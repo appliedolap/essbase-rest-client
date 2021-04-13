@@ -14,6 +14,28 @@ cat temp.json | jq '.definitions.ZoomIn.properties.ancestor.enum = ["top", "bott
 
 cat temp.json | jq '.definitions.ZoomIn.properties.mode.enum = ["children", "descendents", "base"]' > json.tmp && mv json.tmp temp.json
 
+# The Drillthrough Reports get endpoint nominally models a response with the following:
+#  "responses": {
+#      "200": {
+#          "description": "<p><strong>OK</strong></p><p>The drill through reports were retrieved successfully. Returns the links to get, edit, or delete the reports.</p>",
+#          "schema": {
+#              "type": "array",
+#              "items": {
+#                  "$ref": "#/definitions/ReportList"
+#              }
+#          }
+#      },
+#
+# The response should actually be like this though:
+#  "schema": {
+#    "$ref": "#/definitions/ReportList"
+#   }
+#
+# This fixes the response model so that it is a ReportList instead of a List<ReportList>, such as in DrillThroughReportsApi's
+#   public ReportList drillThroughReportsGetReports(String applicationName, String databaseName) throws ApiException {
+
+cat temp.json | jq '.paths."/applications/{applicationName}/databases/{databaseName}/reports".get.responses."200".schema = {"$ref": "#/definitions/ReportList"}' > json.tmp && mv json.tmp temp.json
+
 cp temp.json src/main/resources/processed.json
 
 mvn clean install -DskipTests
