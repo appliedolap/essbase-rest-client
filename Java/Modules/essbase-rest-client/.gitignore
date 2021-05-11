@@ -21,3 +21,5 @@ target
 build
 
 docs/**
+
+temp.json

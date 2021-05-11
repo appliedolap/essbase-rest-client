@@ -854,10 +854,7 @@
           "200": {
             "description": "<p><strong>OK</strong></p><p>Configuration properties retrieved successfully. Returns all the configuration properties which are set for the application, and the links to get, edit, or delete each property.</p>",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/ApplicationConfigList"
-              }
+              "$ref": "#/definitions/ApplicationConfigList"
             }
           },
           "400": {
@@ -2249,10 +2246,7 @@
           "200": {
             "description": "<p><strong>OK</strong></p><p>The drill through reports were retrieved successfully. Returns the links to get, edit, or delete the reports.</p>",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/ReportList"
-              }
+              "$ref": "#/definitions/ReportList"
             }
           },
           "400": {
@@ -6117,10 +6111,7 @@
           "200": {
             "description": "Dimensions are retrieved successfully. Gives the dimension details along with the links to get the generations and levels of each dimension",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/DimensionList"
-              }
+              "$ref": "#/definitions/DimensionList"
             }
           },
           "400": {
@@ -13382,10 +13373,7 @@
           "200": {
             "description": "Scripts are retrieved successfully. Gives the script details along with the links to get/edit/delete the script and to get the script content",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/ScriptList"
-              }
+              "$ref": "#/definitions/ScriptList"
             }
           },
           "400": {
@@ -13853,7 +13841,10 @@
           "200": {
             "description": "returns list session attributes objects having 'user id', 'session id', 'login time' 'connection source' etc.",
             "schema": {
-              "$ref": "#/definitions/SessionAttributes"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SessionAttributes"
+              }
             }
           },
           "400": {
@@ -14695,10 +14686,7 @@
           "200": {
             "description": "Variables are retrieved successfully. Gives the variable details along with the links to get/edit/delete each variable",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/VariableList"
-              }
+              "$ref": "#/definitions/VariableList"
             }
           },
           "400": {
