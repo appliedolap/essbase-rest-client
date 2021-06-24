@@ -7,6 +7,17 @@
     <name>Essbase REST Client</name>
     <version>1.0.1-SNAPSHOT</version>
 
+    <distributionManagement>
+        <repository>
+            <id>central</id>
+            <url>https://appliedolap.jfrog.io/artifactory/libs-release</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <url>https://appliedolap.jfrog.io/artifactory/libs-snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <properties>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
