@@ -14,3 +14,11 @@ The library can be consumed as simply as doing the following:
     for (EssApplication application : applications) {
         System.out.println("App: " + application);
     }
+
+# Generating Javadoc
+
+You can generate Javadoc by executing the following goal from the project folder:
+
+    mvn clean javadoc:javadoc
+
+After generation you should be able to browse to `target/site/apidocs/index.html`.
