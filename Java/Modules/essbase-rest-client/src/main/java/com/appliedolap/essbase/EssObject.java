@@ -1,15 +1,22 @@
 package com.appliedolap.essbase;
 
-import com.appliedolap.essbase.client.ApiClient;
-
+/**
+ * Parent class for all objects in this library's object hierarchy.
+ */
 public abstract class EssObject {
 
-    protected final ApiClient client;
+    protected final ApiContext api;
 
-    public EssObject(ApiClient client) {
-        this.client = client;
+    protected EssObject(ApiContext api) {
+        this.api = api;
     }
 
+    /**
+     * Gets the name of this object. This will generally be the "nice" and "unique" name of this object, such
+     * as the application name, cube, member, variable, or whatever.
+     *
+     * @return the simple name of this object
+     */
     public abstract String getName();
 
 }

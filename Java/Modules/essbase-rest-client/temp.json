@@ -14890,10 +14890,7 @@
           "200": {
             "description": "<p><strong>OK</strong></p><p>Variables returned successfully, with links to get, edit, or delete.</p>",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/VariableList"
-              }
+              "$ref": "#/definitions/VariableList"
             }
           },
           "400": {
@@ -15146,10 +15143,7 @@
           "200": {
             "description": "<p><strong>OK</strong></p><p>Variables returned successfully, with links to get, edit, or delete.</p>",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/VariableList"
-              }
+              "$ref": "#/definitions/VariableList"
             }
           },
           "400": {

@@ -1,4 +1,4 @@
-package com.appliedolap.essbase.util;
+package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.ApiClient;
 import okhttp3.*;
@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 
-public class ApiClientFactory {
+class ApiClientFactory {
 
     private static final Logger logger = LoggerFactory.getLogger(ApiClientFactory.class);
 

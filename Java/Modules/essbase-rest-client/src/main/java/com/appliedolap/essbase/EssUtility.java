@@ -1,9 +1,6 @@
 package com.appliedolap.essbase;
 
-import com.appliedolap.essbase.client.ApiCallback;
-import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
-import com.appliedolap.essbase.client.api.TemplatesAndUtilitiesApi;
 import com.appliedolap.essbase.client.model.Resource;
 import com.appliedolap.essbase.util.GenericApiCallback;
 import com.appliedolap.essbase.util.GenericDownload;
@@ -14,17 +11,17 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Represents one of the downloadable utilities on the Essbase server.
+ */
 public class EssUtility extends EssObject {
 
     private static final Logger logger = LoggerFactory.getLogger(EssUtility.class);
 
-    private final TemplatesAndUtilitiesApi templatesAndUtilitiesApi;
-
     private final Resource resource;
 
-    public EssUtility(ApiClient client, Resource resource) {
-        super(client);
-        this.templatesAndUtilitiesApi = new TemplatesAndUtilitiesApi(client);
+    EssUtility(ApiContext api, Resource resource) {
+        super(api);
         this.resource = resource;
     }
 
@@ -57,7 +54,7 @@ public class EssUtility extends EssObject {
     public void download() {
         if (isDownloadable()) {
             try {
-                Call call = templatesAndUtilitiesApi.resourcesDownloadUtilityCall(resource.getId(), new GenericApiCallback());
+                Call call = api.getTemplatesAndUtilitiesApi().resourcesDownloadUtilityCall(resource.getId(), new GenericApiCallback());
                 GenericDownload.download(call.execute());
             } catch (ApiException | IOException e) {
                 logger.error("Unable to download: {}", e.getMessage());
@@ -68,8 +65,7 @@ public class EssUtility extends EssObject {
         }
     }
 
-    public void download(File folder) {
-
-    }
+//    public void download(File folder) {
+//    }
 
 }

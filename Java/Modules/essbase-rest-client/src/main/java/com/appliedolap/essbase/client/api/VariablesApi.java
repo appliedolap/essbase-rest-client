@@ -1222,7 +1222,7 @@ public class VariablesApi {
      * Get Application Variables
      * Returns all substitution variables from the specified application.
      * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @return List&lt;VariableList&gt;
+     * @return VariableList
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -1232,8 +1232,8 @@ public class VariablesApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public List<VariableList> variablesListAppVariables(String applicationName) throws ApiException {
-        ApiResponse<List<VariableList>> localVarResp = variablesListAppVariablesWithHttpInfo(applicationName);
+    public VariableList variablesListAppVariables(String applicationName) throws ApiException {
+        ApiResponse<VariableList> localVarResp = variablesListAppVariablesWithHttpInfo(applicationName);
         return localVarResp.getData();
     }
 
@@ -1241,7 +1241,7 @@ public class VariablesApi {
      * Get Application Variables
      * Returns all substitution variables from the specified application.
      * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;List&lt;VariableList&gt;&gt;
+     * @return ApiResponse&lt;VariableList&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -1251,9 +1251,9 @@ public class VariablesApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<List<VariableList>> variablesListAppVariablesWithHttpInfo(String applicationName) throws ApiException {
+    public ApiResponse<VariableList> variablesListAppVariablesWithHttpInfo(String applicationName) throws ApiException {
         okhttp3.Call localVarCall = variablesListAppVariablesValidateBeforeCall(applicationName, null);
-        Type localVarReturnType = new TypeToken<List<VariableList>>(){}.getType();
+        Type localVarReturnType = new TypeToken<VariableList>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
@@ -1272,10 +1272,10 @@ public class VariablesApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call variablesListAppVariablesAsync(String applicationName, final ApiCallback<List<VariableList>> _callback) throws ApiException {
+    public okhttp3.Call variablesListAppVariablesAsync(String applicationName, final ApiCallback<VariableList> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = variablesListAppVariablesValidateBeforeCall(applicationName, _callback);
-        Type localVarReturnType = new TypeToken<List<VariableList>>(){}.getType();
+        Type localVarReturnType = new TypeToken<VariableList>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
@@ -1350,7 +1350,7 @@ public class VariablesApi {
      * Returns all substitution variables from the specified application and database.
      * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
      * @param databaseName Database name. (required)
-     * @return List&lt;VariableList&gt;
+     * @return VariableList
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -1360,8 +1360,8 @@ public class VariablesApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public List<VariableList> variablesListVariables(String applicationName, String databaseName) throws ApiException {
-        ApiResponse<List<VariableList>> localVarResp = variablesListVariablesWithHttpInfo(applicationName, databaseName);
+    public VariableList variablesListVariables(String applicationName, String databaseName) throws ApiException {
+        ApiResponse<VariableList> localVarResp = variablesListVariablesWithHttpInfo(applicationName, databaseName);
         return localVarResp.getData();
     }
 
@@ -1370,7 +1370,7 @@ public class VariablesApi {
      * Returns all substitution variables from the specified application and database.
      * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
      * @param databaseName Database name. (required)
-     * @return ApiResponse&lt;List&lt;VariableList&gt;&gt;
+     * @return ApiResponse&lt;VariableList&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -1380,9 +1380,9 @@ public class VariablesApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<List<VariableList>> variablesListVariablesWithHttpInfo(String applicationName, String databaseName) throws ApiException {
+    public ApiResponse<VariableList> variablesListVariablesWithHttpInfo(String applicationName, String databaseName) throws ApiException {
         okhttp3.Call localVarCall = variablesListVariablesValidateBeforeCall(applicationName, databaseName, null);
-        Type localVarReturnType = new TypeToken<List<VariableList>>(){}.getType();
+        Type localVarReturnType = new TypeToken<VariableList>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
@@ -1402,10 +1402,10 @@ public class VariablesApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call variablesListVariablesAsync(String applicationName, String databaseName, final ApiCallback<List<VariableList>> _callback) throws ApiException {
+    public okhttp3.Call variablesListVariablesAsync(String applicationName, String databaseName, final ApiCallback<VariableList> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = variablesListVariablesValidateBeforeCall(applicationName, databaseName, _callback);
-        Type localVarReturnType = new TypeToken<List<VariableList>>(){}.getType();
+        Type localVarReturnType = new TypeToken<VariableList>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

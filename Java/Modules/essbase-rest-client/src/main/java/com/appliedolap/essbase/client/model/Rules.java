@@ -37,7 +37,7 @@ import java.util.List;
 /**
  * Rules
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-06-23T11:48:17.898-07:00[America/Los_Angeles]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-06-29T09:19:09.255-07:00[America/Los_Angeles]")
 public class Rules {
   public static final String SERIALIZED_NAME_DIMENSIONS = "dimensions";
   @SerializedName(SERIALIZED_NAME_DIMENSIONS)

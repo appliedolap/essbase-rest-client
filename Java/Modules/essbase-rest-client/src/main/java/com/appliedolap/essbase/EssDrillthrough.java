@@ -1,8 +1,6 @@
 package com.appliedolap.essbase;
 
-import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
-import com.appliedolap.essbase.client.api.DrillThroughReportsApi;
 import com.appliedolap.essbase.client.model.DrillthroughBean;
 import com.appliedolap.essbase.client.model.ReportBean;
 import com.appliedolap.essbase.util.WrapperUtil;
@@ -10,15 +8,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+/**
+ * Represents a drill-through report on a given cube
+ */
 public class EssDrillthrough extends EssObject {
 
     private static final Logger logger = LoggerFactory.getLogger(EssDrillthrough.class);
 
     private final EssCube cube;
-
-    private final DrillThroughReportsApi drillThroughReportsApi;
 
     private boolean hasDetails = false;
 
@@ -32,9 +32,8 @@ public class EssDrillthrough extends EssObject {
 
     private List<String> drillableRegions;
 
-    public EssDrillthrough(ApiClient client, EssCube cube, ReportBean reportBean) {
-        super(client);
-        this.drillThroughReportsApi = new DrillThroughReportsApi(client);
+    EssDrillthrough(ApiContext api, EssCube cube, ReportBean reportBean) {
+        super(api);
         this.cube = cube;
         this.name = reportBean.getName();
 
@@ -67,7 +66,7 @@ public class EssDrillthrough extends EssObject {
     private void loadDetails() {
         if (!hasDetails) {
             try {
-                DrillthroughBean drillthroughBean = drillThroughReportsApi.drillThroughReportsGetReport(cube.getApplication().getName(), cube.getName(), getName());
+                DrillthroughBean drillthroughBean = api.getDrillThroughReportsApi().drillThroughReportsGetReport(cube.getApplication().getName(), cube.getName(), getName());
                 this.url = drillthroughBean.getUrl();
                 this.drillableRegions = new ArrayList<>(drillthroughBean.getDrillableRegions());
                 this.hasDetails = true;
@@ -77,46 +76,78 @@ public class EssDrillthrough extends EssObject {
         }
     }
 
+    /**
+     * Gets the name of this drill-through report.
+     *
+     * @return the drill-through name
+     */
     @Override
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the URL of this drill-through report (URL-style only!). This API will likely change soon as support
+     * for different drill-through types is built out.
+     *
+     * @return the drill URL
+     */
     public String getUrl() {
         loadDetails();
         return url;
     }
 
+    /**
+     * Sets the drill (again, likely to change soon)
+     *
+     * @param url the drill URL
+     */
     public void setUrl(String url) {
         loadDetails();
         this.url = url;
     }
 
+    /**
+     * Get the drillable regions)
+     *
+     * @return the list of drillable regions
+     */
     public List<String> getDrillableRegions() {
         loadDetails();
-        return drillableRegions;
+        return Collections.unmodifiableList(drillableRegions);
     }
 
+    /**
+     * Sets the drillable regions for this report
+     *
+     * @param drillableRegions the drillable regions
+     */
     public void setDrillableRegions(List<String> drillableRegions) {
         loadDetails();
         this.drillableRegions = drillableRegions;
     }
 
+    /**
+     * Saves updates to this report
+     */
     public void save() {
         try {
             DrillthroughBean drillthroughBean = new DrillthroughBean();
             drillthroughBean.setType("URL");
             drillthroughBean.setUrl(url);
             drillthroughBean.setDrillableRegions(drillableRegions);
-            drillThroughReportsApi.drillThroughReportsUpdateReport(cube.getApplication().getName(), cube.getName(), name, drillthroughBean);
+            api.getDrillThroughReportsApi().drillThroughReportsUpdateReport(cube.getApplication().getName(), cube.getName(), name, drillthroughBean);
         } catch (ApiException apiException) {
             throw new EssApiException(apiException);
         }
     }
 
+    /**
+     * Deletes this drill-through report
+     */
     public void delete() {
         logger.info("Deleting drill-through report {}", getName());
-        WrapperUtil.wrap(() -> drillThroughReportsApi.drillThroughReportsDelete(cube.getApplication().getName(), cube.getName(), getName()));
+        WrapperUtil.wrap(() -> api.getDrillThroughReportsApi().drillThroughReportsDelete(cube.getApplication().getName(), cube.getName(), getName()));
     }
 
 }

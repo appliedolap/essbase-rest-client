@@ -1,28 +1,38 @@
 package com.appliedolap.essbase;
 
-import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.model.SessionAttributes;
 
-public class EssSession {
-
-    private final ApiClient client;
+/**
+ * Models a session (connection) on the server.
+ */
+public class EssSession extends EssObject {
 
     private final EssCube cube;
 
     private final SessionAttributes sessionAttributes;
 
-    public EssSession(ApiClient client, EssCube cube, SessionAttributes sessionAttributes) {
-        this.client = client;
+    EssSession(ApiContext api, EssCube cube, SessionAttributes sessionAttributes) {
+        super(api);
         this.cube = cube;
         this.sessionAttributes = sessionAttributes;
     }
 
+    /**
+     * Gets the ID of this session.
+     *
+     * @return the session ID
+     */
     public String getSessionId() {
         return sessionAttributes.getSessionId();
     }
 
-    public void delete() {
+//    public void delete() {
+//
+//    }
 
+    @Override
+    public String getName() {
+        return sessionAttributes.getSessionId();
     }
 
 }

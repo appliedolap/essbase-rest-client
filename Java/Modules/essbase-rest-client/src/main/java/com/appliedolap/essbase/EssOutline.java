@@ -2,6 +2,7 @@ package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
+import com.appliedolap.essbase.client.api.BatchOutlineEditingApi;
 import com.appliedolap.essbase.client.api.DimensionsApi;
 import com.appliedolap.essbase.client.api.OutlineViewerApi;
 import com.appliedolap.essbase.client.model.*;
@@ -17,35 +18,37 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Models the outline for a particular cube.
+ */
 public class EssOutline extends EssObject {
 
     private static final Logger logger = LoggerFactory.getLogger(EssOutline.class);
 
     private final EssCube cube;
 
-    private final OutlineViewerApi outlineViewerApi;
-
-    private final DimensionsApi dimensionsApi;
-
-    public EssOutline(ApiClient client, EssCube cube) {
-        super(client);
+    EssOutline(ApiContext api, EssCube cube) {
+        super(api);
         this.cube = cube;
-        this.outlineViewerApi = new OutlineViewerApi(client);
-        this.dimensionsApi = new DimensionsApi(client);
     }
 
+    /**
+     * Gets the owning cube of this outline.
+     *
+     * @return the cube for this outline.
+     */
     public EssCube getCube() {
         return cube;
     }
 
     @Override
     public String getName() {
-        return null;
+        return cube.getName();
     }
 
     public void getMember(String memberName) {
         try {
-            MemberBean memberBean = outlineViewerApi.outlineGetMemberInfo(cube.getApplication().getName(), cube.getName(), memberName, null);
+            MemberBean memberBean = api.getOutlineViewerApi().outlineGetMemberInfo(cube.getApplication().getName(), cube.getName(), memberName, null);
             System.out.println();
         } catch (ApiException apiException) {
             apiException.printStackTrace();
@@ -54,17 +57,22 @@ public class EssOutline extends EssObject {
 
     public void getMemberSearch(String memberName) {
         try {
-            RestCollectionResponse restCollectionResponse = outlineViewerApi.outlineGetMembers(cube.getApplication().getName(), cube.getName(), null, true, memberName, null, null, null, 0, 0);
+            RestCollectionResponse restCollectionResponse = api.getOutlineViewerApi().outlineGetMembers(cube.getApplication().getName(), cube.getName(), null, true, memberName, null, null, null, 0, 0);
             System.out.println();
         } catch (ApiException apiException) {
             apiException.printStackTrace();
         }
     }
 
+    /**
+     * Downloads the outline XML as a byte array.
+     *
+     * @return the outline XML as bytes
+     */
     public byte[] downloadXml() {
         return WrapperUtil.doWithWrap(() -> {
             ExportOptions exportOptions = new ExportOptions();
-            Call call = outlineViewerApi.outlineGetOutlineXMLCall(cube.getApplication().getName(), cube.getName(), exportOptions, new GenericApiCallback());
+            Call call = api.getOutlineViewerApi().outlineGetOutlineXMLCall(cube.getApplication().getName(), cube.getName(), exportOptions, new GenericApiCallback());
             return GenericDownload.downloadBytes(call.execute());
         });
 
@@ -84,22 +92,23 @@ public class EssOutline extends EssObject {
             IOUtils.write(downloadXml(), outputStream);
             logger.info("Downloaded outline XML to {}", outputFile.toPath().normalize().toAbsolutePath());
         }
-
         return outputFile;
     }
 
-    public List<EssDimension> getDimensions() {
+    public List<EssMember> getDimensions() {
         try {
-            DimensionList dimensionList = dimensionsApi.dimensionsListDimensions(cube.getApplication().getName(), cube.getName());
-            List<EssDimension> dimensions = new ArrayList<>();
-            for (DimensionBean dimension : dimensionList.getItems()) {
-                EssDimension essDimension = new EssDimension(client, dimension);
-                dimensions.add(essDimension);
-            }
-            return dimensions;
+            RestCollectionResponse dimResponse = api.getOutlineViewerApi().outlineGetMembers(getCube().getApplication().getName(), getCube().getName(), null, null, null, null, null, null, 0, 0);
+            return EssMember.collectionToMembers(api, getCube(), dimResponse);
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void insertSibling() {
+        OtlEditMain otlEditMain = new OtlEditMain();
+        //otlEditMain.setE
+        BatchOutlineEditingApi batch = api.getBatchOutlineEditingApi();
+        //batch.
     }
 
 }

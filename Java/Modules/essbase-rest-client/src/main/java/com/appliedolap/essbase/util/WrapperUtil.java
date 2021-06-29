@@ -3,7 +3,11 @@ package com.appliedolap.essbase.util;
 import com.appliedolap.essbase.EssApiException;
 import com.appliedolap.essbase.client.ApiException;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class WrapperUtil {
 
@@ -18,6 +22,26 @@ public class WrapperUtil {
     public static void wrap(EssApiRunnable runnable) throws EssApiException {
         try {
             runnable.run();
+        } catch (Exception e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    public static <R, T> R wrapFunc(Callable<T> func, Function<? super T, ? extends R> mapper) throws EssApiException {
+        try {
+            T originalReturnValue = func.call();
+            return mapper.apply(originalReturnValue);
+        } catch (Exception e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    public static <R, T> List<R> wrapToList(List<T> sourceList, Function<? super T, ? extends R> mapper) throws EssApiException {
+        try {
+            if (sourceList == null) return Collections.emptyList();
+            return sourceList.stream()
+                    .map(mapper)
+                    .collect(Collectors.toList());
         } catch (Exception e) {
             throw new EssApiException(e);
         }

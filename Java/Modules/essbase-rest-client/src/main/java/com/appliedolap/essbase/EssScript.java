@@ -1,9 +1,6 @@
 package com.appliedolap.essbase;
 
-import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
-import com.appliedolap.essbase.client.api.JobsApi;
-import com.appliedolap.essbase.client.api.ScriptsApi;
 import com.appliedolap.essbase.client.model.JobRecordBean;
 import com.appliedolap.essbase.client.model.JobsInputBean;
 import com.appliedolap.essbase.client.model.ParametersBean;
@@ -11,26 +8,28 @@ import com.appliedolap.essbase.client.model.Script;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Represents a script object (calc, report, etc.) on Essbase cube/application.
+ */
 public class EssScript extends EssObject {
 
     private static final Logger logger = LoggerFactory.getLogger(EssScript.class);
-
-    private final ScriptsApi scriptsApi;
-
-    private final JobsApi jobsApi;
 
     private final EssCube cube;
 
     private final Script script;
 
-    public EssScript(ApiClient client, EssCube cube, Script script) {
-        super(client);
-        this.scriptsApi = new ScriptsApi(client);
-        this.jobsApi = new JobsApi(client);
+    EssScript(ApiContext api, EssCube cube, Script script) {
+        super(api);
         this.cube = cube;
         this.script = script;
     }
 
+    /**
+     * The name of this script.
+     *
+     * @return the script name
+     */
     @Override
     public String getName() {
         return script.getName();
@@ -52,6 +51,9 @@ public class EssScript extends EssObject {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Create a job to execute this script (assumes calc for now)
+     */
     public void execute() {
         JobsInputBean job = new JobsInputBean();
         job.setApplication(cube.getApplication().getName());
@@ -64,7 +66,7 @@ public class EssScript extends EssObject {
 
         try {
             logger.info("Executing calc {}", script.getName());
-            JobRecordBean jobRecord = jobsApi.jobsExecuteJob(job);
+            JobRecordBean jobRecord = api.getJobsApi().jobsExecuteJob(job);
             logger.info("Executed calc job request, job ID is {}", jobRecord.getJobID());
         } catch (ApiException e) {
             throw new RuntimeException(e);

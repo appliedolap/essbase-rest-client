@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * AppStartupSettings
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-06-23T11:48:17.898-07:00[America/Los_Angeles]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-06-29T09:19:09.255-07:00[America/Los_Angeles]")
 public class AppStartupSettings {
   public static final String SERIALIZED_NAME_ALLOW_USERS_TO_START_APPLICATION = "allowUsersToStartApplication";
   @SerializedName(SERIALIZED_NAME_ALLOW_USERS_TO_START_APPLICATION)

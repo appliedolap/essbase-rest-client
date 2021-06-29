@@ -198,7 +198,7 @@ public class FilesApi2 {
         }
 
         final String[] localVarContentTypes = {
-            "application/octet-stream"
+            bytes == null ? "application/json" : "application/octet-stream"
         };
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
