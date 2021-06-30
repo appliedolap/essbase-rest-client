@@ -28,6 +28,7 @@ import java.io.IOException;
 
 
 import com.appliedolap.essbase.client.model.About;
+import com.appliedolap.essbase.client.model.AboutInstance;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -164,7 +165,7 @@ public class AboutEssbaseApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 0 </td><td> successful operation </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> successful operation </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call getInstanceDetailsCall(final ApiCallback _callback) throws ApiException {
@@ -180,7 +181,7 @@ public class AboutEssbaseApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
-            
+            "application/json", "application/xml"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -209,31 +210,34 @@ public class AboutEssbaseApi {
     /**
      * 
      * 
+     * @return AboutInstance
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 0 </td><td> successful operation </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> successful operation </td><td>  -  </td></tr>
      </table>
      */
-    public void getInstanceDetails() throws ApiException {
-        getInstanceDetailsWithHttpInfo();
+    public AboutInstance getInstanceDetails() throws ApiException {
+        ApiResponse<AboutInstance> localVarResp = getInstanceDetailsWithHttpInfo();
+        return localVarResp.getData();
     }
 
     /**
      * 
      * 
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;AboutInstance&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 0 </td><td> successful operation </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> successful operation </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> getInstanceDetailsWithHttpInfo() throws ApiException {
+    public ApiResponse<AboutInstance> getInstanceDetailsWithHttpInfo() throws ApiException {
         okhttp3.Call localVarCall = getInstanceDetailsValidateBeforeCall(null);
-        return localVarApiClient.execute(localVarCall);
+        Type localVarReturnType = new TypeToken<AboutInstance>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
@@ -245,13 +249,14 @@ public class AboutEssbaseApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 0 </td><td> successful operation </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> successful operation </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call getInstanceDetailsAsync(final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call getInstanceDetailsAsync(final ApiCallback<AboutInstance> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = getInstanceDetailsValidateBeforeCall(_callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
+        Type localVarReturnType = new TypeToken<AboutInstance>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
 }

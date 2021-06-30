@@ -51,6 +51,27 @@ cat temp.json | jq '.paths."/applications/{applicationName}/databases/{databaseN
 
 cat temp.json | jq '.paths."/sessions".get.responses."200".schema = {"type": "array","items": {"$ref": "#/definitions/SessionAttributes"}}' > json.tmp && mv json.tmp temp.json
 
+cat temp.json | jq '.paths."/about/instance".get.responses = {"200": {"description": "successful operation", "schema": { "$ref": "#/definitions/AboutInstance" }}}' > json.tmp && mv json.tmp temp.json
+
+# The about instance default definition doesn't model a response at all, so we create and stick one in here
+cat temp.json | jq '.definitions."AboutInstance" = {
+  "type": "object",
+  "properties": {
+    "provisioningSupported": {
+      "type": "boolean"
+    },
+    "resetPasswordSupported": {
+      "type": "boolean"
+    },
+    "easInstalled": {
+      "type": "boolean"
+    }
+  },
+  "xml": {
+    "name": "aboutInstance"
+  }
+}' > json.tmp && mv json.tmp temp.json
+
 cp temp.json src/main/resources/processed.json
 
 #mvn clean install -DskipTests

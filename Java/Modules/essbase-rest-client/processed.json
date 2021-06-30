@@ -4918,7 +4918,10 @@
         "parameters": [],
         "responses": {
           "default": {
-            "description": "successful operation"
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AboutInstance"
+            }
           }
         }
       }
@@ -17485,6 +17488,25 @@
         "name": "about"
       }
     },
+
+    "AboutInstance": {
+      "type": "object",
+      "properties": {
+        "provisioningSupported": {
+          "type": "boolean"
+        },
+        "resetPasswordSupported": {
+          "type": "boolean"
+        },
+        "easInstalled": {
+          "type": "boolean"
+        }
+      },
+      "xml": {
+        "name": "aboutInstance"
+      }
+    },
+
     "CopyRenameBean": {
       "type": "object",
       "required": [

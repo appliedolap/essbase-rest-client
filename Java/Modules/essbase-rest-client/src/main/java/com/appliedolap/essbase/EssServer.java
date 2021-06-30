@@ -7,7 +7,10 @@ import com.appliedolap.essbase.util.WrapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static com.appliedolap.essbase.util.Utils.wrap;
 
@@ -202,6 +205,10 @@ public class EssServer extends EssObject {
         return WrapperUtil.wrapFunc(() -> api.getAboutEssbaseApi().aboutGetAbout(), About::new);
     }
 
+    public AboutInstance getAboutInstance() {
+        return WrapperUtil.wrapFunc(() -> api.getAboutEssbaseApi().getInstanceDetails(), AboutInstance::new);
+    }
+
     /**
      * Creates an application (and a database) with the given names. While we tend to historically think of Essbase as
      * employing the concept of an application containing one or more databases/cubes, most of the operations in the
@@ -262,15 +269,6 @@ public class EssServer extends EssObject {
         }
     }
 
-//    public void getUrls() {
-//        try {
-//            Preference preference = api.getUrlsApi().uRLsGet();
-//            System.out.println();
-//        } catch (ApiException apiException) {
-//            apiException.printStackTrace();
-//        }
-//    }
-
     /**
      * The about information of this server.
      */
@@ -298,6 +296,27 @@ public class EssServer extends EssObject {
             return about.getBuild();
         }
 
+    }
+
+    public static class AboutInstance {
+
+        private final com.appliedolap.essbase.client.model.AboutInstance aboutInstance;
+
+        public AboutInstance(com.appliedolap.essbase.client.model.AboutInstance aboutInstance) {
+            this.aboutInstance = aboutInstance;
+        }
+
+        public Boolean getProvisioningSupported() {
+            return aboutInstance.getProvisioningSupported();
+        }
+
+        public Boolean getResetPasswordSupported() {
+            return aboutInstance.getResetPasswordSupported();
+        }
+
+        public Boolean getEasInstalled() {
+            return aboutInstance.getEasInstalled();
+        }
     }
 
 }
