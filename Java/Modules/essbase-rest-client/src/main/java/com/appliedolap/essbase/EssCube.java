@@ -84,7 +84,7 @@ public class EssCube extends EssObject {
             List<SessionAttributes> sessions = api.getSessionsApi().sessionsGetAllActiveSessions(application.getName(), cube.getName(), null);
             List<EssSession> sessionList = new ArrayList<>();
             for (SessionAttributes sessionAttributes : sessions) {
-                EssSession session = new EssSession(api, this, sessionAttributes);
+                EssSession session = new EssSession(api, sessionAttributes);
                 sessionList.add(session);
             }
             return Collections.unmodifiableList(sessionList);

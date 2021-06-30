@@ -3,6 +3,7 @@ package com.appliedolap.essbase.util;
 import com.appliedolap.essbase.EssApiException;
 import com.appliedolap.essbase.client.ApiException;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -31,6 +32,19 @@ public class WrapperUtil {
         try {
             T originalReturnValue = func.call();
             return mapper.apply(originalReturnValue);
+        } catch (Exception e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    public static <R, T> List<R> wrapList(Callable<List<T>> func, Function<? super T, ? extends R> mapper) throws EssApiException {
+        try {
+            List<T> returnValues = func.call();
+            List<R> converted = new ArrayList<R>();
+            for (T returnValue : returnValues) {
+                converted.add(mapper.apply(returnValue));
+            }
+            return converted;
         } catch (Exception e) {
             throw new EssApiException(e);
         }

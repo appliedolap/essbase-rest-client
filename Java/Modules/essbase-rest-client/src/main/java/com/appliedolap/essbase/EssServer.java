@@ -104,6 +104,29 @@ public class EssServer extends EssObject {
         }
     }
 
+    public List<EssSession> getSessions() {
+        return WrapperUtil.wrapList(() -> api.getSessionsApi().sessionsGetAllActiveSessions(null, null, null), sessionAttributes -> new EssSession(api, sessionAttributes));
+    }
+
+    /**
+     * Kill all sessions on the server.
+     *
+     * @param logoff true to also log them off
+     */
+    public void killSessions(boolean logoff) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Kill all sessions on the server for the given user.
+     *
+     * @param userId the user ID
+     * @param logoff true to also log them off
+     */
+    public void killSessions(String userId, boolean logoff) {
+        throw new UnsupportedOperationException();
+    }
+
 //    public EssFile getFile(String fileFullPath) {
 //        return null;
 //    }

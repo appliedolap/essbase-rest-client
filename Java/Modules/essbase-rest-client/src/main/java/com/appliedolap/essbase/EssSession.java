@@ -1,20 +1,25 @@
 package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.model.SessionAttributes;
+import com.appliedolap.essbase.util.WrapperUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Models a session (connection) on the server.
  */
 public class EssSession extends EssObject {
 
-    private final EssCube cube;
+    private static final Logger logger = LoggerFactory.getLogger(EssSession.class);
 
     private final SessionAttributes sessionAttributes;
 
-    EssSession(ApiContext api, EssCube cube, SessionAttributes sessionAttributes) {
+    private final Long sessionId;
+
+    EssSession(ApiContext api, SessionAttributes sessionAttributes) {
         super(api);
-        this.cube = cube;
         this.sessionAttributes = sessionAttributes;
+        sessionId = Long.parseLong(sessionAttributes.getSessionId());
     }
 
     /**
@@ -22,14 +27,51 @@ public class EssSession extends EssObject {
      *
      * @return the session ID
      */
-    public String getSessionId() {
-        return sessionAttributes.getSessionId();
+    public Long getSessionId() {
+        return sessionId;
     }
 
-//    public void delete() {
-//
-//    }
+    /**
+     * Get the user for the sessino
+     * @return
+     */
+    public String getUserId() {
+        return sessionAttributes.getUserId();
+    }
 
+    /**
+     * Number of seconds session has been created
+     *
+     * @return the number of seconds the session has been created
+     */
+    public long getLoginTimeInSeconds() {
+        return Long.parseLong(sessionAttributes.getLoginTimeInSeconds());
+    }
+
+    /**
+     * Get the connection source (not sure what this signifies but it's in the source JSON...)
+     *
+     * @return the connection source
+     */
+    public String getConnectionSource() {
+        return sessionAttributes.getConnectionSource();
+    }
+
+    /**
+     * Kill the session.
+     *
+     * @param logoff true to also log it off (e.g., it'll disappear from the list of sessions)
+     */
+    public void kill(boolean logoff) {
+        logger.info("Killing session {}, logging off: {}", sessionId, logoff);
+        WrapperUtil.wrap(() -> api.getSessionsApi().sessionsDeleteSessionWithId(sessionId, logoff));
+    }
+
+    /**
+     * Standard implementation.
+     *
+     * @return the name of session (the ID)
+     */
     @Override
     public String getName() {
         return sessionAttributes.getSessionId();
