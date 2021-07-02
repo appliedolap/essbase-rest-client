@@ -238,18 +238,32 @@ public class EssServer extends EssObject {
      * REST API are centered around actions you do on a particular cube, and in cases like these where you are creating
      * a cube, there is no separate application creation step, it just gets created or re-used as the case may be.
      *
+     * <p>The default database creation options will be BSO cube with scenarios and duplicates turned off. For more
+     * granular control of the created database type, use {@link #createApplication(String, String, DatabaseCreateOptions)}.
+     *
      * @param applicationName the application name
      * @param databaseName the database name
      */
     public void createApplication(String applicationName, String databaseName) {
+        createApplication(applicationName, databaseName, new DatabaseCreateOptions());
+    }
+
+    /**
+     * Create an application/database with the given name and options.
+     *
+     * @param applicationName the name of the application
+     * @param databaseName the name of the database/cube
+     * @param databaseCreateOptions the database creation options
+     */
+    public void createApplication(String applicationName, String databaseName, DatabaseCreateOptions databaseCreateOptions) {
         // the underlying JSON payload appears to need, at a minimum, the five values that are set here. The B parameter
         // is presumably the code for a BSO application. Untested if A is used for ASO
         CreateApplication createApplication = new CreateApplication();
         createApplication.setApplicationName(applicationName);
         createApplication.setDatabaseName(databaseName);
-        createApplication.setDatabaseType("B");
-        createApplication.setEnableScenario(false);
-        createApplication.setAllowDuplicates(false);
+        createApplication.setDatabaseType(databaseCreateOptions.getType().name());
+        createApplication.setEnableScenario(databaseCreateOptions.isEnableScenarios());
+        createApplication.setAllowDuplicates(databaseCreateOptions.isAllowDuplicates());
 
         logger.info("Creating application");
         try {
@@ -340,6 +354,74 @@ public class EssServer extends EssObject {
         public Boolean getEasInstalled() {
             return aboutInstance.getEasInstalled();
         }
+    }
+
+    /**
+     * Database creation options.
+     */
+    public static class DatabaseCreateOptions {
+
+        private ApplicationType type = ApplicationType.BSO;
+
+        private boolean enableScenarios;
+
+        private boolean allowDuplicates;
+
+        public ApplicationType getType() {
+            return type;
+        }
+
+        public void setType(ApplicationType type) {
+            this.type = type;
+        }
+
+        public boolean isEnableScenarios() {
+            return enableScenarios;
+        }
+
+        public void setEnableScenarios(boolean enableScenarios) {
+            this.enableScenarios = enableScenarios;
+        }
+
+        public boolean isAllowDuplicates() {
+            return allowDuplicates;
+        }
+
+        public void setAllowDuplicates(boolean allowDuplicates) {
+            this.allowDuplicates = allowDuplicates;
+        }
+    }
+
+    /**
+     * A cube type, despite the name.
+     */
+    public enum ApplicationType {
+
+        /**
+         * ASO/Aggregate Storage Option
+         */
+        ASO("A"),
+
+        /**
+         * BSO/Block Storage Option (including hybrid)
+         */
+        BSO("B");
+
+        private String code;
+
+        ApplicationType(String code) {
+            this.code = code;
+        }
+
+        /**
+         * This is private because we don't want this shitty abbreviation leaking into the public API.
+         * Note: this might not be the case after all. Not sure, leaving in for now
+         * @return the code for the database type as used in the create request
+         */
+        private String getCode() {
+            return code;
+        }
+
     }
 
 }

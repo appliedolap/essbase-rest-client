@@ -255,7 +255,7 @@ public class EssCube extends EssObject {
         JobsInputBean job = new JobsInputBean();
         job.setApplication(getApplicationName());
         job.setDb(getName());
-        job.setJobtype("exportExcel");
+        job.setJobtype(EssJob.Type.EXPORT_EXCEL.getParam());
 
         ParametersBean params = new ParametersBean();
         params.dataLevel("ALL_DATA");
@@ -265,6 +265,7 @@ public class EssCube extends EssObject {
 
         try {
             logger.info("Submitting job for {}.{} for Excel export", getApplicationName(), getName());
+            // TODO: return EssJob
             JobRecordBean jobRecord = api.getJobsApi().jobsExecuteJob(job);
         } catch (ApiException e) {
             throw new RuntimeException(e);
@@ -291,8 +292,6 @@ public class EssCube extends EssObject {
         params.recreateApplication("true");
         params.createFiles("true");
         params.setCatalogExcelPath(path);
-        //params.catalogExcelPath(String.format("/applications/%s/%s", getApplicationName(), getName()));
-        //params.catalogExcelPath(String.format("/users/admin/%s", getApplicationName(), getName()));
         job.setParameters(params);
 
         try {
@@ -312,6 +311,12 @@ public class EssCube extends EssObject {
     public void importFile(File file) {
         EssFolder folder = new EssFolder(api, getApplication().getServer(), getName(), String.format("applications/%s/%s", getApplicationName(), getName()));
         folder.uploadFile(file);
+    }
+
+    public static class ExcelExportOptions {
+
+        private boolean columnFormat;
+
     }
 
 }

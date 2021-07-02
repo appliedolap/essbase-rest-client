@@ -96,7 +96,7 @@ public class EssApplication extends EssObject {
      *
      * @return when the application was created
      */
-    private Instant getCreated() {
+    public Instant getCreated() {
         return Utils.instant(application.getCreationTime());
     }
 
@@ -105,7 +105,7 @@ public class EssApplication extends EssObject {
      *
      * @return the modified time for this application
      */
-    private Instant getModified() {
+    public Instant getModified() {
         return Utils.instant(application.getModifiedTime());
     }
 
