@@ -43,6 +43,8 @@ public class ApiContext {
 
     private final BatchOutlineEditingApi batchOutlineEditingApi;
 
+    private final GroupsApi groupsApi;
+
     ApiContext(ApiClient client) {
         this.applicationsApi = new ApplicationsApi(client);
         this.applicationConfigurationApi = new ApplicationConfigurationApi(client);
@@ -61,6 +63,7 @@ public class ApiContext {
         this.scenariosApi = new ScenariosApi(client);
         this.urlsApi = new UrlsApi(client);
         this.batchOutlineEditingApi = new BatchOutlineEditingApi(client);
+        this.groupsApi = new GroupsApi(client);
     }
 
     public ApplicationsApi applicationsApi() {
@@ -133,6 +136,10 @@ public class ApiContext {
 
     public BatchOutlineEditingApi getBatchOutlineEditingApi() {
         return batchOutlineEditingApi;
+    }
+
+    public GroupsApi getGroupsApi() {
+        return groupsApi;
     }
 
 }

@@ -188,6 +188,25 @@ public class EssServer extends EssObject {
     }
 
     /**
+     * Gets a list of groups on this server
+     *
+     * @return the list of groups
+     */
+    public List<EssGroup> getGroups() {
+        try {
+            Groups groups = api.getGroupsApi().groupsSearch(null, -1, "all");
+            List<EssGroup> essGroups = new ArrayList<>();
+            for (GroupBean group : wrap(groups.getItems())) {
+                EssGroup essGroup = new EssGroup(api, this, group);
+                essGroups.add(essGroup);
+            }
+            return Collections.unmodifiableList(essGroups);
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    /**
      * Gets server-scoped variables.
      *
      * @return the server-wide variables
@@ -202,7 +221,7 @@ public class EssServer extends EssObject {
             }
             return Collections.unmodifiableList(variables);
         } catch (ApiException e) {
-            throw new RuntimeException(e);
+            throw new EssApiException(e);
         }
     }
 
