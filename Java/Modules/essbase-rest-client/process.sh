@@ -1,8 +1,11 @@
 #!/bin/bash
 
-rm temp || echo "No temp file to delete, skpping"
+rm temp.json >/dev/null 2>&1 || echo "No temp file to delete, skipping"
 
 cp formatted.json temp.json
+
+# Add securityDefinitions and security for basic auth by default.
+cat temp.json | jq '. += ({securityDefinitions: {basicAuth: {type: "basic"}}, security: [{"basicAuth": []}]})' > json.tmp && mv json.tmp temp.json
 
 # Essbase REST API seems to be case-sensitive. An example error message when using the default upper-case enums is:
 #
