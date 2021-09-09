@@ -75,6 +75,81 @@ cat temp.json | jq '.definitions."AboutInstance" = {
   }
 }' > json.tmp && mv json.tmp temp.json
 
+# The get files definition doesn't model a strongly typed response, so create new object/collection types and add them to the definitions list.
+cat temp.json | jq '.paths."/files/{path}".get.responses."200".schema = { "$ref": "#/definitions/FileCollectionResponse" }' > json.tmp && mv json.tmp temp.json
+
+cat temp.json | jq '.definitions."FileCollectionResponse" = {
+  "type": "object",
+  "properties": {
+    "count": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/FileBean"
+      }
+    },
+    "totalResults": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "hasMore": {
+      "type": "boolean"
+    },
+    "limit": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "properties": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "offset": {
+      "type": "integer",
+      "format": "int64"
+    }
+  }
+}' > json.tmp && mv json.tmp temp.json
+
+cat temp.json | jq '.definitions."FileBean" = {
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "fullPath": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "permissions": {
+      "type": "object",
+      "properties": {
+          "addFolder": {
+            "type": "boolean"
+          },
+          "addFile": {
+            "type": "boolean"
+          }
+      }
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Link"
+      }
+    }
+  },
+  "xml": {
+    "name": "File"
+  }
+}' > json.tmp && mv json.tmp temp.json
+
 cp temp.json src/main/resources/processed.json
 
 #mvn clean install -DskipTests
