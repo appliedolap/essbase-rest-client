@@ -28,6 +28,7 @@ import java.io.IOException;
 
 
 import com.appliedolap.essbase.client.model.CollectionResponse;
+import com.appliedolap.essbase.client.model.FileCollectionResponse;
 import com.appliedolap.essbase.client.model.FilePathDetail;
 import com.appliedolap.essbase.client.model.GenericEntity;
 import com.appliedolap.essbase.client.model.ZipFileDetails;
@@ -103,7 +104,7 @@ public class FilesApi {
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "basicAuth" };
         return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
@@ -235,7 +236,7 @@ public class FilesApi {
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "basicAuth" };
         return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
@@ -354,7 +355,7 @@ public class FilesApi {
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "basicAuth" };
         return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
@@ -474,7 +475,7 @@ public class FilesApi {
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "basicAuth" };
         return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
@@ -591,7 +592,7 @@ public class FilesApi {
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "basicAuth" };
         return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
@@ -701,7 +702,7 @@ public class FilesApi {
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "basicAuth" };
         return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
@@ -853,7 +854,7 @@ public class FilesApi {
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "basicAuth" };
         return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
@@ -883,7 +884,7 @@ public class FilesApi {
      * @param fileSize &lt;p&gt;Validates whether enough free space is available. Applicable only with query parameters &lt;code&gt;action&#x3D;&#39;validateUpload&#39;&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
      * @param filter &lt;p&gt;Filter the list of files.&lt;/p&gt; (optional)
      * @param recursive &lt;p&gt;Recursive param to get search result as recursive.&lt;/p&gt; (optional, default to false)
-     * @return CollectionResponse
+     * @return FileCollectionResponse
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -893,8 +894,8 @@ public class FilesApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public CollectionResponse filesListFiles(String path, Integer offset, Integer limit, String type, Boolean overwrite, String action, Long fileSize, String filter, Boolean recursive) throws ApiException {
-        ApiResponse<CollectionResponse> localVarResp = filesListFilesWithHttpInfo(path, offset, limit, type, overwrite, action, fileSize, filter, recursive);
+    public FileCollectionResponse filesListFiles(String path, Integer offset, Integer limit, String type, Boolean overwrite, String action, Long fileSize, String filter, Boolean recursive) throws ApiException {
+        ApiResponse<FileCollectionResponse> localVarResp = filesListFilesWithHttpInfo(path, offset, limit, type, overwrite, action, fileSize, filter, recursive);
         return localVarResp.getData();
     }
 
@@ -910,7 +911,7 @@ public class FilesApi {
      * @param fileSize &lt;p&gt;Validates whether enough free space is available. Applicable only with query parameters &lt;code&gt;action&#x3D;&#39;validateUpload&#39;&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
      * @param filter &lt;p&gt;Filter the list of files.&lt;/p&gt; (optional)
      * @param recursive &lt;p&gt;Recursive param to get search result as recursive.&lt;/p&gt; (optional, default to false)
-     * @return ApiResponse&lt;CollectionResponse&gt;
+     * @return ApiResponse&lt;FileCollectionResponse&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -920,9 +921,9 @@ public class FilesApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<CollectionResponse> filesListFilesWithHttpInfo(String path, Integer offset, Integer limit, String type, Boolean overwrite, String action, Long fileSize, String filter, Boolean recursive) throws ApiException {
+    public ApiResponse<FileCollectionResponse> filesListFilesWithHttpInfo(String path, Integer offset, Integer limit, String type, Boolean overwrite, String action, Long fileSize, String filter, Boolean recursive) throws ApiException {
         okhttp3.Call localVarCall = filesListFilesValidateBeforeCall(path, offset, limit, type, overwrite, action, fileSize, filter, recursive, null);
-        Type localVarReturnType = new TypeToken<CollectionResponse>(){}.getType();
+        Type localVarReturnType = new TypeToken<FileCollectionResponse>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
@@ -949,10 +950,10 @@ public class FilesApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call filesListFilesAsync(String path, Integer offset, Integer limit, String type, Boolean overwrite, String action, Long fileSize, String filter, Boolean recursive, final ApiCallback<CollectionResponse> _callback) throws ApiException {
+    public okhttp3.Call filesListFilesAsync(String path, Integer offset, Integer limit, String type, Boolean overwrite, String action, Long fileSize, String filter, Boolean recursive, final ApiCallback<FileCollectionResponse> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = filesListFilesValidateBeforeCall(path, offset, limit, type, overwrite, action, fileSize, filter, recursive, _callback);
-        Type localVarReturnType = new TypeToken<CollectionResponse>(){}.getType();
+        Type localVarReturnType = new TypeToken<FileCollectionResponse>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
@@ -1005,7 +1006,7 @@ public class FilesApi {
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "basicAuth" };
         return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
@@ -1127,7 +1128,7 @@ public class FilesApi {
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "basicAuth" };
         return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 

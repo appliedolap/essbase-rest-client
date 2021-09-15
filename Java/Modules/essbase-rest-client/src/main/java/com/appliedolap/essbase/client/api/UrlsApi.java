@@ -27,7 +27,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import com.appliedolap.essbase.client.model.Preference;
+import com.appliedolap.essbase.client.model.EssbaseURLList;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -91,7 +91,7 @@ public class UrlsApi {
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "basicAuth" };
         return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
@@ -107,7 +107,7 @@ public class UrlsApi {
     /**
      * Get Essbase URLs
      * Returns the list of available Essbase URLs
-     * @return Preference
+     * @return EssbaseURLList
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -115,15 +115,15 @@ public class UrlsApi {
         <tr><td> 200 </td><td> successful operation </td><td>  -  </td></tr>
      </table>
      */
-    public Preference uRLsGet() throws ApiException {
-        ApiResponse<Preference> localVarResp = uRLsGetWithHttpInfo();
+    public EssbaseURLList uRLsGet() throws ApiException {
+        ApiResponse<EssbaseURLList> localVarResp = uRLsGetWithHttpInfo();
         return localVarResp.getData();
     }
 
     /**
      * Get Essbase URLs
      * Returns the list of available Essbase URLs
-     * @return ApiResponse&lt;Preference&gt;
+     * @return ApiResponse&lt;EssbaseURLList&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -131,9 +131,9 @@ public class UrlsApi {
         <tr><td> 200 </td><td> successful operation </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Preference> uRLsGetWithHttpInfo() throws ApiException {
+    public ApiResponse<EssbaseURLList> uRLsGetWithHttpInfo() throws ApiException {
         okhttp3.Call localVarCall = uRLsGetValidateBeforeCall(null);
-        Type localVarReturnType = new TypeToken<Preference>(){}.getType();
+        Type localVarReturnType = new TypeToken<EssbaseURLList>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
@@ -149,10 +149,10 @@ public class UrlsApi {
         <tr><td> 200 </td><td> successful operation </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call uRLsGetAsync(final ApiCallback<Preference> _callback) throws ApiException {
+    public okhttp3.Call uRLsGetAsync(final ApiCallback<EssbaseURLList> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = uRLsGetValidateBeforeCall(_callback);
-        Type localVarReturnType = new TypeToken<Preference>(){}.getType();
+        Type localVarReturnType = new TypeToken<EssbaseURLList>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
