@@ -75,6 +75,32 @@ cat temp.json | jq '.definitions."AboutInstance" = {
   }
 }' > json.tmp && mv json.tmp temp.json
 
+cat temp.json | jq '.paths."/urls".get.responses."200".schema = { "$ref": "#/definitions/EssbaseURLList" }' > json.tmp && mv json.tmp temp.json
+
+cat temp.json | jq '.definitions."EssbaseURL" = {
+  "type": "object",
+  "properties": {
+    "application": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  }
+}' > json.tmp && mv json.tmp temp.json
+
+cat temp.json | jq '.definitions."EssbaseURLList" = {
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/EssbaseURL"
+      }
+    }
+  }
+}' > json.tmp && mv json.tmp temp.json
+
 # The get files definition doesn't model a strongly typed response, so create new object/collection types and add them to the definitions list.
 cat temp.json | jq '.paths."/files/{path}".get.responses."200".schema = { "$ref": "#/definitions/FileCollectionResponse" }' > json.tmp && mv json.tmp temp.json
 

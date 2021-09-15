@@ -340,7 +340,7 @@
           "200": {
             "description": "<p><strong>OK</strong></p><p> Response type can be either JSON/XML or stream, depending on the Accept header. If <code>Accept=application/json</code> or <code>Accept=application/xml</code>, the response lists files and current folder details. If <code>Accept=application/octet-stream</code>, the response is returned as a stream. If query parameters include <code>action=validateUpload</code> and <code>Accept='application/json'</code> or <code>Accept='application/xml'</code>, the response is empty.</p>",
             "schema": {
-              "$ref": "#/definitions/CollectionResponse"
+              "$ref": "#/definitions/FileCollectionResponse"
             }
           },
           "400": {
@@ -6507,7 +6507,7 @@
           "200": {
             "description": "successful operation",
             "schema": {
-              "$ref": "#/definitions/Preference"
+              "$ref": "#/definitions/EssbaseURLList"
             }
           }
         }
@@ -22414,6 +22414,108 @@
       "xml": {
         "name": "aboutInstance"
       }
+    },
+    "EssbaseURL": {
+      "type": "object",
+      "properties": {
+        "application": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "EssbaseURLList": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EssbaseURL"
+          }
+        }
+      }
+    },
+    "FileCollectionResponse": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FileBean"
+          }
+        },
+        "totalResults": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "hasMore": {
+          "type": "boolean"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "offset": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "FileBean": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "fullPath": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "permissions": {
+          "type": "object",
+          "properties": {
+            "addFolder": {
+              "type": "boolean"
+            },
+            "addFile": {
+              "type": "boolean"
+            }
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        }
+      },
+      "xml": {
+        "name": "File"
+      }
     }
-  }
+  },
+  "securityDefinitions": {
+    "basicAuth": {
+      "type": "basic"
+    }
+  },
+  "security": [
+    {
+      "basicAuth": []
+    }
+  ]
 }
