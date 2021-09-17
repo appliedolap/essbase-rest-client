@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.appliedolap.essbase.util.Utils.wrap;
 
@@ -22,11 +23,16 @@ public class EssServer extends EssObject {
 
     private static final Logger logger = LoggerFactory.getLogger(EssServer.class);
 
+    /**
+     *
+     */
+    public static final String DEFAULT_REST_API_PATH = "/rest/v1";
+
     private final String server;
 
     /**
      * Creates a new server connection object. At present, the server path is assumed to be in the exact format such as:
-     * <code>http://docker1:9000/essbase/rest/v1</code>. In other words, this class will currently not try to prepend or
+     * <code>http://docker1:9000/essbase</code>. In other words, this class will currently not try to prepend or
      * append any information such as the protocol, port, or REST path. Note that if using HTTPS without a valid cert,
      * you may encounter PKIX errors. Note: SSL verification is currently turned off.
      *
@@ -40,7 +46,7 @@ public class EssServer extends EssObject {
     }
 
     private static ApiContext createApiContext(String server, String username, String password) {
-        ApiClientFactory clientFactory = new ApiClientFactory(server, username, password);
+        ApiClientFactory clientFactory = new ApiClientFactory(server + DEFAULT_REST_API_PATH, username, password);
         ApiClient client = clientFactory.create();
         return new ApiContext(client);
     }
@@ -322,6 +328,17 @@ public class EssServer extends EssObject {
             api.getJobsApi().jobsExecuteJob(job);
         } catch (ApiException apiException) {
             apiException.printStackTrace();
+        }
+    }
+
+    public List<EssURL> getURLs() {
+        try {
+            return api.getUrlsApi().uRLsGet().getItems()
+                    .stream()
+                    .map(url -> new EssURL(api, this, url))
+                    .collect(Collectors.toList());
+        } catch (ApiException e) {
+            throw new EssApiException(e);
         }
     }
 
