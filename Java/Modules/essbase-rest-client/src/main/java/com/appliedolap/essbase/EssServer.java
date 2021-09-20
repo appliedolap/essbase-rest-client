@@ -58,9 +58,12 @@ public class EssServer extends EssObject {
      * @return an application object for the application
      */
     public EssApplication getApplication(String applicationName) {
-        Application application = new Application();
-        application.setName(applicationName);
-        return new EssApplication(api, this, application);
+        for (EssApplication application : getApplications()) {
+            if (application.getName().equals(applicationName)) {
+                return application;
+            }
+        }
+        throw new IllegalArgumentException("No application with name " + applicationName);
     }
 
     @Override

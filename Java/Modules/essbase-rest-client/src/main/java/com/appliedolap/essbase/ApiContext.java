@@ -4,7 +4,7 @@ import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.api.*;
 
 /**
- * Serves as a holder for all of the various API interfaces. We can pass this around as needed without having to
+ * Serves as a holder for all the various API interfaces. We can pass this around as needed without having to
  * clutter up individual classes with having to instantiate and track all of these.
  */
 public class ApiContext {
@@ -45,6 +45,8 @@ public class ApiContext {
 
     private final GroupsApi groupsApi;
 
+    private final ExecuteMdxApi executeMdxApi;
+
     ApiContext(ApiClient client) {
         this.applicationsApi = new ApplicationsApi(client);
         this.applicationConfigurationApi = new ApplicationConfigurationApi(client);
@@ -64,6 +66,7 @@ public class ApiContext {
         this.urlsApi = new UrlsApi(client);
         this.batchOutlineEditingApi = new BatchOutlineEditingApi(client);
         this.groupsApi = new GroupsApi(client);
+        this.executeMdxApi = new ExecuteMdxApi(client);
     }
 
     public ApplicationsApi applicationsApi() {
@@ -128,6 +131,10 @@ public class ApiContext {
 
     public ScenariosApi getScenariosApi() {
         return scenariosApi;
+    }
+
+    public ExecuteMdxApi getExecuteMdxApi() {
+        return executeMdxApi;
     }
 
     public UrlsApi getUrlsApi() {

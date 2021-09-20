@@ -2,11 +2,17 @@ package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.*;
+import com.appliedolap.essbase.misc.MdxJson;
+import com.appliedolap.essbase.util.GenericApiCallback;
 import com.appliedolap.essbase.util.WrapperUtil;
+import com.google.gson.Gson;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +30,7 @@ public class EssCube extends EssObject {
 
     private final Cube cube;
 
-    EssCube(ApiContext api, EssApplication application, Cube cube) {
+    public EssCube(ApiContext api, EssApplication application, Cube cube) {
         super(api);
         this.application = application;
         this.cube = cube;
@@ -313,10 +319,75 @@ public class EssCube extends EssObject {
         folder.uploadFile(file);
     }
 
+    public void executeMdx(String query, MdxOutputType outputType, MdxOptions mdxOptions, OutputStream outputStream) {
+        try {
+            MDXInput mdxInput = new MDXInput();
+            mdxInput.setQuery(query);
+
+            // CSV, HTML, JSON, XLSX
+            Response response = api.getExecuteMdxApi().mDXExecuteMDXCall(getApplicationName(), getName(), outputType.name(), mdxInput, new GenericApiCallback()).execute();
+            ResponseBody body = response.body();
+
+            if (response.isSuccessful()) {
+                IOUtils.write(body.bytes(), outputStream);
+            } else {
+                logger.error("Error during query execution: {}", response.message());
+            }
+        } catch (IOException | ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    public EssGrid executeMdx(String query) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        executeMdx(query, MdxOutputType.JSON, new MdxOptions(), outputStream);
+
+        String json = new String(outputStream.toString());
+        MdxJson mdxJson = new Gson().fromJson(json, MdxJson.class);
+        return new EssGrid(mdxJson);
+    }
+
     public static class ExcelExportOptions {
 
         private boolean columnFormat;
 
+    }
+
+    public static class MdxOptions {
+
+        private boolean dataless;
+
+        private boolean hideRestrictedData;
+
+        private boolean cellAttributes;
+
+        private boolean formatString;
+
+        private boolean formatValues;
+
+        private boolean meaninglessCells;
+
+        private boolean textList;
+
+        private boolean urlDrillthrough;
+
+        // NAME, ALIAS, UNIQUE_NAME
+        //private String memberIdentifierType = "NAME";
+
+    }
+
+    public enum MdxOutputType {
+
+        JSON, HTML, XLSX, CSV;
+
+        public boolean isPrintable() {
+            return this != XLSX;
+        }
+
+    }
+
+    public enum MdxIdentifierType {
+        NAME, ALIAS, UNIQUE_NAME
     }
 
 }
