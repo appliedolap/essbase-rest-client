@@ -8,7 +8,6 @@ import okhttp3.Call;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -28,6 +27,11 @@ public class EssUtility extends EssObject {
     @Override
     public String getName() {
         return resource.getName();
+    }
+
+    @Override
+    public Type getType() {
+        return Type.UTILITY;
     }
 
     /**
@@ -64,8 +68,5 @@ public class EssUtility extends EssObject {
             System.err.println("Not a downloadable type");
         }
     }
-
-//    public void download(File folder) {
-//    }
 
 }

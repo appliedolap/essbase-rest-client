@@ -35,6 +35,11 @@ public class EssScript extends EssObject {
         return script.getName();
     }
 
+    @Override
+    public Type getType() {
+        return Type.SCRIPT;
+    }
+
     public Long getModifiedTime() {
         return script.getModifiedTime();
     }

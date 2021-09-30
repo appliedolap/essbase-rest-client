@@ -4,7 +4,8 @@ import com.appliedolap.essbase.client.model.Variable;
 import com.appliedolap.essbase.util.WrapperUtil;
 
 /**
- * A variable on the Essbase server. May be a server variable (this object), an application variable, or a cube variable.
+ * A variable on the Essbase server. This may be a server variable (this object), an application variable, or a
+ * cube variable.
  */
 public class EssVariable extends EssObject {
 
@@ -32,6 +33,11 @@ public class EssVariable extends EssObject {
     @Override
     public String getName() {
         return variable.getName();
+    }
+
+    @Override
+    public Type getType() {
+        return Type.VARIABLE;
     }
 
     /**

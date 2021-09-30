@@ -21,7 +21,7 @@ public class EssJob extends EssObject {
 
     private final EssServer server;
 
-    private final Type type;
+    private final JobType type;
 
     private final Long id;
 
@@ -31,7 +31,7 @@ public class EssJob extends EssObject {
         this.server = server;
         this.record = record;
         this.id = record.getJobID();
-        this.type = Type.parse(record.getJobType());
+        this.type = JobType.parse(record.getJobType());
     }
 
     private void requireDetailedJob() {
@@ -85,6 +85,11 @@ public class EssJob extends EssObject {
         return id.toString();
     }
 
+    @Override
+    public Type getType() {
+        return Type.JOB;
+    }
+
     /**
      * Gets the owning server for this job.
      *
@@ -99,7 +104,7 @@ public class EssJob extends EssObject {
      *
      * @return the job type
      */
-    public Type getType() {
+    public JobType getJobType() {
         return type;
     }
 
@@ -153,7 +158,7 @@ public class EssJob extends EssObject {
     /**
      * Known job types.
      */
-    public enum Type {
+    public enum JobType {
 
         LOAD_DATA("dataload", "Data Load"),
         BUILD_DIMENSIONS("dimbuild", "Dimension Build"),
@@ -178,7 +183,7 @@ public class EssJob extends EssObject {
 
         private final String responseType;
 
-        Type(String param, String responseType) {
+        JobType(String param, String responseType) {
             this.param = param;
             this.responseType = responseType;
         }
@@ -203,13 +208,13 @@ public class EssJob extends EssObject {
             return responseType;
         }
 
-        public static Type parse(String textType) {
-            for (Type type : Type.values()) {
+        public static JobType parse(String textType) {
+            for (JobType type : JobType.values()) {
                 if (type.getResponseType().equals(textType)) {
                     return type;
                 }
             }
-            return Type.UNKNOWN;
+            return JobType.UNKNOWN;
         }
 
         @Override

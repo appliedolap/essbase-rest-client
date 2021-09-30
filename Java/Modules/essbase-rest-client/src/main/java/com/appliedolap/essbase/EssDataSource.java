@@ -32,4 +32,9 @@ public class EssDataSource extends EssObject {
         return datasource.getName();
     }
 
+    @Override
+    public Type getType() {
+        return Type.DATASOURCE;
+    }
+
 }

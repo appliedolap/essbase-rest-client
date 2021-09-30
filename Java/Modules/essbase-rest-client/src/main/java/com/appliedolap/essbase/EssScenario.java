@@ -27,4 +27,13 @@ public class EssScenario extends EssObject {
         return scenarioBean.getName();
     }
 
+    @Override
+    public Type getType() {
+        return Type.SCENARIO;
+    }
+
+    public EssCube getCube() {
+        return cube;
+    }
+
 }

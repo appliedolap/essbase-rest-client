@@ -33,6 +33,11 @@ public class EssGroup extends EssObject {
         return groupBean.getName();
     }
 
+    @Override
+    public Type getType() {
+        return Type.GROUP;
+    }
+
     public EssServer getServer() {
         return server;
     }

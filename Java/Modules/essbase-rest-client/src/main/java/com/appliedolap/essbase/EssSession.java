@@ -32,8 +32,9 @@ public class EssSession extends EssObject {
     }
 
     /**
-     * Get the user for the sessino
-     * @return
+     * Get the user for the session.
+     *
+     * @return the user ID
      */
     public String getUserId() {
         return sessionAttributes.getUserId();
@@ -49,7 +50,7 @@ public class EssSession extends EssObject {
     }
 
     /**
-     * Get the connection source (not sure what this signifies but it's in the source JSON...)
+     * Get the connection source (not sure what this signifies, but it's in the source JSON...)
      *
      * @return the connection source
      */
@@ -75,6 +76,11 @@ public class EssSession extends EssObject {
     @Override
     public String getName() {
         return sessionAttributes.getSessionId();
+    }
+
+    @Override
+    public Type getType() {
+        return Type.SESSION;
     }
 
 }

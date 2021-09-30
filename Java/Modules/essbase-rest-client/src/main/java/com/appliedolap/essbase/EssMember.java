@@ -77,6 +77,11 @@ public class EssMember extends EssObject {
         return memberBean.getName();
     }
 
+    @Override
+    public Type getType() {
+        return Type.MEMBER;
+    }
+
     /**
      * Gets the parent member (not implemented yet).
      *

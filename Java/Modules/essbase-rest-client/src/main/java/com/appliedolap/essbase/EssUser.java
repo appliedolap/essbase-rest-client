@@ -30,12 +30,26 @@ public class EssUser extends EssObject {
         return userBean.getId();
     }
 
+    @Override
+    public Type getType() {
+        return Type.USER;
+    }
+
     public String getDisplayName() {
         return userBean.getName();
     }
 
     public String getEmail() {
         return userBean.getEmail();
+    }
+
+    /**
+     * Get the owning server of this user.
+     *
+     * @return the server associated with this user
+     */
+    public EssServer getServer() {
+        return server;
     }
 
 }

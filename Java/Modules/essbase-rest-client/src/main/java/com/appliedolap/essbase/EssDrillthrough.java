@@ -55,6 +55,11 @@ public class EssDrillthrough extends EssObject {
         return name;
     }
 
+    @Override
+    public Type getType() {
+        return Type.DRILLTHROUGH;
+    }
+
     /**
      * Gets the URL of this drill-through report (URL-style only!). This API will likely change soon as support
      * for different drill-through types is built out.
@@ -72,8 +77,8 @@ public class EssDrillthrough extends EssObject {
      * @see Type
      * @return the type
      */
-    public Type getType() {
-        return Type.valueOf(getDrillthroughBean().getType());
+    public DrillthroughType getDrillthroughType() {
+        return DrillthroughType.valueOf(getDrillthroughBean().getType());
     }
 
     /**
@@ -162,7 +167,7 @@ public class EssDrillthrough extends EssObject {
      * @param outputStream the stream to output to
      */
     public void run(Map<String, String> pov, OutputStream outputStream, Options options) {
-        if (getType() != Type.DATASOURCE) throw new IllegalStateException("Cannot call run on a drill-through report that is not of type " + Type.DATASOURCE);
+        if (getDrillthroughType() != DrillthroughType.DATASOURCE) throw new IllegalStateException("Cannot call run on a drill-through report that is not of type " + Type.DATASOURCE);
 
         // consider the column mappings and pov together and make sure that necessary values are provided.
         Map<String, String> filters = new LinkedHashMap<>();
@@ -245,7 +250,7 @@ public class EssDrillthrough extends EssObject {
     /**
      * The drill-through report type
      */
-    public enum Type {
+    public enum DrillthroughType {
 
         // URL type seems to have nulls for: dataSourceName, columnMapping, columns, parameterMapping
         DATASOURCE, URL

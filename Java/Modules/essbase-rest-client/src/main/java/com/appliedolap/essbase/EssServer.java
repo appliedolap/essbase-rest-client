@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,6 +60,11 @@ public class EssServer extends EssObject {
     @Override
     public String getName() {
         return server;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.SERVER;
     }
 
     /**
@@ -316,7 +320,7 @@ public class EssServer extends EssObject {
         JobsInputBean job = new JobsInputBean();
         job.setApplication(application);
         job.setDb(database);
-        job.setJobtype(EssJob.Type.IMPORT_EXCEL.getParam());
+        job.setJobtype(EssJob.JobType.IMPORT_EXCEL.getParam());
 
         ParametersBean params = new ParametersBean();
 
@@ -505,7 +509,7 @@ public class EssServer extends EssObject {
          */
         BSO("B");
 
-        private String code;
+        private final String code;
 
         ApplicationType(String code) {
             this.code = code;

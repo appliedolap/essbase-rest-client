@@ -82,6 +82,11 @@ public class EssApplication extends EssObject {
         return application.getName();
     }
 
+    @Override
+    public Type getType() {
+        return Type.APPLICATION;
+    }
+
     /**
      * Get the server that contains this application.
      *

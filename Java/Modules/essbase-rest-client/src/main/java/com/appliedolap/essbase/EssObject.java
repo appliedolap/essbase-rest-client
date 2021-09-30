@@ -19,7 +19,7 @@ public abstract class EssObject {
      */
     public abstract String getName();
 
-    //public abstract Type getType();
+    public abstract Type getType();
 
     public enum Type {
         APPLICATION,
@@ -36,6 +36,7 @@ public abstract class EssObject {
         SERVER,
         SESSION,
         URL,
+        USER,
         UTILITY,
         VARIABLE
     }

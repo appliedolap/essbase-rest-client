@@ -53,6 +53,11 @@ public class EssFile extends EssObject {
         return name;
     }
 
+    @Override
+    public Type getType() {
+        return Type.FILE;
+    }
+
     /**
      * Returns the full path of the file, i.e. the combination of its path and filename.
      *

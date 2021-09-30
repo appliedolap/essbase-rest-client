@@ -1,11 +1,11 @@
 package com.appliedolap.essbase;
 
-import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.api.BatchOutlineEditingApi;
-import com.appliedolap.essbase.client.api.DimensionsApi;
-import com.appliedolap.essbase.client.api.OutlineViewerApi;
-import com.appliedolap.essbase.client.model.*;
+import com.appliedolap.essbase.client.model.ExportOptions;
+import com.appliedolap.essbase.client.model.MemberBean;
+import com.appliedolap.essbase.client.model.OtlEditMain;
+import com.appliedolap.essbase.client.model.RestCollectionResponse;
 import com.appliedolap.essbase.util.GenericApiCallback;
 import com.appliedolap.essbase.util.GenericDownload;
 import com.appliedolap.essbase.util.WrapperUtil;
@@ -14,8 +14,10 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -44,6 +46,11 @@ public class EssOutline extends EssObject {
     @Override
     public String getName() {
         return cube.getName();
+    }
+
+    @Override
+    public Type getType() {
+        return Type.OUTLINE;
     }
 
     public void getMember(String memberName) {

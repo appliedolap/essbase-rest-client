@@ -46,6 +46,11 @@ public class EssCube extends EssObject {
         return cube.getName();
     }
 
+    @Override
+    public Type getType() {
+        return Type.CUBE;
+    }
+
     /**
      * Get the list of scripts associated with this cube.
      *
