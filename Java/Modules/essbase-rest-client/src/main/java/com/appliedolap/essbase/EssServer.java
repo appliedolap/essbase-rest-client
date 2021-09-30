@@ -4,6 +4,7 @@ import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.*;
 import com.appliedolap.essbase.util.GenericApiCallback;
+import com.appliedolap.essbase.util.Utils;
 import com.appliedolap.essbase.util.WrapperUtil;
 import okhttp3.Response;
 import org.apache.commons.io.IOUtils;
@@ -57,21 +58,6 @@ public class EssServer extends EssObject {
         return new ApiContext(client);
     }
 
-    /**
-     * Gets an application with the given name
-     *
-     * @param applicationName the application name
-     * @return an application object for the application
-     */
-    public EssApplication getApplication(String applicationName) {
-        for (EssApplication application : getApplications()) {
-            if (application.getName().equals(applicationName)) {
-                return application;
-            }
-        }
-        throw new IllegalArgumentException("No application with name " + applicationName);
-    }
-
     @Override
     public String getName() {
         return server;
@@ -93,6 +79,16 @@ public class EssServer extends EssObject {
         } catch (ApiException e) {
             throw new EssApiException(e);
         }
+    }
+
+    /**
+     * Gets an application with the given name
+     *
+     * @param applicationName the application name
+     * @return an application object for the application
+     */
+    public EssApplication getApplication(String applicationName) {
+        return Utils.getWithName(getApplications(), applicationName, Type.APPLICATION);
     }
 
     /**
@@ -340,6 +336,12 @@ public class EssServer extends EssObject {
         }
     }
 
+    /**
+     * Returns the list of URLs known to this server. Generally speaking this seems to be the URL for the Jet UI, REST API,
+     * XMLA provider, and some others.
+     *
+     * @return list of URLs from the corresponding API
+     */
     public List<EssURL> getURLs() {
         try {
             return api.getUrlsApi().uRLsGet().getItems()
@@ -349,6 +351,33 @@ public class EssServer extends EssObject {
         } catch (ApiException e) {
             throw new EssApiException(e);
         }
+    }
+
+    /**
+     * Get the list of global data sources defined on the server.
+     *
+     * @return list of global data sources
+     */
+    public List<EssDataSource> getDataSources() {
+        try {
+            return api.getGlobalDataSourcesApi().globalDatasourcesGetDatasources(0, 1000).getItems()
+                    .stream()
+                    .map(ds -> new EssDataSource(api, this, ds))
+                    .collect(Collectors.toList());
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    /**
+     * Get the data source with the given name. Will throw {@link com.appliedolap.essbase.exceptions.NoSuchEssbaseObjectException}
+     * if there is no data source with that name.
+     *
+     * @param dataSourceName the data source name
+     * @return the data source with that name
+     */
+    public EssDataSource getDataSource(String dataSourceName) {
+        return Utils.getWithName(getDataSources(), dataSourceName, Type.DATASOURCE);
     }
 
     /**

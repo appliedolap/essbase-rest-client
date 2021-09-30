@@ -41,7 +41,7 @@ public class EssApplication extends EssObject {
         STARTED,
 
         /**
-         * State is unknown. Currently unknown whether there are any states beyond stopped and started (such as starting)
+         * State is unknown, currently unknown whether there are any states beyond stopped and started (such as starting)
          * but this gives us some buffer against unknown states breaking the API.
          */
         UNKNOWN;
@@ -137,9 +137,7 @@ public class EssApplication extends EssObject {
      * @return the cube
      */
     public EssCube getCube(String cubeName) {
-        Cube cube = new Cube();
-        cube.setName(cubeName);
-        return new EssCube(api, this, cube);
+        return Utils.getWithName(getCubes(), cubeName, EssObject.Type.CUBE);
     }
 
     /**
@@ -269,7 +267,7 @@ public class EssApplication extends EssObject {
      * Stops the application.
      */
     public void stop() {
-        // in practice, it seems that 'stop' also works or the input parameter is simply not case sensitive
+        // in practice, it seems that 'stop' also works or the input parameter is simply not case-sensitive
         WrapperUtil.wrap(() -> api.getApplicationsApi().applicationsPerformOperation(getName(), "Stop"));
     }
 
@@ -277,7 +275,7 @@ public class EssApplication extends EssObject {
      * Starts the application
      */
     public void start() {
-        // in practice, it seems that 'start' also works or the input parameter is simply not case sensitive
+        // in practice, it seems that 'start' also works or the input parameter is simply not case-sensitive
         WrapperUtil.wrap(() -> api.getApplicationsApi().applicationsPerformOperation(getName(), "Start"));
     }
 
