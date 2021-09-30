@@ -285,7 +285,7 @@ public class EssCube extends EssObject {
         JobsInputBean job = new JobsInputBean();
         job.setApplication(getApplicationName());
         job.setDb(getName());
-        job.setJobtype(EssJob.Type.EXPORT_EXCEL.getParam());
+        job.setJobtype(EssJob.JobType.EXPORT_EXCEL.getParam());
 
         ParametersBean params = new ParametersBean();
         params.dataLevel("ALL_DATA");
