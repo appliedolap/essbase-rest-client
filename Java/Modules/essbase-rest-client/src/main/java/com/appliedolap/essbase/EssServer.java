@@ -3,10 +3,16 @@ package com.appliedolap.essbase;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.*;
+import com.appliedolap.essbase.util.GenericApiCallback;
 import com.appliedolap.essbase.util.WrapperUtil;
+import okhttp3.Response;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -341,6 +347,30 @@ public class EssServer extends EssObject {
                     .map(url -> new EssURL(api, this, url))
                     .collect(Collectors.toList());
         } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    /**
+     * Calls the global data source endpoint to execute a query against a data source with the given parameters.
+     *
+     * @param query the query
+     * @param includeHeaders whether to include headers in the result
+     * @param delimiter the delimiter (currently only space and tab are supported by the server, you can use constants in {@link EssDataSource} for convenience)
+     * @param params the parameters, if any. If none, supply an empty map
+     * @param outputStream the output stream to write results to
+     */
+    // TODO: get the metadataOnly flag into the OpenAPI call; it exists but is not getting generated. It causes you to get JDBC headers only but with no data
+    public void streamDataSource(String query, boolean includeHeaders, String delimiter, Map<String, Object> params, OutputStream outputStream) {
+        try {
+            DatasourceQueryInfo datasourceQueryInfo = new DatasourceQueryInfo();
+            datasourceQueryInfo.setQuery(query);
+            datasourceQueryInfo.setDelimiter(delimiter);
+            datasourceQueryInfo.setParams(params);
+            GenericApiCallback callback = new GenericApiCallback();
+            Response response = api.getGlobalDataSourcesApi().globalDatasourcesGetDataStreamCall(includeHeaders, datasourceQueryInfo, callback).execute();
+            IOUtils.copy(response.body().byteStream(), outputStream);
+        } catch (ApiException | IOException e) {
             throw new EssApiException(e);
         }
     }

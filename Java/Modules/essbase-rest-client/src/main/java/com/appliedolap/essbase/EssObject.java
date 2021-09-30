@@ -19,4 +19,10 @@ public abstract class EssObject {
      */
     public abstract String getName();
 
+    public enum Type {
+
+        APPLICATION, CUBE, DRILLTHROUGH_REPORT
+
+    }
+
 }

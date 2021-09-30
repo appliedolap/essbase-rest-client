@@ -2,6 +2,7 @@ package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.*;
+import com.appliedolap.essbase.exceptions.NoSuchEssbaseObjectException;
 import com.appliedolap.essbase.misc.MdxJson;
 import com.appliedolap.essbase.util.GenericApiCallback;
 import com.appliedolap.essbase.util.WrapperUtil;
@@ -216,6 +217,24 @@ public class EssCube extends EssObject {
         } catch (ApiException apiException) {
             throw new EssApiException(apiException);
         }
+    }
+
+    /**
+     * Gets a drill-through report with a specific name. Note that the current implementation of this method hits the
+     * drill-through report list endpoint and filters based on the name, so you will likely end up with two trips to the
+     * server: one to get the list, and one to get the details of the report, which will happen when you access most
+     * detailed properties in the drill-through report.
+     *
+     * @param drillthroughName the name of the drill-through report
+     * @return a drill-through report object
+     */
+    public EssDrillthrough getDrillthrough(String drillthroughName) {
+        for (EssDrillthrough drillthrough : getDrillthroughs()) {
+            if (drillthrough.getName().equals(drillthroughName)) {
+                return drillthrough;
+            }
+        }
+        throw new NoSuchEssbaseObjectException(drillthroughName, Type.CUBE);
     }
 
     /**

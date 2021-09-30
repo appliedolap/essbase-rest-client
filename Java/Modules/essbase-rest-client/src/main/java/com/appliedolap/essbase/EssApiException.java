@@ -14,6 +14,10 @@ import java.util.Map;
  */
 public class EssApiException extends RuntimeException {
 
+    public EssApiException(String message) {
+        super(message);
+    }
+
     public EssApiException(Throwable throwable) {
         super(getBestMessage(throwable), throwable);
     }

@@ -1,18 +1,20 @@
 package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.ApiException;
+import com.appliedolap.essbase.client.model.ColumnMappingInfo;
 import com.appliedolap.essbase.client.model.DrillthroughBean;
 import com.appliedolap.essbase.client.model.ReportBean;
+import com.appliedolap.essbase.exceptions.DrillthroughColumnMismatchException;
 import com.appliedolap.essbase.util.WrapperUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.OutputStream;
+import java.util.*;
 
 /**
- * Represents a drill-through report on a given cube
+ * Represents a drill-through report on a given cube.
  */
 public class EssDrillthrough extends EssObject {
 
@@ -20,60 +22,27 @@ public class EssDrillthrough extends EssObject {
 
     private final EssCube cube;
 
-    private boolean hasDetails = false;
-
     /**
      * name is final -- the REST API does not honor the name field when updating the report, and it is used as part of
      * the URL. A pseudo-rename looks like it is accomplished via a copy and delete
      */
     private final String name;
 
-    private String url;
-
-    private List<String> drillableRegions;
+    private DrillthroughBean drillthroughBean;
 
     EssDrillthrough(ApiContext api, EssCube cube, ReportBean reportBean) {
         super(api);
         this.cube = cube;
         this.name = reportBean.getName();
-
-//        try {
-//            // if a URL-type drillthrough, will have:
-//            // type = URL
-//            // url = "the url value"
-//            // name = "the name of the drill report"
-//            // a List<String> for drillable regions containing regions such as @Member("Actual")
-//            // useTempTables = false (not sure if relevant)
-//            // the following seem blank for this type: dataSourceName, columnMapping, columns, parameterMapping
-//
-//            // if columnar:
-//            // dataSourceName is set ("UserList")
-//            // columnMapping is Map<String to ColumnMappingInfo), such as
-//            //   FIRST_NAME -> dimension=CellProperties, generation=null, level = Level0, type = enum(LEVEL0), generationNumber= null
-//            // null: url
-//            // columns: List<String> FIRST_NAME, LAST_NAME
-//            // drillable regions still set as normal
-//            // type: DATASOURCE
-//            // name = same
-//            // Use Temporary Tables is an option in the Essbase JET UI but seems greyed out; may be enabled when using a
-//            // true SQL source
-//            // DrillthroughBean drillthroughBean = drillThroughReportsApi.drillThroughReportsGetReport(cube.getApplication().getName(), cube.getName(), reportBean.getName());
-//        } catch (ApiException apiException) {
-//            apiException.printStackTrace();
-//        }
     }
 
-    private void loadDetails() {
-        if (!hasDetails) {
-            try {
-                DrillthroughBean drillthroughBean = api.getDrillThroughReportsApi().drillThroughReportsGetReport(cube.getApplication().getName(), cube.getName(), getName());
-                this.url = drillthroughBean.getUrl();
-                this.drillableRegions = new ArrayList<>(drillthroughBean.getDrillableRegions());
-                this.hasDetails = true;
-            } catch (ApiException apiException) {
-                throw new EssApiException(apiException);
-            }
-        }
+    /**
+     * Returns the cube that owns this drill-through object.
+     *
+     * @return the parent cube for this drill-through definition
+     */
+    public EssCube getCube() {
+        return cube;
     }
 
     /**
@@ -90,11 +59,21 @@ public class EssDrillthrough extends EssObject {
      * Gets the URL of this drill-through report (URL-style only!). This API will likely change soon as support
      * for different drill-through types is built out.
      *
-     * @return the drill URL
+     * @return the drill URL if there is one, null otherwise, such as on data source reports
      */
     public String getUrl() {
-        loadDetails();
-        return url;
+        return getDrillthroughBean().getUrl();
+    }
+
+    /**
+     * Gets the type of report, which will be either <code>DATASOURCE</code> or <code>URL</code>. This method causes
+     * a fetch to the drill-through report definition endpoint if it hasn't already been fetched.
+     *
+     * @see Type
+     * @return the type
+     */
+    public Type getType() {
+        return Type.valueOf(getDrillthroughBean().getType());
     }
 
     /**
@@ -103,18 +82,16 @@ public class EssDrillthrough extends EssObject {
      * @param url the drill URL
      */
     public void setUrl(String url) {
-        loadDetails();
-        this.url = url;
+        getDrillthroughBean().setUrl(url);
     }
 
     /**
-     * Get the drillable regions)
+     * Get the drillable regions.
      *
      * @return the list of drillable regions
      */
     public List<String> getDrillableRegions() {
-        loadDetails();
-        return Collections.unmodifiableList(drillableRegions);
+        return getDrillthroughBean().getDrillableRegions();
     }
 
     /**
@@ -123,8 +100,7 @@ public class EssDrillthrough extends EssObject {
      * @param drillableRegions the drillable regions
      */
     public void setDrillableRegions(List<String> drillableRegions) {
-        loadDetails();
-        this.drillableRegions = drillableRegions;
+        getDrillthroughBean().setDrillableRegions(drillableRegions);
     }
 
     /**
@@ -132,14 +108,31 @@ public class EssDrillthrough extends EssObject {
      */
     public void save() {
         try {
-            DrillthroughBean drillthroughBean = new DrillthroughBean();
-            drillthroughBean.setType("URL");
-            drillthroughBean.setUrl(url);
-            drillthroughBean.setDrillableRegions(drillableRegions);
             api.getDrillThroughReportsApi().drillThroughReportsUpdateReport(cube.getApplication().getName(), cube.getName(), name, drillthroughBean);
         } catch (ApiException apiException) {
             throw new EssApiException(apiException);
         }
+    }
+
+    /**
+     * The overall drill-through object is constructed from the "get drill-through reports API" which basically has the
+     * name of the report, all other properties must be fetched from the individual report API. This class employs a
+     * lazy fetch strategy so that the details are fetched if needed, once, and then subsequently used. Therefore,
+     * accesses to the report type and other properties go through this method so that the fetch will happen. This method
+     * is intentionally private so that the DrillthroughBean object does not leak out into the public client API.
+     *
+     * @return the drillthrough bean object (details of the drill-through report)
+     */
+    private DrillthroughBean getDrillthroughBean() {
+        if (drillthroughBean == null) {
+            try {
+                drillthroughBean = api.getDrillThroughReportsApi().drillThroughReportsGetReport(cube.getApplication().getName(), cube.getName(), getName());
+                return drillthroughBean;
+            } catch (ApiException apiException) {
+                throw new EssApiException(apiException);
+            }
+        }
+        return drillthroughBean;
     }
 
     /**
@@ -148,6 +141,164 @@ public class EssDrillthrough extends EssObject {
     public void delete() {
         logger.info("Deleting drill-through report {}", getName());
         WrapperUtil.wrap(() -> api.getDrillThroughReportsApi().drillThroughReportsDelete(cube.getApplication().getName(), cube.getName(), getName()));
+    }
+
+    /**
+     * Executes a drill-through request for the given POV and sends output to the given output stream. The default
+     * {@link Options} will be used for output.
+     *
+     * @param pov a mappings of dimensions to members representing the drilled cell.
+     * @param outputStream the stream to output to
+     */
+    public void run(Map<String, String> pov, OutputStream outputStream) {
+        run(pov, outputStream, new Options());
+    }
+
+    /**
+     * Executes a drill-through request for the given POV and sends output to the given output stream.
+     *
+     * @param pov a mappings of dimensions to members representing the drilled cell.
+     * @param options custom options for output generation
+     * @param outputStream the stream to output to
+     */
+    public void run(Map<String, String> pov, OutputStream outputStream, Options options) {
+        if (getType() != Type.DATASOURCE) throw new IllegalStateException("Cannot call run on a drill-through report that is not of type " + Type.DATASOURCE);
+
+        // consider the column mappings and pov together and make sure that necessary values are provided.
+        Map<String, String> filters = new LinkedHashMap<>();
+        Map<String, ColumnMappingInfo> columnMappings = drillthroughBean.getColumnMapping();
+        if (columnMappings != null) {
+            for (String columnName : columnMappings.keySet()) {
+                ColumnMappingInfo columnMappingInfo = columnMappings.get(columnName);
+                String dimension = columnMappingInfo.getDimension();
+                if (!pov.containsKey(dimension)) {
+                    throw new DrillthroughColumnMismatchException(this, columnName, dimension);
+                } else {
+                    filters.put(columnName, pov.get(dimension));
+                }
+            }
+        }
+
+        // build the query against the data source
+        String query = new DataSourceQueryBuilder(drillthroughBean.getDataSourceName())
+                .columns(drillthroughBean.getColumns())
+                .filter(filters)
+                .build();
+
+        logger.info("Drill-through {} execution constructed query: {}", getName(), query);
+        cube.getApplication().getServer().streamDataSource(query, options.isIncludeHeaders(), options.getDelimiter(), Collections.emptyMap(), outputStream);
+    }
+
+    /**
+     * Helper class for building a query against a data source.
+     */
+    private static class DataSourceQueryBuilder {
+
+        private final String dataSourceName;
+
+        private final List<String> columns;
+
+        private final Map<String, String> columnMappings;
+
+        public DataSourceQueryBuilder(String dataSourceName) {
+            this.dataSourceName = dataSourceName;
+            this.columns = new ArrayList<>();
+            this.columnMappings = new LinkedHashMap<>();
+        }
+
+        public DataSourceQueryBuilder columns(List<String> columns) {
+            this.columns.addAll(columns);
+            return this;
+        }
+
+        public DataSourceQueryBuilder filter(String columnName, String value) {
+            columnMappings.put(columnName, value);
+            return this;
+        }
+
+        public DataSourceQueryBuilder filter(Map<String, String> columnNamesToMembers) {
+            for (Map.Entry<String, String> entry : columnNamesToMembers.entrySet()) {
+                filter(entry.getKey(), entry.getValue());
+            }
+            return this;
+        }
+
+        public String build() {
+            StringBuilder sb = new StringBuilder("SELECT ");
+            String allColumnNames = StringUtils.join(columns, ", ");
+            sb.append(allColumnNames);
+            sb.append(" FROM ");
+            sb.append(dataSourceName);
+            sb.append (" WHERE (1 = 1)");
+            for (Map.Entry<String, String> mappingEntry : columnMappings.entrySet()) {
+                sb.append(" AND ");
+                sb.append(mappingEntry.getKey());
+                sb.append(" = '");
+                sb.append(mappingEntry.getValue());
+                sb.append("'");
+            }
+            return sb.toString();
+        }
+
+    }
+
+    /**
+     * The drill-through report type
+     */
+    public enum Type {
+
+        // URL type seems to have nulls for: dataSourceName, columnMapping, columns, parameterMapping
+        DATASOURCE, URL
+
+    }
+
+    /**
+     * Options for drill-through report execution.
+     */
+    public static class Options {
+
+        private String delimiter = EssDataSource.DELIMITER_TAB;
+
+        private boolean includeHeaders = true;
+
+        /**
+         * Gets the current delimiter.
+         *
+         * @return the delimiter
+         */
+        public String getDelimiter() {
+            return delimiter;
+        }
+
+        /**
+         * Sets the delimiter to use. At the time of this writing, the Essbase REST API only allows a comma or tab. This
+         * Java API will not preclude you from using something else, but you are encouraged to use the constants in {@link EssDataSource}.
+         *
+         * @param delimiter the delimiter
+         */
+        public void setDelimiter(String delimiter) {
+            this.delimiter = delimiter;
+        }
+
+        /**
+         * Gets the value for including headers.
+         *
+         * @return true if include headers is on, false otherwise
+         */
+        public boolean isIncludeHeaders() {
+            return includeHeaders;
+        }
+
+        /**
+         * Sets whether headers are to be included in the output or not. This is a property on the Essbase REST API call
+         * (as opposed to a post-processing step).
+         *
+         * @param includeHeaders value for include headers
+         */
+        public void setIncludeHeaders(boolean includeHeaders) {
+            this.includeHeaders = includeHeaders;
+        }
+
     }
 
 }
