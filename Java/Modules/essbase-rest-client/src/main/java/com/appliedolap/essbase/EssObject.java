@@ -19,8 +19,16 @@ public abstract class EssObject {
      */
     public abstract String getName();
 
+    /**
+     * Gets the type of this object.
+     *
+     * @return the object type
+     */
     public abstract Type getType();
 
+    /**
+     * Object types for the Essbase REST API.
+     */
     public enum Type {
         APPLICATION,
         CUBE,
