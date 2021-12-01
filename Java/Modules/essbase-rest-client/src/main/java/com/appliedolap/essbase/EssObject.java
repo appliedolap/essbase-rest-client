@@ -46,7 +46,10 @@ public abstract class EssObject {
         URL,
         USER,
         UTILITY,
-        VARIABLE
+        VARIABLE,
+        DIMENSION,
+        GENERATION,
+        LEVEL
     }
 
 }

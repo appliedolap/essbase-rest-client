@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * BufferSettings
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-09-15T10:08:15.807377400-05:00[America/Chicago]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-11-29T21:46:59.899155-05:00[America/Indiana/Indianapolis]")
 public class BufferSettings {
   public static final String SERIALIZED_NAME_DATA_RETRIEVAL_BUFFER_SIZE = "dataRetrievalBufferSize";
   @SerializedName(SERIALIZED_NAME_DATA_RETRIEVAL_BUFFER_SIZE)

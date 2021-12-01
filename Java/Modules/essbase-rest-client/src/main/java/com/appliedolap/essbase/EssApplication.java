@@ -145,6 +145,10 @@ public class EssApplication extends EssObject {
         return Utils.getWithName(getCubes(), cubeName, EssObject.Type.CUBE);
     }
 
+    public ApiContext getApi() {
+        return api;
+    }
+
     /**
      * Copies this application to a new application with the given name.
      *

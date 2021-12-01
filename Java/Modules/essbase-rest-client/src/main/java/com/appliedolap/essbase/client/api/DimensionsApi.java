@@ -761,7 +761,7 @@ public class DimensionsApi {
      * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
      * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
      * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @return List&lt;GenerationLevelList&gt;
+     * @return GenerationLevelList
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -771,8 +771,8 @@ public class DimensionsApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public List<GenerationLevelList> dimensionsListDimGenerations(String applicationName, String databaseName, String dimensionName) throws ApiException {
-        ApiResponse<List<GenerationLevelList>> localVarResp = dimensionsListDimGenerationsWithHttpInfo(applicationName, databaseName, dimensionName);
+    public GenerationLevelList dimensionsListDimGenerations(String applicationName, String databaseName, String dimensionName) throws ApiException {
+        ApiResponse<GenerationLevelList> localVarResp = dimensionsListDimGenerationsWithHttpInfo(applicationName, databaseName, dimensionName);
         return localVarResp.getData();
     }
 
@@ -782,7 +782,7 @@ public class DimensionsApi {
      * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
      * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
      * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;List&lt;GenerationLevelList&gt;&gt;
+     * @return ApiResponse&lt;GenerationLevelList&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -792,9 +792,9 @@ public class DimensionsApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<List<GenerationLevelList>> dimensionsListDimGenerationsWithHttpInfo(String applicationName, String databaseName, String dimensionName) throws ApiException {
+    public ApiResponse<GenerationLevelList> dimensionsListDimGenerationsWithHttpInfo(String applicationName, String databaseName, String dimensionName) throws ApiException {
         okhttp3.Call localVarCall = dimensionsListDimGenerationsValidateBeforeCall(applicationName, databaseName, dimensionName, null);
-        Type localVarReturnType = new TypeToken<List<GenerationLevelList>>(){}.getType();
+        Type localVarReturnType = new TypeToken<GenerationLevelList>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
@@ -815,10 +815,10 @@ public class DimensionsApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call dimensionsListDimGenerationsAsync(String applicationName, String databaseName, String dimensionName, final ApiCallback<List<GenerationLevelList>> _callback) throws ApiException {
+    public okhttp3.Call dimensionsListDimGenerationsAsync(String applicationName, String databaseName, String dimensionName, final ApiCallback<GenerationLevelList> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = dimensionsListDimGenerationsValidateBeforeCall(applicationName, databaseName, dimensionName, _callback);
-        Type localVarReturnType = new TypeToken<List<GenerationLevelList>>(){}.getType();
+        Type localVarReturnType = new TypeToken<GenerationLevelList>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
@@ -901,7 +901,7 @@ public class DimensionsApi {
      * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
      * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
      * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @return List&lt;GenerationLevelList&gt;
+     * @return GenerationLevelList
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -911,8 +911,8 @@ public class DimensionsApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public List<GenerationLevelList> dimensionsListDimLevels(String applicationName, String databaseName, String dimensionName) throws ApiException {
-        ApiResponse<List<GenerationLevelList>> localVarResp = dimensionsListDimLevelsWithHttpInfo(applicationName, databaseName, dimensionName);
+    public GenerationLevelList dimensionsListDimLevels(String applicationName, String databaseName, String dimensionName) throws ApiException {
+        ApiResponse<GenerationLevelList> localVarResp = dimensionsListDimLevelsWithHttpInfo(applicationName, databaseName, dimensionName);
         return localVarResp.getData();
     }
 
@@ -922,7 +922,7 @@ public class DimensionsApi {
      * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
      * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
      * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;List&lt;GenerationLevelList&gt;&gt;
+     * @return ApiResponse&lt;GenerationLevelList&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -932,9 +932,9 @@ public class DimensionsApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<List<GenerationLevelList>> dimensionsListDimLevelsWithHttpInfo(String applicationName, String databaseName, String dimensionName) throws ApiException {
+    public ApiResponse<GenerationLevelList> dimensionsListDimLevelsWithHttpInfo(String applicationName, String databaseName, String dimensionName) throws ApiException {
         okhttp3.Call localVarCall = dimensionsListDimLevelsValidateBeforeCall(applicationName, databaseName, dimensionName, null);
-        Type localVarReturnType = new TypeToken<List<GenerationLevelList>>(){}.getType();
+        Type localVarReturnType = new TypeToken<GenerationLevelList>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
@@ -955,10 +955,10 @@ public class DimensionsApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call dimensionsListDimLevelsAsync(String applicationName, String databaseName, String dimensionName, final ApiCallback<List<GenerationLevelList>> _callback) throws ApiException {
+    public okhttp3.Call dimensionsListDimLevelsAsync(String applicationName, String databaseName, String dimensionName, final ApiCallback<GenerationLevelList> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = dimensionsListDimLevelsValidateBeforeCall(applicationName, databaseName, dimensionName, _callback);
-        Type localVarReturnType = new TypeToken<List<GenerationLevelList>>(){}.getType();
+        Type localVarReturnType = new TypeToken<GenerationLevelList>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

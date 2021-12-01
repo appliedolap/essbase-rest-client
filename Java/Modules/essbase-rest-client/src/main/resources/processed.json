@@ -1897,7 +1897,10 @@
           "500": {
             "description": "<p>Internal Server Error.</p>"
           }
-        }
+        },
+        "consumes": [
+          "application/json"
+        ]
       }
     },
     "/datasources": {
@@ -2128,7 +2131,10 @@
           "500": {
             "description": "<p>Internal Server Error.</p>"
           }
-        }
+        },
+        "consumes": [
+          "application/json"
+        ]
       }
     },
     "/datasources/query/data/{streamId}": {
@@ -6165,10 +6171,7 @@
           "200": {
             "description": "Generations are retrieved successfully. Gives all generation details of a dimension along with the links to get/edit each generation",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/GenerationLevelList"
-              }
+              "$ref": "#/definitions/GenerationLevelList"
             }
           },
           "400": {
@@ -6219,10 +6222,7 @@
           "200": {
             "description": "Levels are retrieved successfully. Gives all level details of a dimension along with the links to get/edit each level",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/GenerationLevelList"
-              }
+              "$ref": "#/definitions/GenerationLevelList"
             }
           },
           "400": {

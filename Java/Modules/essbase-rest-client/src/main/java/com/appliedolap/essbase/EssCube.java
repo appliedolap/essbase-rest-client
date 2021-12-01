@@ -279,6 +279,26 @@ public class EssCube extends EssObject {
     }
 
     /**
+     * Gets the list of dimensions on the cube, if any.
+     * @return the cube's dimensions
+     */
+    public List<EssDimension> getDimensions() {
+        try {
+            DimensionList dimensionList = api.getDimensionsApi().dimensionsListDimensions(application.getName(), cube.getName());
+            List<EssDimension> dimensions = new ArrayList<>();
+            if (dimensionList.getItems() != null) {
+                for (DimensionBean dimensionBean : dimensionList.getItems()) {
+                    EssDimension dimension = new EssDimension(api, application, this, dimensionBean);
+                    dimensions.add(dimension);
+                }
+            }
+            return Collections.unmodifiableList(dimensions);
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    /**
      * Exports this cube to an Excel workbook.
      */
     public void exportExcel() {
