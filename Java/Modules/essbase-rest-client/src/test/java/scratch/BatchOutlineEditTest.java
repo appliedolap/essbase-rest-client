@@ -15,11 +15,11 @@ public class BatchOutlineEditTest {
         try {
             ApiContext api = app.getApi();
             EssCube cube = app.getCube("Basic");
-            List<EssDimension> dimenList = cube.getDimensions();
+            /*List<EssDimension> dimenList = cube.getDimensions();
             GenerationLevelList genLevel = api.getDimensionsApi().dimensionsListDimGenerations("Sample", "Basic", "Year");
             EssGeneration generation = new EssGeneration(api, genLevel.getItems().get(0));
             dimenList.get(0).updateGeneration(generation.getNumber(), generation);
-            System.out.println("");
+            System.out.println("");*/
             /*List<EssDimension> dimensionList = cube.getDimensions();
             System.out.println();*/
             /*System.out.println("Calling");
