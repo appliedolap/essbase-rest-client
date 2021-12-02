@@ -286,7 +286,7 @@ public class LocksApi {
      * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
      * @param offset &lt;p&gt;Number of items to omit from the start of the result set. Default value is 0.&lt;/p&gt; (optional, default to 0)
      * @param limit &lt;p&gt;Maximum number of objects to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @return List&lt;LockObjectList&gt;
+     * @return LockObjectList
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -296,8 +296,8 @@ public class LocksApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public List<LockObjectList> locksGetLockedObjects(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
-        ApiResponse<List<LockObjectList>> localVarResp = locksGetLockedObjectsWithHttpInfo(applicationName, databaseName, offset, limit);
+    public LockObjectList locksGetLockedObjects(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
+        ApiResponse<LockObjectList> localVarResp = locksGetLockedObjectsWithHttpInfo(applicationName, databaseName, offset, limit);
         return localVarResp.getData();
     }
 
@@ -308,7 +308,7 @@ public class LocksApi {
      * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
      * @param offset &lt;p&gt;Number of items to omit from the start of the result set. Default value is 0.&lt;/p&gt; (optional, default to 0)
      * @param limit &lt;p&gt;Maximum number of objects to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @return ApiResponse&lt;List&lt;LockObjectList&gt;&gt;
+     * @return ApiResponse&lt;LockObjectList&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -318,9 +318,9 @@ public class LocksApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<List<LockObjectList>> locksGetLockedObjectsWithHttpInfo(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
+    public ApiResponse<LockObjectList> locksGetLockedObjectsWithHttpInfo(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
         okhttp3.Call localVarCall = locksGetLockedObjectsValidateBeforeCall(applicationName, databaseName, offset, limit, null);
-        Type localVarReturnType = new TypeToken<List<LockObjectList>>(){}.getType();
+        Type localVarReturnType = new TypeToken<LockObjectList>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
@@ -342,10 +342,10 @@ public class LocksApi {
         <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call locksGetLockedObjectsAsync(String applicationName, String databaseName, Integer offset, Integer limit, final ApiCallback<List<LockObjectList>> _callback) throws ApiException {
+    public okhttp3.Call locksGetLockedObjectsAsync(String applicationName, String databaseName, Integer offset, Integer limit, final ApiCallback<LockObjectList> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = locksGetLockedObjectsValidateBeforeCall(applicationName, databaseName, offset, limit, _callback);
-        Type localVarReturnType = new TypeToken<List<LockObjectList>>(){}.getType();
+        Type localVarReturnType = new TypeToken<LockObjectList>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

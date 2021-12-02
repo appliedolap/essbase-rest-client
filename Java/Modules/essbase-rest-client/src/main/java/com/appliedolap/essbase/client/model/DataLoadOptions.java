@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * DataLoadOptions
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-11-29T21:46:59.899155-05:00[America/Indiana/Indianapolis]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
 public class DataLoadOptions {
   public static final String SERIALIZED_NAME_CLEAR_COMBINATIONS = "clearCombinations";
   @SerializedName(SERIALIZED_NAME_CLEAR_COMBINATIONS)

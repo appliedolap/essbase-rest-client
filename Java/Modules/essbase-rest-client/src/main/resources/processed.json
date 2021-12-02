@@ -4494,10 +4494,7 @@
           "200": {
             "description": "Locked objects retrieved successfully. Gives the details of locked objects along with the links to lock/unlock the object",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/LockObjectList"
-              }
+              "$ref": "#/definitions/LockObjectList"
             }
           },
           "400": {

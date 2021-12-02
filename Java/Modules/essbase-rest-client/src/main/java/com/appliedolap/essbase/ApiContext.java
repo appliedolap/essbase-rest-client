@@ -49,6 +49,8 @@ public class ApiContext {
 
     private final GlobalDataSourcesApi globalDataSourcesApi;
 
+    private final LocksApi locksApi;
+
     ApiContext(ApiClient client) {
         this.applicationsApi = new ApplicationsApi(client);
         this.applicationConfigurationApi = new ApplicationConfigurationApi(client);
@@ -70,6 +72,7 @@ public class ApiContext {
         this.groupsApi = new GroupsApi(client);
         this.executeMdxApi = new ExecuteMdxApi(client);
         this.globalDataSourcesApi = new GlobalDataSourcesApi(client);
+        this.locksApi = new LocksApi(client);
     }
 
     public ApplicationsApi applicationsApi() {
@@ -156,4 +159,7 @@ public class ApiContext {
         return globalDataSourcesApi;
     }
 
+    public LocksApi getLocksApi() {
+        return locksApi;
+    }
 }

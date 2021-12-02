@@ -49,7 +49,8 @@ public abstract class EssObject {
         VARIABLE,
         DIMENSION,
         GENERATION,
-        LEVEL
+        LEVEL,
+        LOCK
     }
 
 }

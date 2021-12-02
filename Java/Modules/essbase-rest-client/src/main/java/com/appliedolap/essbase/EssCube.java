@@ -1,6 +1,7 @@
 package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.ApiException;
+import com.appliedolap.essbase.client.api.LocksApi;
 import com.appliedolap.essbase.client.model.*;
 import com.appliedolap.essbase.exceptions.NoSuchEssbaseObjectException;
 import com.appliedolap.essbase.misc.MdxJson;
@@ -17,6 +18,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static com.appliedolap.essbase.util.Utils.wrap;
 
@@ -293,6 +295,63 @@ public class EssCube extends EssObject {
                 }
             }
             return Collections.unmodifiableList(dimensions);
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    /**
+     * List Locked Objects Returns all the locked objects from the specified application and database
+     * @param offset Number of items to omit from the start of the result set. Default value is 0
+     * @param limit Maximum number of objects to return. Default is 50
+     * @return LockObjectLis
+     */
+    public List<EssLock> getLockedObjects(Integer offset, Integer limit) {
+        try {
+            LockObjectList lockObjectLists = api.getLocksApi().locksGetLockedObjects(application.getName(), cube.getName(), offset, limit);
+            List<EssLock> locks = new ArrayList<>();
+            List<LockObject> lockObject = lockObjectLists.getItems();
+            if (Objects.nonNull(lockObject)) {
+                for (LockObject object : lockObject) {
+                    EssLock lock = new EssLock(api, object);
+                    locks.add(lock);
+                }
+            }
+            return locks;
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    /**
+     * Unlock Object Unlocks the object in the specified application and database
+     * @param lockedObject Details about object to be unlocked
+     */
+    public void unlockObject(EssLock lockedObject) {
+        try {
+            LockObject object = new LockObject();
+            object.setName(lockedObject.getName());
+            object.setTime(lockedObject.getTime());
+            object.setUser(lockedObject.getUser());
+            object.setType(lockedObject.getLockObjectType());
+            api.getLocksApi().locksUnLockObject(application.getName(), cube.getName(), object);
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    /**
+     * Lock Object Locks the object in the specified application and database and returns the details of the locked object
+     * @param unlockedObject Object details to be locked (required)
+     */
+    public void lockObject(EssLock unlockedObject) {
+        try {
+            LockObject object = new LockObject();
+            object.setName(unlockedObject.getName());
+            object.setTime(unlockedObject.getTime());
+            object.setUser(unlockedObject.getUser());
+            object.setType(unlockedObject.getLockObjectType());
+            api.getLocksApi().locksLockObject(application.getName(), cube.getName(), object);
         } catch (ApiException e) {
             throw new EssApiException(e);
         }
