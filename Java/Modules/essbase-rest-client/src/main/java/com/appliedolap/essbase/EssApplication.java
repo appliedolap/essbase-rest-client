@@ -2,11 +2,15 @@ package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.*;
+import com.appliedolap.essbase.util.GenericApiCallback;
+import com.appliedolap.essbase.util.GenericDownload;
 import com.appliedolap.essbase.util.Utils;
 import com.appliedolap.essbase.util.WrapperUtil;
+import okhttp3.Call;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -288,4 +292,29 @@ public class EssApplication extends EssObject {
         WrapperUtil.wrap(() -> api.getApplicationsApi().applicationsPerformOperation(getName(), "Start"));
     }
 
+    /**
+     * Gets the latest applicaiton log as a byte array
+     * @return byte array of the log
+     */
+    public void downloadLatestLog(OutputStream outputStream) {
+        try {
+            Call call = api.getApplicationLogsApi().applicationLogsDownloadLatestLogFileCall(application.getName(), new GenericApiCallback());
+            outputStream.write(GenericDownload.downloadBytes(call.execute()));
+        } catch (ApiException | IOException a) {
+            throw new EssApiException(a);
+        }
+    }
+
+    /**
+     * Gets all application log as a byte array.
+     * @return byte array of the log (User is Required to convert into zip)
+     */
+    public void downloadAllLogsAsZip(OutputStream outputStream) {
+        try {
+            Call call = api.getApplicationLogsApi().applicationLogsDownloadAllLogFilesCall(application.getName(), new GenericApiCallback());
+            outputStream.write(GenericDownload.downloadBytes(call.execute()));
+        } catch (ApiException | IOException a) {
+            throw new EssApiException(a);
+        }
+    }
 }

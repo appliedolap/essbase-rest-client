@@ -51,6 +51,8 @@ public class ApiContext {
 
     private final LocksApi locksApi;
 
+    private final ApplicationLogsApi logsApi;
+
     ApiContext(ApiClient client) {
         this.applicationsApi = new ApplicationsApi(client);
         this.applicationConfigurationApi = new ApplicationConfigurationApi(client);
@@ -73,6 +75,7 @@ public class ApiContext {
         this.executeMdxApi = new ExecuteMdxApi(client);
         this.globalDataSourcesApi = new GlobalDataSourcesApi(client);
         this.locksApi = new LocksApi(client);
+        this.logsApi = new ApplicationLogsApi(client);
     }
 
     public ApplicationsApi applicationsApi() {
@@ -161,5 +164,9 @@ public class ApiContext {
 
     public LocksApi getLocksApi() {
         return locksApi;
+    }
+
+    public ApplicationLogsApi getApplicationLogsApi() {
+        return logsApi;
     }
 }
