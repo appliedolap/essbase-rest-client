@@ -9,7 +9,7 @@ in a single module for the sake of convenience and some technical factors.
 
 The library can be consumed as simply as doing the following:
 
-    EssServer server = new EssServer("http://docker1:9000/essbase/rest/v1", "admin", "welcome1");
+    EssServer server = new EssServer("http://docker1:9000/essbase", "admin", "welcome1");
     List<EssApplication> applications = server.getApplications();
     for (EssApplication application : applications) {
         System.out.println("App: " + application);
