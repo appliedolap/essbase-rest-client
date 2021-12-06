@@ -7884,7 +7884,10 @@
           "500": {
             "description": "Internal Server Error."
           }
-        }
+        },
+        "consumes": [
+          "application/json"
+        ]
       }
     },
     "/applications/{application}/databases/{database}/mdx/{name}": {
@@ -15942,32 +15945,119 @@
     },
     "Datasource": {
       "type": "object",
+      "required": [
+        "columns",
+        "connection",
+        "type"
+      ],
       "properties": {
-        "header": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "TEMPLATE",
+            "EXCELFILE",
+            "DB",
+            "DELIMITEDFILE",
+            "FIXEDWIDTHFILE",
+            "BI",
+            "ESSBASE",
+            "JDBC",
+            "SPARK",
+            "MS_SQL",
+            "MYSQL",
+            "DB2",
+            "ORACLE",
+            "FILE"
+          ]
+        },
+        "connection": {
           "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "columns": {
+          "$ref": "#/definitions/ColumnsType"
         },
         "name": {
           "type": "string"
         },
-        "tokens": {
-          "type": "array",
-          "items": {
-            "type": "string"
+        "ignoreErrorRecords": {
+          "type": "boolean"
+        },
+        "delimeter": {
+          "type": "string",
+          "xml": {
+            "name": "delimiter"
           }
         },
-        "tokensCombineOption": {
-          "type": "string",
-          "enum": [
-            "AND",
-            "OR"
-          ]
+        "customDelimiter": {
+          "type": "string"
         },
-        "sqlProperties": {
-          "$ref": "#/definitions/SQLProperties"
+        "query": {
+          "type": "string"
         },
-        "fileProperties": {
-          "$ref": "#/definitions/FileProperties"
+        "application": {
+          "type": "string"
+        },
+        "cube": {
+          "type": "string"
+        },
+        "startRow": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "endRow": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "headerRow": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sheet": {
+          "type": "string"
+        },
+        "skipHiddenRows": {
+          "type": "boolean"
+        },
+        "widths": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64",
+            "xml": {
+              "name": "widths"
+            }
+          }
+        },
+        "queryParameters": {
+          "type": "array",
+          "items": {
+            "xml": {
+              "name": "queryParameters"
+            },
+            "$ref": "#/definitions/QueryParamsInfo"
+          }
+        },
+        "headers": {
+          "type": "array",
+          "items": {
+            "xml": {
+              "name": "headers"
+            },
+            "$ref": "#/definitions/HeaderType"
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
         }
+      },
+      "xml": {
+        "name": "datasource"
       }
     },
     "DatasourcesList": {
@@ -22434,6 +22524,40 @@
         }
       }
     },
+    "FileBean": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "fullPath": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "permissions": {
+          "type": "object",
+          "properties": {
+            "addFolder": {
+              "type": "boolean"
+            },
+            "addFile": {
+              "type": "boolean"
+            }
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        }
+      },
+      "xml": {
+        "name": "File"
+      }
+    },
     "FileCollectionResponse": {
       "type": "object",
       "properties": {
@@ -22468,40 +22592,6 @@
           "type": "integer",
           "format": "int64"
         }
-      }
-    },
-    "FileBean": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "fullPath": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "permissions": {
-          "type": "object",
-          "properties": {
-            "addFolder": {
-              "type": "boolean"
-            },
-            "addFile": {
-              "type": "boolean"
-            }
-          }
-        },
-        "links": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Link"
-          }
-        }
-      },
-      "xml": {
-        "name": "File"
       }
     }
   },
