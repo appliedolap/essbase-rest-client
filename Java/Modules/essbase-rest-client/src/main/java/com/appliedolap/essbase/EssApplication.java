@@ -293,8 +293,8 @@ public class EssApplication extends EssObject {
     }
 
     /**
-     * Gets the latest applicaiton log as a byte array
-     * @return byte array of the log
+     * Gets the latest applicaiton log as a outputstream
+     * @return outputstream of the log
      */
     public void downloadLatestLog(OutputStream outputStream) {
         try {
@@ -306,8 +306,8 @@ public class EssApplication extends EssObject {
     }
 
     /**
-     * Gets all application log as a byte array.
-     * @return byte array of the log (User is Required to convert into zip)
+     * Gets all application log as a outputStream.
+     * @return outputStream of the log (user is Required to convert into zip)
      */
     public void downloadAllLogsAsZip(OutputStream outputStream) {
         try {

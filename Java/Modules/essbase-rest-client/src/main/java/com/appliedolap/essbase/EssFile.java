@@ -1,10 +1,7 @@
 package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.ApiException;
-import com.appliedolap.essbase.client.model.CollectionResponse;
-import com.appliedolap.essbase.client.model.JobRecordBean;
-import com.appliedolap.essbase.client.model.JobsInputBean;
-import com.appliedolap.essbase.client.model.ParametersBean;
+import com.appliedolap.essbase.client.model.*;
 import com.appliedolap.essbase.util.GenericApiCallback;
 import com.appliedolap.essbase.util.GenericDownload;
 import okhttp3.Call;
@@ -164,32 +161,67 @@ public class EssFile extends EssObject {
         }
     }
 
-    // TODO: move to EssFolder
-    @Deprecated
-    public List<EssFile> getFiles() {
+    /**
+     * Copy a file from source to destination.
+     * @param body File path details.(required)
+     * @param overwrite Overwrite existing file. (optional, default to false)
+     */
+    public void copy(EssFilePathDetail body, Boolean overwrite) {
         try {
-            String pathForFetch = fullPath;
-            if (pathForFetch.startsWith("/")) {
-                pathForFetch = pathForFetch.substring(1);
+            if (overwrite == null){
+                overwrite = false;
             }
-            CollectionResponse files = api.getFilesApi2().filesListFiles(pathForFetch, null, null, null, null, null, null, null, false);
-            List<EssFile> childFiles = new ArrayList<>();
-            for (Object file : files.getItems()) {
-                Map<String, String> fileMap = (Map) file;
-                // name, fullPath, type, permissions (another map), links
-                String name = fileMap.get("name");
-                boolean isFolder = "folder".equals(fileMap.get("type"));
-                EssFile essFile;
-                if (isFolder) {
-                    essFile = new EssFolder(api, server, name, fileMap.get("fullPath"));
-                } else {
-                    essFile = new EssFile(api, server, name, fileMap.get("fullPath"));
-                }
-                childFiles.add(essFile);
+            api.getFilesApi().filesCopyResource(body, overwrite);
+        } catch (ApiException a) {
+            throw new EssApiException(a);
+        }
+    }
+
+    /**
+     * Moves a file from source to destination. Moving a folder is not supported
+     * @param body File path details.(required)
+     * @param overwrite Overwrite existing file. Only applicable for moving a file. (optional, default to false)
+     */
+    public void move(EssFilePathDetail body, Boolean overwrite) {
+        try {
+            if (overwrite == null){
+                overwrite = false;
             }
-            return childFiles;
-        } catch (ApiException e) {
-            throw new RuntimeException(e);
+            api.getFilesApi().filesMoveResource(body, overwrite);
+        } catch (ApiException a) {
+            throw new EssApiException(a);
+        }
+    }
+
+    /**
+     * Renames a file or folder. Renaming a folder is supported only if the folder is not in the applications directory
+     * @param body File path details.(required)
+     * @param overwrite Overwrite existing file. Only applicable for renaming a file. (optional, default to false)
+     */
+    public void rename(EssFilePathDetail body, Boolean overwrite) {
+        try {
+            if (overwrite == null){
+                overwrite = false;
+            }
+            api.getFilesApi().filesMoveResource(body, overwrite);
+        } catch (ApiException a) {
+            throw new EssApiException(a);
+        }
+    }
+
+    /**
+     * Extract a zip file on same location. Supported for applications, users, and shared folders.
+     * @param body File path details.(required)
+     * @param overwrite Overwrite existing file. Not applicable for folder. (optional, default to false)
+     */
+    public void extract(EssZipFileDetails body, Boolean overwrite) {
+        try {
+            if (overwrite == null){
+                overwrite = false;
+            }
+            api.getFilesApi().filesExtract(body, overwrite);
+        } catch (ApiException a) {
+            throw new EssApiException(a);
         }
     }
 

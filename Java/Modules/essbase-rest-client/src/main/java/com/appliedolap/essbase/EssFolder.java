@@ -2,6 +2,9 @@ package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiException;
+import com.appliedolap.essbase.client.model.CollectionResponse;
+import com.appliedolap.essbase.client.model.FilePathDetail;
+import com.appliedolap.essbase.client.model.ZipFileDetails;
 import com.appliedolap.essbase.util.GenericApiCallback;
 import okhttp3.Call;
 import okhttp3.Response;
@@ -11,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,8 +25,11 @@ public class EssFolder extends EssFile {
 
     private static final Logger logger = LoggerFactory.getLogger(EssFolder.class);
 
+    private final EssServer server;
+
     EssFolder(ApiContext api, EssServer server, String name, String fullPath) {
         super(api, server, name, fullPath);
+        this.server = server;
     }
 
     /**
@@ -94,6 +102,34 @@ public class EssFolder extends EssFile {
             e.printStackTrace();
         } catch (ApiException apiException) {
             apiException.printStackTrace();
+        }
+    }
+
+    public List<EssFile> getFiles() {
+        try {
+            String pathForFetch = fullPath;
+            if (pathForFetch.startsWith("/")) {
+                pathForFetch = pathForFetch.substring(1);
+            }
+            CollectionResponse files = api.getFilesApi2().filesListFiles(pathForFetch, null, null, null, null, null, null, null, false);
+            List<EssFile> childFiles = new ArrayList<>();
+            int count =0;
+            for (Object file : files.getItems()) {
+                Map<String, String> fileMap = (Map) file;
+                // name, fullPath, type, permissions (another map), links
+                String name = fileMap.get("name");
+                boolean isFolder = "folder".equals(fileMap.get("type"));
+                EssFile essFile;
+                if (isFolder) {
+                    essFile = new EssFolder(api, server, name, fileMap.get("fullPath"));
+                } else {
+                        essFile = new EssFile(api, server, name, fileMap.get("fullPath"));
+                }
+                childFiles.add(essFile);
+            }
+            return childFiles;
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
         }
     }
 
