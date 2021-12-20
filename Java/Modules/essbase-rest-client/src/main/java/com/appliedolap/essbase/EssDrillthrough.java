@@ -1,9 +1,7 @@
 package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.ApiException;
-import com.appliedolap.essbase.client.model.ColumnMappingInfo;
-import com.appliedolap.essbase.client.model.DrillthroughBean;
-import com.appliedolap.essbase.client.model.ReportBean;
+import com.appliedolap.essbase.client.model.*;
 import com.appliedolap.essbase.exceptions.DrillthroughColumnMismatchException;
 import com.appliedolap.essbase.util.WrapperUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -106,6 +104,145 @@ public class EssDrillthrough extends EssObject {
      */
     public void setDrillableRegions(List<String> drillableRegions) {
         getDrillthroughBean().setDrillableRegions(drillableRegions);
+    }
+
+    /**
+     * Gets the useTempTables parameter for this report which is only valid using Oracle DB.
+     *
+     * @return the use temp tables setting
+     */
+    public boolean isUseTempTables() {
+        // Note: return value tests for null as getUseTempTables may be null and not a valid boolean
+        return getDrillthroughBean().getUseTempTables() != null && getDrillthroughBean().getUseTempTables();
+    }
+
+    /**
+     * Sets the useTempTables parameter for this report which is only valid using Oracle DB.
+     *
+     * @param useTempTables the use temp tables setting
+     */
+    public void setUseTempTables(boolean useTempTables) {
+        getDrillthroughBean().setUseTempTables(useTempTables);
+    }
+
+    /**
+     * Gets the name of the data source for this report.
+     *
+     * @return the name of the data source.
+     */
+    public String getDataSourceName() {
+        // Note: return value tests for null as getUseTempTables may be null and not a valid boolean
+        return getDrillthroughBean().getDataSourceName();
+    }
+
+    /**
+     * Sets the name of the data source for this report.
+     *
+     * @param dataSourceName the name of the data source
+     */
+    public void setDataSourceName(String dataSourceName) {
+        getDrillthroughBean().setDataSourceName(dataSourceName);
+    }
+
+    /**
+     * Gets a list of column names for this report.
+     *
+     * @return a list of column names for this report.
+     */
+    public List<String> getColumns() {
+        return getDrillthroughBean().getColumns();
+    }
+
+    /**
+     * Sets the list of column names for this report.
+     *
+     * @param columns a list of column names for this report
+     */
+    public void setColumns(List<String> columns) {
+        getDrillthroughBean().setColumns(columns);
+    }
+
+    /**
+     * Gets information about report column mappings.
+     *
+     * @return information about report column mappings.
+     */
+    public Map<String, ColumnMapping> getColumnMappings() {
+        Map<String, ColumnMappingInfo> columnMappingInfos = getDrillthroughBean().getColumnMapping();
+
+        LinkedHashMap<String, ColumnMapping> columnMapping = new LinkedHashMap<>();
+
+        if (columnMappingInfos != null) {
+            for (Map.Entry<String, ColumnMappingInfo> entry : columnMappingInfos.entrySet()) {
+                String columnName = entry.getKey();
+                ColumnMappingInfo columnMappingInfo = entry.getValue();
+
+                columnMapping.put(columnName, new ColumnMapping(columnName, columnMappingInfo));
+            }
+        }
+
+        return columnMapping;
+    }
+
+    /**
+     * Sets a map of column mapping objects to update.
+     *
+     * @param columnMappings a map of column mapping objects to update
+     */
+    public void setColumnMappings(Map<String, ColumnMapping> columnMappings) {
+        // create a map to pass to the REST API
+        Map<String, ColumnMappingInfo> columnMappingInfos = new LinkedHashMap<>();
+
+        // loop the mappings
+        for (ColumnMapping columnMapping : columnMappings.values()) {
+            // add it to the map
+            columnMappingInfos.put(columnMapping.getColumnName(), columnMapping.getColumnMappingInfo());
+        }
+
+        // call the server to set the mappings
+        getDrillthroughBean().setColumnMapping(columnMappingInfos);
+    }
+
+
+    /**
+     * Gets information about parameter mappings.
+     *
+     * @return information about parameter mappings.
+     */
+    public Map<String, Parameter> getParameterMappings() {
+        Map<String, RunTimeParametersInfo> parametersInfos = getDrillthroughBean().getParameterMapping();
+
+        LinkedHashMap<String, Parameter> parameters = new LinkedHashMap<>();
+
+        if (parametersInfos != null) {
+            for (Map.Entry<String, RunTimeParametersInfo> entry : parametersInfos.entrySet()) {
+                String key = entry.getKey();
+                RunTimeParametersInfo parametersInfo = entry.getValue();
+
+                parameters.put(key, new Parameter(key, parametersInfo));
+            }
+        }
+
+        return parameters;
+    }
+
+    /**
+     * Sets a map of parameter mappings to update.
+     *
+     * @param parameters a map of parameter mappings to update
+     */
+    public void setRunTimeParameters(Map<String, Parameter> parameters) {
+        // create a map to pass to the REST API
+        Map<String, RunTimeParametersInfo> parametersInfos = new LinkedHashMap<>();
+
+        // loop the mappings
+        for (Parameter parameter : parameters.values()) {
+            // add it to the map
+            parametersInfos.put(parameter.getKey(), parameter.getRunTimeParametersInfo());
+        }
+
+        // call the server to set the mappings
+        getDrillthroughBean().setParameterMapping(parametersInfos);
     }
 
     /**
@@ -306,4 +443,29 @@ public class EssDrillthrough extends EssObject {
 
     }
 
+    public static class ColumnMapping {
+        private final String columnName;
+        private final ColumnMappingInfo columnMappingInfo;
+
+        private ColumnMapping(String columnName, ColumnMappingInfo columnMappingInfo) {
+            this.columnName = columnName;
+            this.columnMappingInfo = columnMappingInfo;
+        }
+
+        public String getColumnName() { return columnName;}
+        public ColumnMappingInfo getColumnMappingInfo() { return columnMappingInfo;}
+    }
+
+    public static class Parameter {
+        private final String key;
+        private final RunTimeParametersInfo runTimeParametersInfo;
+
+        private Parameter(String key, RunTimeParametersInfo runTimeParametersInfo) {
+            this.key = key;
+            this.runTimeParametersInfo = runTimeParametersInfo;
+        }
+
+        public String getKey() { return key;}
+        public RunTimeParametersInfo getRunTimeParametersInfo() { return runTimeParametersInfo;}
+    }
 }
