@@ -340,7 +340,7 @@
           "200": {
             "description": "<p><strong>OK</strong></p><p> Response type can be either JSON/XML or stream, depending on the Accept header. If <code>Accept=application/json</code> or <code>Accept=application/xml</code>, the response lists files and current folder details. If <code>Accept=application/octet-stream</code>, the response is returned as a stream. If query parameters include <code>action=validateUpload</code> and <code>Accept='application/json'</code> or <code>Accept='application/xml'</code>, the response is empty.</p>",
             "schema": {
-              "$ref": "#/definitions/CollectionResponse"
+              "$ref": "#/definitions/FileCollectionResponse"
             }
           },
           "400": {
@@ -1897,7 +1897,10 @@
           "500": {
             "description": "<p>Internal Server Error.</p>"
           }
-        }
+        },
+        "consumes": [
+          "application/json"
+        ]
       }
     },
     "/datasources": {
@@ -2128,7 +2131,10 @@
           "500": {
             "description": "<p>Internal Server Error.</p>"
           }
-        }
+        },
+        "consumes": [
+          "application/json"
+        ]
       }
     },
     "/datasources/query/data/{streamId}": {
@@ -4488,10 +4494,7 @@
           "200": {
             "description": "Locked objects retrieved successfully. Gives the details of locked objects along with the links to lock/unlock the object",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/LockObjectList"
-              }
+              "$ref": "#/definitions/LockObjectList"
             }
           },
           "400": {
@@ -4917,8 +4920,11 @@
         ],
         "parameters": [],
         "responses": {
-          "default": {
-            "description": "successful operation"
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AboutInstance"
+            }
           }
         }
       }
@@ -6162,10 +6168,7 @@
           "200": {
             "description": "Generations are retrieved successfully. Gives all generation details of a dimension along with the links to get/edit each generation",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/GenerationLevelList"
-              }
+              "$ref": "#/definitions/GenerationLevelList"
             }
           },
           "400": {
@@ -6216,10 +6219,7 @@
           "200": {
             "description": "Levels are retrieved successfully. Gives all level details of a dimension along with the links to get/edit each level",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/GenerationLevelList"
-              }
+              "$ref": "#/definitions/GenerationLevelList"
             }
           },
           "400": {
@@ -6504,7 +6504,7 @@
           "200": {
             "description": "successful operation",
             "schema": {
-              "$ref": "#/definitions/Preference"
+              "$ref": "#/definitions/EssbaseURLList"
             }
           }
         }
@@ -7884,7 +7884,10 @@
           "500": {
             "description": "Internal Server Error."
           }
-        }
+        },
+        "consumes": [
+          "application/json"
+        ]
       }
     },
     "/applications/{application}/databases/{database}/mdx/{name}": {
@@ -14890,10 +14893,7 @@
           "200": {
             "description": "<p><strong>OK</strong></p><p>Variables returned successfully, with links to get, edit, or delete.</p>",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/VariableList"
-              }
+              "$ref": "#/definitions/VariableList"
             }
           },
           "400": {
@@ -15146,10 +15146,7 @@
           "200": {
             "description": "<p><strong>OK</strong></p><p>Variables returned successfully, with links to get, edit, or delete.</p>",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/VariableList"
-              }
+              "$ref": "#/definitions/VariableList"
             }
           },
           "400": {
@@ -15948,32 +15945,119 @@
     },
     "Datasource": {
       "type": "object",
+      "required": [
+        "columns",
+        "connection",
+        "type"
+      ],
       "properties": {
-        "header": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "TEMPLATE",
+            "EXCELFILE",
+            "DB",
+            "DELIMITEDFILE",
+            "FIXEDWIDTHFILE",
+            "BI",
+            "ESSBASE",
+            "JDBC",
+            "SPARK",
+            "MS_SQL",
+            "MYSQL",
+            "DB2",
+            "ORACLE",
+            "FILE"
+          ]
+        },
+        "connection": {
           "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "columns": {
+          "$ref": "#/definitions/ColumnsType"
         },
         "name": {
           "type": "string"
         },
-        "tokens": {
-          "type": "array",
-          "items": {
-            "type": "string"
+        "ignoreErrorRecords": {
+          "type": "boolean"
+        },
+        "delimeter": {
+          "type": "string",
+          "xml": {
+            "name": "delimiter"
           }
         },
-        "tokensCombineOption": {
-          "type": "string",
-          "enum": [
-            "AND",
-            "OR"
-          ]
+        "customDelimiter": {
+          "type": "string"
         },
-        "sqlProperties": {
-          "$ref": "#/definitions/SQLProperties"
+        "query": {
+          "type": "string"
         },
-        "fileProperties": {
-          "$ref": "#/definitions/FileProperties"
+        "application": {
+          "type": "string"
+        },
+        "cube": {
+          "type": "string"
+        },
+        "startRow": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "endRow": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "headerRow": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sheet": {
+          "type": "string"
+        },
+        "skipHiddenRows": {
+          "type": "boolean"
+        },
+        "widths": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64",
+            "xml": {
+              "name": "widths"
+            }
+          }
+        },
+        "queryParameters": {
+          "type": "array",
+          "items": {
+            "xml": {
+              "name": "queryParameters"
+            },
+            "$ref": "#/definitions/QueryParamsInfo"
+          }
+        },
+        "headers": {
+          "type": "array",
+          "items": {
+            "xml": {
+              "name": "headers"
+            },
+            "$ref": "#/definitions/HeaderType"
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
         }
+      },
+      "xml": {
+        "name": "datasource"
       }
     },
     "DatasourcesList": {
@@ -22400,6 +22484,125 @@
           }
         }
       }
+    },
+    "AboutInstance": {
+      "type": "object",
+      "properties": {
+        "provisioningSupported": {
+          "type": "boolean"
+        },
+        "resetPasswordSupported": {
+          "type": "boolean"
+        },
+        "easInstalled": {
+          "type": "boolean"
+        }
+      },
+      "xml": {
+        "name": "aboutInstance"
+      }
+    },
+    "EssbaseURL": {
+      "type": "object",
+      "properties": {
+        "application": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "EssbaseURLList": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EssbaseURL"
+          }
+        }
+      }
+    },
+    "FileBean": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "fullPath": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "permissions": {
+          "type": "object",
+          "properties": {
+            "addFolder": {
+              "type": "boolean"
+            },
+            "addFile": {
+              "type": "boolean"
+            }
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        }
+      },
+      "xml": {
+        "name": "File"
+      }
+    },
+    "FileCollectionResponse": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FileBean"
+          }
+        },
+        "totalResults": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "hasMore": {
+          "type": "boolean"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "offset": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
     }
-  }
+  },
+  "securityDefinitions": {
+    "basicAuth": {
+      "type": "basic"
+    }
+  },
+  "security": [
+    {
+      "basicAuth": []
+    }
+  ]
 }
