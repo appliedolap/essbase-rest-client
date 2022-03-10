@@ -3,6 +3,7 @@ package com.appliedolap.essbase;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.*;
+import com.appliedolap.essbase.exceptions.NoSuchEssbaseObjectException;
 import com.appliedolap.essbase.util.GenericApiCallback;
 import com.appliedolap.essbase.util.Utils;
 import com.appliedolap.essbase.util.WrapperUtil;
@@ -28,6 +29,13 @@ import static com.appliedolap.essbase.util.Utils.wrap;
 public class EssServer extends EssObject {
 
     private static final Logger logger = LoggerFactory.getLogger(EssServer.class);
+
+    /**
+     * For now, we're setting a generous upper limit on the number of applications that can be returned in a listing. We
+     * may want to revisit this in the future. This library is currently designed to hide pagination details so that they
+     * don't leak into the abstractions provided in this library, but we may need to rethink this in the future.
+     */
+    public static final int MAX_APPLICATIONS = 1000;
 
     /**
      *
@@ -68,13 +76,14 @@ public class EssServer extends EssObject {
     }
 
     /**
-     * Fetch the list of applications available on the server for the currently connected user.
+     * Fetch the list of applications available on the server for the currently connected user. The number of returned
+     * applications is limited to {@value MAX_APPLICATIONS} (the value of {@link #MAX_APPLICATIONS}).
      *
      * @return a list of applications
      */
     public List<EssApplication> getApplications() {
         try {
-            ApplicationList applicationList = api.getApplicationsApi().applicationsGetApplications(null, null, null, null, null, null);
+            ApplicationList applicationList = api.getApplicationsApi().applicationsGetApplications(null, null, MAX_APPLICATIONS, null, null, null);
             List<EssApplication> applications = new ArrayList<>();
             for (Application application : wrap(applicationList.getItems())) {
                 applications.add(new EssApplication(api, this, application));
@@ -92,7 +101,20 @@ public class EssServer extends EssObject {
      * @return an application object for the application
      */
     public EssApplication getApplication(String applicationName) {
-        return Utils.getWithName(getApplications(), applicationName, Type.APPLICATION);
+        try {
+            // calls the same list method as the getApplications method but provides a filter on the app name so that
+            // only one is returned. In the future we could potentially go straight to the /applications/{applicationName}
+            // endpoint, but that returns much more information, so doing it this way gives us consistency with the data
+            // that is returned from the other method
+            ApplicationList applicationList = api.getApplicationsApi().applicationsGetApplications(applicationName, null, null, null, null, null);
+            if (Utils.isNotEmpty(applicationList.getItems())) {
+                return new EssApplication(api, this, applicationList.getItems().get(0));
+            } else {
+                throw new NoSuchEssbaseObjectException(applicationName, Type.APPLICATION);
+            }
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
     }
 
     /**
