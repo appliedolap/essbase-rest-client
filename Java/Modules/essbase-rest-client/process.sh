@@ -37,6 +37,9 @@ cat temp.json | jq '.paths."/applications/{applicationName}/datasources/query/st
 # Return types for variables are not a List<VariableList>, they are a VariableList
 cat temp.json | jq '.paths."/applications/{applicationName}/variables".get.responses."200".schema = {"$ref": "#/definitions/VariableList"}' > json.tmp && mv json.tmp temp.json
 
+# Fix the consumes for the datasource query endpoint
+cat temp.json | jq '.paths."/datasources/query".post.consumes = ["application/json"]' > json.tmp && mv json.tmp temp.json
+
 # Fix the consumes for the datasource stream endpoint
 cat temp.json | jq '.paths."/datasources/query/stream".post.consumes = ["application/json"]' > json.tmp && mv json.tmp temp.json
 

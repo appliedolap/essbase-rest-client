@@ -5,7 +5,7 @@
     <artifactId>essbase-rest-client</artifactId>
     <packaging>jar</packaging>
     <name>Essbase REST Client</name>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
 
     <distributionManagement>
         <repository>

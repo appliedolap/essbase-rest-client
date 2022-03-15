@@ -24,6 +24,16 @@ public class Utils {
     }
 
     /**
+     * Checks if the given collection is not null and has at least one element.
+     *
+     * @param collection the collection
+     * @return true if it's not empty, false otherwise
+     */
+    public static boolean isNotEmpty(Collection<?> collection) {
+        return collection != null && !collection.isEmpty();
+    }
+
+    /**
      * Null-safe instant creator, defaults to epoch if input is null
      *
      * @param millis the time millis
