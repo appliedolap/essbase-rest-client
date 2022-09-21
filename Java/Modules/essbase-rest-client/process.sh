@@ -21,6 +21,9 @@ cat temp.json | jq '.paths."/applications/{applicationName}/databases/{databaseN
 cat temp.json | jq '.paths."/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/generations".get.responses."200".schema = {"$ref": "#/definitions/GenerationLevelList"}' > json.tmp && mv json.tmp temp.json
 cat temp.json | jq '.paths."/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/levels".get.responses."200".schema = {"$ref": "#/definitions/GenerationLevelList"}' > json.tmp && mv json.tmp temp.json
 
+# Fix the consumes for the grid execute endpoint
+cat temp.json | jq '.paths."/applications/{applicationName}/databases/{databaseName}/grid".post.consumes = ["application/json"]' > json.tmp && mv json.tmp temp.json
+
 # Return types for locked objects are not a List<LockObjectList>, they are a LockObjectList
 cat temp.json | jq '.paths."/applications/{applicationName}/databases/{databaseName}/locks/objects".get.responses."200".schema = {"$ref": "#/definitions/LockObjectList"}' > json.tmp && mv json.tmp temp.json
 
@@ -45,6 +48,9 @@ cat temp.json | jq '.paths."/datasources/query/stream".post.consumes = ["applica
 
 # Add a modeled response type for the files endpoint.
 cat temp.json | jq '.paths."/files/{path}".get.responses."200".schema = { "$ref": "#/definitions/FileCollectionResponse" }' > json.tmp && mv json.tmp temp.json
+
+# Fix the consumes for the grid preferences endpoint
+cat temp.json | jq '.paths."/preferences/grid".put.consumes = ["application/json"]' > json.tmp && mv json.tmp temp.json
 
 cat temp.json | jq '.paths."/sessions".get.responses."200".schema = {"type": "array","items": {"$ref": "#/definitions/SessionAttributes"}}' > json.tmp && mv json.tmp temp.json
 
@@ -309,6 +315,22 @@ cat temp.json | jq '.definitions."FileCollectionResponse" = {
 #   Cannot deserialize value of type `oracle.essbase.restws.services.main.grid.Action` from String \"ZOOMIN\":
 #   value not one of declared Enum instance names: [removeonly, keeponly, pivot, submit, pivotToPOV, refresh, zoomin, zoomout]
 cat temp.json | jq '.definitions.GridOperation.properties.action.enum = ["zoomin", "zoomout", "keeponly", "removeonly", "refresh", "pivot", "pivotToPOV", "submit"]' > json.tmp && mv json.tmp temp.json
+
+# The properties for the MemberBean definition are incomplete. Add the following properties.
+cat temp.json | jq '.definitions.MemberBean.properties += {
+  "uda": {
+    "type": "array",
+    "items": {
+      "type": "string"
+    }
+  },
+  "dataStorageType": {
+    "type": "string"
+  },
+  "parentName": {
+    "type": "string"
+  }
+}' > json.tmp && mv json.tmp temp.json
 
 cat temp.json | jq '.definitions.ZoomIn.properties.ancestor.enum = ["top", "bottom"]' > json.tmp && mv json.tmp temp.json
 

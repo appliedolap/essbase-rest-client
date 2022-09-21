@@ -6993,7 +6993,10 @@
           "500": {
             "description": "<p>Internal Server Error.</p>"
           }
-        }
+        },
+        "consumes": [
+          "application/json"
+        ]
       }
     },
     "/applications/{applicationName}/databases/{databaseName}/grid/mdx": {
@@ -7307,7 +7310,10 @@
           "500": {
             "description": "<p>Internal Server Error.</p>"
           }
-        }
+        },
+        "consumes": [
+          "application/json"
+        ]
       }
     },
     "/performance/settings": {
@@ -20035,6 +20041,18 @@
           "items": {
             "$ref": "#/definitions/Link"
           }
+        },
+        "uda": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dataStorageType": {
+          "type": "string"
+        },
+        "parentName": {
+          "type": "string"
         }
       }
     },
