@@ -9,13 +9,9 @@
 
     <distributionManagement>
         <repository>
-            <id>central</id>
-            <url>https://appliedolap.jfrog.io/artifactory/libs-release</url>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/appliedolap/Dodeca/</url>
         </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <url>https://appliedolap.jfrog.io/artifactory/libs-snapshot</url>
-        </snapshotRepository>
     </distributionManagement>
 
     <properties>
