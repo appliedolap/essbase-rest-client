@@ -293,12 +293,11 @@ public class EssApplication extends EssObject {
     }
 
     /**
-     * Gets the latest applicaiton log as a outputstream
-     * @return outputstream of the log
+     * Writes the latest application log to the given output stream.
      */
     public void downloadLatestLog(OutputStream outputStream) {
         try {
-            Call call = api.getApplicationLogsApi().applicationLogsDownloadLatestLogFileCall(application.getName(), new GenericApiCallback());
+            Call call = api.getApplicationLogsApi().applicationLogsDownloadLatestLogFileCall(getName(), new GenericApiCallback());
             outputStream.write(GenericDownload.downloadBytes(call.execute()));
         } catch (ApiException | IOException a) {
             throw new EssApiException(a);
@@ -306,12 +305,11 @@ public class EssApplication extends EssObject {
     }
 
     /**
-     * Gets all application log as a outputStream.
-     * @return outputStream of the log (user is Required to convert into zip)
+     * Writes all logs to the given output stream.
      */
     public void downloadAllLogsAsZip(OutputStream outputStream) {
         try {
-            Call call = api.getApplicationLogsApi().applicationLogsDownloadAllLogFilesCall(application.getName(), new GenericApiCallback());
+            Call call = api.getApplicationLogsApi().applicationLogsDownloadAllLogFilesCall(getName(), new GenericApiCallback());
             outputStream.write(GenericDownload.downloadBytes(call.execute()));
         } catch (ApiException | IOException a) {
             throw new EssApiException(a);
