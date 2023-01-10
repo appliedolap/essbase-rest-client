@@ -250,10 +250,10 @@ public class EssApplication extends EssObject {
      *
      * @return the application variables
      */
-    public List<EssVariable> getVariables() {
+    public List<EssApplicationVariable> getVariables() {
         try {
             VariableList variables = api.getVariablesApi().variablesListAppVariables(getName());
-            List<EssVariable> applicationVariables = new ArrayList<>();
+            List<EssApplicationVariable> applicationVariables = new ArrayList<>();
             for (Variable variable : wrap(variables.getItems())) {
                 EssApplicationVariable applicationVariable = new EssApplicationVariable(api, this, variable);
                 applicationVariables.add(applicationVariable);

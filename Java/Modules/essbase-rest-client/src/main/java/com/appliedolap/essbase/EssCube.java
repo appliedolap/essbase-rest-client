@@ -114,10 +114,10 @@ public class EssCube extends EssObject {
      *
      * @return the cube variables
      */
-    public List<EssVariable> getVariables() {
+    public List<EssCubeVariable> getVariables() {
         try {
             VariableList variables = api.getVariablesApi().variablesListVariables(application.getName(), cube.getName());
-            List<EssVariable> cubeVariables = new ArrayList<>();
+            List<EssCubeVariable> cubeVariables = new ArrayList<>();
             for (Variable variable : wrap(variables.getItems())) {
                 cubeVariables.add(new EssCubeVariable(api, this, variable));
             }
