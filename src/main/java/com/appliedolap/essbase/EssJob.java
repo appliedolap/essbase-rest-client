@@ -15,7 +15,7 @@ public class EssJob extends EssObject {
 
     private static final Logger logger = LoggerFactory.getLogger(EssJob.class);
 
-    private final JobRecordBean record;
+    private final JobRecordBean jobRecord;
 
     private JobRecordBean detailedRecord;
 
@@ -29,7 +29,7 @@ public class EssJob extends EssObject {
         super(api);
         if (record.getJobID() == null) throw new IllegalArgumentException("Job must supply an ID");
         this.server = server;
-        this.record = record;
+        this.jobRecord = record;
         this.id = record.getJobID();
         this.type = JobType.parse(record.getJobType());
     }
@@ -50,7 +50,7 @@ public class EssJob extends EssObject {
      * @return the numeric ID of this job
      */
     public Long getJobID() {
-        return record.getJobID();
+        return jobRecord.getJobID();
     }
 
     /**
@@ -59,7 +59,7 @@ public class EssJob extends EssObject {
      * @return true if it was (as based on status code), false otherwise
      */
     public boolean isSuccessful() {
-        return record.getStatusCode() != null && record.getStatusCode() == 200;
+        return jobRecord.getStatusCode() != null && jobRecord.getStatusCode() == 200;
     }
 
     /**
@@ -113,8 +113,8 @@ public class EssJob extends EssObject {
      */
     public void rerun() {
         try {
-            logger.info("Re-running job {}", record.getJobID());
-            api.getJobsApi().jobsExecuteByJobId(record.getJobID());
+            logger.info("Re-running job {}", jobRecord.getJobID());
+            api.getJobsApi().jobsExecuteByJobId(jobRecord.getJobID());
         } catch (ApiException apiException) {
             apiException.printStackTrace();
         }
@@ -126,7 +126,7 @@ public class EssJob extends EssObject {
      * @return the job status
      */
     public Status getStatus() {
-        return Status.fromCode(record.getStatusCode());
+        return Status.fromCode(jobRecord.getStatusCode());
     }
 
     /**
@@ -151,8 +151,8 @@ public class EssJob extends EssObject {
      * @return a slightly longer description of the job
      */
     public String getDescription() {
-        String filename = record.getJobfileName() == null ? "" : ", filename: " + record.getJobfileName();
-        return String.format("%s (%d)%s", record.getJobType(), record.getJobID(), filename);
+        String filename = jobRecord.getJobfileName() == null ? "" : ", filename: " + jobRecord.getJobfileName();
+        return String.format("%s (%d)%s", jobRecord.getJobType(), jobRecord.getJobID(), filename);
     }
 
     /**
@@ -175,7 +175,7 @@ public class EssJob extends EssObject {
 
         /**
          * There is no "other" type for an Essbase job, but this gives us some wiggle room in case a new type is
-         * introduced or we cannot otherwise properly parse the return type.
+         * introduced, or we cannot otherwise properly parse the return type.
          */
         UNKNOWN("other", "Other");
 
@@ -225,7 +225,7 @@ public class EssJob extends EssObject {
     }
 
     /**
-     * Models the status of a job. This enum may move inside of the EssJob object in the future.
+     * Models the status of a job. This enum may move inside the EssJob object in the future.
      */
     public enum Status {
 

@@ -5,8 +5,6 @@ import com.appliedolap.essbase.client.model.GroupBean;
 import com.appliedolap.essbase.client.model.Groups;
 import com.appliedolap.essbase.client.model.UserBean;
 import com.appliedolap.essbase.client.model.Users;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,8 +13,6 @@ import java.util.List;
 import static com.appliedolap.essbase.util.Utils.wrap;
 
 public class EssGroup extends EssObject {
-
-    private static final Logger logger = LoggerFactory.getLogger(EssGroup.class);
 
     private final EssServer server;
 
@@ -69,8 +65,8 @@ public class EssGroup extends EssObject {
         try {
             Groups groups = api.getGroupsApi().groupsGetGroupMembersOfGroup(groupBean.getName());
             List<EssGroup> essGroups = new ArrayList<>();
-            for (GroupBean groupBean : wrap(groups.getItems())) {
-                EssGroup essGroup = new EssGroup(api, server, groupBean);
+            for (GroupBean currentGroupBean : wrap(groups.getItems())) {
+                EssGroup essGroup = new EssGroup(api, server, currentGroupBean);
                 essGroups.add(essGroup);
             }
             return Collections.unmodifiableList(essGroups);

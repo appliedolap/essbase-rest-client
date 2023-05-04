@@ -294,6 +294,8 @@ public class EssApplication extends EssObject {
 
     /**
      * Writes the latest application log to the given output stream.
+     *
+     * @param outputStream the output stream
      */
     public void downloadLatestLog(OutputStream outputStream) {
         try {
@@ -306,6 +308,8 @@ public class EssApplication extends EssObject {
 
     /**
      * Writes all logs to the given output stream.
+     *
+     * @param outputStream the output stream
      */
     public void downloadAllLogsAsZip(OutputStream outputStream) {
         try {
@@ -315,4 +319,5 @@ public class EssApplication extends EssObject {
             throw new EssApiException(a);
         }
     }
+
 }

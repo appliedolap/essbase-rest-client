@@ -3,8 +3,6 @@ package com.appliedolap.essbase;
 import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.CollectionResponse;
-import com.appliedolap.essbase.client.model.FilePathDetail;
-import com.appliedolap.essbase.client.model.ZipFileDetails;
 import com.appliedolap.essbase.util.GenericApiCallback;
 import okhttp3.Call;
 import okhttp3.Response;
@@ -33,10 +31,11 @@ public class EssFolder extends EssFile {
     }
 
     /**
-     * Check if this item is a folder (true for <code>EssFolder</code> objects, false for {@link EssFile} objects.
+     * Check if this item is a folder (true for <code>EssFolder</code> objects, false for {@link EssFile} objects).
      *
      * @return true if a folder, false if file
      */
+    @Override
     public boolean isFolder() {
         return true;
     }
@@ -44,8 +43,9 @@ public class EssFolder extends EssFile {
     /**
      * Inverse of {@link #isFolder()}.
      *
-     * @return true if file, false otherwise
+     * @return true if it's a file, false otherwise
      */
+    @Override
     public boolean isFile() {
         return false;
     }

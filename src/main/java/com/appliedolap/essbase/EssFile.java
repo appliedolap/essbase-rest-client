@@ -1,7 +1,9 @@
 package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.ApiException;
-import com.appliedolap.essbase.client.model.*;
+import com.appliedolap.essbase.client.model.JobRecordBean;
+import com.appliedolap.essbase.client.model.JobsInputBean;
+import com.appliedolap.essbase.client.model.ParametersBean;
 import com.appliedolap.essbase.util.GenericApiCallback;
 import com.appliedolap.essbase.util.GenericDownload;
 import okhttp3.Call;
@@ -11,12 +13,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
- * A file or folder in the Essbase server file hiearchy. If a folder, the {@link #isFolder()} method will return
+ * A file or folder in the Essbase server file hierarchy. If a folder, the {@link #isFolder()} method will return
  * <code>true</code> and the instance can be cast to an {@link EssFolder}.
  */
 public class EssFile extends EssObject {
