@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * A general, unchecked exception that we can be used to wrap the {@link ApiException} checked exceptions that are all
  * over the generated client code. This class will try and inspect the original exception in order to come up with the
- * best and most informative error message possible (namely by extracting the <code>errorMessage</code> key from the
+ * best and most informative error message possible, namely by extracting the <code>errorMessage</code> key from the
  * response body in the original exception, if any.
  */
 public class EssApiException extends RuntimeException {

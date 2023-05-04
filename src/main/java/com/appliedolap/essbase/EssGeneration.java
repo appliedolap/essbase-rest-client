@@ -1,17 +1,11 @@
 package com.appliedolap.essbase;
 
-import com.appliedolap.essbase.client.model.DimensionBean;
 import com.appliedolap.essbase.client.model.GenerationLevel;
-import com.google.gson.annotations.SerializedName;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Special Type of Member that represents a Generation
  */
 public class EssGeneration extends EssObject {
-
-    private static final Logger logger = LoggerFactory.getLogger(EssGeneration.class);
 
     private final GenerationLevel generationLevel;
 
@@ -54,9 +48,9 @@ public class EssGeneration extends EssObject {
     }
 
     /**
-     * Gets the unique of the generation
+     * Gets the unique setting of the generation
      *
-     * @return the unique of this generation.
+     * @return the unique setting of this generation.
      */
     public Boolean getUnique() {
         return generationLevel.getUnique();

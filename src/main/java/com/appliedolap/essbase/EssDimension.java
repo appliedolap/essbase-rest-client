@@ -1,12 +1,10 @@
 package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.ApiException;
-import com.appliedolap.essbase.client.model.*;
-import com.appliedolap.essbase.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.appliedolap.essbase.client.model.DimensionBean;
+import com.appliedolap.essbase.client.model.GenerationLevel;
+import com.appliedolap.essbase.client.model.GenerationLevelList;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,10 +15,10 @@ import java.util.Objects;
  */
 public class EssDimension extends EssObject {
 
-    private static final Logger logger = LoggerFactory.getLogger(EssDimension.class);
-
     private final DimensionBean dimensionBean;
+
     private final EssApplication application;
+
     private final EssCube cube;
 
     public EssDimension(ApiContext api, EssApplication application, EssCube cube, DimensionBean dimensionBean) {
@@ -69,6 +67,7 @@ public class EssDimension extends EssObject {
     /**
      * Gets the generation on the dimension, if any.
      *
+     * @param generationNumber the generation number
      * @return the dimension's generation.
      */
     public EssGeneration getGeneration(Integer generationNumber) {
@@ -80,24 +79,26 @@ public class EssDimension extends EssObject {
         }
     }
 
-    /**
-     * Update The Generation with the specified generationNumber and EssGeneration body
-     *
-     * @param generationNumber generaitonNumber
-     * @param generation       body of EssGeneration
-     * @return updated EssGeneration object
-    public EssGeneration updateGeneration(Integer generationNumber, EssGeneration generation) {
-        try {
-            api.getDimensionsApi().dimensionsEditDimGenerations(application.getName(), cube.getName(), getName(), generationNumber, generation.getGenerationLevel());
-            return generation;
-        } catch (ApiException e) {
-            throw new EssApiException(e);
-        }
-    }*/
+//    /**
+//     * Update The Generation with the specified generationNumber and EssGeneration body
+//     *
+//     * @param generationNumber generaitonNumber
+//     * @param generation       body of EssGeneration
+//     * @return updated EssGeneration object
+//     * /
+//    public EssGeneration updateGeneration(Integer generationNumber, EssGeneration generation) {
+//        try {
+//            api.getDimensionsApi().dimensionsEditDimGenerations(application.getName(), cube.getName(), getName(), generationNumber, generation.getGenerationLevel());
+//            return generation;
+//        } catch (ApiException e) {
+//            throw new EssApiException(e);
+//        }
+//    }
 
     /**
      * Gets the level on the dimension, if any.
      *
+     * @param levelNumber the level number
      * @return the dimension's level.
      */
     public EssLevel getLevel(Integer levelNumber) {
@@ -143,4 +144,5 @@ public class EssDimension extends EssObject {
             throw new EssApiException(e);
         }
     }
+
 }

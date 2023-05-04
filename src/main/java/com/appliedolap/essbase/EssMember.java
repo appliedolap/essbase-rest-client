@@ -106,7 +106,7 @@ public class EssMember extends EssObject {
     /**
      * Check if the member is a normal member or a dimension member.
      *
-     * @return true if dimension, false if normal member
+     * @return true if it's a dimension, false if normal member
      */
     public boolean isDimension() {
         return memberBean.getDimension() != null ? memberBean.getDimension() : false;

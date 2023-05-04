@@ -169,4 +169,5 @@ public class ApiContext {
     public ApplicationLogsApi getApplicationLogsApi() {
         return logsApi;
     }
+
 }

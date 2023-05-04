@@ -1,7 +1,6 @@
 package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.ApiException;
-import com.appliedolap.essbase.client.api.LocksApi;
 import com.appliedolap.essbase.client.model.*;
 import com.appliedolap.essbase.exceptions.NoSuchEssbaseObjectException;
 import com.appliedolap.essbase.misc.MdxJson;
@@ -14,7 +13,10 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

@@ -37,9 +37,6 @@ public class EssServer extends EssObject {
      */
     public static final int MAX_APPLICATIONS = 1000;
 
-    /**
-     *
-     */
     public static final String DEFAULT_REST_API_PATH = "/rest/v1";
 
     private final String server;
