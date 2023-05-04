@@ -6,7 +6,7 @@ This library is a very functional but does not implement everything available in
 
 ## Versus Essbase Java API
 
-The Essbase Java API has been the gold standard for connectivity and interaction with Essbase over the years. There are a few reasons you may want to use this library. This library provides access to some functionality that is _only_ in the REST API, is less sensitive to version changes (sometimes the Essbase Java JARs would receive binary incompatible changes), and it may be easier to access your Essbase server using it's normal HTTPS port instead of thet APS port.
+The Essbase Java API has been the gold standard for connectivity and interaction with Essbase over the years. There are a few reasons you may want to use this library. This library provides access to some functionality that is _only_ in the REST API, is less sensitive to version changes (sometimes the Essbase Java JARs would receive binary incompatible changes), and it may be easier to access your Essbase server using its normal HTTPS port instead of the APS port.
 
 ## Using in a Java Project
 
@@ -17,6 +17,8 @@ You can pull this library in using Maven by adding this to your `<dependencies>`
             <artifactId>essbase-rest-client</artifactId>
             <version>1.0.2</version>
         </dependency>
+
+You may want to check the versions available on [Maven Central](https://central.sonatype.com/artifact/com.appliedolap.essbase/essbase-rest-client) to ensure you are using the latest version.
 
 ## Example
 
