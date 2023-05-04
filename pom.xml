@@ -5,7 +5,7 @@
     <artifactId>essbase-rest-client</artifactId>
     <packaging>jar</packaging>
     <name>Essbase REST Client</name>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <url>https://github.com/appliedolap/essbase-rest-client</url>
     <description>Java library for interacting with Essbase 21+ servers using its REST API</description>
     <inceptionYear>2022</inceptionYear>
