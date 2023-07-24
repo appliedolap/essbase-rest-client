@@ -138,6 +138,26 @@ public class EssServer extends EssObject {
         }
     }
 
+    /**
+     * Gets a file using the specified path and name.
+     * @param path the path to the file, such as <code>gallery/Applications/Demo Samples/Block Storage</code>
+     * @param filename the name of the file, such as <code>Sample_Basic.xlsx</code>
+     * @return the file if it exists, null otherwise
+     */
+    public EssFile getFile(String path, String filename) {
+        try {
+            FileCollectionResponse collectionResponse = api.getFilesApi().filesListFiles(path, null, null, null, null, null, null, null, null);
+            for (FileBean fileBean : collectionResponse.getItems()) {
+                if (fileBean.getName().equals(filename)) {
+                    return new EssFile(api, this, filename, fileBean.getFullPath());
+                }
+            }
+            return null;
+        } catch (ApiException e) {
+            throw new RuntimeException("Could not list files", e);
+        }
+    }
+
     public List<EssSession> getSessions() {
         return WrapperUtil.wrapList(() -> api.getSessionsApi().sessionsGetAllActiveSessions(null, null, null), sessionAttributes -> new EssSession(api, sessionAttributes));
     }
