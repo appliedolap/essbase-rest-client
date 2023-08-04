@@ -1,16 +1,15 @@
 package scratch;
 
-import com.appliedolap.essbase.EssOutline;
-import com.appliedolap.essbase.EssServer;
+import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Collections;
 import java.util.Map;
 
-public class DataSourceStreamTest {
+public class DataSourceStreamTest extends AbstractEssbaseServerTest {
 
-    public static void main(String[] args) {
-        EssServer server = new EssServer("http://docker1:9000/essbase", "admin", "welcome1");
+    @Test
+    public void dataSourceStream() {
         Map<String, Object> params = Collections.emptyMap();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

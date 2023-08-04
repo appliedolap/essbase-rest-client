@@ -3,22 +3,25 @@ package scratch;
 import com.appliedolap.essbase.*;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class BatchOutlineEditTest {
-    public static void main(String[] args) {
-        EssServer server = new EssServer("http://localhost:9000/essbase", "admin", "welcome1");
+public class BatchOutlineEditTest extends AbstractEssbaseServerTest {
+
+    @Test
+    public void batchOutlineEdit() {
         EssApplication app = server.getApplication("Sample");
         try {
             ApiContext api = app.getApi();
             EssCube cube = app.getCube("Basic");
-           List<EssLock> locks = cube.getLockedObjects(0,50);
-           EssLock lock = locks.get(0);
-         cube.unlockObject(lock);
+            List<EssLock> locks = cube.getLockedObjects(0, 50);
+            EssLock lock = locks.get(0);
+            cube.unlockObject(lock);
             System.out.println();
+
             /*List<EssDimension> dimensionList = cube.getDimensions();
             System.out.println();*/
             /*System.out.println("Calling");
