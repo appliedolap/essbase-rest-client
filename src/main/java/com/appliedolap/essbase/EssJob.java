@@ -5,7 +5,9 @@ import com.appliedolap.essbase.client.model.JobRecordBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Represents a server job, which is any number of different types of actions that have been performed on the
@@ -90,6 +92,10 @@ public class EssJob extends EssObject {
         return Type.JOB;
     }
 
+    public long getDuration() {
+        return jobRecord.getEndTime() - jobRecord.getStartTime();
+    }
+
     /**
      * Gets the owning server for this job.
      *
@@ -153,6 +159,26 @@ public class EssJob extends EssObject {
     public String getDescription() {
         String filename = jobRecord.getJobfileName() == null ? "" : ", filename: " + jobRecord.getJobfileName();
         return String.format("%s (%d)%s", jobRecord.getJobType(), jobRecord.getJobID(), filename);
+    }
+
+    public EssJob waitForCompletion() {
+        return waitForCompletion(5, TimeUnit.SECONDS);
+    }
+
+    public EssJob waitForCompletion(long duration, TimeUnit timeUnit) {
+        try {
+            while (true) {
+                JobRecordBean jobRecordBean = api.getJobsApi().jobsGetJobInfo(id.toString());
+                EssJob updatedJob = new EssJob(api, server, jobRecordBean);
+                if (updatedJob.getStatus().isComplete()) {
+                    return updatedJob;
+                }
+                logger.info("Waiting {} to check for update to job {}", duration, getDescription());
+                timeUnit.sleep(duration);
+            }
+        } catch (ApiException | InterruptedException e) {
+            throw new EssApiException(e);
+        }
     }
 
     /**
@@ -233,8 +259,11 @@ public class EssJob extends EssObject {
          * Represented in the Essbase REST API with code 100.
          */
         IN_PROGRESS(100),
+
         COMPLETED(200),
+
         COMPLETED_WITH_WARNINGS(300),
+
         FAILED(400);
 
         private final int code;
@@ -256,5 +285,14 @@ public class EssJob extends EssObject {
             throw new IllegalArgumentException("Invalid code: " + code);
         }
 
+        public boolean isComplete() {
+            return this != IN_PROGRESS;
+        }
+
+        public boolean isSuccessful() {
+            return this == COMPLETED || this == COMPLETED_WITH_WARNINGS;
+        }
+
     }
+
 }

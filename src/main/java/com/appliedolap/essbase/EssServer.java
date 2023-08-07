@@ -354,7 +354,7 @@ public class EssServer extends EssObject {
      * @param database the cube/database
      * @param file the XLSX file
      */
-    public void createApplicationFromWorkbook(String application, String database, EssFile file) {
+    public EssJob createApplicationFromWorkbook(String application, String database, EssFile file) {
         logger.info("Submitting job to build/update {}.{} from {}", application, database, file);
         JobsInputBean job = new JobsInputBean();
         job.setApplication(application);
@@ -373,9 +373,10 @@ public class EssServer extends EssObject {
         job.setParameters(params);
 
         try {
-            api.getJobsApi().jobsExecuteJob(job);
-        } catch (ApiException apiException) {
-            apiException.printStackTrace();
+            JobRecordBean jobRecordBean = api.getJobsApi().jobsExecuteJob(job);
+            return new EssJob(api, this, jobRecordBean);
+        } catch (ApiException e) {
+            throw new EssApiException(e);
         }
     }
 
