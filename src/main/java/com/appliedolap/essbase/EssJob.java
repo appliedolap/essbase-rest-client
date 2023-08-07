@@ -5,8 +5,8 @@ import com.appliedolap.essbase.client.model.JobRecordBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Duration;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,13 +27,13 @@ public class EssJob extends EssObject {
 
     private final Long id;
 
-    EssJob(ApiContext api, EssServer server, JobRecordBean record) {
+    EssJob(ApiContext api, EssServer server, JobRecordBean jobRecord) {
         super(api);
-        if (record.getJobID() == null) throw new IllegalArgumentException("Job must supply an ID");
+        Objects.requireNonNull(jobRecord.getJobID(), "Job must supply an ID");
         this.server = server;
-        this.jobRecord = record;
-        this.id = record.getJobID();
-        this.type = JobType.parse(record.getJobType());
+        this.jobRecord = jobRecord;
+        this.id = jobRecord.getJobID();
+        this.type = JobType.parse(jobRecord.getJobType());
     }
 
     private void requireDetailedJob() {
@@ -61,20 +61,7 @@ public class EssJob extends EssObject {
      * @return true if it was (as based on status code), false otherwise
      */
     public boolean isSuccessful() {
-        return jobRecord.getStatusCode() != null && jobRecord.getStatusCode() == 200;
-    }
-
-    /**
-     * This is temporary just to force some output details to log to the console
-     */
-    public void getDetailedInfo() {
-        try {
-            detailedRecord = api.getJobsApi().jobsGetJobInfo(id.toString());
-            logger.info("Job details: {}", detailedRecord);
-            logger.info("Detailed output: {}", detailedRecord.getJobOutputInfo());
-        } catch (ApiException apiException) {
-            apiException.printStackTrace();
-        }
+        return getStatus().isSuccessful();
     }
 
     /**
@@ -92,8 +79,19 @@ public class EssJob extends EssObject {
         return Type.JOB;
     }
 
+    /**
+     * Gets the duration of this job, in milliseconds. This method may return 0 while the job is executing and only have
+     * a useful value upon completion.
+     *
+     * @return the duration of the job
+     */
     public long getDuration() {
-        return jobRecord.getEndTime() - jobRecord.getStartTime();
+        if (jobRecord.getEndTime() != null && jobRecord.getStartTime() != null) {
+            return jobRecord.getEndTime() - jobRecord.getStartTime();
+        } else {
+            logger.warn("Job start/end time was null");
+            return 0L;
+        }
     }
 
     /**
@@ -121,8 +119,8 @@ public class EssJob extends EssObject {
         try {
             logger.info("Re-running job {}", jobRecord.getJobID());
             api.getJobsApi().jobsExecuteByJobId(jobRecord.getJobID());
-        } catch (ApiException apiException) {
-            apiException.printStackTrace();
+        } catch (ApiException e) {
+            throw new EssApiException(e);
         }
     }
 
@@ -132,7 +130,11 @@ public class EssJob extends EssObject {
      * @return the job status
      */
     public Status getStatus() {
-        return Status.fromCode(jobRecord.getStatusCode());
+        if (jobRecord.getStatusCode() != null) {
+            return Status.fromCode(jobRecord.getStatusCode());
+        } else {
+            return Status.UNKNOWN;
+        }
     }
 
     /**
@@ -144,9 +146,8 @@ public class EssJob extends EssObject {
     public String getErrorMessage() {
         requireDetailedJob();
         Map<String, Object> outputInfo = detailedRecord.getJobOutputInfo();
-        Object errorMessage = outputInfo.get("errorMessage");
-        if (errorMessage != null) {
-            return errorMessage.toString();
+        if (outputInfo != null && outputInfo.get("errorMessage") != null) {
+            return outputInfo.get("errorMessage").toString();
         }
         return null;
     }
@@ -161,11 +162,26 @@ public class EssJob extends EssObject {
         return String.format("%s (%d)%s", jobRecord.getJobType(), jobRecord.getJobID(), filename);
     }
 
-    public EssJob waitForCompletion() {
+    /**
+     * Loops while re-polling the job for its static to change to one that is complete (successfully or otherwise). The
+     * default wait interval is 5 seconds, although a custom interval can be specified by using {@link #waitForCompletion(long, TimeUnit)}.
+     *
+     * @return the updated job object, once this job is complete
+     * @throws InterruptedException if interruption is thrown
+     */
+    public EssJob waitForCompletion() throws InterruptedException {
         return waitForCompletion(5, TimeUnit.SECONDS);
     }
 
-    public EssJob waitForCompletion(long duration, TimeUnit timeUnit) {
+    /**
+     * Waits given amount of time for job to complete. See {@link #waitForCompletion()} for more details.
+     *
+     * @param duration the duration
+     * @param timeUnit the time unit of the duration
+     * @return the updated job object, once this job is complete
+     * @throws InterruptedException if interruption is thrown
+     */
+    public EssJob waitForCompletion(long duration, TimeUnit timeUnit) throws InterruptedException {
         try {
             while (true) {
                 JobRecordBean jobRecordBean = api.getJobsApi().jobsGetJobInfo(id.toString());
@@ -176,7 +192,7 @@ public class EssJob extends EssObject {
                 logger.info("Waiting {} to check for update to job {}", duration, getDescription());
                 timeUnit.sleep(duration);
             }
-        } catch (ApiException | InterruptedException e) {
+        } catch (ApiException e) {
             throw new EssApiException(e);
         }
     }
@@ -264,7 +280,12 @@ public class EssJob extends EssObject {
 
         COMPLETED_WITH_WARNINGS(300),
 
-        FAILED(400);
+        FAILED(400),
+
+        /**
+         * This is not an official code, we're just using it as a buffer against changes in the API
+         */
+        UNKNOWN(0);
 
         private final int code;
 

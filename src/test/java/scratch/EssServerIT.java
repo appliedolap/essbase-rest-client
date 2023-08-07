@@ -25,7 +25,7 @@ public class EssServerIT extends AbstractEssbaseServerTest {
     }
 
     @Test
-    public void createApplicationFromWorkbookWithWait() {
+    public void createApplicationFromWorkbookWithWait() throws InterruptedException {
         EssFile sampleBasic = server.getFile("gallery/Applications/Demo Samples/Block Storage", "Sample_Basic.xlsx");
         EssJob job = server.createApplicationFromWorkbook("Sample", "Basic", sampleBasic);
         EssJob finished = job.waitForCompletion();
