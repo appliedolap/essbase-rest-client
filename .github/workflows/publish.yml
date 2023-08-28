@@ -15,8 +15,8 @@ jobs:
           cache: 'maven'
           check-latest: false
           server-id: ossrh
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
+          server-username: ${{ secrets.OSSRH_USERNAME }}
+          server-password: ${{ secrets.OSSRH_TOKEN }}
       - name: Build ${{ github.ref_name }}
         run: |
           mvn -B deploy '-Djava.net.preferIPv4Stack=true' '-Dhttps.protocols=TLSv1.2' '-Dmaven.test.skip=true'
