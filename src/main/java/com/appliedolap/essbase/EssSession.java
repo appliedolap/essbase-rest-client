@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Models a session (connection) on the server.
  */
-public class EssSession extends EssObject {
+public class EssSession extends AbstractEssObject {
 
     private static final Logger logger = LoggerFactory.getLogger(EssSession.class);
 
@@ -16,7 +16,7 @@ public class EssSession extends EssObject {
 
     private final Long sessionId;
 
-    EssSession(ApiContext api, SessionAttributes sessionAttributes) {
+    public EssSession(ApiContext api, SessionAttributes sessionAttributes) {
         super(api);
         this.sessionAttributes = sessionAttributes;
         sessionId = Long.parseLong(sessionAttributes.getSessionId());

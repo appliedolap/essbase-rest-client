@@ -7,11 +7,11 @@ import com.appliedolap.essbase.util.WrapperUtil;
  * A variable on the Essbase server. This may be a server variable (this object), an application variable, or a
  * cube variable.
  */
-public class EssVariable extends EssObject {
+public class EssVariable extends AbstractEssObject {
 
     private final Variable variable;
 
-    EssVariable(ApiContext api, Variable variable) {
+    public EssVariable(ApiContext api, Variable variable) {
         super(api);
         this.variable = variable;
     }

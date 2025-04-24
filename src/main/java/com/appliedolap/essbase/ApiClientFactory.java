@@ -12,7 +12,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 
-class ApiClientFactory {
+public class ApiClientFactory {
+
+    public static final String ESSBASE_NETWORK_LOGGING = "essbase.network.logging";
 
     private static final Logger logger = LoggerFactory.getLogger(ApiClientFactory.class);
 
@@ -57,9 +59,12 @@ class ApiClientFactory {
 
     public ApiClient create() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .addNetworkInterceptor(loggingInterceptor)
                 .addInterceptor(credentialInterceptor)
                 .addInterceptor(linksInterceptor);
+
+        if (Boolean.getBoolean(ESSBASE_NETWORK_LOGGING)) {
+            builder.addNetworkInterceptor(loggingInterceptor);
+        }
 
         OkHttpClient httpClient = builder.build();
 
@@ -101,20 +106,19 @@ class ApiClientFactory {
 
             if (!stateless) {
                 for (Cookie cookie : cookies) {
-                    System.out.println("---> COOKIE: " + cookie);
+                    //System.out.println("---> COOKIE: " + cookie);
                     if (cookie.name().equals("sessionExpiry")) {
                         long sessionExpiry = Long.parseLong(cookie.value());
-                        System.out.println("Session expiry is in: " + ((sessionExpiry - System.currentTimeMillis()) / 1000.0f));
-                        System.out.println();
+                        logger.debug("Session expire is in: {}", ((sessionExpiry - System.currentTimeMillis()) / 1000.0f));
                     } else if (cookie.name().equals(JSESSION)) {
                         if (!hasAuthenticated) {
                             sessionId = cookie.value();
-                            System.out.println("Setting session ID: " + sessionId);
+                            logger.debug("Setting session ID: {}", sessionId);
                             hasAuthenticated = true;
                         }
                     } else if (cookie.name().equals(WL_JSESSION)) {
                         wlSessionId = cookie.value();
-                        System.out.println("have WL session: " + cookie.value());
+                        logger.debug("Have WL session: {}", cookie.value());
                     }
                 }
             }

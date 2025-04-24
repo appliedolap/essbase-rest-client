@@ -3,7 +3,7 @@ package com.appliedolap.essbase;
 import com.appliedolap.essbase.client.model.LockObject;
 import com.appliedolap.essbase.client.model.LockObject.TypeEnum;
 
-public class EssLock extends EssObject {
+public class EssLock extends AbstractEssObject {
 
     private final LockObject object;
 

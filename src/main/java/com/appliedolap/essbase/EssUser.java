@@ -5,7 +5,7 @@ import com.appliedolap.essbase.client.model.UserBean;
 /**
  * A user entry on the server.
  */
-public class EssUser extends EssObject {
+public class EssUser extends AbstractEssObject {
 
     private final EssServer server;
 

@@ -21,7 +21,7 @@ import static com.appliedolap.essbase.util.Utils.wrap;
 /**
  * Represents an Essbase application object. An application is a container for one or more {@link EssCube} cubes.
  */
-public class EssApplication extends EssObject {
+public class EssApplication extends AbstractEssObject {
 
     private static final Logger logger = LoggerFactory.getLogger(EssApplication.class);
 
@@ -69,7 +69,7 @@ public class EssApplication extends EssObject {
 
     }
 
-    EssApplication(ApiContext api, EssServer server, Application application) {
+    public EssApplication(ApiContext api, EssServer server, Application application) {
         super(api);
         this.server = server;
         this.application = application;
@@ -146,7 +146,7 @@ public class EssApplication extends EssObject {
      * @return the cube
      */
     public EssCube getCube(String cubeName) {
-        return Utils.getWithName(getCubes(), cubeName, EssObject.Type.CUBE);
+        return Utils.getWithName(getCubes(), cubeName, AbstractEssObject.Type.CUBE);
     }
 
     public ApiContext getApi() {

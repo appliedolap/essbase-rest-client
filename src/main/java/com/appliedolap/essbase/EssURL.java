@@ -10,13 +10,13 @@ import java.net.URISyntaxException;
  * a client can dynamically ask for URLs, which as of now includes such things as the URL to the JET UI, XMLA provider,
  * REST API, Java API, Smart View, and so on.
  */
-public class EssURL extends EssObject {
+public class EssURL extends AbstractEssObject {
 
     private final EssServer server;
 
     private final EssbaseURL essbaseURL;
 
-    protected EssURL(ApiContext api, EssServer server, EssbaseURL essbaseURL) {
+    public EssURL(ApiContext api, EssServer server, EssbaseURL essbaseURL) {
         super(api);
         this.server = server;
         this.essbaseURL = essbaseURL;

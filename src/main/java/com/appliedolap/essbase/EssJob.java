@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * Represents a server job, which is any number of different types of actions that have been performed on the
  * server, such as a dimension build, data load, and others. See {@link Type} for full list of known types.
  */
-public class EssJob extends EssObject {
+public class EssJob extends AbstractEssObject {
 
     private static final Logger logger = LoggerFactory.getLogger(EssJob.class);
 
@@ -27,7 +27,7 @@ public class EssJob extends EssObject {
 
     private final Long id;
 
-    EssJob(ApiContext api, EssServer server, JobRecordBean jobRecord) {
+    public EssJob(ApiContext api, EssServer server, JobRecordBean jobRecord) {
         super(api);
         Objects.requireNonNull(jobRecord.getJobID(), "Job must supply an ID");
         this.server = server;
@@ -65,7 +65,7 @@ public class EssJob extends EssObject {
     }
 
     /**
-     * Implemented for conformance to {@link EssObject}; the name is simply the job ID.
+     * Implemented for conformance to {@link AbstractEssObject}; the name is simply the job ID.
      *
      * @return the name of this job
      */
@@ -189,7 +189,7 @@ public class EssJob extends EssObject {
                 if (updatedJob.getStatus().isComplete()) {
                     return updatedJob;
                 }
-                logger.info("Waiting {} to check for update to job {}", duration, getDescription());
+                logger.info("Waiting {} {} to check for update to job {}", duration, timeUnit.toString().toLowerCase(), getDescription());
                 timeUnit.sleep(duration);
             }
         } catch (ApiException e) {

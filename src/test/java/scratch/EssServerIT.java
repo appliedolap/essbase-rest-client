@@ -1,7 +1,9 @@
 package scratch;
 
+import com.appliedolap.essbase.EssCube;
 import com.appliedolap.essbase.EssFile;
 import com.appliedolap.essbase.EssJob;
+import com.appliedolap.essbase.EssOutline;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +35,14 @@ public class EssServerIT extends AbstractEssbaseServerTest {
         logger.info("Job finished in {} seconds", TimeUnit.MILLISECONDS.toSeconds(finished.getDuration()));
 
         System.out.println("Desc: " + job.getDescription());
+    }
+
+    @Test
+    public void outline() {
+        EssCube cube = server.getApplication("Sample").getCube("Basic");
+        EssOutline outline = cube.getOutline();
+        byte[] xml = outline.downloadXml();
+        System.out.println("XML: " + new String(xml));
     }
 
 }

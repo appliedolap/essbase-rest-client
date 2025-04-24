@@ -18,7 +18,7 @@ import java.io.IOException;
  * A file or folder in the Essbase server file hierarchy. If a folder, the {@link #isFolder()} method will return
  * <code>true</code> and the instance can be cast to an {@link EssFolder}.
  */
-public class EssFile extends EssObject {
+public class EssFile extends AbstractEssObject {
 
     private static final Logger logger = LoggerFactory.getLogger(EssFile.class);
 
@@ -28,7 +28,7 @@ public class EssFile extends EssObject {
 
     protected final String fullPath;
 
-    EssFile(ApiContext api, EssServer server, String name, String fullPath) {
+    public EssFile(ApiContext api, EssServer server, String name, String fullPath) {
         super(api);
         this.server = server;
         this.name = name;

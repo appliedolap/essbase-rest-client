@@ -1,7 +1,6 @@
 package com.appliedolap.essbase.util;
 
-import com.appliedolap.essbase.EssObject;
-import com.appliedolap.essbase.client.model.Type;
+import com.appliedolap.essbase.AbstractEssObject;
 import com.appliedolap.essbase.exceptions.NoSuchEssbaseObjectException;
 
 import java.time.Instant;
@@ -62,7 +61,7 @@ public class Utils {
      * @param <E> type filter, the list must extend from EssObject
      * @return a single item with the given name, exception thrown otherwise
      */
-    public static <E extends EssObject> E getWithName(Iterable<E> items, String name, EssObject.Type type) {
+    public static <E extends AbstractEssObject> E getWithName(Iterable<E> items, String name, AbstractEssObject.Type type) {
         for (E item : items) {
             if (item.getName().equals(name)) {
                 return item;

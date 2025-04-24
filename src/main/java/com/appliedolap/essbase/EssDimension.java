@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * A special type of member that represents a dimension.
  */
-public class EssDimension extends EssObject {
+public class EssDimension extends AbstractEssObject {
 
     private final DimensionBean dimensionBean;
 

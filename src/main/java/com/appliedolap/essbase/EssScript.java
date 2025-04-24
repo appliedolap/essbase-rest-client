@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Represents a script object (calc, report, etc.) on Essbase cube/application.
  */
-public class EssScript extends EssObject {
+public class EssScript extends AbstractEssObject {
 
     private static final Logger logger = LoggerFactory.getLogger(EssScript.class);
 

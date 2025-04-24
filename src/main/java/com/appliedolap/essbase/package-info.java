@@ -1,7 +1,7 @@
 /**
  * The classes in this package model client API that works with the Essbase REST API. In general, the design of the
  * library is completely top-down (similar to the traditional Essbase Java API). The starting place for any client program
- * working with this library is the {@link com.appliedolap.essbase.EssServer}. Once instantiated, usage procedes in a
+ * working with this library is the {@link com.appliedolap.essbase.impl.EssServerImpl}. Once instantiated, usage procedes in a
  * top-down manner, such as getting the list of applications on the server, getting the list of cubes from that application, getting
  * the list of dimensions in that cube, and so on.
  *

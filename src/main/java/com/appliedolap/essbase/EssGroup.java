@@ -12,13 +12,13 @@ import java.util.List;
 
 import static com.appliedolap.essbase.util.Utils.wrap;
 
-public class EssGroup extends EssObject {
+public class EssGroup extends AbstractEssObject {
 
     private final EssServer server;
 
     private final GroupBean groupBean;
 
-    EssGroup(ApiContext api, EssServer server, GroupBean groupBean) {
+    public EssGroup(ApiContext api, EssServer server, GroupBean groupBean) {
         super(api);
         this.server = server;
         this.groupBean = groupBean;

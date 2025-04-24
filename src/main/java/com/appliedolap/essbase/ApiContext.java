@@ -53,7 +53,7 @@ public class ApiContext {
 
     private final ApplicationLogsApi logsApi;
 
-    ApiContext(ApiClient client) {
+    public ApiContext(ApiClient client) {
         this.applicationsApi = new ApplicationsApi(client);
         this.applicationConfigurationApi = new ApplicationConfigurationApi(client);
         this.aboutEssbaseApi = new AboutEssbaseApi(client);

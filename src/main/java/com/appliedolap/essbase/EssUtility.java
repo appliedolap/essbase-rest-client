@@ -13,13 +13,13 @@ import java.io.IOException;
 /**
  * Represents one of the downloadable utilities on the Essbase server.
  */
-public class EssUtility extends EssObject {
+public class EssUtility extends AbstractEssObject {
 
     private static final Logger logger = LoggerFactory.getLogger(EssUtility.class);
 
     private final Resource resource;
 
-    EssUtility(ApiContext api, Resource resource) {
+    public EssUtility(ApiContext api, Resource resource) {
         super(api);
         this.resource = resource;
     }

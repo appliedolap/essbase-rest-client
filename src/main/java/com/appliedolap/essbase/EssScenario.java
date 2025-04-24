@@ -5,7 +5,7 @@ import com.appliedolap.essbase.client.model.ScenarioBean;
 /**
  * Models a particular scenario in a scenarios-enabled Essbase cube.
  */
-public class EssScenario extends EssObject {
+public class EssScenario extends AbstractEssObject {
 
     private final EssCube cube;
 

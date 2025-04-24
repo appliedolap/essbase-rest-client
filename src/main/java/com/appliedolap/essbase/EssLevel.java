@@ -5,7 +5,7 @@ import com.appliedolap.essbase.client.model.GenerationLevel;
 /**
  * Special Type of Member that represents a Level
  */
-public class EssLevel extends EssObject {
+public class EssLevel extends AbstractEssObject {
 
     private final GenerationLevel generationLevel;
 

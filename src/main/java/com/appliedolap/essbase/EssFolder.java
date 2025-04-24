@@ -25,7 +25,7 @@ public class EssFolder extends EssFile {
 
     private final EssServer server;
 
-    EssFolder(ApiContext api, EssServer server, String name, String fullPath) {
+    public EssFolder(ApiContext api, EssServer server, String name, String fullPath) {
         super(api, server, name, fullPath);
         this.server = server;
     }

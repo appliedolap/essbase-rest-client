@@ -3,6 +3,7 @@ package com.appliedolap.essbase;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.*;
 import com.appliedolap.essbase.exceptions.NoSuchEssbaseObjectException;
+import com.appliedolap.essbase.impl.EssDrillthroughImpl;
 import com.appliedolap.essbase.misc.MdxJson;
 import com.appliedolap.essbase.util.GenericApiCallback;
 import com.appliedolap.essbase.util.WrapperUtil;
@@ -27,7 +28,7 @@ import static com.appliedolap.essbase.util.Utils.wrap;
 /**
  * Represents an Essbase cube on the server.
  */
-public class EssCube extends EssObject {
+public class EssCube extends AbstractEssObject {
 
     private static final Logger logger = LoggerFactory.getLogger(EssCube.class);
 
@@ -198,7 +199,7 @@ public class EssCube extends EssObject {
      * @param urlLink the drill-through link
      * @param drillRegions the drillable regions
      */
-    public void createDrillthroughURL(String urlName, String urlLink, List<String> drillRegions) {
+    public EssDrillthrough createDrillthroughURL(String urlName, String urlLink, List<String> drillRegions) {
         WrapperUtil.wrap(() -> {
             DrillthroughBean drillthroughBean = new DrillthroughBean();
             drillthroughBean.setName(urlName);
@@ -207,6 +208,7 @@ public class EssCube extends EssObject {
             drillthroughBean.setDrillableRegions(drillRegions);
             api.getDrillThroughReportsApi().drillThroughReportsCreate(getApplicationName(), this.getName(), drillthroughBean);
         });
+        return getDrillthrough(urlName);
     }
 
     /**
@@ -219,7 +221,7 @@ public class EssCube extends EssObject {
             ReportList reportList = api.getDrillThroughReportsApi().drillThroughReportsGetReports(getApplicationName(), getName());
             List<EssDrillthrough> essDrillthroughs = new ArrayList<>();
             for (ReportBean reportBean : reportList.getItems()) {
-                EssDrillthrough essDrillthrough = new EssDrillthrough(api, this, reportBean);
+                EssDrillthrough essDrillthrough = new EssDrillthroughImpl(api, this, reportBean);
                 essDrillthroughs.add(essDrillthrough);
             }
             return Collections.unmodifiableList(essDrillthroughs);
@@ -243,7 +245,7 @@ public class EssCube extends EssObject {
                 return drillthrough;
             }
         }
-        throw new NoSuchEssbaseObjectException(drillthroughName, Type.CUBE);
+        throw new NoSuchEssbaseObjectException(drillthroughName, Type.DRILLTHROUGH);
     }
 
     /**

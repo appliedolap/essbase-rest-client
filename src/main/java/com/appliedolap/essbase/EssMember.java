@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * A member in an Essbase cube.
  */
-public class EssMember extends EssObject {
+public class EssMember extends AbstractEssObject {
 
     private final EssCube cube;
 

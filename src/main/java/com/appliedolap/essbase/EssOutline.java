@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Models the outline for a particular cube.
  */
-public class EssOutline extends EssObject {
+public class EssOutline extends AbstractEssObject {
 
     private static final Logger logger = LoggerFactory.getLogger(EssOutline.class);
 
