@@ -154,6 +154,7 @@ public interface EssServer {
      * @param application the application
      * @param database    the cube/database
      * @param file        the XLSX file
+     * @return a new job for the creation process
      */
     EssJob createApplicationFromWorkbook(String application, String database, EssFile file);
 

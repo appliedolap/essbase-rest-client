@@ -198,6 +198,7 @@ public class EssCube extends AbstractEssObject {
      * @param urlName the name (no spaces?!)
      * @param urlLink the drill-through link
      * @param drillRegions the drillable regions
+     * @return a new drill-through object
      */
     public EssDrillthrough createDrillthroughURL(String urlName, String urlLink, List<String> drillRegions) {
         WrapperUtil.wrap(() -> {
