@@ -1,5 +1,7 @@
 package com.appliedolap.essbase.impl;
 
+import java.util.StringJoiner;
+
 public class EssServerConnectionDetailsImpl {
 
     private String server;
@@ -40,6 +42,15 @@ public class EssServerConnectionDetailsImpl {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", EssServerConnectionDetailsImpl.class.getSimpleName() + "[", "]")
+                .add("server='" + server + "'")
+                .add("username='" + username + "'")
+                .add("stateless=" + stateless)
+                .toString();
     }
 
 }
