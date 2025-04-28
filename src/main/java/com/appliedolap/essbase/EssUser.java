@@ -1,21 +1,6 @@
 package com.appliedolap.essbase;
 
-import com.appliedolap.essbase.client.model.UserBean;
-
-/**
- * A user entry on the server.
- */
-public class EssUser extends AbstractEssObject {
-
-    private final EssServer server;
-
-    private final UserBean userBean;
-
-    EssUser(ApiContext api, EssServer server, UserBean userBean) {
-        super(api);
-        this.server = server;
-        this.userBean = userBean;
-    }
+public interface EssUser extends EssObject {
 
     /**
      * Returns the user ID. This might seem a little weird given that the user object has a 'name' property on it, but
@@ -26,30 +11,20 @@ public class EssUser extends AbstractEssObject {
      * @return the user ID
      */
     @Override
-    public String getName() {
-        return userBean.getId();
-    }
+    String getName();
 
     @Override
-    public Type getType() {
-        return Type.USER;
-    }
+    Type getType();
 
-    public String getDisplayName() {
-        return userBean.getName();
-    }
+    String getDisplayName();
 
-    public String getEmail() {
-        return userBean.getEmail();
-    }
+    String getEmail();
 
     /**
      * Get the owning server of this user.
      *
      * @return the server associated with this user
      */
-    public EssServer getServer() {
-        return server;
-    }
+    EssServer getServer();
 
 }

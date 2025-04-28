@@ -1,21 +1,6 @@
 package com.appliedolap.essbase;
 
-import com.appliedolap.essbase.client.model.ScenarioBean;
-
-/**
- * Models a particular scenario in a scenarios-enabled Essbase cube.
- */
-public class EssScenario extends AbstractEssObject {
-
-    private final EssCube cube;
-
-    private final ScenarioBean scenarioBean;
-
-    EssScenario(ApiContext api, EssCube cube, ScenarioBean scenarioBean) {
-        super(api);
-        this.cube = cube;
-        this.scenarioBean = scenarioBean;
-    }
+public interface EssScenario extends EssObject {
 
     /**
      * Gets the name of this scenario.
@@ -23,17 +8,11 @@ public class EssScenario extends AbstractEssObject {
      * @return the scenario name
      */
     @Override
-    public String getName() {
-        return scenarioBean.getName();
-    }
+    String getName();
 
     @Override
-    public Type getType() {
-        return Type.SCENARIO;
-    }
+    Type getType();
 
-    public EssCube getCube() {
-        return cube;
-    }
+    EssCube getCube();
 
 }

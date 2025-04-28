@@ -1,19 +1,16 @@
 package scratch;
 
 import com.appliedolap.essbase.*;
-import com.appliedolap.essbase.client.ApiException;
-import com.appliedolap.essbase.client.model.*;
+import com.appliedolap.essbase.impl.EssApplicationImpl;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class BatchOutlineEditTest extends AbstractEssbaseServerTest {
 
     @Test
     public void batchOutlineEdit() {
-        EssApplication app = server.getApplication("Sample");
+        EssApplicationImpl app = server.getApplication("Sample");
         try {
             ApiContext api = app.getApi();
             EssCube cube = app.getCube("Basic");

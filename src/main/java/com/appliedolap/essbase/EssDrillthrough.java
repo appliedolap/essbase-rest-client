@@ -18,7 +18,7 @@ public interface EssDrillthrough {
      */
     String getName();
 
-    AbstractEssObject.Type getType();
+    EssObject.Type getType();
 
     /**
      * Gets the URL of this drill-through report (URL-style only!). This API will likely change soon as support for
@@ -33,7 +33,7 @@ public interface EssDrillthrough {
      * fetch to the drill-through report definition endpoint if it hasn't already been fetched.
      *
      * @return the type
-     * @see AbstractEssObject.Type
+     * @see EssObject.Type
      */
     DrillthroughType getDrillthroughType();
 

@@ -1,5 +1,7 @@
 package com.appliedolap.essbase;
 
+import com.appliedolap.essbase.impl.EssApplicationImpl;
+import com.appliedolap.essbase.impl.EssDataSourceImpl;
 import com.appliedolap.essbase.impl.EssServerImpl;
 
 import java.io.OutputStream;
@@ -19,7 +21,7 @@ public interface EssServer {
 
     String getName();
 
-    AbstractEssObject.Type getType();
+    EssObject.Type getType();
 
     /**
      * Fetch the list of applications available on the server for the currently connected user. The number of returned
@@ -35,7 +37,7 @@ public interface EssServer {
      * @param applicationName the application name
      * @return an application object for the application
      */
-    EssApplication getApplication(String applicationName);
+    EssApplicationImpl getApplication(String applicationName);
 
     /**
      * Gets the list of files available through the files API. The returned files may include folders.
@@ -189,7 +191,7 @@ public interface EssServer {
      * @param query          the query
      * @param includeHeaders whether to include headers in the result
      * @param delimiter      the delimiter (currently only space and tab are supported by the server, you can use
-     *                       constants in {@link EssDataSource} for convenience)
+     *                       constants in {@link EssDataSourceImpl} for convenience)
      * @param params         the parameters, if any. If none, supply an empty map
      * @param outputStream   the output stream to write results to
      */

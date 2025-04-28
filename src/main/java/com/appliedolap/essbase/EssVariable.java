@@ -1,29 +1,13 @@
 package com.appliedolap.essbase;
 
-import com.appliedolap.essbase.client.model.Variable;
-import com.appliedolap.essbase.util.WrapperUtil;
-
-/**
- * A variable on the Essbase server. This may be a server variable (this object), an application variable, or a
- * cube variable.
- */
-public class EssVariable extends AbstractEssObject {
-
-    private final Variable variable;
-
-    public EssVariable(ApiContext api, Variable variable) {
-        super(api);
-        this.variable = variable;
-    }
+public interface EssVariable extends EssObject {
 
     /**
      * Gets the scope of this variable.
      *
      * @return the variable scope
      */
-    public Scope getScope() {
-        return Scope.SERVER;
-    }
+    Scope getScope();
 
     /**
      * Gets the name of this variable.
@@ -31,35 +15,27 @@ public class EssVariable extends AbstractEssObject {
      * @return the name of this variable
      */
     @Override
-    public String getName() {
-        return variable.getName();
-    }
+    String getName();
 
     @Override
-    public Type getType() {
-        return Type.VARIABLE;
-    }
+    Type getType();
 
     /**
      * Gets the value of this variable.
      *
      * @return the value of this variable
      */
-    public String getValue() {
-        return variable.getValue();
-    }
+    String getValue();
 
     /**
      * Deletes the variable.
      */
-    public void delete() {
-        WrapperUtil.wrap(() -> api.getServerVariablesApi().variablesDeleteServerVariable(variable.getName()));
-    }
+    void delete();
 
     /**
      * Models variable scope.
      */
-    public enum Scope {
+    enum Scope {
 
         SERVER, APPLICATION, CUBE
 

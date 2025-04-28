@@ -1,68 +1,22 @@
 package com.appliedolap.essbase;
 
-import com.appliedolap.essbase.client.ApiException;
-import com.appliedolap.essbase.client.model.JobRecordBean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Represents a server job, which is any number of different types of actions that have been performed on the
- * server, such as a dimension build, data load, and others. See {@link Type} for full list of known types.
- */
-public class EssJob extends AbstractEssObject {
-
-    private static final Logger logger = LoggerFactory.getLogger(EssJob.class);
-
-    private final JobRecordBean jobRecord;
-
-    private JobRecordBean detailedRecord;
-
-    private final EssServer server;
-
-    private final JobType type;
-
-    private final Long id;
-
-    public EssJob(ApiContext api, EssServer server, JobRecordBean jobRecord) {
-        super(api);
-        Objects.requireNonNull(jobRecord.getJobID(), "Job must supply an ID");
-        this.server = server;
-        this.jobRecord = jobRecord;
-        this.id = jobRecord.getJobID();
-        this.type = JobType.parse(jobRecord.getJobType());
-    }
-
-    private void requireDetailedJob() {
-        if (detailedRecord == null) {
-            try {
-                detailedRecord = api.getJobsApi().jobsGetJobInfo(id.toString());
-            } catch (ApiException apiException) {
-                throw new EssApiException(apiException);
-            }
-        }
-    }
+public interface EssJob extends EssObject {
 
     /**
      * Gets the ID of the job.
      *
      * @return the numeric ID of this job
      */
-    public Long getJobID() {
-        return jobRecord.getJobID();
-    }
+    Long getJobID();
 
     /**
      * Check if the job execution was successful.
      *
      * @return true if it was (as based on status code), false otherwise
      */
-    public boolean isSuccessful() {
-        return getStatus().isSuccessful();
-    }
+    boolean isSuccessful();
 
     /**
      * Implemented for conformance to {@link AbstractEssObject}; the name is simply the job ID.
@@ -70,14 +24,10 @@ public class EssJob extends AbstractEssObject {
      * @return the name of this job
      */
     @Override
-    public String getName() {
-        return id.toString();
-    }
+    String getName();
 
     @Override
-    public Type getType() {
-        return Type.JOB;
-    }
+    Type getType();
 
     /**
      * Gets the duration of this job, in milliseconds. This method may return 0 while the job is executing and only have
@@ -85,93 +35,58 @@ public class EssJob extends AbstractEssObject {
      *
      * @return the duration of the job
      */
-    public long getDuration() {
-        if (jobRecord.getEndTime() != null && jobRecord.getStartTime() != null) {
-            return jobRecord.getEndTime() - jobRecord.getStartTime();
-        } else {
-            logger.warn("Job start/end time was null");
-            return 0L;
-        }
-    }
+    long getDuration();
 
     /**
      * Gets the owning server for this job.
      *
      * @return the server for this job
      */
-    public EssServer getServer() {
-        return server;
-    }
+    EssServer getServer();
 
     /**
      * Gets the type of the job.
      *
      * @return the job type
      */
-    public JobType getJobType() {
-        return type;
-    }
+    JobType getJobType();
 
     /**
      * Re-run the job (using the Essbase REST API method to re-run a job).
      */
-    public void rerun() {
-        try {
-            logger.info("Re-running job {}", jobRecord.getJobID());
-            api.getJobsApi().jobsExecuteByJobId(jobRecord.getJobID());
-        } catch (ApiException e) {
-            throw new EssApiException(e);
-        }
-    }
+    void rerun();
 
     /**
      * Gets the status of this job.
      *
      * @return the job status
      */
-    public Status getStatus() {
-        if (jobRecord.getStatusCode() != null) {
-            return Status.fromCode(jobRecord.getStatusCode());
-        } else {
-            return Status.UNKNOWN;
-        }
-    }
+    Status getStatus();
 
     /**
-     * Returns the error message for the job, if any. This API will likely change as the jobs API is filled out,
-     * since this status is null for successful jobs.
+     * Returns the error message for the job, if any. This API will likely change as the jobs API is filled out, since
+     * this status is null for successful jobs.
      *
      * @return the error message, if any
      */
-    public String getErrorMessage() {
-        requireDetailedJob();
-        Map<String, Object> outputInfo = detailedRecord.getJobOutputInfo();
-        if (outputInfo != null && outputInfo.get("errorMessage") != null) {
-            return outputInfo.get("errorMessage").toString();
-        }
-        return null;
-    }
+    String getErrorMessage();
 
     /**
      * A textual description of the job.
      *
      * @return a slightly longer description of the job
      */
-    public String getDescription() {
-        String filename = jobRecord.getJobfileName() == null ? "" : ", filename: " + jobRecord.getJobfileName();
-        return String.format("%s (%d)%s", jobRecord.getJobType(), jobRecord.getJobID(), filename);
-    }
+    String getDescription();
 
     /**
      * Loops while re-polling the job for its static to change to one that is complete (successfully or otherwise). The
-     * default wait interval is 5 seconds, although a custom interval can be specified by using {@link #waitForCompletion(long, TimeUnit)}.
+     * default wait interval is 5 seconds, although a custom interval can be specified by using
+     * {@link #waitForCompletion(long, TimeUnit)}.
      *
      * @return the updated job object, once this job is complete
      * @throws InterruptedException if interruption is thrown
      */
-    public EssJob waitForCompletion() throws InterruptedException {
-        return waitForCompletion(5, TimeUnit.SECONDS);
-    }
+    EssJob waitForCompletion() throws InterruptedException;
 
     /**
      * Waits given amount of time for job to complete. See {@link #waitForCompletion()} for more details.
@@ -181,21 +96,7 @@ public class EssJob extends AbstractEssObject {
      * @return the updated job object, once this job is complete
      * @throws InterruptedException if interruption is thrown
      */
-    public EssJob waitForCompletion(long duration, TimeUnit timeUnit) throws InterruptedException {
-        try {
-            while (true) {
-                JobRecordBean jobRecordBean = api.getJobsApi().jobsGetJobInfo(id.toString());
-                EssJob updatedJob = new EssJob(api, server, jobRecordBean);
-                if (updatedJob.getStatus().isComplete()) {
-                    return updatedJob;
-                }
-                logger.info("Waiting {} {} to check for update to job {}", duration, timeUnit.toString().toLowerCase(), getDescription());
-                timeUnit.sleep(duration);
-            }
-        } catch (ApiException e) {
-            throw new EssApiException(e);
-        }
-    }
+    EssJob waitForCompletion(long duration, TimeUnit timeUnit) throws InterruptedException;
 
     /**
      * Known job types.
@@ -232,8 +133,8 @@ public class EssJob extends AbstractEssObject {
 
         /**
          * Represents the name of the param used in the JSON request to the server. This is an instance of the JSON
-         * request format 'leaking' but it is what it is. Having this constant be accessible allows us to reference these
-         * consistently when putting together a job request.
+         * request format 'leaking' but it is what it is. Having this constant be accessible allows us to reference
+         * these consistently when putting together a job request.
          *
          * @return the parameter as used in the request payload to the job submission API
          */
@@ -251,12 +152,12 @@ public class EssJob extends AbstractEssObject {
         }
 
         public static JobType parse(String textType) {
-            for (JobType type : JobType.values()) {
+            for (JobType type : EssJob.JobType.values()) {
                 if (type.getResponseType().equals(textType)) {
                     return type;
                 }
             }
-            return JobType.UNKNOWN;
+            return EssJob.JobType.UNKNOWN;
         }
 
         @Override
@@ -298,7 +199,7 @@ public class EssJob extends AbstractEssObject {
         }
 
         public static Status fromCode(int code) {
-            for (Status jobStatus : Status.values()) {
+            for (Status jobStatus : EssJob.Status.values()) {
                 if (jobStatus.getCode() == code) {
                     return jobStatus;
                 }

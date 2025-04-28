@@ -6,8 +6,8 @@
  * the list of dimensions in that cube, and so on.
  *
  * <p>All objects in the API are created from a parent object, and all objects maintain a reference to their parent. For
- * example, the {@link com.appliedolap.essbase.EssApplication} object has a method to return a list of cubes in that application,
- * via {@link com.appliedolap.essbase.EssApplication#getCubes()}, and each cube in the returned list "knows" about its
- * parent/owning application, accessible via {@link com.appliedolap.essbase.EssCube#getApplication()}.
+ * example, the {@link com.appliedolap.essbase.impl.EssApplicationImpl} object has a method to return a list of cubes in that application,
+ * via {@link com.appliedolap.essbase.impl.EssApplicationImpl#getCubes()}, and each cube in the returned list "knows" about its
+ * parent/owning application, accessible via {@link com.appliedolap.essbase.impl.EssCubeImpl#getApplication()}.
  */
 package com.appliedolap.essbase;

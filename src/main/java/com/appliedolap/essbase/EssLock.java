@@ -1,16 +1,8 @@
 package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.model.LockObject;
-import com.appliedolap.essbase.client.model.LockObject.TypeEnum;
 
-public class EssLock extends AbstractEssObject {
-
-    private final LockObject object;
-
-    EssLock(ApiContext api, LockObject object) {
-        super(api);
-        this.object = object;
-    }
+public interface EssLock extends EssObject {
 
     /**
      * Gets the name of the lock.
@@ -18,25 +10,15 @@ public class EssLock extends AbstractEssObject {
      * @return the name of this lock
      */
     @Override
-    public String getName() {
-        return object.getName();
-    }
+    String getName();
 
     @Override
-    public Type getType() {
-        return Type.LOCK;
-    }
+    Type getType();
 
-    public TypeEnum getLockObjectType() {
-        return object.getType();
-    }
+    LockObject.TypeEnum getLockObjectType();
 
-    public String getUser() {
-        return object.getUser();
-    }
+    String getUser();
 
-    public Long getTime() {
-        return object.getTime();
-    }
+    Long getTime();
 
 }

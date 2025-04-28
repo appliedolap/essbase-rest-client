@@ -353,7 +353,7 @@ public class EssDrillthroughImpl extends AbstractEssObject implements EssDrillth
 
         /**
          * Sets the delimiter to use. At the time of this writing, the Essbase REST API only allows a comma or tab. This
-         * Java API will not preclude you from using something else, but you are encouraged to use the constants in {@link EssDataSource}.
+         * Java API will not preclude you from using something else, but you are encouraged to use the constants in {@link EssDataSourceImpl}.
          *
          * @param delimiter the delimiter
          */

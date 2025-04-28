@@ -81,7 +81,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
             ApplicationList applicationList = api.getApplicationsApi().applicationsGetApplications(null, null, MAX_APPLICATIONS, null, null, null);
             List<EssApplication> applications = new ArrayList<>();
             for (Application application : wrap(applicationList.getItems())) {
-                applications.add(new EssApplication(api, this, application));
+                applications.add(new EssApplicationImpl(api, this, application));
             }
             return Collections.unmodifiableList(applications);
         } catch (ApiException e) {
@@ -90,7 +90,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     }
 
     @Override
-    public EssApplication getApplication(String applicationName) {
+    public EssApplicationImpl getApplication(String applicationName) {
         try {
             // calls the same list method as the getApplications method but provides a filter on the app name so that
             // only one is returned. In the future we could potentially go straight to the /applications/{applicationName}
@@ -98,7 +98,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
             // that is returned from the other method
             ApplicationList applicationList = api.getApplicationsApi().applicationsGetApplications(applicationName, null, null, null, null, null);
             if (Utils.isNotEmpty(applicationList.getItems())) {
-                return new EssApplication(api, this, applicationList.getItems().get(0));
+                return new EssApplicationImpl(api, this, applicationList.getItems().get(0));
             } else {
                 throw new NoSuchEssbaseObjectException(applicationName, Type.APPLICATION);
             }
@@ -118,7 +118,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
                 String name = fileMap.get("name");
                 String fullPath = fileMap.get("fullPath");
                 boolean isFolder = "folder".equals(fileMap.get("type"));
-                EssFile essFile = isFolder ? new EssFolder(api, this, name, fullPath) : new EssFile(api, this, name, fullPath);
+                EssFile essFile = isFolder ? new EssFolderImpl(api, this, name, fullPath) : new EssFileImpl(api, this, name, fullPath);
                 files.add(essFile);
             }
             return Collections.unmodifiableList(files);
@@ -133,7 +133,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
             FileCollectionResponse collectionResponse = api.getFilesApi().filesListFiles(path, null, null, null, null, null, null, null, null);
             for (FileBean fileBean : collectionResponse.getItems()) {
                 if (fileBean.getName().equals(filename)) {
-                    return new EssFile(api, this, filename, fileBean.getFullPath());
+                    return new EssFileImpl(api, this, filename, fileBean.getFullPath());
                 }
             }
             return null;
@@ -144,7 +144,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
 
     @Override
     public List<EssSession> getSessions() {
-        return WrapperUtil.wrapList(() -> api.getSessionsApi().sessionsGetAllActiveSessions(null, null, null), sessionAttributes -> new EssSession(api, sessionAttributes));
+        return WrapperUtil.wrapList(() -> api.getSessionsApi().sessionsGetAllActiveSessions(null, null, null), sessionAttributes -> new EssSessionImpl(api, sessionAttributes));
     }
 
     @Override
@@ -165,7 +165,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     public EssFolder getHomePath() {
         try {
             String homepath = api.getFilesApi().filesGetUserHomePath();
-            return new EssFolder(api, this, homepath, homepath);
+            return new EssFolderImpl(api, this, homepath, homepath);
         } catch (ApiException apiException) {
             logger.error("Unable to get home path: {}", apiException.getMessage());
             throw new EssApiException(apiException);
@@ -178,7 +178,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
             ResourceList utilities = api.getTemplatesAndUtilitiesApi().resourcesGetUtilities();
             List<EssUtility> essUtilities = new ArrayList<>();
             for (Resource resource : wrap(utilities.getItems())) {
-                EssUtility utility = new EssUtility(api, resource);
+                EssUtility utility = new EssUtilityImpl(api, resource);
                 essUtilities.add(utility);
             }
             return Collections.unmodifiableList(essUtilities);
@@ -193,7 +193,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
             JobRecordPaginatedResultWrapper jobs = api.getJobsApi().jobsGetAllJobRecords(null, null, "job_ID:desc", 0L, 50L, false);
             List<EssJob> essJobs = new ArrayList<>();
             for (JobRecordBean jobRecordBean : wrap(jobs.getItems())) {
-                EssJob essJob = new EssJob(api, this, jobRecordBean);
+                EssJob essJob = new EssJobImpl(api, this, jobRecordBean);
                 essJobs.add(essJob);
             }
             return Collections.unmodifiableList(essJobs);
@@ -209,7 +209,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
             Groups groups = api.getGroupsApi().groupsSearch(null, -1, "all");
             List<EssGroup> essGroups = new ArrayList<>();
             for (GroupBean group : wrap(groups.getItems())) {
-                EssGroup essGroup = new EssGroup(api, this, group);
+                EssGroup essGroup = new EssGroupImpl(api, this, group);
                 essGroups.add(essGroup);
             }
             return Collections.unmodifiableList(essGroups);
@@ -224,7 +224,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
             VariableList variableList = api.getServerVariablesApi().variablesListServerVariables();
             List<EssVariable> variables = new ArrayList<>();
             for (Variable variable : wrap(variableList.getItems())) {
-                EssVariable essVariable = new EssVariable(api, variable);
+                EssVariable essVariable = new EssVariableImpl(api, variable);
                 variables.add(essVariable);
             }
             return Collections.unmodifiableList(variables);
@@ -282,7 +282,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
         JobsInputBean job = new JobsInputBean();
         job.setApplication(application);
         job.setDb(database);
-        job.setJobtype(EssJob.JobType.IMPORT_EXCEL.getParam());
+        job.setJobtype(EssJobImpl.JobType.IMPORT_EXCEL.getParam());
 
         ParametersBean params = new ParametersBean();
 
@@ -297,7 +297,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
 
         try {
             JobRecordBean jobRecordBean = api.getJobsApi().jobsExecuteJob(job);
-            return new EssJob(api, this, jobRecordBean);
+            return new EssJobImpl(api, this, jobRecordBean);
         } catch (ApiException e) {
             throw new EssApiException(e);
         }
@@ -308,7 +308,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
         try {
             return api.getUrlsApi().uRLsGet().getItems()
                     .stream()
-                    .map(url -> new EssURL(api, this, url))
+                    .map(url -> new EssURLImpl(api, this, url))
                     .collect(Collectors.toList());
         } catch (ApiException e) {
             throw new EssApiException(e);
@@ -320,7 +320,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
         try {
             return api.getGlobalDataSourcesApi().globalDatasourcesGetDatasources(0, 1000).getItems()
                     .stream()
-                    .map(ds -> new EssDataSource(api, this, ds))
+                    .map(ds -> new EssDataSourceImpl(api, this, ds))
                     .collect(Collectors.toList());
         } catch (ApiException e) {
             throw new EssApiException(e);
