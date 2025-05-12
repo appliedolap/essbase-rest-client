@@ -5,7 +5,7 @@
     <artifactId>essbase-rest-client</artifactId>
     <packaging>jar</packaging>
     <name>Essbase REST Client</name>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <url>https://github.com/appliedolap/essbase-rest-client</url>
     <description>Java library for interacting with Essbase 21+ servers using its REST API</description>
     <inceptionYear>2022</inceptionYear>
@@ -31,7 +31,7 @@
     </developers>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <gson-fire-version>1.8.5</gson-fire-version>
@@ -95,12 +95,12 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.8.0</version>
+            <version>2.19.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>5.3.27</version>
+            <version>6.0.23</version>
         </dependency>
         <dependency>
             <groupId>javax.annotation</groupId>
@@ -118,7 +118,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
+            <version>1.5.13</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -156,6 +156,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.5.0</version>
                 <configuration>
+                    <doclint>all,-missing</doclint> <!-- Enable all checks except "missing" documentation -->
                     <excludePackageNames>com.appliedolap.essbase.client.*:*.util</excludePackageNames>
                     <sourceFileExcludes>
                         <exclude>com/appliedolap/essbase/client/*</exclude>
