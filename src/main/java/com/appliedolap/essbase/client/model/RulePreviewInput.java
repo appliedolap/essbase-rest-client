@@ -13,88 +13,104 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.Rules;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * RulePreviewInput
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  RulePreviewInput.JSON_PROPERTY_DATA,
+  RulePreviewInput.JSON_PROPERTY_RULES
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class RulePreviewInput {
-  public static final String SERIALIZED_NAME_DATA = "data";
-  @SerializedName(SERIALIZED_NAME_DATA)
-  private List<List<String>> data = null;
+  public static final String JSON_PROPERTY_DATA = "data";
+  @jakarta.annotation.Nullable
+  private List<List<String>> data = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_RULES = "rules";
-  @SerializedName(SERIALIZED_NAME_RULES)
+  public static final String JSON_PROPERTY_RULES = "rules";
+  @jakarta.annotation.Nullable
   private Rules rules;
 
+  public RulePreviewInput() { 
+  }
 
-  public RulePreviewInput data(List<List<String>> data) {
-    
+  public RulePreviewInput data(@jakarta.annotation.Nullable List<List<String>> data) {
     this.data = data;
     return this;
   }
 
   public RulePreviewInput addDataItem(List<String> dataItem) {
     if (this.data == null) {
-      this.data = new ArrayList<List<String>>();
+      this.data = new ArrayList<>();
     }
     this.data.add(dataItem);
     return this;
   }
 
-   /**
+  /**
    * Get data
    * @return data
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<List<String>> getData() {
     return data;
   }
 
 
-  public void setData(List<List<String>> data) {
+  @JsonProperty(JSON_PROPERTY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setData(@jakarta.annotation.Nullable List<List<String>> data) {
     this.data = data;
   }
 
 
-  public RulePreviewInput rules(Rules rules) {
-    
+  public RulePreviewInput rules(@jakarta.annotation.Nullable Rules rules) {
     this.rules = rules;
     return this;
   }
 
-   /**
+  /**
    * Get rules
    * @return rules
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RULES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Rules getRules() {
     return rules;
   }
 
 
-  public void setRules(Rules rules) {
+  @JsonProperty(JSON_PROPERTY_RULES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRules(@jakarta.annotation.Nullable Rules rules) {
     this.rules = rules;
   }
 
 
+  /**
+   * Return true if this RulePreviewInput object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -134,5 +150,53 @@ public class RulePreviewInput {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `data` to the URL query string
+    if (getData() != null) {
+      for (int i = 0; i < getData().size(); i++) {
+        joiner.add(String.format("%sdata%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getData().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `rules` to the URL query string
+    if (getRules() != null) {
+      joiner.add(getRules().toUrlQueryString(prefix + "rules" + suffix));
+    }
+
+    return joiner.toString();
+  }
 }
 

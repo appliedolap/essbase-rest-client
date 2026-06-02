@@ -13,374 +13,412 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * AttributeOutlineSettings
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  AttributeOutlineSettings.JSON_PROPERTY_PREFIX_SUFFIX_VALUE,
+  AttributeOutlineSettings.JSON_PROPERTY_PREFIX_SUFFIX_SEPARATOR,
+  AttributeOutlineSettings.JSON_PROPERTY_PREFIX_SUFFIX_FORMAT,
+  AttributeOutlineSettings.JSON_PROPERTY_TRUE_MEMBER_NAME,
+  AttributeOutlineSettings.JSON_PROPERTY_FALSE_MEMBER_NAME,
+  AttributeOutlineSettings.JSON_PROPERTY_DATE_MEMBER_NAMES,
+  AttributeOutlineSettings.JSON_PROPERTY_NUMERIC_RANGES_REPRESENT,
+  AttributeOutlineSettings.JSON_PROPERTY_CALC_DIMENSION_NAME,
+  AttributeOutlineSettings.JSON_PROPERTY_CALC_SUM_MEMBER,
+  AttributeOutlineSettings.JSON_PROPERTY_CALC_COUNT_MEMBER,
+  AttributeOutlineSettings.JSON_PROPERTY_CALC_MINIMUM_MEMBER,
+  AttributeOutlineSettings.JSON_PROPERTY_CALC_MAXIMUM_MEMBER,
+  AttributeOutlineSettings.JSON_PROPERTY_CALC_AVERAGE_MEMBER
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class AttributeOutlineSettings {
-  public static final String SERIALIZED_NAME_PREFIX_SUFFIX_VALUE = "prefixSuffixValue";
-  @SerializedName(SERIALIZED_NAME_PREFIX_SUFFIX_VALUE)
+  public static final String JSON_PROPERTY_PREFIX_SUFFIX_VALUE = "prefixSuffixValue";
+  @jakarta.annotation.Nullable
   private String prefixSuffixValue;
 
-  public static final String SERIALIZED_NAME_PREFIX_SUFFIX_SEPARATOR = "prefixSuffixSeparator";
-  @SerializedName(SERIALIZED_NAME_PREFIX_SUFFIX_SEPARATOR)
+  public static final String JSON_PROPERTY_PREFIX_SUFFIX_SEPARATOR = "prefixSuffixSeparator";
+  @jakarta.annotation.Nullable
   private String prefixSuffixSeparator;
 
-  public static final String SERIALIZED_NAME_PREFIX_SUFFIX_FORMAT = "prefixSuffixFormat";
-  @SerializedName(SERIALIZED_NAME_PREFIX_SUFFIX_FORMAT)
+  public static final String JSON_PROPERTY_PREFIX_SUFFIX_FORMAT = "prefixSuffixFormat";
+  @jakarta.annotation.Nullable
   private String prefixSuffixFormat;
 
-  public static final String SERIALIZED_NAME_TRUE_MEMBER_NAME = "trueMemberName";
-  @SerializedName(SERIALIZED_NAME_TRUE_MEMBER_NAME)
+  public static final String JSON_PROPERTY_TRUE_MEMBER_NAME = "trueMemberName";
+  @jakarta.annotation.Nullable
   private String trueMemberName;
 
-  public static final String SERIALIZED_NAME_FALSE_MEMBER_NAME = "falseMemberName";
-  @SerializedName(SERIALIZED_NAME_FALSE_MEMBER_NAME)
+  public static final String JSON_PROPERTY_FALSE_MEMBER_NAME = "falseMemberName";
+  @jakarta.annotation.Nullable
   private String falseMemberName;
 
-  public static final String SERIALIZED_NAME_DATE_MEMBER_NAMES = "dateMemberNames";
-  @SerializedName(SERIALIZED_NAME_DATE_MEMBER_NAMES)
+  public static final String JSON_PROPERTY_DATE_MEMBER_NAMES = "dateMemberNames";
+  @jakarta.annotation.Nullable
   private String dateMemberNames;
 
-  public static final String SERIALIZED_NAME_NUMERIC_RANGES_REPRESENT = "numericRangesRepresent";
-  @SerializedName(SERIALIZED_NAME_NUMERIC_RANGES_REPRESENT)
+  public static final String JSON_PROPERTY_NUMERIC_RANGES_REPRESENT = "numericRangesRepresent";
+  @jakarta.annotation.Nullable
   private String numericRangesRepresent;
 
-  public static final String SERIALIZED_NAME_CALC_DIMENSION_NAME = "calcDimensionName";
-  @SerializedName(SERIALIZED_NAME_CALC_DIMENSION_NAME)
+  public static final String JSON_PROPERTY_CALC_DIMENSION_NAME = "calcDimensionName";
+  @jakarta.annotation.Nullable
   private String calcDimensionName;
 
-  public static final String SERIALIZED_NAME_CALC_SUM_MEMBER = "calcSumMember";
-  @SerializedName(SERIALIZED_NAME_CALC_SUM_MEMBER)
+  public static final String JSON_PROPERTY_CALC_SUM_MEMBER = "calcSumMember";
+  @jakarta.annotation.Nullable
   private String calcSumMember;
 
-  public static final String SERIALIZED_NAME_CALC_COUNT_MEMBER = "calcCountMember";
-  @SerializedName(SERIALIZED_NAME_CALC_COUNT_MEMBER)
+  public static final String JSON_PROPERTY_CALC_COUNT_MEMBER = "calcCountMember";
+  @jakarta.annotation.Nullable
   private String calcCountMember;
 
-  public static final String SERIALIZED_NAME_CALC_MINIMUM_MEMBER = "calcMinimumMember";
-  @SerializedName(SERIALIZED_NAME_CALC_MINIMUM_MEMBER)
+  public static final String JSON_PROPERTY_CALC_MINIMUM_MEMBER = "calcMinimumMember";
+  @jakarta.annotation.Nullable
   private String calcMinimumMember;
 
-  public static final String SERIALIZED_NAME_CALC_MAXIMUM_MEMBER = "calcMaximumMember";
-  @SerializedName(SERIALIZED_NAME_CALC_MAXIMUM_MEMBER)
+  public static final String JSON_PROPERTY_CALC_MAXIMUM_MEMBER = "calcMaximumMember";
+  @jakarta.annotation.Nullable
   private String calcMaximumMember;
 
-  public static final String SERIALIZED_NAME_CALC_AVERAGE_MEMBER = "calcAverageMember";
-  @SerializedName(SERIALIZED_NAME_CALC_AVERAGE_MEMBER)
+  public static final String JSON_PROPERTY_CALC_AVERAGE_MEMBER = "calcAverageMember";
+  @jakarta.annotation.Nullable
   private String calcAverageMember;
 
+  public AttributeOutlineSettings() { 
+  }
 
-  public AttributeOutlineSettings prefixSuffixValue(String prefixSuffixValue) {
-    
+  public AttributeOutlineSettings prefixSuffixValue(@jakarta.annotation.Nullable String prefixSuffixValue) {
     this.prefixSuffixValue = prefixSuffixValue;
     return this;
   }
 
-   /**
+  /**
    * Get prefixSuffixValue
    * @return prefixSuffixValue
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PREFIX_SUFFIX_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getPrefixSuffixValue() {
     return prefixSuffixValue;
   }
 
 
-  public void setPrefixSuffixValue(String prefixSuffixValue) {
+  @JsonProperty(JSON_PROPERTY_PREFIX_SUFFIX_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPrefixSuffixValue(@jakarta.annotation.Nullable String prefixSuffixValue) {
     this.prefixSuffixValue = prefixSuffixValue;
   }
 
 
-  public AttributeOutlineSettings prefixSuffixSeparator(String prefixSuffixSeparator) {
-    
+  public AttributeOutlineSettings prefixSuffixSeparator(@jakarta.annotation.Nullable String prefixSuffixSeparator) {
     this.prefixSuffixSeparator = prefixSuffixSeparator;
     return this;
   }
 
-   /**
+  /**
    * Get prefixSuffixSeparator
    * @return prefixSuffixSeparator
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PREFIX_SUFFIX_SEPARATOR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getPrefixSuffixSeparator() {
     return prefixSuffixSeparator;
   }
 
 
-  public void setPrefixSuffixSeparator(String prefixSuffixSeparator) {
+  @JsonProperty(JSON_PROPERTY_PREFIX_SUFFIX_SEPARATOR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPrefixSuffixSeparator(@jakarta.annotation.Nullable String prefixSuffixSeparator) {
     this.prefixSuffixSeparator = prefixSuffixSeparator;
   }
 
 
-  public AttributeOutlineSettings prefixSuffixFormat(String prefixSuffixFormat) {
-    
+  public AttributeOutlineSettings prefixSuffixFormat(@jakarta.annotation.Nullable String prefixSuffixFormat) {
     this.prefixSuffixFormat = prefixSuffixFormat;
     return this;
   }
 
-   /**
+  /**
    * Get prefixSuffixFormat
    * @return prefixSuffixFormat
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PREFIX_SUFFIX_FORMAT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getPrefixSuffixFormat() {
     return prefixSuffixFormat;
   }
 
 
-  public void setPrefixSuffixFormat(String prefixSuffixFormat) {
+  @JsonProperty(JSON_PROPERTY_PREFIX_SUFFIX_FORMAT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPrefixSuffixFormat(@jakarta.annotation.Nullable String prefixSuffixFormat) {
     this.prefixSuffixFormat = prefixSuffixFormat;
   }
 
 
-  public AttributeOutlineSettings trueMemberName(String trueMemberName) {
-    
+  public AttributeOutlineSettings trueMemberName(@jakarta.annotation.Nullable String trueMemberName) {
     this.trueMemberName = trueMemberName;
     return this;
   }
 
-   /**
+  /**
    * Get trueMemberName
    * @return trueMemberName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TRUE_MEMBER_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getTrueMemberName() {
     return trueMemberName;
   }
 
 
-  public void setTrueMemberName(String trueMemberName) {
+  @JsonProperty(JSON_PROPERTY_TRUE_MEMBER_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTrueMemberName(@jakarta.annotation.Nullable String trueMemberName) {
     this.trueMemberName = trueMemberName;
   }
 
 
-  public AttributeOutlineSettings falseMemberName(String falseMemberName) {
-    
+  public AttributeOutlineSettings falseMemberName(@jakarta.annotation.Nullable String falseMemberName) {
     this.falseMemberName = falseMemberName;
     return this;
   }
 
-   /**
+  /**
    * Get falseMemberName
    * @return falseMemberName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FALSE_MEMBER_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getFalseMemberName() {
     return falseMemberName;
   }
 
 
-  public void setFalseMemberName(String falseMemberName) {
+  @JsonProperty(JSON_PROPERTY_FALSE_MEMBER_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFalseMemberName(@jakarta.annotation.Nullable String falseMemberName) {
     this.falseMemberName = falseMemberName;
   }
 
 
-  public AttributeOutlineSettings dateMemberNames(String dateMemberNames) {
-    
+  public AttributeOutlineSettings dateMemberNames(@jakarta.annotation.Nullable String dateMemberNames) {
     this.dateMemberNames = dateMemberNames;
     return this;
   }
 
-   /**
+  /**
    * Get dateMemberNames
    * @return dateMemberNames
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATE_MEMBER_NAMES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDateMemberNames() {
     return dateMemberNames;
   }
 
 
-  public void setDateMemberNames(String dateMemberNames) {
+  @JsonProperty(JSON_PROPERTY_DATE_MEMBER_NAMES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDateMemberNames(@jakarta.annotation.Nullable String dateMemberNames) {
     this.dateMemberNames = dateMemberNames;
   }
 
 
-  public AttributeOutlineSettings numericRangesRepresent(String numericRangesRepresent) {
-    
+  public AttributeOutlineSettings numericRangesRepresent(@jakarta.annotation.Nullable String numericRangesRepresent) {
     this.numericRangesRepresent = numericRangesRepresent;
     return this;
   }
 
-   /**
+  /**
    * Get numericRangesRepresent
    * @return numericRangesRepresent
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMERIC_RANGES_REPRESENT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getNumericRangesRepresent() {
     return numericRangesRepresent;
   }
 
 
-  public void setNumericRangesRepresent(String numericRangesRepresent) {
+  @JsonProperty(JSON_PROPERTY_NUMERIC_RANGES_REPRESENT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumericRangesRepresent(@jakarta.annotation.Nullable String numericRangesRepresent) {
     this.numericRangesRepresent = numericRangesRepresent;
   }
 
 
-  public AttributeOutlineSettings calcDimensionName(String calcDimensionName) {
-    
+  public AttributeOutlineSettings calcDimensionName(@jakarta.annotation.Nullable String calcDimensionName) {
     this.calcDimensionName = calcDimensionName;
     return this;
   }
 
-   /**
+  /**
    * Get calcDimensionName
    * @return calcDimensionName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CALC_DIMENSION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getCalcDimensionName() {
     return calcDimensionName;
   }
 
 
-  public void setCalcDimensionName(String calcDimensionName) {
+  @JsonProperty(JSON_PROPERTY_CALC_DIMENSION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCalcDimensionName(@jakarta.annotation.Nullable String calcDimensionName) {
     this.calcDimensionName = calcDimensionName;
   }
 
 
-  public AttributeOutlineSettings calcSumMember(String calcSumMember) {
-    
+  public AttributeOutlineSettings calcSumMember(@jakarta.annotation.Nullable String calcSumMember) {
     this.calcSumMember = calcSumMember;
     return this;
   }
 
-   /**
+  /**
    * Get calcSumMember
    * @return calcSumMember
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CALC_SUM_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getCalcSumMember() {
     return calcSumMember;
   }
 
 
-  public void setCalcSumMember(String calcSumMember) {
+  @JsonProperty(JSON_PROPERTY_CALC_SUM_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCalcSumMember(@jakarta.annotation.Nullable String calcSumMember) {
     this.calcSumMember = calcSumMember;
   }
 
 
-  public AttributeOutlineSettings calcCountMember(String calcCountMember) {
-    
+  public AttributeOutlineSettings calcCountMember(@jakarta.annotation.Nullable String calcCountMember) {
     this.calcCountMember = calcCountMember;
     return this;
   }
 
-   /**
+  /**
    * Get calcCountMember
    * @return calcCountMember
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CALC_COUNT_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getCalcCountMember() {
     return calcCountMember;
   }
 
 
-  public void setCalcCountMember(String calcCountMember) {
+  @JsonProperty(JSON_PROPERTY_CALC_COUNT_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCalcCountMember(@jakarta.annotation.Nullable String calcCountMember) {
     this.calcCountMember = calcCountMember;
   }
 
 
-  public AttributeOutlineSettings calcMinimumMember(String calcMinimumMember) {
-    
+  public AttributeOutlineSettings calcMinimumMember(@jakarta.annotation.Nullable String calcMinimumMember) {
     this.calcMinimumMember = calcMinimumMember;
     return this;
   }
 
-   /**
+  /**
    * Get calcMinimumMember
    * @return calcMinimumMember
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CALC_MINIMUM_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getCalcMinimumMember() {
     return calcMinimumMember;
   }
 
 
-  public void setCalcMinimumMember(String calcMinimumMember) {
+  @JsonProperty(JSON_PROPERTY_CALC_MINIMUM_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCalcMinimumMember(@jakarta.annotation.Nullable String calcMinimumMember) {
     this.calcMinimumMember = calcMinimumMember;
   }
 
 
-  public AttributeOutlineSettings calcMaximumMember(String calcMaximumMember) {
-    
+  public AttributeOutlineSettings calcMaximumMember(@jakarta.annotation.Nullable String calcMaximumMember) {
     this.calcMaximumMember = calcMaximumMember;
     return this;
   }
 
-   /**
+  /**
    * Get calcMaximumMember
    * @return calcMaximumMember
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CALC_MAXIMUM_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getCalcMaximumMember() {
     return calcMaximumMember;
   }
 
 
-  public void setCalcMaximumMember(String calcMaximumMember) {
+  @JsonProperty(JSON_PROPERTY_CALC_MAXIMUM_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCalcMaximumMember(@jakarta.annotation.Nullable String calcMaximumMember) {
     this.calcMaximumMember = calcMaximumMember;
   }
 
 
-  public AttributeOutlineSettings calcAverageMember(String calcAverageMember) {
-    
+  public AttributeOutlineSettings calcAverageMember(@jakarta.annotation.Nullable String calcAverageMember) {
     this.calcAverageMember = calcAverageMember;
     return this;
   }
 
-   /**
+  /**
    * Get calcAverageMember
    * @return calcAverageMember
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CALC_AVERAGE_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getCalcAverageMember() {
     return calcAverageMember;
   }
 
 
-  public void setCalcAverageMember(String calcAverageMember) {
+  @JsonProperty(JSON_PROPERTY_CALC_AVERAGE_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCalcAverageMember(@jakarta.annotation.Nullable String calcAverageMember) {
     this.calcAverageMember = calcAverageMember;
   }
 
 
+  /**
+   * Return true if this AttributeOutlineSettings object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -442,5 +480,104 @@ public class AttributeOutlineSettings {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `prefixSuffixValue` to the URL query string
+    if (getPrefixSuffixValue() != null) {
+      joiner.add(String.format("%sprefixSuffixValue%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPrefixSuffixValue()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `prefixSuffixSeparator` to the URL query string
+    if (getPrefixSuffixSeparator() != null) {
+      joiner.add(String.format("%sprefixSuffixSeparator%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPrefixSuffixSeparator()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `prefixSuffixFormat` to the URL query string
+    if (getPrefixSuffixFormat() != null) {
+      joiner.add(String.format("%sprefixSuffixFormat%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPrefixSuffixFormat()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `trueMemberName` to the URL query string
+    if (getTrueMemberName() != null) {
+      joiner.add(String.format("%strueMemberName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTrueMemberName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `falseMemberName` to the URL query string
+    if (getFalseMemberName() != null) {
+      joiner.add(String.format("%sfalseMemberName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFalseMemberName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dateMemberNames` to the URL query string
+    if (getDateMemberNames() != null) {
+      joiner.add(String.format("%sdateMemberNames%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDateMemberNames()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numericRangesRepresent` to the URL query string
+    if (getNumericRangesRepresent() != null) {
+      joiner.add(String.format("%snumericRangesRepresent%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumericRangesRepresent()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `calcDimensionName` to the URL query string
+    if (getCalcDimensionName() != null) {
+      joiner.add(String.format("%scalcDimensionName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCalcDimensionName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `calcSumMember` to the URL query string
+    if (getCalcSumMember() != null) {
+      joiner.add(String.format("%scalcSumMember%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCalcSumMember()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `calcCountMember` to the URL query string
+    if (getCalcCountMember() != null) {
+      joiner.add(String.format("%scalcCountMember%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCalcCountMember()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `calcMinimumMember` to the URL query string
+    if (getCalcMinimumMember() != null) {
+      joiner.add(String.format("%scalcMinimumMember%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCalcMinimumMember()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `calcMaximumMember` to the URL query string
+    if (getCalcMaximumMember() != null) {
+      joiner.add(String.format("%scalcMaximumMember%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCalcMaximumMember()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `calcAverageMember` to the URL query string
+    if (getCalcAverageMember() != null) {
+      joiner.add(String.format("%scalcAverageMember%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCalcAverageMember()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

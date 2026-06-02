@@ -13,212 +13,238 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ServerConfiguration
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ServerConfiguration.JSON_PROPERTY_HOST,
+  ServerConfiguration.JSON_PROPERTY_PORT,
+  ServerConfiguration.JSON_PROPERTY_USER,
+  ServerConfiguration.JSON_PROPERTY_PASSWORD,
+  ServerConfiguration.JSON_PROPERTY_FOLDER,
+  ServerConfiguration.JSON_PROPERTY_MESSAGE_ACTION,
+  ServerConfiguration.JSON_PROPERTY_MESSAGE_LOCATION
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ServerConfiguration {
-  public static final String SERIALIZED_NAME_HOST = "host";
-  @SerializedName(SERIALIZED_NAME_HOST)
+  public static final String JSON_PROPERTY_HOST = "host";
+  @jakarta.annotation.Nullable
   private String host;
 
-  public static final String SERIALIZED_NAME_PORT = "port";
-  @SerializedName(SERIALIZED_NAME_PORT)
+  public static final String JSON_PROPERTY_PORT = "port";
+  @jakarta.annotation.Nullable
   private Integer port;
 
-  public static final String SERIALIZED_NAME_USER = "user";
-  @SerializedName(SERIALIZED_NAME_USER)
+  public static final String JSON_PROPERTY_USER = "user";
+  @jakarta.annotation.Nullable
   private String user;
 
-  public static final String SERIALIZED_NAME_PASSWORD = "password";
-  @SerializedName(SERIALIZED_NAME_PASSWORD)
+  public static final String JSON_PROPERTY_PASSWORD = "password";
+  @jakarta.annotation.Nullable
   private String password;
 
-  public static final String SERIALIZED_NAME_FOLDER = "folder";
-  @SerializedName(SERIALIZED_NAME_FOLDER)
+  public static final String JSON_PROPERTY_FOLDER = "folder";
+  @jakarta.annotation.Nullable
   private String folder;
 
-  public static final String SERIALIZED_NAME_MESSAGE_ACTION = "messageAction";
-  @SerializedName(SERIALIZED_NAME_MESSAGE_ACTION)
+  public static final String JSON_PROPERTY_MESSAGE_ACTION = "messageAction";
+  @jakarta.annotation.Nullable
   private String messageAction;
 
-  public static final String SERIALIZED_NAME_MESSAGE_LOCATION = "messageLocation";
-  @SerializedName(SERIALIZED_NAME_MESSAGE_LOCATION)
+  public static final String JSON_PROPERTY_MESSAGE_LOCATION = "messageLocation";
+  @jakarta.annotation.Nullable
   private String messageLocation;
 
+  public ServerConfiguration() { 
+  }
 
-  public ServerConfiguration host(String host) {
-    
+  public ServerConfiguration host(@jakarta.annotation.Nullable String host) {
     this.host = host;
     return this;
   }
 
-   /**
+  /**
    * Get host
    * @return host
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HOST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getHost() {
     return host;
   }
 
 
-  public void setHost(String host) {
+  @JsonProperty(JSON_PROPERTY_HOST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHost(@jakarta.annotation.Nullable String host) {
     this.host = host;
   }
 
 
-  public ServerConfiguration port(Integer port) {
-    
+  public ServerConfiguration port(@jakarta.annotation.Nullable Integer port) {
     this.port = port;
     return this;
   }
 
-   /**
+  /**
    * Get port
    * @return port
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PORT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getPort() {
     return port;
   }
 
 
-  public void setPort(Integer port) {
+  @JsonProperty(JSON_PROPERTY_PORT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPort(@jakarta.annotation.Nullable Integer port) {
     this.port = port;
   }
 
 
-  public ServerConfiguration user(String user) {
-    
+  public ServerConfiguration user(@jakarta.annotation.Nullable String user) {
     this.user = user;
     return this;
   }
 
-   /**
+  /**
    * Get user
    * @return user
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getUser() {
     return user;
   }
 
 
-  public void setUser(String user) {
+  @JsonProperty(JSON_PROPERTY_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUser(@jakarta.annotation.Nullable String user) {
     this.user = user;
   }
 
 
-  public ServerConfiguration password(String password) {
-    
+  public ServerConfiguration password(@jakarta.annotation.Nullable String password) {
     this.password = password;
     return this;
   }
 
-   /**
+  /**
    * Get password
    * @return password
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PASSWORD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getPassword() {
     return password;
   }
 
 
-  public void setPassword(String password) {
+  @JsonProperty(JSON_PROPERTY_PASSWORD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPassword(@jakarta.annotation.Nullable String password) {
     this.password = password;
   }
 
 
-  public ServerConfiguration folder(String folder) {
-    
+  public ServerConfiguration folder(@jakarta.annotation.Nullable String folder) {
     this.folder = folder;
     return this;
   }
 
-   /**
+  /**
    * Get folder
    * @return folder
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FOLDER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getFolder() {
     return folder;
   }
 
 
-  public void setFolder(String folder) {
+  @JsonProperty(JSON_PROPERTY_FOLDER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFolder(@jakarta.annotation.Nullable String folder) {
     this.folder = folder;
   }
 
 
-  public ServerConfiguration messageAction(String messageAction) {
-    
+  public ServerConfiguration messageAction(@jakarta.annotation.Nullable String messageAction) {
     this.messageAction = messageAction;
     return this;
   }
 
-   /**
+  /**
    * Get messageAction
    * @return messageAction
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MESSAGE_ACTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getMessageAction() {
     return messageAction;
   }
 
 
-  public void setMessageAction(String messageAction) {
+  @JsonProperty(JSON_PROPERTY_MESSAGE_ACTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMessageAction(@jakarta.annotation.Nullable String messageAction) {
     this.messageAction = messageAction;
   }
 
 
-  public ServerConfiguration messageLocation(String messageLocation) {
-    
+  public ServerConfiguration messageLocation(@jakarta.annotation.Nullable String messageLocation) {
     this.messageLocation = messageLocation;
     return this;
   }
 
-   /**
+  /**
    * Get messageLocation
    * @return messageLocation
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MESSAGE_LOCATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getMessageLocation() {
     return messageLocation;
   }
 
 
-  public void setMessageLocation(String messageLocation) {
+  @JsonProperty(JSON_PROPERTY_MESSAGE_LOCATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMessageLocation(@jakarta.annotation.Nullable String messageLocation) {
     this.messageLocation = messageLocation;
   }
 
 
+  /**
+   * Return true if this ServerConfiguration object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -268,5 +294,74 @@ public class ServerConfiguration {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `host` to the URL query string
+    if (getHost() != null) {
+      joiner.add(String.format("%shost%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getHost()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `port` to the URL query string
+    if (getPort() != null) {
+      joiner.add(String.format("%sport%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPort()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `user` to the URL query string
+    if (getUser() != null) {
+      joiner.add(String.format("%suser%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUser()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `password` to the URL query string
+    if (getPassword() != null) {
+      joiner.add(String.format("%spassword%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPassword()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `folder` to the URL query string
+    if (getFolder() != null) {
+      joiner.add(String.format("%sfolder%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFolder()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `messageAction` to the URL query string
+    if (getMessageAction() != null) {
+      joiner.add(String.format("%smessageAction%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMessageAction()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `messageLocation` to the URL query string
+    if (getMessageLocation() != null) {
+      joiner.add(String.format("%smessageLocation%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMessageLocation()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

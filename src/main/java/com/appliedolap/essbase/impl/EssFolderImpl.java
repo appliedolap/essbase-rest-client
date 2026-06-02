@@ -1,21 +1,19 @@
 package com.appliedolap.essbase.impl;
 
 import com.appliedolap.essbase.*;
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiException;
-import com.appliedolap.essbase.client.model.CollectionResponse;
-import com.appliedolap.essbase.util.GenericApiCallback;
-import okhttp3.Call;
-import okhttp3.Response;
+import com.appliedolap.essbase.client.model.FileBean;
+import com.appliedolap.essbase.client.model.FileCollectionResponse;
+import com.appliedolap.essbase.util.NativeHttp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.http.HttpRequest;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Represents a folder in the remote Essbase server pseudo-filesystem.
@@ -45,11 +43,13 @@ public class EssFolderImpl extends EssFileImpl implements EssFolder {
     public void createSubFolder(String subFolderName) {
         try {
             logger.info("Creating new folder {}", subFolderName);
-            api.getFilesApi2().filesAddFileCall(fullPath + "/" + subFolderName, false, null,new GenericApiCallback()).execute();
-        } catch (ApiException apiException) {
-            throw new EssApiException(apiException);
-        } catch (IOException e) {
-            e.printStackTrace();
+            String path = NativeHttp.withQuery("/files/" + NativeHttp.encodePathKeepingSlashes(fullPath + "/" + subFolderName), "overwrite", false);
+            NativeHttp.sendAndDiscard(api.getClient(), NativeHttp.request(api.getClient(), path)
+                    .header("Accept", "application/json, application/xml")
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.noBody()), "filesAddFile");
+        } catch (ApiException | IOException e) {
+            throw new EssApiException(e);
         }
     }
 
@@ -57,34 +57,14 @@ public class EssFolderImpl extends EssFileImpl implements EssFolder {
     public void uploadFile(File file) {
         try {
             byte[] bytes = Files.readAllBytes(file.toPath());
-
-            Call call = api.getFilesApi2().filesAddFileCall(fullPath + "/" + file.getName(), true, bytes, new ApiCallback() {
-                @Override
-                public void onFailure(ApiException e, int statusCode, Map responseHeaders) {
-                    logger.info("on failure");
-                }
-
-                @Override
-                public void onSuccess(Object result, int statusCode, Map responseHeaders) {
-                    logger.info("on success");
-                }
-
-                @Override
-                public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
-                    logger.info("on upload {} / {} / {}", bytesWritten, contentLength, done);
-                }
-
-                @Override
-                public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
-                    logger.info("on download");
-
-                }
-            });
-            Response response = call.execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ApiException apiException) {
-            apiException.printStackTrace();
+            String path = NativeHttp.withQuery("/files/" + NativeHttp.encodePathKeepingSlashes(fullPath + "/" + file.getName()), "overwrite", true);
+            NativeHttp.sendAndDiscard(api.getClient(), NativeHttp.request(api.getClient(), path)
+                    .header("Accept", "application/json, application/xml")
+                    .header("Content-Type", "application/octet-stream")
+                    .PUT(HttpRequest.BodyPublishers.ofByteArray(bytes)), "filesAddFile");
+            logger.info("Uploaded file {} to {}", file.getName(), fullPath);
+        } catch (IOException | ApiException e) {
+            throw new EssApiException(e);
         }
     }
 
@@ -95,19 +75,16 @@ public class EssFolderImpl extends EssFileImpl implements EssFolder {
             if (pathForFetch.startsWith("/")) {
                 pathForFetch = pathForFetch.substring(1);
             }
-            CollectionResponse files = api.getFilesApi2().filesListFiles(pathForFetch, null, null, null, null, null, null, null, false);
+            FileCollectionResponse files = api.getFilesApi().filesListFiles(pathForFetch, null, null, null, null, null, null, null, false);
             List<EssFile> childFiles = new ArrayList<>();
-            int count =0;
-            for (Object file : files.getItems()) {
-                Map<String, String> fileMap = (Map) file;
-                // name, fullPath, type, permissions (another map), links
-                String name = fileMap.get("name");
-                boolean isFolder = "folder".equals(fileMap.get("type"));
+            for (FileBean file : files.getItems()) {
+                String name = file.getName();
+                boolean isFolder = "folder".equals(file.getType());
                 EssFile essFile;
                 if (isFolder) {
-                    essFile = new EssFolderImpl(api, server, name, fileMap.get("fullPath"));
+                    essFile = new EssFolderImpl(api, server, name, file.getFullPath());
                 } else {
-                        essFile = new EssFileImpl(api, server, name, fileMap.get("fullPath"));
+                    essFile = new EssFileImpl(api, server, name, file.getFullPath());
                 }
                 childFiles.add(essFile);
             }

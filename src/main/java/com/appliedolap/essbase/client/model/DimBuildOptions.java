@@ -13,142 +13,162 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.SmartList;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * DimBuildOptions
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  DimBuildOptions.JSON_PROPERTY_AUTO_CONFIG,
+  DimBuildOptions.JSON_PROPERTY_ARRANGE_DIMENSIONS,
+  DimBuildOptions.JSON_PROPERTY_ALIAS_TABLE,
+  DimBuildOptions.JSON_PROPERTY_SMART_LISTS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class DimBuildOptions {
-  public static final String SERIALIZED_NAME_AUTO_CONFIG = "autoConfig";
-  @SerializedName(SERIALIZED_NAME_AUTO_CONFIG)
+  public static final String JSON_PROPERTY_AUTO_CONFIG = "autoConfig";
+  @jakarta.annotation.Nullable
   private Boolean autoConfig;
 
-  public static final String SERIALIZED_NAME_ARRANGE_DIMENSIONS = "arrangeDimensions";
-  @SerializedName(SERIALIZED_NAME_ARRANGE_DIMENSIONS)
+  public static final String JSON_PROPERTY_ARRANGE_DIMENSIONS = "arrangeDimensions";
+  @jakarta.annotation.Nullable
   private Boolean arrangeDimensions;
 
-  public static final String SERIALIZED_NAME_ALIAS_TABLE = "aliasTable";
-  @SerializedName(SERIALIZED_NAME_ALIAS_TABLE)
+  public static final String JSON_PROPERTY_ALIAS_TABLE = "aliasTable";
+  @jakarta.annotation.Nullable
   private String aliasTable;
 
-  public static final String SERIALIZED_NAME_SMART_LISTS = "smartLists";
-  @SerializedName(SERIALIZED_NAME_SMART_LISTS)
-  private List<SmartList> smartLists = null;
+  public static final String JSON_PROPERTY_SMART_LISTS = "smartLists";
+  @jakarta.annotation.Nullable
+  private List<SmartList> smartLists = new ArrayList<>();
 
+  public DimBuildOptions() { 
+  }
 
-  public DimBuildOptions autoConfig(Boolean autoConfig) {
-    
+  public DimBuildOptions autoConfig(@jakarta.annotation.Nullable Boolean autoConfig) {
     this.autoConfig = autoConfig;
     return this;
   }
 
-   /**
+  /**
    * Get autoConfig
    * @return autoConfig
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_AUTO_CONFIG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAutoConfig() {
     return autoConfig;
   }
 
 
-  public void setAutoConfig(Boolean autoConfig) {
+  @JsonProperty(JSON_PROPERTY_AUTO_CONFIG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAutoConfig(@jakarta.annotation.Nullable Boolean autoConfig) {
     this.autoConfig = autoConfig;
   }
 
 
-  public DimBuildOptions arrangeDimensions(Boolean arrangeDimensions) {
-    
+  public DimBuildOptions arrangeDimensions(@jakarta.annotation.Nullable Boolean arrangeDimensions) {
     this.arrangeDimensions = arrangeDimensions;
     return this;
   }
 
-   /**
+  /**
    * Get arrangeDimensions
    * @return arrangeDimensions
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ARRANGE_DIMENSIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getArrangeDimensions() {
     return arrangeDimensions;
   }
 
 
-  public void setArrangeDimensions(Boolean arrangeDimensions) {
+  @JsonProperty(JSON_PROPERTY_ARRANGE_DIMENSIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setArrangeDimensions(@jakarta.annotation.Nullable Boolean arrangeDimensions) {
     this.arrangeDimensions = arrangeDimensions;
   }
 
 
-  public DimBuildOptions aliasTable(String aliasTable) {
-    
+  public DimBuildOptions aliasTable(@jakarta.annotation.Nullable String aliasTable) {
     this.aliasTable = aliasTable;
     return this;
   }
 
-   /**
+  /**
    * Get aliasTable
    * @return aliasTable
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALIAS_TABLE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getAliasTable() {
     return aliasTable;
   }
 
 
-  public void setAliasTable(String aliasTable) {
+  @JsonProperty(JSON_PROPERTY_ALIAS_TABLE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAliasTable(@jakarta.annotation.Nullable String aliasTable) {
     this.aliasTable = aliasTable;
   }
 
 
-  public DimBuildOptions smartLists(List<SmartList> smartLists) {
-    
+  public DimBuildOptions smartLists(@jakarta.annotation.Nullable List<SmartList> smartLists) {
     this.smartLists = smartLists;
     return this;
   }
 
   public DimBuildOptions addSmartListsItem(SmartList smartListsItem) {
     if (this.smartLists == null) {
-      this.smartLists = new ArrayList<SmartList>();
+      this.smartLists = new ArrayList<>();
     }
     this.smartLists.add(smartListsItem);
     return this;
   }
 
-   /**
+  /**
    * Get smartLists
    * @return smartLists
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SMART_LISTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<SmartList> getSmartLists() {
     return smartLists;
   }
 
 
-  public void setSmartLists(List<SmartList> smartLists) {
+  @JsonProperty(JSON_PROPERTY_SMART_LISTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSmartLists(@jakarta.annotation.Nullable List<SmartList> smartLists) {
     this.smartLists = smartLists;
   }
 
 
+  /**
+   * Return true if this DimBuildOptions object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -192,5 +212,64 @@ public class DimBuildOptions {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `autoConfig` to the URL query string
+    if (getAutoConfig() != null) {
+      joiner.add(String.format("%sautoConfig%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAutoConfig()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `arrangeDimensions` to the URL query string
+    if (getArrangeDimensions() != null) {
+      joiner.add(String.format("%sarrangeDimensions%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getArrangeDimensions()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `aliasTable` to the URL query string
+    if (getAliasTable() != null) {
+      joiner.add(String.format("%saliasTable%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAliasTable()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `smartLists` to the URL query string
+    if (getSmartLists() != null) {
+      for (int i = 0; i < getSmartLists().size(); i++) {
+        if (getSmartLists().get(i) != null) {
+          joiner.add(getSmartLists().get(i).toUrlQueryString(String.format("%ssmartLists%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

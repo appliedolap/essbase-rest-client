@@ -13,131 +13,151 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * Link
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  Link.JSON_PROPERTY_REL,
+  Link.JSON_PROPERTY_HREF,
+  Link.JSON_PROPERTY_METHOD,
+  Link.JSON_PROPERTY_TYPE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class Link {
-  public static final String SERIALIZED_NAME_REL = "rel";
-  @SerializedName(SERIALIZED_NAME_REL)
+  public static final String JSON_PROPERTY_REL = "rel";
+  @jakarta.annotation.Nullable
   private String rel;
 
-  public static final String SERIALIZED_NAME_HREF = "href";
-  @SerializedName(SERIALIZED_NAME_HREF)
+  public static final String JSON_PROPERTY_HREF = "href";
+  @jakarta.annotation.Nullable
   private String href;
 
-  public static final String SERIALIZED_NAME_METHOD = "method";
-  @SerializedName(SERIALIZED_NAME_METHOD)
+  public static final String JSON_PROPERTY_METHOD = "method";
+  @jakarta.annotation.Nullable
   private String method;
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nullable
   private String type;
 
+  public Link() { 
+  }
 
-  public Link rel(String rel) {
-    
+  public Link rel(@jakarta.annotation.Nullable String rel) {
     this.rel = rel;
     return this;
   }
 
-   /**
+  /**
    * Get rel
    * @return rel
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getRel() {
     return rel;
   }
 
 
-  public void setRel(String rel) {
+  @JsonProperty(JSON_PROPERTY_REL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRel(@jakarta.annotation.Nullable String rel) {
     this.rel = rel;
   }
 
 
-  public Link href(String href) {
-    
+  public Link href(@jakarta.annotation.Nullable String href) {
     this.href = href;
     return this;
   }
 
-   /**
+  /**
    * Get href
    * @return href
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HREF)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getHref() {
     return href;
   }
 
 
-  public void setHref(String href) {
+  @JsonProperty(JSON_PROPERTY_HREF)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHref(@jakarta.annotation.Nullable String href) {
     this.href = href;
   }
 
 
-  public Link method(String method) {
-    
+  public Link method(@jakarta.annotation.Nullable String method) {
     this.method = method;
     return this;
   }
 
-   /**
+  /**
    * Get method
    * @return method
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_METHOD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getMethod() {
     return method;
   }
 
 
-  public void setMethod(String method) {
+  @JsonProperty(JSON_PROPERTY_METHOD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMethod(@jakarta.annotation.Nullable String method) {
     this.method = method;
   }
 
 
-  public Link type(String type) {
-    
+  public Link type(@jakarta.annotation.Nullable String type) {
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getType() {
     return type;
   }
 
 
-  public void setType(String type) {
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setType(@jakarta.annotation.Nullable String type) {
     this.type = type;
   }
 
 
+  /**
+   * Return true if this Link object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -181,5 +201,59 @@ public class Link {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `rel` to the URL query string
+    if (getRel() != null) {
+      joiner.add(String.format("%srel%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRel()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `href` to the URL query string
+    if (getHref() != null) {
+      joiner.add(String.format("%shref%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getHref()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `method` to the URL query string
+    if (getMethod() != null) {
+      joiner.add(String.format("%smethod%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMethod()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

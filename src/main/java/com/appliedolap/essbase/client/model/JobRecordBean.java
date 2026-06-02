@@ -13,403 +13,441 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.Link;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * JobRecordBean
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  JobRecordBean.JSON_PROPERTY_JOB_I_D,
+  JobRecordBean.JSON_PROPERTY_APP_NAME,
+  JobRecordBean.JSON_PROPERTY_DB_NAME,
+  JobRecordBean.JSON_PROPERTY_JOB_TYPE,
+  JobRecordBean.JSON_PROPERTY_JOBFILE_NAME,
+  JobRecordBean.JSON_PROPERTY_USER_NAME,
+  JobRecordBean.JSON_PROPERTY_START_TIME,
+  JobRecordBean.JSON_PROPERTY_END_TIME,
+  JobRecordBean.JSON_PROPERTY_STATUS_CODE,
+  JobRecordBean.JSON_PROPERTY_STATUS_MESSAGE,
+  JobRecordBean.JSON_PROPERTY_JOB_INPUT_INFO,
+  JobRecordBean.JSON_PROPERTY_JOB_OUTPUT_INFO,
+  JobRecordBean.JSON_PROPERTY_LINKS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class JobRecordBean {
-  public static final String SERIALIZED_NAME_JOB_I_D = "job_ID";
-  @SerializedName(SERIALIZED_NAME_JOB_I_D)
+  public static final String JSON_PROPERTY_JOB_I_D = "job_ID";
+  @jakarta.annotation.Nullable
   private Long jobID;
 
-  public static final String SERIALIZED_NAME_APP_NAME = "appName";
-  @SerializedName(SERIALIZED_NAME_APP_NAME)
+  public static final String JSON_PROPERTY_APP_NAME = "appName";
+  @jakarta.annotation.Nullable
   private String appName;
 
-  public static final String SERIALIZED_NAME_DB_NAME = "dbName";
-  @SerializedName(SERIALIZED_NAME_DB_NAME)
+  public static final String JSON_PROPERTY_DB_NAME = "dbName";
+  @jakarta.annotation.Nullable
   private String dbName;
 
-  public static final String SERIALIZED_NAME_JOB_TYPE = "jobType";
-  @SerializedName(SERIALIZED_NAME_JOB_TYPE)
+  public static final String JSON_PROPERTY_JOB_TYPE = "jobType";
+  @jakarta.annotation.Nullable
   private String jobType;
 
-  public static final String SERIALIZED_NAME_JOBFILE_NAME = "jobfileName";
-  @SerializedName(SERIALIZED_NAME_JOBFILE_NAME)
+  public static final String JSON_PROPERTY_JOBFILE_NAME = "jobfileName";
+  @jakarta.annotation.Nullable
   private String jobfileName;
 
-  public static final String SERIALIZED_NAME_USER_NAME = "userName";
-  @SerializedName(SERIALIZED_NAME_USER_NAME)
+  public static final String JSON_PROPERTY_USER_NAME = "userName";
+  @jakarta.annotation.Nullable
   private String userName;
 
-  public static final String SERIALIZED_NAME_START_TIME = "startTime";
-  @SerializedName(SERIALIZED_NAME_START_TIME)
+  public static final String JSON_PROPERTY_START_TIME = "startTime";
+  @jakarta.annotation.Nullable
   private Long startTime;
 
-  public static final String SERIALIZED_NAME_END_TIME = "endTime";
-  @SerializedName(SERIALIZED_NAME_END_TIME)
+  public static final String JSON_PROPERTY_END_TIME = "endTime";
+  @jakarta.annotation.Nullable
   private Long endTime;
 
-  public static final String SERIALIZED_NAME_STATUS_CODE = "statusCode";
-  @SerializedName(SERIALIZED_NAME_STATUS_CODE)
+  public static final String JSON_PROPERTY_STATUS_CODE = "statusCode";
+  @jakarta.annotation.Nullable
   private Integer statusCode;
 
-  public static final String SERIALIZED_NAME_STATUS_MESSAGE = "statusMessage";
-  @SerializedName(SERIALIZED_NAME_STATUS_MESSAGE)
+  public static final String JSON_PROPERTY_STATUS_MESSAGE = "statusMessage";
+  @jakarta.annotation.Nullable
   private String statusMessage;
 
-  public static final String SERIALIZED_NAME_JOB_INPUT_INFO = "jobInputInfo";
-  @SerializedName(SERIALIZED_NAME_JOB_INPUT_INFO)
-  private Map<String, Object> jobInputInfo = null;
+  public static final String JSON_PROPERTY_JOB_INPUT_INFO = "jobInputInfo";
+  @jakarta.annotation.Nullable
+  private Map<String, Object> jobInputInfo = new HashMap<>();
 
-  public static final String SERIALIZED_NAME_JOB_OUTPUT_INFO = "jobOutputInfo";
-  @SerializedName(SERIALIZED_NAME_JOB_OUTPUT_INFO)
-  private Map<String, Object> jobOutputInfo = null;
+  public static final String JSON_PROPERTY_JOB_OUTPUT_INFO = "jobOutputInfo";
+  @jakarta.annotation.Nullable
+  private Map<String, Object> jobOutputInfo = new HashMap<>();
 
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
+  public JobRecordBean() { 
+  }
 
-  public JobRecordBean jobID(Long jobID) {
-    
+  public JobRecordBean jobID(@jakarta.annotation.Nullable Long jobID) {
     this.jobID = jobID;
     return this;
   }
 
-   /**
+  /**
    * Get jobID
    * @return jobID
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_JOB_I_D)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getJobID() {
     return jobID;
   }
 
 
-  public void setJobID(Long jobID) {
+  @JsonProperty(JSON_PROPERTY_JOB_I_D)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setJobID(@jakarta.annotation.Nullable Long jobID) {
     this.jobID = jobID;
   }
 
 
-  public JobRecordBean appName(String appName) {
-    
+  public JobRecordBean appName(@jakarta.annotation.Nullable String appName) {
     this.appName = appName;
     return this;
   }
 
-   /**
+  /**
    * Get appName
    * @return appName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APP_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getAppName() {
     return appName;
   }
 
 
-  public void setAppName(String appName) {
+  @JsonProperty(JSON_PROPERTY_APP_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAppName(@jakarta.annotation.Nullable String appName) {
     this.appName = appName;
   }
 
 
-  public JobRecordBean dbName(String dbName) {
-    
+  public JobRecordBean dbName(@jakarta.annotation.Nullable String dbName) {
     this.dbName = dbName;
     return this;
   }
 
-   /**
+  /**
    * Get dbName
    * @return dbName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DB_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDbName() {
     return dbName;
   }
 
 
-  public void setDbName(String dbName) {
+  @JsonProperty(JSON_PROPERTY_DB_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDbName(@jakarta.annotation.Nullable String dbName) {
     this.dbName = dbName;
   }
 
 
-  public JobRecordBean jobType(String jobType) {
-    
+  public JobRecordBean jobType(@jakarta.annotation.Nullable String jobType) {
     this.jobType = jobType;
     return this;
   }
 
-   /**
+  /**
    * Get jobType
    * @return jobType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_JOB_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getJobType() {
     return jobType;
   }
 
 
-  public void setJobType(String jobType) {
+  @JsonProperty(JSON_PROPERTY_JOB_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setJobType(@jakarta.annotation.Nullable String jobType) {
     this.jobType = jobType;
   }
 
 
-  public JobRecordBean jobfileName(String jobfileName) {
-    
+  public JobRecordBean jobfileName(@jakarta.annotation.Nullable String jobfileName) {
     this.jobfileName = jobfileName;
     return this;
   }
 
-   /**
+  /**
    * Get jobfileName
    * @return jobfileName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_JOBFILE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getJobfileName() {
     return jobfileName;
   }
 
 
-  public void setJobfileName(String jobfileName) {
+  @JsonProperty(JSON_PROPERTY_JOBFILE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setJobfileName(@jakarta.annotation.Nullable String jobfileName) {
     this.jobfileName = jobfileName;
   }
 
 
-  public JobRecordBean userName(String userName) {
-    
+  public JobRecordBean userName(@jakarta.annotation.Nullable String userName) {
     this.userName = userName;
     return this;
   }
 
-   /**
+  /**
    * Get userName
    * @return userName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getUserName() {
     return userName;
   }
 
 
-  public void setUserName(String userName) {
+  @JsonProperty(JSON_PROPERTY_USER_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUserName(@jakarta.annotation.Nullable String userName) {
     this.userName = userName;
   }
 
 
-  public JobRecordBean startTime(Long startTime) {
-    
+  public JobRecordBean startTime(@jakarta.annotation.Nullable Long startTime) {
     this.startTime = startTime;
     return this;
   }
 
-   /**
+  /**
    * Get startTime
    * @return startTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_START_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getStartTime() {
     return startTime;
   }
 
 
-  public void setStartTime(Long startTime) {
+  @JsonProperty(JSON_PROPERTY_START_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStartTime(@jakarta.annotation.Nullable Long startTime) {
     this.startTime = startTime;
   }
 
 
-  public JobRecordBean endTime(Long endTime) {
-    
+  public JobRecordBean endTime(@jakarta.annotation.Nullable Long endTime) {
     this.endTime = endTime;
     return this;
   }
 
-   /**
+  /**
    * Get endTime
    * @return endTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_END_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getEndTime() {
     return endTime;
   }
 
 
-  public void setEndTime(Long endTime) {
+  @JsonProperty(JSON_PROPERTY_END_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEndTime(@jakarta.annotation.Nullable Long endTime) {
     this.endTime = endTime;
   }
 
 
-  public JobRecordBean statusCode(Integer statusCode) {
-    
+  public JobRecordBean statusCode(@jakarta.annotation.Nullable Integer statusCode) {
     this.statusCode = statusCode;
     return this;
   }
 
-   /**
+  /**
    * Get statusCode
    * @return statusCode
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STATUS_CODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getStatusCode() {
     return statusCode;
   }
 
 
-  public void setStatusCode(Integer statusCode) {
+  @JsonProperty(JSON_PROPERTY_STATUS_CODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStatusCode(@jakarta.annotation.Nullable Integer statusCode) {
     this.statusCode = statusCode;
   }
 
 
-  public JobRecordBean statusMessage(String statusMessage) {
-    
+  public JobRecordBean statusMessage(@jakarta.annotation.Nullable String statusMessage) {
     this.statusMessage = statusMessage;
     return this;
   }
 
-   /**
+  /**
    * Get statusMessage
    * @return statusMessage
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STATUS_MESSAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getStatusMessage() {
     return statusMessage;
   }
 
 
-  public void setStatusMessage(String statusMessage) {
+  @JsonProperty(JSON_PROPERTY_STATUS_MESSAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStatusMessage(@jakarta.annotation.Nullable String statusMessage) {
     this.statusMessage = statusMessage;
   }
 
 
-  public JobRecordBean jobInputInfo(Map<String, Object> jobInputInfo) {
-    
+  public JobRecordBean jobInputInfo(@jakarta.annotation.Nullable Map<String, Object> jobInputInfo) {
     this.jobInputInfo = jobInputInfo;
     return this;
   }
 
   public JobRecordBean putJobInputInfoItem(String key, Object jobInputInfoItem) {
     if (this.jobInputInfo == null) {
-      this.jobInputInfo = new HashMap<String, Object>();
+      this.jobInputInfo = new HashMap<>();
     }
     this.jobInputInfo.put(key, jobInputInfoItem);
     return this;
   }
 
-   /**
+  /**
    * Get jobInputInfo
    * @return jobInputInfo
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_JOB_INPUT_INFO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Map<String, Object> getJobInputInfo() {
     return jobInputInfo;
   }
 
 
-  public void setJobInputInfo(Map<String, Object> jobInputInfo) {
+  @JsonProperty(JSON_PROPERTY_JOB_INPUT_INFO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setJobInputInfo(@jakarta.annotation.Nullable Map<String, Object> jobInputInfo) {
     this.jobInputInfo = jobInputInfo;
   }
 
 
-  public JobRecordBean jobOutputInfo(Map<String, Object> jobOutputInfo) {
-    
+  public JobRecordBean jobOutputInfo(@jakarta.annotation.Nullable Map<String, Object> jobOutputInfo) {
     this.jobOutputInfo = jobOutputInfo;
     return this;
   }
 
   public JobRecordBean putJobOutputInfoItem(String key, Object jobOutputInfoItem) {
     if (this.jobOutputInfo == null) {
-      this.jobOutputInfo = new HashMap<String, Object>();
+      this.jobOutputInfo = new HashMap<>();
     }
     this.jobOutputInfo.put(key, jobOutputInfoItem);
     return this;
   }
 
-   /**
+  /**
    * Get jobOutputInfo
    * @return jobOutputInfo
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_JOB_OUTPUT_INFO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Map<String, Object> getJobOutputInfo() {
     return jobOutputInfo;
   }
 
 
-  public void setJobOutputInfo(Map<String, Object> jobOutputInfo) {
+  @JsonProperty(JSON_PROPERTY_JOB_OUTPUT_INFO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setJobOutputInfo(@jakarta.annotation.Nullable Map<String, Object> jobOutputInfo) {
     this.jobOutputInfo = jobOutputInfo;
   }
 
 
-  public JobRecordBean links(List<Link> links) {
-    
+  public JobRecordBean links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public JobRecordBean addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
+  /**
+   * Return true if this JobRecordBean object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -471,5 +509,117 @@ public class JobRecordBean {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `job_ID` to the URL query string
+    if (getJobID() != null) {
+      joiner.add(String.format("%sjob_ID%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getJobID()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `appName` to the URL query string
+    if (getAppName() != null) {
+      joiner.add(String.format("%sappName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAppName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dbName` to the URL query string
+    if (getDbName() != null) {
+      joiner.add(String.format("%sdbName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDbName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `jobType` to the URL query string
+    if (getJobType() != null) {
+      joiner.add(String.format("%sjobType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getJobType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `jobfileName` to the URL query string
+    if (getJobfileName() != null) {
+      joiner.add(String.format("%sjobfileName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getJobfileName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `userName` to the URL query string
+    if (getUserName() != null) {
+      joiner.add(String.format("%suserName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUserName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `startTime` to the URL query string
+    if (getStartTime() != null) {
+      joiner.add(String.format("%sstartTime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStartTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `endTime` to the URL query string
+    if (getEndTime() != null) {
+      joiner.add(String.format("%sendTime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getEndTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `statusCode` to the URL query string
+    if (getStatusCode() != null) {
+      joiner.add(String.format("%sstatusCode%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStatusCode()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `statusMessage` to the URL query string
+    if (getStatusMessage() != null) {
+      joiner.add(String.format("%sstatusMessage%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStatusMessage()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `jobInputInfo` to the URL query string
+    if (getJobInputInfo() != null) {
+      for (String _key : getJobInputInfo().keySet()) {
+        joiner.add(String.format("%sjobInputInfo%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, _key, containerSuffix),
+            getJobInputInfo().get(_key), URLEncoder.encode(ApiClient.valueToString(getJobInputInfo().get(_key)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `jobOutputInfo` to the URL query string
+    if (getJobOutputInfo() != null) {
+      for (String _key : getJobOutputInfo().keySet()) {
+        joiner.add(String.format("%sjobOutputInfo%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, _key, containerSuffix),
+            getJobOutputInfo().get(_key), URLEncoder.encode(ApiClient.valueToString(getJobOutputInfo().get(_key)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

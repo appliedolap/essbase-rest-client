@@ -13,42 +13,51 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ColumnOperation
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ColumnOperation.JSON_PROPERTY_UPDATE_COLUMNS,
+  ColumnOperation.JSON_PROPERTY_TYPE,
+  ColumnOperation.JSON_PROPERTY_POSITION
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ColumnOperation {
-  public static final String SERIALIZED_NAME_UPDATE_COLUMNS = "updateColumns";
-  @SerializedName(SERIALIZED_NAME_UPDATE_COLUMNS)
+  public static final String JSON_PROPERTY_UPDATE_COLUMNS = "updateColumns";
+  @jakarta.annotation.Nullable
   private Boolean updateColumns;
 
   /**
    * Gets or Sets type
    */
-  @JsonAdapter(TypeEnum.Adapter.class)
   public enum TypeEnum {
-    CREATE("CREATE"),
+    CREATE(String.valueOf("CREATE")),
     
-    JOIN("JOIN"),
+    JOIN(String.valueOf("JOIN")),
     
-    SPLIT("SPLIT"),
+    SPLIT(String.valueOf("SPLIT")),
     
-    MOVE("MOVE"),
+    MOVE(String.valueOf("MOVE")),
     
-    CREATETEXT("CREATETEXT"),
+    CREATETEXT(String.valueOf("CREATETEXT")),
     
-    SUBSTRING("SUBSTRING");
+    SUBSTRING(String.valueOf("SUBSTRING"));
 
     private String value;
 
@@ -56,6 +65,7 @@ public class ColumnOperation {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -65,6 +75,7 @@ public class ColumnOperation {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static TypeEnum fromValue(String value) {
       for (TypeEnum b : TypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -73,99 +84,94 @@ public class ColumnOperation {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<TypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final TypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public TypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return TypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nullable
   private TypeEnum type;
 
-  public static final String SERIALIZED_NAME_POSITION = "position";
-  @SerializedName(SERIALIZED_NAME_POSITION)
+  public static final String JSON_PROPERTY_POSITION = "position";
+  @jakarta.annotation.Nullable
   private Integer position;
 
+  public ColumnOperation() { 
+  }
 
-  public ColumnOperation updateColumns(Boolean updateColumns) {
-    
+  public ColumnOperation updateColumns(@jakarta.annotation.Nullable Boolean updateColumns) {
     this.updateColumns = updateColumns;
     return this;
   }
 
-   /**
+  /**
    * Get updateColumns
    * @return updateColumns
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UPDATE_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getUpdateColumns() {
     return updateColumns;
   }
 
 
-  public void setUpdateColumns(Boolean updateColumns) {
+  @JsonProperty(JSON_PROPERTY_UPDATE_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUpdateColumns(@jakarta.annotation.Nullable Boolean updateColumns) {
     this.updateColumns = updateColumns;
   }
 
 
-  public ColumnOperation type(TypeEnum type) {
-    
+  public ColumnOperation type(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public TypeEnum getType() {
     return type;
   }
 
 
-  public void setType(TypeEnum type) {
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setType(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
   }
 
 
-  public ColumnOperation position(Integer position) {
-    
+  public ColumnOperation position(@jakarta.annotation.Nullable Integer position) {
     this.position = position;
     return this;
   }
 
-   /**
+  /**
    * Get position
    * @return position
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_POSITION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getPosition() {
     return position;
   }
 
 
-  public void setPosition(Integer position) {
+  @JsonProperty(JSON_PROPERTY_POSITION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPosition(@jakarta.annotation.Nullable Integer position) {
     this.position = position;
   }
 
 
+  /**
+   * Return true if this ColumnOperation object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -207,5 +213,54 @@ public class ColumnOperation {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `updateColumns` to the URL query string
+    if (getUpdateColumns() != null) {
+      joiner.add(String.format("%supdateColumns%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUpdateColumns()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `position` to the URL query string
+    if (getPosition() != null) {
+      joiner.add(String.format("%sposition%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPosition()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

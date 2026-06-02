@@ -13,212 +13,238 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * GeneralOutlineSettings
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  GeneralOutlineSettings.JSON_PROPERTY_CASE_SENSITIVE_MEMBERS,
+  GeneralOutlineSettings.JSON_PROPERTY_OUTLINE_TYPE,
+  GeneralOutlineSettings.JSON_PROPERTY_ALLOW_DUPLICATE_MEMBER_NAMES,
+  GeneralOutlineSettings.JSON_PROPERTY_TYPE_MEASURES_ENABLED,
+  GeneralOutlineSettings.JSON_PROPERTY_DATE_FORMAT,
+  GeneralOutlineSettings.JSON_PROPERTY_VARYING_ATTRIBUTES_ENABLED,
+  GeneralOutlineSettings.JSON_PROPERTY_TIME_MODIFIED
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class GeneralOutlineSettings {
-  public static final String SERIALIZED_NAME_CASE_SENSITIVE_MEMBERS = "caseSensitiveMembers";
-  @SerializedName(SERIALIZED_NAME_CASE_SENSITIVE_MEMBERS)
+  public static final String JSON_PROPERTY_CASE_SENSITIVE_MEMBERS = "caseSensitiveMembers";
+  @jakarta.annotation.Nullable
   private Boolean caseSensitiveMembers;
 
-  public static final String SERIALIZED_NAME_OUTLINE_TYPE = "outlineType";
-  @SerializedName(SERIALIZED_NAME_OUTLINE_TYPE)
+  public static final String JSON_PROPERTY_OUTLINE_TYPE = "outlineType";
+  @jakarta.annotation.Nullable
   private String outlineType;
 
-  public static final String SERIALIZED_NAME_ALLOW_DUPLICATE_MEMBER_NAMES = "allowDuplicateMemberNames";
-  @SerializedName(SERIALIZED_NAME_ALLOW_DUPLICATE_MEMBER_NAMES)
+  public static final String JSON_PROPERTY_ALLOW_DUPLICATE_MEMBER_NAMES = "allowDuplicateMemberNames";
+  @jakarta.annotation.Nullable
   private Boolean allowDuplicateMemberNames;
 
-  public static final String SERIALIZED_NAME_TYPE_MEASURES_ENABLED = "typeMeasuresEnabled";
-  @SerializedName(SERIALIZED_NAME_TYPE_MEASURES_ENABLED)
+  public static final String JSON_PROPERTY_TYPE_MEASURES_ENABLED = "typeMeasuresEnabled";
+  @jakarta.annotation.Nullable
   private Boolean typeMeasuresEnabled;
 
-  public static final String SERIALIZED_NAME_DATE_FORMAT = "dateFormat";
-  @SerializedName(SERIALIZED_NAME_DATE_FORMAT)
+  public static final String JSON_PROPERTY_DATE_FORMAT = "dateFormat";
+  @jakarta.annotation.Nullable
   private String dateFormat;
 
-  public static final String SERIALIZED_NAME_VARYING_ATTRIBUTES_ENABLED = "varyingAttributesEnabled";
-  @SerializedName(SERIALIZED_NAME_VARYING_ATTRIBUTES_ENABLED)
+  public static final String JSON_PROPERTY_VARYING_ATTRIBUTES_ENABLED = "varyingAttributesEnabled";
+  @jakarta.annotation.Nullable
   private Boolean varyingAttributesEnabled;
 
-  public static final String SERIALIZED_NAME_TIME_MODIFIED = "timeModified";
-  @SerializedName(SERIALIZED_NAME_TIME_MODIFIED)
+  public static final String JSON_PROPERTY_TIME_MODIFIED = "timeModified";
+  @jakarta.annotation.Nullable
   private Long timeModified;
 
+  public GeneralOutlineSettings() { 
+  }
 
-  public GeneralOutlineSettings caseSensitiveMembers(Boolean caseSensitiveMembers) {
-    
+  public GeneralOutlineSettings caseSensitiveMembers(@jakarta.annotation.Nullable Boolean caseSensitiveMembers) {
     this.caseSensitiveMembers = caseSensitiveMembers;
     return this;
   }
 
-   /**
+  /**
    * Get caseSensitiveMembers
    * @return caseSensitiveMembers
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CASE_SENSITIVE_MEMBERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getCaseSensitiveMembers() {
     return caseSensitiveMembers;
   }
 
 
-  public void setCaseSensitiveMembers(Boolean caseSensitiveMembers) {
+  @JsonProperty(JSON_PROPERTY_CASE_SENSITIVE_MEMBERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCaseSensitiveMembers(@jakarta.annotation.Nullable Boolean caseSensitiveMembers) {
     this.caseSensitiveMembers = caseSensitiveMembers;
   }
 
 
-  public GeneralOutlineSettings outlineType(String outlineType) {
-    
+  public GeneralOutlineSettings outlineType(@jakarta.annotation.Nullable String outlineType) {
     this.outlineType = outlineType;
     return this;
   }
 
-   /**
+  /**
    * Get outlineType
    * @return outlineType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OUTLINE_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getOutlineType() {
     return outlineType;
   }
 
 
-  public void setOutlineType(String outlineType) {
+  @JsonProperty(JSON_PROPERTY_OUTLINE_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOutlineType(@jakarta.annotation.Nullable String outlineType) {
     this.outlineType = outlineType;
   }
 
 
-  public GeneralOutlineSettings allowDuplicateMemberNames(Boolean allowDuplicateMemberNames) {
-    
+  public GeneralOutlineSettings allowDuplicateMemberNames(@jakarta.annotation.Nullable Boolean allowDuplicateMemberNames) {
     this.allowDuplicateMemberNames = allowDuplicateMemberNames;
     return this;
   }
 
-   /**
+  /**
    * Get allowDuplicateMemberNames
    * @return allowDuplicateMemberNames
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALLOW_DUPLICATE_MEMBER_NAMES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAllowDuplicateMemberNames() {
     return allowDuplicateMemberNames;
   }
 
 
-  public void setAllowDuplicateMemberNames(Boolean allowDuplicateMemberNames) {
+  @JsonProperty(JSON_PROPERTY_ALLOW_DUPLICATE_MEMBER_NAMES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAllowDuplicateMemberNames(@jakarta.annotation.Nullable Boolean allowDuplicateMemberNames) {
     this.allowDuplicateMemberNames = allowDuplicateMemberNames;
   }
 
 
-  public GeneralOutlineSettings typeMeasuresEnabled(Boolean typeMeasuresEnabled) {
-    
+  public GeneralOutlineSettings typeMeasuresEnabled(@jakarta.annotation.Nullable Boolean typeMeasuresEnabled) {
     this.typeMeasuresEnabled = typeMeasuresEnabled;
     return this;
   }
 
-   /**
+  /**
    * Get typeMeasuresEnabled
    * @return typeMeasuresEnabled
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE_MEASURES_ENABLED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getTypeMeasuresEnabled() {
     return typeMeasuresEnabled;
   }
 
 
-  public void setTypeMeasuresEnabled(Boolean typeMeasuresEnabled) {
+  @JsonProperty(JSON_PROPERTY_TYPE_MEASURES_ENABLED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTypeMeasuresEnabled(@jakarta.annotation.Nullable Boolean typeMeasuresEnabled) {
     this.typeMeasuresEnabled = typeMeasuresEnabled;
   }
 
 
-  public GeneralOutlineSettings dateFormat(String dateFormat) {
-    
+  public GeneralOutlineSettings dateFormat(@jakarta.annotation.Nullable String dateFormat) {
     this.dateFormat = dateFormat;
     return this;
   }
 
-   /**
+  /**
    * Get dateFormat
    * @return dateFormat
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATE_FORMAT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDateFormat() {
     return dateFormat;
   }
 
 
-  public void setDateFormat(String dateFormat) {
+  @JsonProperty(JSON_PROPERTY_DATE_FORMAT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDateFormat(@jakarta.annotation.Nullable String dateFormat) {
     this.dateFormat = dateFormat;
   }
 
 
-  public GeneralOutlineSettings varyingAttributesEnabled(Boolean varyingAttributesEnabled) {
-    
+  public GeneralOutlineSettings varyingAttributesEnabled(@jakarta.annotation.Nullable Boolean varyingAttributesEnabled) {
     this.varyingAttributesEnabled = varyingAttributesEnabled;
     return this;
   }
 
-   /**
+  /**
    * Get varyingAttributesEnabled
    * @return varyingAttributesEnabled
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VARYING_ATTRIBUTES_ENABLED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getVaryingAttributesEnabled() {
     return varyingAttributesEnabled;
   }
 
 
-  public void setVaryingAttributesEnabled(Boolean varyingAttributesEnabled) {
+  @JsonProperty(JSON_PROPERTY_VARYING_ATTRIBUTES_ENABLED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVaryingAttributesEnabled(@jakarta.annotation.Nullable Boolean varyingAttributesEnabled) {
     this.varyingAttributesEnabled = varyingAttributesEnabled;
   }
 
 
-  public GeneralOutlineSettings timeModified(Long timeModified) {
-    
+  public GeneralOutlineSettings timeModified(@jakarta.annotation.Nullable Long timeModified) {
     this.timeModified = timeModified;
     return this;
   }
 
-   /**
+  /**
    * Get timeModified
    * @return timeModified
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TIME_MODIFIED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getTimeModified() {
     return timeModified;
   }
 
 
-  public void setTimeModified(Long timeModified) {
+  @JsonProperty(JSON_PROPERTY_TIME_MODIFIED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTimeModified(@jakarta.annotation.Nullable Long timeModified) {
     this.timeModified = timeModified;
   }
 
 
+  /**
+   * Return true if this GeneralOutlineSettings object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -268,5 +294,74 @@ public class GeneralOutlineSettings {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `caseSensitiveMembers` to the URL query string
+    if (getCaseSensitiveMembers() != null) {
+      joiner.add(String.format("%scaseSensitiveMembers%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCaseSensitiveMembers()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `outlineType` to the URL query string
+    if (getOutlineType() != null) {
+      joiner.add(String.format("%soutlineType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getOutlineType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `allowDuplicateMemberNames` to the URL query string
+    if (getAllowDuplicateMemberNames() != null) {
+      joiner.add(String.format("%sallowDuplicateMemberNames%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAllowDuplicateMemberNames()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `typeMeasuresEnabled` to the URL query string
+    if (getTypeMeasuresEnabled() != null) {
+      joiner.add(String.format("%stypeMeasuresEnabled%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTypeMeasuresEnabled()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dateFormat` to the URL query string
+    if (getDateFormat() != null) {
+      joiner.add(String.format("%sdateFormat%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDateFormat()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `varyingAttributesEnabled` to the URL query string
+    if (getVaryingAttributesEnabled() != null) {
+      joiner.add(String.format("%svaryingAttributesEnabled%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getVaryingAttributesEnabled()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `timeModified` to the URL query string
+    if (getTimeModified() != null) {
+      joiner.add(String.format("%stimeModified%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTimeModified()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

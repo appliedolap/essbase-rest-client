@@ -10,1528 +10,1086 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.PartitionBean;
 import com.appliedolap.essbase.client.model.PartitionList;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class PartitionsApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public PartitionsApi() {
-        this(Configuration.getDefaultApiClient());
+  public PartitionsApi() {
+    this(new ApiClient());
+  }
+
+  public PartitionsApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
+    }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
+
+  /**
+   * Create Partition
+   * Create a new partition&lt;p&gt;  For partitions across instances, connectionName must be provided.&lt;/p&gt;&lt;p&gt;  If the connection is defined at application level then, the property &#39;applicationLevelConnection&#39; as true must be specified&lt;/p&gt;&lt;p&gt;  If the datasource is defined at application level then, the property &#39;applicationLevelDatasource&#39; as true must be specified&lt;/p&gt;&lt;p&gt; Example (with minimum required properties)&lt;/p&gt;&lt;p&gt; a)TRANSPARENT/REPLICATED/LAZY_TRANSPARENT - (change type appropriately)&lt;/p&gt;&lt;p&gt;{&#39;type&#39;:&#39;TRANSPARENT&#39;,&#39;isNew&#39;:true,&#39;sourceInfo&#39;:{&#39;applicationName&#39;:&#39;Sample_2&#39;,&#39;databaseName&#39;:&#39;Basic&#39;},&#39;areas&#39;:[{&#39;sourceArea&#39;:&#39;Jan&#39;,&#39;targetArea&#39;:&#39;Jan&#39;,&#39;slices&#39;:[]}],&#39;mappings&#39;:[]}&lt;/p&gt;&lt;p&gt; b)FEDERATED - &lt;p&gt;{&#39;type&#39;:&#39;FEDERATED&#39;,&#39;isNew&#39;:true,&#39;sourceInfo&#39;:{&#39;datasourceName&#39;:&#39;federatedDatasourceExcel1&#39;,&#39;measuresDimensionName&#39;:&#39;Measures&#39;,&#39;essbaseToColumnMap&#39;:{&#39;arr&#39;:[{&#39;essbaseName&#39;:&#39;Caffeinated&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Ounces&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Pkg Type&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Population&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Intro Date&#39;,&#39;columnName&#39;:&#39;&#39;}]}},&#39;areas&#39;:[{&#39;sourceArea&#39;:&#39;Jan&#39;,&#39;targetArea&#39;:&#39;Jan&#39;,&#39;slices&#39;:[]}]}&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Partition information (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void partitionCreatePartition(String applicationName, String databaseName, PartitionBean body) throws ApiException {
+    partitionCreatePartitionWithHttpInfo(applicationName, databaseName, body);
+  }
+
+  /**
+   * Create Partition
+   * Create a new partition&lt;p&gt;  For partitions across instances, connectionName must be provided.&lt;/p&gt;&lt;p&gt;  If the connection is defined at application level then, the property &#39;applicationLevelConnection&#39; as true must be specified&lt;/p&gt;&lt;p&gt;  If the datasource is defined at application level then, the property &#39;applicationLevelDatasource&#39; as true must be specified&lt;/p&gt;&lt;p&gt; Example (with minimum required properties)&lt;/p&gt;&lt;p&gt; a)TRANSPARENT/REPLICATED/LAZY_TRANSPARENT - (change type appropriately)&lt;/p&gt;&lt;p&gt;{&#39;type&#39;:&#39;TRANSPARENT&#39;,&#39;isNew&#39;:true,&#39;sourceInfo&#39;:{&#39;applicationName&#39;:&#39;Sample_2&#39;,&#39;databaseName&#39;:&#39;Basic&#39;},&#39;areas&#39;:[{&#39;sourceArea&#39;:&#39;Jan&#39;,&#39;targetArea&#39;:&#39;Jan&#39;,&#39;slices&#39;:[]}],&#39;mappings&#39;:[]}&lt;/p&gt;&lt;p&gt; b)FEDERATED - &lt;p&gt;{&#39;type&#39;:&#39;FEDERATED&#39;,&#39;isNew&#39;:true,&#39;sourceInfo&#39;:{&#39;datasourceName&#39;:&#39;federatedDatasourceExcel1&#39;,&#39;measuresDimensionName&#39;:&#39;Measures&#39;,&#39;essbaseToColumnMap&#39;:{&#39;arr&#39;:[{&#39;essbaseName&#39;:&#39;Caffeinated&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Ounces&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Pkg Type&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Population&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Intro Date&#39;,&#39;columnName&#39;:&#39;&#39;}]}},&#39;areas&#39;:[{&#39;sourceArea&#39;:&#39;Jan&#39;,&#39;targetArea&#39;:&#39;Jan&#39;,&#39;slices&#39;:[]}]}&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Partition information (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> partitionCreatePartitionWithHttpInfo(String applicationName, String databaseName, PartitionBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = partitionCreatePartitionRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("partitionCreatePartition", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder partitionCreatePartitionRequestBuilder(String applicationName, String databaseName, PartitionBean body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling partitionCreatePartition");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling partitionCreatePartition");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling partitionCreatePartition");
     }
 
-    public PartitionsApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Delete Partition
+   * Delete a partition based on appropriate query parameters&lt;p&gt;a) To delete TRANSPARENT/REPLICATED/LAZY_TRANSPARENT partition, partition type, source server,source application and source database are required&lt;/p&gt;&lt;p&gt;b) To delete FEDERATED partition, partition type, datasource name, measures dimension name and optional application level datasource are required&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param type Partition type (required)
+   * @param serverName Partition source server name (optional)
+   * @param applicationName2 Partition source application name (optional)
+   * @param databaseName2 Partition source database name (optional)
+   * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
+   * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
+   * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
+   * @throws ApiException if fails to make API call
+   */
+  public void partitionDeletePartition(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
+    partitionDeletePartitionWithHttpInfo(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource);
+  }
+
+  /**
+   * Delete Partition
+   * Delete a partition based on appropriate query parameters&lt;p&gt;a) To delete TRANSPARENT/REPLICATED/LAZY_TRANSPARENT partition, partition type, source server,source application and source database are required&lt;/p&gt;&lt;p&gt;b) To delete FEDERATED partition, partition type, datasource name, measures dimension name and optional application level datasource are required&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param type Partition type (required)
+   * @param serverName Partition source server name (optional)
+   * @param applicationName2 Partition source application name (optional)
+   * @param databaseName2 Partition source database name (optional)
+   * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
+   * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
+   * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> partitionDeletePartitionWithHttpInfo(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = partitionDeletePartitionRequestBuilder(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("partitionDeletePartition", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder partitionDeletePartitionRequestBuilder(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling partitionDeletePartition");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling partitionDeletePartition");
+    }
+    // verify the required parameter 'type' is set
+    if (type == null) {
+      throw new ApiException(400, "Missing the required parameter 'type' when calling partitionDeletePartition");
     }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "type";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("type", type));
+    localVarQueryParameterBaseName = "serverName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("serverName", serverName));
+    localVarQueryParameterBaseName = "applicationName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("applicationName", applicationName2));
+    localVarQueryParameterBaseName = "databaseName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("databaseName", databaseName2));
+    localVarQueryParameterBaseName = "datasourceName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("datasourceName", datasourceName));
+    localVarQueryParameterBaseName = "measuresDimensionName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("measuresDimensionName", measuresDimensionName));
+    localVarQueryParameterBaseName = "applicationLevelDatasource";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("applicationLevelDatasource", applicationLevelDatasource));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Partition Cell Count
+   * Get source and target cell counts for all the area definitions.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Partition information (required)
+   * @return PartitionBean
+   * @throws ApiException if fails to make API call
+   */
+  public PartitionBean partitionGetPartitionCellCount(String applicationName, String databaseName, PartitionBean body) throws ApiException {
+    ApiResponse<PartitionBean> localVarResponse = partitionGetPartitionCellCountWithHttpInfo(applicationName, databaseName, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Partition Cell Count
+   * Get source and target cell counts for all the area definitions.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Partition information (required)
+   * @return ApiResponse&lt;PartitionBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PartitionBean> partitionGetPartitionCellCountWithHttpInfo(String applicationName, String databaseName, PartitionBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = partitionGetPartitionCellCountRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("partitionGetPartitionCellCount", localVarResponse);
+        }
+        return new ApiResponse<PartitionBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<PartitionBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder partitionGetPartitionCellCountRequestBuilder(String applicationName, String databaseName, PartitionBean body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling partitionGetPartitionCellCount");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling partitionGetPartitionCellCount");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling partitionGetPartitionCellCount");
     }
 
-    /**
-     * Build call for partitionCreatePartition
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Partition created successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionCreatePartitionCall(String applicationName, String databaseName, PartitionBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions/cellcount"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
 
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Partitions
+   * &lt;p&gt;Returns a list of partitions defined on the database, or a specific partition.&lt;/p&gt; &lt;ul&gt;&lt;li&gt;With no parameters: Returns all available partitions.&lt;/li&gt;&lt;li&gt;With &lt;code&gt;type&lt;/code&gt; parameter: Returns filtered partitions list.&lt;/li&gt;&lt;li&gt;With partition type, source server, source application, and source database parameters: Returns existing TRANSPARENT/REPLICATED/LAZY_TRANSPARENT partition&lt;/li&gt;&lt;/ul&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param type Partition type. Multiple types can be added with a comma separator. (optional)
+   * @param offset &lt;p&gt;Number of partitions to omit from the start of the result set.&lt;/p&gt; (optional)
+   * @param limit &lt;p&gt;Maximum number of partitions to return.&lt;/p&gt; (optional)
+   * @param serverName Partition source server name. (optional)
+   * @param applicationName2 Partition source application name. (optional)
+   * @param databaseName2 Partition source database name. (optional)
+   * @param datasourceName Datasource name (optional)
+   * @param measuresDimensionName Measures dimension name (optional)
+   * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
+   * @return PartitionList
+   * @throws ApiException if fails to make API call
+   */
+  public PartitionList partitionGetPartitions(String applicationName, String databaseName, List<String> type, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
+    ApiResponse<PartitionList> localVarResponse = partitionGetPartitionsWithHttpInfo(applicationName, databaseName, type, offset, limit, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Partitions
+   * &lt;p&gt;Returns a list of partitions defined on the database, or a specific partition.&lt;/p&gt; &lt;ul&gt;&lt;li&gt;With no parameters: Returns all available partitions.&lt;/li&gt;&lt;li&gt;With &lt;code&gt;type&lt;/code&gt; parameter: Returns filtered partitions list.&lt;/li&gt;&lt;li&gt;With partition type, source server, source application, and source database parameters: Returns existing TRANSPARENT/REPLICATED/LAZY_TRANSPARENT partition&lt;/li&gt;&lt;/ul&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param type Partition type. Multiple types can be added with a comma separator. (optional)
+   * @param offset &lt;p&gt;Number of partitions to omit from the start of the result set.&lt;/p&gt; (optional)
+   * @param limit &lt;p&gt;Maximum number of partitions to return.&lt;/p&gt; (optional)
+   * @param serverName Partition source server name. (optional)
+   * @param applicationName2 Partition source application name. (optional)
+   * @param databaseName2 Partition source database name. (optional)
+   * @param datasourceName Datasource name (optional)
+   * @param measuresDimensionName Measures dimension name (optional)
+   * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
+   * @return ApiResponse&lt;PartitionList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PartitionList> partitionGetPartitionsWithHttpInfo(String applicationName, String databaseName, List<String> type, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = partitionGetPartitionsRequestBuilder(applicationName, databaseName, type, offset, limit, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("partitionGetPartitions", localVarResponse);
         }
+        return new ApiResponse<PartitionList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<PartitionList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder partitionGetPartitionsRequestBuilder(String applicationName, String databaseName, List<String> type, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling partitionGetPartitions");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling partitionGetPartitions");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call partitionCreatePartitionValidateBeforeCall(String applicationName, String databaseName, PartitionBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling partitionCreatePartition(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling partitionCreatePartition(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling partitionCreatePartition(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = partitionCreatePartitionCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
 
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "type";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("multi", "type", type));
+    localVarQueryParameterBaseName = "offset";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("offset", offset));
+    localVarQueryParameterBaseName = "limit";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("limit", limit));
+    localVarQueryParameterBaseName = "serverName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("serverName", serverName));
+    localVarQueryParameterBaseName = "applicationName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("applicationName", applicationName2));
+    localVarQueryParameterBaseName = "databaseName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("databaseName", databaseName2));
+    localVarQueryParameterBaseName = "datasourceName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("datasourceName", datasourceName));
+    localVarQueryParameterBaseName = "measuresDimensionName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("measuresDimensionName", measuresDimensionName));
+    localVarQueryParameterBaseName = "applicationLevelDatasource";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("applicationLevelDatasource", applicationLevelDatasource));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Create Partition
-     * Create a new partition&lt;p&gt;  For partitions across instances, connectionName must be provided.&lt;/p&gt;&lt;p&gt;  If the connection is defined at application level then, the property &#39;applicationLevelConnection&#39; as true must be specified&lt;/p&gt;&lt;p&gt;  If the datasource is defined at application level then, the property &#39;applicationLevelDatasource&#39; as true must be specified&lt;/p&gt;&lt;p&gt; Example (with minimum required properties)&lt;/p&gt;&lt;p&gt; a)TRANSPARENT/REPLICATED/LAZY_TRANSPARENT - (change type appropriately)&lt;/p&gt;&lt;p&gt;{&#39;type&#39;:&#39;TRANSPARENT&#39;,&#39;isNew&#39;:true,&#39;sourceInfo&#39;:{&#39;applicationName&#39;:&#39;Sample_2&#39;,&#39;databaseName&#39;:&#39;Basic&#39;},&#39;areas&#39;:[{&#39;sourceArea&#39;:&#39;Jan&#39;,&#39;targetArea&#39;:&#39;Jan&#39;,&#39;slices&#39;:[]}],&#39;mappings&#39;:[]}&lt;/p&gt;&lt;p&gt; b)FEDERATED - &lt;p&gt;{&#39;type&#39;:&#39;FEDERATED&#39;,&#39;isNew&#39;:true,&#39;sourceInfo&#39;:{&#39;datasourceName&#39;:&#39;federatedDatasourceExcel1&#39;,&#39;measuresDimensionName&#39;:&#39;Measures&#39;,&#39;essbaseToColumnMap&#39;:{&#39;arr&#39;:[{&#39;essbaseName&#39;:&#39;Caffeinated&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Ounces&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Pkg Type&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Population&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Intro Date&#39;,&#39;columnName&#39;:&#39;&#39;}]}},&#39;areas&#39;:[{&#39;sourceArea&#39;:&#39;Jan&#39;,&#39;targetArea&#39;:&#39;Jan&#39;,&#39;slices&#39;:[]}]}&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Partition created successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void partitionCreatePartition(String applicationName, String databaseName, PartitionBean body) throws ApiException {
-        partitionCreatePartitionWithHttpInfo(applicationName, databaseName, body);
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Lock Partition
+   * Lock partition object. For non federated partition, both source and target partition objects will be locked&lt;p&gt;a) FEDERATED partition - Partition type, datasource name, measures dimension name and optional application level datasource are required&lt;/p&gt;&lt;p&gt;b) TRANSPARENT/REPLICATED/LAZY_TRANSPARENT Others - partition type, source server,source application and source database are required&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param type Partition type (required)
+   * @param serverName Partition source server name (optional)
+   * @param applicationName2 Partition source application name (optional)
+   * @param databaseName2 Partition source database name (optional)
+   * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
+   * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
+   * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
+   * @throws ApiException if fails to make API call
+   */
+  public void partitionLockPartition(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
+    partitionLockPartitionWithHttpInfo(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource);
+  }
+
+  /**
+   * Lock Partition
+   * Lock partition object. For non federated partition, both source and target partition objects will be locked&lt;p&gt;a) FEDERATED partition - Partition type, datasource name, measures dimension name and optional application level datasource are required&lt;/p&gt;&lt;p&gt;b) TRANSPARENT/REPLICATED/LAZY_TRANSPARENT Others - partition type, source server,source application and source database are required&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param type Partition type (required)
+   * @param serverName Partition source server name (optional)
+   * @param applicationName2 Partition source application name (optional)
+   * @param databaseName2 Partition source database name (optional)
+   * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
+   * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
+   * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> partitionLockPartitionWithHttpInfo(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = partitionLockPartitionRequestBuilder(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("partitionLockPartition", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder partitionLockPartitionRequestBuilder(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling partitionLockPartition");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling partitionLockPartition");
+    }
+    // verify the required parameter 'type' is set
+    if (type == null) {
+      throw new ApiException(400, "Missing the required parameter 'type' when calling partitionLockPartition");
     }
 
-    /**
-     * Create Partition
-     * Create a new partition&lt;p&gt;  For partitions across instances, connectionName must be provided.&lt;/p&gt;&lt;p&gt;  If the connection is defined at application level then, the property &#39;applicationLevelConnection&#39; as true must be specified&lt;/p&gt;&lt;p&gt;  If the datasource is defined at application level then, the property &#39;applicationLevelDatasource&#39; as true must be specified&lt;/p&gt;&lt;p&gt; Example (with minimum required properties)&lt;/p&gt;&lt;p&gt; a)TRANSPARENT/REPLICATED/LAZY_TRANSPARENT - (change type appropriately)&lt;/p&gt;&lt;p&gt;{&#39;type&#39;:&#39;TRANSPARENT&#39;,&#39;isNew&#39;:true,&#39;sourceInfo&#39;:{&#39;applicationName&#39;:&#39;Sample_2&#39;,&#39;databaseName&#39;:&#39;Basic&#39;},&#39;areas&#39;:[{&#39;sourceArea&#39;:&#39;Jan&#39;,&#39;targetArea&#39;:&#39;Jan&#39;,&#39;slices&#39;:[]}],&#39;mappings&#39;:[]}&lt;/p&gt;&lt;p&gt; b)FEDERATED - &lt;p&gt;{&#39;type&#39;:&#39;FEDERATED&#39;,&#39;isNew&#39;:true,&#39;sourceInfo&#39;:{&#39;datasourceName&#39;:&#39;federatedDatasourceExcel1&#39;,&#39;measuresDimensionName&#39;:&#39;Measures&#39;,&#39;essbaseToColumnMap&#39;:{&#39;arr&#39;:[{&#39;essbaseName&#39;:&#39;Caffeinated&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Ounces&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Pkg Type&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Population&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Intro Date&#39;,&#39;columnName&#39;:&#39;&#39;}]}},&#39;areas&#39;:[{&#39;sourceArea&#39;:&#39;Jan&#39;,&#39;targetArea&#39;:&#39;Jan&#39;,&#39;slices&#39;:[]}]}&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Partition created successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> partitionCreatePartitionWithHttpInfo(String applicationName, String databaseName, PartitionBean body) throws ApiException {
-        okhttp3.Call localVarCall = partitionCreatePartitionValidateBeforeCall(applicationName, databaseName, body, null);
-        return localVarApiClient.execute(localVarCall);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions/lock"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "type";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("type", type));
+    localVarQueryParameterBaseName = "serverName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("serverName", serverName));
+    localVarQueryParameterBaseName = "applicationName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("applicationName", applicationName2));
+    localVarQueryParameterBaseName = "databaseName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("databaseName", databaseName2));
+    localVarQueryParameterBaseName = "datasourceName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("datasourceName", datasourceName));
+    localVarQueryParameterBaseName = "measuresDimensionName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("measuresDimensionName", measuresDimensionName));
+    localVarQueryParameterBaseName = "applicationLevelDatasource";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("applicationLevelDatasource", applicationLevelDatasource));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Create Partition (asynchronously)
-     * Create a new partition&lt;p&gt;  For partitions across instances, connectionName must be provided.&lt;/p&gt;&lt;p&gt;  If the connection is defined at application level then, the property &#39;applicationLevelConnection&#39; as true must be specified&lt;/p&gt;&lt;p&gt;  If the datasource is defined at application level then, the property &#39;applicationLevelDatasource&#39; as true must be specified&lt;/p&gt;&lt;p&gt; Example (with minimum required properties)&lt;/p&gt;&lt;p&gt; a)TRANSPARENT/REPLICATED/LAZY_TRANSPARENT - (change type appropriately)&lt;/p&gt;&lt;p&gt;{&#39;type&#39;:&#39;TRANSPARENT&#39;,&#39;isNew&#39;:true,&#39;sourceInfo&#39;:{&#39;applicationName&#39;:&#39;Sample_2&#39;,&#39;databaseName&#39;:&#39;Basic&#39;},&#39;areas&#39;:[{&#39;sourceArea&#39;:&#39;Jan&#39;,&#39;targetArea&#39;:&#39;Jan&#39;,&#39;slices&#39;:[]}],&#39;mappings&#39;:[]}&lt;/p&gt;&lt;p&gt; b)FEDERATED - &lt;p&gt;{&#39;type&#39;:&#39;FEDERATED&#39;,&#39;isNew&#39;:true,&#39;sourceInfo&#39;:{&#39;datasourceName&#39;:&#39;federatedDatasourceExcel1&#39;,&#39;measuresDimensionName&#39;:&#39;Measures&#39;,&#39;essbaseToColumnMap&#39;:{&#39;arr&#39;:[{&#39;essbaseName&#39;:&#39;Caffeinated&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Ounces&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Pkg Type&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Population&#39;,&#39;columnName&#39;:&#39;&#39;},{&#39;essbaseName&#39;:&#39;Intro Date&#39;,&#39;columnName&#39;:&#39;&#39;}]}},&#39;areas&#39;:[{&#39;sourceArea&#39;:&#39;Jan&#39;,&#39;targetArea&#39;:&#39;Jan&#39;,&#39;slices&#39;:[]}]}&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Partition created successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionCreatePartitionAsync(String applicationName, String databaseName, PartitionBean body, final ApiCallback<Void> _callback) throws ApiException {
+    localVarRequestBuilder.header("Accept", "application/json");
 
-        okhttp3.Call localVarCall = partitionCreatePartitionValidateBeforeCall(applicationName, databaseName, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
+    localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-    /**
-     * Build call for partitionDeletePartition
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type (required)
-     * @param serverName Partition source server name (optional)
-     * @param applicationName2 Partition source application name (optional)
-     * @param databaseName2 Partition source database name (optional)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
-     * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Delete successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to delete partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionDeletePartitionCall(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
+  /**
+   * Replicate Data
+   * Replicate data from source for a replicated partition
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param applicationName2 Partition source application name (required)
+   * @param databaseName2 Partition source database name (required)
+   * @param serverName Partition source server name (optional)
+   * @param replicateOption Replicate data options (optional, default to UPDATED_CELLS)
+   * @throws ApiException if fails to make API call
+   */
+  public void partitionReplicateDataFromSource(String applicationName, String databaseName, String applicationName2, String databaseName2, String serverName, String replicateOption) throws ApiException {
+    partitionReplicateDataFromSourceWithHttpInfo(applicationName, databaseName, applicationName2, databaseName2, serverName, replicateOption);
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (type != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("type", type));
+  /**
+   * Replicate Data
+   * Replicate data from source for a replicated partition
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param applicationName2 Partition source application name (required)
+   * @param databaseName2 Partition source database name (required)
+   * @param serverName Partition source server name (optional)
+   * @param replicateOption Replicate data options (optional, default to UPDATED_CELLS)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> partitionReplicateDataFromSourceWithHttpInfo(String applicationName, String databaseName, String applicationName2, String databaseName2, String serverName, String replicateOption) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = partitionReplicateDataFromSourceRequestBuilder(applicationName, databaseName, applicationName2, databaseName2, serverName, replicateOption);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("partitionReplicateDataFromSource", localVarResponse);
         }
-
-        if (serverName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("serverName", serverName));
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        if (applicationName2 != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("applicationName", applicationName2));
-        }
-
-        if (databaseName2 != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("databaseName", databaseName2));
-        }
-
-        if (datasourceName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("datasourceName", datasourceName));
-        }
-
-        if (measuresDimensionName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("measuresDimensionName", measuresDimensionName));
-        }
-
-        if (applicationLevelDatasource != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("applicationLevelDatasource", applicationLevelDatasource));
-        }
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder partitionReplicateDataFromSourceRequestBuilder(String applicationName, String databaseName, String applicationName2, String databaseName2, String serverName, String replicateOption) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling partitionReplicateDataFromSource");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling partitionReplicateDataFromSource");
+    }
+    // verify the required parameter 'applicationName2' is set
+    if (applicationName2 == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName2' when calling partitionReplicateDataFromSource");
+    }
+    // verify the required parameter 'databaseName2' is set
+    if (databaseName2 == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName2' when calling partitionReplicateDataFromSource");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call partitionDeletePartitionValidateBeforeCall(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling partitionDeletePartition(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling partitionDeletePartition(Async)");
-        }
-        
-        // verify the required parameter 'type' is set
-        if (type == null) {
-            throw new ApiException("Missing the required parameter 'type' when calling partitionDeletePartition(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = partitionDeletePartitionCall(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource, _callback);
-        return localVarCall;
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions/replicatedata"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
 
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "serverName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("serverName", serverName));
+    localVarQueryParameterBaseName = "applicationName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("applicationName", applicationName2));
+    localVarQueryParameterBaseName = "databaseName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("databaseName", databaseName2));
+    localVarQueryParameterBaseName = "replicateOption";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("replicateOption", replicateOption));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Delete Partition
-     * Delete a partition based on appropriate query parameters&lt;p&gt;a) To delete TRANSPARENT/REPLICATED/LAZY_TRANSPARENT partition, partition type, source server,source application and source database are required&lt;/p&gt;&lt;p&gt;b) To delete FEDERATED partition, partition type, datasource name, measures dimension name and optional application level datasource are required&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type (required)
-     * @param serverName Partition source server name (optional)
-     * @param applicationName2 Partition source application name (optional)
-     * @param databaseName2 Partition source database name (optional)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
-     * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Delete successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to delete partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void partitionDeletePartition(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
-        partitionDeletePartitionWithHttpInfo(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource);
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Unlock Partition
+   * Unlock partition object. For non federated partition, both source and target partition objects will be unlocked&lt;p&gt;a) FEDERATED partition - Partition type, datasource name, measures dimension name and optional application level datasource are required&lt;/p&gt;&lt;p&gt;b) TRANSPARENT/REPLICATED/LAZY_TRANSPARENT Others - partition type, source server,source application and source database are required&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param type Partition type (required)
+   * @param serverName Partition source server name (optional)
+   * @param applicationName2 Partition source application name (optional)
+   * @param databaseName2 Partition source database name (optional)
+   * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
+   * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
+   * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
+   * @throws ApiException if fails to make API call
+   */
+  public void partitionUnlockPartition(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
+    partitionUnlockPartitionWithHttpInfo(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource);
+  }
+
+  /**
+   * Unlock Partition
+   * Unlock partition object. For non federated partition, both source and target partition objects will be unlocked&lt;p&gt;a) FEDERATED partition - Partition type, datasource name, measures dimension name and optional application level datasource are required&lt;/p&gt;&lt;p&gt;b) TRANSPARENT/REPLICATED/LAZY_TRANSPARENT Others - partition type, source server,source application and source database are required&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param type Partition type (required)
+   * @param serverName Partition source server name (optional)
+   * @param applicationName2 Partition source application name (optional)
+   * @param databaseName2 Partition source database name (optional)
+   * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
+   * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
+   * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> partitionUnlockPartitionWithHttpInfo(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = partitionUnlockPartitionRequestBuilder(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("partitionUnlockPartition", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder partitionUnlockPartitionRequestBuilder(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling partitionUnlockPartition");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling partitionUnlockPartition");
+    }
+    // verify the required parameter 'type' is set
+    if (type == null) {
+      throw new ApiException(400, "Missing the required parameter 'type' when calling partitionUnlockPartition");
     }
 
-    /**
-     * Delete Partition
-     * Delete a partition based on appropriate query parameters&lt;p&gt;a) To delete TRANSPARENT/REPLICATED/LAZY_TRANSPARENT partition, partition type, source server,source application and source database are required&lt;/p&gt;&lt;p&gt;b) To delete FEDERATED partition, partition type, datasource name, measures dimension name and optional application level datasource are required&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type (required)
-     * @param serverName Partition source server name (optional)
-     * @param applicationName2 Partition source application name (optional)
-     * @param databaseName2 Partition source database name (optional)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
-     * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Delete successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to delete partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> partitionDeletePartitionWithHttpInfo(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
-        okhttp3.Call localVarCall = partitionDeletePartitionValidateBeforeCall(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource, null);
-        return localVarApiClient.execute(localVarCall);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions/unlock"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "type";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("type", type));
+    localVarQueryParameterBaseName = "serverName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("serverName", serverName));
+    localVarQueryParameterBaseName = "applicationName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("applicationName", applicationName2));
+    localVarQueryParameterBaseName = "databaseName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("databaseName", databaseName2));
+    localVarQueryParameterBaseName = "datasourceName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("datasourceName", datasourceName));
+    localVarQueryParameterBaseName = "measuresDimensionName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("measuresDimensionName", measuresDimensionName));
+    localVarQueryParameterBaseName = "applicationLevelDatasource";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("applicationLevelDatasource", applicationLevelDatasource));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Delete Partition (asynchronously)
-     * Delete a partition based on appropriate query parameters&lt;p&gt;a) To delete TRANSPARENT/REPLICATED/LAZY_TRANSPARENT partition, partition type, source server,source application and source database are required&lt;/p&gt;&lt;p&gt;b) To delete FEDERATED partition, partition type, datasource name, measures dimension name and optional application level datasource are required&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type (required)
-     * @param serverName Partition source server name (optional)
-     * @param applicationName2 Partition source application name (optional)
-     * @param databaseName2 Partition source database name (optional)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
-     * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Delete successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to delete partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionDeletePartitionAsync(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource, final ApiCallback<Void> _callback) throws ApiException {
+    localVarRequestBuilder.header("Accept", "application/json");
 
-        okhttp3.Call localVarCall = partitionDeletePartitionValidateBeforeCall(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
+    localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-    /**
-     * Build call for partitionGetPartitionCellCount
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get cell count </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionGetPartitionCellCountCall(String applicationName, String databaseName, PartitionBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions/cellcount"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call partitionGetPartitionCellCountValidateBeforeCall(String applicationName, String databaseName, PartitionBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling partitionGetPartitionCellCount(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling partitionGetPartitionCellCount(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling partitionGetPartitionCellCount(Async)");
-        }
-        
+  /**
+   * Update Partition
+   * Updates an existing partition
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Partition information (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void partitionUpdatePartition(String applicationName, String databaseName, PartitionBean body) throws ApiException {
+    partitionUpdatePartitionWithHttpInfo(applicationName, databaseName, body);
+  }
 
-        okhttp3.Call localVarCall = partitionGetPartitionCellCountCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
+  /**
+   * Update Partition
+   * Updates an existing partition
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Partition information (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> partitionUpdatePartitionWithHttpInfo(String applicationName, String databaseName, PartitionBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = partitionUpdatePartitionRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("partitionUpdatePartition", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
+  private HttpRequest.Builder partitionUpdatePartitionRequestBuilder(String applicationName, String databaseName, PartitionBean body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling partitionUpdatePartition");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling partitionUpdatePartition");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling partitionUpdatePartition");
     }
 
-    /**
-     * Get Partition Cell Count
-     * Get source and target cell counts for all the area definitions.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @return PartitionBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get cell count </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public PartitionBean partitionGetPartitionCellCount(String applicationName, String databaseName, PartitionBean body) throws ApiException {
-        ApiResponse<PartitionBean> localVarResp = partitionGetPartitionCellCountWithHttpInfo(applicationName, databaseName, body);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PATCH", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Validate Partition
+   * Validate either new or existing partition
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Partition information (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void partitionValidatePartition(String applicationName, String databaseName, PartitionBean body) throws ApiException {
+    partitionValidatePartitionWithHttpInfo(applicationName, databaseName, body);
+  }
+
+  /**
+   * Validate Partition
+   * Validate either new or existing partition
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Partition information (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> partitionValidatePartitionWithHttpInfo(String applicationName, String databaseName, PartitionBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = partitionValidatePartitionRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("partitionValidatePartition", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder partitionValidatePartitionRequestBuilder(String applicationName, String databaseName, PartitionBean body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling partitionValidatePartition");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling partitionValidatePartition");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling partitionValidatePartition");
     }
 
-    /**
-     * Get Partition Cell Count
-     * Get source and target cell counts for all the area definitions.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @return ApiResponse&lt;PartitionBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get cell count </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<PartitionBean> partitionGetPartitionCellCountWithHttpInfo(String applicationName, String databaseName, PartitionBean body) throws ApiException {
-        okhttp3.Call localVarCall = partitionGetPartitionCellCountValidateBeforeCall(applicationName, databaseName, body, null);
-        Type localVarReturnType = new TypeToken<PartitionBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions/validate"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Get Partition Cell Count (asynchronously)
-     * Get source and target cell counts for all the area definitions.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get cell count </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionGetPartitionCellCountAsync(String applicationName, String databaseName, PartitionBean body, final ApiCallback<PartitionBean> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = partitionGetPartitionCellCountValidateBeforeCall(applicationName, databaseName, body, _callback);
-        Type localVarReturnType = new TypeToken<PartitionBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-    /**
-     * Build call for partitionGetPartitions
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type. Multiple types can be added with a comma separator. (optional)
-     * @param offset &lt;p&gt;Number of partitions to omit from the start of the result set.&lt;/p&gt; (optional)
-     * @param limit &lt;p&gt;Maximum number of partitions to return.&lt;/p&gt; (optional)
-     * @param serverName Partition source server name. (optional)
-     * @param applicationName2 Partition source application name. (optional)
-     * @param databaseName2 Partition source database name. (optional)
-     * @param datasourceName Datasource name (optional)
-     * @param measuresDimensionName Measures dimension name (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns either a list of partitions or specific partition details. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get partitions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionGetPartitionsCall(String applicationName, String databaseName, List<String> type, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (type != null) {
-            localVarCollectionQueryParams.addAll(localVarApiClient.parameterToPairs("multi", "type", type));
-        }
-
-        if (offset != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("offset", offset));
-        }
-
-        if (limit != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
-        }
-
-        if (serverName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("serverName", serverName));
-        }
-
-        if (applicationName2 != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("applicationName", applicationName2));
-        }
-
-        if (databaseName2 != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("databaseName", databaseName2));
-        }
-
-        if (datasourceName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("datasourceName", datasourceName));
-        }
-
-        if (measuresDimensionName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("measuresDimensionName", measuresDimensionName));
-        }
-
-        if (applicationLevelDatasource != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("applicationLevelDatasource", applicationLevelDatasource));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call partitionGetPartitionsValidateBeforeCall(String applicationName, String databaseName, List<String> type, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling partitionGetPartitions(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling partitionGetPartitions(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = partitionGetPartitionsCall(applicationName, databaseName, type, offset, limit, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Partitions
-     * &lt;p&gt;Returns a list of partitions defined on the database, or a specific partition.&lt;/p&gt; &lt;ul&gt;&lt;li&gt;With no parameters: Returns all available partitions.&lt;/li&gt;&lt;li&gt;With &lt;code&gt;type&lt;/code&gt; parameter: Returns filtered partitions list.&lt;/li&gt;&lt;li&gt;With partition type, source server, source application, and source database parameters: Returns existing TRANSPARENT/REPLICATED/LAZY_TRANSPARENT partition&lt;/li&gt;&lt;/ul&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type. Multiple types can be added with a comma separator. (optional)
-     * @param offset &lt;p&gt;Number of partitions to omit from the start of the result set.&lt;/p&gt; (optional)
-     * @param limit &lt;p&gt;Maximum number of partitions to return.&lt;/p&gt; (optional)
-     * @param serverName Partition source server name. (optional)
-     * @param applicationName2 Partition source application name. (optional)
-     * @param databaseName2 Partition source database name. (optional)
-     * @param datasourceName Datasource name (optional)
-     * @param measuresDimensionName Measures dimension name (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @return PartitionList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns either a list of partitions or specific partition details. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get partitions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public PartitionList partitionGetPartitions(String applicationName, String databaseName, List<String> type, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
-        ApiResponse<PartitionList> localVarResp = partitionGetPartitionsWithHttpInfo(applicationName, databaseName, type, offset, limit, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Partitions
-     * &lt;p&gt;Returns a list of partitions defined on the database, or a specific partition.&lt;/p&gt; &lt;ul&gt;&lt;li&gt;With no parameters: Returns all available partitions.&lt;/li&gt;&lt;li&gt;With &lt;code&gt;type&lt;/code&gt; parameter: Returns filtered partitions list.&lt;/li&gt;&lt;li&gt;With partition type, source server, source application, and source database parameters: Returns existing TRANSPARENT/REPLICATED/LAZY_TRANSPARENT partition&lt;/li&gt;&lt;/ul&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type. Multiple types can be added with a comma separator. (optional)
-     * @param offset &lt;p&gt;Number of partitions to omit from the start of the result set.&lt;/p&gt; (optional)
-     * @param limit &lt;p&gt;Maximum number of partitions to return.&lt;/p&gt; (optional)
-     * @param serverName Partition source server name. (optional)
-     * @param applicationName2 Partition source application name. (optional)
-     * @param databaseName2 Partition source database name. (optional)
-     * @param datasourceName Datasource name (optional)
-     * @param measuresDimensionName Measures dimension name (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @return ApiResponse&lt;PartitionList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns either a list of partitions or specific partition details. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get partitions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<PartitionList> partitionGetPartitionsWithHttpInfo(String applicationName, String databaseName, List<String> type, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
-        okhttp3.Call localVarCall = partitionGetPartitionsValidateBeforeCall(applicationName, databaseName, type, offset, limit, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource, null);
-        Type localVarReturnType = new TypeToken<PartitionList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Partitions (asynchronously)
-     * &lt;p&gt;Returns a list of partitions defined on the database, or a specific partition.&lt;/p&gt; &lt;ul&gt;&lt;li&gt;With no parameters: Returns all available partitions.&lt;/li&gt;&lt;li&gt;With &lt;code&gt;type&lt;/code&gt; parameter: Returns filtered partitions list.&lt;/li&gt;&lt;li&gt;With partition type, source server, source application, and source database parameters: Returns existing TRANSPARENT/REPLICATED/LAZY_TRANSPARENT partition&lt;/li&gt;&lt;/ul&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type. Multiple types can be added with a comma separator. (optional)
-     * @param offset &lt;p&gt;Number of partitions to omit from the start of the result set.&lt;/p&gt; (optional)
-     * @param limit &lt;p&gt;Maximum number of partitions to return.&lt;/p&gt; (optional)
-     * @param serverName Partition source server name. (optional)
-     * @param applicationName2 Partition source application name. (optional)
-     * @param databaseName2 Partition source database name. (optional)
-     * @param datasourceName Datasource name (optional)
-     * @param measuresDimensionName Measures dimension name (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns either a list of partitions or specific partition details. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get partitions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionGetPartitionsAsync(String applicationName, String databaseName, List<String> type, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource, final ApiCallback<PartitionList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = partitionGetPartitionsValidateBeforeCall(applicationName, databaseName, type, offset, limit, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource, _callback);
-        Type localVarReturnType = new TypeToken<PartitionList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for partitionLockPartition
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type (required)
-     * @param serverName Partition source server name (optional)
-     * @param applicationName2 Partition source application name (optional)
-     * @param databaseName2 Partition source database name (optional)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
-     * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Lock successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to lock partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionLockPartitionCall(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions/lock"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (type != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("type", type));
-        }
-
-        if (serverName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("serverName", serverName));
-        }
-
-        if (applicationName2 != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("applicationName", applicationName2));
-        }
-
-        if (databaseName2 != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("databaseName", databaseName2));
-        }
-
-        if (datasourceName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("datasourceName", datasourceName));
-        }
-
-        if (measuresDimensionName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("measuresDimensionName", measuresDimensionName));
-        }
-
-        if (applicationLevelDatasource != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("applicationLevelDatasource", applicationLevelDatasource));
-        }
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call partitionLockPartitionValidateBeforeCall(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling partitionLockPartition(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling partitionLockPartition(Async)");
-        }
-        
-        // verify the required parameter 'type' is set
-        if (type == null) {
-            throw new ApiException("Missing the required parameter 'type' when calling partitionLockPartition(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = partitionLockPartitionCall(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Lock Partition
-     * Lock partition object. For non federated partition, both source and target partition objects will be locked&lt;p&gt;a) FEDERATED partition - Partition type, datasource name, measures dimension name and optional application level datasource are required&lt;/p&gt;&lt;p&gt;b) TRANSPARENT/REPLICATED/LAZY_TRANSPARENT Others - partition type, source server,source application and source database are required&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type (required)
-     * @param serverName Partition source server name (optional)
-     * @param applicationName2 Partition source application name (optional)
-     * @param databaseName2 Partition source database name (optional)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
-     * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Lock successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to lock partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void partitionLockPartition(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
-        partitionLockPartitionWithHttpInfo(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource);
-    }
-
-    /**
-     * Lock Partition
-     * Lock partition object. For non federated partition, both source and target partition objects will be locked&lt;p&gt;a) FEDERATED partition - Partition type, datasource name, measures dimension name and optional application level datasource are required&lt;/p&gt;&lt;p&gt;b) TRANSPARENT/REPLICATED/LAZY_TRANSPARENT Others - partition type, source server,source application and source database are required&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type (required)
-     * @param serverName Partition source server name (optional)
-     * @param applicationName2 Partition source application name (optional)
-     * @param databaseName2 Partition source database name (optional)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
-     * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Lock successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to lock partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> partitionLockPartitionWithHttpInfo(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
-        okhttp3.Call localVarCall = partitionLockPartitionValidateBeforeCall(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Lock Partition (asynchronously)
-     * Lock partition object. For non federated partition, both source and target partition objects will be locked&lt;p&gt;a) FEDERATED partition - Partition type, datasource name, measures dimension name and optional application level datasource are required&lt;/p&gt;&lt;p&gt;b) TRANSPARENT/REPLICATED/LAZY_TRANSPARENT Others - partition type, source server,source application and source database are required&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type (required)
-     * @param serverName Partition source server name (optional)
-     * @param applicationName2 Partition source application name (optional)
-     * @param databaseName2 Partition source database name (optional)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
-     * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Lock successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to lock partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionLockPartitionAsync(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = partitionLockPartitionValidateBeforeCall(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for partitionReplicateDataFromSource
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param applicationName2 Partition source application name (required)
-     * @param databaseName2 Partition source database name (required)
-     * @param serverName Partition source server name (optional)
-     * @param replicateOption Replicate data options (optional, default to UPDATED_CELLS)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Replicate data successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Either unsupported partition type or failed to replicate data from source </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionReplicateDataFromSourceCall(String applicationName, String databaseName, String applicationName2, String databaseName2, String serverName, String replicateOption, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions/replicatedata"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (serverName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("serverName", serverName));
-        }
-
-        if (applicationName2 != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("applicationName", applicationName2));
-        }
-
-        if (databaseName2 != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("databaseName", databaseName2));
-        }
-
-        if (replicateOption != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("replicateOption", replicateOption));
-        }
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call partitionReplicateDataFromSourceValidateBeforeCall(String applicationName, String databaseName, String applicationName2, String databaseName2, String serverName, String replicateOption, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling partitionReplicateDataFromSource(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling partitionReplicateDataFromSource(Async)");
-        }
-        
-        // verify the required parameter 'applicationName2' is set
-        if (applicationName2 == null) {
-            throw new ApiException("Missing the required parameter 'applicationName2' when calling partitionReplicateDataFromSource(Async)");
-        }
-        
-        // verify the required parameter 'databaseName2' is set
-        if (databaseName2 == null) {
-            throw new ApiException("Missing the required parameter 'databaseName2' when calling partitionReplicateDataFromSource(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = partitionReplicateDataFromSourceCall(applicationName, databaseName, applicationName2, databaseName2, serverName, replicateOption, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Replicate Data
-     * Replicate data from source for a replicated partition
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param applicationName2 Partition source application name (required)
-     * @param databaseName2 Partition source database name (required)
-     * @param serverName Partition source server name (optional)
-     * @param replicateOption Replicate data options (optional, default to UPDATED_CELLS)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Replicate data successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Either unsupported partition type or failed to replicate data from source </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void partitionReplicateDataFromSource(String applicationName, String databaseName, String applicationName2, String databaseName2, String serverName, String replicateOption) throws ApiException {
-        partitionReplicateDataFromSourceWithHttpInfo(applicationName, databaseName, applicationName2, databaseName2, serverName, replicateOption);
-    }
-
-    /**
-     * Replicate Data
-     * Replicate data from source for a replicated partition
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param applicationName2 Partition source application name (required)
-     * @param databaseName2 Partition source database name (required)
-     * @param serverName Partition source server name (optional)
-     * @param replicateOption Replicate data options (optional, default to UPDATED_CELLS)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Replicate data successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Either unsupported partition type or failed to replicate data from source </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> partitionReplicateDataFromSourceWithHttpInfo(String applicationName, String databaseName, String applicationName2, String databaseName2, String serverName, String replicateOption) throws ApiException {
-        okhttp3.Call localVarCall = partitionReplicateDataFromSourceValidateBeforeCall(applicationName, databaseName, applicationName2, databaseName2, serverName, replicateOption, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Replicate Data (asynchronously)
-     * Replicate data from source for a replicated partition
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param applicationName2 Partition source application name (required)
-     * @param databaseName2 Partition source database name (required)
-     * @param serverName Partition source server name (optional)
-     * @param replicateOption Replicate data options (optional, default to UPDATED_CELLS)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Replicate data successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Either unsupported partition type or failed to replicate data from source </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionReplicateDataFromSourceAsync(String applicationName, String databaseName, String applicationName2, String databaseName2, String serverName, String replicateOption, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = partitionReplicateDataFromSourceValidateBeforeCall(applicationName, databaseName, applicationName2, databaseName2, serverName, replicateOption, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for partitionUnlockPartition
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type (required)
-     * @param serverName Partition source server name (optional)
-     * @param applicationName2 Partition source application name (optional)
-     * @param databaseName2 Partition source database name (optional)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
-     * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Unlock successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to unlock partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionUnlockPartitionCall(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions/unlock"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (type != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("type", type));
-        }
-
-        if (serverName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("serverName", serverName));
-        }
-
-        if (applicationName2 != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("applicationName", applicationName2));
-        }
-
-        if (databaseName2 != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("databaseName", databaseName2));
-        }
-
-        if (datasourceName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("datasourceName", datasourceName));
-        }
-
-        if (measuresDimensionName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("measuresDimensionName", measuresDimensionName));
-        }
-
-        if (applicationLevelDatasource != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("applicationLevelDatasource", applicationLevelDatasource));
-        }
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call partitionUnlockPartitionValidateBeforeCall(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling partitionUnlockPartition(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling partitionUnlockPartition(Async)");
-        }
-        
-        // verify the required parameter 'type' is set
-        if (type == null) {
-            throw new ApiException("Missing the required parameter 'type' when calling partitionUnlockPartition(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = partitionUnlockPartitionCall(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Unlock Partition
-     * Unlock partition object. For non federated partition, both source and target partition objects will be unlocked&lt;p&gt;a) FEDERATED partition - Partition type, datasource name, measures dimension name and optional application level datasource are required&lt;/p&gt;&lt;p&gt;b) TRANSPARENT/REPLICATED/LAZY_TRANSPARENT Others - partition type, source server,source application and source database are required&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type (required)
-     * @param serverName Partition source server name (optional)
-     * @param applicationName2 Partition source application name (optional)
-     * @param databaseName2 Partition source database name (optional)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
-     * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Unlock successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to unlock partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void partitionUnlockPartition(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
-        partitionUnlockPartitionWithHttpInfo(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource);
-    }
-
-    /**
-     * Unlock Partition
-     * Unlock partition object. For non federated partition, both source and target partition objects will be unlocked&lt;p&gt;a) FEDERATED partition - Partition type, datasource name, measures dimension name and optional application level datasource are required&lt;/p&gt;&lt;p&gt;b) TRANSPARENT/REPLICATED/LAZY_TRANSPARENT Others - partition type, source server,source application and source database are required&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type (required)
-     * @param serverName Partition source server name (optional)
-     * @param applicationName2 Partition source application name (optional)
-     * @param databaseName2 Partition source database name (optional)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
-     * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Unlock successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to unlock partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> partitionUnlockPartitionWithHttpInfo(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource) throws ApiException {
-        okhttp3.Call localVarCall = partitionUnlockPartitionValidateBeforeCall(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Unlock Partition (asynchronously)
-     * Unlock partition object. For non federated partition, both source and target partition objects will be unlocked&lt;p&gt;a) FEDERATED partition - Partition type, datasource name, measures dimension name and optional application level datasource are required&lt;/p&gt;&lt;p&gt;b) TRANSPARENT/REPLICATED/LAZY_TRANSPARENT Others - partition type, source server,source application and source database are required&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param type Partition type (required)
-     * @param serverName Partition source server name (optional)
-     * @param applicationName2 Partition source application name (optional)
-     * @param databaseName2 Partition source database name (optional)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (optional)
-     * @param measuresDimensionName &lt;p&gt;Measures dimension name.&lt;/p&gt; (optional)
-     * @param applicationLevelDatasource Specify whether the datasource is defined at application level (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Unlock successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to unlock partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionUnlockPartitionAsync(String applicationName, String databaseName, String type, String serverName, String applicationName2, String databaseName2, String datasourceName, String measuresDimensionName, Boolean applicationLevelDatasource, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = partitionUnlockPartitionValidateBeforeCall(applicationName, databaseName, type, serverName, applicationName2, databaseName2, datasourceName, measuresDimensionName, applicationLevelDatasource, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for partitionUpdatePartition
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Update successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to update partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionUpdatePartitionCall(String applicationName, String databaseName, PartitionBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PATCH", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call partitionUpdatePartitionValidateBeforeCall(String applicationName, String databaseName, PartitionBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling partitionUpdatePartition(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling partitionUpdatePartition(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling partitionUpdatePartition(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = partitionUpdatePartitionCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Update Partition
-     * Updates an existing partition
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Update successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to update partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void partitionUpdatePartition(String applicationName, String databaseName, PartitionBean body) throws ApiException {
-        partitionUpdatePartitionWithHttpInfo(applicationName, databaseName, body);
-    }
-
-    /**
-     * Update Partition
-     * Updates an existing partition
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Update successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to update partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> partitionUpdatePartitionWithHttpInfo(String applicationName, String databaseName, PartitionBean body) throws ApiException {
-        okhttp3.Call localVarCall = partitionUpdatePartitionValidateBeforeCall(applicationName, databaseName, body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Update Partition (asynchronously)
-     * Updates an existing partition
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Update successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to update partition </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionUpdatePartitionAsync(String applicationName, String databaseName, PartitionBean body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = partitionUpdatePartitionValidateBeforeCall(applicationName, databaseName, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for partitionValidatePartition
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> validation successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to validate partition </td><td>  -  </td></tr>
-        <tr><td> 422 </td><td> Partition validated with warnings </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionValidatePartitionCall(String applicationName, String databaseName, PartitionBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/partitions/validate"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call partitionValidatePartitionValidateBeforeCall(String applicationName, String databaseName, PartitionBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling partitionValidatePartition(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling partitionValidatePartition(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling partitionValidatePartition(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = partitionValidatePartitionCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Validate Partition
-     * Validate either new or existing partition
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> validation successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to validate partition </td><td>  -  </td></tr>
-        <tr><td> 422 </td><td> Partition validated with warnings </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void partitionValidatePartition(String applicationName, String databaseName, PartitionBean body) throws ApiException {
-        partitionValidatePartitionWithHttpInfo(applicationName, databaseName, body);
-    }
-
-    /**
-     * Validate Partition
-     * Validate either new or existing partition
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> validation successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to validate partition </td><td>  -  </td></tr>
-        <tr><td> 422 </td><td> Partition validated with warnings </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> partitionValidatePartitionWithHttpInfo(String applicationName, String databaseName, PartitionBean body) throws ApiException {
-        okhttp3.Call localVarCall = partitionValidatePartitionValidateBeforeCall(applicationName, databaseName, body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Validate Partition (asynchronously)
-     * Validate either new or existing partition
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Partition information (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> validation successful </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to validate partition </td><td>  -  </td></tr>
-        <tr><td> 422 </td><td> Partition validated with warnings </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call partitionValidatePartitionAsync(String applicationName, String databaseName, PartitionBean body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = partitionValidatePartitionValidateBeforeCall(applicationName, databaseName, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
 }

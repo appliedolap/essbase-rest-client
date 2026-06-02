@@ -13,105 +13,123 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.NamedQueriesPreferences;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * Query
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  Query.JSON_PROPERTY_DESCRIPTION,
+  Query.JSON_PROPERTY_SPEC,
+  Query.JSON_PROPERTY_PREFERENCES
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class Query {
-  public static final String SERIALIZED_NAME_DESCRIPTION = "description";
-  @SerializedName(SERIALIZED_NAME_DESCRIPTION)
+  public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  @jakarta.annotation.Nullable
   private String description;
 
-  public static final String SERIALIZED_NAME_SPEC = "spec";
-  @SerializedName(SERIALIZED_NAME_SPEC)
+  public static final String JSON_PROPERTY_SPEC = "spec";
+  @jakarta.annotation.Nullable
   private String spec;
 
-  public static final String SERIALIZED_NAME_PREFERENCES = "preferences";
-  @SerializedName(SERIALIZED_NAME_PREFERENCES)
+  public static final String JSON_PROPERTY_PREFERENCES = "preferences";
+  @jakarta.annotation.Nullable
   private NamedQueriesPreferences preferences;
 
+  public Query() { 
+  }
 
-  public Query description(String description) {
-    
+  public Query description(@jakarta.annotation.Nullable String description) {
     this.description = description;
     return this;
   }
 
-   /**
+  /**
    * Get description
    * @return description
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDescription() {
     return description;
   }
 
 
-  public void setDescription(String description) {
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDescription(@jakarta.annotation.Nullable String description) {
     this.description = description;
   }
 
 
-  public Query spec(String spec) {
-    
+  public Query spec(@jakarta.annotation.Nullable String spec) {
     this.spec = spec;
     return this;
   }
 
-   /**
+  /**
    * Get spec
    * @return spec
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SPEC)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getSpec() {
     return spec;
   }
 
 
-  public void setSpec(String spec) {
+  @JsonProperty(JSON_PROPERTY_SPEC)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSpec(@jakarta.annotation.Nullable String spec) {
     this.spec = spec;
   }
 
 
-  public Query preferences(NamedQueriesPreferences preferences) {
-    
+  public Query preferences(@jakarta.annotation.Nullable NamedQueriesPreferences preferences) {
     this.preferences = preferences;
     return this;
   }
 
-   /**
+  /**
    * Get preferences
    * @return preferences
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PREFERENCES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public NamedQueriesPreferences getPreferences() {
     return preferences;
   }
 
 
-  public void setPreferences(NamedQueriesPreferences preferences) {
+  @JsonProperty(JSON_PROPERTY_PREFERENCES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPreferences(@jakarta.annotation.Nullable NamedQueriesPreferences preferences) {
     this.preferences = preferences;
   }
 
 
+  /**
+   * Return true if this Query object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -153,5 +171,54 @@ public class Query {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `description` to the URL query string
+    if (getDescription() != null) {
+      joiner.add(String.format("%sdescription%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDescription()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `spec` to the URL query string
+    if (getSpec() != null) {
+      joiner.add(String.format("%sspec%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSpec()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `preferences` to the URL query string
+    if (getPreferences() != null) {
+      joiner.add(getPreferences().toUrlQueryString(prefix + "preferences" + suffix));
+    }
+
+    return joiner.toString();
+  }
 }
 

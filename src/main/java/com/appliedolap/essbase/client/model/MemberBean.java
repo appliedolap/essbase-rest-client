@@ -13,83 +13,111 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.Link;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * MemberBean
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  MemberBean.JSON_PROPERTY_NAME,
+  MemberBean.JSON_PROPERTY_DIMENSION_NAME,
+  MemberBean.JSON_PROPERTY_NUMBER_OF_CHILDREN,
+  MemberBean.JSON_PROPERTY_LEVEL_NUMBER,
+  MemberBean.JSON_PROPERTY_GENERATION_NUMBER,
+  MemberBean.JSON_PROPERTY_ALIASES,
+  MemberBean.JSON_PROPERTY_ACTIVE_ALIAS_NAME,
+  MemberBean.JSON_PROPERTY_MEMBER_HAS_UNIQUE_NAME,
+  MemberBean.JSON_PROPERTY_UNIQUE_NAME,
+  MemberBean.JSON_PROPERTY_MEMBER_ID,
+  MemberBean.JSON_PROPERTY_UNIQUE_ID,
+  MemberBean.JSON_PROPERTY_TYPE,
+  MemberBean.JSON_PROPERTY_MEMBER_SOLVE_ORDER,
+  MemberBean.JSON_PROPERTY_DESCENDANTS_COUNT,
+  MemberBean.JSON_PROPERTY_PREVIOUS_SIBLINGS_COUNT,
+  MemberBean.JSON_PROPERTY_DIMENSION,
+  MemberBean.JSON_PROPERTY_ATTRIBUTE,
+  MemberBean.JSON_PROPERTY_ACCOUNT,
+  MemberBean.JSON_PROPERTY_LINKS,
+  MemberBean.JSON_PROPERTY_UDA,
+  MemberBean.JSON_PROPERTY_DATA_STORAGE_TYPE,
+  MemberBean.JSON_PROPERTY_PARENT_NAME
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class MemberBean {
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
-  public static final String SERIALIZED_NAME_DIMENSION_NAME = "dimensionName";
-  @SerializedName(SERIALIZED_NAME_DIMENSION_NAME)
+  public static final String JSON_PROPERTY_DIMENSION_NAME = "dimensionName";
+  @jakarta.annotation.Nullable
   private String dimensionName;
 
-  public static final String SERIALIZED_NAME_NUMBER_OF_CHILDREN = "numberOfChildren";
-  @SerializedName(SERIALIZED_NAME_NUMBER_OF_CHILDREN)
+  public static final String JSON_PROPERTY_NUMBER_OF_CHILDREN = "numberOfChildren";
+  @jakarta.annotation.Nullable
   private Integer numberOfChildren;
 
-  public static final String SERIALIZED_NAME_LEVEL_NUMBER = "levelNumber";
-  @SerializedName(SERIALIZED_NAME_LEVEL_NUMBER)
+  public static final String JSON_PROPERTY_LEVEL_NUMBER = "levelNumber";
+  @jakarta.annotation.Nullable
   private Integer levelNumber;
 
-  public static final String SERIALIZED_NAME_GENERATION_NUMBER = "generationNumber";
-  @SerializedName(SERIALIZED_NAME_GENERATION_NUMBER)
+  public static final String JSON_PROPERTY_GENERATION_NUMBER = "generationNumber";
+  @jakarta.annotation.Nullable
   private Integer generationNumber;
 
-  public static final String SERIALIZED_NAME_ALIASES = "aliases";
-  @SerializedName(SERIALIZED_NAME_ALIASES)
-  private Map<String, String> aliases = null;
+  public static final String JSON_PROPERTY_ALIASES = "aliases";
+  @jakarta.annotation.Nullable
+  private Map<String, String> aliases = new HashMap<>();
 
-  public static final String SERIALIZED_NAME_ACTIVE_ALIAS_NAME = "activeAliasName";
-  @SerializedName(SERIALIZED_NAME_ACTIVE_ALIAS_NAME)
+  public static final String JSON_PROPERTY_ACTIVE_ALIAS_NAME = "activeAliasName";
+  @jakarta.annotation.Nullable
   private String activeAliasName;
 
-  public static final String SERIALIZED_NAME_MEMBER_HAS_UNIQUE_NAME = "memberHasUniqueName";
-  @SerializedName(SERIALIZED_NAME_MEMBER_HAS_UNIQUE_NAME)
+  public static final String JSON_PROPERTY_MEMBER_HAS_UNIQUE_NAME = "memberHasUniqueName";
+  @jakarta.annotation.Nullable
   private Boolean memberHasUniqueName;
 
-  public static final String SERIALIZED_NAME_UNIQUE_NAME = "uniqueName";
-  @SerializedName(SERIALIZED_NAME_UNIQUE_NAME)
+  public static final String JSON_PROPERTY_UNIQUE_NAME = "uniqueName";
+  @jakarta.annotation.Nullable
   private String uniqueName;
 
-  public static final String SERIALIZED_NAME_MEMBER_ID = "memberId";
-  @SerializedName(SERIALIZED_NAME_MEMBER_ID)
+  public static final String JSON_PROPERTY_MEMBER_ID = "memberId";
+  @jakarta.annotation.Nullable
   private String memberId;
 
-  public static final String SERIALIZED_NAME_UNIQUE_ID = "uniqueId";
-  @SerializedName(SERIALIZED_NAME_UNIQUE_ID)
+  public static final String JSON_PROPERTY_UNIQUE_ID = "uniqueId";
+  @jakarta.annotation.Nullable
   private String uniqueId;
 
   /**
    * Gets or Sets type
    */
-  @JsonAdapter(TypeEnum.Adapter.class)
   public enum TypeEnum {
-    NONE("NONE"),
+    NONE(String.valueOf("NONE")),
     
-    NUMERIC("NUMERIC"),
+    NUMERIC(String.valueOf("NUMERIC")),
     
-    SMARTLIST("SMARTLIST"),
+    SMARTLIST(String.valueOf("SMARTLIST")),
     
-    DATE("DATE");
+    DATE(String.valueOf("DATE"));
 
     private String value;
 
@@ -97,6 +125,7 @@ public class MemberBean {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -106,6 +135,7 @@ public class MemberBean {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static TypeEnum fromValue(String value) {
       for (TypeEnum b : TypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -114,507 +144,610 @@ public class MemberBean {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<TypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final TypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public TypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return TypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nullable
   private TypeEnum type;
 
-  public static final String SERIALIZED_NAME_MEMBER_SOLVE_ORDER = "memberSolveOrder";
-  @SerializedName(SERIALIZED_NAME_MEMBER_SOLVE_ORDER)
+  public static final String JSON_PROPERTY_MEMBER_SOLVE_ORDER = "memberSolveOrder";
+  @jakarta.annotation.Nullable
   private Integer memberSolveOrder;
 
-  public static final String SERIALIZED_NAME_DESCENDANTS_COUNT = "descendantsCount";
-  @SerializedName(SERIALIZED_NAME_DESCENDANTS_COUNT)
+  public static final String JSON_PROPERTY_DESCENDANTS_COUNT = "descendantsCount";
+  @jakarta.annotation.Nullable
   private Long descendantsCount;
 
-  public static final String SERIALIZED_NAME_PREVIOUS_SIBLINGS_COUNT = "previousSiblingsCount";
-  @SerializedName(SERIALIZED_NAME_PREVIOUS_SIBLINGS_COUNT)
+  public static final String JSON_PROPERTY_PREVIOUS_SIBLINGS_COUNT = "previousSiblingsCount";
+  @jakarta.annotation.Nullable
   private Integer previousSiblingsCount;
 
-  public static final String SERIALIZED_NAME_DIMENSION = "dimension";
-  @SerializedName(SERIALIZED_NAME_DIMENSION)
+  public static final String JSON_PROPERTY_DIMENSION = "dimension";
+  @jakarta.annotation.Nullable
   private Boolean dimension;
 
-  public static final String SERIALIZED_NAME_ATTRIBUTE = "attribute";
-  @SerializedName(SERIALIZED_NAME_ATTRIBUTE)
+  public static final String JSON_PROPERTY_ATTRIBUTE = "attribute";
+  @jakarta.annotation.Nullable
   private Boolean attribute;
 
-  public static final String SERIALIZED_NAME_ACCOUNT = "account";
-  @SerializedName(SERIALIZED_NAME_ACCOUNT)
+  public static final String JSON_PROPERTY_ACCOUNT = "account";
+  @jakarta.annotation.Nullable
   private Boolean account;
 
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
+  public static final String JSON_PROPERTY_UDA = "uda";
+  @jakarta.annotation.Nullable
+  private List<String> uda = new ArrayList<>();
 
-  public MemberBean name(String name) {
-    
+  public static final String JSON_PROPERTY_DATA_STORAGE_TYPE = "dataStorageType";
+  @jakarta.annotation.Nullable
+  private String dataStorageType;
+
+  public static final String JSON_PROPERTY_PARENT_NAME = "parentName";
+  @jakarta.annotation.Nullable
+  private String parentName;
+
+  public MemberBean() { 
+  }
+
+  public MemberBean name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
-  public MemberBean dimensionName(String dimensionName) {
-    
+  public MemberBean dimensionName(@jakarta.annotation.Nullable String dimensionName) {
     this.dimensionName = dimensionName;
     return this;
   }
 
-   /**
+  /**
    * Get dimensionName
    * @return dimensionName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIMENSION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDimensionName() {
     return dimensionName;
   }
 
 
-  public void setDimensionName(String dimensionName) {
+  @JsonProperty(JSON_PROPERTY_DIMENSION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimensionName(@jakarta.annotation.Nullable String dimensionName) {
     this.dimensionName = dimensionName;
   }
 
 
-  public MemberBean numberOfChildren(Integer numberOfChildren) {
-    
+  public MemberBean numberOfChildren(@jakarta.annotation.Nullable Integer numberOfChildren) {
     this.numberOfChildren = numberOfChildren;
     return this;
   }
 
-   /**
+  /**
    * Get numberOfChildren
    * @return numberOfChildren
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_CHILDREN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getNumberOfChildren() {
     return numberOfChildren;
   }
 
 
-  public void setNumberOfChildren(Integer numberOfChildren) {
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_CHILDREN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumberOfChildren(@jakarta.annotation.Nullable Integer numberOfChildren) {
     this.numberOfChildren = numberOfChildren;
   }
 
 
-  public MemberBean levelNumber(Integer levelNumber) {
-    
+  public MemberBean levelNumber(@jakarta.annotation.Nullable Integer levelNumber) {
     this.levelNumber = levelNumber;
     return this;
   }
 
-   /**
+  /**
    * Get levelNumber
    * @return levelNumber
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LEVEL_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getLevelNumber() {
     return levelNumber;
   }
 
 
-  public void setLevelNumber(Integer levelNumber) {
+  @JsonProperty(JSON_PROPERTY_LEVEL_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLevelNumber(@jakarta.annotation.Nullable Integer levelNumber) {
     this.levelNumber = levelNumber;
   }
 
 
-  public MemberBean generationNumber(Integer generationNumber) {
-    
+  public MemberBean generationNumber(@jakarta.annotation.Nullable Integer generationNumber) {
     this.generationNumber = generationNumber;
     return this;
   }
 
-   /**
+  /**
    * Get generationNumber
    * @return generationNumber
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GENERATION_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getGenerationNumber() {
     return generationNumber;
   }
 
 
-  public void setGenerationNumber(Integer generationNumber) {
+  @JsonProperty(JSON_PROPERTY_GENERATION_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGenerationNumber(@jakarta.annotation.Nullable Integer generationNumber) {
     this.generationNumber = generationNumber;
   }
 
 
-  public MemberBean aliases(Map<String, String> aliases) {
-    
+  public MemberBean aliases(@jakarta.annotation.Nullable Map<String, String> aliases) {
     this.aliases = aliases;
     return this;
   }
 
   public MemberBean putAliasesItem(String key, String aliasesItem) {
     if (this.aliases == null) {
-      this.aliases = new HashMap<String, String>();
+      this.aliases = new HashMap<>();
     }
     this.aliases.put(key, aliasesItem);
     return this;
   }
 
-   /**
+  /**
    * Get aliases
    * @return aliases
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALIASES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Map<String, String> getAliases() {
     return aliases;
   }
 
 
-  public void setAliases(Map<String, String> aliases) {
+  @JsonProperty(JSON_PROPERTY_ALIASES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAliases(@jakarta.annotation.Nullable Map<String, String> aliases) {
     this.aliases = aliases;
   }
 
 
-  public MemberBean activeAliasName(String activeAliasName) {
-    
+  public MemberBean activeAliasName(@jakarta.annotation.Nullable String activeAliasName) {
     this.activeAliasName = activeAliasName;
     return this;
   }
 
-   /**
+  /**
    * Get activeAliasName
    * @return activeAliasName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ACTIVE_ALIAS_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getActiveAliasName() {
     return activeAliasName;
   }
 
 
-  public void setActiveAliasName(String activeAliasName) {
+  @JsonProperty(JSON_PROPERTY_ACTIVE_ALIAS_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setActiveAliasName(@jakarta.annotation.Nullable String activeAliasName) {
     this.activeAliasName = activeAliasName;
   }
 
 
-  public MemberBean memberHasUniqueName(Boolean memberHasUniqueName) {
-    
+  public MemberBean memberHasUniqueName(@jakarta.annotation.Nullable Boolean memberHasUniqueName) {
     this.memberHasUniqueName = memberHasUniqueName;
     return this;
   }
 
-   /**
+  /**
    * Get memberHasUniqueName
    * @return memberHasUniqueName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MEMBER_HAS_UNIQUE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getMemberHasUniqueName() {
     return memberHasUniqueName;
   }
 
 
-  public void setMemberHasUniqueName(Boolean memberHasUniqueName) {
+  @JsonProperty(JSON_PROPERTY_MEMBER_HAS_UNIQUE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMemberHasUniqueName(@jakarta.annotation.Nullable Boolean memberHasUniqueName) {
     this.memberHasUniqueName = memberHasUniqueName;
   }
 
 
-  public MemberBean uniqueName(String uniqueName) {
-    
+  public MemberBean uniqueName(@jakarta.annotation.Nullable String uniqueName) {
     this.uniqueName = uniqueName;
     return this;
   }
 
-   /**
+  /**
    * Get uniqueName
    * @return uniqueName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UNIQUE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getUniqueName() {
     return uniqueName;
   }
 
 
-  public void setUniqueName(String uniqueName) {
+  @JsonProperty(JSON_PROPERTY_UNIQUE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUniqueName(@jakarta.annotation.Nullable String uniqueName) {
     this.uniqueName = uniqueName;
   }
 
 
-  public MemberBean memberId(String memberId) {
-    
+  public MemberBean memberId(@jakarta.annotation.Nullable String memberId) {
     this.memberId = memberId;
     return this;
   }
 
-   /**
+  /**
    * Get memberId
    * @return memberId
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MEMBER_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getMemberId() {
     return memberId;
   }
 
 
-  public void setMemberId(String memberId) {
+  @JsonProperty(JSON_PROPERTY_MEMBER_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMemberId(@jakarta.annotation.Nullable String memberId) {
     this.memberId = memberId;
   }
 
 
-  public MemberBean uniqueId(String uniqueId) {
-    
+  public MemberBean uniqueId(@jakarta.annotation.Nullable String uniqueId) {
     this.uniqueId = uniqueId;
     return this;
   }
 
-   /**
+  /**
    * Get uniqueId
    * @return uniqueId
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UNIQUE_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getUniqueId() {
     return uniqueId;
   }
 
 
-  public void setUniqueId(String uniqueId) {
+  @JsonProperty(JSON_PROPERTY_UNIQUE_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUniqueId(@jakarta.annotation.Nullable String uniqueId) {
     this.uniqueId = uniqueId;
   }
 
 
-  public MemberBean type(TypeEnum type) {
-    
+  public MemberBean type(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public TypeEnum getType() {
     return type;
   }
 
 
-  public void setType(TypeEnum type) {
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setType(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
   }
 
 
-  public MemberBean memberSolveOrder(Integer memberSolveOrder) {
-    
+  public MemberBean memberSolveOrder(@jakarta.annotation.Nullable Integer memberSolveOrder) {
     this.memberSolveOrder = memberSolveOrder;
     return this;
   }
 
-   /**
+  /**
    * Get memberSolveOrder
    * @return memberSolveOrder
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MEMBER_SOLVE_ORDER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getMemberSolveOrder() {
     return memberSolveOrder;
   }
 
 
-  public void setMemberSolveOrder(Integer memberSolveOrder) {
+  @JsonProperty(JSON_PROPERTY_MEMBER_SOLVE_ORDER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMemberSolveOrder(@jakarta.annotation.Nullable Integer memberSolveOrder) {
     this.memberSolveOrder = memberSolveOrder;
   }
 
 
-  public MemberBean descendantsCount(Long descendantsCount) {
-    
+  public MemberBean descendantsCount(@jakarta.annotation.Nullable Long descendantsCount) {
     this.descendantsCount = descendantsCount;
     return this;
   }
 
-   /**
+  /**
    * Get descendantsCount
    * @return descendantsCount
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DESCENDANTS_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getDescendantsCount() {
     return descendantsCount;
   }
 
 
-  public void setDescendantsCount(Long descendantsCount) {
+  @JsonProperty(JSON_PROPERTY_DESCENDANTS_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDescendantsCount(@jakarta.annotation.Nullable Long descendantsCount) {
     this.descendantsCount = descendantsCount;
   }
 
 
-  public MemberBean previousSiblingsCount(Integer previousSiblingsCount) {
-    
+  public MemberBean previousSiblingsCount(@jakarta.annotation.Nullable Integer previousSiblingsCount) {
     this.previousSiblingsCount = previousSiblingsCount;
     return this;
   }
 
-   /**
+  /**
    * Get previousSiblingsCount
    * @return previousSiblingsCount
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PREVIOUS_SIBLINGS_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getPreviousSiblingsCount() {
     return previousSiblingsCount;
   }
 
 
-  public void setPreviousSiblingsCount(Integer previousSiblingsCount) {
+  @JsonProperty(JSON_PROPERTY_PREVIOUS_SIBLINGS_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPreviousSiblingsCount(@jakarta.annotation.Nullable Integer previousSiblingsCount) {
     this.previousSiblingsCount = previousSiblingsCount;
   }
 
 
-  public MemberBean dimension(Boolean dimension) {
-    
+  public MemberBean dimension(@jakarta.annotation.Nullable Boolean dimension) {
     this.dimension = dimension;
     return this;
   }
 
-   /**
+  /**
    * Get dimension
    * @return dimension
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getDimension() {
     return dimension;
   }
 
 
-  public void setDimension(Boolean dimension) {
+  @JsonProperty(JSON_PROPERTY_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimension(@jakarta.annotation.Nullable Boolean dimension) {
     this.dimension = dimension;
   }
 
 
-  public MemberBean attribute(Boolean attribute) {
-    
+  public MemberBean attribute(@jakarta.annotation.Nullable Boolean attribute) {
     this.attribute = attribute;
     return this;
   }
 
-   /**
+  /**
    * Get attribute
    * @return attribute
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ATTRIBUTE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAttribute() {
     return attribute;
   }
 
 
-  public void setAttribute(Boolean attribute) {
+  @JsonProperty(JSON_PROPERTY_ATTRIBUTE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAttribute(@jakarta.annotation.Nullable Boolean attribute) {
     this.attribute = attribute;
   }
 
 
-  public MemberBean account(Boolean account) {
-    
+  public MemberBean account(@jakarta.annotation.Nullable Boolean account) {
     this.account = account;
     return this;
   }
 
-   /**
+  /**
    * Get account
    * @return account
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ACCOUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAccount() {
     return account;
   }
 
 
-  public void setAccount(Boolean account) {
+  @JsonProperty(JSON_PROPERTY_ACCOUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAccount(@jakarta.annotation.Nullable Boolean account) {
     this.account = account;
   }
 
 
-  public MemberBean links(List<Link> links) {
-    
+  public MemberBean links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public MemberBean addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
+  public MemberBean uda(@jakarta.annotation.Nullable List<String> uda) {
+    this.uda = uda;
+    return this;
+  }
+
+  public MemberBean addUdaItem(String udaItem) {
+    if (this.uda == null) {
+      this.uda = new ArrayList<>();
+    }
+    this.uda.add(udaItem);
+    return this;
+  }
+
+  /**
+   * Get uda
+   * @return uda
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UDA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public List<String> getUda() {
+    return uda;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_UDA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUda(@jakarta.annotation.Nullable List<String> uda) {
+    this.uda = uda;
+  }
+
+
+  public MemberBean dataStorageType(@jakarta.annotation.Nullable String dataStorageType) {
+    this.dataStorageType = dataStorageType;
+    return this;
+  }
+
+  /**
+   * Get dataStorageType
+   * @return dataStorageType
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_STORAGE_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getDataStorageType() {
+    return dataStorageType;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_DATA_STORAGE_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataStorageType(@jakarta.annotation.Nullable String dataStorageType) {
+    this.dataStorageType = dataStorageType;
+  }
+
+
+  public MemberBean parentName(@jakarta.annotation.Nullable String parentName) {
+    this.parentName = parentName;
+    return this;
+  }
+
+  /**
+   * Get parentName
+   * @return parentName
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PARENT_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getParentName() {
+    return parentName;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PARENT_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setParentName(@jakarta.annotation.Nullable String parentName) {
+    this.parentName = parentName;
+  }
+
+
+  /**
+   * Return true if this MemberBean object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -642,12 +775,15 @@ public class MemberBean {
         Objects.equals(this.dimension, memberBean.dimension) &&
         Objects.equals(this.attribute, memberBean.attribute) &&
         Objects.equals(this.account, memberBean.account) &&
-        Objects.equals(this.links, memberBean.links);
+        Objects.equals(this.links, memberBean.links) &&
+        Objects.equals(this.uda, memberBean.uda) &&
+        Objects.equals(this.dataStorageType, memberBean.dataStorageType) &&
+        Objects.equals(this.parentName, memberBean.parentName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, dimensionName, numberOfChildren, levelNumber, generationNumber, aliases, activeAliasName, memberHasUniqueName, uniqueName, memberId, uniqueId, type, memberSolveOrder, descendantsCount, previousSiblingsCount, dimension, attribute, account, links);
+    return Objects.hash(name, dimensionName, numberOfChildren, levelNumber, generationNumber, aliases, activeAliasName, memberHasUniqueName, uniqueName, memberId, uniqueId, type, memberSolveOrder, descendantsCount, previousSiblingsCount, dimension, attribute, account, links, uda, dataStorageType, parentName);
   }
 
   @Override
@@ -673,6 +809,9 @@ public class MemberBean {
     sb.append("    attribute: ").append(toIndentedString(attribute)).append("\n");
     sb.append("    account: ").append(toIndentedString(account)).append("\n");
     sb.append("    links: ").append(toIndentedString(links)).append("\n");
+    sb.append("    uda: ").append(toIndentedString(uda)).append("\n");
+    sb.append("    dataStorageType: ").append(toIndentedString(dataStorageType)).append("\n");
+    sb.append("    parentName: ").append(toIndentedString(parentName)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -688,5 +827,162 @@ public class MemberBean {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dimensionName` to the URL query string
+    if (getDimensionName() != null) {
+      joiner.add(String.format("%sdimensionName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDimensionName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numberOfChildren` to the URL query string
+    if (getNumberOfChildren() != null) {
+      joiner.add(String.format("%snumberOfChildren%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumberOfChildren()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `levelNumber` to the URL query string
+    if (getLevelNumber() != null) {
+      joiner.add(String.format("%slevelNumber%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLevelNumber()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `generationNumber` to the URL query string
+    if (getGenerationNumber() != null) {
+      joiner.add(String.format("%sgenerationNumber%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getGenerationNumber()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `aliases` to the URL query string
+    if (getAliases() != null) {
+      for (String _key : getAliases().keySet()) {
+        joiner.add(String.format("%saliases%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, _key, containerSuffix),
+            getAliases().get(_key), URLEncoder.encode(ApiClient.valueToString(getAliases().get(_key)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `activeAliasName` to the URL query string
+    if (getActiveAliasName() != null) {
+      joiner.add(String.format("%sactiveAliasName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getActiveAliasName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `memberHasUniqueName` to the URL query string
+    if (getMemberHasUniqueName() != null) {
+      joiner.add(String.format("%smemberHasUniqueName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMemberHasUniqueName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `uniqueName` to the URL query string
+    if (getUniqueName() != null) {
+      joiner.add(String.format("%suniqueName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUniqueName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `memberId` to the URL query string
+    if (getMemberId() != null) {
+      joiner.add(String.format("%smemberId%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMemberId()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `uniqueId` to the URL query string
+    if (getUniqueId() != null) {
+      joiner.add(String.format("%suniqueId%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUniqueId()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `memberSolveOrder` to the URL query string
+    if (getMemberSolveOrder() != null) {
+      joiner.add(String.format("%smemberSolveOrder%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMemberSolveOrder()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `descendantsCount` to the URL query string
+    if (getDescendantsCount() != null) {
+      joiner.add(String.format("%sdescendantsCount%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDescendantsCount()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `previousSiblingsCount` to the URL query string
+    if (getPreviousSiblingsCount() != null) {
+      joiner.add(String.format("%spreviousSiblingsCount%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPreviousSiblingsCount()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dimension` to the URL query string
+    if (getDimension() != null) {
+      joiner.add(String.format("%sdimension%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDimension()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `attribute` to the URL query string
+    if (getAttribute() != null) {
+      joiner.add(String.format("%sattribute%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAttribute()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `account` to the URL query string
+    if (getAccount() != null) {
+      joiner.add(String.format("%saccount%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAccount()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `uda` to the URL query string
+    if (getUda() != null) {
+      for (int i = 0; i < getUda().size(); i++) {
+        joiner.add(String.format("%suda%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getUda().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `dataStorageType` to the URL query string
+    if (getDataStorageType() != null) {
+      joiner.add(String.format("%sdataStorageType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataStorageType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `parentName` to the URL query string
+    if (getParentName() != null) {
+      joiner.add(String.format("%sparentName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getParentName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

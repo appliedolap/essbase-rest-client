@@ -13,340 +13,372 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.ColumnMappingInfo;
 import com.appliedolap.essbase.client.model.Link;
 import com.appliedolap.essbase.client.model.RunTimeParametersInfo;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * DrillthroughBean
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  DrillthroughBean.JSON_PROPERTY_LINKS,
+  DrillthroughBean.JSON_PROPERTY_DATA_SOURCE_NAME,
+  DrillthroughBean.JSON_PROPERTY_URL,
+  DrillthroughBean.JSON_PROPERTY_COLUMN_MAPPING,
+  DrillthroughBean.JSON_PROPERTY_COLUMNS,
+  DrillthroughBean.JSON_PROPERTY_DRILLABLE_REGIONS,
+  DrillthroughBean.JSON_PROPERTY_PARAMETER_MAPPING,
+  DrillthroughBean.JSON_PROPERTY_USE_TEMP_TABLES,
+  DrillthroughBean.JSON_PROPERTY_TYPE,
+  DrillthroughBean.JSON_PROPERTY_NAME
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class DrillthroughBean {
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_DATA_SOURCE_NAME = "dataSourceName";
-  @SerializedName(SERIALIZED_NAME_DATA_SOURCE_NAME)
+  public static final String JSON_PROPERTY_DATA_SOURCE_NAME = "dataSourceName";
+  @jakarta.annotation.Nullable
   private String dataSourceName;
 
-  public static final String SERIALIZED_NAME_URL = "url";
-  @SerializedName(SERIALIZED_NAME_URL)
+  public static final String JSON_PROPERTY_URL = "url";
+  @jakarta.annotation.Nullable
   private String url;
 
-  public static final String SERIALIZED_NAME_COLUMN_MAPPING = "columnMapping";
-  @SerializedName(SERIALIZED_NAME_COLUMN_MAPPING)
-  private Map<String, ColumnMappingInfo> columnMapping = null;
+  public static final String JSON_PROPERTY_COLUMN_MAPPING = "columnMapping";
+  @jakarta.annotation.Nullable
+  private Map<String, ColumnMappingInfo> columnMapping = new HashMap<>();
 
-  public static final String SERIALIZED_NAME_COLUMNS = "columns";
-  @SerializedName(SERIALIZED_NAME_COLUMNS)
-  private List<String> columns = null;
+  public static final String JSON_PROPERTY_COLUMNS = "columns";
+  @jakarta.annotation.Nullable
+  private List<String> columns = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_DRILLABLE_REGIONS = "drillableRegions";
-  @SerializedName(SERIALIZED_NAME_DRILLABLE_REGIONS)
-  private List<String> drillableRegions = null;
+  public static final String JSON_PROPERTY_DRILLABLE_REGIONS = "drillableRegions";
+  @jakarta.annotation.Nullable
+  private List<String> drillableRegions = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_PARAMETER_MAPPING = "parameterMapping";
-  @SerializedName(SERIALIZED_NAME_PARAMETER_MAPPING)
-  private Map<String, RunTimeParametersInfo> parameterMapping = null;
+  public static final String JSON_PROPERTY_PARAMETER_MAPPING = "parameterMapping";
+  @jakarta.annotation.Nullable
+  private Map<String, RunTimeParametersInfo> parameterMapping = new HashMap<>();
 
-  public static final String SERIALIZED_NAME_USE_TEMP_TABLES = "useTempTables";
-  @SerializedName(SERIALIZED_NAME_USE_TEMP_TABLES)
+  public static final String JSON_PROPERTY_USE_TEMP_TABLES = "useTempTables";
+  @jakarta.annotation.Nullable
   private Boolean useTempTables;
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nullable
   private String type;
 
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
+  public DrillthroughBean() { 
+  }
 
-  public DrillthroughBean links(List<Link> links) {
-    
+  public DrillthroughBean links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public DrillthroughBean addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
-  public DrillthroughBean dataSourceName(String dataSourceName) {
-    
+  public DrillthroughBean dataSourceName(@jakarta.annotation.Nullable String dataSourceName) {
     this.dataSourceName = dataSourceName;
     return this;
   }
 
-   /**
+  /**
    * Get dataSourceName
    * @return dataSourceName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_SOURCE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDataSourceName() {
     return dataSourceName;
   }
 
 
-  public void setDataSourceName(String dataSourceName) {
+  @JsonProperty(JSON_PROPERTY_DATA_SOURCE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataSourceName(@jakarta.annotation.Nullable String dataSourceName) {
     this.dataSourceName = dataSourceName;
   }
 
 
-  public DrillthroughBean url(String url) {
-    
+  public DrillthroughBean url(@jakarta.annotation.Nullable String url) {
     this.url = url;
     return this;
   }
 
-   /**
+  /**
    * Get url
    * @return url
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_URL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getUrl() {
     return url;
   }
 
 
-  public void setUrl(String url) {
+  @JsonProperty(JSON_PROPERTY_URL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUrl(@jakarta.annotation.Nullable String url) {
     this.url = url;
   }
 
 
-  public DrillthroughBean columnMapping(Map<String, ColumnMappingInfo> columnMapping) {
-    
+  public DrillthroughBean columnMapping(@jakarta.annotation.Nullable Map<String, ColumnMappingInfo> columnMapping) {
     this.columnMapping = columnMapping;
     return this;
   }
 
   public DrillthroughBean putColumnMappingItem(String key, ColumnMappingInfo columnMappingItem) {
     if (this.columnMapping == null) {
-      this.columnMapping = new HashMap<String, ColumnMappingInfo>();
+      this.columnMapping = new HashMap<>();
     }
     this.columnMapping.put(key, columnMappingItem);
     return this;
   }
 
-   /**
+  /**
    * Get columnMapping
    * @return columnMapping
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COLUMN_MAPPING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Map<String, ColumnMappingInfo> getColumnMapping() {
     return columnMapping;
   }
 
 
-  public void setColumnMapping(Map<String, ColumnMappingInfo> columnMapping) {
+  @JsonProperty(JSON_PROPERTY_COLUMN_MAPPING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setColumnMapping(@jakarta.annotation.Nullable Map<String, ColumnMappingInfo> columnMapping) {
     this.columnMapping = columnMapping;
   }
 
 
-  public DrillthroughBean columns(List<String> columns) {
-    
+  public DrillthroughBean columns(@jakarta.annotation.Nullable List<String> columns) {
     this.columns = columns;
     return this;
   }
 
   public DrillthroughBean addColumnsItem(String columnsItem) {
     if (this.columns == null) {
-      this.columns = new ArrayList<String>();
+      this.columns = new ArrayList<>();
     }
     this.columns.add(columnsItem);
     return this;
   }
 
-   /**
+  /**
    * Get columns
    * @return columns
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getColumns() {
     return columns;
   }
 
 
-  public void setColumns(List<String> columns) {
+  @JsonProperty(JSON_PROPERTY_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setColumns(@jakarta.annotation.Nullable List<String> columns) {
     this.columns = columns;
   }
 
 
-  public DrillthroughBean drillableRegions(List<String> drillableRegions) {
-    
+  public DrillthroughBean drillableRegions(@jakarta.annotation.Nullable List<String> drillableRegions) {
     this.drillableRegions = drillableRegions;
     return this;
   }
 
   public DrillthroughBean addDrillableRegionsItem(String drillableRegionsItem) {
     if (this.drillableRegions == null) {
-      this.drillableRegions = new ArrayList<String>();
+      this.drillableRegions = new ArrayList<>();
     }
     this.drillableRegions.add(drillableRegionsItem);
     return this;
   }
 
-   /**
+  /**
    * Get drillableRegions
    * @return drillableRegions
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DRILLABLE_REGIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getDrillableRegions() {
     return drillableRegions;
   }
 
 
-  public void setDrillableRegions(List<String> drillableRegions) {
+  @JsonProperty(JSON_PROPERTY_DRILLABLE_REGIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDrillableRegions(@jakarta.annotation.Nullable List<String> drillableRegions) {
     this.drillableRegions = drillableRegions;
   }
 
 
-  public DrillthroughBean parameterMapping(Map<String, RunTimeParametersInfo> parameterMapping) {
-    
+  public DrillthroughBean parameterMapping(@jakarta.annotation.Nullable Map<String, RunTimeParametersInfo> parameterMapping) {
     this.parameterMapping = parameterMapping;
     return this;
   }
 
   public DrillthroughBean putParameterMappingItem(String key, RunTimeParametersInfo parameterMappingItem) {
     if (this.parameterMapping == null) {
-      this.parameterMapping = new HashMap<String, RunTimeParametersInfo>();
+      this.parameterMapping = new HashMap<>();
     }
     this.parameterMapping.put(key, parameterMappingItem);
     return this;
   }
 
-   /**
+  /**
    * Get parameterMapping
    * @return parameterMapping
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PARAMETER_MAPPING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Map<String, RunTimeParametersInfo> getParameterMapping() {
     return parameterMapping;
   }
 
 
-  public void setParameterMapping(Map<String, RunTimeParametersInfo> parameterMapping) {
+  @JsonProperty(JSON_PROPERTY_PARAMETER_MAPPING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setParameterMapping(@jakarta.annotation.Nullable Map<String, RunTimeParametersInfo> parameterMapping) {
     this.parameterMapping = parameterMapping;
   }
 
 
-  public DrillthroughBean useTempTables(Boolean useTempTables) {
-    
+  public DrillthroughBean useTempTables(@jakarta.annotation.Nullable Boolean useTempTables) {
     this.useTempTables = useTempTables;
     return this;
   }
 
-   /**
+  /**
    * Get useTempTables
    * @return useTempTables
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USE_TEMP_TABLES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getUseTempTables() {
     return useTempTables;
   }
 
 
-  public void setUseTempTables(Boolean useTempTables) {
+  @JsonProperty(JSON_PROPERTY_USE_TEMP_TABLES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUseTempTables(@jakarta.annotation.Nullable Boolean useTempTables) {
     this.useTempTables = useTempTables;
   }
 
 
-  public DrillthroughBean type(String type) {
-    
+  public DrillthroughBean type(@jakarta.annotation.Nullable String type) {
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getType() {
     return type;
   }
 
 
-  public void setType(String type) {
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setType(@jakarta.annotation.Nullable String type) {
     this.type = type;
   }
 
 
-  public DrillthroughBean name(String name) {
-    
+  public DrillthroughBean name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
+  /**
+   * Return true if this DrillthroughBean object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -402,5 +434,112 @@ public class DrillthroughBean {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `dataSourceName` to the URL query string
+    if (getDataSourceName() != null) {
+      joiner.add(String.format("%sdataSourceName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataSourceName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `url` to the URL query string
+    if (getUrl() != null) {
+      joiner.add(String.format("%surl%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUrl()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `columnMapping` to the URL query string
+    if (getColumnMapping() != null) {
+      for (String _key : getColumnMapping().keySet()) {
+        if (getColumnMapping().get(_key) != null) {
+          joiner.add(getColumnMapping().get(_key).toUrlQueryString(String.format("%scolumnMapping%s%s", prefix, suffix,
+              "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, _key, containerSuffix))));
+        }
+      }
+    }
+
+    // add `columns` to the URL query string
+    if (getColumns() != null) {
+      for (int i = 0; i < getColumns().size(); i++) {
+        joiner.add(String.format("%scolumns%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getColumns().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `drillableRegions` to the URL query string
+    if (getDrillableRegions() != null) {
+      for (int i = 0; i < getDrillableRegions().size(); i++) {
+        joiner.add(String.format("%sdrillableRegions%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getDrillableRegions().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `parameterMapping` to the URL query string
+    if (getParameterMapping() != null) {
+      for (String _key : getParameterMapping().keySet()) {
+        if (getParameterMapping().get(_key) != null) {
+          joiner.add(getParameterMapping().get(_key).toUrlQueryString(String.format("%sparameterMapping%s%s", prefix, suffix,
+              "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, _key, containerSuffix))));
+        }
+      }
+    }
+
+    // add `useTempTables` to the URL query string
+    if (getUseTempTables() != null) {
+      joiner.add(String.format("%suseTempTables%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUseTempTables()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

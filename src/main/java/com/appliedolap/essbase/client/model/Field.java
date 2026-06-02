@@ -13,49 +13,73 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.FieldDataLoadOptions;
 import com.appliedolap.essbase.client.model.FieldDimBuildOptions;
 import com.appliedolap.essbase.client.model.Filter;
 import com.appliedolap.essbase.client.model.ReplaceInfo;
 import com.appliedolap.essbase.client.model.Transform;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * Field
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  Field.JSON_PROPERTY_REJECT_FILTERS,
+  Field.JSON_PROPERTY_SELECT_FILTERS,
+  Field.JSON_PROPERTY_REPLACE_INFORMATION,
+  Field.JSON_PROPERTY_SELECT_FILTER_JOIN_OPTION,
+  Field.JSON_PROPERTY_REJECT_FILTER_JOIN_OPTION,
+  Field.JSON_PROPERTY_DATE_FORMAT,
+  Field.JSON_PROPERTY_NAME,
+  Field.JSON_PROPERTY_PREFIX,
+  Field.JSON_PROPERTY_SUFFIX,
+  Field.JSON_PROPERTY_OPTION,
+  Field.JSON_PROPERTY_CONVERT_SPACE_TO_UNDER_SCORE,
+  Field.JSON_PROPERTY_TRIM,
+  Field.JSON_PROPERTY_WIDTH,
+  Field.JSON_PROPERTY_SMART_LIST,
+  Field.JSON_PROPERTY_DIMENSION_BUILD_OPTIONS,
+  Field.JSON_PROPERTY_DATALOAD_OPTIONS,
+  Field.JSON_PROPERTY_TRANSFORM,
+  Field.JSON_PROPERTY_CASE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class Field {
-  public static final String SERIALIZED_NAME_REJECT_FILTERS = "rejectFilters";
-  @SerializedName(SERIALIZED_NAME_REJECT_FILTERS)
-  private List<Filter> rejectFilters = null;
+  public static final String JSON_PROPERTY_REJECT_FILTERS = "rejectFilters";
+  @jakarta.annotation.Nullable
+  private List<Filter> rejectFilters = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_SELECT_FILTERS = "selectFilters";
-  @SerializedName(SERIALIZED_NAME_SELECT_FILTERS)
-  private List<Filter> selectFilters = null;
+  public static final String JSON_PROPERTY_SELECT_FILTERS = "selectFilters";
+  @jakarta.annotation.Nullable
+  private List<Filter> selectFilters = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_REPLACE_INFORMATION = "replaceInformation";
-  @SerializedName(SERIALIZED_NAME_REPLACE_INFORMATION)
-  private List<ReplaceInfo> replaceInformation = null;
+  public static final String JSON_PROPERTY_REPLACE_INFORMATION = "replaceInformation";
+  @jakarta.annotation.Nullable
+  private List<ReplaceInfo> replaceInformation = new ArrayList<>();
 
   /**
    * Gets or Sets selectFilterJoinOption
    */
-  @JsonAdapter(SelectFilterJoinOptionEnum.Adapter.class)
   public enum SelectFilterJoinOptionEnum {
-    AND("AND"),
+    AND(String.valueOf("AND")),
     
-    OR("OR");
+    OR(String.valueOf("OR"));
 
     private String value;
 
@@ -63,6 +87,7 @@ public class Field {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -72,6 +97,7 @@ public class Field {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static SelectFilterJoinOptionEnum fromValue(String value) {
       for (SelectFilterJoinOptionEnum b : SelectFilterJoinOptionEnum.values()) {
         if (b.value.equals(value)) {
@@ -80,33 +106,19 @@ public class Field {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<SelectFilterJoinOptionEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final SelectFilterJoinOptionEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public SelectFilterJoinOptionEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return SelectFilterJoinOptionEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_SELECT_FILTER_JOIN_OPTION = "selectFilterJoinOption";
-  @SerializedName(SERIALIZED_NAME_SELECT_FILTER_JOIN_OPTION)
+  public static final String JSON_PROPERTY_SELECT_FILTER_JOIN_OPTION = "selectFilterJoinOption";
+  @jakarta.annotation.Nullable
   private SelectFilterJoinOptionEnum selectFilterJoinOption;
 
   /**
    * Gets or Sets rejectFilterJoinOption
    */
-  @JsonAdapter(RejectFilterJoinOptionEnum.Adapter.class)
   public enum RejectFilterJoinOptionEnum {
-    AND("AND"),
+    AND(String.valueOf("AND")),
     
-    OR("OR");
+    OR(String.valueOf("OR"));
 
     private String value;
 
@@ -114,6 +126,7 @@ public class Field {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -123,6 +136,7 @@ public class Field {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static RejectFilterJoinOptionEnum fromValue(String value) {
       for (RejectFilterJoinOptionEnum b : RejectFilterJoinOptionEnum.values()) {
         if (b.value.equals(value)) {
@@ -131,85 +145,71 @@ public class Field {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<RejectFilterJoinOptionEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final RejectFilterJoinOptionEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public RejectFilterJoinOptionEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return RejectFilterJoinOptionEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_REJECT_FILTER_JOIN_OPTION = "rejectFilterJoinOption";
-  @SerializedName(SERIALIZED_NAME_REJECT_FILTER_JOIN_OPTION)
+  public static final String JSON_PROPERTY_REJECT_FILTER_JOIN_OPTION = "rejectFilterJoinOption";
+  @jakarta.annotation.Nullable
   private RejectFilterJoinOptionEnum rejectFilterJoinOption;
 
-  public static final String SERIALIZED_NAME_DATE_FORMAT = "dateFormat";
-  @SerializedName(SERIALIZED_NAME_DATE_FORMAT)
+  public static final String JSON_PROPERTY_DATE_FORMAT = "dateFormat";
+  @jakarta.annotation.Nullable
   private String dateFormat;
 
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
-  public static final String SERIALIZED_NAME_PREFIX = "prefix";
-  @SerializedName(SERIALIZED_NAME_PREFIX)
+  public static final String JSON_PROPERTY_PREFIX = "prefix";
+  @jakarta.annotation.Nullable
   private String prefix;
 
-  public static final String SERIALIZED_NAME_SUFFIX = "suffix";
-  @SerializedName(SERIALIZED_NAME_SUFFIX)
+  public static final String JSON_PROPERTY_SUFFIX = "suffix";
+  @jakarta.annotation.Nullable
   private String suffix;
 
-  public static final String SERIALIZED_NAME_OPTION = "option";
-  @SerializedName(SERIALIZED_NAME_OPTION)
+  public static final String JSON_PROPERTY_OPTION = "option";
+  @jakarta.annotation.Nullable
   private byte[] option;
 
-  public static final String SERIALIZED_NAME_CONVERT_SPACE_TO_UNDER_SCORE = "convertSpaceToUnderScore";
-  @SerializedName(SERIALIZED_NAME_CONVERT_SPACE_TO_UNDER_SCORE)
+  public static final String JSON_PROPERTY_CONVERT_SPACE_TO_UNDER_SCORE = "convertSpaceToUnderScore";
+  @jakarta.annotation.Nullable
   private Boolean convertSpaceToUnderScore;
 
-  public static final String SERIALIZED_NAME_TRIM = "trim";
-  @SerializedName(SERIALIZED_NAME_TRIM)
+  public static final String JSON_PROPERTY_TRIM = "trim";
+  @jakarta.annotation.Nullable
   private Boolean trim;
 
-  public static final String SERIALIZED_NAME_WIDTH = "width";
-  @SerializedName(SERIALIZED_NAME_WIDTH)
+  public static final String JSON_PROPERTY_WIDTH = "width";
+  @jakarta.annotation.Nullable
   private Double width;
 
-  public static final String SERIALIZED_NAME_SMART_LIST = "smartList";
-  @SerializedName(SERIALIZED_NAME_SMART_LIST)
+  public static final String JSON_PROPERTY_SMART_LIST = "smartList";
+  @jakarta.annotation.Nullable
   private String smartList;
 
-  public static final String SERIALIZED_NAME_DIMENSION_BUILD_OPTIONS = "dimensionBuildOptions";
-  @SerializedName(SERIALIZED_NAME_DIMENSION_BUILD_OPTIONS)
+  public static final String JSON_PROPERTY_DIMENSION_BUILD_OPTIONS = "dimensionBuildOptions";
+  @jakarta.annotation.Nullable
   private FieldDimBuildOptions dimensionBuildOptions;
 
-  public static final String SERIALIZED_NAME_DATALOAD_OPTIONS = "dataloadOptions";
-  @SerializedName(SERIALIZED_NAME_DATALOAD_OPTIONS)
+  public static final String JSON_PROPERTY_DATALOAD_OPTIONS = "dataloadOptions";
+  @jakarta.annotation.Nullable
   private FieldDataLoadOptions dataloadOptions;
 
-  public static final String SERIALIZED_NAME_TRANSFORM = "transform";
-  @SerializedName(SERIALIZED_NAME_TRANSFORM)
+  public static final String JSON_PROPERTY_TRANSFORM = "transform";
+  @jakarta.annotation.Nullable
   private Transform transform;
 
   /**
    * Gets or Sets _case
    */
-  @JsonAdapter(CaseEnum.Adapter.class)
   public enum CaseEnum {
-    NOOP("NOOP"),
+    NOOP(String.valueOf("NOOP")),
     
-    LOWER_CASE("LOWER_CASE"),
+    LOWER_CASE(String.valueOf("LOWER_CASE")),
     
-    UPPER_CASE("UPPER_CASE"),
+    UPPER_CASE(String.valueOf("UPPER_CASE")),
     
-    FIRST_CAPITAL_CASE("FIRST_CAPITAL_CASE");
+    FIRST_CAPITAL_CASE(String.valueOf("FIRST_CAPITAL_CASE"));
 
     private String value;
 
@@ -217,6 +217,7 @@ public class Field {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -226,6 +227,7 @@ public class Field {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static CaseEnum fromValue(String value) {
       for (CaseEnum b : CaseEnum.values()) {
         if (b.value.equals(value)) {
@@ -234,464 +236,474 @@ public class Field {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<CaseEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final CaseEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public CaseEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return CaseEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_CASE = "case";
-  @SerializedName(SERIALIZED_NAME_CASE)
+  public static final String JSON_PROPERTY_CASE = "case";
+  @jakarta.annotation.Nullable
   private CaseEnum _case;
 
+  public Field() { 
+  }
 
-  public Field rejectFilters(List<Filter> rejectFilters) {
-    
+  public Field rejectFilters(@jakarta.annotation.Nullable List<Filter> rejectFilters) {
     this.rejectFilters = rejectFilters;
     return this;
   }
 
   public Field addRejectFiltersItem(Filter rejectFiltersItem) {
     if (this.rejectFilters == null) {
-      this.rejectFilters = new ArrayList<Filter>();
+      this.rejectFilters = new ArrayList<>();
     }
     this.rejectFilters.add(rejectFiltersItem);
     return this;
   }
 
-   /**
+  /**
    * Get rejectFilters
    * @return rejectFilters
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REJECT_FILTERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Filter> getRejectFilters() {
     return rejectFilters;
   }
 
 
-  public void setRejectFilters(List<Filter> rejectFilters) {
+  @JsonProperty(JSON_PROPERTY_REJECT_FILTERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRejectFilters(@jakarta.annotation.Nullable List<Filter> rejectFilters) {
     this.rejectFilters = rejectFilters;
   }
 
 
-  public Field selectFilters(List<Filter> selectFilters) {
-    
+  public Field selectFilters(@jakarta.annotation.Nullable List<Filter> selectFilters) {
     this.selectFilters = selectFilters;
     return this;
   }
 
   public Field addSelectFiltersItem(Filter selectFiltersItem) {
     if (this.selectFilters == null) {
-      this.selectFilters = new ArrayList<Filter>();
+      this.selectFilters = new ArrayList<>();
     }
     this.selectFilters.add(selectFiltersItem);
     return this;
   }
 
-   /**
+  /**
    * Get selectFilters
    * @return selectFilters
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SELECT_FILTERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Filter> getSelectFilters() {
     return selectFilters;
   }
 
 
-  public void setSelectFilters(List<Filter> selectFilters) {
+  @JsonProperty(JSON_PROPERTY_SELECT_FILTERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSelectFilters(@jakarta.annotation.Nullable List<Filter> selectFilters) {
     this.selectFilters = selectFilters;
   }
 
 
-  public Field replaceInformation(List<ReplaceInfo> replaceInformation) {
-    
+  public Field replaceInformation(@jakarta.annotation.Nullable List<ReplaceInfo> replaceInformation) {
     this.replaceInformation = replaceInformation;
     return this;
   }
 
   public Field addReplaceInformationItem(ReplaceInfo replaceInformationItem) {
     if (this.replaceInformation == null) {
-      this.replaceInformation = new ArrayList<ReplaceInfo>();
+      this.replaceInformation = new ArrayList<>();
     }
     this.replaceInformation.add(replaceInformationItem);
     return this;
   }
 
-   /**
+  /**
    * Get replaceInformation
    * @return replaceInformation
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REPLACE_INFORMATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<ReplaceInfo> getReplaceInformation() {
     return replaceInformation;
   }
 
 
-  public void setReplaceInformation(List<ReplaceInfo> replaceInformation) {
+  @JsonProperty(JSON_PROPERTY_REPLACE_INFORMATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setReplaceInformation(@jakarta.annotation.Nullable List<ReplaceInfo> replaceInformation) {
     this.replaceInformation = replaceInformation;
   }
 
 
-  public Field selectFilterJoinOption(SelectFilterJoinOptionEnum selectFilterJoinOption) {
-    
+  public Field selectFilterJoinOption(@jakarta.annotation.Nullable SelectFilterJoinOptionEnum selectFilterJoinOption) {
     this.selectFilterJoinOption = selectFilterJoinOption;
     return this;
   }
 
-   /**
+  /**
    * Get selectFilterJoinOption
    * @return selectFilterJoinOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SELECT_FILTER_JOIN_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public SelectFilterJoinOptionEnum getSelectFilterJoinOption() {
     return selectFilterJoinOption;
   }
 
 
-  public void setSelectFilterJoinOption(SelectFilterJoinOptionEnum selectFilterJoinOption) {
+  @JsonProperty(JSON_PROPERTY_SELECT_FILTER_JOIN_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSelectFilterJoinOption(@jakarta.annotation.Nullable SelectFilterJoinOptionEnum selectFilterJoinOption) {
     this.selectFilterJoinOption = selectFilterJoinOption;
   }
 
 
-  public Field rejectFilterJoinOption(RejectFilterJoinOptionEnum rejectFilterJoinOption) {
-    
+  public Field rejectFilterJoinOption(@jakarta.annotation.Nullable RejectFilterJoinOptionEnum rejectFilterJoinOption) {
     this.rejectFilterJoinOption = rejectFilterJoinOption;
     return this;
   }
 
-   /**
+  /**
    * Get rejectFilterJoinOption
    * @return rejectFilterJoinOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REJECT_FILTER_JOIN_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public RejectFilterJoinOptionEnum getRejectFilterJoinOption() {
     return rejectFilterJoinOption;
   }
 
 
-  public void setRejectFilterJoinOption(RejectFilterJoinOptionEnum rejectFilterJoinOption) {
+  @JsonProperty(JSON_PROPERTY_REJECT_FILTER_JOIN_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRejectFilterJoinOption(@jakarta.annotation.Nullable RejectFilterJoinOptionEnum rejectFilterJoinOption) {
     this.rejectFilterJoinOption = rejectFilterJoinOption;
   }
 
 
-  public Field dateFormat(String dateFormat) {
-    
+  public Field dateFormat(@jakarta.annotation.Nullable String dateFormat) {
     this.dateFormat = dateFormat;
     return this;
   }
 
-   /**
+  /**
    * Get dateFormat
    * @return dateFormat
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATE_FORMAT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDateFormat() {
     return dateFormat;
   }
 
 
-  public void setDateFormat(String dateFormat) {
+  @JsonProperty(JSON_PROPERTY_DATE_FORMAT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDateFormat(@jakarta.annotation.Nullable String dateFormat) {
     this.dateFormat = dateFormat;
   }
 
 
-  public Field name(String name) {
-    
+  public Field name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
-  public Field prefix(String prefix) {
-    
+  public Field prefix(@jakarta.annotation.Nullable String prefix) {
     this.prefix = prefix;
     return this;
   }
 
-   /**
+  /**
    * Get prefix
    * @return prefix
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PREFIX)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getPrefix() {
     return prefix;
   }
 
 
-  public void setPrefix(String prefix) {
+  @JsonProperty(JSON_PROPERTY_PREFIX)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPrefix(@jakarta.annotation.Nullable String prefix) {
     this.prefix = prefix;
   }
 
 
-  public Field suffix(String suffix) {
-    
+  public Field suffix(@jakarta.annotation.Nullable String suffix) {
     this.suffix = suffix;
     return this;
   }
 
-   /**
+  /**
    * Get suffix
    * @return suffix
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SUFFIX)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getSuffix() {
     return suffix;
   }
 
 
-  public void setSuffix(String suffix) {
+  @JsonProperty(JSON_PROPERTY_SUFFIX)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSuffix(@jakarta.annotation.Nullable String suffix) {
     this.suffix = suffix;
   }
 
 
-  public Field option(byte[] option) {
-    
+  public Field option(@jakarta.annotation.Nullable byte[] option) {
     this.option = option;
     return this;
   }
 
-   /**
+  /**
    * Get option
    * @return option
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public byte[] getOption() {
     return option;
   }
 
 
-  public void setOption(byte[] option) {
+  @JsonProperty(JSON_PROPERTY_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOption(@jakarta.annotation.Nullable byte[] option) {
     this.option = option;
   }
 
 
-  public Field convertSpaceToUnderScore(Boolean convertSpaceToUnderScore) {
-    
+  public Field convertSpaceToUnderScore(@jakarta.annotation.Nullable Boolean convertSpaceToUnderScore) {
     this.convertSpaceToUnderScore = convertSpaceToUnderScore;
     return this;
   }
 
-   /**
+  /**
    * Get convertSpaceToUnderScore
    * @return convertSpaceToUnderScore
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CONVERT_SPACE_TO_UNDER_SCORE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getConvertSpaceToUnderScore() {
     return convertSpaceToUnderScore;
   }
 
 
-  public void setConvertSpaceToUnderScore(Boolean convertSpaceToUnderScore) {
+  @JsonProperty(JSON_PROPERTY_CONVERT_SPACE_TO_UNDER_SCORE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setConvertSpaceToUnderScore(@jakarta.annotation.Nullable Boolean convertSpaceToUnderScore) {
     this.convertSpaceToUnderScore = convertSpaceToUnderScore;
   }
 
 
-  public Field trim(Boolean trim) {
-    
+  public Field trim(@jakarta.annotation.Nullable Boolean trim) {
     this.trim = trim;
     return this;
   }
 
-   /**
+  /**
    * Get trim
    * @return trim
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TRIM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getTrim() {
     return trim;
   }
 
 
-  public void setTrim(Boolean trim) {
+  @JsonProperty(JSON_PROPERTY_TRIM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTrim(@jakarta.annotation.Nullable Boolean trim) {
     this.trim = trim;
   }
 
 
-  public Field width(Double width) {
-    
+  public Field width(@jakarta.annotation.Nullable Double width) {
     this.width = width;
     return this;
   }
 
-   /**
+  /**
    * Get width
    * @return width
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_WIDTH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getWidth() {
     return width;
   }
 
 
-  public void setWidth(Double width) {
+  @JsonProperty(JSON_PROPERTY_WIDTH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWidth(@jakarta.annotation.Nullable Double width) {
     this.width = width;
   }
 
 
-  public Field smartList(String smartList) {
-    
+  public Field smartList(@jakarta.annotation.Nullable String smartList) {
     this.smartList = smartList;
     return this;
   }
 
-   /**
+  /**
    * Get smartList
    * @return smartList
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SMART_LIST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getSmartList() {
     return smartList;
   }
 
 
-  public void setSmartList(String smartList) {
+  @JsonProperty(JSON_PROPERTY_SMART_LIST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSmartList(@jakarta.annotation.Nullable String smartList) {
     this.smartList = smartList;
   }
 
 
-  public Field dimensionBuildOptions(FieldDimBuildOptions dimensionBuildOptions) {
-    
+  public Field dimensionBuildOptions(@jakarta.annotation.Nullable FieldDimBuildOptions dimensionBuildOptions) {
     this.dimensionBuildOptions = dimensionBuildOptions;
     return this;
   }
 
-   /**
+  /**
    * Get dimensionBuildOptions
    * @return dimensionBuildOptions
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIMENSION_BUILD_OPTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public FieldDimBuildOptions getDimensionBuildOptions() {
     return dimensionBuildOptions;
   }
 
 
-  public void setDimensionBuildOptions(FieldDimBuildOptions dimensionBuildOptions) {
+  @JsonProperty(JSON_PROPERTY_DIMENSION_BUILD_OPTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimensionBuildOptions(@jakarta.annotation.Nullable FieldDimBuildOptions dimensionBuildOptions) {
     this.dimensionBuildOptions = dimensionBuildOptions;
   }
 
 
-  public Field dataloadOptions(FieldDataLoadOptions dataloadOptions) {
-    
+  public Field dataloadOptions(@jakarta.annotation.Nullable FieldDataLoadOptions dataloadOptions) {
     this.dataloadOptions = dataloadOptions;
     return this;
   }
 
-   /**
+  /**
    * Get dataloadOptions
    * @return dataloadOptions
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATALOAD_OPTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public FieldDataLoadOptions getDataloadOptions() {
     return dataloadOptions;
   }
 
 
-  public void setDataloadOptions(FieldDataLoadOptions dataloadOptions) {
+  @JsonProperty(JSON_PROPERTY_DATALOAD_OPTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataloadOptions(@jakarta.annotation.Nullable FieldDataLoadOptions dataloadOptions) {
     this.dataloadOptions = dataloadOptions;
   }
 
 
-  public Field transform(Transform transform) {
-    
+  public Field transform(@jakarta.annotation.Nullable Transform transform) {
     this.transform = transform;
     return this;
   }
 
-   /**
+  /**
    * Get transform
    * @return transform
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TRANSFORM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Transform getTransform() {
     return transform;
   }
 
 
-  public void setTransform(Transform transform) {
+  @JsonProperty(JSON_PROPERTY_TRANSFORM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTransform(@jakarta.annotation.Nullable Transform transform) {
     this.transform = transform;
   }
 
 
-  public Field _case(CaseEnum _case) {
-    
+  public Field _case(@jakarta.annotation.Nullable CaseEnum _case) {
     this._case = _case;
     return this;
   }
 
-   /**
+  /**
    * Get _case
    * @return _case
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public CaseEnum getCase() {
     return _case;
   }
 
 
-  public void setCase(CaseEnum _case) {
+  @JsonProperty(JSON_PROPERTY_CASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCase(@jakarta.annotation.Nullable CaseEnum _case) {
     this._case = _case;
   }
 
 
+  /**
+   * Return true if this Field object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -763,5 +775,144 @@ public class Field {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `rejectFilters` to the URL query string
+    if (getRejectFilters() != null) {
+      for (int i = 0; i < getRejectFilters().size(); i++) {
+        if (getRejectFilters().get(i) != null) {
+          joiner.add(getRejectFilters().get(i).toUrlQueryString(String.format("%srejectFilters%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `selectFilters` to the URL query string
+    if (getSelectFilters() != null) {
+      for (int i = 0; i < getSelectFilters().size(); i++) {
+        if (getSelectFilters().get(i) != null) {
+          joiner.add(getSelectFilters().get(i).toUrlQueryString(String.format("%sselectFilters%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `replaceInformation` to the URL query string
+    if (getReplaceInformation() != null) {
+      for (int i = 0; i < getReplaceInformation().size(); i++) {
+        if (getReplaceInformation().get(i) != null) {
+          joiner.add(getReplaceInformation().get(i).toUrlQueryString(String.format("%sreplaceInformation%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `selectFilterJoinOption` to the URL query string
+    if (getSelectFilterJoinOption() != null) {
+      joiner.add(String.format("%sselectFilterJoinOption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSelectFilterJoinOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `rejectFilterJoinOption` to the URL query string
+    if (getRejectFilterJoinOption() != null) {
+      joiner.add(String.format("%srejectFilterJoinOption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRejectFilterJoinOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dateFormat` to the URL query string
+    if (getDateFormat() != null) {
+      joiner.add(String.format("%sdateFormat%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDateFormat()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `prefix` to the URL query string
+    if (getPrefix() != null) {
+      joiner.add(String.format("%sprefix%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPrefix()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `suffix` to the URL query string
+    if (getSuffix() != null) {
+      joiner.add(String.format("%ssuffix%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSuffix()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `option` to the URL query string
+    if (getOption() != null) {
+      joiner.add(String.format("%soption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `convertSpaceToUnderScore` to the URL query string
+    if (getConvertSpaceToUnderScore() != null) {
+      joiner.add(String.format("%sconvertSpaceToUnderScore%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getConvertSpaceToUnderScore()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `trim` to the URL query string
+    if (getTrim() != null) {
+      joiner.add(String.format("%strim%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTrim()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `width` to the URL query string
+    if (getWidth() != null) {
+      joiner.add(String.format("%swidth%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getWidth()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `smartList` to the URL query string
+    if (getSmartList() != null) {
+      joiner.add(String.format("%ssmartList%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSmartList()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dimensionBuildOptions` to the URL query string
+    if (getDimensionBuildOptions() != null) {
+      joiner.add(getDimensionBuildOptions().toUrlQueryString(prefix + "dimensionBuildOptions" + suffix));
+    }
+
+    // add `dataloadOptions` to the URL query string
+    if (getDataloadOptions() != null) {
+      joiner.add(getDataloadOptions().toUrlQueryString(prefix + "dataloadOptions" + suffix));
+    }
+
+    // add `transform` to the URL query string
+    if (getTransform() != null) {
+      joiner.add(getTransform().toUrlQueryString(prefix + "transform" + suffix));
+    }
+
+    // add `case` to the URL query string
+    if (getCase() != null) {
+      joiner.add(String.format("%scase%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCase()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

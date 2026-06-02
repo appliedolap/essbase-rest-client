@@ -10,1086 +10,731 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.DimensionList;
 import com.appliedolap.essbase.client.model.GenerationLevel;
 import com.appliedolap.essbase.client.model.GenerationLevelList;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class DimensionsApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public DimensionsApi() {
-        this(Configuration.getDefaultApiClient());
+  public DimensionsApi() {
+    this(new ApiClient());
+  }
+
+  public DimensionsApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public DimensionsApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Update Generation
+   * &lt;p&gt;Updates and returns generation details of a dimension, based on the specified generation number, application, and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
+   * @param generationNumber &lt;p&gt;Generation number.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Generation details.&lt;/p&gt; (required)
+   * @return GenerationLevel
+   * @throws ApiException if fails to make API call
+   */
+  public GenerationLevel dimensionsEditDimGenerations(String applicationName, String databaseName, String dimensionName, Integer generationNumber, GenerationLevel body) throws ApiException {
+    ApiResponse<GenerationLevel> localVarResponse = dimensionsEditDimGenerationsWithHttpInfo(applicationName, databaseName, dimensionName, generationNumber, body);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for dimensionsEditDimGenerations
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param generationNumber &lt;p&gt;Generation number.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Generation details.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Generation details updated successfully, including links to get or edit the generation.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the generation. The application name, database name, dimension name, or generation number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionsEditDimGenerationsCall(String applicationName, String databaseName, String dimensionName, Integer generationNumber, GenerationLevel body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/generations/{generationNumber}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "dimensionName" + "\\}", localVarApiClient.escapeString(dimensionName.toString()))
-            .replaceAll("\\{" + "generationNumber" + "\\}", localVarApiClient.escapeString(generationNumber.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Update Generation
+   * &lt;p&gt;Updates and returns generation details of a dimension, based on the specified generation number, application, and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
+   * @param generationNumber &lt;p&gt;Generation number.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Generation details.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;GenerationLevel&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<GenerationLevel> dimensionsEditDimGenerationsWithHttpInfo(String applicationName, String databaseName, String dimensionName, Integer generationNumber, GenerationLevel body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = dimensionsEditDimGenerationsRequestBuilder(applicationName, databaseName, dimensionName, generationNumber, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("dimensionsEditDimGenerations", localVarResponse);
         }
+        return new ApiResponse<GenerationLevel>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<GenerationLevel>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder dimensionsEditDimGenerationsRequestBuilder(String applicationName, String databaseName, String dimensionName, Integer generationNumber, GenerationLevel body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling dimensionsEditDimGenerations");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling dimensionsEditDimGenerations");
+    }
+    // verify the required parameter 'dimensionName' is set
+    if (dimensionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'dimensionName' when calling dimensionsEditDimGenerations");
+    }
+    // verify the required parameter 'generationNumber' is set
+    if (generationNumber == null) {
+      throw new ApiException(400, "Missing the required parameter 'generationNumber' when calling dimensionsEditDimGenerations");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling dimensionsEditDimGenerations");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call dimensionsEditDimGenerationsValidateBeforeCall(String applicationName, String databaseName, String dimensionName, Integer generationNumber, GenerationLevel body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling dimensionsEditDimGenerations(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/generations/{generationNumber}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{dimensionName}", ApiClient.urlEncode(dimensionName.toString()))
+        .replace("{generationNumber}", ApiClient.urlEncode(generationNumber.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Update Level
+   * &lt;p&gt;Updates and returns level details of a dimension, based on the specified level number, application, and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
+   * @param levelNumber &lt;p&gt;Level number.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Level details.&lt;/p&gt; (required)
+   * @return GenerationLevel
+   * @throws ApiException if fails to make API call
+   */
+  public GenerationLevel dimensionsEditDimLevels(String applicationName, String databaseName, String dimensionName, Integer levelNumber, GenerationLevel body) throws ApiException {
+    ApiResponse<GenerationLevel> localVarResponse = dimensionsEditDimLevelsWithHttpInfo(applicationName, databaseName, dimensionName, levelNumber, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Update Level
+   * &lt;p&gt;Updates and returns level details of a dimension, based on the specified level number, application, and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
+   * @param levelNumber &lt;p&gt;Level number.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Level details.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;GenerationLevel&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<GenerationLevel> dimensionsEditDimLevelsWithHttpInfo(String applicationName, String databaseName, String dimensionName, Integer levelNumber, GenerationLevel body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = dimensionsEditDimLevelsRequestBuilder(applicationName, databaseName, dimensionName, levelNumber, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("dimensionsEditDimLevels", localVarResponse);
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling dimensionsEditDimGenerations(Async)");
+        return new ApiResponse<GenerationLevel>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<GenerationLevel>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder dimensionsEditDimLevelsRequestBuilder(String applicationName, String databaseName, String dimensionName, Integer levelNumber, GenerationLevel body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling dimensionsEditDimLevels");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling dimensionsEditDimLevels");
+    }
+    // verify the required parameter 'dimensionName' is set
+    if (dimensionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'dimensionName' when calling dimensionsEditDimLevels");
+    }
+    // verify the required parameter 'levelNumber' is set
+    if (levelNumber == null) {
+      throw new ApiException(400, "Missing the required parameter 'levelNumber' when calling dimensionsEditDimLevels");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling dimensionsEditDimLevels");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/levels/{levelNumber}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{dimensionName}", ApiClient.urlEncode(dimensionName.toString()))
+        .replace("{levelNumber}", ApiClient.urlEncode(levelNumber.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Generation
+   * &lt;p&gt;Returns generation details of a dimension, based on the specified generation number, application, and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
+   * @param generationNumber &lt;p&gt;Generation number.&lt;/p&gt; (required)
+   * @return GenerationLevel
+   * @throws ApiException if fails to make API call
+   */
+  public GenerationLevel dimensionsGetDimGenerations(String applicationName, String databaseName, String dimensionName, Integer generationNumber) throws ApiException {
+    ApiResponse<GenerationLevel> localVarResponse = dimensionsGetDimGenerationsWithHttpInfo(applicationName, databaseName, dimensionName, generationNumber);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Generation
+   * &lt;p&gt;Returns generation details of a dimension, based on the specified generation number, application, and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
+   * @param generationNumber &lt;p&gt;Generation number.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;GenerationLevel&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<GenerationLevel> dimensionsGetDimGenerationsWithHttpInfo(String applicationName, String databaseName, String dimensionName, Integer generationNumber) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = dimensionsGetDimGenerationsRequestBuilder(applicationName, databaseName, dimensionName, generationNumber);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("dimensionsGetDimGenerations", localVarResponse);
         }
-        
-        // verify the required parameter 'dimensionName' is set
-        if (dimensionName == null) {
-            throw new ApiException("Missing the required parameter 'dimensionName' when calling dimensionsEditDimGenerations(Async)");
+        return new ApiResponse<GenerationLevel>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<GenerationLevel>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder dimensionsGetDimGenerationsRequestBuilder(String applicationName, String databaseName, String dimensionName, Integer generationNumber) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling dimensionsGetDimGenerations");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling dimensionsGetDimGenerations");
+    }
+    // verify the required parameter 'dimensionName' is set
+    if (dimensionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'dimensionName' when calling dimensionsGetDimGenerations");
+    }
+    // verify the required parameter 'generationNumber' is set
+    if (generationNumber == null) {
+      throw new ApiException(400, "Missing the required parameter 'generationNumber' when calling dimensionsGetDimGenerations");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/generations/{generationNumber}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{dimensionName}", ApiClient.urlEncode(dimensionName.toString()))
+        .replace("{generationNumber}", ApiClient.urlEncode(generationNumber.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Level
+   * &lt;p&gt;Returns level details of a dimension, based on the specified level number, application, and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
+   * @param levelNumber &lt;p&gt;Level number.&lt;/p&gt; (required)
+   * @return GenerationLevel
+   * @throws ApiException if fails to make API call
+   */
+  public GenerationLevel dimensionsGetDimLevels(String applicationName, String databaseName, String dimensionName, Integer levelNumber) throws ApiException {
+    ApiResponse<GenerationLevel> localVarResponse = dimensionsGetDimLevelsWithHttpInfo(applicationName, databaseName, dimensionName, levelNumber);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Level
+   * &lt;p&gt;Returns level details of a dimension, based on the specified level number, application, and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
+   * @param levelNumber &lt;p&gt;Level number.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;GenerationLevel&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<GenerationLevel> dimensionsGetDimLevelsWithHttpInfo(String applicationName, String databaseName, String dimensionName, Integer levelNumber) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = dimensionsGetDimLevelsRequestBuilder(applicationName, databaseName, dimensionName, levelNumber);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("dimensionsGetDimLevels", localVarResponse);
         }
-        
-        // verify the required parameter 'generationNumber' is set
-        if (generationNumber == null) {
-            throw new ApiException("Missing the required parameter 'generationNumber' when calling dimensionsEditDimGenerations(Async)");
+        return new ApiResponse<GenerationLevel>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<GenerationLevel>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder dimensionsGetDimLevelsRequestBuilder(String applicationName, String databaseName, String dimensionName, Integer levelNumber) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling dimensionsGetDimLevels");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling dimensionsGetDimLevels");
+    }
+    // verify the required parameter 'dimensionName' is set
+    if (dimensionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'dimensionName' when calling dimensionsGetDimLevels");
+    }
+    // verify the required parameter 'levelNumber' is set
+    if (levelNumber == null) {
+      throw new ApiException(400, "Missing the required parameter 'levelNumber' when calling dimensionsGetDimLevels");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/levels/{levelNumber}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{dimensionName}", ApiClient.urlEncode(dimensionName.toString()))
+        .replace("{levelNumber}", ApiClient.urlEncode(levelNumber.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * List Generations
+   * Returns all the generations of a dimension from the specified application and database
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
+   * @return GenerationLevelList
+   * @throws ApiException if fails to make API call
+   */
+  public GenerationLevelList dimensionsListDimGenerations(String applicationName, String databaseName, String dimensionName) throws ApiException {
+    ApiResponse<GenerationLevelList> localVarResponse = dimensionsListDimGenerationsWithHttpInfo(applicationName, databaseName, dimensionName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * List Generations
+   * Returns all the generations of a dimension from the specified application and database
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;GenerationLevelList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<GenerationLevelList> dimensionsListDimGenerationsWithHttpInfo(String applicationName, String databaseName, String dimensionName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = dimensionsListDimGenerationsRequestBuilder(applicationName, databaseName, dimensionName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("dimensionsListDimGenerations", localVarResponse);
         }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling dimensionsEditDimGenerations(Async)");
+        return new ApiResponse<GenerationLevelList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<GenerationLevelList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder dimensionsListDimGenerationsRequestBuilder(String applicationName, String databaseName, String dimensionName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling dimensionsListDimGenerations");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling dimensionsListDimGenerations");
+    }
+    // verify the required parameter 'dimensionName' is set
+    if (dimensionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'dimensionName' when calling dimensionsListDimGenerations");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/generations"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{dimensionName}", ApiClient.urlEncode(dimensionName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * List Levels
+   * Returns all the levels of a dimension from the specified application and database
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
+   * @return GenerationLevelList
+   * @throws ApiException if fails to make API call
+   */
+  public GenerationLevelList dimensionsListDimLevels(String applicationName, String databaseName, String dimensionName) throws ApiException {
+    ApiResponse<GenerationLevelList> localVarResponse = dimensionsListDimLevelsWithHttpInfo(applicationName, databaseName, dimensionName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * List Levels
+   * Returns all the levels of a dimension from the specified application and database
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;GenerationLevelList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<GenerationLevelList> dimensionsListDimLevelsWithHttpInfo(String applicationName, String databaseName, String dimensionName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = dimensionsListDimLevelsRequestBuilder(applicationName, databaseName, dimensionName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("dimensionsListDimLevels", localVarResponse);
         }
-        
+        return new ApiResponse<GenerationLevelList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<GenerationLevelList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = dimensionsEditDimGenerationsCall(applicationName, databaseName, dimensionName, generationNumber, body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder dimensionsListDimLevelsRequestBuilder(String applicationName, String databaseName, String dimensionName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling dimensionsListDimLevels");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling dimensionsListDimLevels");
+    }
+    // verify the required parameter 'dimensionName' is set
+    if (dimensionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'dimensionName' when calling dimensionsListDimLevels");
     }
 
-    /**
-     * Update Generation
-     * &lt;p&gt;Updates and returns generation details of a dimension, based on the specified generation number, application, and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param generationNumber &lt;p&gt;Generation number.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Generation details.&lt;/p&gt; (required)
-     * @return GenerationLevel
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Generation details updated successfully, including links to get or edit the generation.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the generation. The application name, database name, dimension name, or generation number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public GenerationLevel dimensionsEditDimGenerations(String applicationName, String databaseName, String dimensionName, Integer generationNumber, GenerationLevel body) throws ApiException {
-        ApiResponse<GenerationLevel> localVarResp = dimensionsEditDimGenerationsWithHttpInfo(applicationName, databaseName, dimensionName, generationNumber, body);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/levels"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{dimensionName}", ApiClient.urlEncode(dimensionName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Update Generation
-     * &lt;p&gt;Updates and returns generation details of a dimension, based on the specified generation number, application, and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param generationNumber &lt;p&gt;Generation number.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Generation details.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;GenerationLevel&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Generation details updated successfully, including links to get or edit the generation.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the generation. The application name, database name, dimension name, or generation number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<GenerationLevel> dimensionsEditDimGenerationsWithHttpInfo(String applicationName, String databaseName, String dimensionName, Integer generationNumber, GenerationLevel body) throws ApiException {
-        okhttp3.Call localVarCall = dimensionsEditDimGenerationsValidateBeforeCall(applicationName, databaseName, dimensionName, generationNumber, body, null);
-        Type localVarReturnType = new TypeToken<GenerationLevel>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Update Generation (asynchronously)
-     * &lt;p&gt;Updates and returns generation details of a dimension, based on the specified generation number, application, and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param generationNumber &lt;p&gt;Generation number.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Generation details.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Generation details updated successfully, including links to get or edit the generation.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the generation. The application name, database name, dimension name, or generation number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionsEditDimGenerationsAsync(String applicationName, String databaseName, String dimensionName, Integer generationNumber, GenerationLevel body, final ApiCallback<GenerationLevel> _callback) throws ApiException {
+  /**
+   * List Dimensions
+   * Returns all the dimensions from the specified application and database
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return DimensionList
+   * @throws ApiException if fails to make API call
+   */
+  public DimensionList dimensionsListDimensions(String applicationName, String databaseName) throws ApiException {
+    ApiResponse<DimensionList> localVarResponse = dimensionsListDimensionsWithHttpInfo(applicationName, databaseName);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = dimensionsEditDimGenerationsValidateBeforeCall(applicationName, databaseName, dimensionName, generationNumber, body, _callback);
-        Type localVarReturnType = new TypeToken<GenerationLevel>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for dimensionsEditDimLevels
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param levelNumber &lt;p&gt;Level number.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Level details.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Level details updated successfully, including links to get or edit the level.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the level. The application name, database name, dimension name, or level  number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionsEditDimLevelsCall(String applicationName, String databaseName, String dimensionName, Integer levelNumber, GenerationLevel body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/levels/{levelNumber}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "dimensionName" + "\\}", localVarApiClient.escapeString(dimensionName.toString()))
-            .replaceAll("\\{" + "levelNumber" + "\\}", localVarApiClient.escapeString(levelNumber.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * List Dimensions
+   * Returns all the dimensions from the specified application and database
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;DimensionList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<DimensionList> dimensionsListDimensionsWithHttpInfo(String applicationName, String databaseName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = dimensionsListDimensionsRequestBuilder(applicationName, databaseName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("dimensionsListDimensions", localVarResponse);
         }
+        return new ApiResponse<DimensionList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<DimensionList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder dimensionsListDimensionsRequestBuilder(String applicationName, String databaseName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling dimensionsListDimensions");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling dimensionsListDimensions");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call dimensionsEditDimLevelsValidateBeforeCall(String applicationName, String databaseName, String dimensionName, Integer levelNumber, GenerationLevel body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling dimensionsEditDimLevels(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling dimensionsEditDimLevels(Async)");
-        }
-        
-        // verify the required parameter 'dimensionName' is set
-        if (dimensionName == null) {
-            throw new ApiException("Missing the required parameter 'dimensionName' when calling dimensionsEditDimLevels(Async)");
-        }
-        
-        // verify the required parameter 'levelNumber' is set
-        if (levelNumber == null) {
-            throw new ApiException("Missing the required parameter 'levelNumber' when calling dimensionsEditDimLevels(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling dimensionsEditDimLevels(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = dimensionsEditDimLevelsCall(applicationName, databaseName, dimensionName, levelNumber, body, _callback);
-        return localVarCall;
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimensions"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Update Level
-     * &lt;p&gt;Updates and returns level details of a dimension, based on the specified level number, application, and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param levelNumber &lt;p&gt;Level number.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Level details.&lt;/p&gt; (required)
-     * @return GenerationLevel
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Level details updated successfully, including links to get or edit the level.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the level. The application name, database name, dimension name, or level  number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public GenerationLevel dimensionsEditDimLevels(String applicationName, String databaseName, String dimensionName, Integer levelNumber, GenerationLevel body) throws ApiException {
-        ApiResponse<GenerationLevel> localVarResp = dimensionsEditDimLevelsWithHttpInfo(applicationName, databaseName, dimensionName, levelNumber, body);
-        return localVarResp.getData();
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Update Level
-     * &lt;p&gt;Updates and returns level details of a dimension, based on the specified level number, application, and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param levelNumber &lt;p&gt;Level number.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Level details.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;GenerationLevel&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Level details updated successfully, including links to get or edit the level.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the level. The application name, database name, dimension name, or level  number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<GenerationLevel> dimensionsEditDimLevelsWithHttpInfo(String applicationName, String databaseName, String dimensionName, Integer levelNumber, GenerationLevel body) throws ApiException {
-        okhttp3.Call localVarCall = dimensionsEditDimLevelsValidateBeforeCall(applicationName, databaseName, dimensionName, levelNumber, body, null);
-        Type localVarReturnType = new TypeToken<GenerationLevel>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Update Level (asynchronously)
-     * &lt;p&gt;Updates and returns level details of a dimension, based on the specified level number, application, and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param levelNumber &lt;p&gt;Level number.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Level details.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Level details updated successfully, including links to get or edit the level.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the level. The application name, database name, dimension name, or level  number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionsEditDimLevelsAsync(String applicationName, String databaseName, String dimensionName, Integer levelNumber, GenerationLevel body, final ApiCallback<GenerationLevel> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = dimensionsEditDimLevelsValidateBeforeCall(applicationName, databaseName, dimensionName, levelNumber, body, _callback);
-        Type localVarReturnType = new TypeToken<GenerationLevel>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for dimensionsGetDimGenerations
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param generationNumber &lt;p&gt;Generation number.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Generation details returned successfully, including links to get or edit the generation.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get generation. The application name, database name, dimension name, or generation number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionsGetDimGenerationsCall(String applicationName, String databaseName, String dimensionName, Integer generationNumber, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/generations/{generationNumber}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "dimensionName" + "\\}", localVarApiClient.escapeString(dimensionName.toString()))
-            .replaceAll("\\{" + "generationNumber" + "\\}", localVarApiClient.escapeString(generationNumber.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call dimensionsGetDimGenerationsValidateBeforeCall(String applicationName, String databaseName, String dimensionName, Integer generationNumber, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling dimensionsGetDimGenerations(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling dimensionsGetDimGenerations(Async)");
-        }
-        
-        // verify the required parameter 'dimensionName' is set
-        if (dimensionName == null) {
-            throw new ApiException("Missing the required parameter 'dimensionName' when calling dimensionsGetDimGenerations(Async)");
-        }
-        
-        // verify the required parameter 'generationNumber' is set
-        if (generationNumber == null) {
-            throw new ApiException("Missing the required parameter 'generationNumber' when calling dimensionsGetDimGenerations(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = dimensionsGetDimGenerationsCall(applicationName, databaseName, dimensionName, generationNumber, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Generation
-     * &lt;p&gt;Returns generation details of a dimension, based on the specified generation number, application, and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param generationNumber &lt;p&gt;Generation number.&lt;/p&gt; (required)
-     * @return GenerationLevel
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Generation details returned successfully, including links to get or edit the generation.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get generation. The application name, database name, dimension name, or generation number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public GenerationLevel dimensionsGetDimGenerations(String applicationName, String databaseName, String dimensionName, Integer generationNumber) throws ApiException {
-        ApiResponse<GenerationLevel> localVarResp = dimensionsGetDimGenerationsWithHttpInfo(applicationName, databaseName, dimensionName, generationNumber);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Generation
-     * &lt;p&gt;Returns generation details of a dimension, based on the specified generation number, application, and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param generationNumber &lt;p&gt;Generation number.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;GenerationLevel&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Generation details returned successfully, including links to get or edit the generation.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get generation. The application name, database name, dimension name, or generation number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<GenerationLevel> dimensionsGetDimGenerationsWithHttpInfo(String applicationName, String databaseName, String dimensionName, Integer generationNumber) throws ApiException {
-        okhttp3.Call localVarCall = dimensionsGetDimGenerationsValidateBeforeCall(applicationName, databaseName, dimensionName, generationNumber, null);
-        Type localVarReturnType = new TypeToken<GenerationLevel>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Generation (asynchronously)
-     * &lt;p&gt;Returns generation details of a dimension, based on the specified generation number, application, and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param generationNumber &lt;p&gt;Generation number.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Generation details returned successfully, including links to get or edit the generation.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get generation. The application name, database name, dimension name, or generation number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionsGetDimGenerationsAsync(String applicationName, String databaseName, String dimensionName, Integer generationNumber, final ApiCallback<GenerationLevel> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = dimensionsGetDimGenerationsValidateBeforeCall(applicationName, databaseName, dimensionName, generationNumber, _callback);
-        Type localVarReturnType = new TypeToken<GenerationLevel>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for dimensionsGetDimLevels
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param levelNumber &lt;p&gt;Level number.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Level details returned successfully, including links to get or edit the level.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get level. The application name, database name, dimension name, or level number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionsGetDimLevelsCall(String applicationName, String databaseName, String dimensionName, Integer levelNumber, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/levels/{levelNumber}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "dimensionName" + "\\}", localVarApiClient.escapeString(dimensionName.toString()))
-            .replaceAll("\\{" + "levelNumber" + "\\}", localVarApiClient.escapeString(levelNumber.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call dimensionsGetDimLevelsValidateBeforeCall(String applicationName, String databaseName, String dimensionName, Integer levelNumber, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling dimensionsGetDimLevels(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling dimensionsGetDimLevels(Async)");
-        }
-        
-        // verify the required parameter 'dimensionName' is set
-        if (dimensionName == null) {
-            throw new ApiException("Missing the required parameter 'dimensionName' when calling dimensionsGetDimLevels(Async)");
-        }
-        
-        // verify the required parameter 'levelNumber' is set
-        if (levelNumber == null) {
-            throw new ApiException("Missing the required parameter 'levelNumber' when calling dimensionsGetDimLevels(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = dimensionsGetDimLevelsCall(applicationName, databaseName, dimensionName, levelNumber, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Level
-     * &lt;p&gt;Returns level details of a dimension, based on the specified level number, application, and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param levelNumber &lt;p&gt;Level number.&lt;/p&gt; (required)
-     * @return GenerationLevel
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Level details returned successfully, including links to get or edit the level.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get level. The application name, database name, dimension name, or level number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public GenerationLevel dimensionsGetDimLevels(String applicationName, String databaseName, String dimensionName, Integer levelNumber) throws ApiException {
-        ApiResponse<GenerationLevel> localVarResp = dimensionsGetDimLevelsWithHttpInfo(applicationName, databaseName, dimensionName, levelNumber);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Level
-     * &lt;p&gt;Returns level details of a dimension, based on the specified level number, application, and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param levelNumber &lt;p&gt;Level number.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;GenerationLevel&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Level details returned successfully, including links to get or edit the level.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get level. The application name, database name, dimension name, or level number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<GenerationLevel> dimensionsGetDimLevelsWithHttpInfo(String applicationName, String databaseName, String dimensionName, Integer levelNumber) throws ApiException {
-        okhttp3.Call localVarCall = dimensionsGetDimLevelsValidateBeforeCall(applicationName, databaseName, dimensionName, levelNumber, null);
-        Type localVarReturnType = new TypeToken<GenerationLevel>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Level (asynchronously)
-     * &lt;p&gt;Returns level details of a dimension, based on the specified level number, application, and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param levelNumber &lt;p&gt;Level number.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Level details returned successfully, including links to get or edit the level.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get level. The application name, database name, dimension name, or level number may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionsGetDimLevelsAsync(String applicationName, String databaseName, String dimensionName, Integer levelNumber, final ApiCallback<GenerationLevel> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = dimensionsGetDimLevelsValidateBeforeCall(applicationName, databaseName, dimensionName, levelNumber, _callback);
-        Type localVarReturnType = new TypeToken<GenerationLevel>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for dimensionsListDimGenerations
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Generations are retrieved successfully. Gives all generation details of a dimension along with the links to get/edit each generation </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the generations. The application, database, or dimension name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionsListDimGenerationsCall(String applicationName, String databaseName, String dimensionName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/generations"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "dimensionName" + "\\}", localVarApiClient.escapeString(dimensionName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call dimensionsListDimGenerationsValidateBeforeCall(String applicationName, String databaseName, String dimensionName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling dimensionsListDimGenerations(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling dimensionsListDimGenerations(Async)");
-        }
-        
-        // verify the required parameter 'dimensionName' is set
-        if (dimensionName == null) {
-            throw new ApiException("Missing the required parameter 'dimensionName' when calling dimensionsListDimGenerations(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = dimensionsListDimGenerationsCall(applicationName, databaseName, dimensionName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * List Generations
-     * Returns all the generations of a dimension from the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @return GenerationLevelList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Generations are retrieved successfully. Gives all generation details of a dimension along with the links to get/edit each generation </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the generations. The application, database, or dimension name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public GenerationLevelList dimensionsListDimGenerations(String applicationName, String databaseName, String dimensionName) throws ApiException {
-        ApiResponse<GenerationLevelList> localVarResp = dimensionsListDimGenerationsWithHttpInfo(applicationName, databaseName, dimensionName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * List Generations
-     * Returns all the generations of a dimension from the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;GenerationLevelList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Generations are retrieved successfully. Gives all generation details of a dimension along with the links to get/edit each generation </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the generations. The application, database, or dimension name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<GenerationLevelList> dimensionsListDimGenerationsWithHttpInfo(String applicationName, String databaseName, String dimensionName) throws ApiException {
-        okhttp3.Call localVarCall = dimensionsListDimGenerationsValidateBeforeCall(applicationName, databaseName, dimensionName, null);
-        Type localVarReturnType = new TypeToken<GenerationLevelList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List Generations (asynchronously)
-     * Returns all the generations of a dimension from the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Generations are retrieved successfully. Gives all generation details of a dimension along with the links to get/edit each generation </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the generations. The application, database, or dimension name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionsListDimGenerationsAsync(String applicationName, String databaseName, String dimensionName, final ApiCallback<GenerationLevelList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = dimensionsListDimGenerationsValidateBeforeCall(applicationName, databaseName, dimensionName, _callback);
-        Type localVarReturnType = new TypeToken<GenerationLevelList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for dimensionsListDimLevels
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Levels are retrieved successfully. Gives all level details of a dimension along with the links to get/edit each level </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the levels. The application, database, or dimension name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionsListDimLevelsCall(String applicationName, String databaseName, String dimensionName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/levels"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "dimensionName" + "\\}", localVarApiClient.escapeString(dimensionName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call dimensionsListDimLevelsValidateBeforeCall(String applicationName, String databaseName, String dimensionName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling dimensionsListDimLevels(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling dimensionsListDimLevels(Async)");
-        }
-        
-        // verify the required parameter 'dimensionName' is set
-        if (dimensionName == null) {
-            throw new ApiException("Missing the required parameter 'dimensionName' when calling dimensionsListDimLevels(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = dimensionsListDimLevelsCall(applicationName, databaseName, dimensionName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * List Levels
-     * Returns all the levels of a dimension from the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @return GenerationLevelList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Levels are retrieved successfully. Gives all level details of a dimension along with the links to get/edit each level </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the levels. The application, database, or dimension name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public GenerationLevelList dimensionsListDimLevels(String applicationName, String databaseName, String dimensionName) throws ApiException {
-        ApiResponse<GenerationLevelList> localVarResp = dimensionsListDimLevelsWithHttpInfo(applicationName, databaseName, dimensionName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * List Levels
-     * Returns all the levels of a dimension from the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;GenerationLevelList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Levels are retrieved successfully. Gives all level details of a dimension along with the links to get/edit each level </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the levels. The application, database, or dimension name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<GenerationLevelList> dimensionsListDimLevelsWithHttpInfo(String applicationName, String databaseName, String dimensionName) throws ApiException {
-        okhttp3.Call localVarCall = dimensionsListDimLevelsValidateBeforeCall(applicationName, databaseName, dimensionName, null);
-        Type localVarReturnType = new TypeToken<GenerationLevelList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List Levels (asynchronously)
-     * Returns all the levels of a dimension from the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param dimensionName &lt;p&gt;Dimension name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Levels are retrieved successfully. Gives all level details of a dimension along with the links to get/edit each level </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the levels. The application, database, or dimension name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionsListDimLevelsAsync(String applicationName, String databaseName, String dimensionName, final ApiCallback<GenerationLevelList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = dimensionsListDimLevelsValidateBeforeCall(applicationName, databaseName, dimensionName, _callback);
-        Type localVarReturnType = new TypeToken<GenerationLevelList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for dimensionsListDimensions
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Dimensions are retrieved successfully. Gives the dimension details along with the links to get the generations and levels of each dimension </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the dimensions. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionsListDimensionsCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimensions"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call dimensionsListDimensionsValidateBeforeCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling dimensionsListDimensions(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling dimensionsListDimensions(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = dimensionsListDimensionsCall(applicationName, databaseName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * List Dimensions
-     * Returns all the dimensions from the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return DimensionList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Dimensions are retrieved successfully. Gives the dimension details along with the links to get the generations and levels of each dimension </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the dimensions. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public DimensionList dimensionsListDimensions(String applicationName, String databaseName) throws ApiException {
-        ApiResponse<DimensionList> localVarResp = dimensionsListDimensionsWithHttpInfo(applicationName, databaseName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * List Dimensions
-     * Returns all the dimensions from the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;DimensionList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Dimensions are retrieved successfully. Gives the dimension details along with the links to get the generations and levels of each dimension </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the dimensions. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<DimensionList> dimensionsListDimensionsWithHttpInfo(String applicationName, String databaseName) throws ApiException {
-        okhttp3.Call localVarCall = dimensionsListDimensionsValidateBeforeCall(applicationName, databaseName, null);
-        Type localVarReturnType = new TypeToken<DimensionList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List Dimensions (asynchronously)
-     * Returns all the dimensions from the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Dimensions are retrieved successfully. Gives the dimension details along with the links to get the generations and levels of each dimension </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the dimensions. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionsListDimensionsAsync(String applicationName, String databaseName, final ApiCallback<DimensionList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = dimensionsListDimensionsValidateBeforeCall(applicationName, databaseName, _callback);
-        Type localVarReturnType = new TypeToken<DimensionList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

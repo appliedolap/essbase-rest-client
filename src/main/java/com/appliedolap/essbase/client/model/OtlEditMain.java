@@ -13,57 +13,70 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.JAXBElementObject;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * OtlEditMain
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  OtlEditMain.JSON_PROPERTY_EDIT_ACTIONS,
+  OtlEditMain.JSON_PROPERTY_OTL_VERSION,
+  OtlEditMain.JSON_PROPERTY_VALIDATE,
+  OtlEditMain.JSON_PROPERTY_VALIDATE_FORMULAS,
+  OtlEditMain.JSON_PROPERTY_KEEP_TRANSACTION,
+  OtlEditMain.JSON_PROPERTY_RESTRUCT_OPTION,
+  OtlEditMain.JSON_PROPERTY_JSONFORMAT_LOG
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class OtlEditMain {
-  public static final String SERIALIZED_NAME_EDIT_ACTIONS = "editActions";
-  @SerializedName(SERIALIZED_NAME_EDIT_ACTIONS)
-  private List<JAXBElementObject> editActions = null;
+  public static final String JSON_PROPERTY_EDIT_ACTIONS = "editActions";
+  @jakarta.annotation.Nullable
+  private List<JAXBElementObject> editActions = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_OTL_VERSION = "otlVersion";
-  @SerializedName(SERIALIZED_NAME_OTL_VERSION)
+  public static final String JSON_PROPERTY_OTL_VERSION = "otlVersion";
+  @jakarta.annotation.Nullable
   private Integer otlVersion;
 
-  public static final String SERIALIZED_NAME_VALIDATE = "validate";
-  @SerializedName(SERIALIZED_NAME_VALIDATE)
+  public static final String JSON_PROPERTY_VALIDATE = "validate";
+  @jakarta.annotation.Nullable
   private Boolean validate;
 
-  public static final String SERIALIZED_NAME_VALIDATE_FORMULAS = "validateFormulas";
-  @SerializedName(SERIALIZED_NAME_VALIDATE_FORMULAS)
+  public static final String JSON_PROPERTY_VALIDATE_FORMULAS = "validateFormulas";
+  @jakarta.annotation.Nullable
   private Boolean validateFormulas;
 
-  public static final String SERIALIZED_NAME_KEEP_TRANSACTION = "keepTransaction";
-  @SerializedName(SERIALIZED_NAME_KEEP_TRANSACTION)
+  public static final String JSON_PROPERTY_KEEP_TRANSACTION = "keepTransaction";
+  @jakarta.annotation.Nullable
   private Boolean keepTransaction;
 
   /**
    * Gets or Sets restructOption
    */
-  @JsonAdapter(RestructOptionEnum.Adapter.class)
   public enum RestructOptionEnum {
-    ALL_DATA("ALL_DATA"),
+    ALL_DATA(String.valueOf("ALL_DATA")),
     
-    NO_DATA("NO_DATA"),
+    NO_DATA(String.valueOf("NO_DATA")),
     
-    LOW_DATA("LOW_DATA"),
+    LOW_DATA(String.valueOf("LOW_DATA")),
     
-    IN_DATA("IN_DATA");
+    IN_DATA(String.valueOf("IN_DATA"));
 
     private String value;
 
@@ -71,6 +84,7 @@ public class OtlEditMain {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -80,6 +94,7 @@ public class OtlEditMain {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static RestructOptionEnum fromValue(String value) {
       for (RestructOptionEnum b : RestructOptionEnum.values()) {
         if (b.value.equals(value)) {
@@ -88,199 +103,198 @@ public class OtlEditMain {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<RestructOptionEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final RestructOptionEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public RestructOptionEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return RestructOptionEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_RESTRUCT_OPTION = "restructOption";
-  @SerializedName(SERIALIZED_NAME_RESTRUCT_OPTION)
+  public static final String JSON_PROPERTY_RESTRUCT_OPTION = "restructOption";
+  @jakarta.annotation.Nullable
   private RestructOptionEnum restructOption;
 
-  public static final String SERIALIZED_NAME_JSONFORMAT_LOG = "jsonformatLog";
-  @SerializedName(SERIALIZED_NAME_JSONFORMAT_LOG)
+  public static final String JSON_PROPERTY_JSONFORMAT_LOG = "jsonformatLog";
+  @jakarta.annotation.Nullable
   private Boolean jsonformatLog;
 
+  public OtlEditMain() { 
+  }
 
-  public OtlEditMain editActions(List<JAXBElementObject> editActions) {
-    
+  public OtlEditMain editActions(@jakarta.annotation.Nullable List<JAXBElementObject> editActions) {
     this.editActions = editActions;
     return this;
   }
 
   public OtlEditMain addEditActionsItem(JAXBElementObject editActionsItem) {
     if (this.editActions == null) {
-      this.editActions = new ArrayList<JAXBElementObject>();
+      this.editActions = new ArrayList<>();
     }
     this.editActions.add(editActionsItem);
     return this;
   }
 
-   /**
+  /**
    * Get editActions
    * @return editActions
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EDIT_ACTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<JAXBElementObject> getEditActions() {
     return editActions;
   }
 
 
-  public void setEditActions(List<JAXBElementObject> editActions) {
+  @JsonProperty(JSON_PROPERTY_EDIT_ACTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEditActions(@jakarta.annotation.Nullable List<JAXBElementObject> editActions) {
     this.editActions = editActions;
   }
 
 
-  public OtlEditMain otlVersion(Integer otlVersion) {
-    
+  public OtlEditMain otlVersion(@jakarta.annotation.Nullable Integer otlVersion) {
     this.otlVersion = otlVersion;
     return this;
   }
 
-   /**
+  /**
    * Get otlVersion
    * @return otlVersion
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OTL_VERSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getOtlVersion() {
     return otlVersion;
   }
 
 
-  public void setOtlVersion(Integer otlVersion) {
+  @JsonProperty(JSON_PROPERTY_OTL_VERSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOtlVersion(@jakarta.annotation.Nullable Integer otlVersion) {
     this.otlVersion = otlVersion;
   }
 
 
-  public OtlEditMain validate(Boolean validate) {
-    
+  public OtlEditMain validate(@jakarta.annotation.Nullable Boolean validate) {
     this.validate = validate;
     return this;
   }
 
-   /**
+  /**
    * Get validate
    * @return validate
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VALIDATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getValidate() {
     return validate;
   }
 
 
-  public void setValidate(Boolean validate) {
+  @JsonProperty(JSON_PROPERTY_VALIDATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setValidate(@jakarta.annotation.Nullable Boolean validate) {
     this.validate = validate;
   }
 
 
-  public OtlEditMain validateFormulas(Boolean validateFormulas) {
-    
+  public OtlEditMain validateFormulas(@jakarta.annotation.Nullable Boolean validateFormulas) {
     this.validateFormulas = validateFormulas;
     return this;
   }
 
-   /**
+  /**
    * Get validateFormulas
    * @return validateFormulas
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VALIDATE_FORMULAS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getValidateFormulas() {
     return validateFormulas;
   }
 
 
-  public void setValidateFormulas(Boolean validateFormulas) {
+  @JsonProperty(JSON_PROPERTY_VALIDATE_FORMULAS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setValidateFormulas(@jakarta.annotation.Nullable Boolean validateFormulas) {
     this.validateFormulas = validateFormulas;
   }
 
 
-  public OtlEditMain keepTransaction(Boolean keepTransaction) {
-    
+  public OtlEditMain keepTransaction(@jakarta.annotation.Nullable Boolean keepTransaction) {
     this.keepTransaction = keepTransaction;
     return this;
   }
 
-   /**
+  /**
    * Get keepTransaction
    * @return keepTransaction
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_KEEP_TRANSACTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getKeepTransaction() {
     return keepTransaction;
   }
 
 
-  public void setKeepTransaction(Boolean keepTransaction) {
+  @JsonProperty(JSON_PROPERTY_KEEP_TRANSACTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setKeepTransaction(@jakarta.annotation.Nullable Boolean keepTransaction) {
     this.keepTransaction = keepTransaction;
   }
 
 
-  public OtlEditMain restructOption(RestructOptionEnum restructOption) {
-    
+  public OtlEditMain restructOption(@jakarta.annotation.Nullable RestructOptionEnum restructOption) {
     this.restructOption = restructOption;
     return this;
   }
 
-   /**
+  /**
    * Get restructOption
    * @return restructOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RESTRUCT_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public RestructOptionEnum getRestructOption() {
     return restructOption;
   }
 
 
-  public void setRestructOption(RestructOptionEnum restructOption) {
+  @JsonProperty(JSON_PROPERTY_RESTRUCT_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRestructOption(@jakarta.annotation.Nullable RestructOptionEnum restructOption) {
     this.restructOption = restructOption;
   }
 
 
-  public OtlEditMain jsonformatLog(Boolean jsonformatLog) {
-    
+  public OtlEditMain jsonformatLog(@jakarta.annotation.Nullable Boolean jsonformatLog) {
     this.jsonformatLog = jsonformatLog;
     return this;
   }
 
-   /**
+  /**
    * Get jsonformatLog
    * @return jsonformatLog
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_JSONFORMAT_LOG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getJsonformatLog() {
     return jsonformatLog;
   }
 
 
-  public void setJsonformatLog(Boolean jsonformatLog) {
+  @JsonProperty(JSON_PROPERTY_JSONFORMAT_LOG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setJsonformatLog(@jakarta.annotation.Nullable Boolean jsonformatLog) {
     this.jsonformatLog = jsonformatLog;
   }
 
 
+  /**
+   * Return true if this OtlEditMain object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -330,5 +344,79 @@ public class OtlEditMain {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `editActions` to the URL query string
+    if (getEditActions() != null) {
+      for (int i = 0; i < getEditActions().size(); i++) {
+        if (getEditActions().get(i) != null) {
+          joiner.add(getEditActions().get(i).toUrlQueryString(String.format("%seditActions%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `otlVersion` to the URL query string
+    if (getOtlVersion() != null) {
+      joiner.add(String.format("%sotlVersion%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getOtlVersion()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `validate` to the URL query string
+    if (getValidate() != null) {
+      joiner.add(String.format("%svalidate%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getValidate()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `validateFormulas` to the URL query string
+    if (getValidateFormulas() != null) {
+      joiner.add(String.format("%svalidateFormulas%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getValidateFormulas()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `keepTransaction` to the URL query string
+    if (getKeepTransaction() != null) {
+      joiner.add(String.format("%skeepTransaction%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getKeepTransaction()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `restructOption` to the URL query string
+    if (getRestructOption() != null) {
+      joiner.add(String.format("%srestructOption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRestructOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `jsonformatLog` to the URL query string
+    if (getJsonformatLog() != null) {
+      joiner.add(String.format("%sjsonformatLog%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getJsonformatLog()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

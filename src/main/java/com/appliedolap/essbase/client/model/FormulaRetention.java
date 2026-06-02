@@ -13,158 +13,180 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * FormulaRetention
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  FormulaRetention.JSON_PROPERTY_COMMENTS,
+  FormulaRetention.JSON_PROPERTY_ZOOM,
+  FormulaRetention.JSON_PROPERTY_FOCUS,
+  FormulaRetention.JSON_PROPERTY_RETRIVE,
+  FormulaRetention.JSON_PROPERTY_FILL
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class FormulaRetention {
-  public static final String SERIALIZED_NAME_COMMENTS = "comments";
-  @SerializedName(SERIALIZED_NAME_COMMENTS)
+  public static final String JSON_PROPERTY_COMMENTS = "comments";
+  @jakarta.annotation.Nullable
   private Boolean comments;
 
-  public static final String SERIALIZED_NAME_ZOOM = "zoom";
-  @SerializedName(SERIALIZED_NAME_ZOOM)
+  public static final String JSON_PROPERTY_ZOOM = "zoom";
+  @jakarta.annotation.Nullable
   private Boolean zoom;
 
-  public static final String SERIALIZED_NAME_FOCUS = "focus";
-  @SerializedName(SERIALIZED_NAME_FOCUS)
+  public static final String JSON_PROPERTY_FOCUS = "focus";
+  @jakarta.annotation.Nullable
   private Boolean focus;
 
-  public static final String SERIALIZED_NAME_RETRIVE = "retrive";
-  @SerializedName(SERIALIZED_NAME_RETRIVE)
+  public static final String JSON_PROPERTY_RETRIVE = "retrive";
+  @jakarta.annotation.Nullable
   private Boolean retrive;
 
-  public static final String SERIALIZED_NAME_FILL = "fill";
-  @SerializedName(SERIALIZED_NAME_FILL)
+  public static final String JSON_PROPERTY_FILL = "fill";
+  @jakarta.annotation.Nullable
   private Boolean fill;
 
+  public FormulaRetention() { 
+  }
 
-  public FormulaRetention comments(Boolean comments) {
-    
+  public FormulaRetention comments(@jakarta.annotation.Nullable Boolean comments) {
     this.comments = comments;
     return this;
   }
 
-   /**
+  /**
    * Get comments
    * @return comments
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COMMENTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getComments() {
     return comments;
   }
 
 
-  public void setComments(Boolean comments) {
+  @JsonProperty(JSON_PROPERTY_COMMENTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setComments(@jakarta.annotation.Nullable Boolean comments) {
     this.comments = comments;
   }
 
 
-  public FormulaRetention zoom(Boolean zoom) {
-    
+  public FormulaRetention zoom(@jakarta.annotation.Nullable Boolean zoom) {
     this.zoom = zoom;
     return this;
   }
 
-   /**
+  /**
    * Get zoom
    * @return zoom
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ZOOM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getZoom() {
     return zoom;
   }
 
 
-  public void setZoom(Boolean zoom) {
+  @JsonProperty(JSON_PROPERTY_ZOOM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setZoom(@jakarta.annotation.Nullable Boolean zoom) {
     this.zoom = zoom;
   }
 
 
-  public FormulaRetention focus(Boolean focus) {
-    
+  public FormulaRetention focus(@jakarta.annotation.Nullable Boolean focus) {
     this.focus = focus;
     return this;
   }
 
-   /**
+  /**
    * Get focus
    * @return focus
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FOCUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getFocus() {
     return focus;
   }
 
 
-  public void setFocus(Boolean focus) {
+  @JsonProperty(JSON_PROPERTY_FOCUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFocus(@jakarta.annotation.Nullable Boolean focus) {
     this.focus = focus;
   }
 
 
-  public FormulaRetention retrive(Boolean retrive) {
-    
+  public FormulaRetention retrive(@jakarta.annotation.Nullable Boolean retrive) {
     this.retrive = retrive;
     return this;
   }
 
-   /**
+  /**
    * Get retrive
    * @return retrive
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RETRIVE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getRetrive() {
     return retrive;
   }
 
 
-  public void setRetrive(Boolean retrive) {
+  @JsonProperty(JSON_PROPERTY_RETRIVE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRetrive(@jakarta.annotation.Nullable Boolean retrive) {
     this.retrive = retrive;
   }
 
 
-  public FormulaRetention fill(Boolean fill) {
-    
+  public FormulaRetention fill(@jakarta.annotation.Nullable Boolean fill) {
     this.fill = fill;
     return this;
   }
 
-   /**
+  /**
    * Get fill
    * @return fill
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FILL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getFill() {
     return fill;
   }
 
 
-  public void setFill(Boolean fill) {
+  @JsonProperty(JSON_PROPERTY_FILL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFill(@jakarta.annotation.Nullable Boolean fill) {
     this.fill = fill;
   }
 
 
+  /**
+   * Return true if this FormulaRetention object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -210,5 +232,64 @@ public class FormulaRetention {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `comments` to the URL query string
+    if (getComments() != null) {
+      joiner.add(String.format("%scomments%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getComments()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `zoom` to the URL query string
+    if (getZoom() != null) {
+      joiner.add(String.format("%szoom%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getZoom()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `focus` to the URL query string
+    if (getFocus() != null) {
+      joiner.add(String.format("%sfocus%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFocus()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `retrive` to the URL query string
+    if (getRetrive() != null) {
+      joiner.add(String.format("%sretrive%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRetrive()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `fill` to the URL query string
+    if (getFill() != null) {
+      joiner.add(String.format("%sfill%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFill()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

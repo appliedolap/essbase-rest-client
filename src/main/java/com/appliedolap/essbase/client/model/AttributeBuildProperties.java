@@ -13,131 +13,151 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * AttributeBuildProperties
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  AttributeBuildProperties.JSON_PROPERTY_RANGE_INCREMENT_VALUE,
+  AttributeBuildProperties.JSON_PROPERTY_RANGE_START_VALUE,
+  AttributeBuildProperties.JSON_PROPERTY_REMOVE_ALL,
+  AttributeBuildProperties.JSON_PROPERTY_USE_RANGES
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class AttributeBuildProperties {
-  public static final String SERIALIZED_NAME_RANGE_INCREMENT_VALUE = "rangeIncrementValue";
-  @SerializedName(SERIALIZED_NAME_RANGE_INCREMENT_VALUE)
+  public static final String JSON_PROPERTY_RANGE_INCREMENT_VALUE = "rangeIncrementValue";
+  @jakarta.annotation.Nullable
   private Double rangeIncrementValue;
 
-  public static final String SERIALIZED_NAME_RANGE_START_VALUE = "rangeStartValue";
-  @SerializedName(SERIALIZED_NAME_RANGE_START_VALUE)
+  public static final String JSON_PROPERTY_RANGE_START_VALUE = "rangeStartValue";
+  @jakarta.annotation.Nullable
   private Double rangeStartValue;
 
-  public static final String SERIALIZED_NAME_REMOVE_ALL = "removeAll";
-  @SerializedName(SERIALIZED_NAME_REMOVE_ALL)
+  public static final String JSON_PROPERTY_REMOVE_ALL = "removeAll";
+  @jakarta.annotation.Nullable
   private Boolean removeAll;
 
-  public static final String SERIALIZED_NAME_USE_RANGES = "useRanges";
-  @SerializedName(SERIALIZED_NAME_USE_RANGES)
+  public static final String JSON_PROPERTY_USE_RANGES = "useRanges";
+  @jakarta.annotation.Nullable
   private Boolean useRanges;
 
+  public AttributeBuildProperties() { 
+  }
 
-  public AttributeBuildProperties rangeIncrementValue(Double rangeIncrementValue) {
-    
+  public AttributeBuildProperties rangeIncrementValue(@jakarta.annotation.Nullable Double rangeIncrementValue) {
     this.rangeIncrementValue = rangeIncrementValue;
     return this;
   }
 
-   /**
+  /**
    * Get rangeIncrementValue
    * @return rangeIncrementValue
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RANGE_INCREMENT_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getRangeIncrementValue() {
     return rangeIncrementValue;
   }
 
 
-  public void setRangeIncrementValue(Double rangeIncrementValue) {
+  @JsonProperty(JSON_PROPERTY_RANGE_INCREMENT_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRangeIncrementValue(@jakarta.annotation.Nullable Double rangeIncrementValue) {
     this.rangeIncrementValue = rangeIncrementValue;
   }
 
 
-  public AttributeBuildProperties rangeStartValue(Double rangeStartValue) {
-    
+  public AttributeBuildProperties rangeStartValue(@jakarta.annotation.Nullable Double rangeStartValue) {
     this.rangeStartValue = rangeStartValue;
     return this;
   }
 
-   /**
+  /**
    * Get rangeStartValue
    * @return rangeStartValue
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RANGE_START_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getRangeStartValue() {
     return rangeStartValue;
   }
 
 
-  public void setRangeStartValue(Double rangeStartValue) {
+  @JsonProperty(JSON_PROPERTY_RANGE_START_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRangeStartValue(@jakarta.annotation.Nullable Double rangeStartValue) {
     this.rangeStartValue = rangeStartValue;
   }
 
 
-  public AttributeBuildProperties removeAll(Boolean removeAll) {
-    
+  public AttributeBuildProperties removeAll(@jakarta.annotation.Nullable Boolean removeAll) {
     this.removeAll = removeAll;
     return this;
   }
 
-   /**
+  /**
    * Get removeAll
    * @return removeAll
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REMOVE_ALL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getRemoveAll() {
     return removeAll;
   }
 
 
-  public void setRemoveAll(Boolean removeAll) {
+  @JsonProperty(JSON_PROPERTY_REMOVE_ALL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRemoveAll(@jakarta.annotation.Nullable Boolean removeAll) {
     this.removeAll = removeAll;
   }
 
 
-  public AttributeBuildProperties useRanges(Boolean useRanges) {
-    
+  public AttributeBuildProperties useRanges(@jakarta.annotation.Nullable Boolean useRanges) {
     this.useRanges = useRanges;
     return this;
   }
 
-   /**
+  /**
    * Get useRanges
    * @return useRanges
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USE_RANGES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getUseRanges() {
     return useRanges;
   }
 
 
-  public void setUseRanges(Boolean useRanges) {
+  @JsonProperty(JSON_PROPERTY_USE_RANGES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUseRanges(@jakarta.annotation.Nullable Boolean useRanges) {
     this.useRanges = useRanges;
   }
 
 
+  /**
+   * Return true if this AttributeBuildProperties object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -181,5 +201,59 @@ public class AttributeBuildProperties {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `rangeIncrementValue` to the URL query string
+    if (getRangeIncrementValue() != null) {
+      joiner.add(String.format("%srangeIncrementValue%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRangeIncrementValue()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `rangeStartValue` to the URL query string
+    if (getRangeStartValue() != null) {
+      joiner.add(String.format("%srangeStartValue%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRangeStartValue()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `removeAll` to the URL query string
+    if (getRemoveAll() != null) {
+      joiner.add(String.format("%sremoveAll%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRemoveAll()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `useRanges` to the URL query string
+    if (getUseRanges() != null) {
+      joiner.add(String.format("%suseRanges%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUseRanges()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

@@ -5,9 +5,8 @@ import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.JobRecordBean;
 import com.appliedolap.essbase.client.model.JobsInputBean;
 import com.appliedolap.essbase.client.model.ParametersBean;
-import com.appliedolap.essbase.util.GenericApiCallback;
 import com.appliedolap.essbase.util.GenericDownload;
-import okhttp3.Call;
+import com.appliedolap.essbase.util.NativeHttp;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,8 +88,10 @@ public class EssFileImpl extends AbstractEssObject implements EssFile {
     public File downloadToFolder(File folder) {
         try {
             String pathForFetch = fullPath;
-            Call call = api.getFilesApi2().filesDownloadFilesCall(pathForFetch, null, null, null, null, null, null, null, false, new GenericApiCallback());
-            return GenericDownload.download(folder, call.execute());
+            String path = NativeHttp.withQuery("/files/" + NativeHttp.encodePathKeepingSlashes(pathForFetch), "recursive", false);
+            return GenericDownload.download(folder, NativeHttp.send(api.getClient(), NativeHttp.request(api.getClient(), path)
+                    .header("Accept", "application/octet-stream")
+                    .GET(), "filesDownloadFiles"));
         } catch (ApiException | IOException e) {
             throw new RuntimeException(e);
         }

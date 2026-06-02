@@ -13,77 +13,93 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * BufferSettings
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  BufferSettings.JSON_PROPERTY_DATA_RETRIEVAL_BUFFER_SIZE,
+  BufferSettings.JSON_PROPERTY_DATA_RETRIEVAL_SORT_BUFFER_SIZE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class BufferSettings {
-  public static final String SERIALIZED_NAME_DATA_RETRIEVAL_BUFFER_SIZE = "dataRetrievalBufferSize";
-  @SerializedName(SERIALIZED_NAME_DATA_RETRIEVAL_BUFFER_SIZE)
+  public static final String JSON_PROPERTY_DATA_RETRIEVAL_BUFFER_SIZE = "dataRetrievalBufferSize";
+  @jakarta.annotation.Nullable
   private Long dataRetrievalBufferSize;
 
-  public static final String SERIALIZED_NAME_DATA_RETRIEVAL_SORT_BUFFER_SIZE = "dataRetrievalSortBufferSize";
-  @SerializedName(SERIALIZED_NAME_DATA_RETRIEVAL_SORT_BUFFER_SIZE)
+  public static final String JSON_PROPERTY_DATA_RETRIEVAL_SORT_BUFFER_SIZE = "dataRetrievalSortBufferSize";
+  @jakarta.annotation.Nullable
   private Long dataRetrievalSortBufferSize;
 
+  public BufferSettings() { 
+  }
 
-  public BufferSettings dataRetrievalBufferSize(Long dataRetrievalBufferSize) {
-    
+  public BufferSettings dataRetrievalBufferSize(@jakarta.annotation.Nullable Long dataRetrievalBufferSize) {
     this.dataRetrievalBufferSize = dataRetrievalBufferSize;
     return this;
   }
 
-   /**
+  /**
    * Get dataRetrievalBufferSize
    * @return dataRetrievalBufferSize
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_RETRIEVAL_BUFFER_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getDataRetrievalBufferSize() {
     return dataRetrievalBufferSize;
   }
 
 
-  public void setDataRetrievalBufferSize(Long dataRetrievalBufferSize) {
+  @JsonProperty(JSON_PROPERTY_DATA_RETRIEVAL_BUFFER_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataRetrievalBufferSize(@jakarta.annotation.Nullable Long dataRetrievalBufferSize) {
     this.dataRetrievalBufferSize = dataRetrievalBufferSize;
   }
 
 
-  public BufferSettings dataRetrievalSortBufferSize(Long dataRetrievalSortBufferSize) {
-    
+  public BufferSettings dataRetrievalSortBufferSize(@jakarta.annotation.Nullable Long dataRetrievalSortBufferSize) {
     this.dataRetrievalSortBufferSize = dataRetrievalSortBufferSize;
     return this;
   }
 
-   /**
+  /**
    * Get dataRetrievalSortBufferSize
    * @return dataRetrievalSortBufferSize
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_RETRIEVAL_SORT_BUFFER_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getDataRetrievalSortBufferSize() {
     return dataRetrievalSortBufferSize;
   }
 
 
-  public void setDataRetrievalSortBufferSize(Long dataRetrievalSortBufferSize) {
+  @JsonProperty(JSON_PROPERTY_DATA_RETRIEVAL_SORT_BUFFER_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataRetrievalSortBufferSize(@jakarta.annotation.Nullable Long dataRetrievalSortBufferSize) {
     this.dataRetrievalSortBufferSize = dataRetrievalSortBufferSize;
   }
 
 
+  /**
+   * Return true if this BufferSettings object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -123,5 +139,49 @@ public class BufferSettings {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `dataRetrievalBufferSize` to the URL query string
+    if (getDataRetrievalBufferSize() != null) {
+      joiner.add(String.format("%sdataRetrievalBufferSize%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataRetrievalBufferSize()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dataRetrievalSortBufferSize` to the URL query string
+    if (getDataRetrievalSortBufferSize() != null) {
+      joiner.add(String.format("%sdataRetrievalSortBufferSize%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataRetrievalSortBufferSize()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

@@ -13,213 +13,239 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.Limit;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * Limits
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  Limits.JSON_PROPERTY_CORE_FILE_SIZE,
+  Limits.JSON_PROPERTY_DATA_SEGMENT_SIZE,
+  Limits.JSON_PROPERTY_MAX_MEMORY,
+  Limits.JSON_PROPERTY_OPEN_FILES,
+  Limits.JSON_PROPERTY_USER_MAX_PROCESSES,
+  Limits.JSON_PROPERTY_VIRTUAL_MEMORY_SIZE,
+  Limits.JSON_PROPERTY_WEB_LOGIC_HEAP_SIZE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class Limits {
-  public static final String SERIALIZED_NAME_CORE_FILE_SIZE = "coreFileSize";
-  @SerializedName(SERIALIZED_NAME_CORE_FILE_SIZE)
+  public static final String JSON_PROPERTY_CORE_FILE_SIZE = "coreFileSize";
+  @jakarta.annotation.Nullable
   private Limit coreFileSize;
 
-  public static final String SERIALIZED_NAME_DATA_SEGMENT_SIZE = "dataSegmentSize";
-  @SerializedName(SERIALIZED_NAME_DATA_SEGMENT_SIZE)
+  public static final String JSON_PROPERTY_DATA_SEGMENT_SIZE = "dataSegmentSize";
+  @jakarta.annotation.Nullable
   private Limit dataSegmentSize;
 
-  public static final String SERIALIZED_NAME_MAX_MEMORY = "maxMemory";
-  @SerializedName(SERIALIZED_NAME_MAX_MEMORY)
+  public static final String JSON_PROPERTY_MAX_MEMORY = "maxMemory";
+  @jakarta.annotation.Nullable
   private Limit maxMemory;
 
-  public static final String SERIALIZED_NAME_OPEN_FILES = "openFiles";
-  @SerializedName(SERIALIZED_NAME_OPEN_FILES)
+  public static final String JSON_PROPERTY_OPEN_FILES = "openFiles";
+  @jakarta.annotation.Nullable
   private Limit openFiles;
 
-  public static final String SERIALIZED_NAME_USER_MAX_PROCESSES = "userMaxProcesses";
-  @SerializedName(SERIALIZED_NAME_USER_MAX_PROCESSES)
+  public static final String JSON_PROPERTY_USER_MAX_PROCESSES = "userMaxProcesses";
+  @jakarta.annotation.Nullable
   private Limit userMaxProcesses;
 
-  public static final String SERIALIZED_NAME_VIRTUAL_MEMORY_SIZE = "virtualMemorySize";
-  @SerializedName(SERIALIZED_NAME_VIRTUAL_MEMORY_SIZE)
+  public static final String JSON_PROPERTY_VIRTUAL_MEMORY_SIZE = "virtualMemorySize";
+  @jakarta.annotation.Nullable
   private Limit virtualMemorySize;
 
-  public static final String SERIALIZED_NAME_WEB_LOGIC_HEAP_SIZE = "webLogicHeapSize";
-  @SerializedName(SERIALIZED_NAME_WEB_LOGIC_HEAP_SIZE)
+  public static final String JSON_PROPERTY_WEB_LOGIC_HEAP_SIZE = "webLogicHeapSize";
+  @jakarta.annotation.Nullable
   private Limit webLogicHeapSize;
 
+  public Limits() { 
+  }
 
-  public Limits coreFileSize(Limit coreFileSize) {
-    
+  public Limits coreFileSize(@jakarta.annotation.Nullable Limit coreFileSize) {
     this.coreFileSize = coreFileSize;
     return this;
   }
 
-   /**
+  /**
    * Get coreFileSize
    * @return coreFileSize
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CORE_FILE_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Limit getCoreFileSize() {
     return coreFileSize;
   }
 
 
-  public void setCoreFileSize(Limit coreFileSize) {
+  @JsonProperty(JSON_PROPERTY_CORE_FILE_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCoreFileSize(@jakarta.annotation.Nullable Limit coreFileSize) {
     this.coreFileSize = coreFileSize;
   }
 
 
-  public Limits dataSegmentSize(Limit dataSegmentSize) {
-    
+  public Limits dataSegmentSize(@jakarta.annotation.Nullable Limit dataSegmentSize) {
     this.dataSegmentSize = dataSegmentSize;
     return this;
   }
 
-   /**
+  /**
    * Get dataSegmentSize
    * @return dataSegmentSize
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_SEGMENT_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Limit getDataSegmentSize() {
     return dataSegmentSize;
   }
 
 
-  public void setDataSegmentSize(Limit dataSegmentSize) {
+  @JsonProperty(JSON_PROPERTY_DATA_SEGMENT_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataSegmentSize(@jakarta.annotation.Nullable Limit dataSegmentSize) {
     this.dataSegmentSize = dataSegmentSize;
   }
 
 
-  public Limits maxMemory(Limit maxMemory) {
-    
+  public Limits maxMemory(@jakarta.annotation.Nullable Limit maxMemory) {
     this.maxMemory = maxMemory;
     return this;
   }
 
-   /**
+  /**
    * Get maxMemory
    * @return maxMemory
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MAX_MEMORY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Limit getMaxMemory() {
     return maxMemory;
   }
 
 
-  public void setMaxMemory(Limit maxMemory) {
+  @JsonProperty(JSON_PROPERTY_MAX_MEMORY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMaxMemory(@jakarta.annotation.Nullable Limit maxMemory) {
     this.maxMemory = maxMemory;
   }
 
 
-  public Limits openFiles(Limit openFiles) {
-    
+  public Limits openFiles(@jakarta.annotation.Nullable Limit openFiles) {
     this.openFiles = openFiles;
     return this;
   }
 
-   /**
+  /**
    * Get openFiles
    * @return openFiles
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OPEN_FILES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Limit getOpenFiles() {
     return openFiles;
   }
 
 
-  public void setOpenFiles(Limit openFiles) {
+  @JsonProperty(JSON_PROPERTY_OPEN_FILES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOpenFiles(@jakarta.annotation.Nullable Limit openFiles) {
     this.openFiles = openFiles;
   }
 
 
-  public Limits userMaxProcesses(Limit userMaxProcesses) {
-    
+  public Limits userMaxProcesses(@jakarta.annotation.Nullable Limit userMaxProcesses) {
     this.userMaxProcesses = userMaxProcesses;
     return this;
   }
 
-   /**
+  /**
    * Get userMaxProcesses
    * @return userMaxProcesses
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER_MAX_PROCESSES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Limit getUserMaxProcesses() {
     return userMaxProcesses;
   }
 
 
-  public void setUserMaxProcesses(Limit userMaxProcesses) {
+  @JsonProperty(JSON_PROPERTY_USER_MAX_PROCESSES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUserMaxProcesses(@jakarta.annotation.Nullable Limit userMaxProcesses) {
     this.userMaxProcesses = userMaxProcesses;
   }
 
 
-  public Limits virtualMemorySize(Limit virtualMemorySize) {
-    
+  public Limits virtualMemorySize(@jakarta.annotation.Nullable Limit virtualMemorySize) {
     this.virtualMemorySize = virtualMemorySize;
     return this;
   }
 
-   /**
+  /**
    * Get virtualMemorySize
    * @return virtualMemorySize
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VIRTUAL_MEMORY_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Limit getVirtualMemorySize() {
     return virtualMemorySize;
   }
 
 
-  public void setVirtualMemorySize(Limit virtualMemorySize) {
+  @JsonProperty(JSON_PROPERTY_VIRTUAL_MEMORY_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVirtualMemorySize(@jakarta.annotation.Nullable Limit virtualMemorySize) {
     this.virtualMemorySize = virtualMemorySize;
   }
 
 
-  public Limits webLogicHeapSize(Limit webLogicHeapSize) {
-    
+  public Limits webLogicHeapSize(@jakarta.annotation.Nullable Limit webLogicHeapSize) {
     this.webLogicHeapSize = webLogicHeapSize;
     return this;
   }
 
-   /**
+  /**
    * Get webLogicHeapSize
    * @return webLogicHeapSize
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_WEB_LOGIC_HEAP_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Limit getWebLogicHeapSize() {
     return webLogicHeapSize;
   }
 
 
-  public void setWebLogicHeapSize(Limit webLogicHeapSize) {
+  @JsonProperty(JSON_PROPERTY_WEB_LOGIC_HEAP_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWebLogicHeapSize(@jakarta.annotation.Nullable Limit webLogicHeapSize) {
     this.webLogicHeapSize = webLogicHeapSize;
   }
 
 
+  /**
+   * Return true if this Limits object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -269,5 +295,74 @@ public class Limits {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `coreFileSize` to the URL query string
+    if (getCoreFileSize() != null) {
+      joiner.add(getCoreFileSize().toUrlQueryString(prefix + "coreFileSize" + suffix));
+    }
+
+    // add `dataSegmentSize` to the URL query string
+    if (getDataSegmentSize() != null) {
+      joiner.add(getDataSegmentSize().toUrlQueryString(prefix + "dataSegmentSize" + suffix));
+    }
+
+    // add `maxMemory` to the URL query string
+    if (getMaxMemory() != null) {
+      joiner.add(getMaxMemory().toUrlQueryString(prefix + "maxMemory" + suffix));
+    }
+
+    // add `openFiles` to the URL query string
+    if (getOpenFiles() != null) {
+      joiner.add(getOpenFiles().toUrlQueryString(prefix + "openFiles" + suffix));
+    }
+
+    // add `userMaxProcesses` to the URL query string
+    if (getUserMaxProcesses() != null) {
+      joiner.add(getUserMaxProcesses().toUrlQueryString(prefix + "userMaxProcesses" + suffix));
+    }
+
+    // add `virtualMemorySize` to the URL query string
+    if (getVirtualMemorySize() != null) {
+      joiner.add(getVirtualMemorySize().toUrlQueryString(prefix + "virtualMemorySize" + suffix));
+    }
+
+    // add `webLogicHeapSize` to the URL query string
+    if (getWebLogicHeapSize() != null) {
+      joiner.add(getWebLogicHeapSize().toUrlQueryString(prefix + "webLogicHeapSize" + suffix));
+    }
+
+    return joiner.toString();
+  }
 }
 

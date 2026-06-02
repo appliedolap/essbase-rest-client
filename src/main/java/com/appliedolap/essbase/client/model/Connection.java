@@ -13,45 +13,71 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.Link;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * Connection
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  Connection.JSON_PROPERTY_DESCRIPTION,
+  Connection.JSON_PROPERTY_NAME,
+  Connection.JSON_PROPERTY_TYPE,
+  Connection.JSON_PROPERTY_PATH,
+  Connection.JSON_PROPERTY_CATALOG,
+  Connection.JSON_PROPERTY_HOST,
+  Connection.JSON_PROPERTY_PORT,
+  Connection.JSON_PROPERTY_USER,
+  Connection.JSON_PROPERTY_PASSWORD,
+  Connection.JSON_PROPERTY_ENCRYPTED,
+  Connection.JSON_PROPERTY_TOKEN,
+  Connection.JSON_PROPERTY_SID,
+  Connection.JSON_PROPERTY_SERVICE,
+  Connection.JSON_PROPERTY_SCHEMA,
+  Connection.JSON_PROPERTY_DB_U_R_L,
+  Connection.JSON_PROPERTY_DB_DRIVER,
+  Connection.JSON_PROPERTY_DATASOURCE,
+  Connection.JSON_PROPERTY_SUBTYPE,
+  Connection.JSON_PROPERTY_WALLET_PATH,
+  Connection.JSON_PROPERTY_LINKS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class Connection {
-  public static final String SERIALIZED_NAME_DESCRIPTION = "description";
-  @SerializedName(SERIALIZED_NAME_DESCRIPTION)
+  public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  @jakarta.annotation.Nullable
   private String description;
 
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nonnull
   private String name;
 
   /**
    * Gets or Sets type
    */
-  @JsonAdapter(TypeEnum.Adapter.class)
   public enum TypeEnum {
-    FILE("FILE"),
+    FILE(String.valueOf("FILE")),
     
-    DB("DB"),
+    DB(String.valueOf("DB")),
     
-    ESSBASE("ESSBASE"),
+    ESSBASE(String.valueOf("ESSBASE")),
     
-    BI("BI");
+    BI(String.valueOf("BI"));
 
     private String value;
 
@@ -59,6 +85,7 @@ public class Connection {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -68,6 +95,7 @@ public class Connection {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static TypeEnum fromValue(String value) {
       for (TypeEnum b : TypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -76,113 +104,99 @@ public class Connection {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<TypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final TypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public TypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return TypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nonnull
   private TypeEnum type;
 
-  public static final String SERIALIZED_NAME_PATH = "path";
-  @SerializedName(SERIALIZED_NAME_PATH)
+  public static final String JSON_PROPERTY_PATH = "path";
+  @jakarta.annotation.Nullable
   private String path;
 
-  public static final String SERIALIZED_NAME_CATALOG = "catalog";
-  @SerializedName(SERIALIZED_NAME_CATALOG)
+  public static final String JSON_PROPERTY_CATALOG = "catalog";
+  @jakarta.annotation.Nullable
   private Boolean catalog;
 
-  public static final String SERIALIZED_NAME_HOST = "host";
-  @SerializedName(SERIALIZED_NAME_HOST)
+  public static final String JSON_PROPERTY_HOST = "host";
+  @jakarta.annotation.Nullable
   private String host;
 
-  public static final String SERIALIZED_NAME_PORT = "port";
-  @SerializedName(SERIALIZED_NAME_PORT)
+  public static final String JSON_PROPERTY_PORT = "port";
+  @jakarta.annotation.Nullable
   private Integer port;
 
-  public static final String SERIALIZED_NAME_USER = "user";
-  @SerializedName(SERIALIZED_NAME_USER)
+  public static final String JSON_PROPERTY_USER = "user";
+  @jakarta.annotation.Nullable
   private String user;
 
-  public static final String SERIALIZED_NAME_PASSWORD = "password";
-  @SerializedName(SERIALIZED_NAME_PASSWORD)
+  public static final String JSON_PROPERTY_PASSWORD = "password";
+  @jakarta.annotation.Nullable
   private String password;
 
-  public static final String SERIALIZED_NAME_ENCRYPTED = "encrypted";
-  @SerializedName(SERIALIZED_NAME_ENCRYPTED)
+  public static final String JSON_PROPERTY_ENCRYPTED = "encrypted";
+  @jakarta.annotation.Nullable
   private Boolean encrypted;
 
-  public static final String SERIALIZED_NAME_TOKEN = "token";
-  @SerializedName(SERIALIZED_NAME_TOKEN)
+  public static final String JSON_PROPERTY_TOKEN = "token";
+  @jakarta.annotation.Nullable
   private String token;
 
-  public static final String SERIALIZED_NAME_SID = "sid";
-  @SerializedName(SERIALIZED_NAME_SID)
+  public static final String JSON_PROPERTY_SID = "sid";
+  @jakarta.annotation.Nullable
   private String sid;
 
-  public static final String SERIALIZED_NAME_SERVICE = "service";
-  @SerializedName(SERIALIZED_NAME_SERVICE)
+  public static final String JSON_PROPERTY_SERVICE = "service";
+  @jakarta.annotation.Nullable
   private String service;
 
-  public static final String SERIALIZED_NAME_SCHEMA = "schema";
-  @SerializedName(SERIALIZED_NAME_SCHEMA)
+  public static final String JSON_PROPERTY_SCHEMA = "schema";
+  @jakarta.annotation.Nullable
   private String schema;
 
-  public static final String SERIALIZED_NAME_DB_U_R_L = "dbURL";
-  @SerializedName(SERIALIZED_NAME_DB_U_R_L)
+  public static final String JSON_PROPERTY_DB_U_R_L = "dbURL";
+  @jakarta.annotation.Nullable
   private String dbURL;
 
-  public static final String SERIALIZED_NAME_DB_DRIVER = "dbDriver";
-  @SerializedName(SERIALIZED_NAME_DB_DRIVER)
+  public static final String JSON_PROPERTY_DB_DRIVER = "dbDriver";
+  @jakarta.annotation.Nullable
   private String dbDriver;
 
-  public static final String SERIALIZED_NAME_DATASOURCE = "datasource";
-  @SerializedName(SERIALIZED_NAME_DATASOURCE)
+  public static final String JSON_PROPERTY_DATASOURCE = "datasource";
+  @jakarta.annotation.Nullable
   private String datasource;
 
   /**
    * Gets or Sets subtype
    */
-  @JsonAdapter(SubtypeEnum.Adapter.class)
   public enum SubtypeEnum {
-    TEMPLATE("TEMPLATE"),
+    TEMPLATE(String.valueOf("TEMPLATE")),
     
-    EXCELFILE("EXCELFILE"),
+    EXCELFILE(String.valueOf("EXCELFILE")),
     
-    DB("DB"),
+    DB(String.valueOf("DB")),
     
-    DELIMITEDFILE("DELIMITEDFILE"),
+    DELIMITEDFILE(String.valueOf("DELIMITEDFILE")),
     
-    FIXEDWIDTHFILE("FIXEDWIDTHFILE"),
+    FIXEDWIDTHFILE(String.valueOf("FIXEDWIDTHFILE")),
     
-    BI("BI"),
+    BI(String.valueOf("BI")),
     
-    ESSBASE("ESSBASE"),
+    ESSBASE(String.valueOf("ESSBASE")),
     
-    JDBC("JDBC"),
+    JDBC(String.valueOf("JDBC")),
     
-    SPARK("SPARK"),
+    SPARK(String.valueOf("SPARK")),
     
-    MS_SQL("MS_SQL"),
+    MS_SQL(String.valueOf("MS_SQL")),
     
-    MYSQL("MYSQL"),
+    MYSQL(String.valueOf("MYSQL")),
     
-    DB2("DB2"),
+    DB2(String.valueOf("DB2")),
     
-    ORACLE("ORACLE"),
+    ORACLE(String.valueOf("ORACLE")),
     
-    FILE("FILE");
+    FILE(String.valueOf("FILE"));
 
     private String value;
 
@@ -190,6 +204,7 @@ public class Connection {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -199,6 +214,7 @@ public class Connection {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static SubtypeEnum fromValue(String value) {
       for (SubtypeEnum b : SubtypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -207,500 +223,514 @@ public class Connection {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<SubtypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final SubtypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public SubtypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return SubtypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_SUBTYPE = "subtype";
-  @SerializedName(SERIALIZED_NAME_SUBTYPE)
+  public static final String JSON_PROPERTY_SUBTYPE = "subtype";
+  @jakarta.annotation.Nullable
   private SubtypeEnum subtype;
 
-  public static final String SERIALIZED_NAME_WALLET_PATH = "walletPath";
-  @SerializedName(SERIALIZED_NAME_WALLET_PATH)
+  public static final String JSON_PROPERTY_WALLET_PATH = "walletPath";
+  @jakarta.annotation.Nullable
   private String walletPath;
 
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
+  public Connection() { 
+  }
 
-  public Connection description(String description) {
-    
+  public Connection description(@jakarta.annotation.Nullable String description) {
     this.description = description;
     return this;
   }
 
-   /**
+  /**
    * Get description
    * @return description
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDescription() {
     return description;
   }
 
 
-  public void setDescription(String description) {
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDescription(@jakarta.annotation.Nullable String description) {
     this.description = description;
   }
 
 
-  public Connection name(String name) {
-    
+  public Connection name(@jakarta.annotation.Nonnull String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @ApiModelProperty(required = true, value = "")
-
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setName(@jakarta.annotation.Nonnull String name) {
     this.name = name;
   }
 
 
-  public Connection type(TypeEnum type) {
-    
+  public Connection type(@jakarta.annotation.Nonnull TypeEnum type) {
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
-  @ApiModelProperty(required = true, value = "")
-
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public TypeEnum getType() {
     return type;
   }
 
 
-  public void setType(TypeEnum type) {
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setType(@jakarta.annotation.Nonnull TypeEnum type) {
     this.type = type;
   }
 
 
-  public Connection path(String path) {
-    
+  public Connection path(@jakarta.annotation.Nullable String path) {
     this.path = path;
     return this;
   }
 
-   /**
+  /**
    * Get path
    * @return path
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PATH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getPath() {
     return path;
   }
 
 
-  public void setPath(String path) {
+  @JsonProperty(JSON_PROPERTY_PATH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPath(@jakarta.annotation.Nullable String path) {
     this.path = path;
   }
 
 
-  public Connection catalog(Boolean catalog) {
-    
+  public Connection catalog(@jakarta.annotation.Nullable Boolean catalog) {
     this.catalog = catalog;
     return this;
   }
 
-   /**
+  /**
    * Get catalog
    * @return catalog
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CATALOG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getCatalog() {
     return catalog;
   }
 
 
-  public void setCatalog(Boolean catalog) {
+  @JsonProperty(JSON_PROPERTY_CATALOG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCatalog(@jakarta.annotation.Nullable Boolean catalog) {
     this.catalog = catalog;
   }
 
 
-  public Connection host(String host) {
-    
+  public Connection host(@jakarta.annotation.Nullable String host) {
     this.host = host;
     return this;
   }
 
-   /**
+  /**
    * Get host
    * @return host
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HOST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getHost() {
     return host;
   }
 
 
-  public void setHost(String host) {
+  @JsonProperty(JSON_PROPERTY_HOST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHost(@jakarta.annotation.Nullable String host) {
     this.host = host;
   }
 
 
-  public Connection port(Integer port) {
-    
+  public Connection port(@jakarta.annotation.Nullable Integer port) {
     this.port = port;
     return this;
   }
 
-   /**
+  /**
    * Get port
    * @return port
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PORT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getPort() {
     return port;
   }
 
 
-  public void setPort(Integer port) {
+  @JsonProperty(JSON_PROPERTY_PORT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPort(@jakarta.annotation.Nullable Integer port) {
     this.port = port;
   }
 
 
-  public Connection user(String user) {
-    
+  public Connection user(@jakarta.annotation.Nullable String user) {
     this.user = user;
     return this;
   }
 
-   /**
+  /**
    * Get user
    * @return user
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getUser() {
     return user;
   }
 
 
-  public void setUser(String user) {
+  @JsonProperty(JSON_PROPERTY_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUser(@jakarta.annotation.Nullable String user) {
     this.user = user;
   }
 
 
-  public Connection password(String password) {
-    
+  public Connection password(@jakarta.annotation.Nullable String password) {
     this.password = password;
     return this;
   }
 
-   /**
+  /**
    * Get password
    * @return password
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PASSWORD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getPassword() {
     return password;
   }
 
 
-  public void setPassword(String password) {
+  @JsonProperty(JSON_PROPERTY_PASSWORD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPassword(@jakarta.annotation.Nullable String password) {
     this.password = password;
   }
 
 
-  public Connection encrypted(Boolean encrypted) {
-    
+  public Connection encrypted(@jakarta.annotation.Nullable Boolean encrypted) {
     this.encrypted = encrypted;
     return this;
   }
 
-   /**
+  /**
    * Get encrypted
    * @return encrypted
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ENCRYPTED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getEncrypted() {
     return encrypted;
   }
 
 
-  public void setEncrypted(Boolean encrypted) {
+  @JsonProperty(JSON_PROPERTY_ENCRYPTED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEncrypted(@jakarta.annotation.Nullable Boolean encrypted) {
     this.encrypted = encrypted;
   }
 
 
-  public Connection token(String token) {
-    
+  public Connection token(@jakarta.annotation.Nullable String token) {
     this.token = token;
     return this;
   }
 
-   /**
+  /**
    * Get token
    * @return token
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TOKEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getToken() {
     return token;
   }
 
 
-  public void setToken(String token) {
+  @JsonProperty(JSON_PROPERTY_TOKEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setToken(@jakarta.annotation.Nullable String token) {
     this.token = token;
   }
 
 
-  public Connection sid(String sid) {
-    
+  public Connection sid(@jakarta.annotation.Nullable String sid) {
     this.sid = sid;
     return this;
   }
 
-   /**
+  /**
    * Get sid
    * @return sid
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getSid() {
     return sid;
   }
 
 
-  public void setSid(String sid) {
+  @JsonProperty(JSON_PROPERTY_SID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSid(@jakarta.annotation.Nullable String sid) {
     this.sid = sid;
   }
 
 
-  public Connection service(String service) {
-    
+  public Connection service(@jakarta.annotation.Nullable String service) {
     this.service = service;
     return this;
   }
 
-   /**
+  /**
    * Get service
    * @return service
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SERVICE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getService() {
     return service;
   }
 
 
-  public void setService(String service) {
+  @JsonProperty(JSON_PROPERTY_SERVICE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setService(@jakarta.annotation.Nullable String service) {
     this.service = service;
   }
 
 
-  public Connection schema(String schema) {
-    
+  public Connection schema(@jakarta.annotation.Nullable String schema) {
     this.schema = schema;
     return this;
   }
 
-   /**
+  /**
    * Get schema
    * @return schema
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SCHEMA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getSchema() {
     return schema;
   }
 
 
-  public void setSchema(String schema) {
+  @JsonProperty(JSON_PROPERTY_SCHEMA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSchema(@jakarta.annotation.Nullable String schema) {
     this.schema = schema;
   }
 
 
-  public Connection dbURL(String dbURL) {
-    
+  public Connection dbURL(@jakarta.annotation.Nullable String dbURL) {
     this.dbURL = dbURL;
     return this;
   }
 
-   /**
+  /**
    * Get dbURL
    * @return dbURL
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DB_U_R_L)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDbURL() {
     return dbURL;
   }
 
 
-  public void setDbURL(String dbURL) {
+  @JsonProperty(JSON_PROPERTY_DB_U_R_L)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDbURL(@jakarta.annotation.Nullable String dbURL) {
     this.dbURL = dbURL;
   }
 
 
-  public Connection dbDriver(String dbDriver) {
-    
+  public Connection dbDriver(@jakarta.annotation.Nullable String dbDriver) {
     this.dbDriver = dbDriver;
     return this;
   }
 
-   /**
+  /**
    * Get dbDriver
    * @return dbDriver
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DB_DRIVER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDbDriver() {
     return dbDriver;
   }
 
 
-  public void setDbDriver(String dbDriver) {
+  @JsonProperty(JSON_PROPERTY_DB_DRIVER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDbDriver(@jakarta.annotation.Nullable String dbDriver) {
     this.dbDriver = dbDriver;
   }
 
 
-  public Connection datasource(String datasource) {
-    
+  public Connection datasource(@jakarta.annotation.Nullable String datasource) {
     this.datasource = datasource;
     return this;
   }
 
-   /**
+  /**
    * Get datasource
    * @return datasource
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATASOURCE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDatasource() {
     return datasource;
   }
 
 
-  public void setDatasource(String datasource) {
+  @JsonProperty(JSON_PROPERTY_DATASOURCE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatasource(@jakarta.annotation.Nullable String datasource) {
     this.datasource = datasource;
   }
 
 
-  public Connection subtype(SubtypeEnum subtype) {
-    
+  public Connection subtype(@jakarta.annotation.Nullable SubtypeEnum subtype) {
     this.subtype = subtype;
     return this;
   }
 
-   /**
+  /**
    * Get subtype
    * @return subtype
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SUBTYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public SubtypeEnum getSubtype() {
     return subtype;
   }
 
 
-  public void setSubtype(SubtypeEnum subtype) {
+  @JsonProperty(JSON_PROPERTY_SUBTYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSubtype(@jakarta.annotation.Nullable SubtypeEnum subtype) {
     this.subtype = subtype;
   }
 
 
-  public Connection walletPath(String walletPath) {
-    
+  public Connection walletPath(@jakarta.annotation.Nullable String walletPath) {
     this.walletPath = walletPath;
     return this;
   }
 
-   /**
+  /**
    * Get walletPath
    * @return walletPath
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_WALLET_PATH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getWalletPath() {
     return walletPath;
   }
 
 
-  public void setWalletPath(String walletPath) {
+  @JsonProperty(JSON_PROPERTY_WALLET_PATH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWalletPath(@jakarta.annotation.Nullable String walletPath) {
     this.walletPath = walletPath;
   }
 
 
-  public Connection links(List<Link> links) {
-    
+  public Connection links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public Connection addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
+  /**
+   * Return true if this Connection object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -776,5 +806,144 @@ public class Connection {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `description` to the URL query string
+    if (getDescription() != null) {
+      joiner.add(String.format("%sdescription%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDescription()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `path` to the URL query string
+    if (getPath() != null) {
+      joiner.add(String.format("%spath%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPath()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `catalog` to the URL query string
+    if (getCatalog() != null) {
+      joiner.add(String.format("%scatalog%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCatalog()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `host` to the URL query string
+    if (getHost() != null) {
+      joiner.add(String.format("%shost%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getHost()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `port` to the URL query string
+    if (getPort() != null) {
+      joiner.add(String.format("%sport%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPort()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `user` to the URL query string
+    if (getUser() != null) {
+      joiner.add(String.format("%suser%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUser()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `password` to the URL query string
+    if (getPassword() != null) {
+      joiner.add(String.format("%spassword%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPassword()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `encrypted` to the URL query string
+    if (getEncrypted() != null) {
+      joiner.add(String.format("%sencrypted%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getEncrypted()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `token` to the URL query string
+    if (getToken() != null) {
+      joiner.add(String.format("%stoken%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getToken()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `sid` to the URL query string
+    if (getSid() != null) {
+      joiner.add(String.format("%ssid%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSid()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `service` to the URL query string
+    if (getService() != null) {
+      joiner.add(String.format("%sservice%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getService()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `schema` to the URL query string
+    if (getSchema() != null) {
+      joiner.add(String.format("%sschema%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSchema()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dbURL` to the URL query string
+    if (getDbURL() != null) {
+      joiner.add(String.format("%sdbURL%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDbURL()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dbDriver` to the URL query string
+    if (getDbDriver() != null) {
+      joiner.add(String.format("%sdbDriver%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDbDriver()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `datasource` to the URL query string
+    if (getDatasource() != null) {
+      joiner.add(String.format("%sdatasource%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDatasource()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `subtype` to the URL query string
+    if (getSubtype() != null) {
+      joiner.add(String.format("%ssubtype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSubtype()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `walletPath` to the URL query string
+    if (getWalletPath() != null) {
+      joiner.add(String.format("%swalletPath%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getWalletPath()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

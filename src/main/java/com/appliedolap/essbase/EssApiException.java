@@ -1,7 +1,8 @@
 package com.appliedolap.essbase;
 
 import com.appliedolap.essbase.client.ApiException;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,8 @@ import java.util.Map;
  */
 public class EssApiException extends RuntimeException {
 
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     public EssApiException(String message) {
         super(message);
     }
@@ -24,7 +27,7 @@ public class EssApiException extends RuntimeException {
 
     protected static String getBestMessage(Throwable e) {
         if (e instanceof ApiException) {
-            Map<String, String> details = extractMessage(((ApiException)e).getResponseBody());
+            Map<String, String> details = extractMessage(((ApiException) e).getResponseBody());
             String errorMessage = details.get("errorMessage");
             if (errorMessage != null) {
                 return errorMessage;
@@ -33,15 +36,27 @@ public class EssApiException extends RuntimeException {
         return e.getMessage();
     }
 
-    protected static Map extractMessage(String message) {
-        try {
-            Gson gson = new Gson();
-            return gson.fromJson(message, Map.class);
-        } catch (Exception e) {
-            Map<String, String> details = new HashMap<>();
-            details.put("errorMessage", message);
-            return details;
+    protected static Map<String, String> extractMessage(String message) {
+        if (message == null || message.isBlank()) {
+            return new HashMap<>();
         }
+        try {
+            Map<String, Object> parsedDetails = OBJECT_MAPPER.readValue(message, new TypeReference<Map<String, Object>>() {});
+            if (parsedDetails != null) {
+                Map<String, String> details = new HashMap<>();
+                for (Map.Entry<String, Object> entry : parsedDetails.entrySet()) {
+                    if (entry.getValue() != null) {
+                        details.put(entry.getKey(), entry.getValue().toString());
+                    }
+                }
+                return details;
+            }
+        } catch (Exception e) {
+            // Plain-text/non-JSON response bodies are handled below.
+        }
+        Map<String, String> details = new HashMap<>();
+        details.put("errorMessage", message);
+        return details;
     }
 
 }

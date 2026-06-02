@@ -13,122 +13,140 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * DVUpdatedCell
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  DVUpdatedCell.JSON_PROPERTY_VALUE,
+  DVUpdatedCell.JSON_PROPERTY_ROW_HEADERS,
+  DVUpdatedCell.JSON_PROPERTY_COLUMN_HEADERS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class DVUpdatedCell {
-  public static final String SERIALIZED_NAME_VALUE = "value";
-  @SerializedName(SERIALIZED_NAME_VALUE)
+  public static final String JSON_PROPERTY_VALUE = "value";
+  @jakarta.annotation.Nullable
   private String value;
 
-  public static final String SERIALIZED_NAME_ROW_HEADERS = "rowHeaders";
-  @SerializedName(SERIALIZED_NAME_ROW_HEADERS)
-  private List<String> rowHeaders = null;
+  public static final String JSON_PROPERTY_ROW_HEADERS = "rowHeaders";
+  @jakarta.annotation.Nullable
+  private List<String> rowHeaders = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_COLUMN_HEADERS = "columnHeaders";
-  @SerializedName(SERIALIZED_NAME_COLUMN_HEADERS)
-  private List<String> columnHeaders = null;
+  public static final String JSON_PROPERTY_COLUMN_HEADERS = "columnHeaders";
+  @jakarta.annotation.Nullable
+  private List<String> columnHeaders = new ArrayList<>();
 
+  public DVUpdatedCell() { 
+  }
 
-  public DVUpdatedCell value(String value) {
-    
+  public DVUpdatedCell value(@jakarta.annotation.Nullable String value) {
     this.value = value;
     return this;
   }
 
-   /**
+  /**
    * Get value
    * @return value
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getValue() {
     return value;
   }
 
 
-  public void setValue(String value) {
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setValue(@jakarta.annotation.Nullable String value) {
     this.value = value;
   }
 
 
-  public DVUpdatedCell rowHeaders(List<String> rowHeaders) {
-    
+  public DVUpdatedCell rowHeaders(@jakarta.annotation.Nullable List<String> rowHeaders) {
     this.rowHeaders = rowHeaders;
     return this;
   }
 
   public DVUpdatedCell addRowHeadersItem(String rowHeadersItem) {
     if (this.rowHeaders == null) {
-      this.rowHeaders = new ArrayList<String>();
+      this.rowHeaders = new ArrayList<>();
     }
     this.rowHeaders.add(rowHeadersItem);
     return this;
   }
 
-   /**
+  /**
    * Get rowHeaders
    * @return rowHeaders
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ROW_HEADERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getRowHeaders() {
     return rowHeaders;
   }
 
 
-  public void setRowHeaders(List<String> rowHeaders) {
+  @JsonProperty(JSON_PROPERTY_ROW_HEADERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRowHeaders(@jakarta.annotation.Nullable List<String> rowHeaders) {
     this.rowHeaders = rowHeaders;
   }
 
 
-  public DVUpdatedCell columnHeaders(List<String> columnHeaders) {
-    
+  public DVUpdatedCell columnHeaders(@jakarta.annotation.Nullable List<String> columnHeaders) {
     this.columnHeaders = columnHeaders;
     return this;
   }
 
   public DVUpdatedCell addColumnHeadersItem(String columnHeadersItem) {
     if (this.columnHeaders == null) {
-      this.columnHeaders = new ArrayList<String>();
+      this.columnHeaders = new ArrayList<>();
     }
     this.columnHeaders.add(columnHeadersItem);
     return this;
   }
 
-   /**
+  /**
    * Get columnHeaders
    * @return columnHeaders
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COLUMN_HEADERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getColumnHeaders() {
     return columnHeaders;
   }
 
 
-  public void setColumnHeaders(List<String> columnHeaders) {
+  @JsonProperty(JSON_PROPERTY_COLUMN_HEADERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setColumnHeaders(@jakarta.annotation.Nullable List<String> columnHeaders) {
     this.columnHeaders = columnHeaders;
   }
 
 
+  /**
+   * Return true if this DVUpdatedCell object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -170,5 +188,62 @@ public class DVUpdatedCell {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `value` to the URL query string
+    if (getValue() != null) {
+      joiner.add(String.format("%svalue%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getValue()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `rowHeaders` to the URL query string
+    if (getRowHeaders() != null) {
+      for (int i = 0; i < getRowHeaders().size(); i++) {
+        joiner.add(String.format("%srowHeaders%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getRowHeaders().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `columnHeaders` to the URL query string
+    if (getColumnHeaders() != null) {
+      for (int i = 0; i < getColumnHeaders().size(); i++) {
+        joiner.add(String.format("%scolumnHeaders%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getColumnHeaders().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

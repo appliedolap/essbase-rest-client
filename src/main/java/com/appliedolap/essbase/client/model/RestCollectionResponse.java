@@ -13,231 +13,257 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.Link;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * RestCollectionResponse
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  RestCollectionResponse.JSON_PROPERTY_ITEMS,
+  RestCollectionResponse.JSON_PROPERTY_HAS_MORE,
+  RestCollectionResponse.JSON_PROPERTY_TOTAL_RESULTS,
+  RestCollectionResponse.JSON_PROPERTY_LIMIT,
+  RestCollectionResponse.JSON_PROPERTY_COUNT,
+  RestCollectionResponse.JSON_PROPERTY_OFFSET,
+  RestCollectionResponse.JSON_PROPERTY_LINKS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class RestCollectionResponse {
-  public static final String SERIALIZED_NAME_ITEMS = "items";
-  @SerializedName(SERIALIZED_NAME_ITEMS)
-  private List<Object> items = null;
+  public static final String JSON_PROPERTY_ITEMS = "items";
+  @jakarta.annotation.Nullable
+  private List<Object> items = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_HAS_MORE = "hasMore";
-  @SerializedName(SERIALIZED_NAME_HAS_MORE)
+  public static final String JSON_PROPERTY_HAS_MORE = "hasMore";
+  @jakarta.annotation.Nullable
   private Boolean hasMore;
 
-  public static final String SERIALIZED_NAME_TOTAL_RESULTS = "totalResults";
-  @SerializedName(SERIALIZED_NAME_TOTAL_RESULTS)
+  public static final String JSON_PROPERTY_TOTAL_RESULTS = "totalResults";
+  @jakarta.annotation.Nullable
   private Integer totalResults;
 
-  public static final String SERIALIZED_NAME_LIMIT = "limit";
-  @SerializedName(SERIALIZED_NAME_LIMIT)
+  public static final String JSON_PROPERTY_LIMIT = "limit";
+  @jakarta.annotation.Nullable
   private Integer limit;
 
-  public static final String SERIALIZED_NAME_COUNT = "count";
-  @SerializedName(SERIALIZED_NAME_COUNT)
+  public static final String JSON_PROPERTY_COUNT = "count";
+  @jakarta.annotation.Nullable
   private Integer count;
 
-  public static final String SERIALIZED_NAME_OFFSET = "offset";
-  @SerializedName(SERIALIZED_NAME_OFFSET)
+  public static final String JSON_PROPERTY_OFFSET = "offset";
+  @jakarta.annotation.Nullable
   private Integer offset;
 
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
+  public RestCollectionResponse() { 
+  }
 
-  public RestCollectionResponse items(List<Object> items) {
-    
+  public RestCollectionResponse items(@jakarta.annotation.Nullable List<Object> items) {
     this.items = items;
     return this;
   }
 
   public RestCollectionResponse addItemsItem(Object itemsItem) {
     if (this.items == null) {
-      this.items = new ArrayList<Object>();
+      this.items = new ArrayList<>();
     }
     this.items.add(itemsItem);
     return this;
   }
 
-   /**
+  /**
    * Get items
    * @return items
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ITEMS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Object> getItems() {
     return items;
   }
 
 
-  public void setItems(List<Object> items) {
+  @JsonProperty(JSON_PROPERTY_ITEMS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setItems(@jakarta.annotation.Nullable List<Object> items) {
     this.items = items;
   }
 
 
-  public RestCollectionResponse hasMore(Boolean hasMore) {
-    
+  public RestCollectionResponse hasMore(@jakarta.annotation.Nullable Boolean hasMore) {
     this.hasMore = hasMore;
     return this;
   }
 
-   /**
+  /**
    * Get hasMore
    * @return hasMore
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HAS_MORE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getHasMore() {
     return hasMore;
   }
 
 
-  public void setHasMore(Boolean hasMore) {
+  @JsonProperty(JSON_PROPERTY_HAS_MORE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHasMore(@jakarta.annotation.Nullable Boolean hasMore) {
     this.hasMore = hasMore;
   }
 
 
-  public RestCollectionResponse totalResults(Integer totalResults) {
-    
+  public RestCollectionResponse totalResults(@jakarta.annotation.Nullable Integer totalResults) {
     this.totalResults = totalResults;
     return this;
   }
 
-   /**
+  /**
    * Get totalResults
    * @return totalResults
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TOTAL_RESULTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getTotalResults() {
     return totalResults;
   }
 
 
-  public void setTotalResults(Integer totalResults) {
+  @JsonProperty(JSON_PROPERTY_TOTAL_RESULTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTotalResults(@jakarta.annotation.Nullable Integer totalResults) {
     this.totalResults = totalResults;
   }
 
 
-  public RestCollectionResponse limit(Integer limit) {
-    
+  public RestCollectionResponse limit(@jakarta.annotation.Nullable Integer limit) {
     this.limit = limit;
     return this;
   }
 
-   /**
+  /**
    * Get limit
    * @return limit
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LIMIT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getLimit() {
     return limit;
   }
 
 
-  public void setLimit(Integer limit) {
+  @JsonProperty(JSON_PROPERTY_LIMIT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLimit(@jakarta.annotation.Nullable Integer limit) {
     this.limit = limit;
   }
 
 
-  public RestCollectionResponse count(Integer count) {
-    
+  public RestCollectionResponse count(@jakarta.annotation.Nullable Integer count) {
     this.count = count;
     return this;
   }
 
-   /**
+  /**
    * Get count
    * @return count
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getCount() {
     return count;
   }
 
 
-  public void setCount(Integer count) {
+  @JsonProperty(JSON_PROPERTY_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCount(@jakarta.annotation.Nullable Integer count) {
     this.count = count;
   }
 
 
-  public RestCollectionResponse offset(Integer offset) {
-    
+  public RestCollectionResponse offset(@jakarta.annotation.Nullable Integer offset) {
     this.offset = offset;
     return this;
   }
 
-   /**
+  /**
    * Get offset
    * @return offset
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OFFSET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getOffset() {
     return offset;
   }
 
 
-  public void setOffset(Integer offset) {
+  @JsonProperty(JSON_PROPERTY_OFFSET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOffset(@jakarta.annotation.Nullable Integer offset) {
     this.offset = offset;
   }
 
 
-  public RestCollectionResponse links(List<Link> links) {
-    
+  public RestCollectionResponse links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public RestCollectionResponse addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
+  /**
+   * Return true if this RestCollectionResponse object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -287,5 +313,83 @@ public class RestCollectionResponse {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `items` to the URL query string
+    if (getItems() != null) {
+      for (int i = 0; i < getItems().size(); i++) {
+        joiner.add(String.format("%sitems%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getItems().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `hasMore` to the URL query string
+    if (getHasMore() != null) {
+      joiner.add(String.format("%shasMore%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getHasMore()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `totalResults` to the URL query string
+    if (getTotalResults() != null) {
+      joiner.add(String.format("%stotalResults%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTotalResults()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `limit` to the URL query string
+    if (getLimit() != null) {
+      joiner.add(String.format("%slimit%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLimit()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `count` to the URL query string
+    if (getCount() != null) {
+      joiner.add(String.format("%scount%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCount()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `offset` to the URL query string
+    if (getOffset() != null) {
+      joiner.add(String.format("%soffset%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getOffset()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

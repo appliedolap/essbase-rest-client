@@ -13,104 +13,122 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * StatisticsDimensions
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  StatisticsDimensions.JSON_PROPERTY_NAME,
+  StatisticsDimensions.JSON_PROPERTY_LEVELS,
+  StatisticsDimensions.JSON_PROPERTY_BITS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class StatisticsDimensions {
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
-  public static final String SERIALIZED_NAME_LEVELS = "levels";
-  @SerializedName(SERIALIZED_NAME_LEVELS)
+  public static final String JSON_PROPERTY_LEVELS = "levels";
+  @jakarta.annotation.Nullable
   private String levels;
 
-  public static final String SERIALIZED_NAME_BITS = "bits";
-  @SerializedName(SERIALIZED_NAME_BITS)
+  public static final String JSON_PROPERTY_BITS = "bits";
+  @jakarta.annotation.Nullable
   private Double bits;
 
+  public StatisticsDimensions() { 
+  }
 
-  public StatisticsDimensions name(String name) {
-    
+  public StatisticsDimensions name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
-  public StatisticsDimensions levels(String levels) {
-    
+  public StatisticsDimensions levels(@jakarta.annotation.Nullable String levels) {
     this.levels = levels;
     return this;
   }
 
-   /**
+  /**
    * Get levels
    * @return levels
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LEVELS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getLevels() {
     return levels;
   }
 
 
-  public void setLevels(String levels) {
+  @JsonProperty(JSON_PROPERTY_LEVELS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLevels(@jakarta.annotation.Nullable String levels) {
     this.levels = levels;
   }
 
 
-  public StatisticsDimensions bits(Double bits) {
-    
+  public StatisticsDimensions bits(@jakarta.annotation.Nullable Double bits) {
     this.bits = bits;
     return this;
   }
 
-   /**
+  /**
    * Get bits
    * @return bits
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BITS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getBits() {
     return bits;
   }
 
 
-  public void setBits(Double bits) {
+  @JsonProperty(JSON_PROPERTY_BITS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBits(@jakarta.annotation.Nullable Double bits) {
     this.bits = bits;
   }
 
 
+  /**
+   * Return true if this StatisticsDimensions object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -152,5 +170,54 @@ public class StatisticsDimensions {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `levels` to the URL query string
+    if (getLevels() != null) {
+      joiner.add(String.format("%slevels%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLevels()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `bits` to the URL query string
+    if (getBits() != null) {
+      joiner.add(String.format("%sbits%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getBits()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

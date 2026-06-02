@@ -9,6 +9,8 @@ import com.appliedolap.essbase.client.api.*;
  */
 public class ApiContext {
 
+    private final ApiClient client;
+
     private final ApplicationsApi applicationsApi;
 
     private final ApplicationConfigurationApi applicationConfigurationApi;
@@ -22,8 +24,6 @@ public class ApiContext {
     private final TemplatesAndUtilitiesApi templatesAndUtilitiesApi;
 
     private final FilesApi filesApi;
-
-    private final FilesApi2 filesApi2;
 
     private final DrillThroughReportsApi drillThroughReportsApi;
 
@@ -54,6 +54,7 @@ public class ApiContext {
     private final ApplicationLogsApi logsApi;
 
     public ApiContext(ApiClient client) {
+        this.client = client;
         this.applicationsApi = new ApplicationsApi(client);
         this.applicationConfigurationApi = new ApplicationConfigurationApi(client);
         this.aboutEssbaseApi = new AboutEssbaseApi(client);
@@ -61,7 +62,6 @@ public class ApiContext {
         this.serverVariablesApi = new ServerVariablesApi(client);
         this.templatesAndUtilitiesApi = new TemplatesAndUtilitiesApi(client);
         this.filesApi = new FilesApi(client);
-        this.filesApi2 = new FilesApi2(client);
         this.drillThroughReportsApi = new DrillThroughReportsApi(client);
         this.scriptsApi = new ScriptsApi(client);
         this.sessionsApi = new SessionsApi(client);
@@ -80,6 +80,10 @@ public class ApiContext {
 
     public ApplicationsApi applicationsApi() {
         return applicationsApi;
+    }
+
+    public ApiClient getClient() {
+        return client;
     }
 
     public ApplicationConfigurationApi getApplicationConfigurationApi() {
@@ -108,10 +112,6 @@ public class ApiContext {
 
     public FilesApi getFilesApi() {
         return filesApi;
-    }
-
-    public FilesApi2 getFilesApi2() {
-        return filesApi2;
     }
 
     public DrillThroughReportsApi getDrillThroughReportsApi() {

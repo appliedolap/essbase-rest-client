@@ -13,239 +13,267 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * Limit
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  Limit.JSON_PROPERTY_ID,
+  Limit.JSON_PROPERTY_NAME,
+  Limit.JSON_PROPERTY_VALUE,
+  Limit.JSON_PROPERTY_DESCRIPTION,
+  Limit.JSON_PROPERTY_UNLIMITED,
+  Limit.JSON_PROPERTY_SHOW_UNLIMITED,
+  Limit.JSON_PROPERTY_MINIMUM,
+  Limit.JSON_PROPERTY_MAXIMUM
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class Limit {
-  public static final String SERIALIZED_NAME_ID = "id";
-  @SerializedName(SERIALIZED_NAME_ID)
+  public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nullable
   private String id;
 
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
-  public static final String SERIALIZED_NAME_VALUE = "value";
-  @SerializedName(SERIALIZED_NAME_VALUE)
+  public static final String JSON_PROPERTY_VALUE = "value";
+  @jakarta.annotation.Nullable
   private String value;
 
-  public static final String SERIALIZED_NAME_DESCRIPTION = "description";
-  @SerializedName(SERIALIZED_NAME_DESCRIPTION)
+  public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  @jakarta.annotation.Nullable
   private String description;
 
-  public static final String SERIALIZED_NAME_UNLIMITED = "unlimited";
-  @SerializedName(SERIALIZED_NAME_UNLIMITED)
+  public static final String JSON_PROPERTY_UNLIMITED = "unlimited";
+  @jakarta.annotation.Nullable
   private Boolean unlimited;
 
-  public static final String SERIALIZED_NAME_SHOW_UNLIMITED = "showUnlimited";
-  @SerializedName(SERIALIZED_NAME_SHOW_UNLIMITED)
+  public static final String JSON_PROPERTY_SHOW_UNLIMITED = "showUnlimited";
+  @jakarta.annotation.Nullable
   private Boolean showUnlimited;
 
-  public static final String SERIALIZED_NAME_MINIMUM = "minimum";
-  @SerializedName(SERIALIZED_NAME_MINIMUM)
+  public static final String JSON_PROPERTY_MINIMUM = "minimum";
+  @jakarta.annotation.Nullable
   private Long minimum;
 
-  public static final String SERIALIZED_NAME_MAXIMUM = "maximum";
-  @SerializedName(SERIALIZED_NAME_MAXIMUM)
+  public static final String JSON_PROPERTY_MAXIMUM = "maximum";
+  @jakarta.annotation.Nullable
   private Long maximum;
 
+  public Limit() { 
+  }
 
-  public Limit id(String id) {
-    
+  public Limit id(@jakarta.annotation.Nullable String id) {
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getId() {
     return id;
   }
 
 
-  public void setId(String id) {
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setId(@jakarta.annotation.Nullable String id) {
     this.id = id;
   }
 
 
-  public Limit name(String name) {
-    
+  public Limit name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
-  public Limit value(String value) {
-    
+  public Limit value(@jakarta.annotation.Nullable String value) {
     this.value = value;
     return this;
   }
 
-   /**
+  /**
    * Get value
    * @return value
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getValue() {
     return value;
   }
 
 
-  public void setValue(String value) {
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setValue(@jakarta.annotation.Nullable String value) {
     this.value = value;
   }
 
 
-  public Limit description(String description) {
-    
+  public Limit description(@jakarta.annotation.Nullable String description) {
     this.description = description;
     return this;
   }
 
-   /**
+  /**
    * Get description
    * @return description
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDescription() {
     return description;
   }
 
 
-  public void setDescription(String description) {
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDescription(@jakarta.annotation.Nullable String description) {
     this.description = description;
   }
 
 
-  public Limit unlimited(Boolean unlimited) {
-    
+  public Limit unlimited(@jakarta.annotation.Nullable Boolean unlimited) {
     this.unlimited = unlimited;
     return this;
   }
 
-   /**
+  /**
    * Get unlimited
    * @return unlimited
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UNLIMITED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getUnlimited() {
     return unlimited;
   }
 
 
-  public void setUnlimited(Boolean unlimited) {
+  @JsonProperty(JSON_PROPERTY_UNLIMITED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUnlimited(@jakarta.annotation.Nullable Boolean unlimited) {
     this.unlimited = unlimited;
   }
 
 
-  public Limit showUnlimited(Boolean showUnlimited) {
-    
+  public Limit showUnlimited(@jakarta.annotation.Nullable Boolean showUnlimited) {
     this.showUnlimited = showUnlimited;
     return this;
   }
 
-   /**
+  /**
    * Get showUnlimited
    * @return showUnlimited
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SHOW_UNLIMITED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getShowUnlimited() {
     return showUnlimited;
   }
 
 
-  public void setShowUnlimited(Boolean showUnlimited) {
+  @JsonProperty(JSON_PROPERTY_SHOW_UNLIMITED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setShowUnlimited(@jakarta.annotation.Nullable Boolean showUnlimited) {
     this.showUnlimited = showUnlimited;
   }
 
 
-  public Limit minimum(Long minimum) {
-    
+  public Limit minimum(@jakarta.annotation.Nullable Long minimum) {
     this.minimum = minimum;
     return this;
   }
 
-   /**
+  /**
    * Get minimum
    * @return minimum
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MINIMUM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getMinimum() {
     return minimum;
   }
 
 
-  public void setMinimum(Long minimum) {
+  @JsonProperty(JSON_PROPERTY_MINIMUM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMinimum(@jakarta.annotation.Nullable Long minimum) {
     this.minimum = minimum;
   }
 
 
-  public Limit maximum(Long maximum) {
-    
+  public Limit maximum(@jakarta.annotation.Nullable Long maximum) {
     this.maximum = maximum;
     return this;
   }
 
-   /**
+  /**
    * Get maximum
    * @return maximum
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MAXIMUM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getMaximum() {
     return maximum;
   }
 
 
-  public void setMaximum(Long maximum) {
+  @JsonProperty(JSON_PROPERTY_MAXIMUM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMaximum(@jakarta.annotation.Nullable Long maximum) {
     this.maximum = maximum;
   }
 
 
+  /**
+   * Return true if this Limit object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -297,5 +325,79 @@ public class Limit {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `id` to the URL query string
+    if (getId() != null) {
+      joiner.add(String.format("%sid%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getId()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `value` to the URL query string
+    if (getValue() != null) {
+      joiner.add(String.format("%svalue%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getValue()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `description` to the URL query string
+    if (getDescription() != null) {
+      joiner.add(String.format("%sdescription%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDescription()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `unlimited` to the URL query string
+    if (getUnlimited() != null) {
+      joiner.add(String.format("%sunlimited%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUnlimited()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `showUnlimited` to the URL query string
+    if (getShowUnlimited() != null) {
+      joiner.add(String.format("%sshowUnlimited%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getShowUnlimited()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `minimum` to the URL query string
+    if (getMinimum() != null) {
+      joiner.add(String.format("%sminimum%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMinimum()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `maximum` to the URL query string
+    if (getMaximum() != null) {
+      joiner.add(String.format("%smaximum%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMaximum()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

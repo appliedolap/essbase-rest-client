@@ -10,878 +10,663 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.DefaultLayoutBean;
 import com.appliedolap.essbase.client.model.Layout;
 import com.appliedolap.essbase.client.model.Layouts;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class LayoutsApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public LayoutsApi() {
-        this(Configuration.getDefaultApiClient());
+  public LayoutsApi() {
+    this(new ApiClient());
+  }
+
+  public LayoutsApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public LayoutsApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Delete layout
+   * Deletes the layout in specified cube
+   * @param application Application Name (required)
+   * @param database Database Name (required)
+   * @param layout Layout Name (required)
+   * @param user User (optional)
+   * @throws ApiException if fails to make API call
+   */
+  public void deleteLayout(String application, String database, String layout, String user) throws ApiException {
+    deleteLayoutWithHttpInfo(application, database, layout, user);
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for deleteLayout
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param layout Layout Name (required)
-     * @param user User (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout deleted successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete layout.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call deleteLayoutCall(String application, String database, String layout, String user, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{application}/databases/{database}/layouts/{layout}"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "database" + "\\}", localVarApiClient.escapeString(database.toString()))
-            .replaceAll("\\{" + "layout" + "\\}", localVarApiClient.escapeString(layout.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (user != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("user", user));
+  /**
+   * Delete layout
+   * Deletes the layout in specified cube
+   * @param application Application Name (required)
+   * @param database Database Name (required)
+   * @param layout Layout Name (required)
+   * @param user User (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> deleteLayoutWithHttpInfo(String application, String database, String layout, String user) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = deleteLayoutRequestBuilder(application, database, layout, user);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("deleteLayout", localVarResponse);
         }
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder deleteLayoutRequestBuilder(String application, String database, String layout, String user) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling deleteLayout");
+    }
+    // verify the required parameter 'database' is set
+    if (database == null) {
+      throw new ApiException(400, "Missing the required parameter 'database' when calling deleteLayout");
+    }
+    // verify the required parameter 'layout' is set
+    if (layout == null) {
+      throw new ApiException(400, "Missing the required parameter 'layout' when calling deleteLayout");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call deleteLayoutValidateBeforeCall(String application, String database, String layout, String user, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling deleteLayout(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{application}/databases/{database}/layouts/{layout}"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{database}", ApiClient.urlEncode(database.toString()))
+        .replace("{layout}", ApiClient.urlEncode(layout.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "user";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("user", user));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Update layout
+   * Update the layout with provided details in spcified cube
+   * @param application Application Name (required)
+   * @param database Database Name (required)
+   * @param layout Layout Name (required)
+   * @param user User (optional)
+   * @param body layout details to be updated (optional)
+   * @return Layout
+   * @throws ApiException if fails to make API call
+   */
+  public Layout editLayout(String application, String database, String layout, String user, Layout body) throws ApiException {
+    ApiResponse<Layout> localVarResponse = editLayoutWithHttpInfo(application, database, layout, user, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Update layout
+   * Update the layout with provided details in spcified cube
+   * @param application Application Name (required)
+   * @param database Database Name (required)
+   * @param layout Layout Name (required)
+   * @param user User (optional)
+   * @param body layout details to be updated (optional)
+   * @return ApiResponse&lt;Layout&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Layout> editLayoutWithHttpInfo(String application, String database, String layout, String user, Layout body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = editLayoutRequestBuilder(application, database, layout, user, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("editLayout", localVarResponse);
         }
-        
-        // verify the required parameter 'database' is set
-        if (database == null) {
-            throw new ApiException("Missing the required parameter 'database' when calling deleteLayout(Async)");
+        return new ApiResponse<Layout>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Layout>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder editLayoutRequestBuilder(String application, String database, String layout, String user, Layout body) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling editLayout");
+    }
+    // verify the required parameter 'database' is set
+    if (database == null) {
+      throw new ApiException(400, "Missing the required parameter 'database' when calling editLayout");
+    }
+    // verify the required parameter 'layout' is set
+    if (layout == null) {
+      throw new ApiException(400, "Missing the required parameter 'layout' when calling editLayout");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{application}/databases/{database}/layouts/{layout}"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{database}", ApiClient.urlEncode(database.toString()))
+        .replace("{layout}", ApiClient.urlEncode(layout.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "user";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("user", user));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get layout details
+   * Get the details for the specified layout
+   * @param application Application name (required)
+   * @param database Database name (required)
+   * @param layout Layout name (required)
+   * @param user User (optional)
+   * @return Layout
+   * @throws ApiException if fails to make API call
+   */
+  public Layout getLayoutDetails(String application, String database, String layout, String user) throws ApiException {
+    ApiResponse<Layout> localVarResponse = getLayoutDetailsWithHttpInfo(application, database, layout, user);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get layout details
+   * Get the details for the specified layout
+   * @param application Application name (required)
+   * @param database Database name (required)
+   * @param layout Layout name (required)
+   * @param user User (optional)
+   * @return ApiResponse&lt;Layout&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Layout> getLayoutDetailsWithHttpInfo(String application, String database, String layout, String user) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = getLayoutDetailsRequestBuilder(application, database, layout, user);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("getLayoutDetails", localVarResponse);
         }
-        
-        // verify the required parameter 'layout' is set
-        if (layout == null) {
-            throw new ApiException("Missing the required parameter 'layout' when calling deleteLayout(Async)");
+        return new ApiResponse<Layout>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Layout>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder getLayoutDetailsRequestBuilder(String application, String database, String layout, String user) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling getLayoutDetails");
+    }
+    // verify the required parameter 'database' is set
+    if (database == null) {
+      throw new ApiException(400, "Missing the required parameter 'database' when calling getLayoutDetails");
+    }
+    // verify the required parameter 'layout' is set
+    if (layout == null) {
+      throw new ApiException(400, "Missing the required parameter 'layout' when calling getLayoutDetails");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{application}/databases/{database}/layouts/{layout}"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{database}", ApiClient.urlEncode(database.toString()))
+        .replace("{layout}", ApiClient.urlEncode(layout.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "user";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("user", user));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * List Layouts
+   * List the available layouts. For admin user, list all the layouts including the ones created by normal users
+   * @param application Application name (required)
+   * @param database Database name (required)
+   * @return Layouts
+   * @throws ApiException if fails to make API call
+   */
+  public Layouts getLayouts(String application, String database) throws ApiException {
+    ApiResponse<Layouts> localVarResponse = getLayoutsWithHttpInfo(application, database);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * List Layouts
+   * List the available layouts. For admin user, list all the layouts including the ones created by normal users
+   * @param application Application name (required)
+   * @param database Database name (required)
+   * @return ApiResponse&lt;Layouts&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Layouts> getLayoutsWithHttpInfo(String application, String database) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = getLayoutsRequestBuilder(application, database);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("getLayouts", localVarResponse);
         }
-        
+        return new ApiResponse<Layouts>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Layouts>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = deleteLayoutCall(application, database, layout, user, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder getLayoutsRequestBuilder(String application, String database) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling getLayouts");
+    }
+    // verify the required parameter 'database' is set
+    if (database == null) {
+      throw new ApiException(400, "Missing the required parameter 'database' when calling getLayouts");
     }
 
-    /**
-     * Delete layout
-     * Deletes the layout in specified cube
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param layout Layout Name (required)
-     * @param user User (optional)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout deleted successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete layout.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void deleteLayout(String application, String database, String layout, String user) throws ApiException {
-        deleteLayoutWithHttpInfo(application, database, layout, user);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{application}/databases/{database}/layouts"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{database}", ApiClient.urlEncode(database.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Delete layout
-     * Deletes the layout in specified cube
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param layout Layout Name (required)
-     * @param user User (optional)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout deleted successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete layout.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> deleteLayoutWithHttpInfo(String application, String database, String layout, String user) throws ApiException {
-        okhttp3.Call localVarCall = deleteLayoutValidateBeforeCall(application, database, layout, user, null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Delete layout (asynchronously)
-     * Deletes the layout in specified cube
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param layout Layout Name (required)
-     * @param user User (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout deleted successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete layout.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call deleteLayoutAsync(String application, String database, String layout, String user, final ApiCallback<Void> _callback) throws ApiException {
+  /**
+   * Mark layout as default
+   * Mark layout as user default or database default
+   * @param application Application Name (required)
+   * @param database Database Name (required)
+   * @param layout Layout Name (required)
+   * @param body User default or database default details (optional)
+   * @return Layout
+   * @throws ApiException if fails to make API call
+   */
+  public Layout markDefaultLayout(String application, String database, String layout, DefaultLayoutBean body) throws ApiException {
+    ApiResponse<Layout> localVarResponse = markDefaultLayoutWithHttpInfo(application, database, layout, body);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = deleteLayoutValidateBeforeCall(application, database, layout, user, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for editLayout
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param layout Layout Name (required)
-     * @param user User (optional)
-     * @param body layout details to be updated (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout updated successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update layout.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call editLayoutCall(String application, String database, String layout, String user, Layout body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{application}/databases/{database}/layouts/{layout}"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "database" + "\\}", localVarApiClient.escapeString(database.toString()))
-            .replaceAll("\\{" + "layout" + "\\}", localVarApiClient.escapeString(layout.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (user != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("user", user));
+  /**
+   * Mark layout as default
+   * Mark layout as user default or database default
+   * @param application Application Name (required)
+   * @param database Database Name (required)
+   * @param layout Layout Name (required)
+   * @param body User default or database default details (optional)
+   * @return ApiResponse&lt;Layout&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Layout> markDefaultLayoutWithHttpInfo(String application, String database, String layout, DefaultLayoutBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = markDefaultLayoutRequestBuilder(application, database, layout, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("markDefaultLayout", localVarResponse);
         }
+        return new ApiResponse<Layout>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Layout>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  private HttpRequest.Builder markDefaultLayoutRequestBuilder(String application, String database, String layout, DefaultLayoutBean body) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling markDefaultLayout");
+    }
+    // verify the required parameter 'database' is set
+    if (database == null) {
+      throw new ApiException(400, "Missing the required parameter 'database' when calling markDefaultLayout");
+    }
+    // verify the required parameter 'layout' is set
+    if (layout == null) {
+      throw new ApiException(400, "Missing the required parameter 'layout' when calling markDefaultLayout");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{application}/databases/{database}/layouts/{layout}/actions/markDefault"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{database}", ApiClient.urlEncode(database.toString()))
+        .replace("{layout}", ApiClient.urlEncode(layout.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Save layout
+   * Save the layout for specified cube
+   * @param application Application Name (required)
+   * @param database Database Name (required)
+   * @param body Grid to be saved as layout (optional)
+   * @return Layout
+   * @throws ApiException if fails to make API call
+   */
+  public Layout saveLayout(String application, String database, Layout body) throws ApiException {
+    ApiResponse<Layout> localVarResponse = saveLayoutWithHttpInfo(application, database, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Save layout
+   * Save the layout for specified cube
+   * @param application Application Name (required)
+   * @param database Database Name (required)
+   * @param body Grid to be saved as layout (optional)
+   * @return ApiResponse&lt;Layout&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Layout> saveLayoutWithHttpInfo(String application, String database, Layout body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = saveLayoutRequestBuilder(application, database, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("saveLayout", localVarResponse);
         }
+        return new ApiResponse<Layout>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Layout>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder saveLayoutRequestBuilder(String application, String database, Layout body) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling saveLayout");
+    }
+    // verify the required parameter 'database' is set
+    if (database == null) {
+      throw new ApiException(400, "Missing the required parameter 'database' when calling saveLayout");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call editLayoutValidateBeforeCall(String application, String database, String layout, String user, Layout body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling editLayout(Async)");
-        }
-        
-        // verify the required parameter 'database' is set
-        if (database == null) {
-            throw new ApiException("Missing the required parameter 'database' when calling editLayout(Async)");
-        }
-        
-        // verify the required parameter 'layout' is set
-        if (layout == null) {
-            throw new ApiException("Missing the required parameter 'layout' when calling editLayout(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = editLayoutCall(application, database, layout, user, body, _callback);
-        return localVarCall;
+    String localVarPath = "/applications/{application}/databases/{database}/layouts"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{database}", ApiClient.urlEncode(database.toString()));
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Update layout
-     * Update the layout with provided details in spcified cube
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param layout Layout Name (required)
-     * @param user User (optional)
-     * @param body layout details to be updated (optional)
-     * @return Layout
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout updated successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update layout.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Layout editLayout(String application, String database, String layout, String user, Layout body) throws ApiException {
-        ApiResponse<Layout> localVarResp = editLayoutWithHttpInfo(application, database, layout, user, body);
-        return localVarResp.getData();
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Update layout
-     * Update the layout with provided details in spcified cube
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param layout Layout Name (required)
-     * @param user User (optional)
-     * @param body layout details to be updated (optional)
-     * @return ApiResponse&lt;Layout&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout updated successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update layout.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Layout> editLayoutWithHttpInfo(String application, String database, String layout, String user, Layout body) throws ApiException {
-        okhttp3.Call localVarCall = editLayoutValidateBeforeCall(application, database, layout, user, body, null);
-        Type localVarReturnType = new TypeToken<Layout>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Update layout (asynchronously)
-     * Update the layout with provided details in spcified cube
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param layout Layout Name (required)
-     * @param user User (optional)
-     * @param body layout details to be updated (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout updated successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update layout.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call editLayoutAsync(String application, String database, String layout, String user, Layout body, final ApiCallback<Layout> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = editLayoutValidateBeforeCall(application, database, layout, user, body, _callback);
-        Type localVarReturnType = new TypeToken<Layout>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for getLayoutDetails
-     * @param application Application name (required)
-     * @param database Database name (required)
-     * @param layout Layout name (required)
-     * @param user User (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout details returned successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get layout details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call getLayoutDetailsCall(String application, String database, String layout, String user, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{application}/databases/{database}/layouts/{layout}"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "database" + "\\}", localVarApiClient.escapeString(database.toString()))
-            .replaceAll("\\{" + "layout" + "\\}", localVarApiClient.escapeString(layout.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (user != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("user", user));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call getLayoutDetailsValidateBeforeCall(String application, String database, String layout, String user, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling getLayoutDetails(Async)");
-        }
-        
-        // verify the required parameter 'database' is set
-        if (database == null) {
-            throw new ApiException("Missing the required parameter 'database' when calling getLayoutDetails(Async)");
-        }
-        
-        // verify the required parameter 'layout' is set
-        if (layout == null) {
-            throw new ApiException("Missing the required parameter 'layout' when calling getLayoutDetails(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = getLayoutDetailsCall(application, database, layout, user, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get layout details
-     * Get the details for the specified layout
-     * @param application Application name (required)
-     * @param database Database name (required)
-     * @param layout Layout name (required)
-     * @param user User (optional)
-     * @return Layout
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout details returned successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get layout details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Layout getLayoutDetails(String application, String database, String layout, String user) throws ApiException {
-        ApiResponse<Layout> localVarResp = getLayoutDetailsWithHttpInfo(application, database, layout, user);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get layout details
-     * Get the details for the specified layout
-     * @param application Application name (required)
-     * @param database Database name (required)
-     * @param layout Layout name (required)
-     * @param user User (optional)
-     * @return ApiResponse&lt;Layout&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout details returned successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get layout details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Layout> getLayoutDetailsWithHttpInfo(String application, String database, String layout, String user) throws ApiException {
-        okhttp3.Call localVarCall = getLayoutDetailsValidateBeforeCall(application, database, layout, user, null);
-        Type localVarReturnType = new TypeToken<Layout>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get layout details (asynchronously)
-     * Get the details for the specified layout
-     * @param application Application name (required)
-     * @param database Database name (required)
-     * @param layout Layout name (required)
-     * @param user User (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout details returned successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get layout details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call getLayoutDetailsAsync(String application, String database, String layout, String user, final ApiCallback<Layout> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = getLayoutDetailsValidateBeforeCall(application, database, layout, user, _callback);
-        Type localVarReturnType = new TypeToken<Layout>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for getLayouts
-     * @param application Application name (required)
-     * @param database Database name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of layouts returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get layouts.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call getLayoutsCall(String application, String database, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{application}/databases/{database}/layouts"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "database" + "\\}", localVarApiClient.escapeString(database.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call getLayoutsValidateBeforeCall(String application, String database, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling getLayouts(Async)");
-        }
-        
-        // verify the required parameter 'database' is set
-        if (database == null) {
-            throw new ApiException("Missing the required parameter 'database' when calling getLayouts(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = getLayoutsCall(application, database, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * List Layouts
-     * List the available layouts. For admin user, list all the layouts including the ones created by normal users
-     * @param application Application name (required)
-     * @param database Database name (required)
-     * @return Layouts
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of layouts returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get layouts.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Layouts getLayouts(String application, String database) throws ApiException {
-        ApiResponse<Layouts> localVarResp = getLayoutsWithHttpInfo(application, database);
-        return localVarResp.getData();
-    }
-
-    /**
-     * List Layouts
-     * List the available layouts. For admin user, list all the layouts including the ones created by normal users
-     * @param application Application name (required)
-     * @param database Database name (required)
-     * @return ApiResponse&lt;Layouts&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of layouts returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get layouts.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Layouts> getLayoutsWithHttpInfo(String application, String database) throws ApiException {
-        okhttp3.Call localVarCall = getLayoutsValidateBeforeCall(application, database, null);
-        Type localVarReturnType = new TypeToken<Layouts>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List Layouts (asynchronously)
-     * List the available layouts. For admin user, list all the layouts including the ones created by normal users
-     * @param application Application name (required)
-     * @param database Database name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of layouts returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get layouts.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call getLayoutsAsync(String application, String database, final ApiCallback<Layouts> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = getLayoutsValidateBeforeCall(application, database, _callback);
-        Type localVarReturnType = new TypeToken<Layouts>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for markDefaultLayout
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param layout Layout Name (required)
-     * @param body User default or database default details (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout marked as default successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to mark layout as user default or database default.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call markDefaultLayoutCall(String application, String database, String layout, DefaultLayoutBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{application}/databases/{database}/layouts/{layout}/actions/markDefault"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "database" + "\\}", localVarApiClient.escapeString(database.toString()))
-            .replaceAll("\\{" + "layout" + "\\}", localVarApiClient.escapeString(layout.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call markDefaultLayoutValidateBeforeCall(String application, String database, String layout, DefaultLayoutBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling markDefaultLayout(Async)");
-        }
-        
-        // verify the required parameter 'database' is set
-        if (database == null) {
-            throw new ApiException("Missing the required parameter 'database' when calling markDefaultLayout(Async)");
-        }
-        
-        // verify the required parameter 'layout' is set
-        if (layout == null) {
-            throw new ApiException("Missing the required parameter 'layout' when calling markDefaultLayout(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = markDefaultLayoutCall(application, database, layout, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Mark layout as default
-     * Mark layout as user default or database default
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param layout Layout Name (required)
-     * @param body User default or database default details (optional)
-     * @return Layout
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout marked as default successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to mark layout as user default or database default.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Layout markDefaultLayout(String application, String database, String layout, DefaultLayoutBean body) throws ApiException {
-        ApiResponse<Layout> localVarResp = markDefaultLayoutWithHttpInfo(application, database, layout, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Mark layout as default
-     * Mark layout as user default or database default
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param layout Layout Name (required)
-     * @param body User default or database default details (optional)
-     * @return ApiResponse&lt;Layout&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout marked as default successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to mark layout as user default or database default.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Layout> markDefaultLayoutWithHttpInfo(String application, String database, String layout, DefaultLayoutBean body) throws ApiException {
-        okhttp3.Call localVarCall = markDefaultLayoutValidateBeforeCall(application, database, layout, body, null);
-        Type localVarReturnType = new TypeToken<Layout>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Mark layout as default (asynchronously)
-     * Mark layout as user default or database default
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param layout Layout Name (required)
-     * @param body User default or database default details (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout marked as default successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to mark layout as user default or database default.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call markDefaultLayoutAsync(String application, String database, String layout, DefaultLayoutBean body, final ApiCallback<Layout> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = markDefaultLayoutValidateBeforeCall(application, database, layout, body, _callback);
-        Type localVarReturnType = new TypeToken<Layout>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for saveLayout
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param body Grid to be saved as layout (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout saved successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to save layout.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call saveLayoutCall(String application, String database, Layout body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{application}/databases/{database}/layouts"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "database" + "\\}", localVarApiClient.escapeString(database.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call saveLayoutValidateBeforeCall(String application, String database, Layout body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling saveLayout(Async)");
-        }
-        
-        // verify the required parameter 'database' is set
-        if (database == null) {
-            throw new ApiException("Missing the required parameter 'database' when calling saveLayout(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = saveLayoutCall(application, database, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Save layout
-     * Save the layout for specified cube
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param body Grid to be saved as layout (optional)
-     * @return Layout
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout saved successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to save layout.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Layout saveLayout(String application, String database, Layout body) throws ApiException {
-        ApiResponse<Layout> localVarResp = saveLayoutWithHttpInfo(application, database, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Save layout
-     * Save the layout for specified cube
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param body Grid to be saved as layout (optional)
-     * @return ApiResponse&lt;Layout&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout saved successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to save layout.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Layout> saveLayoutWithHttpInfo(String application, String database, Layout body) throws ApiException {
-        okhttp3.Call localVarCall = saveLayoutValidateBeforeCall(application, database, body, null);
-        Type localVarReturnType = new TypeToken<Layout>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Save layout (asynchronously)
-     * Save the layout for specified cube
-     * @param application Application Name (required)
-     * @param database Database Name (required)
-     * @param body Grid to be saved as layout (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Layout saved successfully.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to save layout.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call saveLayoutAsync(String application, String database, Layout body, final ApiCallback<Layout> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = saveLayoutValidateBeforeCall(application, database, body, _callback);
-        Type localVarReturnType = new TypeToken<Layout>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

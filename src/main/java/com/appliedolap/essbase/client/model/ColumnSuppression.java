@@ -13,239 +13,267 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ColumnSuppression
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ColumnSuppression.JSON_PROPERTY_INVALID,
+  ColumnSuppression.JSON_PROPERTY_DERIVED,
+  ColumnSuppression.JSON_PROPERTY_MISSING,
+  ColumnSuppression.JSON_PROPERTY_ZERO,
+  ColumnSuppression.JSON_PROPERTY_UNDER_SCORE,
+  ColumnSuppression.JSON_PROPERTY_NO_ACCESS,
+  ColumnSuppression.JSON_PROPERTY_EMPTY_BLOCKS,
+  ColumnSuppression.JSON_PROPERTY_ERROR
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ColumnSuppression {
-  public static final String SERIALIZED_NAME_INVALID = "invalid";
-  @SerializedName(SERIALIZED_NAME_INVALID)
+  public static final String JSON_PROPERTY_INVALID = "invalid";
+  @jakarta.annotation.Nullable
   private Boolean invalid;
 
-  public static final String SERIALIZED_NAME_DERIVED = "derived";
-  @SerializedName(SERIALIZED_NAME_DERIVED)
+  public static final String JSON_PROPERTY_DERIVED = "derived";
+  @jakarta.annotation.Nullable
   private Boolean derived;
 
-  public static final String SERIALIZED_NAME_MISSING = "missing";
-  @SerializedName(SERIALIZED_NAME_MISSING)
+  public static final String JSON_PROPERTY_MISSING = "missing";
+  @jakarta.annotation.Nullable
   private Boolean missing;
 
-  public static final String SERIALIZED_NAME_ZERO = "zero";
-  @SerializedName(SERIALIZED_NAME_ZERO)
+  public static final String JSON_PROPERTY_ZERO = "zero";
+  @jakarta.annotation.Nullable
   private Boolean zero;
 
-  public static final String SERIALIZED_NAME_UNDER_SCORE = "underScore";
-  @SerializedName(SERIALIZED_NAME_UNDER_SCORE)
+  public static final String JSON_PROPERTY_UNDER_SCORE = "underScore";
+  @jakarta.annotation.Nullable
   private Boolean underScore;
 
-  public static final String SERIALIZED_NAME_NO_ACCESS = "noAccess";
-  @SerializedName(SERIALIZED_NAME_NO_ACCESS)
+  public static final String JSON_PROPERTY_NO_ACCESS = "noAccess";
+  @jakarta.annotation.Nullable
   private Boolean noAccess;
 
-  public static final String SERIALIZED_NAME_EMPTY_BLOCKS = "emptyBlocks";
-  @SerializedName(SERIALIZED_NAME_EMPTY_BLOCKS)
+  public static final String JSON_PROPERTY_EMPTY_BLOCKS = "emptyBlocks";
+  @jakarta.annotation.Nullable
   private Boolean emptyBlocks;
 
-  public static final String SERIALIZED_NAME_ERROR = "error";
-  @SerializedName(SERIALIZED_NAME_ERROR)
+  public static final String JSON_PROPERTY_ERROR = "error";
+  @jakarta.annotation.Nullable
   private Boolean error;
 
+  public ColumnSuppression() { 
+  }
 
-  public ColumnSuppression invalid(Boolean invalid) {
-    
+  public ColumnSuppression invalid(@jakarta.annotation.Nullable Boolean invalid) {
     this.invalid = invalid;
     return this;
   }
 
-   /**
+  /**
    * Get invalid
    * @return invalid
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INVALID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getInvalid() {
     return invalid;
   }
 
 
-  public void setInvalid(Boolean invalid) {
+  @JsonProperty(JSON_PROPERTY_INVALID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setInvalid(@jakarta.annotation.Nullable Boolean invalid) {
     this.invalid = invalid;
   }
 
 
-  public ColumnSuppression derived(Boolean derived) {
-    
+  public ColumnSuppression derived(@jakarta.annotation.Nullable Boolean derived) {
     this.derived = derived;
     return this;
   }
 
-   /**
+  /**
    * Get derived
    * @return derived
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DERIVED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getDerived() {
     return derived;
   }
 
 
-  public void setDerived(Boolean derived) {
+  @JsonProperty(JSON_PROPERTY_DERIVED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDerived(@jakarta.annotation.Nullable Boolean derived) {
     this.derived = derived;
   }
 
 
-  public ColumnSuppression missing(Boolean missing) {
-    
+  public ColumnSuppression missing(@jakarta.annotation.Nullable Boolean missing) {
     this.missing = missing;
     return this;
   }
 
-   /**
+  /**
    * Get missing
    * @return missing
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MISSING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getMissing() {
     return missing;
   }
 
 
-  public void setMissing(Boolean missing) {
+  @JsonProperty(JSON_PROPERTY_MISSING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMissing(@jakarta.annotation.Nullable Boolean missing) {
     this.missing = missing;
   }
 
 
-  public ColumnSuppression zero(Boolean zero) {
-    
+  public ColumnSuppression zero(@jakarta.annotation.Nullable Boolean zero) {
     this.zero = zero;
     return this;
   }
 
-   /**
+  /**
    * Get zero
    * @return zero
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ZERO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getZero() {
     return zero;
   }
 
 
-  public void setZero(Boolean zero) {
+  @JsonProperty(JSON_PROPERTY_ZERO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setZero(@jakarta.annotation.Nullable Boolean zero) {
     this.zero = zero;
   }
 
 
-  public ColumnSuppression underScore(Boolean underScore) {
-    
+  public ColumnSuppression underScore(@jakarta.annotation.Nullable Boolean underScore) {
     this.underScore = underScore;
     return this;
   }
 
-   /**
+  /**
    * Get underScore
    * @return underScore
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UNDER_SCORE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getUnderScore() {
     return underScore;
   }
 
 
-  public void setUnderScore(Boolean underScore) {
+  @JsonProperty(JSON_PROPERTY_UNDER_SCORE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUnderScore(@jakarta.annotation.Nullable Boolean underScore) {
     this.underScore = underScore;
   }
 
 
-  public ColumnSuppression noAccess(Boolean noAccess) {
-    
+  public ColumnSuppression noAccess(@jakarta.annotation.Nullable Boolean noAccess) {
     this.noAccess = noAccess;
     return this;
   }
 
-   /**
+  /**
    * Get noAccess
    * @return noAccess
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NO_ACCESS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getNoAccess() {
     return noAccess;
   }
 
 
-  public void setNoAccess(Boolean noAccess) {
+  @JsonProperty(JSON_PROPERTY_NO_ACCESS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNoAccess(@jakarta.annotation.Nullable Boolean noAccess) {
     this.noAccess = noAccess;
   }
 
 
-  public ColumnSuppression emptyBlocks(Boolean emptyBlocks) {
-    
+  public ColumnSuppression emptyBlocks(@jakarta.annotation.Nullable Boolean emptyBlocks) {
     this.emptyBlocks = emptyBlocks;
     return this;
   }
 
-   /**
+  /**
    * Get emptyBlocks
    * @return emptyBlocks
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EMPTY_BLOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getEmptyBlocks() {
     return emptyBlocks;
   }
 
 
-  public void setEmptyBlocks(Boolean emptyBlocks) {
+  @JsonProperty(JSON_PROPERTY_EMPTY_BLOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEmptyBlocks(@jakarta.annotation.Nullable Boolean emptyBlocks) {
     this.emptyBlocks = emptyBlocks;
   }
 
 
-  public ColumnSuppression error(Boolean error) {
-    
+  public ColumnSuppression error(@jakarta.annotation.Nullable Boolean error) {
     this.error = error;
     return this;
   }
 
-   /**
+  /**
    * Get error
    * @return error
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ERROR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getError() {
     return error;
   }
 
 
-  public void setError(Boolean error) {
+  @JsonProperty(JSON_PROPERTY_ERROR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setError(@jakarta.annotation.Nullable Boolean error) {
     this.error = error;
   }
 
 
+  /**
+   * Return true if this ColumnSuppression object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -297,5 +325,79 @@ public class ColumnSuppression {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `invalid` to the URL query string
+    if (getInvalid() != null) {
+      joiner.add(String.format("%sinvalid%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getInvalid()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `derived` to the URL query string
+    if (getDerived() != null) {
+      joiner.add(String.format("%sderived%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDerived()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `missing` to the URL query string
+    if (getMissing() != null) {
+      joiner.add(String.format("%smissing%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMissing()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `zero` to the URL query string
+    if (getZero() != null) {
+      joiner.add(String.format("%szero%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getZero()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `underScore` to the URL query string
+    if (getUnderScore() != null) {
+      joiner.add(String.format("%sunderScore%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUnderScore()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `noAccess` to the URL query string
+    if (getNoAccess() != null) {
+      joiner.add(String.format("%snoAccess%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNoAccess()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `emptyBlocks` to the URL query string
+    if (getEmptyBlocks() != null) {
+      joiner.add(String.format("%semptyBlocks%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getEmptyBlocks()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `error` to the URL query string
+    if (getError() != null) {
+      joiner.add(String.format("%serror%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getError()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

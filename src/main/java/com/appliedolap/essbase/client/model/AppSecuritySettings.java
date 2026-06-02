@@ -13,104 +13,122 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * AppSecuritySettings
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  AppSecuritySettings.JSON_PROPERTY_ALLOW_COMMANDS,
+  AppSecuritySettings.JSON_PROPERTY_ALLOW_CONNECTS,
+  AppSecuritySettings.JSON_PROPERTY_ALLOW_UPDATES
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class AppSecuritySettings {
-  public static final String SERIALIZED_NAME_ALLOW_COMMANDS = "allowCommands";
-  @SerializedName(SERIALIZED_NAME_ALLOW_COMMANDS)
+  public static final String JSON_PROPERTY_ALLOW_COMMANDS = "allowCommands";
+  @jakarta.annotation.Nullable
   private Boolean allowCommands;
 
-  public static final String SERIALIZED_NAME_ALLOW_CONNECTS = "allowConnects";
-  @SerializedName(SERIALIZED_NAME_ALLOW_CONNECTS)
+  public static final String JSON_PROPERTY_ALLOW_CONNECTS = "allowConnects";
+  @jakarta.annotation.Nullable
   private Boolean allowConnects;
 
-  public static final String SERIALIZED_NAME_ALLOW_UPDATES = "allowUpdates";
-  @SerializedName(SERIALIZED_NAME_ALLOW_UPDATES)
+  public static final String JSON_PROPERTY_ALLOW_UPDATES = "allowUpdates";
+  @jakarta.annotation.Nullable
   private Boolean allowUpdates;
 
+  public AppSecuritySettings() { 
+  }
 
-  public AppSecuritySettings allowCommands(Boolean allowCommands) {
-    
+  public AppSecuritySettings allowCommands(@jakarta.annotation.Nullable Boolean allowCommands) {
     this.allowCommands = allowCommands;
     return this;
   }
 
-   /**
+  /**
    * Get allowCommands
    * @return allowCommands
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALLOW_COMMANDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAllowCommands() {
     return allowCommands;
   }
 
 
-  public void setAllowCommands(Boolean allowCommands) {
+  @JsonProperty(JSON_PROPERTY_ALLOW_COMMANDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAllowCommands(@jakarta.annotation.Nullable Boolean allowCommands) {
     this.allowCommands = allowCommands;
   }
 
 
-  public AppSecuritySettings allowConnects(Boolean allowConnects) {
-    
+  public AppSecuritySettings allowConnects(@jakarta.annotation.Nullable Boolean allowConnects) {
     this.allowConnects = allowConnects;
     return this;
   }
 
-   /**
+  /**
    * Get allowConnects
    * @return allowConnects
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALLOW_CONNECTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAllowConnects() {
     return allowConnects;
   }
 
 
-  public void setAllowConnects(Boolean allowConnects) {
+  @JsonProperty(JSON_PROPERTY_ALLOW_CONNECTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAllowConnects(@jakarta.annotation.Nullable Boolean allowConnects) {
     this.allowConnects = allowConnects;
   }
 
 
-  public AppSecuritySettings allowUpdates(Boolean allowUpdates) {
-    
+  public AppSecuritySettings allowUpdates(@jakarta.annotation.Nullable Boolean allowUpdates) {
     this.allowUpdates = allowUpdates;
     return this;
   }
 
-   /**
+  /**
    * Get allowUpdates
    * @return allowUpdates
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALLOW_UPDATES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAllowUpdates() {
     return allowUpdates;
   }
 
 
-  public void setAllowUpdates(Boolean allowUpdates) {
+  @JsonProperty(JSON_PROPERTY_ALLOW_UPDATES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAllowUpdates(@jakarta.annotation.Nullable Boolean allowUpdates) {
     this.allowUpdates = allowUpdates;
   }
 
 
+  /**
+   * Return true if this AppSecuritySettings object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -152,5 +170,54 @@ public class AppSecuritySettings {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `allowCommands` to the URL query string
+    if (getAllowCommands() != null) {
+      joiner.add(String.format("%sallowCommands%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAllowCommands()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `allowConnects` to the URL query string
+    if (getAllowConnects() != null) {
+      joiner.add(String.format("%sallowConnects%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAllowConnects()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `allowUpdates` to the URL query string
+    if (getAllowUpdates() != null) {
+      joiner.add(String.format("%sallowUpdates%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAllowUpdates()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

@@ -13,82 +13,101 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * DimCompactDesignation
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  DimCompactDesignation.JSON_PROPERTY_QUERY,
+  DimCompactDesignation.JSON_PROPERTY_ESSBASE_CONNECTION,
+  DimCompactDesignation.JSON_PROPERTY_GEN_NAMES,
+  DimCompactDesignation.JSON_PROPERTY_COL_NAMES,
+  DimCompactDesignation.JSON_PROPERTY_DIM_GEN_COLUMNS,
+  DimCompactDesignation.JSON_PROPERTY_ATTRIBUTE,
+  DimCompactDesignation.JSON_PROPERTY_DIM_JOIN,
+  DimCompactDesignation.JSON_PROPERTY_DIM_NAME,
+  DimCompactDesignation.JSON_PROPERTY_ATT_NAMES,
+  DimCompactDesignation.JSON_PROPERTY_COLUMN_TYPES,
+  DimCompactDesignation.JSON_PROPERTY_UNIQ_COUNT,
+  DimCompactDesignation.JSON_PROPERTY_HEADER_TEXT,
+  DimCompactDesignation.JSON_PROPERTY_FKCOLUMN_NUMBER
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class DimCompactDesignation {
-  public static final String SERIALIZED_NAME_QUERY = "query";
-  @SerializedName(SERIALIZED_NAME_QUERY)
+  public static final String JSON_PROPERTY_QUERY = "query";
+  @jakarta.annotation.Nullable
   private String query;
 
-  public static final String SERIALIZED_NAME_ESSBASE_CONNECTION = "essbaseConnection";
-  @SerializedName(SERIALIZED_NAME_ESSBASE_CONNECTION)
+  public static final String JSON_PROPERTY_ESSBASE_CONNECTION = "essbaseConnection";
+  @jakarta.annotation.Nullable
   private String essbaseConnection;
 
-  public static final String SERIALIZED_NAME_GEN_NAMES = "genNames";
-  @SerializedName(SERIALIZED_NAME_GEN_NAMES)
-  private List<String> genNames = null;
+  public static final String JSON_PROPERTY_GEN_NAMES = "genNames";
+  @jakarta.annotation.Nullable
+  private List<String> genNames = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_COL_NAMES = "colNames";
-  @SerializedName(SERIALIZED_NAME_COL_NAMES)
-  private List<String> colNames = null;
+  public static final String JSON_PROPERTY_COL_NAMES = "colNames";
+  @jakarta.annotation.Nullable
+  private List<String> colNames = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_DIM_GEN_COLUMNS = "dimGenColumns";
-  @SerializedName(SERIALIZED_NAME_DIM_GEN_COLUMNS)
-  private List<Integer> dimGenColumns = null;
+  public static final String JSON_PROPERTY_DIM_GEN_COLUMNS = "dimGenColumns";
+  @jakarta.annotation.Nullable
+  private List<Integer> dimGenColumns = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_ATTRIBUTE = "attribute";
-  @SerializedName(SERIALIZED_NAME_ATTRIBUTE)
-  private List<Integer> attribute = null;
+  public static final String JSON_PROPERTY_ATTRIBUTE = "attribute";
+  @jakarta.annotation.Nullable
+  private List<Integer> attribute = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_DIM_JOIN = "dimJoin";
-  @SerializedName(SERIALIZED_NAME_DIM_JOIN)
+  public static final String JSON_PROPERTY_DIM_JOIN = "dimJoin";
+  @jakarta.annotation.Nullable
   private String dimJoin;
 
-  public static final String SERIALIZED_NAME_DIM_NAME = "dimName";
-  @SerializedName(SERIALIZED_NAME_DIM_NAME)
+  public static final String JSON_PROPERTY_DIM_NAME = "dimName";
+  @jakarta.annotation.Nullable
   private String dimName;
 
-  public static final String SERIALIZED_NAME_ATT_NAMES = "attNames";
-  @SerializedName(SERIALIZED_NAME_ATT_NAMES)
-  private List<String> attNames = null;
+  public static final String JSON_PROPERTY_ATT_NAMES = "attNames";
+  @jakarta.annotation.Nullable
+  private List<String> attNames = new ArrayList<>();
 
   /**
    * Gets or Sets columnTypes
    */
-  @JsonAdapter(ColumnTypesEnum.Adapter.class)
   public enum ColumnTypesEnum {
-    TEXT("TEXT"),
+    TEXT(String.valueOf("TEXT")),
     
-    INTEGER("INTEGER"),
+    INTEGER(String.valueOf("INTEGER")),
     
-    FLOAT("FLOAT"),
+    FLOAT(String.valueOf("FLOAT")),
     
-    TIME("TIME"),
+    TIME(String.valueOf("TIME")),
     
-    DATE("DATE"),
+    DATE(String.valueOf("DATE")),
     
-    BOOLEAN("BOOLEAN"),
+    BOOLEAN(String.valueOf("BOOLEAN")),
     
-    EMPTY("EMPTY"),
+    EMPTY(String.valueOf("EMPTY")),
     
-    UNKNOWN("UNKNOWN"),
+    UNKNOWN(String.valueOf("UNKNOWN")),
     
-    OUT_OF_RANGE("OUT_OF_RANGE");
+    OUT_OF_RANGE(String.valueOf("OUT_OF_RANGE"));
 
     private String value;
 
@@ -96,6 +115,7 @@ public class DimCompactDesignation {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -105,6 +125,7 @@ public class DimCompactDesignation {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static ColumnTypesEnum fromValue(String value) {
       for (ColumnTypesEnum b : ColumnTypesEnum.values()) {
         if (b.value.equals(value)) {
@@ -113,401 +134,406 @@ public class DimCompactDesignation {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<ColumnTypesEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final ColumnTypesEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public ColumnTypesEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return ColumnTypesEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_COLUMN_TYPES = "columnTypes";
-  @SerializedName(SERIALIZED_NAME_COLUMN_TYPES)
-  private List<ColumnTypesEnum> columnTypes = null;
+  public static final String JSON_PROPERTY_COLUMN_TYPES = "columnTypes";
+  @jakarta.annotation.Nullable
+  private List<ColumnTypesEnum> columnTypes = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_UNIQ_COUNT = "uniqCount";
-  @SerializedName(SERIALIZED_NAME_UNIQ_COUNT)
-  private List<Integer> uniqCount = null;
+  public static final String JSON_PROPERTY_UNIQ_COUNT = "uniqCount";
+  @jakarta.annotation.Nullable
+  private List<Integer> uniqCount = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_HEADER_TEXT = "headerText";
-  @SerializedName(SERIALIZED_NAME_HEADER_TEXT)
-  private List<String> headerText = null;
+  public static final String JSON_PROPERTY_HEADER_TEXT = "headerText";
+  @jakarta.annotation.Nullable
+  private List<String> headerText = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_FKCOLUMN_NUMBER = "fkcolumnNumber";
-  @SerializedName(SERIALIZED_NAME_FKCOLUMN_NUMBER)
+  public static final String JSON_PROPERTY_FKCOLUMN_NUMBER = "fkcolumnNumber";
+  @jakarta.annotation.Nullable
   private Integer fkcolumnNumber;
 
+  public DimCompactDesignation() { 
+  }
 
-  public DimCompactDesignation query(String query) {
-    
+  public DimCompactDesignation query(@jakarta.annotation.Nullable String query) {
     this.query = query;
     return this;
   }
 
-   /**
+  /**
    * Get query
    * @return query
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_QUERY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getQuery() {
     return query;
   }
 
 
-  public void setQuery(String query) {
+  @JsonProperty(JSON_PROPERTY_QUERY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setQuery(@jakarta.annotation.Nullable String query) {
     this.query = query;
   }
 
 
-  public DimCompactDesignation essbaseConnection(String essbaseConnection) {
-    
+  public DimCompactDesignation essbaseConnection(@jakarta.annotation.Nullable String essbaseConnection) {
     this.essbaseConnection = essbaseConnection;
     return this;
   }
 
-   /**
+  /**
    * Get essbaseConnection
    * @return essbaseConnection
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ESSBASE_CONNECTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getEssbaseConnection() {
     return essbaseConnection;
   }
 
 
-  public void setEssbaseConnection(String essbaseConnection) {
+  @JsonProperty(JSON_PROPERTY_ESSBASE_CONNECTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEssbaseConnection(@jakarta.annotation.Nullable String essbaseConnection) {
     this.essbaseConnection = essbaseConnection;
   }
 
 
-  public DimCompactDesignation genNames(List<String> genNames) {
-    
+  public DimCompactDesignation genNames(@jakarta.annotation.Nullable List<String> genNames) {
     this.genNames = genNames;
     return this;
   }
 
   public DimCompactDesignation addGenNamesItem(String genNamesItem) {
     if (this.genNames == null) {
-      this.genNames = new ArrayList<String>();
+      this.genNames = new ArrayList<>();
     }
     this.genNames.add(genNamesItem);
     return this;
   }
 
-   /**
+  /**
    * Get genNames
    * @return genNames
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GEN_NAMES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getGenNames() {
     return genNames;
   }
 
 
-  public void setGenNames(List<String> genNames) {
+  @JsonProperty(JSON_PROPERTY_GEN_NAMES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGenNames(@jakarta.annotation.Nullable List<String> genNames) {
     this.genNames = genNames;
   }
 
 
-  public DimCompactDesignation colNames(List<String> colNames) {
-    
+  public DimCompactDesignation colNames(@jakarta.annotation.Nullable List<String> colNames) {
     this.colNames = colNames;
     return this;
   }
 
   public DimCompactDesignation addColNamesItem(String colNamesItem) {
     if (this.colNames == null) {
-      this.colNames = new ArrayList<String>();
+      this.colNames = new ArrayList<>();
     }
     this.colNames.add(colNamesItem);
     return this;
   }
 
-   /**
+  /**
    * Get colNames
    * @return colNames
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COL_NAMES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getColNames() {
     return colNames;
   }
 
 
-  public void setColNames(List<String> colNames) {
+  @JsonProperty(JSON_PROPERTY_COL_NAMES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setColNames(@jakarta.annotation.Nullable List<String> colNames) {
     this.colNames = colNames;
   }
 
 
-  public DimCompactDesignation dimGenColumns(List<Integer> dimGenColumns) {
-    
+  public DimCompactDesignation dimGenColumns(@jakarta.annotation.Nullable List<Integer> dimGenColumns) {
     this.dimGenColumns = dimGenColumns;
     return this;
   }
 
   public DimCompactDesignation addDimGenColumnsItem(Integer dimGenColumnsItem) {
     if (this.dimGenColumns == null) {
-      this.dimGenColumns = new ArrayList<Integer>();
+      this.dimGenColumns = new ArrayList<>();
     }
     this.dimGenColumns.add(dimGenColumnsItem);
     return this;
   }
 
-   /**
+  /**
    * Get dimGenColumns
    * @return dimGenColumns
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIM_GEN_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Integer> getDimGenColumns() {
     return dimGenColumns;
   }
 
 
-  public void setDimGenColumns(List<Integer> dimGenColumns) {
+  @JsonProperty(JSON_PROPERTY_DIM_GEN_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimGenColumns(@jakarta.annotation.Nullable List<Integer> dimGenColumns) {
     this.dimGenColumns = dimGenColumns;
   }
 
 
-  public DimCompactDesignation attribute(List<Integer> attribute) {
-    
+  public DimCompactDesignation attribute(@jakarta.annotation.Nullable List<Integer> attribute) {
     this.attribute = attribute;
     return this;
   }
 
   public DimCompactDesignation addAttributeItem(Integer attributeItem) {
     if (this.attribute == null) {
-      this.attribute = new ArrayList<Integer>();
+      this.attribute = new ArrayList<>();
     }
     this.attribute.add(attributeItem);
     return this;
   }
 
-   /**
+  /**
    * Get attribute
    * @return attribute
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ATTRIBUTE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Integer> getAttribute() {
     return attribute;
   }
 
 
-  public void setAttribute(List<Integer> attribute) {
+  @JsonProperty(JSON_PROPERTY_ATTRIBUTE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAttribute(@jakarta.annotation.Nullable List<Integer> attribute) {
     this.attribute = attribute;
   }
 
 
-  public DimCompactDesignation dimJoin(String dimJoin) {
-    
+  public DimCompactDesignation dimJoin(@jakarta.annotation.Nullable String dimJoin) {
     this.dimJoin = dimJoin;
     return this;
   }
 
-   /**
+  /**
    * Get dimJoin
    * @return dimJoin
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIM_JOIN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDimJoin() {
     return dimJoin;
   }
 
 
-  public void setDimJoin(String dimJoin) {
+  @JsonProperty(JSON_PROPERTY_DIM_JOIN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimJoin(@jakarta.annotation.Nullable String dimJoin) {
     this.dimJoin = dimJoin;
   }
 
 
-  public DimCompactDesignation dimName(String dimName) {
-    
+  public DimCompactDesignation dimName(@jakarta.annotation.Nullable String dimName) {
     this.dimName = dimName;
     return this;
   }
 
-   /**
+  /**
    * Get dimName
    * @return dimName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIM_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDimName() {
     return dimName;
   }
 
 
-  public void setDimName(String dimName) {
+  @JsonProperty(JSON_PROPERTY_DIM_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimName(@jakarta.annotation.Nullable String dimName) {
     this.dimName = dimName;
   }
 
 
-  public DimCompactDesignation attNames(List<String> attNames) {
-    
+  public DimCompactDesignation attNames(@jakarta.annotation.Nullable List<String> attNames) {
     this.attNames = attNames;
     return this;
   }
 
   public DimCompactDesignation addAttNamesItem(String attNamesItem) {
     if (this.attNames == null) {
-      this.attNames = new ArrayList<String>();
+      this.attNames = new ArrayList<>();
     }
     this.attNames.add(attNamesItem);
     return this;
   }
 
-   /**
+  /**
    * Get attNames
    * @return attNames
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ATT_NAMES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getAttNames() {
     return attNames;
   }
 
 
-  public void setAttNames(List<String> attNames) {
+  @JsonProperty(JSON_PROPERTY_ATT_NAMES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAttNames(@jakarta.annotation.Nullable List<String> attNames) {
     this.attNames = attNames;
   }
 
 
-  public DimCompactDesignation columnTypes(List<ColumnTypesEnum> columnTypes) {
-    
+  public DimCompactDesignation columnTypes(@jakarta.annotation.Nullable List<ColumnTypesEnum> columnTypes) {
     this.columnTypes = columnTypes;
     return this;
   }
 
   public DimCompactDesignation addColumnTypesItem(ColumnTypesEnum columnTypesItem) {
     if (this.columnTypes == null) {
-      this.columnTypes = new ArrayList<ColumnTypesEnum>();
+      this.columnTypes = new ArrayList<>();
     }
     this.columnTypes.add(columnTypesItem);
     return this;
   }
 
-   /**
+  /**
    * Get columnTypes
    * @return columnTypes
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COLUMN_TYPES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<ColumnTypesEnum> getColumnTypes() {
     return columnTypes;
   }
 
 
-  public void setColumnTypes(List<ColumnTypesEnum> columnTypes) {
+  @JsonProperty(JSON_PROPERTY_COLUMN_TYPES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setColumnTypes(@jakarta.annotation.Nullable List<ColumnTypesEnum> columnTypes) {
     this.columnTypes = columnTypes;
   }
 
 
-  public DimCompactDesignation uniqCount(List<Integer> uniqCount) {
-    
+  public DimCompactDesignation uniqCount(@jakarta.annotation.Nullable List<Integer> uniqCount) {
     this.uniqCount = uniqCount;
     return this;
   }
 
   public DimCompactDesignation addUniqCountItem(Integer uniqCountItem) {
     if (this.uniqCount == null) {
-      this.uniqCount = new ArrayList<Integer>();
+      this.uniqCount = new ArrayList<>();
     }
     this.uniqCount.add(uniqCountItem);
     return this;
   }
 
-   /**
+  /**
    * Get uniqCount
    * @return uniqCount
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UNIQ_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Integer> getUniqCount() {
     return uniqCount;
   }
 
 
-  public void setUniqCount(List<Integer> uniqCount) {
+  @JsonProperty(JSON_PROPERTY_UNIQ_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUniqCount(@jakarta.annotation.Nullable List<Integer> uniqCount) {
     this.uniqCount = uniqCount;
   }
 
 
-  public DimCompactDesignation headerText(List<String> headerText) {
-    
+  public DimCompactDesignation headerText(@jakarta.annotation.Nullable List<String> headerText) {
     this.headerText = headerText;
     return this;
   }
 
   public DimCompactDesignation addHeaderTextItem(String headerTextItem) {
     if (this.headerText == null) {
-      this.headerText = new ArrayList<String>();
+      this.headerText = new ArrayList<>();
     }
     this.headerText.add(headerTextItem);
     return this;
   }
 
-   /**
+  /**
    * Get headerText
    * @return headerText
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HEADER_TEXT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getHeaderText() {
     return headerText;
   }
 
 
-  public void setHeaderText(List<String> headerText) {
+  @JsonProperty(JSON_PROPERTY_HEADER_TEXT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHeaderText(@jakarta.annotation.Nullable List<String> headerText) {
     this.headerText = headerText;
   }
 
 
-  public DimCompactDesignation fkcolumnNumber(Integer fkcolumnNumber) {
-    
+  public DimCompactDesignation fkcolumnNumber(@jakarta.annotation.Nullable Integer fkcolumnNumber) {
     this.fkcolumnNumber = fkcolumnNumber;
     return this;
   }
 
-   /**
+  /**
    * Get fkcolumnNumber
    * @return fkcolumnNumber
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FKCOLUMN_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getFkcolumnNumber() {
     return fkcolumnNumber;
   }
 
 
-  public void setFkcolumnNumber(Integer fkcolumnNumber) {
+  @JsonProperty(JSON_PROPERTY_FKCOLUMN_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFkcolumnNumber(@jakarta.annotation.Nullable Integer fkcolumnNumber) {
     this.fkcolumnNumber = fkcolumnNumber;
   }
 
 
+  /**
+   * Return true if this DimCompactDesignation object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -569,5 +595,136 @@ public class DimCompactDesignation {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `query` to the URL query string
+    if (getQuery() != null) {
+      joiner.add(String.format("%squery%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getQuery()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `essbaseConnection` to the URL query string
+    if (getEssbaseConnection() != null) {
+      joiner.add(String.format("%sessbaseConnection%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getEssbaseConnection()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `genNames` to the URL query string
+    if (getGenNames() != null) {
+      for (int i = 0; i < getGenNames().size(); i++) {
+        joiner.add(String.format("%sgenNames%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getGenNames().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `colNames` to the URL query string
+    if (getColNames() != null) {
+      for (int i = 0; i < getColNames().size(); i++) {
+        joiner.add(String.format("%scolNames%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getColNames().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `dimGenColumns` to the URL query string
+    if (getDimGenColumns() != null) {
+      for (int i = 0; i < getDimGenColumns().size(); i++) {
+        joiner.add(String.format("%sdimGenColumns%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getDimGenColumns().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `attribute` to the URL query string
+    if (getAttribute() != null) {
+      for (int i = 0; i < getAttribute().size(); i++) {
+        joiner.add(String.format("%sattribute%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getAttribute().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `dimJoin` to the URL query string
+    if (getDimJoin() != null) {
+      joiner.add(String.format("%sdimJoin%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDimJoin()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dimName` to the URL query string
+    if (getDimName() != null) {
+      joiner.add(String.format("%sdimName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDimName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `attNames` to the URL query string
+    if (getAttNames() != null) {
+      for (int i = 0; i < getAttNames().size(); i++) {
+        joiner.add(String.format("%sattNames%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getAttNames().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `columnTypes` to the URL query string
+    if (getColumnTypes() != null) {
+      for (int i = 0; i < getColumnTypes().size(); i++) {
+        joiner.add(String.format("%scolumnTypes%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getColumnTypes().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `uniqCount` to the URL query string
+    if (getUniqCount() != null) {
+      for (int i = 0; i < getUniqCount().size(); i++) {
+        joiner.add(String.format("%suniqCount%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getUniqCount().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `headerText` to the URL query string
+    if (getHeaderText() != null) {
+      for (int i = 0; i < getHeaderText().size(); i++) {
+        joiner.add(String.format("%sheaderText%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getHeaderText().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `fkcolumnNumber` to the URL query string
+    if (getFkcolumnNumber() != null) {
+      joiner.add(String.format("%sfkcolumnNumber%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFkcolumnNumber()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

@@ -10,804 +10,607 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.Datasource;
 import com.appliedolap.essbase.client.model.DatasourceQueryInfo;
 import com.appliedolap.essbase.client.model.DatasourcesList;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ApplicationDataSourcesApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public ApplicationDataSourcesApi() {
-        this(Configuration.getDefaultApiClient());
+  public ApplicationDataSourcesApi() {
+    this(new ApiClient());
+  }
+
+  public ApplicationDataSourcesApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public ApplicationDataSourcesApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Create Application Data Source
+   * &lt;p&gt;Creates an application-level data source based on specified inputs. &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;connection&lt;/code&gt;, and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of data source.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Data source details.&lt;/p&gt; (optional)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationDatasourcesCreateDatasource(String applicationName, Datasource body) throws ApiException {
+    applicationDatasourcesCreateDatasourceWithHttpInfo(applicationName, body);
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for applicationDatasourcesCreateDatasource
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Data source details.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationDatasourcesCreateDatasourceCall(String applicationName, Datasource body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/datasources"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Create Application Data Source
+   * &lt;p&gt;Creates an application-level data source based on specified inputs. &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;connection&lt;/code&gt;, and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of data source.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Data source details.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationDatasourcesCreateDatasourceWithHttpInfo(String applicationName, Datasource body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationDatasourcesCreateDatasourceRequestBuilder(applicationName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationDatasourcesCreateDatasource", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationDatasourcesCreateDatasourceValidateBeforeCall(String applicationName, Datasource body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationDatasourcesCreateDatasource(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = applicationDatasourcesCreateDatasourceCall(applicationName, body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder applicationDatasourcesCreateDatasourceRequestBuilder(String applicationName, Datasource body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationDatasourcesCreateDatasource");
     }
 
-    /**
-     * Create Application Data Source
-     * &lt;p&gt;Creates an application-level data source based on specified inputs. &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;connection&lt;/code&gt;, and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of data source.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Data source details.&lt;/p&gt; (optional)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationDatasourcesCreateDatasource(String applicationName, Datasource body) throws ApiException {
-        applicationDatasourcesCreateDatasourceWithHttpInfo(applicationName, body);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/datasources"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Create Application Data Source
-     * &lt;p&gt;Creates an application-level data source based on specified inputs. &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;connection&lt;/code&gt;, and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of data source.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Data source details.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationDatasourcesCreateDatasourceWithHttpInfo(String applicationName, Datasource body) throws ApiException {
-        okhttp3.Call localVarCall = applicationDatasourcesCreateDatasourceValidateBeforeCall(applicationName, body, null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Create Application Data Source (asynchronously)
-     * &lt;p&gt;Creates an application-level data source based on specified inputs. &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;connection&lt;/code&gt;, and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of data source.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Data source details.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationDatasourcesCreateDatasourceAsync(String applicationName, Datasource body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationDatasourcesCreateDatasourceValidateBeforeCall(applicationName, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for applicationDatasourcesDeleteDatasource
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationDatasourcesDeleteDatasourceCall(String applicationName, String datasourceName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/datasources/{datasourceName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "datasourceName" + "\\}", localVarApiClient.escapeString(datasourceName.toString()));
+  /**
+   * Delete Application Data Source
+   * &lt;p&gt;Deletes the named application-level data source.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationDatasourcesDeleteDatasource(String applicationName, String datasourceName) throws ApiException {
+    applicationDatasourcesDeleteDatasourceWithHttpInfo(applicationName, datasourceName);
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Delete Application Data Source
+   * &lt;p&gt;Deletes the named application-level data source.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationDatasourcesDeleteDatasourceWithHttpInfo(String applicationName, String datasourceName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationDatasourcesDeleteDatasourceRequestBuilder(applicationName, datasourceName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationDatasourcesDeleteDatasource", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationDatasourcesDeleteDatasourceValidateBeforeCall(String applicationName, String datasourceName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationDatasourcesDeleteDatasource(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
-        // verify the required parameter 'datasourceName' is set
-        if (datasourceName == null) {
-            throw new ApiException("Missing the required parameter 'datasourceName' when calling applicationDatasourcesDeleteDatasource(Async)");
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationDatasourcesDeleteDatasourceRequestBuilder(String applicationName, String datasourceName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationDatasourcesDeleteDatasource");
+    }
+    // verify the required parameter 'datasourceName' is set
+    if (datasourceName == null) {
+      throw new ApiException(400, "Missing the required parameter 'datasourceName' when calling applicationDatasourcesDeleteDatasource");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/datasources/{datasourceName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{datasourceName}", ApiClient.urlEncode(datasourceName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Streamed Data Source Results
+   * &lt;p&gt;Returns results in stream from a application-level data source&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param includeHeaders &lt;p&gt;Include headers.&lt;/p&gt; (optional, default to false)
+   * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationDatasourcesGetDataStream(String applicationName, Boolean includeHeaders, DatasourceQueryInfo body) throws ApiException {
+    applicationDatasourcesGetDataStreamWithHttpInfo(applicationName, includeHeaders, body);
+  }
+
+  /**
+   * Get Streamed Data Source Results
+   * &lt;p&gt;Returns results in stream from a application-level data source&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param includeHeaders &lt;p&gt;Include headers.&lt;/p&gt; (optional, default to false)
+   * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationDatasourcesGetDataStreamWithHttpInfo(String applicationName, Boolean includeHeaders, DatasourceQueryInfo body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationDatasourcesGetDataStreamRequestBuilder(applicationName, includeHeaders, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationDatasourcesGetDataStream", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = applicationDatasourcesDeleteDatasourceCall(applicationName, datasourceName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Delete Application Data Source
-     * &lt;p&gt;Deletes the named application-level data source.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationDatasourcesDeleteDatasource(String applicationName, String datasourceName) throws ApiException {
-        applicationDatasourcesDeleteDatasourceWithHttpInfo(applicationName, datasourceName);
-    }
-
-    /**
-     * Delete Application Data Source
-     * &lt;p&gt;Deletes the named application-level data source.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationDatasourcesDeleteDatasourceWithHttpInfo(String applicationName, String datasourceName) throws ApiException {
-        okhttp3.Call localVarCall = applicationDatasourcesDeleteDatasourceValidateBeforeCall(applicationName, datasourceName, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Delete Application Data Source (asynchronously)
-     * &lt;p&gt;Deletes the named application-level data source.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationDatasourcesDeleteDatasourceAsync(String applicationName, String datasourceName, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationDatasourcesDeleteDatasourceValidateBeforeCall(applicationName, datasourceName, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationDatasourcesGetDataStream
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param includeHeaders &lt;p&gt;Include headers.&lt;/p&gt; (optional, default to false)
-     * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Results fetched successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to stream results.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationDatasourcesGetDataStreamCall(String applicationName, Boolean includeHeaders, DatasourceQueryInfo body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/datasources/query/stream"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (includeHeaders != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("includeHeaders", includeHeaders));
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  private HttpRequest.Builder applicationDatasourcesGetDataStreamRequestBuilder(String applicationName, Boolean includeHeaders, DatasourceQueryInfo body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationDatasourcesGetDataStream");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/datasources/query/stream"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "includeHeaders";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("includeHeaders", includeHeaders));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Application Data Source
+   * &lt;p&gt;Returns details about the specified application-level data source.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param datasouceName &lt;p&gt;Data source name&lt;/p&gt; (required)
+   * @return Datasource
+   * @throws ApiException if fails to make API call
+   */
+  public Datasource applicationDatasourcesGetDatasourceDetails(String applicationName, String datasouceName) throws ApiException {
+    ApiResponse<Datasource> localVarResponse = applicationDatasourcesGetDatasourceDetailsWithHttpInfo(applicationName, datasouceName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Application Data Source
+   * &lt;p&gt;Returns details about the specified application-level data source.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param datasouceName &lt;p&gt;Data source name&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Datasource&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Datasource> applicationDatasourcesGetDatasourceDetailsWithHttpInfo(String applicationName, String datasouceName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationDatasourcesGetDatasourceDetailsRequestBuilder(applicationName, datasouceName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationDatasourcesGetDatasourceDetails", localVarResponse);
         }
+        return new ApiResponse<Datasource>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Datasource>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder applicationDatasourcesGetDatasourceDetailsRequestBuilder(String applicationName, String datasouceName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationDatasourcesGetDatasourceDetails");
+    }
+    // verify the required parameter 'datasouceName' is set
+    if (datasouceName == null) {
+      throw new ApiException(400, "Missing the required parameter 'datasouceName' when calling applicationDatasourcesGetDatasourceDetails");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationDatasourcesGetDataStreamValidateBeforeCall(String applicationName, Boolean includeHeaders, DatasourceQueryInfo body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationDatasourcesGetDataStream(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/datasources/{datasouceName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{datasouceName}", ApiClient.urlEncode(datasouceName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Application Data Sources
+   * &lt;p&gt;Returns a list of application-level data sources, including details such as name, description, connection, and type.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param offset &lt;p&gt;Number of data sources to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of data sources to return. Default is 50.&lt;/p&gt; (optional, default to 50)
+   * @return DatasourcesList
+   * @throws ApiException if fails to make API call
+   */
+  public DatasourcesList applicationDatasourcesGetDatasources(String applicationName, Integer offset, Integer limit) throws ApiException {
+    ApiResponse<DatasourcesList> localVarResponse = applicationDatasourcesGetDatasourcesWithHttpInfo(applicationName, offset, limit);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Application Data Sources
+   * &lt;p&gt;Returns a list of application-level data sources, including details such as name, description, connection, and type.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param offset &lt;p&gt;Number of data sources to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of data sources to return. Default is 50.&lt;/p&gt; (optional, default to 50)
+   * @return ApiResponse&lt;DatasourcesList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<DatasourcesList> applicationDatasourcesGetDatasourcesWithHttpInfo(String applicationName, Integer offset, Integer limit) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationDatasourcesGetDatasourcesRequestBuilder(applicationName, offset, limit);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationDatasourcesGetDatasources", localVarResponse);
         }
-        
+        return new ApiResponse<DatasourcesList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<DatasourcesList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = applicationDatasourcesGetDataStreamCall(applicationName, includeHeaders, body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder applicationDatasourcesGetDatasourcesRequestBuilder(String applicationName, Integer offset, Integer limit) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationDatasourcesGetDatasources");
     }
 
-    /**
-     * Get Streamed Data Source Results
-     * &lt;p&gt;Returns results in stream from a application-level data source&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param includeHeaders &lt;p&gt;Include headers.&lt;/p&gt; (optional, default to false)
-     * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Results fetched successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to stream results.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationDatasourcesGetDataStream(String applicationName, Boolean includeHeaders, DatasourceQueryInfo body) throws ApiException {
-        applicationDatasourcesGetDataStreamWithHttpInfo(applicationName, includeHeaders, body);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/datasources"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "offset";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("offset", offset));
+    localVarQueryParameterBaseName = "limit";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("limit", limit));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Get Streamed Data Source Results
-     * &lt;p&gt;Returns results in stream from a application-level data source&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param includeHeaders &lt;p&gt;Include headers.&lt;/p&gt; (optional, default to false)
-     * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Results fetched successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to stream results.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationDatasourcesGetDataStreamWithHttpInfo(String applicationName, Boolean includeHeaders, DatasourceQueryInfo body) throws ApiException {
-        okhttp3.Call localVarCall = applicationDatasourcesGetDataStreamValidateBeforeCall(applicationName, includeHeaders, body, null);
-        return localVarApiClient.execute(localVarCall);
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Streamed Data Source Results (asynchronously)
-     * &lt;p&gt;Returns results in stream from a application-level data source&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param includeHeaders &lt;p&gt;Include headers.&lt;/p&gt; (optional, default to false)
-     * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Results fetched successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to stream results.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationDatasourcesGetDataStreamAsync(String applicationName, Boolean includeHeaders, DatasourceQueryInfo body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationDatasourcesGetDataStreamValidateBeforeCall(applicationName, includeHeaders, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for applicationDatasourcesGetDatasourceDetails
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param datasouceName &lt;p&gt;Data source name&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data source details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationDatasourcesGetDatasourceDetailsCall(String applicationName, String datasouceName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/datasources/{datasouceName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "datasouceName" + "\\}", localVarApiClient.escapeString(datasouceName.toString()));
+  /**
+   * Update Application Data Source
+   * &lt;p&gt;Update the named application-level data source. If the update is successful, returns details about the updated data source. &lt;code&gt;type&lt;/code&gt; and &lt;code&gt;connection&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of the data source.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Updated data source details.&lt;/p&gt; (optional)
+   * @return Datasource
+   * @throws ApiException if fails to make API call
+   */
+  public Datasource applicationDatasourcesUpdateDatasource(String applicationName, String datasouceName, Datasource body) throws ApiException {
+    ApiResponse<Datasource> localVarResponse = applicationDatasourcesUpdateDatasourceWithHttpInfo(applicationName, datasouceName, body);
+    return localVarResponse.getData();
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Update Application Data Source
+   * &lt;p&gt;Update the named application-level data source. If the update is successful, returns details about the updated data source. &lt;code&gt;type&lt;/code&gt; and &lt;code&gt;connection&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of the data source.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Updated data source details.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;Datasource&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Datasource> applicationDatasourcesUpdateDatasourceWithHttpInfo(String applicationName, String datasouceName, Datasource body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationDatasourcesUpdateDatasourceRequestBuilder(applicationName, datasouceName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationDatasourcesUpdateDatasource", localVarResponse);
         }
+        return new ApiResponse<Datasource>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Datasource>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder applicationDatasourcesUpdateDatasourceRequestBuilder(String applicationName, String datasouceName, Datasource body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationDatasourcesUpdateDatasource");
+    }
+    // verify the required parameter 'datasouceName' is set
+    if (datasouceName == null) {
+      throw new ApiException(400, "Missing the required parameter 'datasouceName' when calling applicationDatasourcesUpdateDatasource");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationDatasourcesGetDatasourceDetailsValidateBeforeCall(String applicationName, String datasouceName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationDatasourcesGetDatasourceDetails(Async)");
-        }
-        
-        // verify the required parameter 'datasouceName' is set
-        if (datasouceName == null) {
-            throw new ApiException("Missing the required parameter 'datasouceName' when calling applicationDatasourcesGetDatasourceDetails(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = applicationDatasourcesGetDatasourceDetailsCall(applicationName, datasouceName, _callback);
-        return localVarCall;
+    String localVarPath = "/applications/{applicationName}/datasources/{datasouceName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{datasouceName}", ApiClient.urlEncode(datasouceName.toString()));
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Get Application Data Source
-     * &lt;p&gt;Returns details about the specified application-level data source.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param datasouceName &lt;p&gt;Data source name&lt;/p&gt; (required)
-     * @return Datasource
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data source details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Datasource applicationDatasourcesGetDatasourceDetails(String applicationName, String datasouceName) throws ApiException {
-        ApiResponse<Datasource> localVarResp = applicationDatasourcesGetDatasourceDetailsWithHttpInfo(applicationName, datasouceName);
-        return localVarResp.getData();
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Application Data Source
-     * &lt;p&gt;Returns details about the specified application-level data source.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param datasouceName &lt;p&gt;Data source name&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Datasource&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data source details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Datasource> applicationDatasourcesGetDatasourceDetailsWithHttpInfo(String applicationName, String datasouceName) throws ApiException {
-        okhttp3.Call localVarCall = applicationDatasourcesGetDatasourceDetailsValidateBeforeCall(applicationName, datasouceName, null);
-        Type localVarReturnType = new TypeToken<Datasource>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Get Application Data Source (asynchronously)
-     * &lt;p&gt;Returns details about the specified application-level data source.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param datasouceName &lt;p&gt;Data source name&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data source details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationDatasourcesGetDatasourceDetailsAsync(String applicationName, String datasouceName, final ApiCallback<Datasource> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationDatasourcesGetDatasourceDetailsValidateBeforeCall(applicationName, datasouceName, _callback);
-        Type localVarReturnType = new TypeToken<Datasource>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationDatasourcesGetDatasources
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of data sources to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of data sources to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of data sources returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data sources.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationDatasourcesGetDatasourcesCall(String applicationName, Integer offset, Integer limit, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/datasources"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (offset != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("offset", offset));
-        }
-
-        if (limit != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationDatasourcesGetDatasourcesValidateBeforeCall(String applicationName, Integer offset, Integer limit, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationDatasourcesGetDatasources(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationDatasourcesGetDatasourcesCall(applicationName, offset, limit, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Application Data Sources
-     * &lt;p&gt;Returns a list of application-level data sources, including details such as name, description, connection, and type.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of data sources to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of data sources to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @return DatasourcesList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of data sources returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data sources.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public DatasourcesList applicationDatasourcesGetDatasources(String applicationName, Integer offset, Integer limit) throws ApiException {
-        ApiResponse<DatasourcesList> localVarResp = applicationDatasourcesGetDatasourcesWithHttpInfo(applicationName, offset, limit);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Application Data Sources
-     * &lt;p&gt;Returns a list of application-level data sources, including details such as name, description, connection, and type.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of data sources to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of data sources to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @return ApiResponse&lt;DatasourcesList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of data sources returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data sources.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<DatasourcesList> applicationDatasourcesGetDatasourcesWithHttpInfo(String applicationName, Integer offset, Integer limit) throws ApiException {
-        okhttp3.Call localVarCall = applicationDatasourcesGetDatasourcesValidateBeforeCall(applicationName, offset, limit, null);
-        Type localVarReturnType = new TypeToken<DatasourcesList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Application Data Sources (asynchronously)
-     * &lt;p&gt;Returns a list of application-level data sources, including details such as name, description, connection, and type.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of data sources to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of data sources to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of data sources returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data sources.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationDatasourcesGetDatasourcesAsync(String applicationName, Integer offset, Integer limit, final ApiCallback<DatasourcesList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationDatasourcesGetDatasourcesValidateBeforeCall(applicationName, offset, limit, _callback);
-        Type localVarReturnType = new TypeToken<DatasourcesList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationDatasourcesUpdateDatasource
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Updated data source details.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update the data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationDatasourcesUpdateDatasourceCall(String applicationName, String datasouceName, Datasource body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/datasources/{datasouceName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "datasouceName" + "\\}", localVarApiClient.escapeString(datasouceName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationDatasourcesUpdateDatasourceValidateBeforeCall(String applicationName, String datasouceName, Datasource body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationDatasourcesUpdateDatasource(Async)");
-        }
-        
-        // verify the required parameter 'datasouceName' is set
-        if (datasouceName == null) {
-            throw new ApiException("Missing the required parameter 'datasouceName' when calling applicationDatasourcesUpdateDatasource(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationDatasourcesUpdateDatasourceCall(applicationName, datasouceName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Update Application Data Source
-     * &lt;p&gt;Update the named application-level data source. If the update is successful, returns details about the updated data source. &lt;code&gt;type&lt;/code&gt; and &lt;code&gt;connection&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of the data source.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Updated data source details.&lt;/p&gt; (optional)
-     * @return Datasource
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update the data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Datasource applicationDatasourcesUpdateDatasource(String applicationName, String datasouceName, Datasource body) throws ApiException {
-        ApiResponse<Datasource> localVarResp = applicationDatasourcesUpdateDatasourceWithHttpInfo(applicationName, datasouceName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Update Application Data Source
-     * &lt;p&gt;Update the named application-level data source. If the update is successful, returns details about the updated data source. &lt;code&gt;type&lt;/code&gt; and &lt;code&gt;connection&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of the data source.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Updated data source details.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;Datasource&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update the data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Datasource> applicationDatasourcesUpdateDatasourceWithHttpInfo(String applicationName, String datasouceName, Datasource body) throws ApiException {
-        okhttp3.Call localVarCall = applicationDatasourcesUpdateDatasourceValidateBeforeCall(applicationName, datasouceName, body, null);
-        Type localVarReturnType = new TypeToken<Datasource>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Update Application Data Source (asynchronously)
-     * &lt;p&gt;Update the named application-level data source. If the update is successful, returns details about the updated data source. &lt;code&gt;type&lt;/code&gt; and &lt;code&gt;connection&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of the data source.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Updated data source details.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update the data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationDatasourcesUpdateDatasourceAsync(String applicationName, String datasouceName, Datasource body, final ApiCallback<Datasource> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationDatasourcesUpdateDatasourceValidateBeforeCall(applicationName, datasouceName, body, _callback);
-        Type localVarReturnType = new TypeToken<Datasource>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

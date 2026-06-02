@@ -1,16 +1,16 @@
 package com.appliedolap.essbase.impl;
 
 import com.appliedolap.essbase.*;
+import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.api.BatchOutlineEditingApi;
 import com.appliedolap.essbase.client.model.ExportOptions;
 import com.appliedolap.essbase.client.model.MemberBean;
 import com.appliedolap.essbase.client.model.OtlEditMain;
 import com.appliedolap.essbase.client.model.RestCollectionResponse;
-import com.appliedolap.essbase.util.GenericApiCallback;
 import com.appliedolap.essbase.util.GenericDownload;
+import com.appliedolap.essbase.util.NativeHttp;
 import com.appliedolap.essbase.util.WrapperUtil;
-import okhttp3.Call;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,17 +74,12 @@ public class EssOutlineImpl extends AbstractEssObject implements EssOutline {
     public byte[] downloadXml() {
         return WrapperUtil.doWithWrap(() -> {
             ExportOptions exportOptions = new ExportOptions();
-            Call call = api.getOutlineViewerApi().outlineGetOutlineXMLCall(cube.getApplication().getName(), cube.getName(), exportOptions, new GenericApiCallback());
-            return GenericDownload.downloadBytes(call.execute());
+            String path = "/outline/" + ApiClient.urlEncode(cube.getApplication().getName())
+                    + "/" + ApiClient.urlEncode(cube.getName()) + "/xml";
+            return GenericDownload.downloadBytes(NativeHttp.send(api.getClient(), NativeHttp.request(api.getClient(), path)
+                    .header("Content-Type", "application/json")
+                    .POST(NativeHttp.jsonBody(api.getClient(), exportOptions)), "outlineGetOutlineXML"));
         });
-
-//        try {
-//            ExportOptions exportOptions = new ExportOptions();
-//            Call call = outlineViewerApi.outlineGetOutlineXMLCall(cube.getApplication().getName(), cube.getName(), exportOptions, new GenericApiCallback());
-//            return GenericDownload.downloadBytes(call.execute());
-//        } catch (ApiException | IOException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     @Override

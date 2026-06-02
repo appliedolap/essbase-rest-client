@@ -13,293 +13,325 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * SessionAttributes
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  SessionAttributes.JSON_PROPERTY_USER_ID,
+  SessionAttributes.JSON_PROPERTY_SESSION_ID,
+  SessionAttributes.JSON_PROPERTY_LOGIN_TIME_IN_SECONDS,
+  SessionAttributes.JSON_PROPERTY_APPLICATION,
+  SessionAttributes.JSON_PROPERTY_DATABASE,
+  SessionAttributes.JSON_PROPERTY_DB_CONNECT_TIME_IN_SECONDS,
+  SessionAttributes.JSON_PROPERTY_REQUEST,
+  SessionAttributes.JSON_PROPERTY_REQUEST_TIME_IN_SECONDS,
+  SessionAttributes.JSON_PROPERTY_CONNECTION_SOURCE,
+  SessionAttributes.JSON_PROPERTY_REQUEST_STATE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class SessionAttributes {
-  public static final String SERIALIZED_NAME_USER_ID = "userId";
-  @SerializedName(SERIALIZED_NAME_USER_ID)
+  public static final String JSON_PROPERTY_USER_ID = "userId";
+  @jakarta.annotation.Nullable
   private String userId;
 
-  public static final String SERIALIZED_NAME_SESSION_ID = "sessionId";
-  @SerializedName(SERIALIZED_NAME_SESSION_ID)
+  public static final String JSON_PROPERTY_SESSION_ID = "sessionId";
+  @jakarta.annotation.Nullable
   private String sessionId;
 
-  public static final String SERIALIZED_NAME_LOGIN_TIME_IN_SECONDS = "loginTimeInSeconds";
-  @SerializedName(SERIALIZED_NAME_LOGIN_TIME_IN_SECONDS)
+  public static final String JSON_PROPERTY_LOGIN_TIME_IN_SECONDS = "loginTimeInSeconds";
+  @jakarta.annotation.Nullable
   private String loginTimeInSeconds;
 
-  public static final String SERIALIZED_NAME_APPLICATION = "application";
-  @SerializedName(SERIALIZED_NAME_APPLICATION)
+  public static final String JSON_PROPERTY_APPLICATION = "application";
+  @jakarta.annotation.Nullable
   private String application;
 
-  public static final String SERIALIZED_NAME_DATABASE = "database";
-  @SerializedName(SERIALIZED_NAME_DATABASE)
+  public static final String JSON_PROPERTY_DATABASE = "database";
+  @jakarta.annotation.Nullable
   private String database;
 
-  public static final String SERIALIZED_NAME_DB_CONNECT_TIME_IN_SECONDS = "dbConnectTimeInSeconds";
-  @SerializedName(SERIALIZED_NAME_DB_CONNECT_TIME_IN_SECONDS)
+  public static final String JSON_PROPERTY_DB_CONNECT_TIME_IN_SECONDS = "dbConnectTimeInSeconds";
+  @jakarta.annotation.Nullable
   private String dbConnectTimeInSeconds;
 
-  public static final String SERIALIZED_NAME_REQUEST = "request";
-  @SerializedName(SERIALIZED_NAME_REQUEST)
+  public static final String JSON_PROPERTY_REQUEST = "request";
+  @jakarta.annotation.Nullable
   private String request;
 
-  public static final String SERIALIZED_NAME_REQUEST_TIME_IN_SECONDS = "requestTimeInSeconds";
-  @SerializedName(SERIALIZED_NAME_REQUEST_TIME_IN_SECONDS)
+  public static final String JSON_PROPERTY_REQUEST_TIME_IN_SECONDS = "requestTimeInSeconds";
+  @jakarta.annotation.Nullable
   private String requestTimeInSeconds;
 
-  public static final String SERIALIZED_NAME_CONNECTION_SOURCE = "connectionSource";
-  @SerializedName(SERIALIZED_NAME_CONNECTION_SOURCE)
+  public static final String JSON_PROPERTY_CONNECTION_SOURCE = "connectionSource";
+  @jakarta.annotation.Nullable
   private String connectionSource;
 
-  public static final String SERIALIZED_NAME_REQUEST_STATE = "requestState";
-  @SerializedName(SERIALIZED_NAME_REQUEST_STATE)
+  public static final String JSON_PROPERTY_REQUEST_STATE = "requestState";
+  @jakarta.annotation.Nullable
   private String requestState;
 
+  public SessionAttributes() { 
+  }
 
-  public SessionAttributes userId(String userId) {
-    
+  public SessionAttributes userId(@jakarta.annotation.Nullable String userId) {
     this.userId = userId;
     return this;
   }
 
-   /**
+  /**
    * Get userId
    * @return userId
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getUserId() {
     return userId;
   }
 
 
-  public void setUserId(String userId) {
+  @JsonProperty(JSON_PROPERTY_USER_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUserId(@jakarta.annotation.Nullable String userId) {
     this.userId = userId;
   }
 
 
-  public SessionAttributes sessionId(String sessionId) {
-    
+  public SessionAttributes sessionId(@jakarta.annotation.Nullable String sessionId) {
     this.sessionId = sessionId;
     return this;
   }
 
-   /**
+  /**
    * Get sessionId
    * @return sessionId
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SESSION_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getSessionId() {
     return sessionId;
   }
 
 
-  public void setSessionId(String sessionId) {
+  @JsonProperty(JSON_PROPERTY_SESSION_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSessionId(@jakarta.annotation.Nullable String sessionId) {
     this.sessionId = sessionId;
   }
 
 
-  public SessionAttributes loginTimeInSeconds(String loginTimeInSeconds) {
-    
+  public SessionAttributes loginTimeInSeconds(@jakarta.annotation.Nullable String loginTimeInSeconds) {
     this.loginTimeInSeconds = loginTimeInSeconds;
     return this;
   }
 
-   /**
+  /**
    * Get loginTimeInSeconds
    * @return loginTimeInSeconds
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LOGIN_TIME_IN_SECONDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getLoginTimeInSeconds() {
     return loginTimeInSeconds;
   }
 
 
-  public void setLoginTimeInSeconds(String loginTimeInSeconds) {
+  @JsonProperty(JSON_PROPERTY_LOGIN_TIME_IN_SECONDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLoginTimeInSeconds(@jakarta.annotation.Nullable String loginTimeInSeconds) {
     this.loginTimeInSeconds = loginTimeInSeconds;
   }
 
 
-  public SessionAttributes application(String application) {
-    
+  public SessionAttributes application(@jakarta.annotation.Nullable String application) {
     this.application = application;
     return this;
   }
 
-   /**
+  /**
    * Get application
    * @return application
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getApplication() {
     return application;
   }
 
 
-  public void setApplication(String application) {
+  @JsonProperty(JSON_PROPERTY_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApplication(@jakarta.annotation.Nullable String application) {
     this.application = application;
   }
 
 
-  public SessionAttributes database(String database) {
-    
+  public SessionAttributes database(@jakarta.annotation.Nullable String database) {
     this.database = database;
     return this;
   }
 
-   /**
+  /**
    * Get database
    * @return database
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDatabase() {
     return database;
   }
 
 
-  public void setDatabase(String database) {
+  @JsonProperty(JSON_PROPERTY_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatabase(@jakarta.annotation.Nullable String database) {
     this.database = database;
   }
 
 
-  public SessionAttributes dbConnectTimeInSeconds(String dbConnectTimeInSeconds) {
-    
+  public SessionAttributes dbConnectTimeInSeconds(@jakarta.annotation.Nullable String dbConnectTimeInSeconds) {
     this.dbConnectTimeInSeconds = dbConnectTimeInSeconds;
     return this;
   }
 
-   /**
+  /**
    * Get dbConnectTimeInSeconds
    * @return dbConnectTimeInSeconds
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DB_CONNECT_TIME_IN_SECONDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDbConnectTimeInSeconds() {
     return dbConnectTimeInSeconds;
   }
 
 
-  public void setDbConnectTimeInSeconds(String dbConnectTimeInSeconds) {
+  @JsonProperty(JSON_PROPERTY_DB_CONNECT_TIME_IN_SECONDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDbConnectTimeInSeconds(@jakarta.annotation.Nullable String dbConnectTimeInSeconds) {
     this.dbConnectTimeInSeconds = dbConnectTimeInSeconds;
   }
 
 
-  public SessionAttributes request(String request) {
-    
+  public SessionAttributes request(@jakarta.annotation.Nullable String request) {
     this.request = request;
     return this;
   }
 
-   /**
+  /**
    * Get request
    * @return request
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REQUEST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getRequest() {
     return request;
   }
 
 
-  public void setRequest(String request) {
+  @JsonProperty(JSON_PROPERTY_REQUEST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRequest(@jakarta.annotation.Nullable String request) {
     this.request = request;
   }
 
 
-  public SessionAttributes requestTimeInSeconds(String requestTimeInSeconds) {
-    
+  public SessionAttributes requestTimeInSeconds(@jakarta.annotation.Nullable String requestTimeInSeconds) {
     this.requestTimeInSeconds = requestTimeInSeconds;
     return this;
   }
 
-   /**
+  /**
    * Get requestTimeInSeconds
    * @return requestTimeInSeconds
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REQUEST_TIME_IN_SECONDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getRequestTimeInSeconds() {
     return requestTimeInSeconds;
   }
 
 
-  public void setRequestTimeInSeconds(String requestTimeInSeconds) {
+  @JsonProperty(JSON_PROPERTY_REQUEST_TIME_IN_SECONDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRequestTimeInSeconds(@jakarta.annotation.Nullable String requestTimeInSeconds) {
     this.requestTimeInSeconds = requestTimeInSeconds;
   }
 
 
-  public SessionAttributes connectionSource(String connectionSource) {
-    
+  public SessionAttributes connectionSource(@jakarta.annotation.Nullable String connectionSource) {
     this.connectionSource = connectionSource;
     return this;
   }
 
-   /**
+  /**
    * Get connectionSource
    * @return connectionSource
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CONNECTION_SOURCE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getConnectionSource() {
     return connectionSource;
   }
 
 
-  public void setConnectionSource(String connectionSource) {
+  @JsonProperty(JSON_PROPERTY_CONNECTION_SOURCE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setConnectionSource(@jakarta.annotation.Nullable String connectionSource) {
     this.connectionSource = connectionSource;
   }
 
 
-  public SessionAttributes requestState(String requestState) {
-    
+  public SessionAttributes requestState(@jakarta.annotation.Nullable String requestState) {
     this.requestState = requestState;
     return this;
   }
 
-   /**
+  /**
    * Get requestState
    * @return requestState
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REQUEST_STATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getRequestState() {
     return requestState;
   }
 
 
-  public void setRequestState(String requestState) {
+  @JsonProperty(JSON_PROPERTY_REQUEST_STATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRequestState(@jakarta.annotation.Nullable String requestState) {
     this.requestState = requestState;
   }
 
 
+  /**
+   * Return true if this SessionAttributes object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -355,5 +387,89 @@ public class SessionAttributes {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `userId` to the URL query string
+    if (getUserId() != null) {
+      joiner.add(String.format("%suserId%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUserId()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `sessionId` to the URL query string
+    if (getSessionId() != null) {
+      joiner.add(String.format("%ssessionId%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSessionId()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `loginTimeInSeconds` to the URL query string
+    if (getLoginTimeInSeconds() != null) {
+      joiner.add(String.format("%sloginTimeInSeconds%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLoginTimeInSeconds()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `application` to the URL query string
+    if (getApplication() != null) {
+      joiner.add(String.format("%sapplication%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getApplication()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `database` to the URL query string
+    if (getDatabase() != null) {
+      joiner.add(String.format("%sdatabase%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDatabase()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dbConnectTimeInSeconds` to the URL query string
+    if (getDbConnectTimeInSeconds() != null) {
+      joiner.add(String.format("%sdbConnectTimeInSeconds%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDbConnectTimeInSeconds()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `request` to the URL query string
+    if (getRequest() != null) {
+      joiner.add(String.format("%srequest%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRequest()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `requestTimeInSeconds` to the URL query string
+    if (getRequestTimeInSeconds() != null) {
+      joiner.add(String.format("%srequestTimeInSeconds%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRequestTimeInSeconds()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `connectionSource` to the URL query string
+    if (getConnectionSource() != null) {
+      joiner.add(String.format("%sconnectionSource%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getConnectionSource()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `requestState` to the URL query string
+    if (getRequestState() != null) {
+      joiner.add(String.format("%srequestState%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRequestState()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

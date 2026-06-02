@@ -13,78 +13,94 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.SystemMaintainableResource;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * SystemMaintenanceLimits
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  SystemMaintenanceLimits.JSON_PROPERTY_DISK,
+  SystemMaintenanceLimits.JSON_PROPERTY_RAM
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class SystemMaintenanceLimits {
-  public static final String SERIALIZED_NAME_DISK = "disk";
-  @SerializedName(SERIALIZED_NAME_DISK)
+  public static final String JSON_PROPERTY_DISK = "disk";
+  @jakarta.annotation.Nullable
   private SystemMaintainableResource disk;
 
-  public static final String SERIALIZED_NAME_RAM = "ram";
-  @SerializedName(SERIALIZED_NAME_RAM)
+  public static final String JSON_PROPERTY_RAM = "ram";
+  @jakarta.annotation.Nullable
   private SystemMaintainableResource ram;
 
+  public SystemMaintenanceLimits() { 
+  }
 
-  public SystemMaintenanceLimits disk(SystemMaintainableResource disk) {
-    
+  public SystemMaintenanceLimits disk(@jakarta.annotation.Nullable SystemMaintainableResource disk) {
     this.disk = disk;
     return this;
   }
 
-   /**
+  /**
    * Get disk
    * @return disk
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DISK)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public SystemMaintainableResource getDisk() {
     return disk;
   }
 
 
-  public void setDisk(SystemMaintainableResource disk) {
+  @JsonProperty(JSON_PROPERTY_DISK)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDisk(@jakarta.annotation.Nullable SystemMaintainableResource disk) {
     this.disk = disk;
   }
 
 
-  public SystemMaintenanceLimits ram(SystemMaintainableResource ram) {
-    
+  public SystemMaintenanceLimits ram(@jakarta.annotation.Nullable SystemMaintainableResource ram) {
     this.ram = ram;
     return this;
   }
 
-   /**
+  /**
    * Get ram
    * @return ram
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RAM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public SystemMaintainableResource getRam() {
     return ram;
   }
 
 
-  public void setRam(SystemMaintainableResource ram) {
+  @JsonProperty(JSON_PROPERTY_RAM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRam(@jakarta.annotation.Nullable SystemMaintainableResource ram) {
     this.ram = ram;
   }
 
 
+  /**
+   * Return true if this SystemMaintenanceLimits object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -124,5 +140,49 @@ public class SystemMaintenanceLimits {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `disk` to the URL query string
+    if (getDisk() != null) {
+      joiner.add(getDisk().toUrlQueryString(prefix + "disk" + suffix));
+    }
+
+    // add `ram` to the URL query string
+    if (getRam() != null) {
+      joiner.add(getRam().toUrlQueryString(prefix + "ram" + suffix));
+    }
+
+    return joiner.toString();
+  }
 }
 

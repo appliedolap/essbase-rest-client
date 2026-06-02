@@ -13,269 +13,297 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.DVUpdatedCell;
 import com.appliedolap.essbase.client.model.GridDimension;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * DVGrid
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  DVGrid.JSON_PROPERTY_DIMENSIONS,
+  DVGrid.JSON_PROPERTY_COLUMNS,
+  DVGrid.JSON_PROPERTY_ROWS,
+  DVGrid.JSON_PROPERTY_FILTERS,
+  DVGrid.JSON_PROPERTY_UPDATED_CELLS,
+  DVGrid.JSON_PROPERTY_ROW_HEADER_LEVELS,
+  DVGrid.JSON_PROPERTY_COLUMN_HEADER_LEVELS,
+  DVGrid.JSON_PROPERTY_GETN_ROW_HEADER_LEVELS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class DVGrid {
-  public static final String SERIALIZED_NAME_DIMENSIONS = "dimensions";
-  @SerializedName(SERIALIZED_NAME_DIMENSIONS)
-  private List<GridDimension> dimensions = null;
+  public static final String JSON_PROPERTY_DIMENSIONS = "dimensions";
+  @jakarta.annotation.Nullable
+  private List<GridDimension> dimensions = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_COLUMNS = "columns";
-  @SerializedName(SERIALIZED_NAME_COLUMNS)
+  public static final String JSON_PROPERTY_COLUMNS = "columns";
+  @jakarta.annotation.Nullable
   private Integer columns;
 
-  public static final String SERIALIZED_NAME_ROWS = "rows";
-  @SerializedName(SERIALIZED_NAME_ROWS)
+  public static final String JSON_PROPERTY_ROWS = "rows";
+  @jakarta.annotation.Nullable
   private Integer rows;
 
-  public static final String SERIALIZED_NAME_FILTERS = "filters";
-  @SerializedName(SERIALIZED_NAME_FILTERS)
-  private Map<String, String> filters = null;
+  public static final String JSON_PROPERTY_FILTERS = "filters";
+  @jakarta.annotation.Nullable
+  private Map<String, String> filters = new HashMap<>();
 
-  public static final String SERIALIZED_NAME_UPDATED_CELLS = "updatedCells";
-  @SerializedName(SERIALIZED_NAME_UPDATED_CELLS)
-  private List<DVUpdatedCell> updatedCells = null;
+  public static final String JSON_PROPERTY_UPDATED_CELLS = "updatedCells";
+  @jakarta.annotation.Nullable
+  private List<DVUpdatedCell> updatedCells = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_ROW_HEADER_LEVELS = "rowHeaderLevels";
-  @SerializedName(SERIALIZED_NAME_ROW_HEADER_LEVELS)
+  public static final String JSON_PROPERTY_ROW_HEADER_LEVELS = "rowHeaderLevels";
+  @jakarta.annotation.Nullable
   private Integer rowHeaderLevels;
 
-  public static final String SERIALIZED_NAME_COLUMN_HEADER_LEVELS = "columnHeaderLevels";
-  @SerializedName(SERIALIZED_NAME_COLUMN_HEADER_LEVELS)
+  public static final String JSON_PROPERTY_COLUMN_HEADER_LEVELS = "columnHeaderLevels";
+  @jakarta.annotation.Nullable
   private Integer columnHeaderLevels;
 
-  public static final String SERIALIZED_NAME_GETN_ROW_HEADER_LEVELS = "getnRowHeaderLevels";
-  @SerializedName(SERIALIZED_NAME_GETN_ROW_HEADER_LEVELS)
+  public static final String JSON_PROPERTY_GETN_ROW_HEADER_LEVELS = "getnRowHeaderLevels";
+  @jakarta.annotation.Nullable
   private Integer getnRowHeaderLevels;
 
+  public DVGrid() { 
+  }
 
-  public DVGrid dimensions(List<GridDimension> dimensions) {
-    
+  public DVGrid dimensions(@jakarta.annotation.Nullable List<GridDimension> dimensions) {
     this.dimensions = dimensions;
     return this;
   }
 
   public DVGrid addDimensionsItem(GridDimension dimensionsItem) {
     if (this.dimensions == null) {
-      this.dimensions = new ArrayList<GridDimension>();
+      this.dimensions = new ArrayList<>();
     }
     this.dimensions.add(dimensionsItem);
     return this;
   }
 
-   /**
+  /**
    * Get dimensions
    * @return dimensions
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIMENSIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<GridDimension> getDimensions() {
     return dimensions;
   }
 
 
-  public void setDimensions(List<GridDimension> dimensions) {
+  @JsonProperty(JSON_PROPERTY_DIMENSIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimensions(@jakarta.annotation.Nullable List<GridDimension> dimensions) {
     this.dimensions = dimensions;
   }
 
 
-  public DVGrid columns(Integer columns) {
-    
+  public DVGrid columns(@jakarta.annotation.Nullable Integer columns) {
     this.columns = columns;
     return this;
   }
 
-   /**
+  /**
    * Get columns
    * @return columns
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getColumns() {
     return columns;
   }
 
 
-  public void setColumns(Integer columns) {
+  @JsonProperty(JSON_PROPERTY_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setColumns(@jakarta.annotation.Nullable Integer columns) {
     this.columns = columns;
   }
 
 
-  public DVGrid rows(Integer rows) {
-    
+  public DVGrid rows(@jakarta.annotation.Nullable Integer rows) {
     this.rows = rows;
     return this;
   }
 
-   /**
+  /**
    * Get rows
    * @return rows
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ROWS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getRows() {
     return rows;
   }
 
 
-  public void setRows(Integer rows) {
+  @JsonProperty(JSON_PROPERTY_ROWS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRows(@jakarta.annotation.Nullable Integer rows) {
     this.rows = rows;
   }
 
 
-  public DVGrid filters(Map<String, String> filters) {
-    
+  public DVGrid filters(@jakarta.annotation.Nullable Map<String, String> filters) {
     this.filters = filters;
     return this;
   }
 
   public DVGrid putFiltersItem(String key, String filtersItem) {
     if (this.filters == null) {
-      this.filters = new HashMap<String, String>();
+      this.filters = new HashMap<>();
     }
     this.filters.put(key, filtersItem);
     return this;
   }
 
-   /**
+  /**
    * Get filters
    * @return filters
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FILTERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Map<String, String> getFilters() {
     return filters;
   }
 
 
-  public void setFilters(Map<String, String> filters) {
+  @JsonProperty(JSON_PROPERTY_FILTERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFilters(@jakarta.annotation.Nullable Map<String, String> filters) {
     this.filters = filters;
   }
 
 
-  public DVGrid updatedCells(List<DVUpdatedCell> updatedCells) {
-    
+  public DVGrid updatedCells(@jakarta.annotation.Nullable List<DVUpdatedCell> updatedCells) {
     this.updatedCells = updatedCells;
     return this;
   }
 
   public DVGrid addUpdatedCellsItem(DVUpdatedCell updatedCellsItem) {
     if (this.updatedCells == null) {
-      this.updatedCells = new ArrayList<DVUpdatedCell>();
+      this.updatedCells = new ArrayList<>();
     }
     this.updatedCells.add(updatedCellsItem);
     return this;
   }
 
-   /**
+  /**
    * Get updatedCells
    * @return updatedCells
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UPDATED_CELLS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<DVUpdatedCell> getUpdatedCells() {
     return updatedCells;
   }
 
 
-  public void setUpdatedCells(List<DVUpdatedCell> updatedCells) {
+  @JsonProperty(JSON_PROPERTY_UPDATED_CELLS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUpdatedCells(@jakarta.annotation.Nullable List<DVUpdatedCell> updatedCells) {
     this.updatedCells = updatedCells;
   }
 
 
-  public DVGrid rowHeaderLevels(Integer rowHeaderLevels) {
-    
+  public DVGrid rowHeaderLevels(@jakarta.annotation.Nullable Integer rowHeaderLevels) {
     this.rowHeaderLevels = rowHeaderLevels;
     return this;
   }
 
-   /**
+  /**
    * Get rowHeaderLevels
    * @return rowHeaderLevels
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ROW_HEADER_LEVELS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getRowHeaderLevels() {
     return rowHeaderLevels;
   }
 
 
-  public void setRowHeaderLevels(Integer rowHeaderLevels) {
+  @JsonProperty(JSON_PROPERTY_ROW_HEADER_LEVELS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRowHeaderLevels(@jakarta.annotation.Nullable Integer rowHeaderLevels) {
     this.rowHeaderLevels = rowHeaderLevels;
   }
 
 
-  public DVGrid columnHeaderLevels(Integer columnHeaderLevels) {
-    
+  public DVGrid columnHeaderLevels(@jakarta.annotation.Nullable Integer columnHeaderLevels) {
     this.columnHeaderLevels = columnHeaderLevels;
     return this;
   }
 
-   /**
+  /**
    * Get columnHeaderLevels
    * @return columnHeaderLevels
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COLUMN_HEADER_LEVELS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getColumnHeaderLevels() {
     return columnHeaderLevels;
   }
 
 
-  public void setColumnHeaderLevels(Integer columnHeaderLevels) {
+  @JsonProperty(JSON_PROPERTY_COLUMN_HEADER_LEVELS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setColumnHeaderLevels(@jakarta.annotation.Nullable Integer columnHeaderLevels) {
     this.columnHeaderLevels = columnHeaderLevels;
   }
 
 
-  public DVGrid getnRowHeaderLevels(Integer getnRowHeaderLevels) {
-    
+  public DVGrid getnRowHeaderLevels(@jakarta.annotation.Nullable Integer getnRowHeaderLevels) {
     this.getnRowHeaderLevels = getnRowHeaderLevels;
     return this;
   }
 
-   /**
+  /**
    * Get getnRowHeaderLevels
    * @return getnRowHeaderLevels
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GETN_ROW_HEADER_LEVELS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getGetnRowHeaderLevels() {
     return getnRowHeaderLevels;
   }
 
 
-  public void setGetnRowHeaderLevels(Integer getnRowHeaderLevels) {
+  @JsonProperty(JSON_PROPERTY_GETN_ROW_HEADER_LEVELS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGetnRowHeaderLevels(@jakarta.annotation.Nullable Integer getnRowHeaderLevels) {
     this.getnRowHeaderLevels = getnRowHeaderLevels;
   }
 
 
+  /**
+   * Return true if this DVGrid object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -327,5 +355,93 @@ public class DVGrid {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `dimensions` to the URL query string
+    if (getDimensions() != null) {
+      for (int i = 0; i < getDimensions().size(); i++) {
+        if (getDimensions().get(i) != null) {
+          joiner.add(getDimensions().get(i).toUrlQueryString(String.format("%sdimensions%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `columns` to the URL query string
+    if (getColumns() != null) {
+      joiner.add(String.format("%scolumns%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getColumns()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `rows` to the URL query string
+    if (getRows() != null) {
+      joiner.add(String.format("%srows%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRows()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `filters` to the URL query string
+    if (getFilters() != null) {
+      for (String _key : getFilters().keySet()) {
+        joiner.add(String.format("%sfilters%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, _key, containerSuffix),
+            getFilters().get(_key), URLEncoder.encode(ApiClient.valueToString(getFilters().get(_key)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `updatedCells` to the URL query string
+    if (getUpdatedCells() != null) {
+      for (int i = 0; i < getUpdatedCells().size(); i++) {
+        if (getUpdatedCells().get(i) != null) {
+          joiner.add(getUpdatedCells().get(i).toUrlQueryString(String.format("%supdatedCells%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `rowHeaderLevels` to the URL query string
+    if (getRowHeaderLevels() != null) {
+      joiner.add(String.format("%srowHeaderLevels%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRowHeaderLevels()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `columnHeaderLevels` to the URL query string
+    if (getColumnHeaderLevels() != null) {
+      joiner.add(String.format("%scolumnHeaderLevels%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getColumnHeaderLevels()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `getnRowHeaderLevels` to the URL query string
+    if (getGetnRowHeaderLevels() != null) {
+      joiner.add(String.format("%sgetnRowHeaderLevels%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getGetnRowHeaderLevels()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

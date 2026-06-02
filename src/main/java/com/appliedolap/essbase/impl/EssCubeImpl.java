@@ -1,16 +1,13 @@
 package com.appliedolap.essbase.impl;
 
 import com.appliedolap.essbase.*;
+import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.*;
 import com.appliedolap.essbase.exceptions.NoSuchEssbaseObjectException;
 import com.appliedolap.essbase.misc.MdxJson;
-import com.appliedolap.essbase.util.GenericApiCallback;
+import com.appliedolap.essbase.util.NativeHttp;
 import com.appliedolap.essbase.util.WrapperUtil;
-import com.google.gson.Gson;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -348,14 +345,13 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
             mdxInput.setQuery(query);
 
             // CSV, HTML, JSON, XLSX
-            Response response = api.getExecuteMdxApi().mDXExecuteMDXCall(getApplicationName(), getName(), outputType.name(), mdxInput, new GenericApiCallback()).execute();
-            ResponseBody body = response.body();
-
-            if (response.isSuccessful()) {
-                IOUtils.write(body.bytes(), outputStream);
-            } else {
-                logger.error("Error during query execution: {}", response.message());
-            }
+            String path = "/applications/" + ApiClient.urlEncode(getApplicationName())
+                    + "/databases/" + ApiClient.urlEncode(getName()) + "/mdx";
+            path = NativeHttp.withQuery(path, "format", outputType.name());
+            NativeHttp.copyBodyTo(NativeHttp.send(api.getClient(), NativeHttp.request(api.getClient(), path)
+                    .header("Accept", "application/octet-stream, application/json, text/csv, text/html, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    .header("Content-Type", "application/json")
+                    .POST(NativeHttp.jsonBody(api.getClient(), mdxInput)), "mDXExecuteMDX"), outputStream);
         } catch (IOException | ApiException e) {
             throw new EssApiException(e);
         }
@@ -366,9 +362,13 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         executeMdx(query, MdxOutputType.JSON, new MdxOptions(), outputStream);
 
-        String json = new String(outputStream.toString());
-        MdxJson mdxJson = new Gson().fromJson(json, MdxJson.class);
-        return new EssGridImpl(mdxJson);
+        String json = outputStream.toString();
+        try {
+            MdxJson mdxJson = api.getClient().getObjectMapper().readValue(json, MdxJson.class);
+            return new EssGridImpl(mdxJson);
+        } catch (IOException e) {
+            throw new EssApiException(e);
+        }
     }
 
     public static class ExcelExportOptions {

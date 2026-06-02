@@ -13,77 +13,93 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * DataLoadStartPayload
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  DataLoadStartPayload.JSON_PROPERTY_RULE_FILE_NAME,
+  DataLoadStartPayload.JSON_PROPERTY_DELIMITER
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class DataLoadStartPayload {
-  public static final String SERIALIZED_NAME_RULE_FILE_NAME = "ruleFileName";
-  @SerializedName(SERIALIZED_NAME_RULE_FILE_NAME)
+  public static final String JSON_PROPERTY_RULE_FILE_NAME = "ruleFileName";
+  @jakarta.annotation.Nullable
   private String ruleFileName;
 
-  public static final String SERIALIZED_NAME_DELIMITER = "delimiter";
-  @SerializedName(SERIALIZED_NAME_DELIMITER)
+  public static final String JSON_PROPERTY_DELIMITER = "delimiter";
+  @jakarta.annotation.Nullable
   private String delimiter;
 
+  public DataLoadStartPayload() { 
+  }
 
-  public DataLoadStartPayload ruleFileName(String ruleFileName) {
-    
+  public DataLoadStartPayload ruleFileName(@jakarta.annotation.Nullable String ruleFileName) {
     this.ruleFileName = ruleFileName;
     return this;
   }
 
-   /**
+  /**
    * Get ruleFileName
    * @return ruleFileName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RULE_FILE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getRuleFileName() {
     return ruleFileName;
   }
 
 
-  public void setRuleFileName(String ruleFileName) {
+  @JsonProperty(JSON_PROPERTY_RULE_FILE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRuleFileName(@jakarta.annotation.Nullable String ruleFileName) {
     this.ruleFileName = ruleFileName;
   }
 
 
-  public DataLoadStartPayload delimiter(String delimiter) {
-    
+  public DataLoadStartPayload delimiter(@jakarta.annotation.Nullable String delimiter) {
     this.delimiter = delimiter;
     return this;
   }
 
-   /**
+  /**
    * Currently only Comma is supported as delimiter
    * @return delimiter
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "Currently only Comma is supported as delimiter")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DELIMITER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDelimiter() {
     return delimiter;
   }
 
 
-  public void setDelimiter(String delimiter) {
+  @JsonProperty(JSON_PROPERTY_DELIMITER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDelimiter(@jakarta.annotation.Nullable String delimiter) {
     this.delimiter = delimiter;
   }
 
 
+  /**
+   * Return true if this DataLoadStartPayload object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -123,5 +139,49 @@ public class DataLoadStartPayload {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `ruleFileName` to the URL query string
+    if (getRuleFileName() != null) {
+      joiner.add(String.format("%sruleFileName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRuleFileName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `delimiter` to the URL query string
+    if (getDelimiter() != null) {
+      joiner.add(String.format("%sdelimiter%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDelimiter()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

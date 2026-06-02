@@ -13,266 +13,296 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * CopyOptions
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  CopyOptions.JSON_PROPERTY_PROPERTIES,
+  CopyOptions.JSON_PROPERTY_COMMENTS,
+  CopyOptions.JSON_PROPERTY_DATA,
+  CopyOptions.JSON_PROPERTY_TASKS,
+  CopyOptions.JSON_PROPERTY_KEY_METRICS,
+  CopyOptions.JSON_PROPERTY_SLICE,
+  CopyOptions.JSON_PROPERTY_LAYOUTS,
+  CopyOptions.JSON_PROPERTY_APPROVERS,
+  CopyOptions.JSON_PROPERTY_PARTICIPANTS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class CopyOptions {
-  public static final String SERIALIZED_NAME_PROPERTIES = "properties";
-  @SerializedName(SERIALIZED_NAME_PROPERTIES)
+  public static final String JSON_PROPERTY_PROPERTIES = "properties";
+  @jakarta.annotation.Nullable
   private Boolean properties;
 
-  public static final String SERIALIZED_NAME_COMMENTS = "comments";
-  @SerializedName(SERIALIZED_NAME_COMMENTS)
+  public static final String JSON_PROPERTY_COMMENTS = "comments";
+  @jakarta.annotation.Nullable
   private Boolean comments;
 
-  public static final String SERIALIZED_NAME_DATA = "data";
-  @SerializedName(SERIALIZED_NAME_DATA)
+  public static final String JSON_PROPERTY_DATA = "data";
+  @jakarta.annotation.Nullable
   private Boolean data;
 
-  public static final String SERIALIZED_NAME_TASKS = "tasks";
-  @SerializedName(SERIALIZED_NAME_TASKS)
+  public static final String JSON_PROPERTY_TASKS = "tasks";
+  @jakarta.annotation.Nullable
   private Boolean tasks;
 
-  public static final String SERIALIZED_NAME_KEY_METRICS = "keyMetrics";
-  @SerializedName(SERIALIZED_NAME_KEY_METRICS)
+  public static final String JSON_PROPERTY_KEY_METRICS = "keyMetrics";
+  @jakarta.annotation.Nullable
   private Boolean keyMetrics;
 
-  public static final String SERIALIZED_NAME_SLICE = "slice";
-  @SerializedName(SERIALIZED_NAME_SLICE)
+  public static final String JSON_PROPERTY_SLICE = "slice";
+  @jakarta.annotation.Nullable
   private Boolean slice;
 
-  public static final String SERIALIZED_NAME_LAYOUTS = "layouts";
-  @SerializedName(SERIALIZED_NAME_LAYOUTS)
+  public static final String JSON_PROPERTY_LAYOUTS = "layouts";
+  @jakarta.annotation.Nullable
   private Boolean layouts;
 
-  public static final String SERIALIZED_NAME_APPROVERS = "approvers";
-  @SerializedName(SERIALIZED_NAME_APPROVERS)
+  public static final String JSON_PROPERTY_APPROVERS = "approvers";
+  @jakarta.annotation.Nullable
   private Boolean approvers;
 
-  public static final String SERIALIZED_NAME_PARTICIPANTS = "participants";
-  @SerializedName(SERIALIZED_NAME_PARTICIPANTS)
+  public static final String JSON_PROPERTY_PARTICIPANTS = "participants";
+  @jakarta.annotation.Nullable
   private Boolean participants;
 
+  public CopyOptions() { 
+  }
 
-  public CopyOptions properties(Boolean properties) {
-    
+  public CopyOptions properties(@jakarta.annotation.Nullable Boolean properties) {
     this.properties = properties;
     return this;
   }
 
-   /**
+  /**
    * Get properties
    * @return properties
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PROPERTIES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getProperties() {
     return properties;
   }
 
 
-  public void setProperties(Boolean properties) {
+  @JsonProperty(JSON_PROPERTY_PROPERTIES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setProperties(@jakarta.annotation.Nullable Boolean properties) {
     this.properties = properties;
   }
 
 
-  public CopyOptions comments(Boolean comments) {
-    
+  public CopyOptions comments(@jakarta.annotation.Nullable Boolean comments) {
     this.comments = comments;
     return this;
   }
 
-   /**
+  /**
    * Get comments
    * @return comments
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COMMENTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getComments() {
     return comments;
   }
 
 
-  public void setComments(Boolean comments) {
+  @JsonProperty(JSON_PROPERTY_COMMENTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setComments(@jakarta.annotation.Nullable Boolean comments) {
     this.comments = comments;
   }
 
 
-  public CopyOptions data(Boolean data) {
-    
+  public CopyOptions data(@jakarta.annotation.Nullable Boolean data) {
     this.data = data;
     return this;
   }
 
-   /**
+  /**
    * Get data
    * @return data
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getData() {
     return data;
   }
 
 
-  public void setData(Boolean data) {
+  @JsonProperty(JSON_PROPERTY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setData(@jakarta.annotation.Nullable Boolean data) {
     this.data = data;
   }
 
 
-  public CopyOptions tasks(Boolean tasks) {
-    
+  public CopyOptions tasks(@jakarta.annotation.Nullable Boolean tasks) {
     this.tasks = tasks;
     return this;
   }
 
-   /**
+  /**
    * Get tasks
    * @return tasks
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TASKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getTasks() {
     return tasks;
   }
 
 
-  public void setTasks(Boolean tasks) {
+  @JsonProperty(JSON_PROPERTY_TASKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTasks(@jakarta.annotation.Nullable Boolean tasks) {
     this.tasks = tasks;
   }
 
 
-  public CopyOptions keyMetrics(Boolean keyMetrics) {
-    
+  public CopyOptions keyMetrics(@jakarta.annotation.Nullable Boolean keyMetrics) {
     this.keyMetrics = keyMetrics;
     return this;
   }
 
-   /**
+  /**
    * Get keyMetrics
    * @return keyMetrics
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_KEY_METRICS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getKeyMetrics() {
     return keyMetrics;
   }
 
 
-  public void setKeyMetrics(Boolean keyMetrics) {
+  @JsonProperty(JSON_PROPERTY_KEY_METRICS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setKeyMetrics(@jakarta.annotation.Nullable Boolean keyMetrics) {
     this.keyMetrics = keyMetrics;
   }
 
 
-  public CopyOptions slice(Boolean slice) {
-    
+  public CopyOptions slice(@jakarta.annotation.Nullable Boolean slice) {
     this.slice = slice;
     return this;
   }
 
-   /**
+  /**
    * Get slice
    * @return slice
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SLICE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getSlice() {
     return slice;
   }
 
 
-  public void setSlice(Boolean slice) {
+  @JsonProperty(JSON_PROPERTY_SLICE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSlice(@jakarta.annotation.Nullable Boolean slice) {
     this.slice = slice;
   }
 
 
-  public CopyOptions layouts(Boolean layouts) {
-    
+  public CopyOptions layouts(@jakarta.annotation.Nullable Boolean layouts) {
     this.layouts = layouts;
     return this;
   }
 
-   /**
+  /**
    * Get layouts
    * @return layouts
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LAYOUTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getLayouts() {
     return layouts;
   }
 
 
-  public void setLayouts(Boolean layouts) {
+  @JsonProperty(JSON_PROPERTY_LAYOUTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLayouts(@jakarta.annotation.Nullable Boolean layouts) {
     this.layouts = layouts;
   }
 
 
-  public CopyOptions approvers(Boolean approvers) {
-    
+  public CopyOptions approvers(@jakarta.annotation.Nullable Boolean approvers) {
     this.approvers = approvers;
     return this;
   }
 
-   /**
+  /**
    * Get approvers
    * @return approvers
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPROVERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getApprovers() {
     return approvers;
   }
 
 
-  public void setApprovers(Boolean approvers) {
+  @JsonProperty(JSON_PROPERTY_APPROVERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApprovers(@jakarta.annotation.Nullable Boolean approvers) {
     this.approvers = approvers;
   }
 
 
-  public CopyOptions participants(Boolean participants) {
-    
+  public CopyOptions participants(@jakarta.annotation.Nullable Boolean participants) {
     this.participants = participants;
     return this;
   }
 
-   /**
+  /**
    * Get participants
    * @return participants
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PARTICIPANTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getParticipants() {
     return participants;
   }
 
 
-  public void setParticipants(Boolean participants) {
+  @JsonProperty(JSON_PROPERTY_PARTICIPANTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setParticipants(@jakarta.annotation.Nullable Boolean participants) {
     this.participants = participants;
   }
 
 
+  /**
+   * Return true if this CopyOptions object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -326,5 +356,84 @@ public class CopyOptions {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `properties` to the URL query string
+    if (getProperties() != null) {
+      joiner.add(String.format("%sproperties%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getProperties()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `comments` to the URL query string
+    if (getComments() != null) {
+      joiner.add(String.format("%scomments%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getComments()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `data` to the URL query string
+    if (getData() != null) {
+      joiner.add(String.format("%sdata%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getData()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `tasks` to the URL query string
+    if (getTasks() != null) {
+      joiner.add(String.format("%stasks%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTasks()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `keyMetrics` to the URL query string
+    if (getKeyMetrics() != null) {
+      joiner.add(String.format("%skeyMetrics%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getKeyMetrics()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `slice` to the URL query string
+    if (getSlice() != null) {
+      joiner.add(String.format("%sslice%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSlice()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `layouts` to the URL query string
+    if (getLayouts() != null) {
+      joiner.add(String.format("%slayouts%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLayouts()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `approvers` to the URL query string
+    if (getApprovers() != null) {
+      joiner.add(String.format("%sapprovers%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getApprovers()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `participants` to the URL query string
+    if (getParticipants() != null) {
+      joiner.add(String.format("%sparticipants%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getParticipants()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

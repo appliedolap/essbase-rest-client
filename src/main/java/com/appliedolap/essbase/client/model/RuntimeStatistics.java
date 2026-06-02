@@ -13,482 +13,528 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * RuntimeStatistics
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  RuntimeStatistics.JSON_PROPERTY_CACHE_HIT_RATIO,
+  RuntimeStatistics.JSON_PROPERTY_CURRENT_CACHE_SIZE,
+  RuntimeStatistics.JSON_PROPERTY_CURRENT_CACHE_SIZE_LIMIT,
+  RuntimeStatistics.JSON_PROPERTY_PAGE_READS_SINCE_LAST_STARTUP,
+  RuntimeStatistics.JSON_PROPERTY_PAGE_WRITES_SINCE_LAST_STARTUP,
+  RuntimeStatistics.JSON_PROPERTY_PAGE_SIZE,
+  RuntimeStatistics.JSON_PROPERTY_DISK_SPACE_ALLOCATED_FOR_DATA,
+  RuntimeStatistics.JSON_PROPERTY_DISK_SPACE_USED_BY_DATA,
+  RuntimeStatistics.JSON_PROPERTY_TEMPORARY_DISK_SPACE_ALLOCATED,
+  RuntimeStatistics.JSON_PROPERTY_TEMPORARY_DISK_SPACE_USED,
+  RuntimeStatistics.JSON_PROPERTY_HIT_RATIO_ON_INDEX_CACHE,
+  RuntimeStatistics.JSON_PROPERTY_HIT_RATIO_ON_DATA_CACHE,
+  RuntimeStatistics.JSON_PROPERTY_NUMBER_OF_INDEX_PAGE_READS,
+  RuntimeStatistics.JSON_PROPERTY_NUMBER_OF_INDEX_PAGE_WRITES,
+  RuntimeStatistics.JSON_PROPERTY_NUMBER_OF_DATA_BLOCK_READS,
+  RuntimeStatistics.JSON_PROPERTY_NUMBER_OF_DATA_BLOCK_WRITES,
+  RuntimeStatistics.JSON_PROPERTY_HIT_RATIO_ON_DATA_FILE_CACHE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class RuntimeStatistics {
-  public static final String SERIALIZED_NAME_CACHE_HIT_RATIO = "cacheHitRatio";
-  @SerializedName(SERIALIZED_NAME_CACHE_HIT_RATIO)
+  public static final String JSON_PROPERTY_CACHE_HIT_RATIO = "cacheHitRatio";
+  @jakarta.annotation.Nullable
   private Double cacheHitRatio;
 
-  public static final String SERIALIZED_NAME_CURRENT_CACHE_SIZE = "currentCacheSize";
-  @SerializedName(SERIALIZED_NAME_CURRENT_CACHE_SIZE)
+  public static final String JSON_PROPERTY_CURRENT_CACHE_SIZE = "currentCacheSize";
+  @jakarta.annotation.Nullable
   private Double currentCacheSize;
 
-  public static final String SERIALIZED_NAME_CURRENT_CACHE_SIZE_LIMIT = "currentCacheSizeLimit";
-  @SerializedName(SERIALIZED_NAME_CURRENT_CACHE_SIZE_LIMIT)
+  public static final String JSON_PROPERTY_CURRENT_CACHE_SIZE_LIMIT = "currentCacheSizeLimit";
+  @jakarta.annotation.Nullable
   private Double currentCacheSizeLimit;
 
-  public static final String SERIALIZED_NAME_PAGE_READS_SINCE_LAST_STARTUP = "pageReadsSinceLastStartup";
-  @SerializedName(SERIALIZED_NAME_PAGE_READS_SINCE_LAST_STARTUP)
+  public static final String JSON_PROPERTY_PAGE_READS_SINCE_LAST_STARTUP = "pageReadsSinceLastStartup";
+  @jakarta.annotation.Nullable
   private Double pageReadsSinceLastStartup;
 
-  public static final String SERIALIZED_NAME_PAGE_WRITES_SINCE_LAST_STARTUP = "pageWritesSinceLastStartup";
-  @SerializedName(SERIALIZED_NAME_PAGE_WRITES_SINCE_LAST_STARTUP)
+  public static final String JSON_PROPERTY_PAGE_WRITES_SINCE_LAST_STARTUP = "pageWritesSinceLastStartup";
+  @jakarta.annotation.Nullable
   private Double pageWritesSinceLastStartup;
 
-  public static final String SERIALIZED_NAME_PAGE_SIZE = "pageSize";
-  @SerializedName(SERIALIZED_NAME_PAGE_SIZE)
+  public static final String JSON_PROPERTY_PAGE_SIZE = "pageSize";
+  @jakarta.annotation.Nullable
   private Double pageSize;
 
-  public static final String SERIALIZED_NAME_DISK_SPACE_ALLOCATED_FOR_DATA = "diskSpaceAllocatedForData";
-  @SerializedName(SERIALIZED_NAME_DISK_SPACE_ALLOCATED_FOR_DATA)
+  public static final String JSON_PROPERTY_DISK_SPACE_ALLOCATED_FOR_DATA = "diskSpaceAllocatedForData";
+  @jakarta.annotation.Nullable
   private Double diskSpaceAllocatedForData;
 
-  public static final String SERIALIZED_NAME_DISK_SPACE_USED_BY_DATA = "diskSpaceUsedByData";
-  @SerializedName(SERIALIZED_NAME_DISK_SPACE_USED_BY_DATA)
+  public static final String JSON_PROPERTY_DISK_SPACE_USED_BY_DATA = "diskSpaceUsedByData";
+  @jakarta.annotation.Nullable
   private Double diskSpaceUsedByData;
 
-  public static final String SERIALIZED_NAME_TEMPORARY_DISK_SPACE_ALLOCATED = "temporaryDiskSpaceAllocated";
-  @SerializedName(SERIALIZED_NAME_TEMPORARY_DISK_SPACE_ALLOCATED)
+  public static final String JSON_PROPERTY_TEMPORARY_DISK_SPACE_ALLOCATED = "temporaryDiskSpaceAllocated";
+  @jakarta.annotation.Nullable
   private Double temporaryDiskSpaceAllocated;
 
-  public static final String SERIALIZED_NAME_TEMPORARY_DISK_SPACE_USED = "temporaryDiskSpaceUsed";
-  @SerializedName(SERIALIZED_NAME_TEMPORARY_DISK_SPACE_USED)
+  public static final String JSON_PROPERTY_TEMPORARY_DISK_SPACE_USED = "temporaryDiskSpaceUsed";
+  @jakarta.annotation.Nullable
   private Double temporaryDiskSpaceUsed;
 
-  public static final String SERIALIZED_NAME_HIT_RATIO_ON_INDEX_CACHE = "hitRatioOnIndexCache";
-  @SerializedName(SERIALIZED_NAME_HIT_RATIO_ON_INDEX_CACHE)
+  public static final String JSON_PROPERTY_HIT_RATIO_ON_INDEX_CACHE = "hitRatioOnIndexCache";
+  @jakarta.annotation.Nullable
   private Double hitRatioOnIndexCache;
 
-  public static final String SERIALIZED_NAME_HIT_RATIO_ON_DATA_CACHE = "hitRatioOnDataCache";
-  @SerializedName(SERIALIZED_NAME_HIT_RATIO_ON_DATA_CACHE)
+  public static final String JSON_PROPERTY_HIT_RATIO_ON_DATA_CACHE = "hitRatioOnDataCache";
+  @jakarta.annotation.Nullable
   private Double hitRatioOnDataCache;
 
-  public static final String SERIALIZED_NAME_NUMBER_OF_INDEX_PAGE_READS = "numberOfIndexPageReads";
-  @SerializedName(SERIALIZED_NAME_NUMBER_OF_INDEX_PAGE_READS)
+  public static final String JSON_PROPERTY_NUMBER_OF_INDEX_PAGE_READS = "numberOfIndexPageReads";
+  @jakarta.annotation.Nullable
   private Double numberOfIndexPageReads;
 
-  public static final String SERIALIZED_NAME_NUMBER_OF_INDEX_PAGE_WRITES = "numberOfIndexPageWrites";
-  @SerializedName(SERIALIZED_NAME_NUMBER_OF_INDEX_PAGE_WRITES)
+  public static final String JSON_PROPERTY_NUMBER_OF_INDEX_PAGE_WRITES = "numberOfIndexPageWrites";
+  @jakarta.annotation.Nullable
   private Double numberOfIndexPageWrites;
 
-  public static final String SERIALIZED_NAME_NUMBER_OF_DATA_BLOCK_READS = "numberOfDataBlockReads";
-  @SerializedName(SERIALIZED_NAME_NUMBER_OF_DATA_BLOCK_READS)
+  public static final String JSON_PROPERTY_NUMBER_OF_DATA_BLOCK_READS = "numberOfDataBlockReads";
+  @jakarta.annotation.Nullable
   private Double numberOfDataBlockReads;
 
-  public static final String SERIALIZED_NAME_NUMBER_OF_DATA_BLOCK_WRITES = "numberOfDataBlockWrites";
-  @SerializedName(SERIALIZED_NAME_NUMBER_OF_DATA_BLOCK_WRITES)
+  public static final String JSON_PROPERTY_NUMBER_OF_DATA_BLOCK_WRITES = "numberOfDataBlockWrites";
+  @jakarta.annotation.Nullable
   private Double numberOfDataBlockWrites;
 
-  public static final String SERIALIZED_NAME_HIT_RATIO_ON_DATA_FILE_CACHE = "hitRatioOnDataFileCache";
-  @SerializedName(SERIALIZED_NAME_HIT_RATIO_ON_DATA_FILE_CACHE)
+  public static final String JSON_PROPERTY_HIT_RATIO_ON_DATA_FILE_CACHE = "hitRatioOnDataFileCache";
+  @jakarta.annotation.Nullable
   private Double hitRatioOnDataFileCache;
 
+  public RuntimeStatistics() { 
+  }
 
-  public RuntimeStatistics cacheHitRatio(Double cacheHitRatio) {
-    
+  public RuntimeStatistics cacheHitRatio(@jakarta.annotation.Nullable Double cacheHitRatio) {
     this.cacheHitRatio = cacheHitRatio;
     return this;
   }
 
-   /**
+  /**
    * Get cacheHitRatio
    * @return cacheHitRatio
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CACHE_HIT_RATIO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getCacheHitRatio() {
     return cacheHitRatio;
   }
 
 
-  public void setCacheHitRatio(Double cacheHitRatio) {
+  @JsonProperty(JSON_PROPERTY_CACHE_HIT_RATIO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCacheHitRatio(@jakarta.annotation.Nullable Double cacheHitRatio) {
     this.cacheHitRatio = cacheHitRatio;
   }
 
 
-  public RuntimeStatistics currentCacheSize(Double currentCacheSize) {
-    
+  public RuntimeStatistics currentCacheSize(@jakarta.annotation.Nullable Double currentCacheSize) {
     this.currentCacheSize = currentCacheSize;
     return this;
   }
 
-   /**
+  /**
    * Get currentCacheSize
    * @return currentCacheSize
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CURRENT_CACHE_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getCurrentCacheSize() {
     return currentCacheSize;
   }
 
 
-  public void setCurrentCacheSize(Double currentCacheSize) {
+  @JsonProperty(JSON_PROPERTY_CURRENT_CACHE_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCurrentCacheSize(@jakarta.annotation.Nullable Double currentCacheSize) {
     this.currentCacheSize = currentCacheSize;
   }
 
 
-  public RuntimeStatistics currentCacheSizeLimit(Double currentCacheSizeLimit) {
-    
+  public RuntimeStatistics currentCacheSizeLimit(@jakarta.annotation.Nullable Double currentCacheSizeLimit) {
     this.currentCacheSizeLimit = currentCacheSizeLimit;
     return this;
   }
 
-   /**
+  /**
    * Get currentCacheSizeLimit
    * @return currentCacheSizeLimit
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CURRENT_CACHE_SIZE_LIMIT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getCurrentCacheSizeLimit() {
     return currentCacheSizeLimit;
   }
 
 
-  public void setCurrentCacheSizeLimit(Double currentCacheSizeLimit) {
+  @JsonProperty(JSON_PROPERTY_CURRENT_CACHE_SIZE_LIMIT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCurrentCacheSizeLimit(@jakarta.annotation.Nullable Double currentCacheSizeLimit) {
     this.currentCacheSizeLimit = currentCacheSizeLimit;
   }
 
 
-  public RuntimeStatistics pageReadsSinceLastStartup(Double pageReadsSinceLastStartup) {
-    
+  public RuntimeStatistics pageReadsSinceLastStartup(@jakarta.annotation.Nullable Double pageReadsSinceLastStartup) {
     this.pageReadsSinceLastStartup = pageReadsSinceLastStartup;
     return this;
   }
 
-   /**
+  /**
    * Get pageReadsSinceLastStartup
    * @return pageReadsSinceLastStartup
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PAGE_READS_SINCE_LAST_STARTUP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getPageReadsSinceLastStartup() {
     return pageReadsSinceLastStartup;
   }
 
 
-  public void setPageReadsSinceLastStartup(Double pageReadsSinceLastStartup) {
+  @JsonProperty(JSON_PROPERTY_PAGE_READS_SINCE_LAST_STARTUP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPageReadsSinceLastStartup(@jakarta.annotation.Nullable Double pageReadsSinceLastStartup) {
     this.pageReadsSinceLastStartup = pageReadsSinceLastStartup;
   }
 
 
-  public RuntimeStatistics pageWritesSinceLastStartup(Double pageWritesSinceLastStartup) {
-    
+  public RuntimeStatistics pageWritesSinceLastStartup(@jakarta.annotation.Nullable Double pageWritesSinceLastStartup) {
     this.pageWritesSinceLastStartup = pageWritesSinceLastStartup;
     return this;
   }
 
-   /**
+  /**
    * Get pageWritesSinceLastStartup
    * @return pageWritesSinceLastStartup
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PAGE_WRITES_SINCE_LAST_STARTUP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getPageWritesSinceLastStartup() {
     return pageWritesSinceLastStartup;
   }
 
 
-  public void setPageWritesSinceLastStartup(Double pageWritesSinceLastStartup) {
+  @JsonProperty(JSON_PROPERTY_PAGE_WRITES_SINCE_LAST_STARTUP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPageWritesSinceLastStartup(@jakarta.annotation.Nullable Double pageWritesSinceLastStartup) {
     this.pageWritesSinceLastStartup = pageWritesSinceLastStartup;
   }
 
 
-  public RuntimeStatistics pageSize(Double pageSize) {
-    
+  public RuntimeStatistics pageSize(@jakarta.annotation.Nullable Double pageSize) {
     this.pageSize = pageSize;
     return this;
   }
 
-   /**
+  /**
    * Get pageSize
    * @return pageSize
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PAGE_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getPageSize() {
     return pageSize;
   }
 
 
-  public void setPageSize(Double pageSize) {
+  @JsonProperty(JSON_PROPERTY_PAGE_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPageSize(@jakarta.annotation.Nullable Double pageSize) {
     this.pageSize = pageSize;
   }
 
 
-  public RuntimeStatistics diskSpaceAllocatedForData(Double diskSpaceAllocatedForData) {
-    
+  public RuntimeStatistics diskSpaceAllocatedForData(@jakarta.annotation.Nullable Double diskSpaceAllocatedForData) {
     this.diskSpaceAllocatedForData = diskSpaceAllocatedForData;
     return this;
   }
 
-   /**
+  /**
    * Get diskSpaceAllocatedForData
    * @return diskSpaceAllocatedForData
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DISK_SPACE_ALLOCATED_FOR_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getDiskSpaceAllocatedForData() {
     return diskSpaceAllocatedForData;
   }
 
 
-  public void setDiskSpaceAllocatedForData(Double diskSpaceAllocatedForData) {
+  @JsonProperty(JSON_PROPERTY_DISK_SPACE_ALLOCATED_FOR_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDiskSpaceAllocatedForData(@jakarta.annotation.Nullable Double diskSpaceAllocatedForData) {
     this.diskSpaceAllocatedForData = diskSpaceAllocatedForData;
   }
 
 
-  public RuntimeStatistics diskSpaceUsedByData(Double diskSpaceUsedByData) {
-    
+  public RuntimeStatistics diskSpaceUsedByData(@jakarta.annotation.Nullable Double diskSpaceUsedByData) {
     this.diskSpaceUsedByData = diskSpaceUsedByData;
     return this;
   }
 
-   /**
+  /**
    * Get diskSpaceUsedByData
    * @return diskSpaceUsedByData
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DISK_SPACE_USED_BY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getDiskSpaceUsedByData() {
     return diskSpaceUsedByData;
   }
 
 
-  public void setDiskSpaceUsedByData(Double diskSpaceUsedByData) {
+  @JsonProperty(JSON_PROPERTY_DISK_SPACE_USED_BY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDiskSpaceUsedByData(@jakarta.annotation.Nullable Double diskSpaceUsedByData) {
     this.diskSpaceUsedByData = diskSpaceUsedByData;
   }
 
 
-  public RuntimeStatistics temporaryDiskSpaceAllocated(Double temporaryDiskSpaceAllocated) {
-    
+  public RuntimeStatistics temporaryDiskSpaceAllocated(@jakarta.annotation.Nullable Double temporaryDiskSpaceAllocated) {
     this.temporaryDiskSpaceAllocated = temporaryDiskSpaceAllocated;
     return this;
   }
 
-   /**
+  /**
    * Get temporaryDiskSpaceAllocated
    * @return temporaryDiskSpaceAllocated
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TEMPORARY_DISK_SPACE_ALLOCATED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getTemporaryDiskSpaceAllocated() {
     return temporaryDiskSpaceAllocated;
   }
 
 
-  public void setTemporaryDiskSpaceAllocated(Double temporaryDiskSpaceAllocated) {
+  @JsonProperty(JSON_PROPERTY_TEMPORARY_DISK_SPACE_ALLOCATED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTemporaryDiskSpaceAllocated(@jakarta.annotation.Nullable Double temporaryDiskSpaceAllocated) {
     this.temporaryDiskSpaceAllocated = temporaryDiskSpaceAllocated;
   }
 
 
-  public RuntimeStatistics temporaryDiskSpaceUsed(Double temporaryDiskSpaceUsed) {
-    
+  public RuntimeStatistics temporaryDiskSpaceUsed(@jakarta.annotation.Nullable Double temporaryDiskSpaceUsed) {
     this.temporaryDiskSpaceUsed = temporaryDiskSpaceUsed;
     return this;
   }
 
-   /**
+  /**
    * Get temporaryDiskSpaceUsed
    * @return temporaryDiskSpaceUsed
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TEMPORARY_DISK_SPACE_USED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getTemporaryDiskSpaceUsed() {
     return temporaryDiskSpaceUsed;
   }
 
 
-  public void setTemporaryDiskSpaceUsed(Double temporaryDiskSpaceUsed) {
+  @JsonProperty(JSON_PROPERTY_TEMPORARY_DISK_SPACE_USED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTemporaryDiskSpaceUsed(@jakarta.annotation.Nullable Double temporaryDiskSpaceUsed) {
     this.temporaryDiskSpaceUsed = temporaryDiskSpaceUsed;
   }
 
 
-  public RuntimeStatistics hitRatioOnIndexCache(Double hitRatioOnIndexCache) {
-    
+  public RuntimeStatistics hitRatioOnIndexCache(@jakarta.annotation.Nullable Double hitRatioOnIndexCache) {
     this.hitRatioOnIndexCache = hitRatioOnIndexCache;
     return this;
   }
 
-   /**
+  /**
    * Get hitRatioOnIndexCache
    * @return hitRatioOnIndexCache
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HIT_RATIO_ON_INDEX_CACHE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getHitRatioOnIndexCache() {
     return hitRatioOnIndexCache;
   }
 
 
-  public void setHitRatioOnIndexCache(Double hitRatioOnIndexCache) {
+  @JsonProperty(JSON_PROPERTY_HIT_RATIO_ON_INDEX_CACHE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHitRatioOnIndexCache(@jakarta.annotation.Nullable Double hitRatioOnIndexCache) {
     this.hitRatioOnIndexCache = hitRatioOnIndexCache;
   }
 
 
-  public RuntimeStatistics hitRatioOnDataCache(Double hitRatioOnDataCache) {
-    
+  public RuntimeStatistics hitRatioOnDataCache(@jakarta.annotation.Nullable Double hitRatioOnDataCache) {
     this.hitRatioOnDataCache = hitRatioOnDataCache;
     return this;
   }
 
-   /**
+  /**
    * Get hitRatioOnDataCache
    * @return hitRatioOnDataCache
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HIT_RATIO_ON_DATA_CACHE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getHitRatioOnDataCache() {
     return hitRatioOnDataCache;
   }
 
 
-  public void setHitRatioOnDataCache(Double hitRatioOnDataCache) {
+  @JsonProperty(JSON_PROPERTY_HIT_RATIO_ON_DATA_CACHE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHitRatioOnDataCache(@jakarta.annotation.Nullable Double hitRatioOnDataCache) {
     this.hitRatioOnDataCache = hitRatioOnDataCache;
   }
 
 
-  public RuntimeStatistics numberOfIndexPageReads(Double numberOfIndexPageReads) {
-    
+  public RuntimeStatistics numberOfIndexPageReads(@jakarta.annotation.Nullable Double numberOfIndexPageReads) {
     this.numberOfIndexPageReads = numberOfIndexPageReads;
     return this;
   }
 
-   /**
+  /**
    * Get numberOfIndexPageReads
    * @return numberOfIndexPageReads
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_INDEX_PAGE_READS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getNumberOfIndexPageReads() {
     return numberOfIndexPageReads;
   }
 
 
-  public void setNumberOfIndexPageReads(Double numberOfIndexPageReads) {
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_INDEX_PAGE_READS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumberOfIndexPageReads(@jakarta.annotation.Nullable Double numberOfIndexPageReads) {
     this.numberOfIndexPageReads = numberOfIndexPageReads;
   }
 
 
-  public RuntimeStatistics numberOfIndexPageWrites(Double numberOfIndexPageWrites) {
-    
+  public RuntimeStatistics numberOfIndexPageWrites(@jakarta.annotation.Nullable Double numberOfIndexPageWrites) {
     this.numberOfIndexPageWrites = numberOfIndexPageWrites;
     return this;
   }
 
-   /**
+  /**
    * Get numberOfIndexPageWrites
    * @return numberOfIndexPageWrites
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_INDEX_PAGE_WRITES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getNumberOfIndexPageWrites() {
     return numberOfIndexPageWrites;
   }
 
 
-  public void setNumberOfIndexPageWrites(Double numberOfIndexPageWrites) {
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_INDEX_PAGE_WRITES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumberOfIndexPageWrites(@jakarta.annotation.Nullable Double numberOfIndexPageWrites) {
     this.numberOfIndexPageWrites = numberOfIndexPageWrites;
   }
 
 
-  public RuntimeStatistics numberOfDataBlockReads(Double numberOfDataBlockReads) {
-    
+  public RuntimeStatistics numberOfDataBlockReads(@jakarta.annotation.Nullable Double numberOfDataBlockReads) {
     this.numberOfDataBlockReads = numberOfDataBlockReads;
     return this;
   }
 
-   /**
+  /**
    * Get numberOfDataBlockReads
    * @return numberOfDataBlockReads
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_DATA_BLOCK_READS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getNumberOfDataBlockReads() {
     return numberOfDataBlockReads;
   }
 
 
-  public void setNumberOfDataBlockReads(Double numberOfDataBlockReads) {
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_DATA_BLOCK_READS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumberOfDataBlockReads(@jakarta.annotation.Nullable Double numberOfDataBlockReads) {
     this.numberOfDataBlockReads = numberOfDataBlockReads;
   }
 
 
-  public RuntimeStatistics numberOfDataBlockWrites(Double numberOfDataBlockWrites) {
-    
+  public RuntimeStatistics numberOfDataBlockWrites(@jakarta.annotation.Nullable Double numberOfDataBlockWrites) {
     this.numberOfDataBlockWrites = numberOfDataBlockWrites;
     return this;
   }
 
-   /**
+  /**
    * Get numberOfDataBlockWrites
    * @return numberOfDataBlockWrites
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_DATA_BLOCK_WRITES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getNumberOfDataBlockWrites() {
     return numberOfDataBlockWrites;
   }
 
 
-  public void setNumberOfDataBlockWrites(Double numberOfDataBlockWrites) {
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_DATA_BLOCK_WRITES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumberOfDataBlockWrites(@jakarta.annotation.Nullable Double numberOfDataBlockWrites) {
     this.numberOfDataBlockWrites = numberOfDataBlockWrites;
   }
 
 
-  public RuntimeStatistics hitRatioOnDataFileCache(Double hitRatioOnDataFileCache) {
-    
+  public RuntimeStatistics hitRatioOnDataFileCache(@jakarta.annotation.Nullable Double hitRatioOnDataFileCache) {
     this.hitRatioOnDataFileCache = hitRatioOnDataFileCache;
     return this;
   }
 
-   /**
+  /**
    * Get hitRatioOnDataFileCache
    * @return hitRatioOnDataFileCache
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HIT_RATIO_ON_DATA_FILE_CACHE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getHitRatioOnDataFileCache() {
     return hitRatioOnDataFileCache;
   }
 
 
-  public void setHitRatioOnDataFileCache(Double hitRatioOnDataFileCache) {
+  @JsonProperty(JSON_PROPERTY_HIT_RATIO_ON_DATA_FILE_CACHE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHitRatioOnDataFileCache(@jakarta.annotation.Nullable Double hitRatioOnDataFileCache) {
     this.hitRatioOnDataFileCache = hitRatioOnDataFileCache;
   }
 
 
+  /**
+   * Return true if this RuntimeStatistics object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -558,5 +604,124 @@ public class RuntimeStatistics {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `cacheHitRatio` to the URL query string
+    if (getCacheHitRatio() != null) {
+      joiner.add(String.format("%scacheHitRatio%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCacheHitRatio()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `currentCacheSize` to the URL query string
+    if (getCurrentCacheSize() != null) {
+      joiner.add(String.format("%scurrentCacheSize%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCurrentCacheSize()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `currentCacheSizeLimit` to the URL query string
+    if (getCurrentCacheSizeLimit() != null) {
+      joiner.add(String.format("%scurrentCacheSizeLimit%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCurrentCacheSizeLimit()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `pageReadsSinceLastStartup` to the URL query string
+    if (getPageReadsSinceLastStartup() != null) {
+      joiner.add(String.format("%spageReadsSinceLastStartup%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPageReadsSinceLastStartup()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `pageWritesSinceLastStartup` to the URL query string
+    if (getPageWritesSinceLastStartup() != null) {
+      joiner.add(String.format("%spageWritesSinceLastStartup%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPageWritesSinceLastStartup()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `pageSize` to the URL query string
+    if (getPageSize() != null) {
+      joiner.add(String.format("%spageSize%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPageSize()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `diskSpaceAllocatedForData` to the URL query string
+    if (getDiskSpaceAllocatedForData() != null) {
+      joiner.add(String.format("%sdiskSpaceAllocatedForData%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDiskSpaceAllocatedForData()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `diskSpaceUsedByData` to the URL query string
+    if (getDiskSpaceUsedByData() != null) {
+      joiner.add(String.format("%sdiskSpaceUsedByData%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDiskSpaceUsedByData()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `temporaryDiskSpaceAllocated` to the URL query string
+    if (getTemporaryDiskSpaceAllocated() != null) {
+      joiner.add(String.format("%stemporaryDiskSpaceAllocated%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTemporaryDiskSpaceAllocated()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `temporaryDiskSpaceUsed` to the URL query string
+    if (getTemporaryDiskSpaceUsed() != null) {
+      joiner.add(String.format("%stemporaryDiskSpaceUsed%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTemporaryDiskSpaceUsed()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `hitRatioOnIndexCache` to the URL query string
+    if (getHitRatioOnIndexCache() != null) {
+      joiner.add(String.format("%shitRatioOnIndexCache%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getHitRatioOnIndexCache()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `hitRatioOnDataCache` to the URL query string
+    if (getHitRatioOnDataCache() != null) {
+      joiner.add(String.format("%shitRatioOnDataCache%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getHitRatioOnDataCache()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numberOfIndexPageReads` to the URL query string
+    if (getNumberOfIndexPageReads() != null) {
+      joiner.add(String.format("%snumberOfIndexPageReads%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumberOfIndexPageReads()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numberOfIndexPageWrites` to the URL query string
+    if (getNumberOfIndexPageWrites() != null) {
+      joiner.add(String.format("%snumberOfIndexPageWrites%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumberOfIndexPageWrites()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numberOfDataBlockReads` to the URL query string
+    if (getNumberOfDataBlockReads() != null) {
+      joiner.add(String.format("%snumberOfDataBlockReads%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumberOfDataBlockReads()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numberOfDataBlockWrites` to the URL query string
+    if (getNumberOfDataBlockWrites() != null) {
+      joiner.add(String.format("%snumberOfDataBlockWrites%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumberOfDataBlockWrites()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `hitRatioOnDataFileCache` to the URL query string
+    if (getHitRatioOnDataFileCache() != null) {
+      joiner.add(String.format("%shitRatioOnDataFileCache%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getHitRatioOnDataFileCache()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

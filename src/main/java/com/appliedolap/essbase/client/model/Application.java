@@ -13,61 +13,79 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.Link;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * Application
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  Application.JSON_PROPERTY_NAME,
+  Application.JSON_PROPERTY_OWNER,
+  Application.JSON_PROPERTY_CREATION_TIME,
+  Application.JSON_PROPERTY_MODIFIED_BY,
+  Application.JSON_PROPERTY_MODIFIED_TIME,
+  Application.JSON_PROPERTY_STATUS,
+  Application.JSON_PROPERTY_DESCRIPTION,
+  Application.JSON_PROPERTY_TYPE,
+  Application.JSON_PROPERTY_START_TIME,
+  Application.JSON_PROPERTY_CONNECTED_USERS_COUNT,
+  Application.JSON_PROPERTY_ROLE,
+  Application.JSON_PROPERTY_LINKS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class Application {
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
-  public static final String SERIALIZED_NAME_OWNER = "owner";
-  @SerializedName(SERIALIZED_NAME_OWNER)
+  public static final String JSON_PROPERTY_OWNER = "owner";
+  @jakarta.annotation.Nullable
   private String owner;
 
-  public static final String SERIALIZED_NAME_CREATION_TIME = "creationTime";
-  @SerializedName(SERIALIZED_NAME_CREATION_TIME)
+  public static final String JSON_PROPERTY_CREATION_TIME = "creationTime";
+  @jakarta.annotation.Nullable
   private Long creationTime;
 
-  public static final String SERIALIZED_NAME_MODIFIED_BY = "modifiedBy";
-  @SerializedName(SERIALIZED_NAME_MODIFIED_BY)
+  public static final String JSON_PROPERTY_MODIFIED_BY = "modifiedBy";
+  @jakarta.annotation.Nullable
   private String modifiedBy;
 
-  public static final String SERIALIZED_NAME_MODIFIED_TIME = "modifiedTime";
-  @SerializedName(SERIALIZED_NAME_MODIFIED_TIME)
+  public static final String JSON_PROPERTY_MODIFIED_TIME = "modifiedTime";
+  @jakarta.annotation.Nullable
   private Long modifiedTime;
 
-  public static final String SERIALIZED_NAME_STATUS = "status";
-  @SerializedName(SERIALIZED_NAME_STATUS)
+  public static final String JSON_PROPERTY_STATUS = "status";
+  @jakarta.annotation.Nullable
   private String status;
 
-  public static final String SERIALIZED_NAME_DESCRIPTION = "description";
-  @SerializedName(SERIALIZED_NAME_DESCRIPTION)
+  public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  @jakarta.annotation.Nullable
   private String description;
 
   /**
    * Gets or Sets type
    */
-  @JsonAdapter(TypeEnum.Adapter.class)
   public enum TypeEnum {
-    ASO("ASO"),
+    ASO(String.valueOf("ASO")),
     
-    BSO("BSO");
+    BSO(String.valueOf("BSO"));
 
     private String value;
 
@@ -75,6 +93,7 @@ public class Application {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -84,6 +103,7 @@ public class Application {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static TypeEnum fromValue(String value) {
       for (TypeEnum b : TypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -92,326 +112,330 @@ public class Application {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<TypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final TypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public TypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return TypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nullable
   private TypeEnum type;
 
-  public static final String SERIALIZED_NAME_START_TIME = "startTime";
-  @SerializedName(SERIALIZED_NAME_START_TIME)
+  public static final String JSON_PROPERTY_START_TIME = "startTime";
+  @jakarta.annotation.Nullable
   private Long startTime;
 
-  public static final String SERIALIZED_NAME_CONNECTED_USERS_COUNT = "connectedUsersCount";
-  @SerializedName(SERIALIZED_NAME_CONNECTED_USERS_COUNT)
+  public static final String JSON_PROPERTY_CONNECTED_USERS_COUNT = "connectedUsersCount";
+  @jakarta.annotation.Nullable
   private Integer connectedUsersCount;
 
-  public static final String SERIALIZED_NAME_ROLE = "role";
-  @SerializedName(SERIALIZED_NAME_ROLE)
+  public static final String JSON_PROPERTY_ROLE = "role";
+  @jakarta.annotation.Nullable
   private String role;
 
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
+  public Application() { 
+  }
 
-  public Application name(String name) {
-    
+  public Application name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
-  public Application owner(String owner) {
-    
+  public Application owner(@jakarta.annotation.Nullable String owner) {
     this.owner = owner;
     return this;
   }
 
-   /**
+  /**
    * Get owner
    * @return owner
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OWNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getOwner() {
     return owner;
   }
 
 
-  public void setOwner(String owner) {
+  @JsonProperty(JSON_PROPERTY_OWNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOwner(@jakarta.annotation.Nullable String owner) {
     this.owner = owner;
   }
 
 
-  public Application creationTime(Long creationTime) {
-    
+  public Application creationTime(@jakarta.annotation.Nullable Long creationTime) {
     this.creationTime = creationTime;
     return this;
   }
 
-   /**
+  /**
    * Get creationTime
    * @return creationTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CREATION_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getCreationTime() {
     return creationTime;
   }
 
 
-  public void setCreationTime(Long creationTime) {
+  @JsonProperty(JSON_PROPERTY_CREATION_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCreationTime(@jakarta.annotation.Nullable Long creationTime) {
     this.creationTime = creationTime;
   }
 
 
-  public Application modifiedBy(String modifiedBy) {
-    
+  public Application modifiedBy(@jakarta.annotation.Nullable String modifiedBy) {
     this.modifiedBy = modifiedBy;
     return this;
   }
 
-   /**
+  /**
    * Get modifiedBy
    * @return modifiedBy
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MODIFIED_BY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getModifiedBy() {
     return modifiedBy;
   }
 
 
-  public void setModifiedBy(String modifiedBy) {
+  @JsonProperty(JSON_PROPERTY_MODIFIED_BY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setModifiedBy(@jakarta.annotation.Nullable String modifiedBy) {
     this.modifiedBy = modifiedBy;
   }
 
 
-  public Application modifiedTime(Long modifiedTime) {
-    
+  public Application modifiedTime(@jakarta.annotation.Nullable Long modifiedTime) {
     this.modifiedTime = modifiedTime;
     return this;
   }
 
-   /**
+  /**
    * Get modifiedTime
    * @return modifiedTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MODIFIED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getModifiedTime() {
     return modifiedTime;
   }
 
 
-  public void setModifiedTime(Long modifiedTime) {
+  @JsonProperty(JSON_PROPERTY_MODIFIED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setModifiedTime(@jakarta.annotation.Nullable Long modifiedTime) {
     this.modifiedTime = modifiedTime;
   }
 
 
-  public Application status(String status) {
-    
+  public Application status(@jakarta.annotation.Nullable String status) {
     this.status = status;
     return this;
   }
 
-   /**
+  /**
    * Get status
    * @return status
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getStatus() {
     return status;
   }
 
 
-  public void setStatus(String status) {
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStatus(@jakarta.annotation.Nullable String status) {
     this.status = status;
   }
 
 
-  public Application description(String description) {
-    
+  public Application description(@jakarta.annotation.Nullable String description) {
     this.description = description;
     return this;
   }
 
-   /**
+  /**
    * Get description
    * @return description
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDescription() {
     return description;
   }
 
 
-  public void setDescription(String description) {
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDescription(@jakarta.annotation.Nullable String description) {
     this.description = description;
   }
 
 
-  public Application type(TypeEnum type) {
-    
+  public Application type(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public TypeEnum getType() {
     return type;
   }
 
 
-  public void setType(TypeEnum type) {
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setType(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
   }
 
 
-  public Application startTime(Long startTime) {
-    
+  public Application startTime(@jakarta.annotation.Nullable Long startTime) {
     this.startTime = startTime;
     return this;
   }
 
-   /**
+  /**
    * Get startTime
    * @return startTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_START_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getStartTime() {
     return startTime;
   }
 
 
-  public void setStartTime(Long startTime) {
+  @JsonProperty(JSON_PROPERTY_START_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStartTime(@jakarta.annotation.Nullable Long startTime) {
     this.startTime = startTime;
   }
 
 
-  public Application connectedUsersCount(Integer connectedUsersCount) {
-    
+  public Application connectedUsersCount(@jakarta.annotation.Nullable Integer connectedUsersCount) {
     this.connectedUsersCount = connectedUsersCount;
     return this;
   }
 
-   /**
+  /**
    * Get connectedUsersCount
    * @return connectedUsersCount
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CONNECTED_USERS_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getConnectedUsersCount() {
     return connectedUsersCount;
   }
 
 
-  public void setConnectedUsersCount(Integer connectedUsersCount) {
+  @JsonProperty(JSON_PROPERTY_CONNECTED_USERS_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setConnectedUsersCount(@jakarta.annotation.Nullable Integer connectedUsersCount) {
     this.connectedUsersCount = connectedUsersCount;
   }
 
 
-  public Application role(String role) {
-    
+  public Application role(@jakarta.annotation.Nullable String role) {
     this.role = role;
     return this;
   }
 
-   /**
+  /**
    * Get role
    * @return role
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ROLE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getRole() {
     return role;
   }
 
 
-  public void setRole(String role) {
+  @JsonProperty(JSON_PROPERTY_ROLE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRole(@jakarta.annotation.Nullable String role) {
     this.role = role;
   }
 
 
-  public Application links(List<Link> links) {
-    
+  public Application links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public Application addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
+  /**
+   * Return true if this Application object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -471,5 +495,104 @@ public class Application {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `owner` to the URL query string
+    if (getOwner() != null) {
+      joiner.add(String.format("%sowner%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getOwner()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `creationTime` to the URL query string
+    if (getCreationTime() != null) {
+      joiner.add(String.format("%screationTime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCreationTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `modifiedBy` to the URL query string
+    if (getModifiedBy() != null) {
+      joiner.add(String.format("%smodifiedBy%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getModifiedBy()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `modifiedTime` to the URL query string
+    if (getModifiedTime() != null) {
+      joiner.add(String.format("%smodifiedTime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getModifiedTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `status` to the URL query string
+    if (getStatus() != null) {
+      joiner.add(String.format("%sstatus%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStatus()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `description` to the URL query string
+    if (getDescription() != null) {
+      joiner.add(String.format("%sdescription%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDescription()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `startTime` to the URL query string
+    if (getStartTime() != null) {
+      joiner.add(String.format("%sstartTime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStartTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `connectedUsersCount` to the URL query string
+    if (getConnectedUsersCount() != null) {
+      joiner.add(String.format("%sconnectedUsersCount%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getConnectedUsersCount()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `role` to the URL query string
+    if (getRole() != null) {
+      joiner.add(String.format("%srole%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRole()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

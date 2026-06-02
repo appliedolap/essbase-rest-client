@@ -13,35 +13,56 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.FormulaRetention;
 import com.appliedolap.essbase.client.model.Suppression;
 import com.appliedolap.essbase.client.model.ZoomIn;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * LayoutPreferences
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  LayoutPreferences.JSON_PROPERTY_INDENTATION,
+  LayoutPreferences.JSON_PROPERTY_ROW_SUPPRESSION,
+  LayoutPreferences.JSON_PROPERTY_COLUMN_SUPPRESSION,
+  LayoutPreferences.JSON_PROPERTY_CELL_TEXT,
+  LayoutPreferences.JSON_PROPERTY_ZOOM_IN,
+  LayoutPreferences.JSON_PROPERTY_NAVIGATE,
+  LayoutPreferences.JSON_PROPERTY_INCLUDE_SELECTION,
+  LayoutPreferences.JSON_PROPERTY_REPEAT_MEMBER_LABELS,
+  LayoutPreferences.JSON_PROPERTY_WITHIN_SELECTED_GROUP,
+  LayoutPreferences.JSON_PROPERTY_REMOVE_UN_SELECTED_GROUP,
+  LayoutPreferences.JSON_PROPERTY_INCLUDE_DESCRIPTION_LABEL,
+  LayoutPreferences.JSON_PROPERTY_MISSING_TEXT,
+  LayoutPreferences.JSON_PROPERTY_NO_ACCESS_TEXT,
+  LayoutPreferences.JSON_PROPERTY_MAX_ROWS,
+  LayoutPreferences.JSON_PROPERTY_FORMULA_RETENTION
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class LayoutPreferences {
   /**
    * Gets or Sets indentation
    */
-  @JsonAdapter(IndentationEnum.Adapter.class)
   public enum IndentationEnum {
-    NONE("NONE"),
+    NONE(String.valueOf("NONE")),
     
-    SUBITEMS("SUBITEMS"),
+    SUBITEMS(String.valueOf("SUBITEMS")),
     
-    TOTALS("TOTALS");
+    TOTALS(String.valueOf("TOTALS"));
 
     private String value;
 
@@ -49,6 +70,7 @@ public class LayoutPreferences {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -58,6 +80,7 @@ public class LayoutPreferences {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static IndentationEnum fromValue(String value) {
       for (IndentationEnum b : IndentationEnum.values()) {
         if (b.value.equals(value)) {
@@ -66,427 +89,434 @@ public class LayoutPreferences {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<IndentationEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final IndentationEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public IndentationEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return IndentationEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_INDENTATION = "indentation";
-  @SerializedName(SERIALIZED_NAME_INDENTATION)
+  public static final String JSON_PROPERTY_INDENTATION = "indentation";
+  @jakarta.annotation.Nullable
   private IndentationEnum indentation;
 
-  public static final String SERIALIZED_NAME_ROW_SUPPRESSION = "rowSuppression";
-  @SerializedName(SERIALIZED_NAME_ROW_SUPPRESSION)
+  public static final String JSON_PROPERTY_ROW_SUPPRESSION = "rowSuppression";
+  @jakarta.annotation.Nullable
   private Suppression rowSuppression;
 
-  public static final String SERIALIZED_NAME_COLUMN_SUPPRESSION = "columnSuppression";
-  @SerializedName(SERIALIZED_NAME_COLUMN_SUPPRESSION)
+  public static final String JSON_PROPERTY_COLUMN_SUPPRESSION = "columnSuppression";
+  @jakarta.annotation.Nullable
   private Suppression columnSuppression;
 
-  public static final String SERIALIZED_NAME_CELL_TEXT = "cellText";
-  @SerializedName(SERIALIZED_NAME_CELL_TEXT)
+  public static final String JSON_PROPERTY_CELL_TEXT = "cellText";
+  @jakarta.annotation.Nullable
   private Boolean cellText;
 
-  public static final String SERIALIZED_NAME_ZOOM_IN = "zoomIn";
-  @SerializedName(SERIALIZED_NAME_ZOOM_IN)
+  public static final String JSON_PROPERTY_ZOOM_IN = "zoomIn";
+  @jakarta.annotation.Nullable
   private ZoomIn zoomIn;
 
-  public static final String SERIALIZED_NAME_NAVIGATE = "navigate";
-  @SerializedName(SERIALIZED_NAME_NAVIGATE)
+  public static final String JSON_PROPERTY_NAVIGATE = "navigate";
+  @jakarta.annotation.Nullable
   private Boolean navigate;
 
-  public static final String SERIALIZED_NAME_INCLUDE_SELECTION = "includeSelection";
-  @SerializedName(SERIALIZED_NAME_INCLUDE_SELECTION)
+  public static final String JSON_PROPERTY_INCLUDE_SELECTION = "includeSelection";
+  @jakarta.annotation.Nullable
   private Boolean includeSelection;
 
-  public static final String SERIALIZED_NAME_REPEAT_MEMBER_LABELS = "repeatMemberLabels";
-  @SerializedName(SERIALIZED_NAME_REPEAT_MEMBER_LABELS)
+  public static final String JSON_PROPERTY_REPEAT_MEMBER_LABELS = "repeatMemberLabels";
+  @jakarta.annotation.Nullable
   private Boolean repeatMemberLabels;
 
-  public static final String SERIALIZED_NAME_WITHIN_SELECTED_GROUP = "withinSelectedGroup";
-  @SerializedName(SERIALIZED_NAME_WITHIN_SELECTED_GROUP)
+  public static final String JSON_PROPERTY_WITHIN_SELECTED_GROUP = "withinSelectedGroup";
+  @jakarta.annotation.Nullable
   private Boolean withinSelectedGroup;
 
-  public static final String SERIALIZED_NAME_REMOVE_UN_SELECTED_GROUP = "removeUnSelectedGroup";
-  @SerializedName(SERIALIZED_NAME_REMOVE_UN_SELECTED_GROUP)
+  public static final String JSON_PROPERTY_REMOVE_UN_SELECTED_GROUP = "removeUnSelectedGroup";
+  @jakarta.annotation.Nullable
   private Boolean removeUnSelectedGroup;
 
-  public static final String SERIALIZED_NAME_INCLUDE_DESCRIPTION_LABEL = "includeDescriptionLabel";
-  @SerializedName(SERIALIZED_NAME_INCLUDE_DESCRIPTION_LABEL)
+  public static final String JSON_PROPERTY_INCLUDE_DESCRIPTION_LABEL = "includeDescriptionLabel";
+  @jakarta.annotation.Nullable
   private Boolean includeDescriptionLabel;
 
-  public static final String SERIALIZED_NAME_MISSING_TEXT = "missingText";
-  @SerializedName(SERIALIZED_NAME_MISSING_TEXT)
+  public static final String JSON_PROPERTY_MISSING_TEXT = "missingText";
+  @jakarta.annotation.Nullable
   private String missingText;
 
-  public static final String SERIALIZED_NAME_NO_ACCESS_TEXT = "noAccessText";
-  @SerializedName(SERIALIZED_NAME_NO_ACCESS_TEXT)
+  public static final String JSON_PROPERTY_NO_ACCESS_TEXT = "noAccessText";
+  @jakarta.annotation.Nullable
   private String noAccessText;
 
-  public static final String SERIALIZED_NAME_MAX_ROWS = "maxRows";
-  @SerializedName(SERIALIZED_NAME_MAX_ROWS)
+  public static final String JSON_PROPERTY_MAX_ROWS = "maxRows";
+  @jakarta.annotation.Nullable
   private Integer maxRows;
 
-  public static final String SERIALIZED_NAME_FORMULA_RETENTION = "formulaRetention";
-  @SerializedName(SERIALIZED_NAME_FORMULA_RETENTION)
+  public static final String JSON_PROPERTY_FORMULA_RETENTION = "formulaRetention";
+  @jakarta.annotation.Nullable
   private FormulaRetention formulaRetention;
 
+  public LayoutPreferences() { 
+  }
 
-  public LayoutPreferences indentation(IndentationEnum indentation) {
-    
+  public LayoutPreferences indentation(@jakarta.annotation.Nullable IndentationEnum indentation) {
     this.indentation = indentation;
     return this;
   }
 
-   /**
+  /**
    * Get indentation
    * @return indentation
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INDENTATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public IndentationEnum getIndentation() {
     return indentation;
   }
 
 
-  public void setIndentation(IndentationEnum indentation) {
+  @JsonProperty(JSON_PROPERTY_INDENTATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIndentation(@jakarta.annotation.Nullable IndentationEnum indentation) {
     this.indentation = indentation;
   }
 
 
-  public LayoutPreferences rowSuppression(Suppression rowSuppression) {
-    
+  public LayoutPreferences rowSuppression(@jakarta.annotation.Nullable Suppression rowSuppression) {
     this.rowSuppression = rowSuppression;
     return this;
   }
 
-   /**
+  /**
    * Get rowSuppression
    * @return rowSuppression
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ROW_SUPPRESSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Suppression getRowSuppression() {
     return rowSuppression;
   }
 
 
-  public void setRowSuppression(Suppression rowSuppression) {
+  @JsonProperty(JSON_PROPERTY_ROW_SUPPRESSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRowSuppression(@jakarta.annotation.Nullable Suppression rowSuppression) {
     this.rowSuppression = rowSuppression;
   }
 
 
-  public LayoutPreferences columnSuppression(Suppression columnSuppression) {
-    
+  public LayoutPreferences columnSuppression(@jakarta.annotation.Nullable Suppression columnSuppression) {
     this.columnSuppression = columnSuppression;
     return this;
   }
 
-   /**
+  /**
    * Get columnSuppression
    * @return columnSuppression
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COLUMN_SUPPRESSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Suppression getColumnSuppression() {
     return columnSuppression;
   }
 
 
-  public void setColumnSuppression(Suppression columnSuppression) {
+  @JsonProperty(JSON_PROPERTY_COLUMN_SUPPRESSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setColumnSuppression(@jakarta.annotation.Nullable Suppression columnSuppression) {
     this.columnSuppression = columnSuppression;
   }
 
 
-  public LayoutPreferences cellText(Boolean cellText) {
-    
+  public LayoutPreferences cellText(@jakarta.annotation.Nullable Boolean cellText) {
     this.cellText = cellText;
     return this;
   }
 
-   /**
+  /**
    * Get cellText
    * @return cellText
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CELL_TEXT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getCellText() {
     return cellText;
   }
 
 
-  public void setCellText(Boolean cellText) {
+  @JsonProperty(JSON_PROPERTY_CELL_TEXT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCellText(@jakarta.annotation.Nullable Boolean cellText) {
     this.cellText = cellText;
   }
 
 
-  public LayoutPreferences zoomIn(ZoomIn zoomIn) {
-    
+  public LayoutPreferences zoomIn(@jakarta.annotation.Nullable ZoomIn zoomIn) {
     this.zoomIn = zoomIn;
     return this;
   }
 
-   /**
+  /**
    * Get zoomIn
    * @return zoomIn
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ZOOM_IN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public ZoomIn getZoomIn() {
     return zoomIn;
   }
 
 
-  public void setZoomIn(ZoomIn zoomIn) {
+  @JsonProperty(JSON_PROPERTY_ZOOM_IN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setZoomIn(@jakarta.annotation.Nullable ZoomIn zoomIn) {
     this.zoomIn = zoomIn;
   }
 
 
-  public LayoutPreferences navigate(Boolean navigate) {
-    
+  public LayoutPreferences navigate(@jakarta.annotation.Nullable Boolean navigate) {
     this.navigate = navigate;
     return this;
   }
 
-   /**
+  /**
    * Get navigate
    * @return navigate
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAVIGATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getNavigate() {
     return navigate;
   }
 
 
-  public void setNavigate(Boolean navigate) {
+  @JsonProperty(JSON_PROPERTY_NAVIGATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNavigate(@jakarta.annotation.Nullable Boolean navigate) {
     this.navigate = navigate;
   }
 
 
-  public LayoutPreferences includeSelection(Boolean includeSelection) {
-    
+  public LayoutPreferences includeSelection(@jakarta.annotation.Nullable Boolean includeSelection) {
     this.includeSelection = includeSelection;
     return this;
   }
 
-   /**
+  /**
    * Get includeSelection
    * @return includeSelection
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INCLUDE_SELECTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getIncludeSelection() {
     return includeSelection;
   }
 
 
-  public void setIncludeSelection(Boolean includeSelection) {
+  @JsonProperty(JSON_PROPERTY_INCLUDE_SELECTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIncludeSelection(@jakarta.annotation.Nullable Boolean includeSelection) {
     this.includeSelection = includeSelection;
   }
 
 
-  public LayoutPreferences repeatMemberLabels(Boolean repeatMemberLabels) {
-    
+  public LayoutPreferences repeatMemberLabels(@jakarta.annotation.Nullable Boolean repeatMemberLabels) {
     this.repeatMemberLabels = repeatMemberLabels;
     return this;
   }
 
-   /**
+  /**
    * Get repeatMemberLabels
    * @return repeatMemberLabels
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REPEAT_MEMBER_LABELS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getRepeatMemberLabels() {
     return repeatMemberLabels;
   }
 
 
-  public void setRepeatMemberLabels(Boolean repeatMemberLabels) {
+  @JsonProperty(JSON_PROPERTY_REPEAT_MEMBER_LABELS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRepeatMemberLabels(@jakarta.annotation.Nullable Boolean repeatMemberLabels) {
     this.repeatMemberLabels = repeatMemberLabels;
   }
 
 
-  public LayoutPreferences withinSelectedGroup(Boolean withinSelectedGroup) {
-    
+  public LayoutPreferences withinSelectedGroup(@jakarta.annotation.Nullable Boolean withinSelectedGroup) {
     this.withinSelectedGroup = withinSelectedGroup;
     return this;
   }
 
-   /**
+  /**
    * Get withinSelectedGroup
    * @return withinSelectedGroup
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_WITHIN_SELECTED_GROUP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getWithinSelectedGroup() {
     return withinSelectedGroup;
   }
 
 
-  public void setWithinSelectedGroup(Boolean withinSelectedGroup) {
+  @JsonProperty(JSON_PROPERTY_WITHIN_SELECTED_GROUP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWithinSelectedGroup(@jakarta.annotation.Nullable Boolean withinSelectedGroup) {
     this.withinSelectedGroup = withinSelectedGroup;
   }
 
 
-  public LayoutPreferences removeUnSelectedGroup(Boolean removeUnSelectedGroup) {
-    
+  public LayoutPreferences removeUnSelectedGroup(@jakarta.annotation.Nullable Boolean removeUnSelectedGroup) {
     this.removeUnSelectedGroup = removeUnSelectedGroup;
     return this;
   }
 
-   /**
+  /**
    * Get removeUnSelectedGroup
    * @return removeUnSelectedGroup
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REMOVE_UN_SELECTED_GROUP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getRemoveUnSelectedGroup() {
     return removeUnSelectedGroup;
   }
 
 
-  public void setRemoveUnSelectedGroup(Boolean removeUnSelectedGroup) {
+  @JsonProperty(JSON_PROPERTY_REMOVE_UN_SELECTED_GROUP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRemoveUnSelectedGroup(@jakarta.annotation.Nullable Boolean removeUnSelectedGroup) {
     this.removeUnSelectedGroup = removeUnSelectedGroup;
   }
 
 
-  public LayoutPreferences includeDescriptionLabel(Boolean includeDescriptionLabel) {
-    
+  public LayoutPreferences includeDescriptionLabel(@jakarta.annotation.Nullable Boolean includeDescriptionLabel) {
     this.includeDescriptionLabel = includeDescriptionLabel;
     return this;
   }
 
-   /**
+  /**
    * Get includeDescriptionLabel
    * @return includeDescriptionLabel
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INCLUDE_DESCRIPTION_LABEL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getIncludeDescriptionLabel() {
     return includeDescriptionLabel;
   }
 
 
-  public void setIncludeDescriptionLabel(Boolean includeDescriptionLabel) {
+  @JsonProperty(JSON_PROPERTY_INCLUDE_DESCRIPTION_LABEL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIncludeDescriptionLabel(@jakarta.annotation.Nullable Boolean includeDescriptionLabel) {
     this.includeDescriptionLabel = includeDescriptionLabel;
   }
 
 
-  public LayoutPreferences missingText(String missingText) {
-    
+  public LayoutPreferences missingText(@jakarta.annotation.Nullable String missingText) {
     this.missingText = missingText;
     return this;
   }
 
-   /**
+  /**
    * Get missingText
    * @return missingText
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MISSING_TEXT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getMissingText() {
     return missingText;
   }
 
 
-  public void setMissingText(String missingText) {
+  @JsonProperty(JSON_PROPERTY_MISSING_TEXT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMissingText(@jakarta.annotation.Nullable String missingText) {
     this.missingText = missingText;
   }
 
 
-  public LayoutPreferences noAccessText(String noAccessText) {
-    
+  public LayoutPreferences noAccessText(@jakarta.annotation.Nullable String noAccessText) {
     this.noAccessText = noAccessText;
     return this;
   }
 
-   /**
+  /**
    * Get noAccessText
    * @return noAccessText
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NO_ACCESS_TEXT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getNoAccessText() {
     return noAccessText;
   }
 
 
-  public void setNoAccessText(String noAccessText) {
+  @JsonProperty(JSON_PROPERTY_NO_ACCESS_TEXT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNoAccessText(@jakarta.annotation.Nullable String noAccessText) {
     this.noAccessText = noAccessText;
   }
 
 
-  public LayoutPreferences maxRows(Integer maxRows) {
-    
+  public LayoutPreferences maxRows(@jakarta.annotation.Nullable Integer maxRows) {
     this.maxRows = maxRows;
     return this;
   }
 
-   /**
+  /**
    * Get maxRows
    * @return maxRows
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MAX_ROWS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getMaxRows() {
     return maxRows;
   }
 
 
-  public void setMaxRows(Integer maxRows) {
+  @JsonProperty(JSON_PROPERTY_MAX_ROWS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMaxRows(@jakarta.annotation.Nullable Integer maxRows) {
     this.maxRows = maxRows;
   }
 
 
-  public LayoutPreferences formulaRetention(FormulaRetention formulaRetention) {
-    
+  public LayoutPreferences formulaRetention(@jakarta.annotation.Nullable FormulaRetention formulaRetention) {
     this.formulaRetention = formulaRetention;
     return this;
   }
 
-   /**
+  /**
    * Get formulaRetention
    * @return formulaRetention
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FORMULA_RETENTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public FormulaRetention getFormulaRetention() {
     return formulaRetention;
   }
 
 
-  public void setFormulaRetention(FormulaRetention formulaRetention) {
+  @JsonProperty(JSON_PROPERTY_FORMULA_RETENTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFormulaRetention(@jakarta.annotation.Nullable FormulaRetention formulaRetention) {
     this.formulaRetention = formulaRetention;
   }
 
 
+  /**
+   * Return true if this LayoutPreferences object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -552,5 +582,114 @@ public class LayoutPreferences {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `indentation` to the URL query string
+    if (getIndentation() != null) {
+      joiner.add(String.format("%sindentation%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIndentation()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `rowSuppression` to the URL query string
+    if (getRowSuppression() != null) {
+      joiner.add(getRowSuppression().toUrlQueryString(prefix + "rowSuppression" + suffix));
+    }
+
+    // add `columnSuppression` to the URL query string
+    if (getColumnSuppression() != null) {
+      joiner.add(getColumnSuppression().toUrlQueryString(prefix + "columnSuppression" + suffix));
+    }
+
+    // add `cellText` to the URL query string
+    if (getCellText() != null) {
+      joiner.add(String.format("%scellText%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCellText()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `zoomIn` to the URL query string
+    if (getZoomIn() != null) {
+      joiner.add(getZoomIn().toUrlQueryString(prefix + "zoomIn" + suffix));
+    }
+
+    // add `navigate` to the URL query string
+    if (getNavigate() != null) {
+      joiner.add(String.format("%snavigate%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNavigate()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `includeSelection` to the URL query string
+    if (getIncludeSelection() != null) {
+      joiner.add(String.format("%sincludeSelection%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIncludeSelection()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `repeatMemberLabels` to the URL query string
+    if (getRepeatMemberLabels() != null) {
+      joiner.add(String.format("%srepeatMemberLabels%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRepeatMemberLabels()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `withinSelectedGroup` to the URL query string
+    if (getWithinSelectedGroup() != null) {
+      joiner.add(String.format("%swithinSelectedGroup%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getWithinSelectedGroup()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `removeUnSelectedGroup` to the URL query string
+    if (getRemoveUnSelectedGroup() != null) {
+      joiner.add(String.format("%sremoveUnSelectedGroup%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRemoveUnSelectedGroup()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `includeDescriptionLabel` to the URL query string
+    if (getIncludeDescriptionLabel() != null) {
+      joiner.add(String.format("%sincludeDescriptionLabel%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIncludeDescriptionLabel()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `missingText` to the URL query string
+    if (getMissingText() != null) {
+      joiner.add(String.format("%smissingText%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMissingText()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `noAccessText` to the URL query string
+    if (getNoAccessText() != null) {
+      joiner.add(String.format("%snoAccessText%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNoAccessText()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `maxRows` to the URL query string
+    if (getMaxRows() != null) {
+      joiner.add(String.format("%smaxRows%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMaxRows()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `formulaRetention` to the URL query string
+    if (getFormulaRetention() != null) {
+      joiner.add(getFormulaRetention().toUrlQueryString(prefix + "formulaRetention" + suffix));
+    }
+
+    return joiner.toString();
+  }
 }
 

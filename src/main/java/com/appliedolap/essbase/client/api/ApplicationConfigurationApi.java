@@ -10,970 +10,668 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.ApplicationConfigEntry;
 import com.appliedolap.essbase.client.model.ApplicationConfigList;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ApplicationConfigurationApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public ApplicationConfigurationApi() {
-        this(Configuration.getDefaultApiClient());
+  public ApplicationConfigurationApi() {
+    this(new ApiClient());
+  }
+
+  public ApplicationConfigurationApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public ApplicationConfigurationApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Add Application Configuration
+   * &lt;p&gt;Adds the configuration property to the application and returns the added configuration property name.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Configuration property entry.&lt;/p&gt; (required)
+   * @return ApplicationConfigEntry
+   * @throws ApiException if fails to make API call
+   */
+  public ApplicationConfigEntry applicationConfigurationAddConfiguration(String applicationName, ApplicationConfigEntry body) throws ApiException {
+    ApiResponse<ApplicationConfigEntry> localVarResponse = applicationConfigurationAddConfigurationWithHttpInfo(applicationName, body);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for applicationConfigurationAddConfiguration
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Configuration property entry.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Configuration property added successfully. Returns the configuration details and the links to get, edit, or delete the configuration.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to add the configuration property. The application name or the configuration property JSON could be incorrect, or the configuration property might already have been added to the application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConfigurationAddConfigurationCall(String applicationName, ApplicationConfigEntry body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/configurations"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Add Application Configuration
+   * &lt;p&gt;Adds the configuration property to the application and returns the added configuration property name.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Configuration property entry.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;ApplicationConfigEntry&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ApplicationConfigEntry> applicationConfigurationAddConfigurationWithHttpInfo(String applicationName, ApplicationConfigEntry body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationConfigurationAddConfigurationRequestBuilder(applicationName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationConfigurationAddConfiguration", localVarResponse);
         }
+        return new ApiResponse<ApplicationConfigEntry>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ApplicationConfigEntry>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder applicationConfigurationAddConfigurationRequestBuilder(String applicationName, ApplicationConfigEntry body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationConfigurationAddConfiguration");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling applicationConfigurationAddConfiguration");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationConfigurationAddConfigurationValidateBeforeCall(String applicationName, ApplicationConfigEntry body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationConfigurationAddConfiguration(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/configurations"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Delete Application Configuration
+   * &lt;p&gt;Deletes the specified configuration property from the specified application.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationConfigurationDeleteConfiguration(String applicationName, String configId) throws ApiException {
+    applicationConfigurationDeleteConfigurationWithHttpInfo(applicationName, configId);
+  }
+
+  /**
+   * Delete Application Configuration
+   * &lt;p&gt;Deletes the specified configuration property from the specified application.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationConfigurationDeleteConfigurationWithHttpInfo(String applicationName, String configId) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationConfigurationDeleteConfigurationRequestBuilder(applicationName, configId);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationConfigurationDeleteConfiguration", localVarResponse);
         }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling applicationConfigurationAddConfiguration(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = applicationConfigurationAddConfigurationCall(applicationName, body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder applicationConfigurationDeleteConfigurationRequestBuilder(String applicationName, String configId) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationConfigurationDeleteConfiguration");
+    }
+    // verify the required parameter 'configId' is set
+    if (configId == null) {
+      throw new ApiException(400, "Missing the required parameter 'configId' when calling applicationConfigurationDeleteConfiguration");
     }
 
-    /**
-     * Add Application Configuration
-     * &lt;p&gt;Adds the configuration property to the application and returns the added configuration property name.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Configuration property entry.&lt;/p&gt; (required)
-     * @return ApplicationConfigEntry
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Configuration property added successfully. Returns the configuration details and the links to get, edit, or delete the configuration.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to add the configuration property. The application name or the configuration property JSON could be incorrect, or the configuration property might already have been added to the application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApplicationConfigEntry applicationConfigurationAddConfiguration(String applicationName, ApplicationConfigEntry body) throws ApiException {
-        ApiResponse<ApplicationConfigEntry> localVarResp = applicationConfigurationAddConfigurationWithHttpInfo(applicationName, body);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/configurations/{configId}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{configId}", ApiClient.urlEncode(configId.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Add Application Configuration
-     * &lt;p&gt;Adds the configuration property to the application and returns the added configuration property name.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Configuration property entry.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;ApplicationConfigEntry&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Configuration property added successfully. Returns the configuration details and the links to get, edit, or delete the configuration.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to add the configuration property. The application name or the configuration property JSON could be incorrect, or the configuration property might already have been added to the application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ApplicationConfigEntry> applicationConfigurationAddConfigurationWithHttpInfo(String applicationName, ApplicationConfigEntry body) throws ApiException {
-        okhttp3.Call localVarCall = applicationConfigurationAddConfigurationValidateBeforeCall(applicationName, body, null);
-        Type localVarReturnType = new TypeToken<ApplicationConfigEntry>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Add Application Configuration (asynchronously)
-     * &lt;p&gt;Adds the configuration property to the application and returns the added configuration property name.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Configuration property entry.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Configuration property added successfully. Returns the configuration details and the links to get, edit, or delete the configuration.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to add the configuration property. The application name or the configuration property JSON could be incorrect, or the configuration property might already have been added to the application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConfigurationAddConfigurationAsync(String applicationName, ApplicationConfigEntry body, final ApiCallback<ApplicationConfigEntry> _callback) throws ApiException {
+  /**
+   * Get Application Configuration Property
+   * &lt;p&gt;Returns configuration (based on configuration property name) from the specified application.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
+   * @return ApplicationConfigEntry
+   * @throws ApiException if fails to make API call
+   */
+  public ApplicationConfigEntry applicationConfigurationGetConfiguration(String applicationName, String configId) throws ApiException {
+    ApiResponse<ApplicationConfigEntry> localVarResponse = applicationConfigurationGetConfigurationWithHttpInfo(applicationName, configId);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = applicationConfigurationAddConfigurationValidateBeforeCall(applicationName, body, _callback);
-        Type localVarReturnType = new TypeToken<ApplicationConfigEntry>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationConfigurationDeleteConfiguration
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the configuration. The application name or configuration property is invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConfigurationDeleteConfigurationCall(String applicationName, String configId, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/configurations/{configId}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "configId" + "\\}", localVarApiClient.escapeString(configId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Get Application Configuration Property
+   * &lt;p&gt;Returns configuration (based on configuration property name) from the specified application.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;ApplicationConfigEntry&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ApplicationConfigEntry> applicationConfigurationGetConfigurationWithHttpInfo(String applicationName, String configId) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationConfigurationGetConfigurationRequestBuilder(applicationName, configId);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationConfigurationGetConfiguration", localVarResponse);
         }
+        return new ApiResponse<ApplicationConfigEntry>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ApplicationConfigEntry>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder applicationConfigurationGetConfigurationRequestBuilder(String applicationName, String configId) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationConfigurationGetConfiguration");
+    }
+    // verify the required parameter 'configId' is set
+    if (configId == null) {
+      throw new ApiException(400, "Missing the required parameter 'configId' when calling applicationConfigurationGetConfiguration");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationConfigurationDeleteConfigurationValidateBeforeCall(String applicationName, String configId, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationConfigurationDeleteConfiguration(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/configurations/{configId}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{configId}", ApiClient.urlEncode(configId.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Application Configuration (Filtered)
+   * &lt;p&gt;Returns all the configuration properties currently set for the specified application, with option to filter by configured value.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param key &lt;p&gt;Filter key to refine the configuration property results.&lt;/p&gt; (optional, default to *)
+   * @param configured &lt;p&gt;Specify &lt;code&gt;all&lt;/code&gt; to return all configured properties. Specify &lt;code&gt;true&lt;/code&gt; to return enabled configuration properties. Specify &lt;code&gt;false&lt;/code&gt; to return configuration properties that are turned off.&lt;/p&gt; (optional, default to all)
+   * @return List&lt;ApplicationConfigList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public List<ApplicationConfigList> applicationConfigurationGetConfigurationKeys(String applicationName, String key, String configured) throws ApiException {
+    ApiResponse<List<ApplicationConfigList>> localVarResponse = applicationConfigurationGetConfigurationKeysWithHttpInfo(applicationName, key, configured);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Application Configuration (Filtered)
+   * &lt;p&gt;Returns all the configuration properties currently set for the specified application, with option to filter by configured value.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param key &lt;p&gt;Filter key to refine the configuration property results.&lt;/p&gt; (optional, default to *)
+   * @param configured &lt;p&gt;Specify &lt;code&gt;all&lt;/code&gt; to return all configured properties. Specify &lt;code&gt;true&lt;/code&gt; to return enabled configuration properties. Specify &lt;code&gt;false&lt;/code&gt; to return configuration properties that are turned off.&lt;/p&gt; (optional, default to all)
+   * @return ApiResponse&lt;List&lt;ApplicationConfigList&gt;&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<List<ApplicationConfigList>> applicationConfigurationGetConfigurationKeysWithHttpInfo(String applicationName, String key, String configured) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationConfigurationGetConfigurationKeysRequestBuilder(applicationName, key, configured);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationConfigurationGetConfigurationKeys", localVarResponse);
         }
-        
-        // verify the required parameter 'configId' is set
-        if (configId == null) {
-            throw new ApiException("Missing the required parameter 'configId' when calling applicationConfigurationDeleteConfiguration(Async)");
+        return new ApiResponse<List<ApplicationConfigList>>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<List<ApplicationConfigList>>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationConfigurationGetConfigurationKeysRequestBuilder(String applicationName, String key, String configured) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationConfigurationGetConfigurationKeys");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/configurationkeys"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "key";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("key", key));
+    localVarQueryParameterBaseName = "configured";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("configured", configured));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Application Configuration
+   * &lt;p&gt;Returns all the configuration properties currently set for the specified application.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @return ApplicationConfigList
+   * @throws ApiException if fails to make API call
+   */
+  public ApplicationConfigList applicationConfigurationGetConfigurations(String applicationName) throws ApiException {
+    ApiResponse<ApplicationConfigList> localVarResponse = applicationConfigurationGetConfigurationsWithHttpInfo(applicationName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Application Configuration
+   * &lt;p&gt;Returns all the configuration properties currently set for the specified application.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;ApplicationConfigList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ApplicationConfigList> applicationConfigurationGetConfigurationsWithHttpInfo(String applicationName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationConfigurationGetConfigurationsRequestBuilder(applicationName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationConfigurationGetConfigurations", localVarResponse);
         }
-        
+        return new ApiResponse<ApplicationConfigList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ApplicationConfigList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = applicationConfigurationDeleteConfigurationCall(applicationName, configId, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder applicationConfigurationGetConfigurationsRequestBuilder(String applicationName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationConfigurationGetConfigurations");
     }
 
-    /**
-     * Delete Application Configuration
-     * &lt;p&gt;Deletes the specified configuration property from the specified application.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the configuration. The application name or configuration property is invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationConfigurationDeleteConfiguration(String applicationName, String configId) throws ApiException {
-        applicationConfigurationDeleteConfigurationWithHttpInfo(applicationName, configId);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/configurations"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Delete Application Configuration
-     * &lt;p&gt;Deletes the specified configuration property from the specified application.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the configuration. The application name or configuration property is invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationConfigurationDeleteConfigurationWithHttpInfo(String applicationName, String configId) throws ApiException {
-        okhttp3.Call localVarCall = applicationConfigurationDeleteConfigurationValidateBeforeCall(applicationName, configId, null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Delete Application Configuration (asynchronously)
-     * &lt;p&gt;Deletes the specified configuration property from the specified application.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the configuration. The application name or configuration property is invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConfigurationDeleteConfigurationAsync(String applicationName, String configId, final ApiCallback<Void> _callback) throws ApiException {
+  /**
+   * Update Application Configuration
+   * &lt;p&gt;Updates the application configuration and returns the updated configuration details.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Configuration property value entry.&lt;/p&gt; (required)
+   * @return ApplicationConfigEntry
+   * @throws ApiException if fails to make API call
+   */
+  public ApplicationConfigEntry applicationConfigurationSetConfiguration(String applicationName, String configId, ApplicationConfigEntry body) throws ApiException {
+    ApiResponse<ApplicationConfigEntry> localVarResponse = applicationConfigurationSetConfigurationWithHttpInfo(applicationName, configId, body);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = applicationConfigurationDeleteConfigurationValidateBeforeCall(applicationName, configId, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationConfigurationGetConfiguration
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration was retrieved successfully. Returns the configuration details and the links to get, edit, or delete the configuration.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the configuration information. The application name or configuration property is invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConfigurationGetConfigurationCall(String applicationName, String configId, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/configurations/{configId}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "configId" + "\\}", localVarApiClient.escapeString(configId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Update Application Configuration
+   * &lt;p&gt;Updates the application configuration and returns the updated configuration details.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Configuration property value entry.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;ApplicationConfigEntry&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ApplicationConfigEntry> applicationConfigurationSetConfigurationWithHttpInfo(String applicationName, String configId, ApplicationConfigEntry body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationConfigurationSetConfigurationRequestBuilder(applicationName, configId, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationConfigurationSetConfiguration", localVarResponse);
         }
+        return new ApiResponse<ApplicationConfigEntry>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ApplicationConfigEntry>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder applicationConfigurationSetConfigurationRequestBuilder(String applicationName, String configId, ApplicationConfigEntry body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationConfigurationSetConfiguration");
+    }
+    // verify the required parameter 'configId' is set
+    if (configId == null) {
+      throw new ApiException(400, "Missing the required parameter 'configId' when calling applicationConfigurationSetConfiguration");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling applicationConfigurationSetConfiguration");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationConfigurationGetConfigurationValidateBeforeCall(String applicationName, String configId, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationConfigurationGetConfiguration(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/configurations/{configId}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{configId}", ApiClient.urlEncode(configId.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Updates Application Configurations
+   * &lt;p&gt;Updates the application configurations and returns the updated configuration details.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Configuration property value entries.&lt;/p&gt; (required)
+   * @return ApplicationConfigList
+   * @throws ApiException if fails to make API call
+   */
+  public ApplicationConfigList applicationConfigurationSetConfigurations(String applicationName, List<ApplicationConfigEntry> body) throws ApiException {
+    ApiResponse<ApplicationConfigList> localVarResponse = applicationConfigurationSetConfigurationsWithHttpInfo(applicationName, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Updates Application Configurations
+   * &lt;p&gt;Updates the application configurations and returns the updated configuration details.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Configuration property value entries.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;ApplicationConfigList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ApplicationConfigList> applicationConfigurationSetConfigurationsWithHttpInfo(String applicationName, List<ApplicationConfigEntry> body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationConfigurationSetConfigurationsRequestBuilder(applicationName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationConfigurationSetConfigurations", localVarResponse);
         }
-        
-        // verify the required parameter 'configId' is set
-        if (configId == null) {
-            throw new ApiException("Missing the required parameter 'configId' when calling applicationConfigurationGetConfiguration(Async)");
-        }
-        
+        return new ApiResponse<ApplicationConfigList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ApplicationConfigList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = applicationConfigurationGetConfigurationCall(applicationName, configId, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder applicationConfigurationSetConfigurationsRequestBuilder(String applicationName, List<ApplicationConfigEntry> body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationConfigurationSetConfigurations");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling applicationConfigurationSetConfigurations");
     }
 
-    /**
-     * Get Application Configuration Property
-     * &lt;p&gt;Returns configuration (based on configuration property name) from the specified application.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
-     * @return ApplicationConfigEntry
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration was retrieved successfully. Returns the configuration details and the links to get, edit, or delete the configuration.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the configuration information. The application name or configuration property is invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApplicationConfigEntry applicationConfigurationGetConfiguration(String applicationName, String configId) throws ApiException {
-        ApiResponse<ApplicationConfigEntry> localVarResp = applicationConfigurationGetConfigurationWithHttpInfo(applicationName, configId);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/configurations"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Get Application Configuration Property
-     * &lt;p&gt;Returns configuration (based on configuration property name) from the specified application.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;ApplicationConfigEntry&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration was retrieved successfully. Returns the configuration details and the links to get, edit, or delete the configuration.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the configuration information. The application name or configuration property is invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ApplicationConfigEntry> applicationConfigurationGetConfigurationWithHttpInfo(String applicationName, String configId) throws ApiException {
-        okhttp3.Call localVarCall = applicationConfigurationGetConfigurationValidateBeforeCall(applicationName, configId, null);
-        Type localVarReturnType = new TypeToken<ApplicationConfigEntry>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Application Configuration Property (asynchronously)
-     * &lt;p&gt;Returns configuration (based on configuration property name) from the specified application.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration was retrieved successfully. Returns the configuration details and the links to get, edit, or delete the configuration.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the configuration information. The application name or configuration property is invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConfigurationGetConfigurationAsync(String applicationName, String configId, final ApiCallback<ApplicationConfigEntry> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationConfigurationGetConfigurationValidateBeforeCall(applicationName, configId, _callback);
-        Type localVarReturnType = new TypeToken<ApplicationConfigEntry>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for applicationConfigurationGetConfigurationKeys
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param key &lt;p&gt;Filter key to refine the configuration property results.&lt;/p&gt; (optional, default to *)
-     * @param configured &lt;p&gt;Specify &lt;code&gt;all&lt;/code&gt; to return all configured properties. Specify &lt;code&gt;true&lt;/code&gt; to return enabled configuration properties. Specify &lt;code&gt;false&lt;/code&gt; to return configuration properties that are turned off.&lt;/p&gt; (optional, default to all)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration properties were retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the configuration properties. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConfigurationGetConfigurationKeysCall(String applicationName, String key, String configured, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/configurationkeys"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (key != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("key", key));
-        }
-
-        if (configured != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("configured", configured));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationConfigurationGetConfigurationKeysValidateBeforeCall(String applicationName, String key, String configured, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationConfigurationGetConfigurationKeys(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationConfigurationGetConfigurationKeysCall(applicationName, key, configured, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Application Configuration (Filtered)
-     * &lt;p&gt;Returns all the configuration properties currently set for the specified application, with option to filter by configured value.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param key &lt;p&gt;Filter key to refine the configuration property results.&lt;/p&gt; (optional, default to *)
-     * @param configured &lt;p&gt;Specify &lt;code&gt;all&lt;/code&gt; to return all configured properties. Specify &lt;code&gt;true&lt;/code&gt; to return enabled configuration properties. Specify &lt;code&gt;false&lt;/code&gt; to return configuration properties that are turned off.&lt;/p&gt; (optional, default to all)
-     * @return List&lt;ApplicationConfigList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration properties were retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the configuration properties. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public List<ApplicationConfigList> applicationConfigurationGetConfigurationKeys(String applicationName, String key, String configured) throws ApiException {
-        ApiResponse<List<ApplicationConfigList>> localVarResp = applicationConfigurationGetConfigurationKeysWithHttpInfo(applicationName, key, configured);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Application Configuration (Filtered)
-     * &lt;p&gt;Returns all the configuration properties currently set for the specified application, with option to filter by configured value.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param key &lt;p&gt;Filter key to refine the configuration property results.&lt;/p&gt; (optional, default to *)
-     * @param configured &lt;p&gt;Specify &lt;code&gt;all&lt;/code&gt; to return all configured properties. Specify &lt;code&gt;true&lt;/code&gt; to return enabled configuration properties. Specify &lt;code&gt;false&lt;/code&gt; to return configuration properties that are turned off.&lt;/p&gt; (optional, default to all)
-     * @return ApiResponse&lt;List&lt;ApplicationConfigList&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration properties were retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the configuration properties. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<List<ApplicationConfigList>> applicationConfigurationGetConfigurationKeysWithHttpInfo(String applicationName, String key, String configured) throws ApiException {
-        okhttp3.Call localVarCall = applicationConfigurationGetConfigurationKeysValidateBeforeCall(applicationName, key, configured, null);
-        Type localVarReturnType = new TypeToken<List<ApplicationConfigList>>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Application Configuration (Filtered) (asynchronously)
-     * &lt;p&gt;Returns all the configuration properties currently set for the specified application, with option to filter by configured value.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param key &lt;p&gt;Filter key to refine the configuration property results.&lt;/p&gt; (optional, default to *)
-     * @param configured &lt;p&gt;Specify &lt;code&gt;all&lt;/code&gt; to return all configured properties. Specify &lt;code&gt;true&lt;/code&gt; to return enabled configuration properties. Specify &lt;code&gt;false&lt;/code&gt; to return configuration properties that are turned off.&lt;/p&gt; (optional, default to all)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration properties were retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the configuration properties. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConfigurationGetConfigurationKeysAsync(String applicationName, String key, String configured, final ApiCallback<List<ApplicationConfigList>> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationConfigurationGetConfigurationKeysValidateBeforeCall(applicationName, key, configured, _callback);
-        Type localVarReturnType = new TypeToken<List<ApplicationConfigList>>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationConfigurationGetConfigurations
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Configuration properties retrieved successfully. Returns all the configuration properties which are set for the application, and the links to get, edit, or delete each property.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the configuration properties. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConfigurationGetConfigurationsCall(String applicationName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/configurations"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationConfigurationGetConfigurationsValidateBeforeCall(String applicationName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationConfigurationGetConfigurations(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationConfigurationGetConfigurationsCall(applicationName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Application Configuration
-     * &lt;p&gt;Returns all the configuration properties currently set for the specified application.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @return ApplicationConfigList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Configuration properties retrieved successfully. Returns all the configuration properties which are set for the application, and the links to get, edit, or delete each property.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the configuration properties. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApplicationConfigList applicationConfigurationGetConfigurations(String applicationName) throws ApiException {
-        ApiResponse<ApplicationConfigList> localVarResp = applicationConfigurationGetConfigurationsWithHttpInfo(applicationName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Application Configuration
-     * &lt;p&gt;Returns all the configuration properties currently set for the specified application.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;ApplicationConfigList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Configuration properties retrieved successfully. Returns all the configuration properties which are set for the application, and the links to get, edit, or delete each property.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the configuration properties. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ApplicationConfigList> applicationConfigurationGetConfigurationsWithHttpInfo(String applicationName) throws ApiException {
-        okhttp3.Call localVarCall = applicationConfigurationGetConfigurationsValidateBeforeCall(applicationName, null);
-        Type localVarReturnType = new TypeToken<ApplicationConfigList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Application Configuration (asynchronously)
-     * &lt;p&gt;Returns all the configuration properties currently set for the specified application.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Configuration properties retrieved successfully. Returns all the configuration properties which are set for the application, and the links to get, edit, or delete each property.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the configuration properties. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConfigurationGetConfigurationsAsync(String applicationName, final ApiCallback<ApplicationConfigList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationConfigurationGetConfigurationsValidateBeforeCall(applicationName, _callback);
-        Type localVarReturnType = new TypeToken<ApplicationConfigList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationConfigurationSetConfiguration
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Configuration property value entry.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration was updated successfully. Returns the configuration details and the links to get, edit, or delete the configuration.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the configuration. The application name or configuration property is invalid, or the specified configuration property has not been added to the application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConfigurationSetConfigurationCall(String applicationName, String configId, ApplicationConfigEntry body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/configurations/{configId}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "configId" + "\\}", localVarApiClient.escapeString(configId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationConfigurationSetConfigurationValidateBeforeCall(String applicationName, String configId, ApplicationConfigEntry body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationConfigurationSetConfiguration(Async)");
-        }
-        
-        // verify the required parameter 'configId' is set
-        if (configId == null) {
-            throw new ApiException("Missing the required parameter 'configId' when calling applicationConfigurationSetConfiguration(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling applicationConfigurationSetConfiguration(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationConfigurationSetConfigurationCall(applicationName, configId, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Update Application Configuration
-     * &lt;p&gt;Updates the application configuration and returns the updated configuration details.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Configuration property value entry.&lt;/p&gt; (required)
-     * @return ApplicationConfigEntry
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration was updated successfully. Returns the configuration details and the links to get, edit, or delete the configuration.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the configuration. The application name or configuration property is invalid, or the specified configuration property has not been added to the application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApplicationConfigEntry applicationConfigurationSetConfiguration(String applicationName, String configId, ApplicationConfigEntry body) throws ApiException {
-        ApiResponse<ApplicationConfigEntry> localVarResp = applicationConfigurationSetConfigurationWithHttpInfo(applicationName, configId, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Update Application Configuration
-     * &lt;p&gt;Updates the application configuration and returns the updated configuration details.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Configuration property value entry.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;ApplicationConfigEntry&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration was updated successfully. Returns the configuration details and the links to get, edit, or delete the configuration.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the configuration. The application name or configuration property is invalid, or the specified configuration property has not been added to the application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ApplicationConfigEntry> applicationConfigurationSetConfigurationWithHttpInfo(String applicationName, String configId, ApplicationConfigEntry body) throws ApiException {
-        okhttp3.Call localVarCall = applicationConfigurationSetConfigurationValidateBeforeCall(applicationName, configId, body, null);
-        Type localVarReturnType = new TypeToken<ApplicationConfigEntry>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Update Application Configuration (asynchronously)
-     * &lt;p&gt;Updates the application configuration and returns the updated configuration details.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param configId &lt;p&gt;Configuration property name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Configuration property value entry.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The configuration was updated successfully. Returns the configuration details and the links to get, edit, or delete the configuration.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the configuration. The application name or configuration property is invalid, or the specified configuration property has not been added to the application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConfigurationSetConfigurationAsync(String applicationName, String configId, ApplicationConfigEntry body, final ApiCallback<ApplicationConfigEntry> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationConfigurationSetConfigurationValidateBeforeCall(applicationName, configId, body, _callback);
-        Type localVarReturnType = new TypeToken<ApplicationConfigEntry>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationConfigurationSetConfigurations
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Configuration property value entries.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Configurations were updated successfully. Returns the configuration details and the links to get, edit, or delete the configurations.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the configurations. The application name or configuration entries is invalid, or the given configuration property has not been added to the application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConfigurationSetConfigurationsCall(String applicationName, List<ApplicationConfigEntry> body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/configurations"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationConfigurationSetConfigurationsValidateBeforeCall(String applicationName, List<ApplicationConfigEntry> body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationConfigurationSetConfigurations(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling applicationConfigurationSetConfigurations(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationConfigurationSetConfigurationsCall(applicationName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Updates Application Configurations
-     * &lt;p&gt;Updates the application configurations and returns the updated configuration details.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Configuration property value entries.&lt;/p&gt; (required)
-     * @return ApplicationConfigList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Configurations were updated successfully. Returns the configuration details and the links to get, edit, or delete the configurations.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the configurations. The application name or configuration entries is invalid, or the given configuration property has not been added to the application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApplicationConfigList applicationConfigurationSetConfigurations(String applicationName, List<ApplicationConfigEntry> body) throws ApiException {
-        ApiResponse<ApplicationConfigList> localVarResp = applicationConfigurationSetConfigurationsWithHttpInfo(applicationName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Updates Application Configurations
-     * &lt;p&gt;Updates the application configurations and returns the updated configuration details.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Configuration property value entries.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;ApplicationConfigList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Configurations were updated successfully. Returns the configuration details and the links to get, edit, or delete the configurations.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the configurations. The application name or configuration entries is invalid, or the given configuration property has not been added to the application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ApplicationConfigList> applicationConfigurationSetConfigurationsWithHttpInfo(String applicationName, List<ApplicationConfigEntry> body) throws ApiException {
-        okhttp3.Call localVarCall = applicationConfigurationSetConfigurationsValidateBeforeCall(applicationName, body, null);
-        Type localVarReturnType = new TypeToken<ApplicationConfigList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Updates Application Configurations (asynchronously)
-     * &lt;p&gt;Updates the application configurations and returns the updated configuration details.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Configuration property value entries.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Configurations were updated successfully. Returns the configuration details and the links to get, edit, or delete the configurations.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the configurations. The application name or configuration entries is invalid, or the given configuration property has not been added to the application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConfigurationSetConfigurationsAsync(String applicationName, List<ApplicationConfigEntry> body, final ApiCallback<ApplicationConfigList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationConfigurationSetConfigurationsValidateBeforeCall(applicationName, body, _callback);
-        Type localVarReturnType = new TypeToken<ApplicationConfigList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

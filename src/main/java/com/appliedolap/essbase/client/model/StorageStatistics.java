@@ -13,655 +13,713 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.StatisticsDimensions;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * StorageStatistics
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  StorageStatistics.JSON_PROPERTY_DIMENSIONS,
+  StorageStatistics.JSON_PROPERTY_MAX_KEY_LENGTH_BITS,
+  StorageStatistics.JSON_PROPERTY_MAX_KEY_LENGTH_BYTES,
+  StorageStatistics.JSON_PROPERTY_NUMBER_OF_INPUT_LEVEL_CELLS,
+  StorageStatistics.JSON_PROPERTY_NUMBER_OF_INCREMENTAL_DATA_SLICES,
+  StorageStatistics.JSON_PROPERTY_NUMBER_OF_INCREMENTAL_INPUT_CELLS,
+  StorageStatistics.JSON_PROPERTY_NUMBER_OF_AGGREGATE_VIEWS,
+  StorageStatistics.JSON_PROPERTY_NUMBER_OF_AGGREGATE_CELLS,
+  StorageStatistics.JSON_PROPERTY_NUMBER_OF_INCREMENTAL_AGGREGATE_CELLS,
+  StorageStatistics.JSON_PROPERTY_COST_OF_QUERYING_INCREMENTAL_DATA,
+  StorageStatistics.JSON_PROPERTY_INPUT_LEVEL_DATA_SIZE,
+  StorageStatistics.JSON_PROPERTY_AGGREGATE_DATA_SIZE,
+  StorageStatistics.JSON_PROPERTY_NUMBER_OF_EXISTING_BLOCKS,
+  StorageStatistics.JSON_PROPERTY_BLOCK_SIZE,
+  StorageStatistics.JSON_PROPERTY_POTENTIAL_NUMBER_OF_BLOCKS,
+  StorageStatistics.JSON_PROPERTY_EXISTING_LEVEL_ZERO_BLOCKS,
+  StorageStatistics.JSON_PROPERTY_EXISTING_UPPER_LEVEL_BLOCKS,
+  StorageStatistics.JSON_PROPERTY_BLOCK_DENSITY,
+  StorageStatistics.JSON_PROPERTY_PERCENTAGE_OF_MAXIMUM_BLOCKS_EXISTING,
+  StorageStatistics.JSON_PROPERTY_COMPRESSION_RATIO,
+  StorageStatistics.JSON_PROPERTY_AVERAGE_CLUSTERING_RATIO,
+  StorageStatistics.JSON_PROPERTY_PAGE_FILE_SIZE,
+  StorageStatistics.JSON_PROPERTY_INDEX_FILE_SIZE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class StorageStatistics {
-  public static final String SERIALIZED_NAME_DIMENSIONS = "dimensions";
-  @SerializedName(SERIALIZED_NAME_DIMENSIONS)
-  private List<StatisticsDimensions> dimensions = null;
+  public static final String JSON_PROPERTY_DIMENSIONS = "dimensions";
+  @jakarta.annotation.Nullable
+  private List<StatisticsDimensions> dimensions = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_MAX_KEY_LENGTH_BITS = "maxKeyLengthBits";
-  @SerializedName(SERIALIZED_NAME_MAX_KEY_LENGTH_BITS)
+  public static final String JSON_PROPERTY_MAX_KEY_LENGTH_BITS = "maxKeyLengthBits";
+  @jakarta.annotation.Nullable
   private Integer maxKeyLengthBits;
 
-  public static final String SERIALIZED_NAME_MAX_KEY_LENGTH_BYTES = "maxKeyLengthBytes";
-  @SerializedName(SERIALIZED_NAME_MAX_KEY_LENGTH_BYTES)
+  public static final String JSON_PROPERTY_MAX_KEY_LENGTH_BYTES = "maxKeyLengthBytes";
+  @jakarta.annotation.Nullable
   private Integer maxKeyLengthBytes;
 
-  public static final String SERIALIZED_NAME_NUMBER_OF_INPUT_LEVEL_CELLS = "numberOfInputLevelCells";
-  @SerializedName(SERIALIZED_NAME_NUMBER_OF_INPUT_LEVEL_CELLS)
+  public static final String JSON_PROPERTY_NUMBER_OF_INPUT_LEVEL_CELLS = "numberOfInputLevelCells";
+  @jakarta.annotation.Nullable
   private Integer numberOfInputLevelCells;
 
-  public static final String SERIALIZED_NAME_NUMBER_OF_INCREMENTAL_DATA_SLICES = "numberOfIncrementalDataSlices";
-  @SerializedName(SERIALIZED_NAME_NUMBER_OF_INCREMENTAL_DATA_SLICES)
+  public static final String JSON_PROPERTY_NUMBER_OF_INCREMENTAL_DATA_SLICES = "numberOfIncrementalDataSlices";
+  @jakarta.annotation.Nullable
   private Integer numberOfIncrementalDataSlices;
 
-  public static final String SERIALIZED_NAME_NUMBER_OF_INCREMENTAL_INPUT_CELLS = "numberOfIncrementalInputCells";
-  @SerializedName(SERIALIZED_NAME_NUMBER_OF_INCREMENTAL_INPUT_CELLS)
+  public static final String JSON_PROPERTY_NUMBER_OF_INCREMENTAL_INPUT_CELLS = "numberOfIncrementalInputCells";
+  @jakarta.annotation.Nullable
   private Integer numberOfIncrementalInputCells;
 
-  public static final String SERIALIZED_NAME_NUMBER_OF_AGGREGATE_VIEWS = "numberOfAggregateViews";
-  @SerializedName(SERIALIZED_NAME_NUMBER_OF_AGGREGATE_VIEWS)
+  public static final String JSON_PROPERTY_NUMBER_OF_AGGREGATE_VIEWS = "numberOfAggregateViews";
+  @jakarta.annotation.Nullable
   private Integer numberOfAggregateViews;
 
-  public static final String SERIALIZED_NAME_NUMBER_OF_AGGREGATE_CELLS = "numberOfAggregateCells";
-  @SerializedName(SERIALIZED_NAME_NUMBER_OF_AGGREGATE_CELLS)
+  public static final String JSON_PROPERTY_NUMBER_OF_AGGREGATE_CELLS = "numberOfAggregateCells";
+  @jakarta.annotation.Nullable
   private Integer numberOfAggregateCells;
 
-  public static final String SERIALIZED_NAME_NUMBER_OF_INCREMENTAL_AGGREGATE_CELLS = "numberOfIncrementalAggregateCells";
-  @SerializedName(SERIALIZED_NAME_NUMBER_OF_INCREMENTAL_AGGREGATE_CELLS)
+  public static final String JSON_PROPERTY_NUMBER_OF_INCREMENTAL_AGGREGATE_CELLS = "numberOfIncrementalAggregateCells";
+  @jakarta.annotation.Nullable
   private Integer numberOfIncrementalAggregateCells;
 
-  public static final String SERIALIZED_NAME_COST_OF_QUERYING_INCREMENTAL_DATA = "costOfQueryingIncrementalData";
-  @SerializedName(SERIALIZED_NAME_COST_OF_QUERYING_INCREMENTAL_DATA)
+  public static final String JSON_PROPERTY_COST_OF_QUERYING_INCREMENTAL_DATA = "costOfQueryingIncrementalData";
+  @jakarta.annotation.Nullable
   private Double costOfQueryingIncrementalData;
 
-  public static final String SERIALIZED_NAME_INPUT_LEVEL_DATA_SIZE = "inputLevelDataSize";
-  @SerializedName(SERIALIZED_NAME_INPUT_LEVEL_DATA_SIZE)
+  public static final String JSON_PROPERTY_INPUT_LEVEL_DATA_SIZE = "inputLevelDataSize";
+  @jakarta.annotation.Nullable
   private Integer inputLevelDataSize;
 
-  public static final String SERIALIZED_NAME_AGGREGATE_DATA_SIZE = "aggregateDataSize";
-  @SerializedName(SERIALIZED_NAME_AGGREGATE_DATA_SIZE)
+  public static final String JSON_PROPERTY_AGGREGATE_DATA_SIZE = "aggregateDataSize";
+  @jakarta.annotation.Nullable
   private Integer aggregateDataSize;
 
-  public static final String SERIALIZED_NAME_NUMBER_OF_EXISTING_BLOCKS = "numberOfExistingBlocks";
-  @SerializedName(SERIALIZED_NAME_NUMBER_OF_EXISTING_BLOCKS)
+  public static final String JSON_PROPERTY_NUMBER_OF_EXISTING_BLOCKS = "numberOfExistingBlocks";
+  @jakarta.annotation.Nullable
   private Double numberOfExistingBlocks;
 
-  public static final String SERIALIZED_NAME_BLOCK_SIZE = "blockSize";
-  @SerializedName(SERIALIZED_NAME_BLOCK_SIZE)
+  public static final String JSON_PROPERTY_BLOCK_SIZE = "blockSize";
+  @jakarta.annotation.Nullable
   private Integer blockSize;
 
-  public static final String SERIALIZED_NAME_POTENTIAL_NUMBER_OF_BLOCKS = "potentialNumberOfBlocks";
-  @SerializedName(SERIALIZED_NAME_POTENTIAL_NUMBER_OF_BLOCKS)
+  public static final String JSON_PROPERTY_POTENTIAL_NUMBER_OF_BLOCKS = "potentialNumberOfBlocks";
+  @jakarta.annotation.Nullable
   private Double potentialNumberOfBlocks;
 
-  public static final String SERIALIZED_NAME_EXISTING_LEVEL_ZERO_BLOCKS = "existingLevelZeroBlocks";
-  @SerializedName(SERIALIZED_NAME_EXISTING_LEVEL_ZERO_BLOCKS)
+  public static final String JSON_PROPERTY_EXISTING_LEVEL_ZERO_BLOCKS = "existingLevelZeroBlocks";
+  @jakarta.annotation.Nullable
   private Double existingLevelZeroBlocks;
 
-  public static final String SERIALIZED_NAME_EXISTING_UPPER_LEVEL_BLOCKS = "existingUpperLevelBlocks";
-  @SerializedName(SERIALIZED_NAME_EXISTING_UPPER_LEVEL_BLOCKS)
+  public static final String JSON_PROPERTY_EXISTING_UPPER_LEVEL_BLOCKS = "existingUpperLevelBlocks";
+  @jakarta.annotation.Nullable
   private Double existingUpperLevelBlocks;
 
-  public static final String SERIALIZED_NAME_BLOCK_DENSITY = "blockDensity";
-  @SerializedName(SERIALIZED_NAME_BLOCK_DENSITY)
+  public static final String JSON_PROPERTY_BLOCK_DENSITY = "blockDensity";
+  @jakarta.annotation.Nullable
   private Double blockDensity;
 
-  public static final String SERIALIZED_NAME_PERCENTAGE_OF_MAXIMUM_BLOCKS_EXISTING = "percentageOfMaximumBlocksExisting";
-  @SerializedName(SERIALIZED_NAME_PERCENTAGE_OF_MAXIMUM_BLOCKS_EXISTING)
+  public static final String JSON_PROPERTY_PERCENTAGE_OF_MAXIMUM_BLOCKS_EXISTING = "percentageOfMaximumBlocksExisting";
+  @jakarta.annotation.Nullable
   private Double percentageOfMaximumBlocksExisting;
 
-  public static final String SERIALIZED_NAME_COMPRESSION_RATIO = "compressionRatio";
-  @SerializedName(SERIALIZED_NAME_COMPRESSION_RATIO)
+  public static final String JSON_PROPERTY_COMPRESSION_RATIO = "compressionRatio";
+  @jakarta.annotation.Nullable
   private Double compressionRatio;
 
-  public static final String SERIALIZED_NAME_AVERAGE_CLUSTERING_RATIO = "averageClusteringRatio";
-  @SerializedName(SERIALIZED_NAME_AVERAGE_CLUSTERING_RATIO)
+  public static final String JSON_PROPERTY_AVERAGE_CLUSTERING_RATIO = "averageClusteringRatio";
+  @jakarta.annotation.Nullable
   private Double averageClusteringRatio;
 
-  public static final String SERIALIZED_NAME_PAGE_FILE_SIZE = "pageFileSize";
-  @SerializedName(SERIALIZED_NAME_PAGE_FILE_SIZE)
+  public static final String JSON_PROPERTY_PAGE_FILE_SIZE = "pageFileSize";
+  @jakarta.annotation.Nullable
   private Long pageFileSize;
 
-  public static final String SERIALIZED_NAME_INDEX_FILE_SIZE = "indexFileSize";
-  @SerializedName(SERIALIZED_NAME_INDEX_FILE_SIZE)
+  public static final String JSON_PROPERTY_INDEX_FILE_SIZE = "indexFileSize";
+  @jakarta.annotation.Nullable
   private Long indexFileSize;
 
+  public StorageStatistics() { 
+  }
 
-  public StorageStatistics dimensions(List<StatisticsDimensions> dimensions) {
-    
+  public StorageStatistics dimensions(@jakarta.annotation.Nullable List<StatisticsDimensions> dimensions) {
     this.dimensions = dimensions;
     return this;
   }
 
   public StorageStatistics addDimensionsItem(StatisticsDimensions dimensionsItem) {
     if (this.dimensions == null) {
-      this.dimensions = new ArrayList<StatisticsDimensions>();
+      this.dimensions = new ArrayList<>();
     }
     this.dimensions.add(dimensionsItem);
     return this;
   }
 
-   /**
+  /**
    * Get dimensions
    * @return dimensions
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIMENSIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<StatisticsDimensions> getDimensions() {
     return dimensions;
   }
 
 
-  public void setDimensions(List<StatisticsDimensions> dimensions) {
+  @JsonProperty(JSON_PROPERTY_DIMENSIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimensions(@jakarta.annotation.Nullable List<StatisticsDimensions> dimensions) {
     this.dimensions = dimensions;
   }
 
 
-  public StorageStatistics maxKeyLengthBits(Integer maxKeyLengthBits) {
-    
+  public StorageStatistics maxKeyLengthBits(@jakarta.annotation.Nullable Integer maxKeyLengthBits) {
     this.maxKeyLengthBits = maxKeyLengthBits;
     return this;
   }
 
-   /**
+  /**
    * Get maxKeyLengthBits
    * @return maxKeyLengthBits
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MAX_KEY_LENGTH_BITS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getMaxKeyLengthBits() {
     return maxKeyLengthBits;
   }
 
 
-  public void setMaxKeyLengthBits(Integer maxKeyLengthBits) {
+  @JsonProperty(JSON_PROPERTY_MAX_KEY_LENGTH_BITS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMaxKeyLengthBits(@jakarta.annotation.Nullable Integer maxKeyLengthBits) {
     this.maxKeyLengthBits = maxKeyLengthBits;
   }
 
 
-  public StorageStatistics maxKeyLengthBytes(Integer maxKeyLengthBytes) {
-    
+  public StorageStatistics maxKeyLengthBytes(@jakarta.annotation.Nullable Integer maxKeyLengthBytes) {
     this.maxKeyLengthBytes = maxKeyLengthBytes;
     return this;
   }
 
-   /**
+  /**
    * Get maxKeyLengthBytes
    * @return maxKeyLengthBytes
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MAX_KEY_LENGTH_BYTES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getMaxKeyLengthBytes() {
     return maxKeyLengthBytes;
   }
 
 
-  public void setMaxKeyLengthBytes(Integer maxKeyLengthBytes) {
+  @JsonProperty(JSON_PROPERTY_MAX_KEY_LENGTH_BYTES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMaxKeyLengthBytes(@jakarta.annotation.Nullable Integer maxKeyLengthBytes) {
     this.maxKeyLengthBytes = maxKeyLengthBytes;
   }
 
 
-  public StorageStatistics numberOfInputLevelCells(Integer numberOfInputLevelCells) {
-    
+  public StorageStatistics numberOfInputLevelCells(@jakarta.annotation.Nullable Integer numberOfInputLevelCells) {
     this.numberOfInputLevelCells = numberOfInputLevelCells;
     return this;
   }
 
-   /**
+  /**
    * Get numberOfInputLevelCells
    * @return numberOfInputLevelCells
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_INPUT_LEVEL_CELLS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getNumberOfInputLevelCells() {
     return numberOfInputLevelCells;
   }
 
 
-  public void setNumberOfInputLevelCells(Integer numberOfInputLevelCells) {
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_INPUT_LEVEL_CELLS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumberOfInputLevelCells(@jakarta.annotation.Nullable Integer numberOfInputLevelCells) {
     this.numberOfInputLevelCells = numberOfInputLevelCells;
   }
 
 
-  public StorageStatistics numberOfIncrementalDataSlices(Integer numberOfIncrementalDataSlices) {
-    
+  public StorageStatistics numberOfIncrementalDataSlices(@jakarta.annotation.Nullable Integer numberOfIncrementalDataSlices) {
     this.numberOfIncrementalDataSlices = numberOfIncrementalDataSlices;
     return this;
   }
 
-   /**
+  /**
    * Get numberOfIncrementalDataSlices
    * @return numberOfIncrementalDataSlices
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_INCREMENTAL_DATA_SLICES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getNumberOfIncrementalDataSlices() {
     return numberOfIncrementalDataSlices;
   }
 
 
-  public void setNumberOfIncrementalDataSlices(Integer numberOfIncrementalDataSlices) {
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_INCREMENTAL_DATA_SLICES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumberOfIncrementalDataSlices(@jakarta.annotation.Nullable Integer numberOfIncrementalDataSlices) {
     this.numberOfIncrementalDataSlices = numberOfIncrementalDataSlices;
   }
 
 
-  public StorageStatistics numberOfIncrementalInputCells(Integer numberOfIncrementalInputCells) {
-    
+  public StorageStatistics numberOfIncrementalInputCells(@jakarta.annotation.Nullable Integer numberOfIncrementalInputCells) {
     this.numberOfIncrementalInputCells = numberOfIncrementalInputCells;
     return this;
   }
 
-   /**
+  /**
    * Get numberOfIncrementalInputCells
    * @return numberOfIncrementalInputCells
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_INCREMENTAL_INPUT_CELLS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getNumberOfIncrementalInputCells() {
     return numberOfIncrementalInputCells;
   }
 
 
-  public void setNumberOfIncrementalInputCells(Integer numberOfIncrementalInputCells) {
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_INCREMENTAL_INPUT_CELLS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumberOfIncrementalInputCells(@jakarta.annotation.Nullable Integer numberOfIncrementalInputCells) {
     this.numberOfIncrementalInputCells = numberOfIncrementalInputCells;
   }
 
 
-  public StorageStatistics numberOfAggregateViews(Integer numberOfAggregateViews) {
-    
+  public StorageStatistics numberOfAggregateViews(@jakarta.annotation.Nullable Integer numberOfAggregateViews) {
     this.numberOfAggregateViews = numberOfAggregateViews;
     return this;
   }
 
-   /**
+  /**
    * Get numberOfAggregateViews
    * @return numberOfAggregateViews
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_AGGREGATE_VIEWS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getNumberOfAggregateViews() {
     return numberOfAggregateViews;
   }
 
 
-  public void setNumberOfAggregateViews(Integer numberOfAggregateViews) {
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_AGGREGATE_VIEWS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumberOfAggregateViews(@jakarta.annotation.Nullable Integer numberOfAggregateViews) {
     this.numberOfAggregateViews = numberOfAggregateViews;
   }
 
 
-  public StorageStatistics numberOfAggregateCells(Integer numberOfAggregateCells) {
-    
+  public StorageStatistics numberOfAggregateCells(@jakarta.annotation.Nullable Integer numberOfAggregateCells) {
     this.numberOfAggregateCells = numberOfAggregateCells;
     return this;
   }
 
-   /**
+  /**
    * Get numberOfAggregateCells
    * @return numberOfAggregateCells
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_AGGREGATE_CELLS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getNumberOfAggregateCells() {
     return numberOfAggregateCells;
   }
 
 
-  public void setNumberOfAggregateCells(Integer numberOfAggregateCells) {
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_AGGREGATE_CELLS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumberOfAggregateCells(@jakarta.annotation.Nullable Integer numberOfAggregateCells) {
     this.numberOfAggregateCells = numberOfAggregateCells;
   }
 
 
-  public StorageStatistics numberOfIncrementalAggregateCells(Integer numberOfIncrementalAggregateCells) {
-    
+  public StorageStatistics numberOfIncrementalAggregateCells(@jakarta.annotation.Nullable Integer numberOfIncrementalAggregateCells) {
     this.numberOfIncrementalAggregateCells = numberOfIncrementalAggregateCells;
     return this;
   }
 
-   /**
+  /**
    * Get numberOfIncrementalAggregateCells
    * @return numberOfIncrementalAggregateCells
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_INCREMENTAL_AGGREGATE_CELLS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getNumberOfIncrementalAggregateCells() {
     return numberOfIncrementalAggregateCells;
   }
 
 
-  public void setNumberOfIncrementalAggregateCells(Integer numberOfIncrementalAggregateCells) {
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_INCREMENTAL_AGGREGATE_CELLS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumberOfIncrementalAggregateCells(@jakarta.annotation.Nullable Integer numberOfIncrementalAggregateCells) {
     this.numberOfIncrementalAggregateCells = numberOfIncrementalAggregateCells;
   }
 
 
-  public StorageStatistics costOfQueryingIncrementalData(Double costOfQueryingIncrementalData) {
-    
+  public StorageStatistics costOfQueryingIncrementalData(@jakarta.annotation.Nullable Double costOfQueryingIncrementalData) {
     this.costOfQueryingIncrementalData = costOfQueryingIncrementalData;
     return this;
   }
 
-   /**
+  /**
    * Get costOfQueryingIncrementalData
    * @return costOfQueryingIncrementalData
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COST_OF_QUERYING_INCREMENTAL_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getCostOfQueryingIncrementalData() {
     return costOfQueryingIncrementalData;
   }
 
 
-  public void setCostOfQueryingIncrementalData(Double costOfQueryingIncrementalData) {
+  @JsonProperty(JSON_PROPERTY_COST_OF_QUERYING_INCREMENTAL_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCostOfQueryingIncrementalData(@jakarta.annotation.Nullable Double costOfQueryingIncrementalData) {
     this.costOfQueryingIncrementalData = costOfQueryingIncrementalData;
   }
 
 
-  public StorageStatistics inputLevelDataSize(Integer inputLevelDataSize) {
-    
+  public StorageStatistics inputLevelDataSize(@jakarta.annotation.Nullable Integer inputLevelDataSize) {
     this.inputLevelDataSize = inputLevelDataSize;
     return this;
   }
 
-   /**
+  /**
    * Get inputLevelDataSize
    * @return inputLevelDataSize
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INPUT_LEVEL_DATA_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getInputLevelDataSize() {
     return inputLevelDataSize;
   }
 
 
-  public void setInputLevelDataSize(Integer inputLevelDataSize) {
+  @JsonProperty(JSON_PROPERTY_INPUT_LEVEL_DATA_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setInputLevelDataSize(@jakarta.annotation.Nullable Integer inputLevelDataSize) {
     this.inputLevelDataSize = inputLevelDataSize;
   }
 
 
-  public StorageStatistics aggregateDataSize(Integer aggregateDataSize) {
-    
+  public StorageStatistics aggregateDataSize(@jakarta.annotation.Nullable Integer aggregateDataSize) {
     this.aggregateDataSize = aggregateDataSize;
     return this;
   }
 
-   /**
+  /**
    * Get aggregateDataSize
    * @return aggregateDataSize
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_AGGREGATE_DATA_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getAggregateDataSize() {
     return aggregateDataSize;
   }
 
 
-  public void setAggregateDataSize(Integer aggregateDataSize) {
+  @JsonProperty(JSON_PROPERTY_AGGREGATE_DATA_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAggregateDataSize(@jakarta.annotation.Nullable Integer aggregateDataSize) {
     this.aggregateDataSize = aggregateDataSize;
   }
 
 
-  public StorageStatistics numberOfExistingBlocks(Double numberOfExistingBlocks) {
-    
+  public StorageStatistics numberOfExistingBlocks(@jakarta.annotation.Nullable Double numberOfExistingBlocks) {
     this.numberOfExistingBlocks = numberOfExistingBlocks;
     return this;
   }
 
-   /**
+  /**
    * Get numberOfExistingBlocks
    * @return numberOfExistingBlocks
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_EXISTING_BLOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getNumberOfExistingBlocks() {
     return numberOfExistingBlocks;
   }
 
 
-  public void setNumberOfExistingBlocks(Double numberOfExistingBlocks) {
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_EXISTING_BLOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumberOfExistingBlocks(@jakarta.annotation.Nullable Double numberOfExistingBlocks) {
     this.numberOfExistingBlocks = numberOfExistingBlocks;
   }
 
 
-  public StorageStatistics blockSize(Integer blockSize) {
-    
+  public StorageStatistics blockSize(@jakarta.annotation.Nullable Integer blockSize) {
     this.blockSize = blockSize;
     return this;
   }
 
-   /**
+  /**
    * Get blockSize
    * @return blockSize
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BLOCK_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getBlockSize() {
     return blockSize;
   }
 
 
-  public void setBlockSize(Integer blockSize) {
+  @JsonProperty(JSON_PROPERTY_BLOCK_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBlockSize(@jakarta.annotation.Nullable Integer blockSize) {
     this.blockSize = blockSize;
   }
 
 
-  public StorageStatistics potentialNumberOfBlocks(Double potentialNumberOfBlocks) {
-    
+  public StorageStatistics potentialNumberOfBlocks(@jakarta.annotation.Nullable Double potentialNumberOfBlocks) {
     this.potentialNumberOfBlocks = potentialNumberOfBlocks;
     return this;
   }
 
-   /**
+  /**
    * Get potentialNumberOfBlocks
    * @return potentialNumberOfBlocks
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_POTENTIAL_NUMBER_OF_BLOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getPotentialNumberOfBlocks() {
     return potentialNumberOfBlocks;
   }
 
 
-  public void setPotentialNumberOfBlocks(Double potentialNumberOfBlocks) {
+  @JsonProperty(JSON_PROPERTY_POTENTIAL_NUMBER_OF_BLOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPotentialNumberOfBlocks(@jakarta.annotation.Nullable Double potentialNumberOfBlocks) {
     this.potentialNumberOfBlocks = potentialNumberOfBlocks;
   }
 
 
-  public StorageStatistics existingLevelZeroBlocks(Double existingLevelZeroBlocks) {
-    
+  public StorageStatistics existingLevelZeroBlocks(@jakarta.annotation.Nullable Double existingLevelZeroBlocks) {
     this.existingLevelZeroBlocks = existingLevelZeroBlocks;
     return this;
   }
 
-   /**
+  /**
    * Get existingLevelZeroBlocks
    * @return existingLevelZeroBlocks
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EXISTING_LEVEL_ZERO_BLOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getExistingLevelZeroBlocks() {
     return existingLevelZeroBlocks;
   }
 
 
-  public void setExistingLevelZeroBlocks(Double existingLevelZeroBlocks) {
+  @JsonProperty(JSON_PROPERTY_EXISTING_LEVEL_ZERO_BLOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setExistingLevelZeroBlocks(@jakarta.annotation.Nullable Double existingLevelZeroBlocks) {
     this.existingLevelZeroBlocks = existingLevelZeroBlocks;
   }
 
 
-  public StorageStatistics existingUpperLevelBlocks(Double existingUpperLevelBlocks) {
-    
+  public StorageStatistics existingUpperLevelBlocks(@jakarta.annotation.Nullable Double existingUpperLevelBlocks) {
     this.existingUpperLevelBlocks = existingUpperLevelBlocks;
     return this;
   }
 
-   /**
+  /**
    * Get existingUpperLevelBlocks
    * @return existingUpperLevelBlocks
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EXISTING_UPPER_LEVEL_BLOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getExistingUpperLevelBlocks() {
     return existingUpperLevelBlocks;
   }
 
 
-  public void setExistingUpperLevelBlocks(Double existingUpperLevelBlocks) {
+  @JsonProperty(JSON_PROPERTY_EXISTING_UPPER_LEVEL_BLOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setExistingUpperLevelBlocks(@jakarta.annotation.Nullable Double existingUpperLevelBlocks) {
     this.existingUpperLevelBlocks = existingUpperLevelBlocks;
   }
 
 
-  public StorageStatistics blockDensity(Double blockDensity) {
-    
+  public StorageStatistics blockDensity(@jakarta.annotation.Nullable Double blockDensity) {
     this.blockDensity = blockDensity;
     return this;
   }
 
-   /**
+  /**
    * Get blockDensity
    * @return blockDensity
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BLOCK_DENSITY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getBlockDensity() {
     return blockDensity;
   }
 
 
-  public void setBlockDensity(Double blockDensity) {
+  @JsonProperty(JSON_PROPERTY_BLOCK_DENSITY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBlockDensity(@jakarta.annotation.Nullable Double blockDensity) {
     this.blockDensity = blockDensity;
   }
 
 
-  public StorageStatistics percentageOfMaximumBlocksExisting(Double percentageOfMaximumBlocksExisting) {
-    
+  public StorageStatistics percentageOfMaximumBlocksExisting(@jakarta.annotation.Nullable Double percentageOfMaximumBlocksExisting) {
     this.percentageOfMaximumBlocksExisting = percentageOfMaximumBlocksExisting;
     return this;
   }
 
-   /**
+  /**
    * Get percentageOfMaximumBlocksExisting
    * @return percentageOfMaximumBlocksExisting
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PERCENTAGE_OF_MAXIMUM_BLOCKS_EXISTING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getPercentageOfMaximumBlocksExisting() {
     return percentageOfMaximumBlocksExisting;
   }
 
 
-  public void setPercentageOfMaximumBlocksExisting(Double percentageOfMaximumBlocksExisting) {
+  @JsonProperty(JSON_PROPERTY_PERCENTAGE_OF_MAXIMUM_BLOCKS_EXISTING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPercentageOfMaximumBlocksExisting(@jakarta.annotation.Nullable Double percentageOfMaximumBlocksExisting) {
     this.percentageOfMaximumBlocksExisting = percentageOfMaximumBlocksExisting;
   }
 
 
-  public StorageStatistics compressionRatio(Double compressionRatio) {
-    
+  public StorageStatistics compressionRatio(@jakarta.annotation.Nullable Double compressionRatio) {
     this.compressionRatio = compressionRatio;
     return this;
   }
 
-   /**
+  /**
    * Get compressionRatio
    * @return compressionRatio
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COMPRESSION_RATIO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getCompressionRatio() {
     return compressionRatio;
   }
 
 
-  public void setCompressionRatio(Double compressionRatio) {
+  @JsonProperty(JSON_PROPERTY_COMPRESSION_RATIO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCompressionRatio(@jakarta.annotation.Nullable Double compressionRatio) {
     this.compressionRatio = compressionRatio;
   }
 
 
-  public StorageStatistics averageClusteringRatio(Double averageClusteringRatio) {
-    
+  public StorageStatistics averageClusteringRatio(@jakarta.annotation.Nullable Double averageClusteringRatio) {
     this.averageClusteringRatio = averageClusteringRatio;
     return this;
   }
 
-   /**
+  /**
    * Get averageClusteringRatio
    * @return averageClusteringRatio
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_AVERAGE_CLUSTERING_RATIO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getAverageClusteringRatio() {
     return averageClusteringRatio;
   }
 
 
-  public void setAverageClusteringRatio(Double averageClusteringRatio) {
+  @JsonProperty(JSON_PROPERTY_AVERAGE_CLUSTERING_RATIO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAverageClusteringRatio(@jakarta.annotation.Nullable Double averageClusteringRatio) {
     this.averageClusteringRatio = averageClusteringRatio;
   }
 
 
-  public StorageStatistics pageFileSize(Long pageFileSize) {
-    
+  public StorageStatistics pageFileSize(@jakarta.annotation.Nullable Long pageFileSize) {
     this.pageFileSize = pageFileSize;
     return this;
   }
 
-   /**
+  /**
    * Get pageFileSize
    * @return pageFileSize
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PAGE_FILE_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getPageFileSize() {
     return pageFileSize;
   }
 
 
-  public void setPageFileSize(Long pageFileSize) {
+  @JsonProperty(JSON_PROPERTY_PAGE_FILE_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPageFileSize(@jakarta.annotation.Nullable Long pageFileSize) {
     this.pageFileSize = pageFileSize;
   }
 
 
-  public StorageStatistics indexFileSize(Long indexFileSize) {
-    
+  public StorageStatistics indexFileSize(@jakarta.annotation.Nullable Long indexFileSize) {
     this.indexFileSize = indexFileSize;
     return this;
   }
 
-   /**
+  /**
    * Get indexFileSize
    * @return indexFileSize
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INDEX_FILE_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getIndexFileSize() {
     return indexFileSize;
   }
 
 
-  public void setIndexFileSize(Long indexFileSize) {
+  @JsonProperty(JSON_PROPERTY_INDEX_FILE_SIZE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIndexFileSize(@jakarta.annotation.Nullable Long indexFileSize) {
     this.indexFileSize = indexFileSize;
   }
 
 
+  /**
+   * Return true if this StorageStatistics object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -743,5 +801,159 @@ public class StorageStatistics {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `dimensions` to the URL query string
+    if (getDimensions() != null) {
+      for (int i = 0; i < getDimensions().size(); i++) {
+        if (getDimensions().get(i) != null) {
+          joiner.add(getDimensions().get(i).toUrlQueryString(String.format("%sdimensions%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `maxKeyLengthBits` to the URL query string
+    if (getMaxKeyLengthBits() != null) {
+      joiner.add(String.format("%smaxKeyLengthBits%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMaxKeyLengthBits()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `maxKeyLengthBytes` to the URL query string
+    if (getMaxKeyLengthBytes() != null) {
+      joiner.add(String.format("%smaxKeyLengthBytes%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMaxKeyLengthBytes()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numberOfInputLevelCells` to the URL query string
+    if (getNumberOfInputLevelCells() != null) {
+      joiner.add(String.format("%snumberOfInputLevelCells%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumberOfInputLevelCells()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numberOfIncrementalDataSlices` to the URL query string
+    if (getNumberOfIncrementalDataSlices() != null) {
+      joiner.add(String.format("%snumberOfIncrementalDataSlices%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumberOfIncrementalDataSlices()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numberOfIncrementalInputCells` to the URL query string
+    if (getNumberOfIncrementalInputCells() != null) {
+      joiner.add(String.format("%snumberOfIncrementalInputCells%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumberOfIncrementalInputCells()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numberOfAggregateViews` to the URL query string
+    if (getNumberOfAggregateViews() != null) {
+      joiner.add(String.format("%snumberOfAggregateViews%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumberOfAggregateViews()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numberOfAggregateCells` to the URL query string
+    if (getNumberOfAggregateCells() != null) {
+      joiner.add(String.format("%snumberOfAggregateCells%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumberOfAggregateCells()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numberOfIncrementalAggregateCells` to the URL query string
+    if (getNumberOfIncrementalAggregateCells() != null) {
+      joiner.add(String.format("%snumberOfIncrementalAggregateCells%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumberOfIncrementalAggregateCells()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `costOfQueryingIncrementalData` to the URL query string
+    if (getCostOfQueryingIncrementalData() != null) {
+      joiner.add(String.format("%scostOfQueryingIncrementalData%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCostOfQueryingIncrementalData()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `inputLevelDataSize` to the URL query string
+    if (getInputLevelDataSize() != null) {
+      joiner.add(String.format("%sinputLevelDataSize%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getInputLevelDataSize()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `aggregateDataSize` to the URL query string
+    if (getAggregateDataSize() != null) {
+      joiner.add(String.format("%saggregateDataSize%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAggregateDataSize()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numberOfExistingBlocks` to the URL query string
+    if (getNumberOfExistingBlocks() != null) {
+      joiner.add(String.format("%snumberOfExistingBlocks%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumberOfExistingBlocks()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `blockSize` to the URL query string
+    if (getBlockSize() != null) {
+      joiner.add(String.format("%sblockSize%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getBlockSize()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `potentialNumberOfBlocks` to the URL query string
+    if (getPotentialNumberOfBlocks() != null) {
+      joiner.add(String.format("%spotentialNumberOfBlocks%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPotentialNumberOfBlocks()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `existingLevelZeroBlocks` to the URL query string
+    if (getExistingLevelZeroBlocks() != null) {
+      joiner.add(String.format("%sexistingLevelZeroBlocks%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getExistingLevelZeroBlocks()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `existingUpperLevelBlocks` to the URL query string
+    if (getExistingUpperLevelBlocks() != null) {
+      joiner.add(String.format("%sexistingUpperLevelBlocks%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getExistingUpperLevelBlocks()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `blockDensity` to the URL query string
+    if (getBlockDensity() != null) {
+      joiner.add(String.format("%sblockDensity%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getBlockDensity()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `percentageOfMaximumBlocksExisting` to the URL query string
+    if (getPercentageOfMaximumBlocksExisting() != null) {
+      joiner.add(String.format("%spercentageOfMaximumBlocksExisting%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPercentageOfMaximumBlocksExisting()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `compressionRatio` to the URL query string
+    if (getCompressionRatio() != null) {
+      joiner.add(String.format("%scompressionRatio%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCompressionRatio()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `averageClusteringRatio` to the URL query string
+    if (getAverageClusteringRatio() != null) {
+      joiner.add(String.format("%saverageClusteringRatio%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAverageClusteringRatio()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `pageFileSize` to the URL query string
+    if (getPageFileSize() != null) {
+      joiner.add(String.format("%spageFileSize%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPageFileSize()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `indexFileSize` to the URL query string
+    if (getIndexFileSize() != null) {
+      joiner.add(String.format("%sindexFileSize%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIndexFileSize()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

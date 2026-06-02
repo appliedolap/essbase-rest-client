@@ -13,64 +13,79 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * NamedQueriesPreferences
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  NamedQueriesPreferences.JSON_PROPERTY_DATALESS,
+  NamedQueriesPreferences.JSON_PROPERTY_HIDE_RESTRICTED_DATA,
+  NamedQueriesPreferences.JSON_PROPERTY_CELL_ATTRIBUTES,
+  NamedQueriesPreferences.JSON_PROPERTY_FORMAT_STRING,
+  NamedQueriesPreferences.JSON_PROPERTY_FORMAT_VALUES,
+  NamedQueriesPreferences.JSON_PROPERTY_MEANINGLESS_CELLS,
+  NamedQueriesPreferences.JSON_PROPERTY_TEXT_LIST,
+  NamedQueriesPreferences.JSON_PROPERTY_URL_DRILL_THROUGH,
+  NamedQueriesPreferences.JSON_PROPERTY_MEMBER_IDENTIFIER_TYPE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class NamedQueriesPreferences {
-  public static final String SERIALIZED_NAME_DATALESS = "dataless";
-  @SerializedName(SERIALIZED_NAME_DATALESS)
+  public static final String JSON_PROPERTY_DATALESS = "dataless";
+  @jakarta.annotation.Nullable
   private Boolean dataless;
 
-  public static final String SERIALIZED_NAME_HIDE_RESTRICTED_DATA = "hideRestrictedData";
-  @SerializedName(SERIALIZED_NAME_HIDE_RESTRICTED_DATA)
+  public static final String JSON_PROPERTY_HIDE_RESTRICTED_DATA = "hideRestrictedData";
+  @jakarta.annotation.Nullable
   private Boolean hideRestrictedData;
 
-  public static final String SERIALIZED_NAME_CELL_ATTRIBUTES = "cellAttributes";
-  @SerializedName(SERIALIZED_NAME_CELL_ATTRIBUTES)
+  public static final String JSON_PROPERTY_CELL_ATTRIBUTES = "cellAttributes";
+  @jakarta.annotation.Nullable
   private Boolean cellAttributes;
 
-  public static final String SERIALIZED_NAME_FORMAT_STRING = "formatString";
-  @SerializedName(SERIALIZED_NAME_FORMAT_STRING)
+  public static final String JSON_PROPERTY_FORMAT_STRING = "formatString";
+  @jakarta.annotation.Nullable
   private Boolean formatString;
 
-  public static final String SERIALIZED_NAME_FORMAT_VALUES = "formatValues";
-  @SerializedName(SERIALIZED_NAME_FORMAT_VALUES)
+  public static final String JSON_PROPERTY_FORMAT_VALUES = "formatValues";
+  @jakarta.annotation.Nullable
   private Boolean formatValues;
 
-  public static final String SERIALIZED_NAME_MEANINGLESS_CELLS = "meaninglessCells";
-  @SerializedName(SERIALIZED_NAME_MEANINGLESS_CELLS)
+  public static final String JSON_PROPERTY_MEANINGLESS_CELLS = "meaninglessCells";
+  @jakarta.annotation.Nullable
   private Boolean meaninglessCells;
 
-  public static final String SERIALIZED_NAME_TEXT_LIST = "textList";
-  @SerializedName(SERIALIZED_NAME_TEXT_LIST)
+  public static final String JSON_PROPERTY_TEXT_LIST = "textList";
+  @jakarta.annotation.Nullable
   private Boolean textList;
 
-  public static final String SERIALIZED_NAME_URL_DRILL_THROUGH = "urlDrillThrough";
-  @SerializedName(SERIALIZED_NAME_URL_DRILL_THROUGH)
+  public static final String JSON_PROPERTY_URL_DRILL_THROUGH = "urlDrillThrough";
+  @jakarta.annotation.Nullable
   private Boolean urlDrillThrough;
 
   /**
    * Gets or Sets memberIdentifierType
    */
-  @JsonAdapter(MemberIdentifierTypeEnum.Adapter.class)
   public enum MemberIdentifierTypeEnum {
-    NAME("NAME"),
+    NAME(String.valueOf("NAME")),
     
-    ALIAS("ALIAS"),
+    ALIAS(String.valueOf("ALIAS")),
     
-    UNIQUE_NAME("UNIQUE_NAME");
+    UNIQUE_NAME(String.valueOf("UNIQUE_NAME"));
 
     private String value;
 
@@ -78,6 +93,7 @@ public class NamedQueriesPreferences {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -87,6 +103,7 @@ public class NamedQueriesPreferences {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static MemberIdentifierTypeEnum fromValue(String value) {
       for (MemberIdentifierTypeEnum b : MemberIdentifierTypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -95,233 +112,234 @@ public class NamedQueriesPreferences {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<MemberIdentifierTypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final MemberIdentifierTypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public MemberIdentifierTypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return MemberIdentifierTypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_MEMBER_IDENTIFIER_TYPE = "memberIdentifierType";
-  @SerializedName(SERIALIZED_NAME_MEMBER_IDENTIFIER_TYPE)
+  public static final String JSON_PROPERTY_MEMBER_IDENTIFIER_TYPE = "memberIdentifierType";
+  @jakarta.annotation.Nullable
   private MemberIdentifierTypeEnum memberIdentifierType;
 
+  public NamedQueriesPreferences() { 
+  }
 
-  public NamedQueriesPreferences dataless(Boolean dataless) {
-    
+  public NamedQueriesPreferences dataless(@jakarta.annotation.Nullable Boolean dataless) {
     this.dataless = dataless;
     return this;
   }
 
-   /**
+  /**
    * Get dataless
    * @return dataless
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATALESS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getDataless() {
     return dataless;
   }
 
 
-  public void setDataless(Boolean dataless) {
+  @JsonProperty(JSON_PROPERTY_DATALESS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataless(@jakarta.annotation.Nullable Boolean dataless) {
     this.dataless = dataless;
   }
 
 
-  public NamedQueriesPreferences hideRestrictedData(Boolean hideRestrictedData) {
-    
+  public NamedQueriesPreferences hideRestrictedData(@jakarta.annotation.Nullable Boolean hideRestrictedData) {
     this.hideRestrictedData = hideRestrictedData;
     return this;
   }
 
-   /**
+  /**
    * Get hideRestrictedData
    * @return hideRestrictedData
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HIDE_RESTRICTED_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getHideRestrictedData() {
     return hideRestrictedData;
   }
 
 
-  public void setHideRestrictedData(Boolean hideRestrictedData) {
+  @JsonProperty(JSON_PROPERTY_HIDE_RESTRICTED_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHideRestrictedData(@jakarta.annotation.Nullable Boolean hideRestrictedData) {
     this.hideRestrictedData = hideRestrictedData;
   }
 
 
-  public NamedQueriesPreferences cellAttributes(Boolean cellAttributes) {
-    
+  public NamedQueriesPreferences cellAttributes(@jakarta.annotation.Nullable Boolean cellAttributes) {
     this.cellAttributes = cellAttributes;
     return this;
   }
 
-   /**
+  /**
    * Get cellAttributes
    * @return cellAttributes
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CELL_ATTRIBUTES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getCellAttributes() {
     return cellAttributes;
   }
 
 
-  public void setCellAttributes(Boolean cellAttributes) {
+  @JsonProperty(JSON_PROPERTY_CELL_ATTRIBUTES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCellAttributes(@jakarta.annotation.Nullable Boolean cellAttributes) {
     this.cellAttributes = cellAttributes;
   }
 
 
-  public NamedQueriesPreferences formatString(Boolean formatString) {
-    
+  public NamedQueriesPreferences formatString(@jakarta.annotation.Nullable Boolean formatString) {
     this.formatString = formatString;
     return this;
   }
 
-   /**
+  /**
    * Get formatString
    * @return formatString
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FORMAT_STRING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getFormatString() {
     return formatString;
   }
 
 
-  public void setFormatString(Boolean formatString) {
+  @JsonProperty(JSON_PROPERTY_FORMAT_STRING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFormatString(@jakarta.annotation.Nullable Boolean formatString) {
     this.formatString = formatString;
   }
 
 
-  public NamedQueriesPreferences formatValues(Boolean formatValues) {
-    
+  public NamedQueriesPreferences formatValues(@jakarta.annotation.Nullable Boolean formatValues) {
     this.formatValues = formatValues;
     return this;
   }
 
-   /**
+  /**
    * Get formatValues
    * @return formatValues
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FORMAT_VALUES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getFormatValues() {
     return formatValues;
   }
 
 
-  public void setFormatValues(Boolean formatValues) {
+  @JsonProperty(JSON_PROPERTY_FORMAT_VALUES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFormatValues(@jakarta.annotation.Nullable Boolean formatValues) {
     this.formatValues = formatValues;
   }
 
 
-  public NamedQueriesPreferences meaninglessCells(Boolean meaninglessCells) {
-    
+  public NamedQueriesPreferences meaninglessCells(@jakarta.annotation.Nullable Boolean meaninglessCells) {
     this.meaninglessCells = meaninglessCells;
     return this;
   }
 
-   /**
+  /**
    * Get meaninglessCells
    * @return meaninglessCells
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MEANINGLESS_CELLS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getMeaninglessCells() {
     return meaninglessCells;
   }
 
 
-  public void setMeaninglessCells(Boolean meaninglessCells) {
+  @JsonProperty(JSON_PROPERTY_MEANINGLESS_CELLS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMeaninglessCells(@jakarta.annotation.Nullable Boolean meaninglessCells) {
     this.meaninglessCells = meaninglessCells;
   }
 
 
-  public NamedQueriesPreferences textList(Boolean textList) {
-    
+  public NamedQueriesPreferences textList(@jakarta.annotation.Nullable Boolean textList) {
     this.textList = textList;
     return this;
   }
 
-   /**
+  /**
    * Get textList
    * @return textList
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TEXT_LIST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getTextList() {
     return textList;
   }
 
 
-  public void setTextList(Boolean textList) {
+  @JsonProperty(JSON_PROPERTY_TEXT_LIST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTextList(@jakarta.annotation.Nullable Boolean textList) {
     this.textList = textList;
   }
 
 
-  public NamedQueriesPreferences urlDrillThrough(Boolean urlDrillThrough) {
-    
+  public NamedQueriesPreferences urlDrillThrough(@jakarta.annotation.Nullable Boolean urlDrillThrough) {
     this.urlDrillThrough = urlDrillThrough;
     return this;
   }
 
-   /**
+  /**
    * Get urlDrillThrough
    * @return urlDrillThrough
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_URL_DRILL_THROUGH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getUrlDrillThrough() {
     return urlDrillThrough;
   }
 
 
-  public void setUrlDrillThrough(Boolean urlDrillThrough) {
+  @JsonProperty(JSON_PROPERTY_URL_DRILL_THROUGH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUrlDrillThrough(@jakarta.annotation.Nullable Boolean urlDrillThrough) {
     this.urlDrillThrough = urlDrillThrough;
   }
 
 
-  public NamedQueriesPreferences memberIdentifierType(MemberIdentifierTypeEnum memberIdentifierType) {
-    
+  public NamedQueriesPreferences memberIdentifierType(@jakarta.annotation.Nullable MemberIdentifierTypeEnum memberIdentifierType) {
     this.memberIdentifierType = memberIdentifierType;
     return this;
   }
 
-   /**
+  /**
    * Get memberIdentifierType
    * @return memberIdentifierType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MEMBER_IDENTIFIER_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public MemberIdentifierTypeEnum getMemberIdentifierType() {
     return memberIdentifierType;
   }
 
 
-  public void setMemberIdentifierType(MemberIdentifierTypeEnum memberIdentifierType) {
+  @JsonProperty(JSON_PROPERTY_MEMBER_IDENTIFIER_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMemberIdentifierType(@jakarta.annotation.Nullable MemberIdentifierTypeEnum memberIdentifierType) {
     this.memberIdentifierType = memberIdentifierType;
   }
 
 
+  /**
+   * Return true if this NamedQueriesPreferences object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -375,5 +393,84 @@ public class NamedQueriesPreferences {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `dataless` to the URL query string
+    if (getDataless() != null) {
+      joiner.add(String.format("%sdataless%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataless()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `hideRestrictedData` to the URL query string
+    if (getHideRestrictedData() != null) {
+      joiner.add(String.format("%shideRestrictedData%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getHideRestrictedData()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `cellAttributes` to the URL query string
+    if (getCellAttributes() != null) {
+      joiner.add(String.format("%scellAttributes%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCellAttributes()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `formatString` to the URL query string
+    if (getFormatString() != null) {
+      joiner.add(String.format("%sformatString%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFormatString()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `formatValues` to the URL query string
+    if (getFormatValues() != null) {
+      joiner.add(String.format("%sformatValues%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFormatValues()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `meaninglessCells` to the URL query string
+    if (getMeaninglessCells() != null) {
+      joiner.add(String.format("%smeaninglessCells%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMeaninglessCells()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `textList` to the URL query string
+    if (getTextList() != null) {
+      joiner.add(String.format("%stextList%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTextList()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `urlDrillThrough` to the URL query string
+    if (getUrlDrillThrough() != null) {
+      joiner.add(String.format("%surlDrillThrough%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUrlDrillThrough()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `memberIdentifierType` to the URL query string
+    if (getMemberIdentifierType() != null) {
+      joiner.add(String.format("%smemberIdentifierType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMemberIdentifierType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

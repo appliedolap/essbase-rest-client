@@ -13,158 +13,180 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * TransactionSettings
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  TransactionSettings.JSON_PROPERTY_COMMITTED_ACCESS,
+  TransactionSettings.JSON_PROPERTY_CONCURRENCY_WAIT_SECONDS,
+  TransactionSettings.JSON_PROPERTY_CONCURRENCY_PRE_IMAGE_ACCESS,
+  TransactionSettings.JSON_PROPERTY_COMMIT_BLOCKS,
+  TransactionSettings.JSON_PROPERTY_COMMIT_ROWS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class TransactionSettings {
-  public static final String SERIALIZED_NAME_COMMITTED_ACCESS = "committedAccess";
-  @SerializedName(SERIALIZED_NAME_COMMITTED_ACCESS)
+  public static final String JSON_PROPERTY_COMMITTED_ACCESS = "committedAccess";
+  @jakarta.annotation.Nullable
   private Boolean committedAccess;
 
-  public static final String SERIALIZED_NAME_CONCURRENCY_WAIT_SECONDS = "concurrencyWaitSeconds";
-  @SerializedName(SERIALIZED_NAME_CONCURRENCY_WAIT_SECONDS)
+  public static final String JSON_PROPERTY_CONCURRENCY_WAIT_SECONDS = "concurrencyWaitSeconds";
+  @jakarta.annotation.Nullable
   private Integer concurrencyWaitSeconds;
 
-  public static final String SERIALIZED_NAME_CONCURRENCY_PRE_IMAGE_ACCESS = "concurrencyPreImageAccess";
-  @SerializedName(SERIALIZED_NAME_CONCURRENCY_PRE_IMAGE_ACCESS)
+  public static final String JSON_PROPERTY_CONCURRENCY_PRE_IMAGE_ACCESS = "concurrencyPreImageAccess";
+  @jakarta.annotation.Nullable
   private Boolean concurrencyPreImageAccess;
 
-  public static final String SERIALIZED_NAME_COMMIT_BLOCKS = "commitBlocks";
-  @SerializedName(SERIALIZED_NAME_COMMIT_BLOCKS)
+  public static final String JSON_PROPERTY_COMMIT_BLOCKS = "commitBlocks";
+  @jakarta.annotation.Nullable
   private Long commitBlocks;
 
-  public static final String SERIALIZED_NAME_COMMIT_ROWS = "commitRows";
-  @SerializedName(SERIALIZED_NAME_COMMIT_ROWS)
+  public static final String JSON_PROPERTY_COMMIT_ROWS = "commitRows";
+  @jakarta.annotation.Nullable
   private Long commitRows;
 
+  public TransactionSettings() { 
+  }
 
-  public TransactionSettings committedAccess(Boolean committedAccess) {
-    
+  public TransactionSettings committedAccess(@jakarta.annotation.Nullable Boolean committedAccess) {
     this.committedAccess = committedAccess;
     return this;
   }
 
-   /**
+  /**
    * Get committedAccess
    * @return committedAccess
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COMMITTED_ACCESS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getCommittedAccess() {
     return committedAccess;
   }
 
 
-  public void setCommittedAccess(Boolean committedAccess) {
+  @JsonProperty(JSON_PROPERTY_COMMITTED_ACCESS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCommittedAccess(@jakarta.annotation.Nullable Boolean committedAccess) {
     this.committedAccess = committedAccess;
   }
 
 
-  public TransactionSettings concurrencyWaitSeconds(Integer concurrencyWaitSeconds) {
-    
+  public TransactionSettings concurrencyWaitSeconds(@jakarta.annotation.Nullable Integer concurrencyWaitSeconds) {
     this.concurrencyWaitSeconds = concurrencyWaitSeconds;
     return this;
   }
 
-   /**
+  /**
    * Get concurrencyWaitSeconds
    * @return concurrencyWaitSeconds
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CONCURRENCY_WAIT_SECONDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getConcurrencyWaitSeconds() {
     return concurrencyWaitSeconds;
   }
 
 
-  public void setConcurrencyWaitSeconds(Integer concurrencyWaitSeconds) {
+  @JsonProperty(JSON_PROPERTY_CONCURRENCY_WAIT_SECONDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setConcurrencyWaitSeconds(@jakarta.annotation.Nullable Integer concurrencyWaitSeconds) {
     this.concurrencyWaitSeconds = concurrencyWaitSeconds;
   }
 
 
-  public TransactionSettings concurrencyPreImageAccess(Boolean concurrencyPreImageAccess) {
-    
+  public TransactionSettings concurrencyPreImageAccess(@jakarta.annotation.Nullable Boolean concurrencyPreImageAccess) {
     this.concurrencyPreImageAccess = concurrencyPreImageAccess;
     return this;
   }
 
-   /**
+  /**
    * Get concurrencyPreImageAccess
    * @return concurrencyPreImageAccess
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CONCURRENCY_PRE_IMAGE_ACCESS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getConcurrencyPreImageAccess() {
     return concurrencyPreImageAccess;
   }
 
 
-  public void setConcurrencyPreImageAccess(Boolean concurrencyPreImageAccess) {
+  @JsonProperty(JSON_PROPERTY_CONCURRENCY_PRE_IMAGE_ACCESS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setConcurrencyPreImageAccess(@jakarta.annotation.Nullable Boolean concurrencyPreImageAccess) {
     this.concurrencyPreImageAccess = concurrencyPreImageAccess;
   }
 
 
-  public TransactionSettings commitBlocks(Long commitBlocks) {
-    
+  public TransactionSettings commitBlocks(@jakarta.annotation.Nullable Long commitBlocks) {
     this.commitBlocks = commitBlocks;
     return this;
   }
 
-   /**
+  /**
    * Get commitBlocks
    * @return commitBlocks
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COMMIT_BLOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getCommitBlocks() {
     return commitBlocks;
   }
 
 
-  public void setCommitBlocks(Long commitBlocks) {
+  @JsonProperty(JSON_PROPERTY_COMMIT_BLOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCommitBlocks(@jakarta.annotation.Nullable Long commitBlocks) {
     this.commitBlocks = commitBlocks;
   }
 
 
-  public TransactionSettings commitRows(Long commitRows) {
-    
+  public TransactionSettings commitRows(@jakarta.annotation.Nullable Long commitRows) {
     this.commitRows = commitRows;
     return this;
   }
 
-   /**
+  /**
    * Get commitRows
    * @return commitRows
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COMMIT_ROWS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getCommitRows() {
     return commitRows;
   }
 
 
-  public void setCommitRows(Long commitRows) {
+  @JsonProperty(JSON_PROPERTY_COMMIT_ROWS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCommitRows(@jakarta.annotation.Nullable Long commitRows) {
     this.commitRows = commitRows;
   }
 
 
+  /**
+   * Return true if this TransactionSettings object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -210,5 +232,64 @@ public class TransactionSettings {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `committedAccess` to the URL query string
+    if (getCommittedAccess() != null) {
+      joiner.add(String.format("%scommittedAccess%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCommittedAccess()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `concurrencyWaitSeconds` to the URL query string
+    if (getConcurrencyWaitSeconds() != null) {
+      joiner.add(String.format("%sconcurrencyWaitSeconds%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getConcurrencyWaitSeconds()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `concurrencyPreImageAccess` to the URL query string
+    if (getConcurrencyPreImageAccess() != null) {
+      joiner.add(String.format("%sconcurrencyPreImageAccess%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getConcurrencyPreImageAccess()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `commitBlocks` to the URL query string
+    if (getCommitBlocks() != null) {
+      joiner.add(String.format("%scommitBlocks%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCommitBlocks()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `commitRows` to the URL query string
+    if (getCommitRows() != null) {
+      joiner.add(String.format("%scommitRows%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCommitRows()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

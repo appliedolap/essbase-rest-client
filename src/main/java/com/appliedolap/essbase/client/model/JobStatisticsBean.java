@@ -13,131 +13,151 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * JobStatisticsBean
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  JobStatisticsBean.JSON_PROPERTY_ERR_CT,
+  JobStatisticsBean.JSON_PROPERTY_SUCCES_CT,
+  JobStatisticsBean.JSON_PROPERTY_WARNING_CT,
+  JobStatisticsBean.JSON_PROPERTY_RUNNING_CT
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class JobStatisticsBean {
-  public static final String SERIALIZED_NAME_ERR_CT = "errCt";
-  @SerializedName(SERIALIZED_NAME_ERR_CT)
+  public static final String JSON_PROPERTY_ERR_CT = "errCt";
+  @jakarta.annotation.Nullable
   private Long errCt;
 
-  public static final String SERIALIZED_NAME_SUCCES_CT = "succesCt";
-  @SerializedName(SERIALIZED_NAME_SUCCES_CT)
+  public static final String JSON_PROPERTY_SUCCES_CT = "succesCt";
+  @jakarta.annotation.Nullable
   private Long succesCt;
 
-  public static final String SERIALIZED_NAME_WARNING_CT = "warningCt";
-  @SerializedName(SERIALIZED_NAME_WARNING_CT)
+  public static final String JSON_PROPERTY_WARNING_CT = "warningCt";
+  @jakarta.annotation.Nullable
   private Long warningCt;
 
-  public static final String SERIALIZED_NAME_RUNNING_CT = "runningCt";
-  @SerializedName(SERIALIZED_NAME_RUNNING_CT)
+  public static final String JSON_PROPERTY_RUNNING_CT = "runningCt";
+  @jakarta.annotation.Nullable
   private Long runningCt;
 
+  public JobStatisticsBean() { 
+  }
 
-  public JobStatisticsBean errCt(Long errCt) {
-    
+  public JobStatisticsBean errCt(@jakarta.annotation.Nullable Long errCt) {
     this.errCt = errCt;
     return this;
   }
 
-   /**
+  /**
    * Get errCt
    * @return errCt
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ERR_CT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getErrCt() {
     return errCt;
   }
 
 
-  public void setErrCt(Long errCt) {
+  @JsonProperty(JSON_PROPERTY_ERR_CT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setErrCt(@jakarta.annotation.Nullable Long errCt) {
     this.errCt = errCt;
   }
 
 
-  public JobStatisticsBean succesCt(Long succesCt) {
-    
+  public JobStatisticsBean succesCt(@jakarta.annotation.Nullable Long succesCt) {
     this.succesCt = succesCt;
     return this;
   }
 
-   /**
+  /**
    * Get succesCt
    * @return succesCt
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SUCCES_CT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getSuccesCt() {
     return succesCt;
   }
 
 
-  public void setSuccesCt(Long succesCt) {
+  @JsonProperty(JSON_PROPERTY_SUCCES_CT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSuccesCt(@jakarta.annotation.Nullable Long succesCt) {
     this.succesCt = succesCt;
   }
 
 
-  public JobStatisticsBean warningCt(Long warningCt) {
-    
+  public JobStatisticsBean warningCt(@jakarta.annotation.Nullable Long warningCt) {
     this.warningCt = warningCt;
     return this;
   }
 
-   /**
+  /**
    * Get warningCt
    * @return warningCt
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_WARNING_CT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getWarningCt() {
     return warningCt;
   }
 
 
-  public void setWarningCt(Long warningCt) {
+  @JsonProperty(JSON_PROPERTY_WARNING_CT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWarningCt(@jakarta.annotation.Nullable Long warningCt) {
     this.warningCt = warningCt;
   }
 
 
-  public JobStatisticsBean runningCt(Long runningCt) {
-    
+  public JobStatisticsBean runningCt(@jakarta.annotation.Nullable Long runningCt) {
     this.runningCt = runningCt;
     return this;
   }
 
-   /**
+  /**
    * Get runningCt
    * @return runningCt
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RUNNING_CT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getRunningCt() {
     return runningCt;
   }
 
 
-  public void setRunningCt(Long runningCt) {
+  @JsonProperty(JSON_PROPERTY_RUNNING_CT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRunningCt(@jakarta.annotation.Nullable Long runningCt) {
     this.runningCt = runningCt;
   }
 
 
+  /**
+   * Return true if this JobStatisticsBean object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -181,5 +201,59 @@ public class JobStatisticsBean {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `errCt` to the URL query string
+    if (getErrCt() != null) {
+      joiner.add(String.format("%serrCt%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getErrCt()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `succesCt` to the URL query string
+    if (getSuccesCt() != null) {
+      joiner.add(String.format("%ssuccesCt%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSuccesCt()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `warningCt` to the URL query string
+    if (getWarningCt() != null) {
+      joiner.add(String.format("%swarningCt%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getWarningCt()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `runningCt` to the URL query string
+    if (getRunningCt() != null) {
+      joiner.add(String.format("%srunningCt%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRunningCt()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

@@ -13,49 +13,60 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.Grid;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * GridOperation
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  GridOperation.JSON_PROPERTY_GRID,
+  GridOperation.JSON_PROPERTY_ACTION,
+  GridOperation.JSON_PROPERTY_ALIAS,
+  GridOperation.JSON_PROPERTY_COORDINATES,
+  GridOperation.JSON_PROPERTY_RANGES
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class GridOperation {
-  public static final String SERIALIZED_NAME_GRID = "grid";
-  @SerializedName(SERIALIZED_NAME_GRID)
+  public static final String JSON_PROPERTY_GRID = "grid";
+  @jakarta.annotation.Nullable
   private Grid grid;
 
   /**
    * Gets or Sets action
    */
-  @JsonAdapter(ActionEnum.Adapter.class)
   public enum ActionEnum {
-    ZOOMIN("zoomin"),
+    ZOOMIN(String.valueOf("zoomin")),
     
-    ZOOMOUT("zoomout"),
+    ZOOMOUT(String.valueOf("zoomout")),
     
-    KEEPONLY("keeponly"),
+    KEEPONLY(String.valueOf("keeponly")),
     
-    REMOVEONLY("removeonly"),
+    REMOVEONLY(String.valueOf("removeonly")),
     
-    REFRESH("refresh"),
+    REFRESH(String.valueOf("refresh")),
     
-    PIVOT("pivot"),
+    PIVOT(String.valueOf("pivot")),
     
-    PIVOTTOPOV("pivotToPOV"),
+    PIVOT_TO_POV(String.valueOf("pivotToPOV")),
     
-    SUBMIT("submit");
+    SUBMIT(String.valueOf("submit"));
 
     private String value;
 
@@ -63,6 +74,7 @@ public class GridOperation {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -72,6 +84,7 @@ public class GridOperation {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static ActionEnum fromValue(String value) {
       for (ActionEnum b : ActionEnum.values()) {
         if (b.value.equals(value)) {
@@ -80,169 +93,166 @@ public class GridOperation {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<ActionEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final ActionEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public ActionEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return ActionEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_ACTION = "action";
-  @SerializedName(SERIALIZED_NAME_ACTION)
+  public static final String JSON_PROPERTY_ACTION = "action";
+  @jakarta.annotation.Nullable
   private ActionEnum action;
 
-  public static final String SERIALIZED_NAME_ALIAS = "alias";
-  @SerializedName(SERIALIZED_NAME_ALIAS)
+  public static final String JSON_PROPERTY_ALIAS = "alias";
+  @jakarta.annotation.Nullable
   private String alias;
 
-  public static final String SERIALIZED_NAME_COORDINATES = "coordinates";
-  @SerializedName(SERIALIZED_NAME_COORDINATES)
-  private List<Integer> coordinates = null;
+  public static final String JSON_PROPERTY_COORDINATES = "coordinates";
+  @jakarta.annotation.Nullable
+  private List<Integer> coordinates = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_RANGES = "ranges";
-  @SerializedName(SERIALIZED_NAME_RANGES)
-  private List<List<Integer>> ranges = null;
+  public static final String JSON_PROPERTY_RANGES = "ranges";
+  @jakarta.annotation.Nullable
+  private List<List<Integer>> ranges = new ArrayList<>();
 
+  public GridOperation() { 
+  }
 
-  public GridOperation grid(Grid grid) {
-    
+  public GridOperation grid(@jakarta.annotation.Nullable Grid grid) {
     this.grid = grid;
     return this;
   }
 
-   /**
+  /**
    * Get grid
    * @return grid
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GRID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Grid getGrid() {
     return grid;
   }
 
 
-  public void setGrid(Grid grid) {
+  @JsonProperty(JSON_PROPERTY_GRID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGrid(@jakarta.annotation.Nullable Grid grid) {
     this.grid = grid;
   }
 
 
-  public GridOperation action(ActionEnum action) {
-    
+  public GridOperation action(@jakarta.annotation.Nullable ActionEnum action) {
     this.action = action;
     return this;
   }
 
-   /**
+  /**
    * Get action
    * @return action
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ACTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public ActionEnum getAction() {
     return action;
   }
 
 
-  public void setAction(ActionEnum action) {
+  @JsonProperty(JSON_PROPERTY_ACTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAction(@jakarta.annotation.Nullable ActionEnum action) {
     this.action = action;
   }
 
 
-  public GridOperation alias(String alias) {
-    
+  public GridOperation alias(@jakarta.annotation.Nullable String alias) {
     this.alias = alias;
     return this;
   }
 
-   /**
+  /**
    * Get alias
    * @return alias
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALIAS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getAlias() {
     return alias;
   }
 
 
-  public void setAlias(String alias) {
+  @JsonProperty(JSON_PROPERTY_ALIAS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAlias(@jakarta.annotation.Nullable String alias) {
     this.alias = alias;
   }
 
 
-  public GridOperation coordinates(List<Integer> coordinates) {
-    
+  public GridOperation coordinates(@jakarta.annotation.Nullable List<Integer> coordinates) {
     this.coordinates = coordinates;
     return this;
   }
 
   public GridOperation addCoordinatesItem(Integer coordinatesItem) {
     if (this.coordinates == null) {
-      this.coordinates = new ArrayList<Integer>();
+      this.coordinates = new ArrayList<>();
     }
     this.coordinates.add(coordinatesItem);
     return this;
   }
 
-   /**
+  /**
    * Get coordinates
    * @return coordinates
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COORDINATES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Integer> getCoordinates() {
     return coordinates;
   }
 
 
-  public void setCoordinates(List<Integer> coordinates) {
+  @JsonProperty(JSON_PROPERTY_COORDINATES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCoordinates(@jakarta.annotation.Nullable List<Integer> coordinates) {
     this.coordinates = coordinates;
   }
 
 
-  public GridOperation ranges(List<List<Integer>> ranges) {
-    
+  public GridOperation ranges(@jakarta.annotation.Nullable List<List<Integer>> ranges) {
     this.ranges = ranges;
     return this;
   }
 
   public GridOperation addRangesItem(List<Integer> rangesItem) {
     if (this.ranges == null) {
-      this.ranges = new ArrayList<List<Integer>>();
+      this.ranges = new ArrayList<>();
     }
     this.ranges.add(rangesItem);
     return this;
   }
 
-   /**
+  /**
    * Get ranges
    * @return ranges
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RANGES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<List<Integer>> getRanges() {
     return ranges;
   }
 
 
-  public void setRanges(List<List<Integer>> ranges) {
+  @JsonProperty(JSON_PROPERTY_RANGES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRanges(@jakarta.annotation.Nullable List<List<Integer>> ranges) {
     this.ranges = ranges;
   }
 
 
+  /**
+   * Return true if this GridOperation object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -288,5 +298,72 @@ public class GridOperation {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `grid` to the URL query string
+    if (getGrid() != null) {
+      joiner.add(getGrid().toUrlQueryString(prefix + "grid" + suffix));
+    }
+
+    // add `action` to the URL query string
+    if (getAction() != null) {
+      joiner.add(String.format("%saction%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAction()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `alias` to the URL query string
+    if (getAlias() != null) {
+      joiner.add(String.format("%salias%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAlias()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `coordinates` to the URL query string
+    if (getCoordinates() != null) {
+      for (int i = 0; i < getCoordinates().size(); i++) {
+        joiner.add(String.format("%scoordinates%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getCoordinates().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `ranges` to the URL query string
+    if (getRanges() != null) {
+      for (int i = 0; i < getRanges().size(); i++) {
+        joiner.add(String.format("%sranges%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getRanges().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

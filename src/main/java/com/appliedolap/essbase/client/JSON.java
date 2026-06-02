@@ -13,391 +13,249 @@
 
 package com.appliedolap.essbase.client;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParseException;
-import com.google.gson.TypeAdapter;
-import com.google.gson.internal.bind.util.ISO8601Utils;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import com.google.gson.JsonElement;
-import io.gsonfire.GsonFireBuilder;
-import io.gsonfire.TypeSelector;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.OffsetDateTime;
-import org.threeten.bp.format.DateTimeFormatter;
-
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.appliedolap.essbase.client.model.*;
-import okio.ByteString;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.lang.reflect.Type;
 import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class JSON {
-    private Gson gson;
-    private boolean isLenientOnJson = false;
-    private DateTypeAdapter dateTypeAdapter = new DateTypeAdapter();
-    private SqlDateTypeAdapter sqlDateTypeAdapter = new SqlDateTypeAdapter();
-    private OffsetDateTimeTypeAdapter offsetDateTimeTypeAdapter = new OffsetDateTimeTypeAdapter();
-    private LocalDateTypeAdapter localDateTypeAdapter = new LocalDateTypeAdapter();
-    private ByteArrayAdapter byteArrayAdapter = new ByteArrayAdapter();
+  private ObjectMapper mapper;
 
-    @SuppressWarnings("unchecked")
-    public static GsonBuilder createGson() {
-        GsonFireBuilder fireBuilder = new GsonFireBuilder()
-        ;
-        GsonBuilder builder = fireBuilder.createGsonBuilder();
-        return builder;
+  public JSON() {
+    mapper = JsonMapper.builder()
+        .serializationInclusion(JsonInclude.Include.NON_NULL)
+        .disable(MapperFeature.ALLOW_COERCION_OF_SCALARS)
+        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+        .enable(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE)
+        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+        .enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING)
+        .enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
+        .defaultDateFormat(new RFC3339DateFormat())
+        .addModule(new JavaTimeModule())
+        .build();
+  }
+
+  /**
+   * Set the date format for JSON (de)serialization with Date properties.
+   *
+   * @param dateFormat Date format
+   */
+  public void setDateFormat(DateFormat dateFormat) {
+    mapper.setDateFormat(dateFormat);
+  }
+
+  /**
+   * Get the object mapper
+   *
+   * @return object mapper
+   */
+  public ObjectMapper getMapper() { return mapper; }
+
+  /**
+   * Returns the target model class that should be used to deserialize the input data.
+   * The discriminator mappings are used to determine the target model class.
+   *
+   * @param node The input data.
+   * @param modelClass The class that contains the discriminator mappings.
+   *
+   * @return the target model class.
+   */
+  public static Class<?> getClassForElement(JsonNode node, Class<?> modelClass) {
+    ClassDiscriminatorMapping cdm = modelDiscriminators.get(modelClass);
+    if (cdm != null) {
+      return cdm.getClassForElement(node, new HashSet<Class<?>>());
+    }
+    return null;
+  }
+
+  /**
+   * Helper class to register the discriminator mappings.
+   */
+  @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
+  private static class ClassDiscriminatorMapping {
+    // The model class name.
+    Class<?> modelClass;
+    // The name of the discriminator property.
+    String discriminatorName;
+    // The discriminator mappings for a model class.
+    Map<String, Class<?>> discriminatorMappings;
+
+    // Constructs a new class discriminator.
+    ClassDiscriminatorMapping(Class<?> cls, String propertyName, Map<String, Class<?>> mappings) {
+      modelClass = cls;
+      discriminatorName = propertyName;
+      discriminatorMappings = new HashMap<String, Class<?>>();
+      if (mappings != null) {
+        discriminatorMappings.putAll(mappings);
+      }
     }
 
-    private static String getDiscriminatorValue(JsonElement readElement, String discriminatorField) {
-        JsonElement element = readElement.getAsJsonObject().get(discriminatorField);
-        if (null == element) {
-            throw new IllegalArgumentException("missing discriminator field: <" + discriminatorField + ">");
+    // Return the name of the discriminator property for this model class.
+    String getDiscriminatorPropertyName() {
+      return discriminatorName;
+    }
+
+    // Return the discriminator value or null if the discriminator is not
+    // present in the payload.
+    String getDiscriminatorValue(JsonNode node) {
+      // Determine the value of the discriminator property in the input data.
+      if (discriminatorName != null) {
+        // Get the value of the discriminator property, if present in the input payload.
+        node = node.get(discriminatorName);
+        if (node != null && node.isValueNode()) {
+          String discrValue = node.asText();
+          if (discrValue != null) {
+            return discrValue;
+          }
         }
-        return element.getAsString();
+      }
+      return null;
     }
 
     /**
-     * Returns the Java class that implements the OpenAPI schema for the specified discriminator value.
+     * Returns the target model class that should be used to deserialize the input data.
+     * This function can be invoked for anyOf/oneOf composed models with discriminator mappings.
+     * The discriminator mappings are used to determine the target model class.
      *
-     * @param classByDiscriminatorValue The map of discriminator values to Java classes.
-     * @param discriminatorValue The value of the OpenAPI discriminator in the input data.
-     * @return The Java class that implements the OpenAPI schema
-     */
-    private static Class getClassByDiscriminator(Map classByDiscriminatorValue, String discriminatorValue) {
-        Class clazz = (Class) classByDiscriminatorValue.get(discriminatorValue);
-        if (null == clazz) {
-            throw new IllegalArgumentException("cannot determine model class of name: <" + discriminatorValue + ">");
-        }
-        return clazz;
-    }
-
-    public JSON() {
-        gson = createGson()
-            .registerTypeAdapter(Date.class, dateTypeAdapter)
-            .registerTypeAdapter(java.sql.Date.class, sqlDateTypeAdapter)
-            .registerTypeAdapter(OffsetDateTime.class, offsetDateTimeTypeAdapter)
-            .registerTypeAdapter(LocalDate.class, localDateTypeAdapter)
-            .registerTypeAdapter(byte[].class, byteArrayAdapter)
-            .create();
-    }
-
-    /**
-     * Get Gson.
+     * @param node The input data.
+     * @param visitedClasses The set of classes that have already been visited.
      *
-     * @return Gson
+     * @return the target model class.
      */
-    public Gson getGson() {
-        return gson;
+    Class<?> getClassForElement(JsonNode node, Set<Class<?>> visitedClasses) {
+      if (visitedClasses.contains(modelClass)) {
+        // Class has already been visited.
+        return null;
+      }
+      // Determine the value of the discriminator property in the input data.
+      String discrValue = getDiscriminatorValue(node);
+      if (discrValue == null) {
+        return null;
+      }
+      Class<?> cls = discriminatorMappings.get(discrValue);
+      // It may not be sufficient to return this cls directly because that target class
+      // may itself be a composed schema, possibly with its own discriminator.
+      visitedClasses.add(modelClass);
+      for (Class<?> childClass : discriminatorMappings.values()) {
+        ClassDiscriminatorMapping childCdm = modelDiscriminators.get(childClass);
+        if (childCdm == null) {
+          continue;
+        }
+        if (!discriminatorName.equals(childCdm.discriminatorName)) {
+          discrValue = getDiscriminatorValue(node);
+          if (discrValue == null) {
+            continue;
+          }
+        }
+        if (childCdm != null) {
+          // Recursively traverse the discriminator mappings.
+          Class<?> childDiscr = childCdm.getClassForElement(node, visitedClasses);
+          if (childDiscr != null) {
+            return childDiscr;
+          }
+        }
+      }
+      return cls;
     }
+  }
 
-    /**
-     * Set Gson.
-     *
-     * @param gson Gson
-     * @return JSON
-     */
-    public JSON setGson(Gson gson) {
-        this.gson = gson;
-        return this;
+  /**
+   * Returns true if inst is an instance of modelClass in the OpenAPI model hierarchy.
+   *
+   * The Java class hierarchy is not implemented the same way as the OpenAPI model hierarchy,
+   * so it's not possible to use the instanceof keyword.
+   *
+   * @param modelClass A OpenAPI model class.
+   * @param inst The instance object.
+   * @param visitedClasses The set of classes that have already been visited.
+   *
+   * @return true if inst is an instance of modelClass in the OpenAPI model hierarchy.
+   */
+  public static boolean isInstanceOf(Class<?> modelClass, Object inst, Set<Class<?>> visitedClasses) {
+    if (modelClass.isInstance(inst)) {
+      // This handles the 'allOf' use case with single parent inheritance.
+      return true;
     }
-
-    public JSON setLenientOnJson(boolean lenientOnJson) {
-        isLenientOnJson = lenientOnJson;
-        return this;
+    if (visitedClasses.contains(modelClass)) {
+      // This is to prevent infinite recursion when the composed schemas have
+      // a circular dependency.
+      return false;
     }
+    visitedClasses.add(modelClass);
 
-    /**
-     * Serialize the given Java object into JSON string.
-     *
-     * @param obj Object
-     * @return String representation of the JSON
-     */
-    public String serialize(Object obj) {
-        return gson.toJson(obj);
+    // Traverse the oneOf/anyOf composed schemas.
+    Map<String, Class<?>> descendants = modelDescendants.get(modelClass);
+    if (descendants != null) {
+      for (Class<?> childType : descendants.values()) {
+        if (isInstanceOf(childType, inst, visitedClasses)) {
+          return true;
+        }
+      }
     }
+    return false;
+  }
 
-    /**
-     * Deserialize the given JSON string to Java object.
-     *
-     * @param <T>        Type
-     * @param body       The JSON string
-     * @param returnType The type to deserialize into
-     * @return The deserialized Java object
-     */
-    @SuppressWarnings("unchecked")
-    public <T> T deserialize(String body, Type returnType) {
-        try {
-            if (isLenientOnJson) {
-                JsonReader jsonReader = new JsonReader(new StringReader(body));
-                // see https://google-gson.googlecode.com/svn/trunk/gson/docs/javadocs/com/google/gson/stream/JsonReader.html#setLenient(boolean)
-                jsonReader.setLenient(true);
-                return gson.fromJson(jsonReader, returnType);
-            } else {
-                return gson.fromJson(body, returnType);
-            }
-        } catch (JsonParseException e) {
-            // Fallback processing when failed to parse JSON form response body:
-            // return the response body string directly for the String return type;
-            if (returnType.equals(String.class)) {
-                return (T) body;
-            } else {
-                throw (e);
-            }
-        }
-    }
+  /**
+   * A map of discriminators for all model classes.
+   */
+  private static Map<Class<?>, ClassDiscriminatorMapping> modelDiscriminators = new HashMap<>();
 
-    /**
-     * Gson TypeAdapter for Byte Array type
-     */
-    public class ByteArrayAdapter extends TypeAdapter<byte[]> {
+  /**
+   * A map of oneOf/anyOf descendants for each model class.
+   */
+  private static Map<Class<?>, Map<String, Class<?>>> modelDescendants = new HashMap<>();
 
-        @Override
-        public void write(JsonWriter out, byte[] value) throws IOException {
-            if (value == null) {
-                out.nullValue();
-            } else {
-                out.value(ByteString.of(value).base64());
-            }
-        }
+  /**
+    * Register a model class discriminator.
+    *
+    * @param modelClass the model class
+    * @param discriminatorPropertyName the name of the discriminator property
+    * @param mappings a map with the discriminator mappings.
+    */
+  public static void registerDiscriminator(Class<?> modelClass, String discriminatorPropertyName, Map<String, Class<?>> mappings) {
+    ClassDiscriminatorMapping m = new ClassDiscriminatorMapping(modelClass, discriminatorPropertyName, mappings);
+    modelDiscriminators.put(modelClass, m);
+  }
 
-        @Override
-        public byte[] read(JsonReader in) throws IOException {
-            switch (in.peek()) {
-                case NULL:
-                    in.nextNull();
-                    return null;
-                default:
-                    String bytesAsBase64 = in.nextString();
-                    ByteString byteString = ByteString.decodeBase64(bytesAsBase64);
-                    return byteString.toByteArray();
-            }
-        }
-    }
+  /**
+    * Register the oneOf/anyOf descendants of the modelClass.
+    *
+    * @param modelClass the model class
+    * @param descendants a map of oneOf/anyOf descendants.
+    */
+  public static void registerDescendants(Class<?> modelClass, Map<String, Class<?>> descendants) {
+    modelDescendants.put(modelClass, descendants);
+  }
 
-    /**
-     * Gson TypeAdapter for JSR310 OffsetDateTime type
-     */
-    public static class OffsetDateTimeTypeAdapter extends TypeAdapter<OffsetDateTime> {
+  private static JSON json;
 
-        private DateTimeFormatter formatter;
+  static {
+    json = new JSON();
+  }
 
-        public OffsetDateTimeTypeAdapter() {
-            this(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-        }
+  /**
+    * Get the default JSON instance.
+    *
+    * @return the default JSON instance
+    */
+  public static JSON getDefault() {
+    return json;
+  }
 
-        public OffsetDateTimeTypeAdapter(DateTimeFormatter formatter) {
-            this.formatter = formatter;
-        }
-
-        public void setFormat(DateTimeFormatter dateFormat) {
-            this.formatter = dateFormat;
-        }
-
-        @Override
-        public void write(JsonWriter out, OffsetDateTime date) throws IOException {
-            if (date == null) {
-                out.nullValue();
-            } else {
-                out.value(formatter.format(date));
-            }
-        }
-
-        @Override
-        public OffsetDateTime read(JsonReader in) throws IOException {
-            switch (in.peek()) {
-                case NULL:
-                    in.nextNull();
-                    return null;
-                default:
-                    String date = in.nextString();
-                    if (date.endsWith("+0000")) {
-                        date = date.substring(0, date.length()-5) + "Z";
-                    }
-                    return OffsetDateTime.parse(date, formatter);
-            }
-        }
-    }
-
-    /**
-     * Gson TypeAdapter for JSR310 LocalDate type
-     */
-    public class LocalDateTypeAdapter extends TypeAdapter<LocalDate> {
-
-        private DateTimeFormatter formatter;
-
-        public LocalDateTypeAdapter() {
-            this(DateTimeFormatter.ISO_LOCAL_DATE);
-        }
-
-        public LocalDateTypeAdapter(DateTimeFormatter formatter) {
-            this.formatter = formatter;
-        }
-
-        public void setFormat(DateTimeFormatter dateFormat) {
-            this.formatter = dateFormat;
-        }
-
-        @Override
-        public void write(JsonWriter out, LocalDate date) throws IOException {
-            if (date == null) {
-                out.nullValue();
-            } else {
-                out.value(formatter.format(date));
-            }
-        }
-
-        @Override
-        public LocalDate read(JsonReader in) throws IOException {
-            switch (in.peek()) {
-                case NULL:
-                    in.nextNull();
-                    return null;
-                default:
-                    String date = in.nextString();
-                    return LocalDate.parse(date, formatter);
-            }
-        }
-    }
-
-    public JSON setOffsetDateTimeFormat(DateTimeFormatter dateFormat) {
-        offsetDateTimeTypeAdapter.setFormat(dateFormat);
-        return this;
-    }
-
-    public JSON setLocalDateFormat(DateTimeFormatter dateFormat) {
-        localDateTypeAdapter.setFormat(dateFormat);
-        return this;
-    }
-
-    /**
-     * Gson TypeAdapter for java.sql.Date type
-     * If the dateFormat is null, a simple "yyyy-MM-dd" format will be used
-     * (more efficient than SimpleDateFormat).
-     */
-    public static class SqlDateTypeAdapter extends TypeAdapter<java.sql.Date> {
-
-        private DateFormat dateFormat;
-
-        public SqlDateTypeAdapter() {}
-
-        public SqlDateTypeAdapter(DateFormat dateFormat) {
-            this.dateFormat = dateFormat;
-        }
-
-        public void setFormat(DateFormat dateFormat) {
-            this.dateFormat = dateFormat;
-        }
-
-        @Override
-        public void write(JsonWriter out, java.sql.Date date) throws IOException {
-            if (date == null) {
-                out.nullValue();
-            } else {
-                String value;
-                if (dateFormat != null) {
-                    value = dateFormat.format(date);
-                } else {
-                    value = date.toString();
-                }
-                out.value(value);
-            }
-        }
-
-        @Override
-        public java.sql.Date read(JsonReader in) throws IOException {
-            switch (in.peek()) {
-                case NULL:
-                    in.nextNull();
-                    return null;
-                default:
-                    String date = in.nextString();
-                    try {
-                        if (dateFormat != null) {
-                            return new java.sql.Date(dateFormat.parse(date).getTime());
-                        }
-                        return new java.sql.Date(ISO8601Utils.parse(date, new ParsePosition(0)).getTime());
-                    } catch (ParseException e) {
-                        throw new JsonParseException(e);
-                    }
-            }
-        }
-    }
-
-    /**
-     * Gson TypeAdapter for java.util.Date type
-     * If the dateFormat is null, ISO8601Utils will be used.
-     */
-    public static class DateTypeAdapter extends TypeAdapter<Date> {
-
-        private DateFormat dateFormat;
-
-        public DateTypeAdapter() {}
-
-        public DateTypeAdapter(DateFormat dateFormat) {
-            this.dateFormat = dateFormat;
-        }
-
-        public void setFormat(DateFormat dateFormat) {
-            this.dateFormat = dateFormat;
-        }
-
-        @Override
-        public void write(JsonWriter out, Date date) throws IOException {
-            if (date == null) {
-                out.nullValue();
-            } else {
-                String value;
-                if (dateFormat != null) {
-                    value = dateFormat.format(date);
-                } else {
-                    value = ISO8601Utils.format(date, true);
-                }
-                out.value(value);
-            }
-        }
-
-        @Override
-        public Date read(JsonReader in) throws IOException {
-            try {
-                switch (in.peek()) {
-                    case NULL:
-                        in.nextNull();
-                        return null;
-                    default:
-                        String date = in.nextString();
-                        try {
-                            if (dateFormat != null) {
-                                return dateFormat.parse(date);
-                            }
-                            return ISO8601Utils.parse(date, new ParsePosition(0));
-                        } catch (ParseException e) {
-                            throw new JsonParseException(e);
-                        }
-                }
-            } catch (IllegalArgumentException e) {
-                throw new JsonParseException(e);
-            }
-        }
-    }
-
-    public JSON setDateFormat(DateFormat dateFormat) {
-        dateTypeAdapter.setFormat(dateFormat);
-        return this;
-    }
-
-    public JSON setSqlDateFormat(DateFormat dateFormat) {
-        sqlDateTypeAdapter.setFormat(dateFormat);
-        return this;
-    }
-
+  /**
+    * Set the default JSON instance.
+    *
+    * @param json JSON instance to be used
+    */
+  public static void setDefault(JSON json) {
+    JSON.json = json;
+  }
 }

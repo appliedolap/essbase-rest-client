@@ -13,52 +13,65 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * LayoutDimension
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  LayoutDimension.JSON_PROPERTY_NAME,
+  LayoutDimension.JSON_PROPERTY_DISPLAY_NAME,
+  LayoutDimension.JSON_PROPERTY_PAGE,
+  LayoutDimension.JSON_PROPERTY_HIDDEN,
+  LayoutDimension.JSON_PROPERTY_EXPANDED,
+  LayoutDimension.JSON_PROPERTY_AXIS,
+  LayoutDimension.JSON_PROPERTY_POSITION
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class LayoutDimension {
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
-  public static final String SERIALIZED_NAME_DISPLAY_NAME = "displayName";
-  @SerializedName(SERIALIZED_NAME_DISPLAY_NAME)
+  public static final String JSON_PROPERTY_DISPLAY_NAME = "displayName";
+  @jakarta.annotation.Nullable
   private String displayName;
 
-  public static final String SERIALIZED_NAME_PAGE = "page";
-  @SerializedName(SERIALIZED_NAME_PAGE)
+  public static final String JSON_PROPERTY_PAGE = "page";
+  @jakarta.annotation.Nullable
   private Integer page;
 
-  public static final String SERIALIZED_NAME_HIDDEN = "hidden";
-  @SerializedName(SERIALIZED_NAME_HIDDEN)
+  public static final String JSON_PROPERTY_HIDDEN = "hidden";
+  @jakarta.annotation.Nullable
   private Boolean hidden;
 
-  public static final String SERIALIZED_NAME_EXPANDED = "expanded";
-  @SerializedName(SERIALIZED_NAME_EXPANDED)
+  public static final String JSON_PROPERTY_EXPANDED = "expanded";
+  @jakarta.annotation.Nullable
   private Boolean expanded;
 
   /**
    * Gets or Sets axis
    */
-  @JsonAdapter(AxisEnum.Adapter.class)
   public enum AxisEnum {
-    COLUMN("COLUMN"),
+    COLUMN(String.valueOf("COLUMN")),
     
-    ROW("ROW"),
+    ROW(String.valueOf("ROW")),
     
-    POV("POV");
+    POV(String.valueOf("POV"));
 
     private String value;
 
@@ -66,6 +79,7 @@ public class LayoutDimension {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -75,6 +89,7 @@ public class LayoutDimension {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static AxisEnum fromValue(String value) {
       for (AxisEnum b : AxisEnum.values()) {
         if (b.value.equals(value)) {
@@ -83,191 +98,190 @@ public class LayoutDimension {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<AxisEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final AxisEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public AxisEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return AxisEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_AXIS = "axis";
-  @SerializedName(SERIALIZED_NAME_AXIS)
+  public static final String JSON_PROPERTY_AXIS = "axis";
+  @jakarta.annotation.Nullable
   private AxisEnum axis;
 
-  public static final String SERIALIZED_NAME_POSITION = "position";
-  @SerializedName(SERIALIZED_NAME_POSITION)
+  public static final String JSON_PROPERTY_POSITION = "position";
+  @jakarta.annotation.Nullable
   private Integer position;
 
+  public LayoutDimension() { 
+  }
 
-  public LayoutDimension name(String name) {
-    
+  public LayoutDimension name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
-  public LayoutDimension displayName(String displayName) {
-    
+  public LayoutDimension displayName(@jakarta.annotation.Nullable String displayName) {
     this.displayName = displayName;
     return this;
   }
 
-   /**
+  /**
    * Get displayName
    * @return displayName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DISPLAY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDisplayName() {
     return displayName;
   }
 
 
-  public void setDisplayName(String displayName) {
+  @JsonProperty(JSON_PROPERTY_DISPLAY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDisplayName(@jakarta.annotation.Nullable String displayName) {
     this.displayName = displayName;
   }
 
 
-  public LayoutDimension page(Integer page) {
-    
+  public LayoutDimension page(@jakarta.annotation.Nullable Integer page) {
     this.page = page;
     return this;
   }
 
-   /**
+  /**
    * Get page
    * @return page
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getPage() {
     return page;
   }
 
 
-  public void setPage(Integer page) {
+  @JsonProperty(JSON_PROPERTY_PAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPage(@jakarta.annotation.Nullable Integer page) {
     this.page = page;
   }
 
 
-  public LayoutDimension hidden(Boolean hidden) {
-    
+  public LayoutDimension hidden(@jakarta.annotation.Nullable Boolean hidden) {
     this.hidden = hidden;
     return this;
   }
 
-   /**
+  /**
    * Get hidden
    * @return hidden
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HIDDEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getHidden() {
     return hidden;
   }
 
 
-  public void setHidden(Boolean hidden) {
+  @JsonProperty(JSON_PROPERTY_HIDDEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHidden(@jakarta.annotation.Nullable Boolean hidden) {
     this.hidden = hidden;
   }
 
 
-  public LayoutDimension expanded(Boolean expanded) {
-    
+  public LayoutDimension expanded(@jakarta.annotation.Nullable Boolean expanded) {
     this.expanded = expanded;
     return this;
   }
 
-   /**
+  /**
    * Get expanded
    * @return expanded
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EXPANDED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getExpanded() {
     return expanded;
   }
 
 
-  public void setExpanded(Boolean expanded) {
+  @JsonProperty(JSON_PROPERTY_EXPANDED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setExpanded(@jakarta.annotation.Nullable Boolean expanded) {
     this.expanded = expanded;
   }
 
 
-  public LayoutDimension axis(AxisEnum axis) {
-    
+  public LayoutDimension axis(@jakarta.annotation.Nullable AxisEnum axis) {
     this.axis = axis;
     return this;
   }
 
-   /**
+  /**
    * Get axis
    * @return axis
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_AXIS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public AxisEnum getAxis() {
     return axis;
   }
 
 
-  public void setAxis(AxisEnum axis) {
+  @JsonProperty(JSON_PROPERTY_AXIS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAxis(@jakarta.annotation.Nullable AxisEnum axis) {
     this.axis = axis;
   }
 
 
-  public LayoutDimension position(Integer position) {
-    
+  public LayoutDimension position(@jakarta.annotation.Nullable Integer position) {
     this.position = position;
     return this;
   }
 
-   /**
+  /**
    * Get position
    * @return position
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_POSITION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getPosition() {
     return position;
   }
 
 
-  public void setPosition(Integer position) {
+  @JsonProperty(JSON_PROPERTY_POSITION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPosition(@jakarta.annotation.Nullable Integer position) {
     this.position = position;
   }
 
 
+  /**
+   * Return true if this LayoutDimension object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -317,5 +331,74 @@ public class LayoutDimension {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `displayName` to the URL query string
+    if (getDisplayName() != null) {
+      joiner.add(String.format("%sdisplayName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDisplayName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `page` to the URL query string
+    if (getPage() != null) {
+      joiner.add(String.format("%spage%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPage()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `hidden` to the URL query string
+    if (getHidden() != null) {
+      joiner.add(String.format("%shidden%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getHidden()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `expanded` to the URL query string
+    if (getExpanded() != null) {
+      joiner.add(String.format("%sexpanded%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getExpanded()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `axis` to the URL query string
+    if (getAxis() != null) {
+      joiner.add(String.format("%saxis%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAxis()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `position` to the URL query string
+    if (getPosition() != null) {
+      joiner.add(String.format("%sposition%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPosition()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

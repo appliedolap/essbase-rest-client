@@ -10,22 +10,12 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.CollectionResponse;
 import com.appliedolap.essbase.client.model.FileCollectionResponse;
@@ -33,1177 +23,867 @@ import com.appliedolap.essbase.client.model.FilePathDetail;
 import com.appliedolap.essbase.client.model.GenericEntity;
 import com.appliedolap.essbase.client.model.ZipFileDetails;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class FilesApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public FilesApi() {
-        this(Configuration.getDefaultApiClient());
+  public FilesApi() {
+    this(new ApiClient());
+  }
+
+  public FilesApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public FilesApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Upload File or Create Folder
+   * &lt;p&gt;Uploads a file to Essbase.&lt;/p&gt;&lt;p&gt;Supported file types include text files, rules files, calculation script files, and MaxL script files.&lt;/p&gt;. &lt;p&gt;If there is no content type, and a folder name is specified in the URL, a folder is created.&lt;/p&gt;
+   * @param path &lt;p&gt;Catalog path. If &lt;code&gt;Content-Type&#x3D;application/octet-stream&lt;/code&gt;, this is a file name. Otherwise, it is a folder name.&lt;/p&gt; (required)
+   * @param overwrite &lt;p&gt;Applicable only for adding a file. Overwriting folders is not supported.&lt;/p&gt; (required)
+   * @return GenericEntity
+   * @throws ApiException if fails to make API call
+   */
+  public GenericEntity filesAddFile(String path, Boolean overwrite) throws ApiException {
+    ApiResponse<GenericEntity> localVarResponse = filesAddFileWithHttpInfo(path, overwrite);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for filesAddFile
-     * @param path &lt;p&gt;Catalog path. If &lt;code&gt;Content-Type&#x3D;application/octet-stream&lt;/code&gt;, this is a file name. Otherwise, it is a folder name.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Applicable only for adding a file. Overwriting folders is not supported.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file uploaded successfully (if Content-Type is &lt;code&gt;application/octet-stream&lt;/code&gt;), or the folder was created successfully (if there is no Content-Type). </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions, or the file or folder may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesAddFileCall(String path, Boolean overwrite, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/files/{path}"
-            .replaceAll("\\{" + "path" + "\\}", localVarApiClient.escapeString(path.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (overwrite != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("overwrite", overwrite));
+  /**
+   * Upload File or Create Folder
+   * &lt;p&gt;Uploads a file to Essbase.&lt;/p&gt;&lt;p&gt;Supported file types include text files, rules files, calculation script files, and MaxL script files.&lt;/p&gt;. &lt;p&gt;If there is no content type, and a folder name is specified in the URL, a folder is created.&lt;/p&gt;
+   * @param path &lt;p&gt;Catalog path. If &lt;code&gt;Content-Type&#x3D;application/octet-stream&lt;/code&gt;, this is a file name. Otherwise, it is a folder name.&lt;/p&gt; (required)
+   * @param overwrite &lt;p&gt;Applicable only for adding a file. Overwriting folders is not supported.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;GenericEntity&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<GenericEntity> filesAddFileWithHttpInfo(String path, Boolean overwrite) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = filesAddFileRequestBuilder(path, overwrite);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("filesAddFile", localVarResponse);
         }
+        return new ApiResponse<GenericEntity>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<GenericEntity>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  private HttpRequest.Builder filesAddFileRequestBuilder(String path, Boolean overwrite) throws ApiException {
+    // verify the required parameter 'path' is set
+    if (path == null) {
+      throw new ApiException(400, "Missing the required parameter 'path' when calling filesAddFile");
+    }
+    // verify the required parameter 'overwrite' is set
+    if (overwrite == null) {
+      throw new ApiException(400, "Missing the required parameter 'overwrite' when calling filesAddFile");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/files/{path}"
+        .replace("{path}", ApiClient.urlEncode(path.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "overwrite";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("overwrite", overwrite));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Copy File
+   * Copy a file from source to destination.
+   * @param body &lt;p&gt;File path details.&lt;/p&gt; (required)
+   * @param overwrite &lt;p&gt;Overwrite existing file.&lt;/p&gt; (optional, default to false)
+   * @throws ApiException if fails to make API call
+   */
+  public void filesCopyResource(FilePathDetail body, Boolean overwrite) throws ApiException {
+    filesCopyResourceWithHttpInfo(body, overwrite);
+  }
+
+  /**
+   * Copy File
+   * Copy a file from source to destination.
+   * @param body &lt;p&gt;File path details.&lt;/p&gt; (required)
+   * @param overwrite &lt;p&gt;Overwrite existing file.&lt;/p&gt; (optional, default to false)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> filesCopyResourceWithHttpInfo(FilePathDetail body, Boolean overwrite) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = filesCopyResourceRequestBuilder(body, overwrite);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("filesCopyResource", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call filesAddFileValidateBeforeCall(String path, Boolean overwrite, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'path' is set
-        if (path == null) {
-            throw new ApiException("Missing the required parameter 'path' when calling filesAddFile(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
-        // verify the required parameter 'overwrite' is set
-        if (overwrite == null) {
-            throw new ApiException("Missing the required parameter 'overwrite' when calling filesAddFile(Async)");
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder filesCopyResourceRequestBuilder(FilePathDetail body, Boolean overwrite) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling filesCopyResource");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/files/actions/copy";
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "overwrite";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("overwrite", overwrite));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Delete File or Folder
+   * &lt;p&gt;Delete the file or folder specified in the path.&lt;/p&gt;
+   * @param path Path of file/folder to delete (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void filesDeleteFile(String path) throws ApiException {
+    filesDeleteFileWithHttpInfo(path);
+  }
+
+  /**
+   * Delete File or Folder
+   * &lt;p&gt;Delete the file or folder specified in the path.&lt;/p&gt;
+   * @param path Path of file/folder to delete (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> filesDeleteFileWithHttpInfo(String path) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = filesDeleteFileRequestBuilder(path);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("filesDeleteFile", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = filesAddFileCall(path, overwrite, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Upload File or Create Folder
-     * &lt;p&gt;Uploads a file to Essbase.&lt;/p&gt;&lt;p&gt;Supported file types include text files, rules files, calculation script files, and MaxL script files.&lt;/p&gt;. &lt;p&gt;If there is no content type, and a folder name is specified in the URL, a folder is created.&lt;/p&gt;
-     * @param path &lt;p&gt;Catalog path. If &lt;code&gt;Content-Type&#x3D;application/octet-stream&lt;/code&gt;, this is a file name. Otherwise, it is a folder name.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Applicable only for adding a file. Overwriting folders is not supported.&lt;/p&gt; (required)
-     * @return GenericEntity
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file uploaded successfully (if Content-Type is &lt;code&gt;application/octet-stream&lt;/code&gt;), or the folder was created successfully (if there is no Content-Type). </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions, or the file or folder may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public GenericEntity filesAddFile(String path, Boolean overwrite) throws ApiException {
-        ApiResponse<GenericEntity> localVarResp = filesAddFileWithHttpInfo(path, overwrite);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Upload File or Create Folder
-     * &lt;p&gt;Uploads a file to Essbase.&lt;/p&gt;&lt;p&gt;Supported file types include text files, rules files, calculation script files, and MaxL script files.&lt;/p&gt;. &lt;p&gt;If there is no content type, and a folder name is specified in the URL, a folder is created.&lt;/p&gt;
-     * @param path &lt;p&gt;Catalog path. If &lt;code&gt;Content-Type&#x3D;application/octet-stream&lt;/code&gt;, this is a file name. Otherwise, it is a folder name.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Applicable only for adding a file. Overwriting folders is not supported.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;GenericEntity&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file uploaded successfully (if Content-Type is &lt;code&gt;application/octet-stream&lt;/code&gt;), or the folder was created successfully (if there is no Content-Type). </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions, or the file or folder may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<GenericEntity> filesAddFileWithHttpInfo(String path, Boolean overwrite) throws ApiException {
-        okhttp3.Call localVarCall = filesAddFileValidateBeforeCall(path, overwrite, null);
-        Type localVarReturnType = new TypeToken<GenericEntity>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Upload File or Create Folder (asynchronously)
-     * &lt;p&gt;Uploads a file to Essbase.&lt;/p&gt;&lt;p&gt;Supported file types include text files, rules files, calculation script files, and MaxL script files.&lt;/p&gt;. &lt;p&gt;If there is no content type, and a folder name is specified in the URL, a folder is created.&lt;/p&gt;
-     * @param path &lt;p&gt;Catalog path. If &lt;code&gt;Content-Type&#x3D;application/octet-stream&lt;/code&gt;, this is a file name. Otherwise, it is a folder name.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Applicable only for adding a file. Overwriting folders is not supported.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file uploaded successfully (if Content-Type is &lt;code&gt;application/octet-stream&lt;/code&gt;), or the folder was created successfully (if there is no Content-Type). </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions, or the file or folder may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesAddFileAsync(String path, Boolean overwrite, final ApiCallback<GenericEntity> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = filesAddFileValidateBeforeCall(path, overwrite, _callback);
-        Type localVarReturnType = new TypeToken<GenericEntity>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for filesCopyResource
-     * @param body &lt;p&gt;File path details.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Overwrite existing file.&lt;/p&gt; (optional, default to false)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;File copied successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesCopyResourceCall(FilePathDetail body, Boolean overwrite, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/files/actions/copy";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (overwrite != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("overwrite", overwrite));
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  private HttpRequest.Builder filesDeleteFileRequestBuilder(String path) throws ApiException {
+    // verify the required parameter 'path' is set
+    if (path == null) {
+      throw new ApiException(400, "Missing the required parameter 'path' when calling filesDeleteFile");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/files/{path}"
+        .replace("{path}", ApiClient.urlEncode(path.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Extract the zip file.
+   * &lt;p&gt;Extract a zip file on same location. Applications, Users and Shared folders are supported to extract zip.&lt;/p&gt;
+   * @param body &lt;p&gt;Zip file path details.&lt;/p&gt; (required)
+   * @param overwrite &lt;p&gt;Overwrite existing file. Not applicable for folder.&lt;/p&gt; (optional, default to false)
+   * @throws ApiException if fails to make API call
+   */
+  public void filesExtract(ZipFileDetails body, Boolean overwrite) throws ApiException {
+    filesExtractWithHttpInfo(body, overwrite);
+  }
+
+  /**
+   * Extract the zip file.
+   * &lt;p&gt;Extract a zip file on same location. Applications, Users and Shared folders are supported to extract zip.&lt;/p&gt;
+   * @param body &lt;p&gt;Zip file path details.&lt;/p&gt; (required)
+   * @param overwrite &lt;p&gt;Overwrite existing file. Not applicable for folder.&lt;/p&gt; (optional, default to false)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> filesExtractWithHttpInfo(ZipFileDetails body, Boolean overwrite) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = filesExtractRequestBuilder(body, overwrite);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("filesExtract", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call filesCopyResourceValidateBeforeCall(FilePathDetail body, Boolean overwrite, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling filesCopyResource(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = filesCopyResourceCall(body, overwrite, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder filesExtractRequestBuilder(ZipFileDetails body, Boolean overwrite) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling filesExtract");
     }
 
-    /**
-     * Copy File
-     * Copy a file from source to destination.
-     * @param body &lt;p&gt;File path details.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Overwrite existing file.&lt;/p&gt; (optional, default to false)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;File copied successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void filesCopyResource(FilePathDetail body, Boolean overwrite) throws ApiException {
-        filesCopyResourceWithHttpInfo(body, overwrite);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/files/actions/extract";
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "overwrite";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("overwrite", overwrite));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Copy File
-     * Copy a file from source to destination.
-     * @param body &lt;p&gt;File path details.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Overwrite existing file.&lt;/p&gt; (optional, default to false)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;File copied successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> filesCopyResourceWithHttpInfo(FilePathDetail body, Boolean overwrite) throws ApiException {
-        okhttp3.Call localVarCall = filesCopyResourceValidateBeforeCall(body, overwrite, null);
-        return localVarApiClient.execute(localVarCall);
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Copy File (asynchronously)
-     * Copy a file from source to destination.
-     * @param body &lt;p&gt;File path details.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Overwrite existing file.&lt;/p&gt; (optional, default to false)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;File copied successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesCopyResourceAsync(FilePathDetail body, Boolean overwrite, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = filesCopyResourceValidateBeforeCall(body, overwrite, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-    /**
-     * Build call for filesDeleteFile
-     * @param path Path of file/folder to delete (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file or folder was removed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesDeleteFileCall(String path, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/files/{path}"
-            .replaceAll("\\{" + "path" + "\\}", localVarApiClient.escapeString(path.toString()));
+  /**
+   * Get Shared Path
+   * &lt;p&gt;Get user shared path.&lt;/p&gt;
+   * @return String
+   * @throws ApiException if fails to make API call
+   */
+  public String filesGetSharedPath() throws ApiException {
+    ApiResponse<String> localVarResponse = filesGetSharedPathWithHttpInfo();
+    return localVarResponse.getData();
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Get Shared Path
+   * &lt;p&gt;Get user shared path.&lt;/p&gt;
+   * @return ApiResponse&lt;String&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<String> filesGetSharedPathWithHttpInfo() throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = filesGetSharedPathRequestBuilder();
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("filesGetSharedPath", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        return new ApiResponse<String>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<String>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call filesDeleteFileValidateBeforeCall(String path, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'path' is set
-        if (path == null) {
-            throw new ApiException("Missing the required parameter 'path' when calling filesDeleteFile(Async)");
+  private HttpRequest.Builder filesGetSharedPathRequestBuilder() throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/files/sharedpath";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Home Path
+   * &lt;p&gt;Get user home path.&lt;/p&gt;
+   * @return String
+   * @throws ApiException if fails to make API call
+   */
+  public String filesGetUserHomePath() throws ApiException {
+    ApiResponse<String> localVarResponse = filesGetUserHomePathWithHttpInfo();
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Home Path
+   * &lt;p&gt;Get user home path.&lt;/p&gt;
+   * @return ApiResponse&lt;String&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<String> filesGetUserHomePathWithHttpInfo() throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = filesGetUserHomePathRequestBuilder();
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("filesGetUserHomePath", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = filesDeleteFileCall(path, _callback);
-        return localVarCall;
-
+        return new ApiResponse<String>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<String>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Delete File or Folder
-     * &lt;p&gt;Delete the file or folder specified in the path.&lt;/p&gt;
-     * @param path Path of file/folder to delete (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file or folder was removed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void filesDeleteFile(String path) throws ApiException {
-        filesDeleteFileWithHttpInfo(path);
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
     }
+  }
 
-    /**
-     * Delete File or Folder
-     * &lt;p&gt;Delete the file or folder specified in the path.&lt;/p&gt;
-     * @param path Path of file/folder to delete (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file or folder was removed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> filesDeleteFileWithHttpInfo(String path) throws ApiException {
-        okhttp3.Call localVarCall = filesDeleteFileValidateBeforeCall(path, null);
-        return localVarApiClient.execute(localVarCall);
+  private HttpRequest.Builder filesGetUserHomePathRequestBuilder() throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/files/homepath";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Delete File or Folder (asynchronously)
-     * &lt;p&gt;Delete the file or folder specified in the path.&lt;/p&gt;
-     * @param path Path of file/folder to delete (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file or folder was removed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesDeleteFileAsync(String path, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = filesDeleteFileValidateBeforeCall(path, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for filesExtract
-     * @param body &lt;p&gt;Zip file path details.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Overwrite existing file. Not applicable for folder.&lt;/p&gt; (optional, default to false)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file operation completed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Contains an invalid special character.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesExtractCall(ZipFileDetails body, Boolean overwrite, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/files/actions/extract";
+  /**
+   * List or Download Files
+   * &lt;p&gt;Returns a list of files, or downloads the specified file. To list files, use &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; for the Accept header. To download, use &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt; for the Accept header.&lt;/p&gt;
+   * @param path &lt;p&gt;Catalog path. If listing files, this is the folder path. If downloading files, this is the file path.&lt;/p&gt; (required)
+   * @param offset &lt;p&gt;Number of items to omit from the start of the result set. Default value is 0. Applicable only for listing files.&lt;/p&gt; (optional)
+   * @param limit &lt;p&gt;Maximum number of files to return. Applicable only for listing files.&lt;/p&gt; (optional)
+   * @param type &lt;p&gt;List files by type. If type is not specified, returns all files. Applicable only for listing files.&lt;/p&gt; (optional)
+   * @param overwrite &lt;p&gt;If true, overwrite files. If false, any existing file is validated but not overwritten. Applicable only with query parameters  &lt;code&gt;action&#x3D;validateUpload&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt; . Default value is false.&lt;/p&gt; (optional, default to false)
+   * @param action &lt;p&gt;Validates the upload. Supported action values are &lt;code&gt;validateUpload&lt;/code&gt; and &lt;code&gt;&#39;Accept&#x3D;application/json&#39;&lt;/code&gt; or &lt;code&gt;&#39;Accept&#x3D;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
+   * @param fileSize &lt;p&gt;Validates whether enough free space is available. Applicable only with query parameters &lt;code&gt;action&#x3D;&#39;validateUpload&#39;&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
+   * @param filter &lt;p&gt;Filter the list of files.&lt;/p&gt; (optional)
+   * @param recursive &lt;p&gt;Recursive param to get search result as recursive.&lt;/p&gt; (optional, default to false)
+   * @return FileCollectionResponse
+   * @throws ApiException if fails to make API call
+   */
+  public FileCollectionResponse filesListFiles(String path, Integer offset, Integer limit, String type, Boolean overwrite, String action, Long fileSize, String filter, Boolean recursive) throws ApiException {
+    ApiResponse<FileCollectionResponse> localVarResponse = filesListFilesWithHttpInfo(path, offset, limit, type, overwrite, action, fileSize, filter, recursive);
+    return localVarResponse.getData();
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (overwrite != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("overwrite", overwrite));
+  /**
+   * List or Download Files
+   * &lt;p&gt;Returns a list of files, or downloads the specified file. To list files, use &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; for the Accept header. To download, use &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt; for the Accept header.&lt;/p&gt;
+   * @param path &lt;p&gt;Catalog path. If listing files, this is the folder path. If downloading files, this is the file path.&lt;/p&gt; (required)
+   * @param offset &lt;p&gt;Number of items to omit from the start of the result set. Default value is 0. Applicable only for listing files.&lt;/p&gt; (optional)
+   * @param limit &lt;p&gt;Maximum number of files to return. Applicable only for listing files.&lt;/p&gt; (optional)
+   * @param type &lt;p&gt;List files by type. If type is not specified, returns all files. Applicable only for listing files.&lt;/p&gt; (optional)
+   * @param overwrite &lt;p&gt;If true, overwrite files. If false, any existing file is validated but not overwritten. Applicable only with query parameters  &lt;code&gt;action&#x3D;validateUpload&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt; . Default value is false.&lt;/p&gt; (optional, default to false)
+   * @param action &lt;p&gt;Validates the upload. Supported action values are &lt;code&gt;validateUpload&lt;/code&gt; and &lt;code&gt;&#39;Accept&#x3D;application/json&#39;&lt;/code&gt; or &lt;code&gt;&#39;Accept&#x3D;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
+   * @param fileSize &lt;p&gt;Validates whether enough free space is available. Applicable only with query parameters &lt;code&gt;action&#x3D;&#39;validateUpload&#39;&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
+   * @param filter &lt;p&gt;Filter the list of files.&lt;/p&gt; (optional)
+   * @param recursive &lt;p&gt;Recursive param to get search result as recursive.&lt;/p&gt; (optional, default to false)
+   * @return ApiResponse&lt;FileCollectionResponse&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<FileCollectionResponse> filesListFilesWithHttpInfo(String path, Integer offset, Integer limit, String type, Boolean overwrite, String action, Long fileSize, String filter, Boolean recursive) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = filesListFilesRequestBuilder(path, offset, limit, type, overwrite, action, fileSize, filter, recursive);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("filesListFiles", localVarResponse);
         }
+        return new ApiResponse<FileCollectionResponse>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<FileCollectionResponse>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  private HttpRequest.Builder filesListFilesRequestBuilder(String path, Integer offset, Integer limit, String type, Boolean overwrite, String action, Long fileSize, String filter, Boolean recursive) throws ApiException {
+    // verify the required parameter 'path' is set
+    if (path == null) {
+      throw new ApiException(400, "Missing the required parameter 'path' when calling filesListFiles");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/files/{path}"
+        .replace("{path}", ApiClient.urlEncode(path.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "offset";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("offset", offset));
+    localVarQueryParameterBaseName = "limit";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("limit", limit));
+    localVarQueryParameterBaseName = "type";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("type", type));
+    localVarQueryParameterBaseName = "overwrite";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("overwrite", overwrite));
+    localVarQueryParameterBaseName = "action";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("action", action));
+    localVarQueryParameterBaseName = "fileSize";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("fileSize", fileSize));
+    localVarQueryParameterBaseName = "filter";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("filter", filter));
+    localVarQueryParameterBaseName = "recursive";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("recursive", recursive));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * List Root Folders
+   * &lt;p&gt;List catalog root folders.&lt;/p&gt;
+   * @param filter &lt;p&gt;Filter the list of files.&lt;/p&gt; (optional)
+   * @param recursive &lt;p&gt;Recursive param to get search result as recursive.&lt;/p&gt; (optional, default to false)
+   * @return CollectionResponse
+   * @throws ApiException if fails to make API call
+   */
+  public CollectionResponse filesListRootFolders(String filter, Boolean recursive) throws ApiException {
+    ApiResponse<CollectionResponse> localVarResponse = filesListRootFoldersWithHttpInfo(filter, recursive);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * List Root Folders
+   * &lt;p&gt;List catalog root folders.&lt;/p&gt;
+   * @param filter &lt;p&gt;Filter the list of files.&lt;/p&gt; (optional)
+   * @param recursive &lt;p&gt;Recursive param to get search result as recursive.&lt;/p&gt; (optional, default to false)
+   * @return ApiResponse&lt;CollectionResponse&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CollectionResponse> filesListRootFoldersWithHttpInfo(String filter, Boolean recursive) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = filesListRootFoldersRequestBuilder(filter, recursive);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("filesListRootFolders", localVarResponse);
         }
+        return new ApiResponse<CollectionResponse>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<CollectionResponse>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
+  private HttpRequest.Builder filesListRootFoldersRequestBuilder(String filter, Boolean recursive) throws ApiException {
 
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/files";
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "filter";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("filter", filter));
+    localVarQueryParameterBaseName = "recursive";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("recursive", recursive));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call filesExtractValidateBeforeCall(ZipFileDetails body, Boolean overwrite, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling filesExtract(Async)");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Move or Rename File
+   * &lt;p&gt;Either moves a file from source to destination, or renames a file or folder. Moving a folder is not supported. Renaming a folder is supported only if the folder is not in the applications directory.&lt;/p&gt;
+   * @param body &lt;p&gt;File path details.&lt;/p&gt; (required)
+   * @param overwrite &lt;p&gt;Overwrite existing file. Only applicable for moving or renaming a file.&lt;/p&gt; (optional, default to false)
+   * @throws ApiException if fails to make API call
+   */
+  public void filesMoveResource(FilePathDetail body, Boolean overwrite) throws ApiException {
+    filesMoveResourceWithHttpInfo(body, overwrite);
+  }
+
+  /**
+   * Move or Rename File
+   * &lt;p&gt;Either moves a file from source to destination, or renames a file or folder. Moving a folder is not supported. Renaming a folder is supported only if the folder is not in the applications directory.&lt;/p&gt;
+   * @param body &lt;p&gt;File path details.&lt;/p&gt; (required)
+   * @param overwrite &lt;p&gt;Overwrite existing file. Only applicable for moving or renaming a file.&lt;/p&gt; (optional, default to false)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> filesMoveResourceWithHttpInfo(FilePathDetail body, Boolean overwrite) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = filesMoveResourceRequestBuilder(body, overwrite);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("filesMoveResource", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = filesExtractCall(body, overwrite, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Extract the zip file.
-     * &lt;p&gt;Extract a zip file on same location. Applications, Users and Shared folders are supported to extract zip.&lt;/p&gt;
-     * @param body &lt;p&gt;Zip file path details.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Overwrite existing file. Not applicable for folder.&lt;/p&gt; (optional, default to false)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file operation completed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Contains an invalid special character.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void filesExtract(ZipFileDetails body, Boolean overwrite) throws ApiException {
-        filesExtractWithHttpInfo(body, overwrite);
-    }
-
-    /**
-     * Extract the zip file.
-     * &lt;p&gt;Extract a zip file on same location. Applications, Users and Shared folders are supported to extract zip.&lt;/p&gt;
-     * @param body &lt;p&gt;Zip file path details.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Overwrite existing file. Not applicable for folder.&lt;/p&gt; (optional, default to false)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file operation completed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Contains an invalid special character.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> filesExtractWithHttpInfo(ZipFileDetails body, Boolean overwrite) throws ApiException {
-        okhttp3.Call localVarCall = filesExtractValidateBeforeCall(body, overwrite, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Extract the zip file. (asynchronously)
-     * &lt;p&gt;Extract a zip file on same location. Applications, Users and Shared folders are supported to extract zip.&lt;/p&gt;
-     * @param body &lt;p&gt;Zip file path details.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Overwrite existing file. Not applicable for folder.&lt;/p&gt; (optional, default to false)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file operation completed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Contains an invalid special character.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesExtractAsync(ZipFileDetails body, Boolean overwrite, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = filesExtractValidateBeforeCall(body, overwrite, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for filesGetSharedPath
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The shared path was returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesGetSharedPathCall(final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/files/sharedpath";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder filesMoveResourceRequestBuilder(FilePathDetail body, Boolean overwrite) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling filesMoveResource");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call filesGetSharedPathValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = filesGetSharedPathCall(_callback);
-        return localVarCall;
+    String localVarPath = "/files/actions/move";
 
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "overwrite";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("overwrite", overwrite));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Get Shared Path
-     * &lt;p&gt;Get user shared path.&lt;/p&gt;
-     * @return String
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The shared path was returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public String filesGetSharedPath() throws ApiException {
-        ApiResponse<String> localVarResp = filesGetSharedPathWithHttpInfo();
-        return localVarResp.getData();
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Get Shared Path
-     * &lt;p&gt;Get user shared path.&lt;/p&gt;
-     * @return ApiResponse&lt;String&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The shared path was returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<String> filesGetSharedPathWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = filesGetSharedPathValidateBeforeCall(null);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Shared Path (asynchronously)
-     * &lt;p&gt;Get user shared path.&lt;/p&gt;
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The shared path was returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesGetSharedPathAsync(final ApiCallback<String> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = filesGetSharedPathValidateBeforeCall(_callback);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for filesGetUserHomePath
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User home path.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesGetUserHomePathCall(final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/files/homepath";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call filesGetUserHomePathValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = filesGetUserHomePathCall(_callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Home Path
-     * &lt;p&gt;Get user home path.&lt;/p&gt;
-     * @return String
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User home path.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public String filesGetUserHomePath() throws ApiException {
-        ApiResponse<String> localVarResp = filesGetUserHomePathWithHttpInfo();
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Home Path
-     * &lt;p&gt;Get user home path.&lt;/p&gt;
-     * @return ApiResponse&lt;String&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User home path.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<String> filesGetUserHomePathWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = filesGetUserHomePathValidateBeforeCall(null);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Home Path (asynchronously)
-     * &lt;p&gt;Get user home path.&lt;/p&gt;
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User home path.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesGetUserHomePathAsync(final ApiCallback<String> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = filesGetUserHomePathValidateBeforeCall(_callback);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for filesListFiles
-     * @param path &lt;p&gt;Catalog path. If listing files, this is the folder path. If downloading files, this is the file path.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of items to omit from the start of the result set. Default value is 0. Applicable only for listing files.&lt;/p&gt; (optional)
-     * @param limit &lt;p&gt;Maximum number of files to return. Applicable only for listing files.&lt;/p&gt; (optional)
-     * @param type &lt;p&gt;List files by type. If type is not specified, returns all files. Applicable only for listing files.&lt;/p&gt; (optional)
-     * @param overwrite &lt;p&gt;If true, overwrite files. If false, any existing file is validated but not overwritten. Applicable only with query parameters  &lt;code&gt;action&#x3D;validateUpload&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt; . Default value is false.&lt;/p&gt; (optional, default to false)
-     * @param action &lt;p&gt;Validates the upload. Supported action values are &lt;code&gt;validateUpload&lt;/code&gt; and &lt;code&gt;&#39;Accept&#x3D;application/json&#39;&lt;/code&gt; or &lt;code&gt;&#39;Accept&#x3D;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @param fileSize &lt;p&gt;Validates whether enough free space is available. Applicable only with query parameters &lt;code&gt;action&#x3D;&#39;validateUpload&#39;&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @param filter &lt;p&gt;Filter the list of files.&lt;/p&gt; (optional)
-     * @param recursive &lt;p&gt;Recursive param to get search result as recursive.&lt;/p&gt; (optional, default to false)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt; Response type can be either JSON/XML or stream, depending on the Accept header. If &lt;code&gt;Accept&#x3D;application/json&lt;/code&gt; or &lt;code&gt;Accept&#x3D;application/xml&lt;/code&gt;, the response lists files and current folder details. If &lt;code&gt;Accept&#x3D;application/octet-stream&lt;/code&gt;, the response is returned as a stream. If query parameters include &lt;code&gt;action&#x3D;validateUpload&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;, the response is empty.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions, or the file may already exist when query parameters include &lt;code&gt;action&#x3D;validateUpload&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesListFilesCall(String path, Integer offset, Integer limit, String type, Boolean overwrite, String action, Long fileSize, String filter, Boolean recursive, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/files/{path}"
-            .replaceAll("\\{" + "path" + "\\}", localVarApiClient.escapeString(path.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (offset != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("offset", offset));
-        }
-
-        if (limit != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
-        }
-
-        if (type != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("type", type));
-        }
-
-        if (overwrite != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("overwrite", overwrite));
-        }
-
-        if (action != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("action", action));
-        }
-
-        if (fileSize != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("fileSize", fileSize));
-        }
-
-        if (filter != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("filter", filter));
-        }
-
-        if (recursive != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("recursive", recursive));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call filesListFilesValidateBeforeCall(String path, Integer offset, Integer limit, String type, Boolean overwrite, String action, Long fileSize, String filter, Boolean recursive, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'path' is set
-        if (path == null) {
-            throw new ApiException("Missing the required parameter 'path' when calling filesListFiles(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = filesListFilesCall(path, offset, limit, type, overwrite, action, fileSize, filter, recursive, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * List or Download Files
-     * &lt;p&gt;Returns a list of files, or downloads the specified file. To list files, use &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; for the Accept header. To download, use &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt; for the Accept header.&lt;/p&gt;
-     * @param path &lt;p&gt;Catalog path. If listing files, this is the folder path. If downloading files, this is the file path.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of items to omit from the start of the result set. Default value is 0. Applicable only for listing files.&lt;/p&gt; (optional)
-     * @param limit &lt;p&gt;Maximum number of files to return. Applicable only for listing files.&lt;/p&gt; (optional)
-     * @param type &lt;p&gt;List files by type. If type is not specified, returns all files. Applicable only for listing files.&lt;/p&gt; (optional)
-     * @param overwrite &lt;p&gt;If true, overwrite files. If false, any existing file is validated but not overwritten. Applicable only with query parameters  &lt;code&gt;action&#x3D;validateUpload&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt; . Default value is false.&lt;/p&gt; (optional, default to false)
-     * @param action &lt;p&gt;Validates the upload. Supported action values are &lt;code&gt;validateUpload&lt;/code&gt; and &lt;code&gt;&#39;Accept&#x3D;application/json&#39;&lt;/code&gt; or &lt;code&gt;&#39;Accept&#x3D;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @param fileSize &lt;p&gt;Validates whether enough free space is available. Applicable only with query parameters &lt;code&gt;action&#x3D;&#39;validateUpload&#39;&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @param filter &lt;p&gt;Filter the list of files.&lt;/p&gt; (optional)
-     * @param recursive &lt;p&gt;Recursive param to get search result as recursive.&lt;/p&gt; (optional, default to false)
-     * @return FileCollectionResponse
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt; Response type can be either JSON/XML or stream, depending on the Accept header. If &lt;code&gt;Accept&#x3D;application/json&lt;/code&gt; or &lt;code&gt;Accept&#x3D;application/xml&lt;/code&gt;, the response lists files and current folder details. If &lt;code&gt;Accept&#x3D;application/octet-stream&lt;/code&gt;, the response is returned as a stream. If query parameters include &lt;code&gt;action&#x3D;validateUpload&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;, the response is empty.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions, or the file may already exist when query parameters include &lt;code&gt;action&#x3D;validateUpload&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public FileCollectionResponse filesListFiles(String path, Integer offset, Integer limit, String type, Boolean overwrite, String action, Long fileSize, String filter, Boolean recursive) throws ApiException {
-        ApiResponse<FileCollectionResponse> localVarResp = filesListFilesWithHttpInfo(path, offset, limit, type, overwrite, action, fileSize, filter, recursive);
-        return localVarResp.getData();
-    }
-
-    /**
-     * List or Download Files
-     * &lt;p&gt;Returns a list of files, or downloads the specified file. To list files, use &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; for the Accept header. To download, use &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt; for the Accept header.&lt;/p&gt;
-     * @param path &lt;p&gt;Catalog path. If listing files, this is the folder path. If downloading files, this is the file path.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of items to omit from the start of the result set. Default value is 0. Applicable only for listing files.&lt;/p&gt; (optional)
-     * @param limit &lt;p&gt;Maximum number of files to return. Applicable only for listing files.&lt;/p&gt; (optional)
-     * @param type &lt;p&gt;List files by type. If type is not specified, returns all files. Applicable only for listing files.&lt;/p&gt; (optional)
-     * @param overwrite &lt;p&gt;If true, overwrite files. If false, any existing file is validated but not overwritten. Applicable only with query parameters  &lt;code&gt;action&#x3D;validateUpload&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt; . Default value is false.&lt;/p&gt; (optional, default to false)
-     * @param action &lt;p&gt;Validates the upload. Supported action values are &lt;code&gt;validateUpload&lt;/code&gt; and &lt;code&gt;&#39;Accept&#x3D;application/json&#39;&lt;/code&gt; or &lt;code&gt;&#39;Accept&#x3D;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @param fileSize &lt;p&gt;Validates whether enough free space is available. Applicable only with query parameters &lt;code&gt;action&#x3D;&#39;validateUpload&#39;&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @param filter &lt;p&gt;Filter the list of files.&lt;/p&gt; (optional)
-     * @param recursive &lt;p&gt;Recursive param to get search result as recursive.&lt;/p&gt; (optional, default to false)
-     * @return ApiResponse&lt;FileCollectionResponse&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt; Response type can be either JSON/XML or stream, depending on the Accept header. If &lt;code&gt;Accept&#x3D;application/json&lt;/code&gt; or &lt;code&gt;Accept&#x3D;application/xml&lt;/code&gt;, the response lists files and current folder details. If &lt;code&gt;Accept&#x3D;application/octet-stream&lt;/code&gt;, the response is returned as a stream. If query parameters include &lt;code&gt;action&#x3D;validateUpload&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;, the response is empty.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions, or the file may already exist when query parameters include &lt;code&gt;action&#x3D;validateUpload&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<FileCollectionResponse> filesListFilesWithHttpInfo(String path, Integer offset, Integer limit, String type, Boolean overwrite, String action, Long fileSize, String filter, Boolean recursive) throws ApiException {
-        okhttp3.Call localVarCall = filesListFilesValidateBeforeCall(path, offset, limit, type, overwrite, action, fileSize, filter, recursive, null);
-        Type localVarReturnType = new TypeToken<FileCollectionResponse>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List or Download Files (asynchronously)
-     * &lt;p&gt;Returns a list of files, or downloads the specified file. To list files, use &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; for the Accept header. To download, use &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt; for the Accept header.&lt;/p&gt;
-     * @param path &lt;p&gt;Catalog path. If listing files, this is the folder path. If downloading files, this is the file path.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of items to omit from the start of the result set. Default value is 0. Applicable only for listing files.&lt;/p&gt; (optional)
-     * @param limit &lt;p&gt;Maximum number of files to return. Applicable only for listing files.&lt;/p&gt; (optional)
-     * @param type &lt;p&gt;List files by type. If type is not specified, returns all files. Applicable only for listing files.&lt;/p&gt; (optional)
-     * @param overwrite &lt;p&gt;If true, overwrite files. If false, any existing file is validated but not overwritten. Applicable only with query parameters  &lt;code&gt;action&#x3D;validateUpload&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt; . Default value is false.&lt;/p&gt; (optional, default to false)
-     * @param action &lt;p&gt;Validates the upload. Supported action values are &lt;code&gt;validateUpload&lt;/code&gt; and &lt;code&gt;&#39;Accept&#x3D;application/json&#39;&lt;/code&gt; or &lt;code&gt;&#39;Accept&#x3D;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @param fileSize &lt;p&gt;Validates whether enough free space is available. Applicable only with query parameters &lt;code&gt;action&#x3D;&#39;validateUpload&#39;&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @param filter &lt;p&gt;Filter the list of files.&lt;/p&gt; (optional)
-     * @param recursive &lt;p&gt;Recursive param to get search result as recursive.&lt;/p&gt; (optional, default to false)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt; Response type can be either JSON/XML or stream, depending on the Accept header. If &lt;code&gt;Accept&#x3D;application/json&lt;/code&gt; or &lt;code&gt;Accept&#x3D;application/xml&lt;/code&gt;, the response lists files and current folder details. If &lt;code&gt;Accept&#x3D;application/octet-stream&lt;/code&gt;, the response is returned as a stream. If query parameters include &lt;code&gt;action&#x3D;validateUpload&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;, the response is empty.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions, or the file may already exist when query parameters include &lt;code&gt;action&#x3D;validateUpload&lt;/code&gt; and &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesListFilesAsync(String path, Integer offset, Integer limit, String type, Boolean overwrite, String action, Long fileSize, String filter, Boolean recursive, final ApiCallback<FileCollectionResponse> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = filesListFilesValidateBeforeCall(path, offset, limit, type, overwrite, action, fileSize, filter, recursive, _callback);
-        Type localVarReturnType = new TypeToken<FileCollectionResponse>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for filesListRootFolders
-     * @param filter &lt;p&gt;Filter the list of files.&lt;/p&gt; (optional)
-     * @param recursive &lt;p&gt;Recursive param to get search result as recursive.&lt;/p&gt; (optional, default to false)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Folder list.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Invalid path.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesListRootFoldersCall(String filter, Boolean recursive, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/files";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (filter != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("filter", filter));
-        }
-
-        if (recursive != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("recursive", recursive));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call filesListRootFoldersValidateBeforeCall(String filter, Boolean recursive, final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = filesListRootFoldersCall(filter, recursive, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * List Root Folders
-     * &lt;p&gt;List catalog root folders.&lt;/p&gt;
-     * @param filter &lt;p&gt;Filter the list of files.&lt;/p&gt; (optional)
-     * @param recursive &lt;p&gt;Recursive param to get search result as recursive.&lt;/p&gt; (optional, default to false)
-     * @return CollectionResponse
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Folder list.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Invalid path.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public CollectionResponse filesListRootFolders(String filter, Boolean recursive) throws ApiException {
-        ApiResponse<CollectionResponse> localVarResp = filesListRootFoldersWithHttpInfo(filter, recursive);
-        return localVarResp.getData();
-    }
-
-    /**
-     * List Root Folders
-     * &lt;p&gt;List catalog root folders.&lt;/p&gt;
-     * @param filter &lt;p&gt;Filter the list of files.&lt;/p&gt; (optional)
-     * @param recursive &lt;p&gt;Recursive param to get search result as recursive.&lt;/p&gt; (optional, default to false)
-     * @return ApiResponse&lt;CollectionResponse&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Folder list.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Invalid path.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<CollectionResponse> filesListRootFoldersWithHttpInfo(String filter, Boolean recursive) throws ApiException {
-        okhttp3.Call localVarCall = filesListRootFoldersValidateBeforeCall(filter, recursive, null);
-        Type localVarReturnType = new TypeToken<CollectionResponse>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List Root Folders (asynchronously)
-     * &lt;p&gt;List catalog root folders.&lt;/p&gt;
-     * @param filter &lt;p&gt;Filter the list of files.&lt;/p&gt; (optional)
-     * @param recursive &lt;p&gt;Recursive param to get search result as recursive.&lt;/p&gt; (optional, default to false)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Folder list.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Invalid path.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesListRootFoldersAsync(String filter, Boolean recursive, final ApiCallback<CollectionResponse> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = filesListRootFoldersValidateBeforeCall(filter, recursive, _callback);
-        Type localVarReturnType = new TypeToken<CollectionResponse>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for filesMoveResource
-     * @param body &lt;p&gt;File path details.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Overwrite existing file. Only applicable for moving or renaming a file.&lt;/p&gt; (optional, default to false)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file operation completed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesMoveResourceCall(FilePathDetail body, Boolean overwrite, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/files/actions/move";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (overwrite != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("overwrite", overwrite));
-        }
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call filesMoveResourceValidateBeforeCall(FilePathDetail body, Boolean overwrite, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling filesMoveResource(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = filesMoveResourceCall(body, overwrite, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Move or Rename File
-     * &lt;p&gt;Either moves a file from source to destination, or renames a file or folder. Moving a folder is not supported. Renaming a folder is supported only if the folder is not in the applications directory.&lt;/p&gt;
-     * @param body &lt;p&gt;File path details.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Overwrite existing file. Only applicable for moving or renaming a file.&lt;/p&gt; (optional, default to false)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file operation completed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void filesMoveResource(FilePathDetail body, Boolean overwrite) throws ApiException {
-        filesMoveResourceWithHttpInfo(body, overwrite);
-    }
-
-    /**
-     * Move or Rename File
-     * &lt;p&gt;Either moves a file from source to destination, or renames a file or folder. Moving a folder is not supported. Renaming a folder is supported only if the folder is not in the applications directory.&lt;/p&gt;
-     * @param body &lt;p&gt;File path details.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Overwrite existing file. Only applicable for moving or renaming a file.&lt;/p&gt; (optional, default to false)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file operation completed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> filesMoveResourceWithHttpInfo(FilePathDetail body, Boolean overwrite) throws ApiException {
-        okhttp3.Call localVarCall = filesMoveResourceValidateBeforeCall(body, overwrite, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Move or Rename File (asynchronously)
-     * &lt;p&gt;Either moves a file from source to destination, or renames a file or folder. Moving a folder is not supported. Renaming a folder is supported only if the folder is not in the applications directory.&lt;/p&gt;
-     * @param body &lt;p&gt;File path details.&lt;/p&gt; (required)
-     * @param overwrite &lt;p&gt;Overwrite existing file. Only applicable for moving or renaming a file.&lt;/p&gt; (optional, default to false)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The file operation completed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call filesMoveResourceAsync(FilePathDetail body, Boolean overwrite, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = filesMoveResourceValidateBeforeCall(body, overwrite, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
 }

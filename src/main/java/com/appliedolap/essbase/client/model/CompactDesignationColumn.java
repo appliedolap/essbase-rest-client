@@ -13,239 +13,267 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * CompactDesignationColumn
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  CompactDesignationColumn.JSON_PROPERTY_ORIGINAL_HEADER_NAME,
+  CompactDesignationColumn.JSON_PROPERTY_OBJECT_NAME,
+  CompactDesignationColumn.JSON_PROPERTY_REFERENCE_OBJECT_NAME,
+  CompactDesignationColumn.JSON_PROPERTY_OBJECT_TYPE,
+  CompactDesignationColumn.JSON_PROPERTY_FORMULA,
+  CompactDesignationColumn.JSON_PROPERTY_DIMENSION_ALIAS,
+  CompactDesignationColumn.JSON_PROPERTY_EXTERNAL_DIM_NAME,
+  CompactDesignationColumn.JSON_PROPERTY_SOLVE_ORDER
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class CompactDesignationColumn {
-  public static final String SERIALIZED_NAME_ORIGINAL_HEADER_NAME = "originalHeaderName";
-  @SerializedName(SERIALIZED_NAME_ORIGINAL_HEADER_NAME)
+  public static final String JSON_PROPERTY_ORIGINAL_HEADER_NAME = "originalHeaderName";
+  @jakarta.annotation.Nullable
   private String originalHeaderName;
 
-  public static final String SERIALIZED_NAME_OBJECT_NAME = "objectName";
-  @SerializedName(SERIALIZED_NAME_OBJECT_NAME)
+  public static final String JSON_PROPERTY_OBJECT_NAME = "objectName";
+  @jakarta.annotation.Nullable
   private String objectName;
 
-  public static final String SERIALIZED_NAME_REFERENCE_OBJECT_NAME = "referenceObjectName";
-  @SerializedName(SERIALIZED_NAME_REFERENCE_OBJECT_NAME)
+  public static final String JSON_PROPERTY_REFERENCE_OBJECT_NAME = "referenceObjectName";
+  @jakarta.annotation.Nullable
   private String referenceObjectName;
 
-  public static final String SERIALIZED_NAME_OBJECT_TYPE = "objectType";
-  @SerializedName(SERIALIZED_NAME_OBJECT_TYPE)
+  public static final String JSON_PROPERTY_OBJECT_TYPE = "objectType";
+  @jakarta.annotation.Nullable
   private String objectType;
 
-  public static final String SERIALIZED_NAME_FORMULA = "formula";
-  @SerializedName(SERIALIZED_NAME_FORMULA)
+  public static final String JSON_PROPERTY_FORMULA = "formula";
+  @jakarta.annotation.Nullable
   private String formula;
 
-  public static final String SERIALIZED_NAME_DIMENSION_ALIAS = "dimensionAlias";
-  @SerializedName(SERIALIZED_NAME_DIMENSION_ALIAS)
+  public static final String JSON_PROPERTY_DIMENSION_ALIAS = "dimensionAlias";
+  @jakarta.annotation.Nullable
   private String dimensionAlias;
 
-  public static final String SERIALIZED_NAME_EXTERNAL_DIM_NAME = "externalDimName";
-  @SerializedName(SERIALIZED_NAME_EXTERNAL_DIM_NAME)
+  public static final String JSON_PROPERTY_EXTERNAL_DIM_NAME = "externalDimName";
+  @jakarta.annotation.Nullable
   private String externalDimName;
 
-  public static final String SERIALIZED_NAME_SOLVE_ORDER = "solveOrder";
-  @SerializedName(SERIALIZED_NAME_SOLVE_ORDER)
+  public static final String JSON_PROPERTY_SOLVE_ORDER = "solveOrder";
+  @jakarta.annotation.Nullable
   private Integer solveOrder;
 
+  public CompactDesignationColumn() { 
+  }
 
-  public CompactDesignationColumn originalHeaderName(String originalHeaderName) {
-    
+  public CompactDesignationColumn originalHeaderName(@jakarta.annotation.Nullable String originalHeaderName) {
     this.originalHeaderName = originalHeaderName;
     return this;
   }
 
-   /**
+  /**
    * Get originalHeaderName
    * @return originalHeaderName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ORIGINAL_HEADER_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getOriginalHeaderName() {
     return originalHeaderName;
   }
 
 
-  public void setOriginalHeaderName(String originalHeaderName) {
+  @JsonProperty(JSON_PROPERTY_ORIGINAL_HEADER_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOriginalHeaderName(@jakarta.annotation.Nullable String originalHeaderName) {
     this.originalHeaderName = originalHeaderName;
   }
 
 
-  public CompactDesignationColumn objectName(String objectName) {
-    
+  public CompactDesignationColumn objectName(@jakarta.annotation.Nullable String objectName) {
     this.objectName = objectName;
     return this;
   }
 
-   /**
+  /**
    * Get objectName
    * @return objectName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OBJECT_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getObjectName() {
     return objectName;
   }
 
 
-  public void setObjectName(String objectName) {
+  @JsonProperty(JSON_PROPERTY_OBJECT_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setObjectName(@jakarta.annotation.Nullable String objectName) {
     this.objectName = objectName;
   }
 
 
-  public CompactDesignationColumn referenceObjectName(String referenceObjectName) {
-    
+  public CompactDesignationColumn referenceObjectName(@jakarta.annotation.Nullable String referenceObjectName) {
     this.referenceObjectName = referenceObjectName;
     return this;
   }
 
-   /**
+  /**
    * Get referenceObjectName
    * @return referenceObjectName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REFERENCE_OBJECT_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getReferenceObjectName() {
     return referenceObjectName;
   }
 
 
-  public void setReferenceObjectName(String referenceObjectName) {
+  @JsonProperty(JSON_PROPERTY_REFERENCE_OBJECT_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setReferenceObjectName(@jakarta.annotation.Nullable String referenceObjectName) {
     this.referenceObjectName = referenceObjectName;
   }
 
 
-  public CompactDesignationColumn objectType(String objectType) {
-    
+  public CompactDesignationColumn objectType(@jakarta.annotation.Nullable String objectType) {
     this.objectType = objectType;
     return this;
   }
 
-   /**
+  /**
    * Get objectType
    * @return objectType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OBJECT_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getObjectType() {
     return objectType;
   }
 
 
-  public void setObjectType(String objectType) {
+  @JsonProperty(JSON_PROPERTY_OBJECT_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setObjectType(@jakarta.annotation.Nullable String objectType) {
     this.objectType = objectType;
   }
 
 
-  public CompactDesignationColumn formula(String formula) {
-    
+  public CompactDesignationColumn formula(@jakarta.annotation.Nullable String formula) {
     this.formula = formula;
     return this;
   }
 
-   /**
+  /**
    * Get formula
    * @return formula
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FORMULA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getFormula() {
     return formula;
   }
 
 
-  public void setFormula(String formula) {
+  @JsonProperty(JSON_PROPERTY_FORMULA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFormula(@jakarta.annotation.Nullable String formula) {
     this.formula = formula;
   }
 
 
-  public CompactDesignationColumn dimensionAlias(String dimensionAlias) {
-    
+  public CompactDesignationColumn dimensionAlias(@jakarta.annotation.Nullable String dimensionAlias) {
     this.dimensionAlias = dimensionAlias;
     return this;
   }
 
-   /**
+  /**
    * Get dimensionAlias
    * @return dimensionAlias
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIMENSION_ALIAS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDimensionAlias() {
     return dimensionAlias;
   }
 
 
-  public void setDimensionAlias(String dimensionAlias) {
+  @JsonProperty(JSON_PROPERTY_DIMENSION_ALIAS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimensionAlias(@jakarta.annotation.Nullable String dimensionAlias) {
     this.dimensionAlias = dimensionAlias;
   }
 
 
-  public CompactDesignationColumn externalDimName(String externalDimName) {
-    
+  public CompactDesignationColumn externalDimName(@jakarta.annotation.Nullable String externalDimName) {
     this.externalDimName = externalDimName;
     return this;
   }
 
-   /**
+  /**
    * Get externalDimName
    * @return externalDimName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EXTERNAL_DIM_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getExternalDimName() {
     return externalDimName;
   }
 
 
-  public void setExternalDimName(String externalDimName) {
+  @JsonProperty(JSON_PROPERTY_EXTERNAL_DIM_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setExternalDimName(@jakarta.annotation.Nullable String externalDimName) {
     this.externalDimName = externalDimName;
   }
 
 
-  public CompactDesignationColumn solveOrder(Integer solveOrder) {
-    
+  public CompactDesignationColumn solveOrder(@jakarta.annotation.Nullable Integer solveOrder) {
     this.solveOrder = solveOrder;
     return this;
   }
 
-   /**
+  /**
    * Get solveOrder
    * @return solveOrder
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SOLVE_ORDER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getSolveOrder() {
     return solveOrder;
   }
 
 
-  public void setSolveOrder(Integer solveOrder) {
+  @JsonProperty(JSON_PROPERTY_SOLVE_ORDER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSolveOrder(@jakarta.annotation.Nullable Integer solveOrder) {
     this.solveOrder = solveOrder;
   }
 
 
+  /**
+   * Return true if this CompactDesignationColumn object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -297,5 +325,79 @@ public class CompactDesignationColumn {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `originalHeaderName` to the URL query string
+    if (getOriginalHeaderName() != null) {
+      joiner.add(String.format("%soriginalHeaderName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getOriginalHeaderName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `objectName` to the URL query string
+    if (getObjectName() != null) {
+      joiner.add(String.format("%sobjectName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getObjectName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `referenceObjectName` to the URL query string
+    if (getReferenceObjectName() != null) {
+      joiner.add(String.format("%sreferenceObjectName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getReferenceObjectName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `objectType` to the URL query string
+    if (getObjectType() != null) {
+      joiner.add(String.format("%sobjectType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getObjectType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `formula` to the URL query string
+    if (getFormula() != null) {
+      joiner.add(String.format("%sformula%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFormula()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dimensionAlias` to the URL query string
+    if (getDimensionAlias() != null) {
+      joiner.add(String.format("%sdimensionAlias%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDimensionAlias()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `externalDimName` to the URL query string
+    if (getExternalDimName() != null) {
+      joiner.add(String.format("%sexternalDimName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getExternalDimName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `solveOrder` to the URL query string
+    if (getSolveOrder() != null) {
+      joiner.add(String.format("%ssolveOrder%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSolveOrder()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

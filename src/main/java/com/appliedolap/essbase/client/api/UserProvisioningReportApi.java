@@ -10,22 +10,12 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.ApplicationProvisionReportItem;
 import com.appliedolap.essbase.client.model.ApplicationProvisionReportItemList;
@@ -33,829 +23,583 @@ import com.appliedolap.essbase.client.model.DatabaseProvisionReportItemList;
 import com.appliedolap.essbase.client.model.MainProvisionReport;
 import com.appliedolap.essbase.client.model.ProvisionReportItemList;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class UserProvisioningReportApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public UserProvisioningReportApi() {
-        this(Configuration.getDefaultApiClient());
+  public UserProvisioningReportApi() {
+    this(new ApiClient());
+  }
+
+  public UserProvisioningReportApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public UserProvisioningReportApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Get Filters Provisioning Report
+   * &lt;p&gt;Get a filters provisioning report for the specified application. The logged in user must have at least Database Manager role for the application to get a provisioning report.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param userId User ID. (required)
+   * @return DatabaseProvisionReportItemList
+   * @throws ApiException if fails to make API call
+   */
+  public DatabaseProvisionReportItemList userProvisioningReportGetFilters(String application, String userId) throws ApiException {
+    ApiResponse<DatabaseProvisionReportItemList> localVarResponse = userProvisioningReportGetFiltersWithHttpInfo(application, userId);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for userProvisioningReportGetFilters
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userProvisioningReportGetFiltersCall(String application, String userId, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/users/{userId}/provisionReport/applications/{application}/filters"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "userId" + "\\}", localVarApiClient.escapeString(userId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Get Filters Provisioning Report
+   * &lt;p&gt;Get a filters provisioning report for the specified application. The logged in user must have at least Database Manager role for the application to get a provisioning report.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param userId User ID. (required)
+   * @return ApiResponse&lt;DatabaseProvisionReportItemList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<DatabaseProvisionReportItemList> userProvisioningReportGetFiltersWithHttpInfo(String application, String userId) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = userProvisioningReportGetFiltersRequestBuilder(application, userId);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("userProvisioningReportGetFilters", localVarResponse);
         }
+        return new ApiResponse<DatabaseProvisionReportItemList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<DatabaseProvisionReportItemList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder userProvisioningReportGetFiltersRequestBuilder(String application, String userId) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling userProvisioningReportGetFilters");
+    }
+    // verify the required parameter 'userId' is set
+    if (userId == null) {
+      throw new ApiException(400, "Missing the required parameter 'userId' when calling userProvisioningReportGetFilters");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call userProvisioningReportGetFiltersValidateBeforeCall(String application, String userId, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling userProvisioningReportGetFilters(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/users/{userId}/provisionReport/applications/{application}/filters"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{userId}", ApiClient.urlEncode(userId.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Full Provisioning Report
+   * Get a full provisioning report. Service roles are included in the response only if the logged in user has Service Administrator role. The logged in user must have at least Database Manager role for an application to get its provisioning report. Application roles are included in the report only if the logged in user has at least Application Manager role for the application.
+   * @param userId User ID. (required)
+   * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to applications are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all applications is returned.&lt;/p&gt; (optional)
+   * @return MainProvisionReport
+   * @throws ApiException if fails to make API call
+   */
+  public MainProvisionReport userProvisioningReportGetFullReport(String userId, String expand) throws ApiException {
+    ApiResponse<MainProvisionReport> localVarResponse = userProvisioningReportGetFullReportWithHttpInfo(userId, expand);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Full Provisioning Report
+   * Get a full provisioning report. Service roles are included in the response only if the logged in user has Service Administrator role. The logged in user must have at least Database Manager role for an application to get its provisioning report. Application roles are included in the report only if the logged in user has at least Application Manager role for the application.
+   * @param userId User ID. (required)
+   * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to applications are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all applications is returned.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;MainProvisionReport&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<MainProvisionReport> userProvisioningReportGetFullReportWithHttpInfo(String userId, String expand) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = userProvisioningReportGetFullReportRequestBuilder(userId, expand);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("userProvisioningReportGetFullReport", localVarResponse);
         }
-        
-        // verify the required parameter 'userId' is set
-        if (userId == null) {
-            throw new ApiException("Missing the required parameter 'userId' when calling userProvisioningReportGetFilters(Async)");
+        return new ApiResponse<MainProvisionReport>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<MainProvisionReport>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder userProvisioningReportGetFullReportRequestBuilder(String userId, String expand) throws ApiException {
+    // verify the required parameter 'userId' is set
+    if (userId == null) {
+      throw new ApiException(400, "Missing the required parameter 'userId' when calling userProvisioningReportGetFullReport");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/users/{userId}/provisionReport"
+        .replace("{userId}", ApiClient.urlEncode(userId.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "expand";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("expand", expand));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Applications Provisioning Reports
+   * &lt;p&gt;Get a provisioning report for all the applications. The logged in user must have at least Database Manager role for the application to get a provisioning report. Application roles are included in the report only if the logged in user has at least Application Manager role for the application.&lt;/p&gt;
+   * @param userId User ID. (required)
+   * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to applications are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all applications is returned.&lt;/p&gt; (optional)
+   * @return ApplicationProvisionReportItemList
+   * @throws ApiException if fails to make API call
+   */
+  public ApplicationProvisionReportItemList userProvisioningReportGetReportForAllApplications(String userId, String expand) throws ApiException {
+    ApiResponse<ApplicationProvisionReportItemList> localVarResponse = userProvisioningReportGetReportForAllApplicationsWithHttpInfo(userId, expand);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Applications Provisioning Reports
+   * &lt;p&gt;Get a provisioning report for all the applications. The logged in user must have at least Database Manager role for the application to get a provisioning report. Application roles are included in the report only if the logged in user has at least Application Manager role for the application.&lt;/p&gt;
+   * @param userId User ID. (required)
+   * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to applications are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all applications is returned.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;ApplicationProvisionReportItemList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ApplicationProvisionReportItemList> userProvisioningReportGetReportForAllApplicationsWithHttpInfo(String userId, String expand) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = userProvisioningReportGetReportForAllApplicationsRequestBuilder(userId, expand);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("userProvisioningReportGetReportForAllApplications", localVarResponse);
         }
-        
+        return new ApiResponse<ApplicationProvisionReportItemList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ApplicationProvisionReportItemList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = userProvisioningReportGetFiltersCall(application, userId, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder userProvisioningReportGetReportForAllApplicationsRequestBuilder(String userId, String expand) throws ApiException {
+    // verify the required parameter 'userId' is set
+    if (userId == null) {
+      throw new ApiException(400, "Missing the required parameter 'userId' when calling userProvisioningReportGetReportForAllApplications");
     }
 
-    /**
-     * Get Filters Provisioning Report
-     * &lt;p&gt;Get a filters provisioning report for the specified application. The logged in user must have at least Database Manager role for the application to get a provisioning report.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @return DatabaseProvisionReportItemList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public DatabaseProvisionReportItemList userProvisioningReportGetFilters(String application, String userId) throws ApiException {
-        ApiResponse<DatabaseProvisionReportItemList> localVarResp = userProvisioningReportGetFiltersWithHttpInfo(application, userId);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/users/{userId}/provisionReport/applications"
+        .replace("{userId}", ApiClient.urlEncode(userId.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "expand";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("expand", expand));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Get Filters Provisioning Report
-     * &lt;p&gt;Get a filters provisioning report for the specified application. The logged in user must have at least Database Manager role for the application to get a provisioning report.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @return ApiResponse&lt;DatabaseProvisionReportItemList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<DatabaseProvisionReportItemList> userProvisioningReportGetFiltersWithHttpInfo(String application, String userId) throws ApiException {
-        okhttp3.Call localVarCall = userProvisioningReportGetFiltersValidateBeforeCall(application, userId, null);
-        Type localVarReturnType = new TypeToken<DatabaseProvisionReportItemList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Filters Provisioning Report (asynchronously)
-     * &lt;p&gt;Get a filters provisioning report for the specified application. The logged in user must have at least Database Manager role for the application to get a provisioning report.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userProvisioningReportGetFiltersAsync(String application, String userId, final ApiCallback<DatabaseProvisionReportItemList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = userProvisioningReportGetFiltersValidateBeforeCall(application, userId, _callback);
-        Type localVarReturnType = new TypeToken<DatabaseProvisionReportItemList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for userProvisioningReportGetFullReport
-     * @param userId User ID. (required)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to applications are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all applications is returned.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Full provisioning report including service and all the applications.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> User not found </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userProvisioningReportGetFullReportCall(String userId, String expand, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/users/{userId}/provisionReport"
-            .replaceAll("\\{" + "userId" + "\\}", localVarApiClient.escapeString(userId.toString()));
+  /**
+   * Get Application Provisioning Report
+   * &lt;p&gt;Get a provisioning report for the specified application. The logged in user must have at least Database Manager role for the application to get a provisioning report. Application roles are included in the report only if the logged in user has at least Application Manager role for the application.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param userId User ID. (required)
+   * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to roles, filters, and scripts are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all roles, filters, and scripts in the application is returned.&lt;/p&gt; (optional)
+   * @return ApplicationProvisionReportItem
+   * @throws ApiException if fails to make API call
+   */
+  public ApplicationProvisionReportItem userProvisioningReportGetReportForApplication(String application, String userId, String expand) throws ApiException {
+    ApiResponse<ApplicationProvisionReportItem> localVarResponse = userProvisioningReportGetReportForApplicationWithHttpInfo(application, userId, expand);
+    return localVarResponse.getData();
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (expand != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("expand", expand));
+  /**
+   * Get Application Provisioning Report
+   * &lt;p&gt;Get a provisioning report for the specified application. The logged in user must have at least Database Manager role for the application to get a provisioning report. Application roles are included in the report only if the logged in user has at least Application Manager role for the application.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param userId User ID. (required)
+   * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to roles, filters, and scripts are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all roles, filters, and scripts in the application is returned.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;ApplicationProvisionReportItem&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ApplicationProvisionReportItem> userProvisioningReportGetReportForApplicationWithHttpInfo(String application, String userId, String expand) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = userProvisioningReportGetReportForApplicationRequestBuilder(application, userId, expand);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("userProvisioningReportGetReportForApplication", localVarResponse);
         }
+        return new ApiResponse<ApplicationProvisionReportItem>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ApplicationProvisionReportItem>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  private HttpRequest.Builder userProvisioningReportGetReportForApplicationRequestBuilder(String application, String userId, String expand) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling userProvisioningReportGetReportForApplication");
+    }
+    // verify the required parameter 'userId' is set
+    if (userId == null) {
+      throw new ApiException(400, "Missing the required parameter 'userId' when calling userProvisioningReportGetReportForApplication");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/users/{userId}/provisionReport/applications/{application}"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{userId}", ApiClient.urlEncode(userId.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "expand";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("expand", expand));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Application Roles Provisioning Report
+   * &lt;p&gt;Get a roles provisioning report for the specified application. The logged in user must have at least Application Manager role for the application to get this provisioning report.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param userId User ID. (required)
+   * @return ProvisionReportItemList
+   * @throws ApiException if fails to make API call
+   */
+  public ProvisionReportItemList userProvisioningReportGetRoles(String application, String userId) throws ApiException {
+    ApiResponse<ProvisionReportItemList> localVarResponse = userProvisioningReportGetRolesWithHttpInfo(application, userId);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Application Roles Provisioning Report
+   * &lt;p&gt;Get a roles provisioning report for the specified application. The logged in user must have at least Application Manager role for the application to get this provisioning report.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param userId User ID. (required)
+   * @return ApiResponse&lt;ProvisionReportItemList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ProvisionReportItemList> userProvisioningReportGetRolesWithHttpInfo(String application, String userId) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = userProvisioningReportGetRolesRequestBuilder(application, userId);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("userProvisioningReportGetRoles", localVarResponse);
         }
+        return new ApiResponse<ProvisionReportItemList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ProvisionReportItemList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder userProvisioningReportGetRolesRequestBuilder(String application, String userId) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling userProvisioningReportGetRoles");
+    }
+    // verify the required parameter 'userId' is set
+    if (userId == null) {
+      throw new ApiException(400, "Missing the required parameter 'userId' when calling userProvisioningReportGetRoles");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call userProvisioningReportGetFullReportValidateBeforeCall(String userId, String expand, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'userId' is set
-        if (userId == null) {
-            throw new ApiException("Missing the required parameter 'userId' when calling userProvisioningReportGetFullReport(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/users/{userId}/provisionReport/applications/{application}/roles"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{userId}", ApiClient.urlEncode(userId.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Scripts Provisioning Report
+   * &lt;p&gt;Get a scripts provisioning report for the specified application. The logged in user must have at least Database Manager role for the application to get a provisioning report.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param userId User ID. (required)
+   * @return DatabaseProvisionReportItemList
+   * @throws ApiException if fails to make API call
+   */
+  public DatabaseProvisionReportItemList userProvisioningReportGetScripts(String application, String userId) throws ApiException {
+    ApiResponse<DatabaseProvisionReportItemList> localVarResponse = userProvisioningReportGetScriptsWithHttpInfo(application, userId);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Scripts Provisioning Report
+   * &lt;p&gt;Get a scripts provisioning report for the specified application. The logged in user must have at least Database Manager role for the application to get a provisioning report.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param userId User ID. (required)
+   * @return ApiResponse&lt;DatabaseProvisionReportItemList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<DatabaseProvisionReportItemList> userProvisioningReportGetScriptsWithHttpInfo(String application, String userId) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = userProvisioningReportGetScriptsRequestBuilder(application, userId);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("userProvisioningReportGetScripts", localVarResponse);
         }
-        
+        return new ApiResponse<DatabaseProvisionReportItemList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<DatabaseProvisionReportItemList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = userProvisioningReportGetFullReportCall(userId, expand, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder userProvisioningReportGetScriptsRequestBuilder(String application, String userId) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling userProvisioningReportGetScripts");
+    }
+    // verify the required parameter 'userId' is set
+    if (userId == null) {
+      throw new ApiException(400, "Missing the required parameter 'userId' when calling userProvisioningReportGetScripts");
     }
 
-    /**
-     * Get Full Provisioning Report
-     * Get a full provisioning report. Service roles are included in the response only if the logged in user has Service Administrator role. The logged in user must have at least Database Manager role for an application to get its provisioning report. Application roles are included in the report only if the logged in user has at least Application Manager role for the application.
-     * @param userId User ID. (required)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to applications are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all applications is returned.&lt;/p&gt; (optional)
-     * @return MainProvisionReport
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Full provisioning report including service and all the applications.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> User not found </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public MainProvisionReport userProvisioningReportGetFullReport(String userId, String expand) throws ApiException {
-        ApiResponse<MainProvisionReport> localVarResp = userProvisioningReportGetFullReportWithHttpInfo(userId, expand);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/users/{userId}/provisionReport/applications/{application}/scripts"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{userId}", ApiClient.urlEncode(userId.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Full Provisioning Report
-     * Get a full provisioning report. Service roles are included in the response only if the logged in user has Service Administrator role. The logged in user must have at least Database Manager role for an application to get its provisioning report. Application roles are included in the report only if the logged in user has at least Application Manager role for the application.
-     * @param userId User ID. (required)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to applications are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all applications is returned.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;MainProvisionReport&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Full provisioning report including service and all the applications.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> User not found </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<MainProvisionReport> userProvisioningReportGetFullReportWithHttpInfo(String userId, String expand) throws ApiException {
-        okhttp3.Call localVarCall = userProvisioningReportGetFullReportValidateBeforeCall(userId, expand, null);
-        Type localVarReturnType = new TypeToken<MainProvisionReport>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Get Full Provisioning Report (asynchronously)
-     * Get a full provisioning report. Service roles are included in the response only if the logged in user has Service Administrator role. The logged in user must have at least Database Manager role for an application to get its provisioning report. Application roles are included in the report only if the logged in user has at least Application Manager role for the application.
-     * @param userId User ID. (required)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to applications are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all applications is returned.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Full provisioning report including service and all the applications.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> User not found </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userProvisioningReportGetFullReportAsync(String userId, String expand, final ApiCallback<MainProvisionReport> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = userProvisioningReportGetFullReportValidateBeforeCall(userId, expand, _callback);
-        Type localVarReturnType = new TypeToken<MainProvisionReport>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for userProvisioningReportGetReportForAllApplications
-     * @param userId User ID. (required)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to applications are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all applications is returned.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userProvisioningReportGetReportForAllApplicationsCall(String userId, String expand, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/users/{userId}/provisionReport/applications"
-            .replaceAll("\\{" + "userId" + "\\}", localVarApiClient.escapeString(userId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (expand != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("expand", expand));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call userProvisioningReportGetReportForAllApplicationsValidateBeforeCall(String userId, String expand, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'userId' is set
-        if (userId == null) {
-            throw new ApiException("Missing the required parameter 'userId' when calling userProvisioningReportGetReportForAllApplications(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = userProvisioningReportGetReportForAllApplicationsCall(userId, expand, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Applications Provisioning Reports
-     * &lt;p&gt;Get a provisioning report for all the applications. The logged in user must have at least Database Manager role for the application to get a provisioning report. Application roles are included in the report only if the logged in user has at least Application Manager role for the application.&lt;/p&gt;
-     * @param userId User ID. (required)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to applications are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all applications is returned.&lt;/p&gt; (optional)
-     * @return ApplicationProvisionReportItemList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApplicationProvisionReportItemList userProvisioningReportGetReportForAllApplications(String userId, String expand) throws ApiException {
-        ApiResponse<ApplicationProvisionReportItemList> localVarResp = userProvisioningReportGetReportForAllApplicationsWithHttpInfo(userId, expand);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Applications Provisioning Reports
-     * &lt;p&gt;Get a provisioning report for all the applications. The logged in user must have at least Database Manager role for the application to get a provisioning report. Application roles are included in the report only if the logged in user has at least Application Manager role for the application.&lt;/p&gt;
-     * @param userId User ID. (required)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to applications are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all applications is returned.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;ApplicationProvisionReportItemList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ApplicationProvisionReportItemList> userProvisioningReportGetReportForAllApplicationsWithHttpInfo(String userId, String expand) throws ApiException {
-        okhttp3.Call localVarCall = userProvisioningReportGetReportForAllApplicationsValidateBeforeCall(userId, expand, null);
-        Type localVarReturnType = new TypeToken<ApplicationProvisionReportItemList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Applications Provisioning Reports (asynchronously)
-     * &lt;p&gt;Get a provisioning report for all the applications. The logged in user must have at least Database Manager role for the application to get a provisioning report. Application roles are included in the report only if the logged in user has at least Application Manager role for the application.&lt;/p&gt;
-     * @param userId User ID. (required)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to applications are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all applications is returned.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userProvisioningReportGetReportForAllApplicationsAsync(String userId, String expand, final ApiCallback<ApplicationProvisionReportItemList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = userProvisioningReportGetReportForAllApplicationsValidateBeforeCall(userId, expand, _callback);
-        Type localVarReturnType = new TypeToken<ApplicationProvisionReportItemList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for userProvisioningReportGetReportForApplication
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to roles, filters, and scripts are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all roles, filters, and scripts in the application is returned.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userProvisioningReportGetReportForApplicationCall(String application, String userId, String expand, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/users/{userId}/provisionReport/applications/{application}"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "userId" + "\\}", localVarApiClient.escapeString(userId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (expand != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("expand", expand));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call userProvisioningReportGetReportForApplicationValidateBeforeCall(String application, String userId, String expand, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling userProvisioningReportGetReportForApplication(Async)");
-        }
-        
-        // verify the required parameter 'userId' is set
-        if (userId == null) {
-            throw new ApiException("Missing the required parameter 'userId' when calling userProvisioningReportGetReportForApplication(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = userProvisioningReportGetReportForApplicationCall(application, userId, expand, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Application Provisioning Report
-     * &lt;p&gt;Get a provisioning report for the specified application. The logged in user must have at least Database Manager role for the application to get a provisioning report. Application roles are included in the report only if the logged in user has at least Application Manager role for the application.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to roles, filters, and scripts are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all roles, filters, and scripts in the application is returned.&lt;/p&gt; (optional)
-     * @return ApplicationProvisionReportItem
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApplicationProvisionReportItem userProvisioningReportGetReportForApplication(String application, String userId, String expand) throws ApiException {
-        ApiResponse<ApplicationProvisionReportItem> localVarResp = userProvisioningReportGetReportForApplicationWithHttpInfo(application, userId, expand);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Application Provisioning Report
-     * &lt;p&gt;Get a provisioning report for the specified application. The logged in user must have at least Database Manager role for the application to get a provisioning report. Application roles are included in the report only if the logged in user has at least Application Manager role for the application.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to roles, filters, and scripts are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all roles, filters, and scripts in the application is returned.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;ApplicationProvisionReportItem&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ApplicationProvisionReportItem> userProvisioningReportGetReportForApplicationWithHttpInfo(String application, String userId, String expand) throws ApiException {
-        okhttp3.Call localVarCall = userProvisioningReportGetReportForApplicationValidateBeforeCall(application, userId, expand, null);
-        Type localVarReturnType = new TypeToken<ApplicationProvisionReportItem>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Application Provisioning Report (asynchronously)
-     * &lt;p&gt;Get a provisioning report for the specified application. The logged in user must have at least Database Manager role for the application to get a provisioning report. Application roles are included in the report only if the logged in user has at least Application Manager role for the application.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;none&lt;/code&gt;, meaning only links to roles, filters, and scripts are returned. If &lt;code&gt;all&lt;/code&gt; is specified, provisioning information for all roles, filters, and scripts in the application is returned.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userProvisioningReportGetReportForApplicationAsync(String application, String userId, String expand, final ApiCallback<ApplicationProvisionReportItem> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = userProvisioningReportGetReportForApplicationValidateBeforeCall(application, userId, expand, _callback);
-        Type localVarReturnType = new TypeToken<ApplicationProvisionReportItem>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for userProvisioningReportGetRoles
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userProvisioningReportGetRolesCall(String application, String userId, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/users/{userId}/provisionReport/applications/{application}/roles"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "userId" + "\\}", localVarApiClient.escapeString(userId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call userProvisioningReportGetRolesValidateBeforeCall(String application, String userId, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling userProvisioningReportGetRoles(Async)");
-        }
-        
-        // verify the required parameter 'userId' is set
-        if (userId == null) {
-            throw new ApiException("Missing the required parameter 'userId' when calling userProvisioningReportGetRoles(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = userProvisioningReportGetRolesCall(application, userId, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Application Roles Provisioning Report
-     * &lt;p&gt;Get a roles provisioning report for the specified application. The logged in user must have at least Application Manager role for the application to get this provisioning report.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @return ProvisionReportItemList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ProvisionReportItemList userProvisioningReportGetRoles(String application, String userId) throws ApiException {
-        ApiResponse<ProvisionReportItemList> localVarResp = userProvisioningReportGetRolesWithHttpInfo(application, userId);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Application Roles Provisioning Report
-     * &lt;p&gt;Get a roles provisioning report for the specified application. The logged in user must have at least Application Manager role for the application to get this provisioning report.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @return ApiResponse&lt;ProvisionReportItemList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ProvisionReportItemList> userProvisioningReportGetRolesWithHttpInfo(String application, String userId) throws ApiException {
-        okhttp3.Call localVarCall = userProvisioningReportGetRolesValidateBeforeCall(application, userId, null);
-        Type localVarReturnType = new TypeToken<ProvisionReportItemList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Application Roles Provisioning Report (asynchronously)
-     * &lt;p&gt;Get a roles provisioning report for the specified application. The logged in user must have at least Application Manager role for the application to get this provisioning report.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userProvisioningReportGetRolesAsync(String application, String userId, final ApiCallback<ProvisionReportItemList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = userProvisioningReportGetRolesValidateBeforeCall(application, userId, _callback);
-        Type localVarReturnType = new TypeToken<ProvisionReportItemList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for userProvisioningReportGetScripts
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the application service role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userProvisioningReportGetScriptsCall(String application, String userId, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/users/{userId}/provisionReport/applications/{application}/scripts"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "userId" + "\\}", localVarApiClient.escapeString(userId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call userProvisioningReportGetScriptsValidateBeforeCall(String application, String userId, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling userProvisioningReportGetScripts(Async)");
-        }
-        
-        // verify the required parameter 'userId' is set
-        if (userId == null) {
-            throw new ApiException("Missing the required parameter 'userId' when calling userProvisioningReportGetScripts(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = userProvisioningReportGetScriptsCall(application, userId, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Scripts Provisioning Report
-     * &lt;p&gt;Get a scripts provisioning report for the specified application. The logged in user must have at least Database Manager role for the application to get a provisioning report.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @return DatabaseProvisionReportItemList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the application service role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public DatabaseProvisionReportItemList userProvisioningReportGetScripts(String application, String userId) throws ApiException {
-        ApiResponse<DatabaseProvisionReportItemList> localVarResp = userProvisioningReportGetScriptsWithHttpInfo(application, userId);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Scripts Provisioning Report
-     * &lt;p&gt;Get a scripts provisioning report for the specified application. The logged in user must have at least Database Manager role for the application to get a provisioning report.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @return ApiResponse&lt;DatabaseProvisionReportItemList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the application service role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<DatabaseProvisionReportItemList> userProvisioningReportGetScriptsWithHttpInfo(String application, String userId) throws ApiException {
-        okhttp3.Call localVarCall = userProvisioningReportGetScriptsValidateBeforeCall(application, userId, null);
-        Type localVarReturnType = new TypeToken<DatabaseProvisionReportItemList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Scripts Provisioning Report (asynchronously)
-     * &lt;p&gt;Get a scripts provisioning report for the specified application. The logged in user must have at least Database Manager role for the application to get a provisioning report.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param userId User ID. (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning report returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the application service role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;User not found.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userProvisioningReportGetScriptsAsync(String application, String userId, final ApiCallback<DatabaseProvisionReportItemList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = userProvisioningReportGetScriptsValidateBeforeCall(application, userId, _callback);
-        Type localVarReturnType = new TypeToken<DatabaseProvisionReportItemList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

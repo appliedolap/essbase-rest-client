@@ -13,107 +13,128 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.AttributeBuildProperties;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * FieldDimBuildOptions
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  FieldDimBuildOptions.JSON_PROPERTY_PARENT,
+  FieldDimBuildOptions.JSON_PROPERTY_GENERATION_TYPE,
+  FieldDimBuildOptions.JSON_PROPERTY_REFER,
+  FieldDimBuildOptions.JSON_PROPERTY_REFER_INDEX,
+  FieldDimBuildOptions.JSON_PROPERTY_SHARED,
+  FieldDimBuildOptions.JSON_PROPERTY_ATTRIBUTE_BUILD_PROPERTIES,
+  FieldDimBuildOptions.JSON_PROPERTY_DIMENSION,
+  FieldDimBuildOptions.JSON_PROPERTY_ATTRIBUTE_DIMENSION,
+  FieldDimBuildOptions.JSON_PROPERTY_ALIAS,
+  FieldDimBuildOptions.JSON_PROPERTY_END_INDEP_COLUMNS,
+  FieldDimBuildOptions.JSON_PROPERTY_START_INDEP_COLUMNS,
+  FieldDimBuildOptions.JSON_PROPERTY_GENERATION_PROPERTY,
+  FieldDimBuildOptions.JSON_PROPERTY_GENERATION,
+  FieldDimBuildOptions.JSON_PROPERTY_IGNORE,
+  FieldDimBuildOptions.JSON_PROPERTY_STATIC_FIELD
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class FieldDimBuildOptions {
-  public static final String SERIALIZED_NAME_PARENT = "parent";
-  @SerializedName(SERIALIZED_NAME_PARENT)
+  public static final String JSON_PROPERTY_PARENT = "parent";
+  @jakarta.annotation.Nullable
   private Integer parent;
 
   /**
    * Gets or Sets generationType
    */
-  @JsonAdapter(GenerationTypeEnum.Adapter.class)
   public enum GenerationTypeEnum {
-    NONE("NONE"),
+    NONE(String.valueOf("NONE")),
     
-    PARENT("PARENT"),
+    PARENT(String.valueOf("PARENT")),
     
-    CHILD("CHILD"),
+    CHILD(String.valueOf("CHILD")),
     
-    GENERATION("GENERATION"),
+    GENERATION(String.valueOf("GENERATION")),
     
-    LEVEL("LEVEL"),
+    LEVEL(String.valueOf("LEVEL")),
     
-    ATTRIBUTE_MEMBER("ATTRIBUTE_MEMBER"),
+    ATTRIBUTE_MEMBER(String.valueOf("ATTRIBUTE_MEMBER")),
     
-    ALIAS("ALIAS"),
+    ALIAS(String.valueOf("ALIAS")),
     
-    PROPERTY("PROPERTY"),
+    PROPERTY(String.valueOf("PROPERTY")),
     
-    FORMULA("FORMULA"),
+    FORMULA(String.valueOf("FORMULA")),
     
-    MEMBER_ID("MEMBER_ID"),
+    MEMBER_ID(String.valueOf("MEMBER_ID")),
     
-    SOLVE_ORDER("SOLVE_ORDER"),
+    SOLVE_ORDER(String.valueOf("SOLVE_ORDER")),
     
-    UDA("UDA"),
+    UDA(String.valueOf("UDA")),
     
-    DUPGEN("DUPGEN"),
+    DUPGEN(String.valueOf("DUPGEN")),
     
-    DUPLEVEL("DUPLEVEL"),
+    DUPLEVEL(String.valueOf("DUPLEVEL")),
     
-    DUPGEN_ALIAS("DUPGEN_ALIAS"),
+    DUPGEN_ALIAS(String.valueOf("DUPGEN_ALIAS")),
     
-    DUPLEVEL_ALIAS("DUPLEVEL_ALIAS"),
+    DUPLEVEL_ALIAS(String.valueOf("DUPLEVEL_ALIAS")),
     
-    CURRENCY_NAME("CURRENCY_NAME"),
+    CURRENCY_NAME(String.valueOf("CURRENCY_NAME")),
     
-    CURRENCY_CATEGORY("CURRENCY_CATEGORY"),
+    CURRENCY_CATEGORY(String.valueOf("CURRENCY_CATEGORY")),
     
-    NUMTYPES("NUMTYPES"),
+    NUMTYPES(String.valueOf("NUMTYPES")),
     
-    ATTRIBUTE_DIM_LABEL("ATTRIBUTE_DIM_LABEL"),
+    ATTRIBUTE_DIM_LABEL(String.valueOf("ATTRIBUTE_DIM_LABEL")),
     
-    ATTRIBUTE_PARENT("ATTRIBUTE_PARENT"),
+    ATTRIBUTE_PARENT(String.valueOf("ATTRIBUTE_PARENT")),
     
-    DUPGEN_CAPTION("DUPGEN_CAPTION"),
+    DUPGEN_CAPTION(String.valueOf("DUPGEN_CAPTION")),
     
-    DUPLEVEL_CAPTION("DUPLEVEL_CAPTION"),
+    DUPLEVEL_CAPTION(String.valueOf("DUPLEVEL_CAPTION")),
     
-    AGGLEVELUSAGE("AGGLEVELUSAGE"),
+    AGGLEVELUSAGE(String.valueOf("AGGLEVELUSAGE")),
     
-    ATTR_ASSOCIATE("ATTR_ASSOCIATE"),
+    ATTR_ASSOCIATE(String.valueOf("ATTR_ASSOCIATE")),
     
-    REFMEMBER("REFMEMBER"),
+    REFMEMBER(String.valueOf("REFMEMBER")),
     
-    GEN_RIGHTJOIN("GEN_RIGHTJOIN"),
+    GEN_RIGHTJOIN(String.valueOf("GEN_RIGHTJOIN")),
     
-    COMMENT("COMMENT"),
+    COMMENT(String.valueOf("COMMENT")),
     
-    SHARED_GEN("SHARED_GEN"),
+    SHARED_GEN(String.valueOf("SHARED_GEN")),
     
-    GEN_NATUREJOIN("GEN_NATUREJOIN"),
+    GEN_NATUREJOIN(String.valueOf("GEN_NATUREJOIN")),
     
-    GEN_LEFTJOIN("GEN_LEFTJOIN"),
+    GEN_LEFTJOIN(String.valueOf("GEN_LEFTJOIN")),
     
-    GEN_OTLMBR("GEN_OTLMBR"),
+    GEN_OTLMBR(String.valueOf("GEN_OTLMBR")),
     
-    COMMENT_EX("COMMENT_EX"),
+    COMMENT_EX(String.valueOf("COMMENT_EX")),
     
-    REFMEMBERID("REFMEMBERID"),
+    REFMEMBERID(String.valueOf("REFMEMBERID")),
     
-    SMARTLISTID("SMARTLISTID"),
+    SMARTLISTID(String.valueOf("SMARTLISTID")),
     
-    SMARTLISTTEXT("SMARTLISTTEXT"),
+    SMARTLISTTEXT(String.valueOf("SMARTLISTTEXT")),
     
-    FORMATSTRING("FORMATSTRING");
+    FORMATSTRING(String.valueOf("FORMATSTRING"));
 
     private String value;
 
@@ -121,6 +142,7 @@ public class FieldDimBuildOptions {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -130,6 +152,7 @@ public class FieldDimBuildOptions {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static GenerationTypeEnum fromValue(String value) {
       for (GenerationTypeEnum b : GenerationTypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -138,81 +161,67 @@ public class FieldDimBuildOptions {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<GenerationTypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final GenerationTypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public GenerationTypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return GenerationTypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_GENERATION_TYPE = "generationType";
-  @SerializedName(SERIALIZED_NAME_GENERATION_TYPE)
+  public static final String JSON_PROPERTY_GENERATION_TYPE = "generationType";
+  @jakarta.annotation.Nullable
   private GenerationTypeEnum generationType;
 
-  public static final String SERIALIZED_NAME_REFER = "refer";
-  @SerializedName(SERIALIZED_NAME_REFER)
+  public static final String JSON_PROPERTY_REFER = "refer";
+  @jakarta.annotation.Nullable
   private Integer refer;
 
-  public static final String SERIALIZED_NAME_REFER_INDEX = "referIndex";
-  @SerializedName(SERIALIZED_NAME_REFER_INDEX)
+  public static final String JSON_PROPERTY_REFER_INDEX = "referIndex";
+  @jakarta.annotation.Nullable
   private Integer referIndex;
 
-  public static final String SERIALIZED_NAME_SHARED = "shared";
-  @SerializedName(SERIALIZED_NAME_SHARED)
+  public static final String JSON_PROPERTY_SHARED = "shared";
+  @jakarta.annotation.Nullable
   private Integer shared;
 
-  public static final String SERIALIZED_NAME_ATTRIBUTE_BUILD_PROPERTIES = "attributeBuildProperties";
-  @SerializedName(SERIALIZED_NAME_ATTRIBUTE_BUILD_PROPERTIES)
+  public static final String JSON_PROPERTY_ATTRIBUTE_BUILD_PROPERTIES = "attributeBuildProperties";
+  @jakarta.annotation.Nullable
   private AttributeBuildProperties attributeBuildProperties;
 
-  public static final String SERIALIZED_NAME_DIMENSION = "dimension";
-  @SerializedName(SERIALIZED_NAME_DIMENSION)
+  public static final String JSON_PROPERTY_DIMENSION = "dimension";
+  @jakarta.annotation.Nullable
   private String dimension;
 
-  public static final String SERIALIZED_NAME_ATTRIBUTE_DIMENSION = "attributeDimension";
-  @SerializedName(SERIALIZED_NAME_ATTRIBUTE_DIMENSION)
+  public static final String JSON_PROPERTY_ATTRIBUTE_DIMENSION = "attributeDimension";
+  @jakarta.annotation.Nullable
   private String attributeDimension;
 
-  public static final String SERIALIZED_NAME_ALIAS = "alias";
-  @SerializedName(SERIALIZED_NAME_ALIAS)
+  public static final String JSON_PROPERTY_ALIAS = "alias";
+  @jakarta.annotation.Nullable
   private String alias;
 
-  public static final String SERIALIZED_NAME_END_INDEP_COLUMNS = "endIndepColumns";
-  @SerializedName(SERIALIZED_NAME_END_INDEP_COLUMNS)
-  private List<Integer> endIndepColumns = null;
+  public static final String JSON_PROPERTY_END_INDEP_COLUMNS = "endIndepColumns";
+  @jakarta.annotation.Nullable
+  private List<Integer> endIndepColumns = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_START_INDEP_COLUMNS = "startIndepColumns";
-  @SerializedName(SERIALIZED_NAME_START_INDEP_COLUMNS)
-  private List<Integer> startIndepColumns = null;
+  public static final String JSON_PROPERTY_START_INDEP_COLUMNS = "startIndepColumns";
+  @jakarta.annotation.Nullable
+  private List<Integer> startIndepColumns = new ArrayList<>();
 
   /**
    * Gets or Sets generationProperty
    */
-  @JsonAdapter(GenerationPropertyEnum.Adapter.class)
   public enum GenerationPropertyEnum {
-    NONE("NONE"),
+    NONE(String.valueOf("NONE")),
     
-    CONSOLIDATIONTYPE("CONSOLIDATIONTYPE"),
+    CONSOLIDATIONTYPE(String.valueOf("CONSOLIDATIONTYPE")),
     
-    STORAGETYPE("STORAGETYPE"),
+    STORAGETYPE(String.valueOf("STORAGETYPE")),
     
-    TIMEBALANCE("TIMEBALANCE"),
+    TIMEBALANCE(String.valueOf("TIMEBALANCE")),
     
-    SKIP("SKIP"),
+    SKIP(String.valueOf("SKIP")),
     
-    VARIANCEREPORT("VARIANCEREPORT"),
+    VARIANCEREPORT(String.valueOf("VARIANCEREPORT")),
     
-    TWOPASSCALC("TWOPASSCALC"),
+    TWOPASSCALC(String.valueOf("TWOPASSCALC")),
     
-    HIERARCHYTYPE("HIERARCHYTYPE");
+    HIERARCHYTYPE(String.valueOf("HIERARCHYTYPE"));
 
     private String value;
 
@@ -220,6 +229,7 @@ public class FieldDimBuildOptions {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -229,6 +239,7 @@ public class FieldDimBuildOptions {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static GenerationPropertyEnum fromValue(String value) {
       for (GenerationPropertyEnum b : GenerationPropertyEnum.values()) {
         if (b.value.equals(value)) {
@@ -237,399 +248,406 @@ public class FieldDimBuildOptions {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<GenerationPropertyEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final GenerationPropertyEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public GenerationPropertyEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return GenerationPropertyEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_GENERATION_PROPERTY = "generationProperty";
-  @SerializedName(SERIALIZED_NAME_GENERATION_PROPERTY)
+  public static final String JSON_PROPERTY_GENERATION_PROPERTY = "generationProperty";
+  @jakarta.annotation.Nullable
   private GenerationPropertyEnum generationProperty;
 
-  public static final String SERIALIZED_NAME_GENERATION = "generation";
-  @SerializedName(SERIALIZED_NAME_GENERATION)
+  public static final String JSON_PROPERTY_GENERATION = "generation";
+  @jakarta.annotation.Nullable
   private Integer generation;
 
-  public static final String SERIALIZED_NAME_IGNORE = "ignore";
-  @SerializedName(SERIALIZED_NAME_IGNORE)
+  public static final String JSON_PROPERTY_IGNORE = "ignore";
+  @jakarta.annotation.Nullable
   private Boolean ignore;
 
-  public static final String SERIALIZED_NAME_STATIC_FIELD = "staticField";
-  @SerializedName(SERIALIZED_NAME_STATIC_FIELD)
+  public static final String JSON_PROPERTY_STATIC_FIELD = "staticField";
+  @jakarta.annotation.Nullable
   private Boolean staticField;
 
+  public FieldDimBuildOptions() { 
+  }
 
-  public FieldDimBuildOptions parent(Integer parent) {
-    
+  public FieldDimBuildOptions parent(@jakarta.annotation.Nullable Integer parent) {
     this.parent = parent;
     return this;
   }
 
-   /**
+  /**
    * Get parent
    * @return parent
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PARENT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getParent() {
     return parent;
   }
 
 
-  public void setParent(Integer parent) {
+  @JsonProperty(JSON_PROPERTY_PARENT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setParent(@jakarta.annotation.Nullable Integer parent) {
     this.parent = parent;
   }
 
 
-  public FieldDimBuildOptions generationType(GenerationTypeEnum generationType) {
-    
+  public FieldDimBuildOptions generationType(@jakarta.annotation.Nullable GenerationTypeEnum generationType) {
     this.generationType = generationType;
     return this;
   }
 
-   /**
+  /**
    * Get generationType
    * @return generationType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GENERATION_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public GenerationTypeEnum getGenerationType() {
     return generationType;
   }
 
 
-  public void setGenerationType(GenerationTypeEnum generationType) {
+  @JsonProperty(JSON_PROPERTY_GENERATION_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGenerationType(@jakarta.annotation.Nullable GenerationTypeEnum generationType) {
     this.generationType = generationType;
   }
 
 
-  public FieldDimBuildOptions refer(Integer refer) {
-    
+  public FieldDimBuildOptions refer(@jakarta.annotation.Nullable Integer refer) {
     this.refer = refer;
     return this;
   }
 
-   /**
+  /**
    * Get refer
    * @return refer
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REFER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getRefer() {
     return refer;
   }
 
 
-  public void setRefer(Integer refer) {
+  @JsonProperty(JSON_PROPERTY_REFER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRefer(@jakarta.annotation.Nullable Integer refer) {
     this.refer = refer;
   }
 
 
-  public FieldDimBuildOptions referIndex(Integer referIndex) {
-    
+  public FieldDimBuildOptions referIndex(@jakarta.annotation.Nullable Integer referIndex) {
     this.referIndex = referIndex;
     return this;
   }
 
-   /**
+  /**
    * Get referIndex
    * @return referIndex
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REFER_INDEX)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getReferIndex() {
     return referIndex;
   }
 
 
-  public void setReferIndex(Integer referIndex) {
+  @JsonProperty(JSON_PROPERTY_REFER_INDEX)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setReferIndex(@jakarta.annotation.Nullable Integer referIndex) {
     this.referIndex = referIndex;
   }
 
 
-  public FieldDimBuildOptions shared(Integer shared) {
-    
+  public FieldDimBuildOptions shared(@jakarta.annotation.Nullable Integer shared) {
     this.shared = shared;
     return this;
   }
 
-   /**
+  /**
    * Get shared
    * @return shared
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SHARED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getShared() {
     return shared;
   }
 
 
-  public void setShared(Integer shared) {
+  @JsonProperty(JSON_PROPERTY_SHARED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setShared(@jakarta.annotation.Nullable Integer shared) {
     this.shared = shared;
   }
 
 
-  public FieldDimBuildOptions attributeBuildProperties(AttributeBuildProperties attributeBuildProperties) {
-    
+  public FieldDimBuildOptions attributeBuildProperties(@jakarta.annotation.Nullable AttributeBuildProperties attributeBuildProperties) {
     this.attributeBuildProperties = attributeBuildProperties;
     return this;
   }
 
-   /**
+  /**
    * Get attributeBuildProperties
    * @return attributeBuildProperties
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ATTRIBUTE_BUILD_PROPERTIES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public AttributeBuildProperties getAttributeBuildProperties() {
     return attributeBuildProperties;
   }
 
 
-  public void setAttributeBuildProperties(AttributeBuildProperties attributeBuildProperties) {
+  @JsonProperty(JSON_PROPERTY_ATTRIBUTE_BUILD_PROPERTIES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAttributeBuildProperties(@jakarta.annotation.Nullable AttributeBuildProperties attributeBuildProperties) {
     this.attributeBuildProperties = attributeBuildProperties;
   }
 
 
-  public FieldDimBuildOptions dimension(String dimension) {
-    
+  public FieldDimBuildOptions dimension(@jakarta.annotation.Nullable String dimension) {
     this.dimension = dimension;
     return this;
   }
 
-   /**
+  /**
    * Get dimension
    * @return dimension
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDimension() {
     return dimension;
   }
 
 
-  public void setDimension(String dimension) {
+  @JsonProperty(JSON_PROPERTY_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimension(@jakarta.annotation.Nullable String dimension) {
     this.dimension = dimension;
   }
 
 
-  public FieldDimBuildOptions attributeDimension(String attributeDimension) {
-    
+  public FieldDimBuildOptions attributeDimension(@jakarta.annotation.Nullable String attributeDimension) {
     this.attributeDimension = attributeDimension;
     return this;
   }
 
-   /**
+  /**
    * Get attributeDimension
    * @return attributeDimension
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ATTRIBUTE_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getAttributeDimension() {
     return attributeDimension;
   }
 
 
-  public void setAttributeDimension(String attributeDimension) {
+  @JsonProperty(JSON_PROPERTY_ATTRIBUTE_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAttributeDimension(@jakarta.annotation.Nullable String attributeDimension) {
     this.attributeDimension = attributeDimension;
   }
 
 
-  public FieldDimBuildOptions alias(String alias) {
-    
+  public FieldDimBuildOptions alias(@jakarta.annotation.Nullable String alias) {
     this.alias = alias;
     return this;
   }
 
-   /**
+  /**
    * Get alias
    * @return alias
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALIAS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getAlias() {
     return alias;
   }
 
 
-  public void setAlias(String alias) {
+  @JsonProperty(JSON_PROPERTY_ALIAS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAlias(@jakarta.annotation.Nullable String alias) {
     this.alias = alias;
   }
 
 
-  public FieldDimBuildOptions endIndepColumns(List<Integer> endIndepColumns) {
-    
+  public FieldDimBuildOptions endIndepColumns(@jakarta.annotation.Nullable List<Integer> endIndepColumns) {
     this.endIndepColumns = endIndepColumns;
     return this;
   }
 
   public FieldDimBuildOptions addEndIndepColumnsItem(Integer endIndepColumnsItem) {
     if (this.endIndepColumns == null) {
-      this.endIndepColumns = new ArrayList<Integer>();
+      this.endIndepColumns = new ArrayList<>();
     }
     this.endIndepColumns.add(endIndepColumnsItem);
     return this;
   }
 
-   /**
+  /**
    * Get endIndepColumns
    * @return endIndepColumns
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_END_INDEP_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Integer> getEndIndepColumns() {
     return endIndepColumns;
   }
 
 
-  public void setEndIndepColumns(List<Integer> endIndepColumns) {
+  @JsonProperty(JSON_PROPERTY_END_INDEP_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEndIndepColumns(@jakarta.annotation.Nullable List<Integer> endIndepColumns) {
     this.endIndepColumns = endIndepColumns;
   }
 
 
-  public FieldDimBuildOptions startIndepColumns(List<Integer> startIndepColumns) {
-    
+  public FieldDimBuildOptions startIndepColumns(@jakarta.annotation.Nullable List<Integer> startIndepColumns) {
     this.startIndepColumns = startIndepColumns;
     return this;
   }
 
   public FieldDimBuildOptions addStartIndepColumnsItem(Integer startIndepColumnsItem) {
     if (this.startIndepColumns == null) {
-      this.startIndepColumns = new ArrayList<Integer>();
+      this.startIndepColumns = new ArrayList<>();
     }
     this.startIndepColumns.add(startIndepColumnsItem);
     return this;
   }
 
-   /**
+  /**
    * Get startIndepColumns
    * @return startIndepColumns
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_START_INDEP_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Integer> getStartIndepColumns() {
     return startIndepColumns;
   }
 
 
-  public void setStartIndepColumns(List<Integer> startIndepColumns) {
+  @JsonProperty(JSON_PROPERTY_START_INDEP_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStartIndepColumns(@jakarta.annotation.Nullable List<Integer> startIndepColumns) {
     this.startIndepColumns = startIndepColumns;
   }
 
 
-  public FieldDimBuildOptions generationProperty(GenerationPropertyEnum generationProperty) {
-    
+  public FieldDimBuildOptions generationProperty(@jakarta.annotation.Nullable GenerationPropertyEnum generationProperty) {
     this.generationProperty = generationProperty;
     return this;
   }
 
-   /**
+  /**
    * Get generationProperty
    * @return generationProperty
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GENERATION_PROPERTY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public GenerationPropertyEnum getGenerationProperty() {
     return generationProperty;
   }
 
 
-  public void setGenerationProperty(GenerationPropertyEnum generationProperty) {
+  @JsonProperty(JSON_PROPERTY_GENERATION_PROPERTY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGenerationProperty(@jakarta.annotation.Nullable GenerationPropertyEnum generationProperty) {
     this.generationProperty = generationProperty;
   }
 
 
-  public FieldDimBuildOptions generation(Integer generation) {
-    
+  public FieldDimBuildOptions generation(@jakarta.annotation.Nullable Integer generation) {
     this.generation = generation;
     return this;
   }
 
-   /**
+  /**
    * Get generation
    * @return generation
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GENERATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getGeneration() {
     return generation;
   }
 
 
-  public void setGeneration(Integer generation) {
+  @JsonProperty(JSON_PROPERTY_GENERATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGeneration(@jakarta.annotation.Nullable Integer generation) {
     this.generation = generation;
   }
 
 
-  public FieldDimBuildOptions ignore(Boolean ignore) {
-    
+  public FieldDimBuildOptions ignore(@jakarta.annotation.Nullable Boolean ignore) {
     this.ignore = ignore;
     return this;
   }
 
-   /**
+  /**
    * Get ignore
    * @return ignore
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_IGNORE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getIgnore() {
     return ignore;
   }
 
 
-  public void setIgnore(Boolean ignore) {
+  @JsonProperty(JSON_PROPERTY_IGNORE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIgnore(@jakarta.annotation.Nullable Boolean ignore) {
     this.ignore = ignore;
   }
 
 
-  public FieldDimBuildOptions staticField(Boolean staticField) {
-    
+  public FieldDimBuildOptions staticField(@jakarta.annotation.Nullable Boolean staticField) {
     this.staticField = staticField;
     return this;
   }
 
-   /**
+  /**
    * Get staticField
    * @return staticField
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STATIC_FIELD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getStaticField() {
     return staticField;
   }
 
 
-  public void setStaticField(Boolean staticField) {
+  @JsonProperty(JSON_PROPERTY_STATIC_FIELD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStaticField(@jakarta.annotation.Nullable Boolean staticField) {
     this.staticField = staticField;
   }
 
 
+  /**
+   * Return true if this FieldDimBuildOptions object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -695,5 +713,122 @@ public class FieldDimBuildOptions {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `parent` to the URL query string
+    if (getParent() != null) {
+      joiner.add(String.format("%sparent%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getParent()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `generationType` to the URL query string
+    if (getGenerationType() != null) {
+      joiner.add(String.format("%sgenerationType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getGenerationType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `refer` to the URL query string
+    if (getRefer() != null) {
+      joiner.add(String.format("%srefer%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRefer()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `referIndex` to the URL query string
+    if (getReferIndex() != null) {
+      joiner.add(String.format("%sreferIndex%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getReferIndex()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `shared` to the URL query string
+    if (getShared() != null) {
+      joiner.add(String.format("%sshared%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getShared()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `attributeBuildProperties` to the URL query string
+    if (getAttributeBuildProperties() != null) {
+      joiner.add(getAttributeBuildProperties().toUrlQueryString(prefix + "attributeBuildProperties" + suffix));
+    }
+
+    // add `dimension` to the URL query string
+    if (getDimension() != null) {
+      joiner.add(String.format("%sdimension%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDimension()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `attributeDimension` to the URL query string
+    if (getAttributeDimension() != null) {
+      joiner.add(String.format("%sattributeDimension%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAttributeDimension()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `alias` to the URL query string
+    if (getAlias() != null) {
+      joiner.add(String.format("%salias%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAlias()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `endIndepColumns` to the URL query string
+    if (getEndIndepColumns() != null) {
+      for (int i = 0; i < getEndIndepColumns().size(); i++) {
+        joiner.add(String.format("%sendIndepColumns%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getEndIndepColumns().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `startIndepColumns` to the URL query string
+    if (getStartIndepColumns() != null) {
+      for (int i = 0; i < getStartIndepColumns().size(); i++) {
+        joiner.add(String.format("%sstartIndepColumns%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getStartIndepColumns().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `generationProperty` to the URL query string
+    if (getGenerationProperty() != null) {
+      joiner.add(String.format("%sgenerationProperty%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getGenerationProperty()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `generation` to the URL query string
+    if (getGeneration() != null) {
+      joiner.add(String.format("%sgeneration%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getGeneration()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `ignore` to the URL query string
+    if (getIgnore() != null) {
+      joiner.add(String.format("%signore%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIgnore()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `staticField` to the URL query string
+    if (getStaticField() != null) {
+      joiner.add(String.format("%sstaticField%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStaticField()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

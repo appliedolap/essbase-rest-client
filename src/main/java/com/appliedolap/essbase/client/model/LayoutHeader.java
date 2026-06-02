@@ -13,158 +13,180 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * LayoutHeader
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  LayoutHeader.JSON_PROPERTY_NAME,
+  LayoutHeader.JSON_PROPERTY_USER,
+  LayoutHeader.JSON_PROPERTY_DATABASE_DEFAULT,
+  LayoutHeader.JSON_PROPERTY_USER_DEFAULT,
+  LayoutHeader.JSON_PROPERTY_SESSION
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class LayoutHeader {
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
-  public static final String SERIALIZED_NAME_USER = "user";
-  @SerializedName(SERIALIZED_NAME_USER)
+  public static final String JSON_PROPERTY_USER = "user";
+  @jakarta.annotation.Nullable
   private String user;
 
-  public static final String SERIALIZED_NAME_DATABASE_DEFAULT = "databaseDefault";
-  @SerializedName(SERIALIZED_NAME_DATABASE_DEFAULT)
+  public static final String JSON_PROPERTY_DATABASE_DEFAULT = "databaseDefault";
+  @jakarta.annotation.Nullable
   private Boolean databaseDefault;
 
-  public static final String SERIALIZED_NAME_USER_DEFAULT = "userDefault";
-  @SerializedName(SERIALIZED_NAME_USER_DEFAULT)
+  public static final String JSON_PROPERTY_USER_DEFAULT = "userDefault";
+  @jakarta.annotation.Nullable
   private Boolean userDefault;
 
-  public static final String SERIALIZED_NAME_SESSION = "session";
-  @SerializedName(SERIALIZED_NAME_SESSION)
+  public static final String JSON_PROPERTY_SESSION = "session";
+  @jakarta.annotation.Nullable
   private Boolean session;
 
+  public LayoutHeader() { 
+  }
 
-  public LayoutHeader name(String name) {
-    
+  public LayoutHeader name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
-  public LayoutHeader user(String user) {
-    
+  public LayoutHeader user(@jakarta.annotation.Nullable String user) {
     this.user = user;
     return this;
   }
 
-   /**
+  /**
    * Get user
    * @return user
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getUser() {
     return user;
   }
 
 
-  public void setUser(String user) {
+  @JsonProperty(JSON_PROPERTY_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUser(@jakarta.annotation.Nullable String user) {
     this.user = user;
   }
 
 
-  public LayoutHeader databaseDefault(Boolean databaseDefault) {
-    
+  public LayoutHeader databaseDefault(@jakarta.annotation.Nullable Boolean databaseDefault) {
     this.databaseDefault = databaseDefault;
     return this;
   }
 
-   /**
+  /**
    * Get databaseDefault
    * @return databaseDefault
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATABASE_DEFAULT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getDatabaseDefault() {
     return databaseDefault;
   }
 
 
-  public void setDatabaseDefault(Boolean databaseDefault) {
+  @JsonProperty(JSON_PROPERTY_DATABASE_DEFAULT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatabaseDefault(@jakarta.annotation.Nullable Boolean databaseDefault) {
     this.databaseDefault = databaseDefault;
   }
 
 
-  public LayoutHeader userDefault(Boolean userDefault) {
-    
+  public LayoutHeader userDefault(@jakarta.annotation.Nullable Boolean userDefault) {
     this.userDefault = userDefault;
     return this;
   }
 
-   /**
+  /**
    * Get userDefault
    * @return userDefault
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER_DEFAULT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getUserDefault() {
     return userDefault;
   }
 
 
-  public void setUserDefault(Boolean userDefault) {
+  @JsonProperty(JSON_PROPERTY_USER_DEFAULT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUserDefault(@jakarta.annotation.Nullable Boolean userDefault) {
     this.userDefault = userDefault;
   }
 
 
-  public LayoutHeader session(Boolean session) {
-    
+  public LayoutHeader session(@jakarta.annotation.Nullable Boolean session) {
     this.session = session;
     return this;
   }
 
-   /**
+  /**
    * Get session
    * @return session
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SESSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getSession() {
     return session;
   }
 
 
-  public void setSession(Boolean session) {
+  @JsonProperty(JSON_PROPERTY_SESSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSession(@jakarta.annotation.Nullable Boolean session) {
     this.session = session;
   }
 
 
+  /**
+   * Return true if this LayoutHeader object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -210,5 +232,64 @@ public class LayoutHeader {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `user` to the URL query string
+    if (getUser() != null) {
+      joiner.add(String.format("%suser%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUser()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `databaseDefault` to the URL query string
+    if (getDatabaseDefault() != null) {
+      joiner.add(String.format("%sdatabaseDefault%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDatabaseDefault()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `userDefault` to the URL query string
+    if (getUserDefault() != null) {
+      joiner.add(String.format("%suserDefault%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUserDefault()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `session` to the URL query string
+    if (getSession() != null) {
+      joiner.add(String.format("%ssession%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSession()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

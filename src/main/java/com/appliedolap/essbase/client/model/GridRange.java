@@ -13,324 +13,354 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * GridRange
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  GridRange.JSON_PROPERTY_FILTERS,
+  GridRange.JSON_PROPERTY_TYPES,
+  GridRange.JSON_PROPERTY_ENUM_IDS,
+  GridRange.JSON_PROPERTY_TEXTS,
+  GridRange.JSON_PROPERTY_START,
+  GridRange.JSON_PROPERTY_STATUSES,
+  GridRange.JSON_PROPERTY_DATA_FORMATS,
+  GridRange.JSON_PROPERTY_VALUES,
+  GridRange.JSON_PROPERTY_END
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class GridRange {
-  public static final String SERIALIZED_NAME_FILTERS = "filters";
-  @SerializedName(SERIALIZED_NAME_FILTERS)
-  private List<String> filters = null;
+  public static final String JSON_PROPERTY_FILTERS = "filters";
+  @jakarta.annotation.Nullable
+  private List<String> filters = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_TYPES = "types";
-  @SerializedName(SERIALIZED_NAME_TYPES)
-  private List<String> types = null;
+  public static final String JSON_PROPERTY_TYPES = "types";
+  @jakarta.annotation.Nullable
+  private List<String> types = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_ENUM_IDS = "enumIds";
-  @SerializedName(SERIALIZED_NAME_ENUM_IDS)
-  private List<String> enumIds = null;
+  public static final String JSON_PROPERTY_ENUM_IDS = "enumIds";
+  @jakarta.annotation.Nullable
+  private List<String> enumIds = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_TEXTS = "texts";
-  @SerializedName(SERIALIZED_NAME_TEXTS)
-  private List<String> texts = null;
+  public static final String JSON_PROPERTY_TEXTS = "texts";
+  @jakarta.annotation.Nullable
+  private List<String> texts = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_START = "start";
-  @SerializedName(SERIALIZED_NAME_START)
+  public static final String JSON_PROPERTY_START = "start";
+  @jakarta.annotation.Nullable
   private Integer start;
 
-  public static final String SERIALIZED_NAME_STATUSES = "statuses";
-  @SerializedName(SERIALIZED_NAME_STATUSES)
-  private List<String> statuses = null;
+  public static final String JSON_PROPERTY_STATUSES = "statuses";
+  @jakarta.annotation.Nullable
+  private List<String> statuses = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_DATA_FORMATS = "dataFormats";
-  @SerializedName(SERIALIZED_NAME_DATA_FORMATS)
-  private List<String> dataFormats = null;
+  public static final String JSON_PROPERTY_DATA_FORMATS = "dataFormats";
+  @jakarta.annotation.Nullable
+  private List<String> dataFormats = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_VALUES = "values";
-  @SerializedName(SERIALIZED_NAME_VALUES)
-  private List<String> values = null;
+  public static final String JSON_PROPERTY_VALUES = "values";
+  @jakarta.annotation.Nullable
+  private List<String> values = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_END = "end";
-  @SerializedName(SERIALIZED_NAME_END)
+  public static final String JSON_PROPERTY_END = "end";
+  @jakarta.annotation.Nullable
   private Integer end;
 
+  public GridRange() { 
+  }
 
-  public GridRange filters(List<String> filters) {
-    
+  public GridRange filters(@jakarta.annotation.Nullable List<String> filters) {
     this.filters = filters;
     return this;
   }
 
   public GridRange addFiltersItem(String filtersItem) {
     if (this.filters == null) {
-      this.filters = new ArrayList<String>();
+      this.filters = new ArrayList<>();
     }
     this.filters.add(filtersItem);
     return this;
   }
 
-   /**
+  /**
    * Get filters
    * @return filters
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FILTERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getFilters() {
     return filters;
   }
 
 
-  public void setFilters(List<String> filters) {
+  @JsonProperty(JSON_PROPERTY_FILTERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFilters(@jakarta.annotation.Nullable List<String> filters) {
     this.filters = filters;
   }
 
 
-  public GridRange types(List<String> types) {
-    
+  public GridRange types(@jakarta.annotation.Nullable List<String> types) {
     this.types = types;
     return this;
   }
 
   public GridRange addTypesItem(String typesItem) {
     if (this.types == null) {
-      this.types = new ArrayList<String>();
+      this.types = new ArrayList<>();
     }
     this.types.add(typesItem);
     return this;
   }
 
-   /**
+  /**
    * Get types
    * @return types
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getTypes() {
     return types;
   }
 
 
-  public void setTypes(List<String> types) {
+  @JsonProperty(JSON_PROPERTY_TYPES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTypes(@jakarta.annotation.Nullable List<String> types) {
     this.types = types;
   }
 
 
-  public GridRange enumIds(List<String> enumIds) {
-    
+  public GridRange enumIds(@jakarta.annotation.Nullable List<String> enumIds) {
     this.enumIds = enumIds;
     return this;
   }
 
   public GridRange addEnumIdsItem(String enumIdsItem) {
     if (this.enumIds == null) {
-      this.enumIds = new ArrayList<String>();
+      this.enumIds = new ArrayList<>();
     }
     this.enumIds.add(enumIdsItem);
     return this;
   }
 
-   /**
+  /**
    * Get enumIds
    * @return enumIds
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ENUM_IDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getEnumIds() {
     return enumIds;
   }
 
 
-  public void setEnumIds(List<String> enumIds) {
+  @JsonProperty(JSON_PROPERTY_ENUM_IDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEnumIds(@jakarta.annotation.Nullable List<String> enumIds) {
     this.enumIds = enumIds;
   }
 
 
-  public GridRange texts(List<String> texts) {
-    
+  public GridRange texts(@jakarta.annotation.Nullable List<String> texts) {
     this.texts = texts;
     return this;
   }
 
   public GridRange addTextsItem(String textsItem) {
     if (this.texts == null) {
-      this.texts = new ArrayList<String>();
+      this.texts = new ArrayList<>();
     }
     this.texts.add(textsItem);
     return this;
   }
 
-   /**
+  /**
    * Get texts
    * @return texts
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TEXTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getTexts() {
     return texts;
   }
 
 
-  public void setTexts(List<String> texts) {
+  @JsonProperty(JSON_PROPERTY_TEXTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTexts(@jakarta.annotation.Nullable List<String> texts) {
     this.texts = texts;
   }
 
 
-  public GridRange start(Integer start) {
-    
+  public GridRange start(@jakarta.annotation.Nullable Integer start) {
     this.start = start;
     return this;
   }
 
-   /**
+  /**
    * Get start
    * @return start
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_START)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getStart() {
     return start;
   }
 
 
-  public void setStart(Integer start) {
+  @JsonProperty(JSON_PROPERTY_START)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStart(@jakarta.annotation.Nullable Integer start) {
     this.start = start;
   }
 
 
-  public GridRange statuses(List<String> statuses) {
-    
+  public GridRange statuses(@jakarta.annotation.Nullable List<String> statuses) {
     this.statuses = statuses;
     return this;
   }
 
   public GridRange addStatusesItem(String statusesItem) {
     if (this.statuses == null) {
-      this.statuses = new ArrayList<String>();
+      this.statuses = new ArrayList<>();
     }
     this.statuses.add(statusesItem);
     return this;
   }
 
-   /**
+  /**
    * Get statuses
    * @return statuses
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STATUSES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getStatuses() {
     return statuses;
   }
 
 
-  public void setStatuses(List<String> statuses) {
+  @JsonProperty(JSON_PROPERTY_STATUSES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStatuses(@jakarta.annotation.Nullable List<String> statuses) {
     this.statuses = statuses;
   }
 
 
-  public GridRange dataFormats(List<String> dataFormats) {
-    
+  public GridRange dataFormats(@jakarta.annotation.Nullable List<String> dataFormats) {
     this.dataFormats = dataFormats;
     return this;
   }
 
   public GridRange addDataFormatsItem(String dataFormatsItem) {
     if (this.dataFormats == null) {
-      this.dataFormats = new ArrayList<String>();
+      this.dataFormats = new ArrayList<>();
     }
     this.dataFormats.add(dataFormatsItem);
     return this;
   }
 
-   /**
+  /**
    * Get dataFormats
    * @return dataFormats
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_FORMATS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getDataFormats() {
     return dataFormats;
   }
 
 
-  public void setDataFormats(List<String> dataFormats) {
+  @JsonProperty(JSON_PROPERTY_DATA_FORMATS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataFormats(@jakarta.annotation.Nullable List<String> dataFormats) {
     this.dataFormats = dataFormats;
   }
 
 
-  public GridRange values(List<String> values) {
-    
+  public GridRange values(@jakarta.annotation.Nullable List<String> values) {
     this.values = values;
     return this;
   }
 
   public GridRange addValuesItem(String valuesItem) {
     if (this.values == null) {
-      this.values = new ArrayList<String>();
+      this.values = new ArrayList<>();
     }
     this.values.add(valuesItem);
     return this;
   }
 
-   /**
+  /**
    * Get values
    * @return values
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VALUES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getValues() {
     return values;
   }
 
 
-  public void setValues(List<String> values) {
+  @JsonProperty(JSON_PROPERTY_VALUES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setValues(@jakarta.annotation.Nullable List<String> values) {
     this.values = values;
   }
 
 
-  public GridRange end(Integer end) {
-    
+  public GridRange end(@jakarta.annotation.Nullable Integer end) {
     this.end = end;
     return this;
   }
 
-   /**
+  /**
    * Get end
    * @return end
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_END)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getEnd() {
     return end;
   }
 
 
-  public void setEnd(Integer end) {
+  @JsonProperty(JSON_PROPERTY_END)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEnd(@jakarta.annotation.Nullable Integer end) {
     this.end = end;
   }
 
 
+  /**
+   * Return true if this GridRange object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -384,5 +414,112 @@ public class GridRange {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `filters` to the URL query string
+    if (getFilters() != null) {
+      for (int i = 0; i < getFilters().size(); i++) {
+        joiner.add(String.format("%sfilters%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getFilters().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `types` to the URL query string
+    if (getTypes() != null) {
+      for (int i = 0; i < getTypes().size(); i++) {
+        joiner.add(String.format("%stypes%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getTypes().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `enumIds` to the URL query string
+    if (getEnumIds() != null) {
+      for (int i = 0; i < getEnumIds().size(); i++) {
+        joiner.add(String.format("%senumIds%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getEnumIds().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `texts` to the URL query string
+    if (getTexts() != null) {
+      for (int i = 0; i < getTexts().size(); i++) {
+        joiner.add(String.format("%stexts%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getTexts().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `start` to the URL query string
+    if (getStart() != null) {
+      joiner.add(String.format("%sstart%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStart()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `statuses` to the URL query string
+    if (getStatuses() != null) {
+      for (int i = 0; i < getStatuses().size(); i++) {
+        joiner.add(String.format("%sstatuses%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getStatuses().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `dataFormats` to the URL query string
+    if (getDataFormats() != null) {
+      for (int i = 0; i < getDataFormats().size(); i++) {
+        joiner.add(String.format("%sdataFormats%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getDataFormats().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `values` to the URL query string
+    if (getValues() != null) {
+      for (int i = 0; i < getValues().size(); i++) {
+        joiner.add(String.format("%svalues%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getValues().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `end` to the URL query string
+    if (getEnd() != null) {
+      joiner.add(String.format("%send%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getEnd()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

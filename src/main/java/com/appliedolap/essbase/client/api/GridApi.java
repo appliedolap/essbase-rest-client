@@ -10,875 +10,622 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.DVGrid;
 import com.appliedolap.essbase.client.model.Grid;
 import com.appliedolap.essbase.client.model.GridOperation;
 import com.appliedolap.essbase.client.model.MDXOperation;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class GridApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public GridApi() {
-        this(Configuration.getDefaultApiClient());
+  public GridApi() {
+    this(new ApiClient());
+  }
+
+  public GridApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public GridApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Execute Grid Operation
+   * &lt;p&gt;Returns the grid for specified operation. Supported grid operations are Zoom In (zoomin), Zoom Out (zoomout), Refresh (refresh), Keep Only (keeponly), Remove Only (removeonly), Submit (submit), Pivot (pivot), and Pivot To POV (pivotToPOV).&lt;/p&gt;
+   * @param applicationName Application name for grid (required)
+   * @param databaseName Database/Cube name for grid (required)
+   * @param body Grid Operation to be performed. (optional)
+   * @return Grid
+   * @throws ApiException if fails to make API call
+   */
+  public Grid gridExecute(String applicationName, String databaseName, GridOperation body) throws ApiException {
+    ApiResponse<Grid> localVarResponse = gridExecuteWithHttpInfo(applicationName, databaseName, body);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for gridExecute
-     * @param applicationName Application name for grid (required)
-     * @param databaseName Database/Cube name for grid (required)
-     * @param body Grid Operation to be performed. (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Resultant Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call gridExecuteCall(String applicationName, String databaseName, GridOperation body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/grid"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Execute Grid Operation
+   * &lt;p&gt;Returns the grid for specified operation. Supported grid operations are Zoom In (zoomin), Zoom Out (zoomout), Refresh (refresh), Keep Only (keeponly), Remove Only (removeonly), Submit (submit), Pivot (pivot), and Pivot To POV (pivotToPOV).&lt;/p&gt;
+   * @param applicationName Application name for grid (required)
+   * @param databaseName Database/Cube name for grid (required)
+   * @param body Grid Operation to be performed. (optional)
+   * @return ApiResponse&lt;Grid&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Grid> gridExecuteWithHttpInfo(String applicationName, String databaseName, GridOperation body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = gridExecuteRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("gridExecute", localVarResponse);
         }
+        return new ApiResponse<Grid>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Grid>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder gridExecuteRequestBuilder(String applicationName, String databaseName, GridOperation body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling gridExecute");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling gridExecute");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call gridExecuteValidateBeforeCall(String applicationName, String databaseName, GridOperation body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling gridExecute(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/grid"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Execute Grid Operation
+   * &lt;p&gt;Returns the grid for specified operation. Supported grid operations are Zoom In (zoomin), Zoom Out (zoomout), Refresh (refresh), Keep Only (keeponly), Remove Only (removeonly), Submit (submit), Pivot (pivot), and Pivot To POV (pivotToPOV).&lt;/p&gt;
+   * @param applicationName Application name for grid (required)
+   * @param databaseName Database/Cube name for grid (required)
+   * @param body Grid Operation to be performed. (optional)
+   * @return Grid
+   * @throws ApiException if fails to make API call
+   */
+  public Grid gridExecuteDV(String applicationName, String databaseName, DVGrid body) throws ApiException {
+    ApiResponse<Grid> localVarResponse = gridExecuteDVWithHttpInfo(applicationName, databaseName, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Execute Grid Operation
+   * &lt;p&gt;Returns the grid for specified operation. Supported grid operations are Zoom In (zoomin), Zoom Out (zoomout), Refresh (refresh), Keep Only (keeponly), Remove Only (removeonly), Submit (submit), Pivot (pivot), and Pivot To POV (pivotToPOV).&lt;/p&gt;
+   * @param applicationName Application name for grid (required)
+   * @param databaseName Database/Cube name for grid (required)
+   * @param body Grid Operation to be performed. (optional)
+   * @return ApiResponse&lt;Grid&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Grid> gridExecuteDVWithHttpInfo(String applicationName, String databaseName, DVGrid body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = gridExecuteDVRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("gridExecuteDV", localVarResponse);
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling gridExecute(Async)");
+        return new ApiResponse<Grid>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Grid>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder gridExecuteDVRequestBuilder(String applicationName, String databaseName, DVGrid body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling gridExecuteDV");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling gridExecuteDV");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dvgrid"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Execute Layout Grid
+   * Returns the grid for the specified layout.
+   * @param applicationName Application name for layout grid (required)
+   * @param databaseName Database/Cube name for layout grid (required)
+   * @param layout Layout name to be executed (required)
+   * @param user Owner of the layout (optional)
+   * @return Grid
+   * @throws ApiException if fails to make API call
+   */
+  public Grid gridExecuteLayout(String applicationName, String databaseName, String layout, String user) throws ApiException {
+    ApiResponse<Grid> localVarResponse = gridExecuteLayoutWithHttpInfo(applicationName, databaseName, layout, user);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Execute Layout Grid
+   * Returns the grid for the specified layout.
+   * @param applicationName Application name for layout grid (required)
+   * @param databaseName Database/Cube name for layout grid (required)
+   * @param layout Layout name to be executed (required)
+   * @param user Owner of the layout (optional)
+   * @return ApiResponse&lt;Grid&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Grid> gridExecuteLayoutWithHttpInfo(String applicationName, String databaseName, String layout, String user) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = gridExecuteLayoutRequestBuilder(applicationName, databaseName, layout, user);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("gridExecuteLayout", localVarResponse);
         }
-        
+        return new ApiResponse<Grid>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Grid>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = gridExecuteCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder gridExecuteLayoutRequestBuilder(String applicationName, String databaseName, String layout, String user) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling gridExecuteLayout");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling gridExecuteLayout");
+    }
+    // verify the required parameter 'layout' is set
+    if (layout == null) {
+      throw new ApiException(400, "Missing the required parameter 'layout' when calling gridExecuteLayout");
     }
 
-    /**
-     * Execute Grid Operation
-     * &lt;p&gt;Returns the grid for specified operation. Supported grid operations are Zoom In (zoomin), Zoom Out (zoomout), Refresh (refresh), Keep Only (keeponly), Remove Only (removeonly), Submit (submit), Pivot (pivot), and Pivot To POV (pivotToPOV).&lt;/p&gt;
-     * @param applicationName Application name for grid (required)
-     * @param databaseName Database/Cube name for grid (required)
-     * @param body Grid Operation to be performed. (optional)
-     * @return Grid
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Resultant Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Grid gridExecute(String applicationName, String databaseName, GridOperation body) throws ApiException {
-        ApiResponse<Grid> localVarResp = gridExecuteWithHttpInfo(applicationName, databaseName, body);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/grid/layout/{layout}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{layout}", ApiClient.urlEncode(layout.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "user";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("user", user));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Execute Grid Operation
-     * &lt;p&gt;Returns the grid for specified operation. Supported grid operations are Zoom In (zoomin), Zoom Out (zoomout), Refresh (refresh), Keep Only (keeponly), Remove Only (removeonly), Submit (submit), Pivot (pivot), and Pivot To POV (pivotToPOV).&lt;/p&gt;
-     * @param applicationName Application name for grid (required)
-     * @param databaseName Database/Cube name for grid (required)
-     * @param body Grid Operation to be performed. (optional)
-     * @return ApiResponse&lt;Grid&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Resultant Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Grid> gridExecuteWithHttpInfo(String applicationName, String databaseName, GridOperation body) throws ApiException {
-        okhttp3.Call localVarCall = gridExecuteValidateBeforeCall(applicationName, databaseName, body, null);
-        Type localVarReturnType = new TypeToken<Grid>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Execute Grid Operation (asynchronously)
-     * &lt;p&gt;Returns the grid for specified operation. Supported grid operations are Zoom In (zoomin), Zoom Out (zoomout), Refresh (refresh), Keep Only (keeponly), Remove Only (removeonly), Submit (submit), Pivot (pivot), and Pivot To POV (pivotToPOV).&lt;/p&gt;
-     * @param applicationName Application name for grid (required)
-     * @param databaseName Database/Cube name for grid (required)
-     * @param body Grid Operation to be performed. (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Resultant Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call gridExecuteAsync(String applicationName, String databaseName, GridOperation body, final ApiCallback<Grid> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = gridExecuteValidateBeforeCall(applicationName, databaseName, body, _callback);
-        Type localVarReturnType = new TypeToken<Grid>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for gridExecuteDV
-     * @param applicationName Application name for grid (required)
-     * @param databaseName Database/Cube name for grid (required)
-     * @param body Grid Operation to be performed. (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Resultant Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call gridExecuteDVCall(String applicationName, String databaseName, DVGrid body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dvgrid"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
+  /**
+   * Execute MDX Query
+   * Returns an output grid from the specified MDX query.
+   * @param applicationName Application name for grid. (required)
+   * @param databaseName Database/Cube name for grid. (required)
+   * @param body MDX query for grid (required)
+   * @return Grid
+   * @throws ApiException if fails to make API call
+   */
+  public Grid gridExecuteMDX(String applicationName, String databaseName, MDXOperation body) throws ApiException {
+    ApiResponse<Grid> localVarResponse = gridExecuteMDXWithHttpInfo(applicationName, databaseName, body);
+    return localVarResponse.getData();
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Execute MDX Query
+   * Returns an output grid from the specified MDX query.
+   * @param applicationName Application name for grid. (required)
+   * @param databaseName Database/Cube name for grid. (required)
+   * @param body MDX query for grid (required)
+   * @return ApiResponse&lt;Grid&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Grid> gridExecuteMDXWithHttpInfo(String applicationName, String databaseName, MDXOperation body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = gridExecuteMDXRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("gridExecuteMDX", localVarResponse);
         }
+        return new ApiResponse<Grid>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Grid>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder gridExecuteMDXRequestBuilder(String applicationName, String databaseName, MDXOperation body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling gridExecuteMDX");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling gridExecuteMDX");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling gridExecuteMDX");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call gridExecuteDVValidateBeforeCall(String applicationName, String databaseName, DVGrid body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling gridExecuteDV(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/grid/mdx"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Default Grid
+   * Returns the default grid from Essbase for the specified cube.
+   * @param applicationName Application name for default grid (required)
+   * @param databaseName Database/Cube name for default grid (required)
+   * @return Grid
+   * @throws ApiException if fails to make API call
+   */
+  public Grid gridGetDefault(String applicationName, String databaseName) throws ApiException {
+    ApiResponse<Grid> localVarResponse = gridGetDefaultWithHttpInfo(applicationName, databaseName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Default Grid
+   * Returns the default grid from Essbase for the specified cube.
+   * @param applicationName Application name for default grid (required)
+   * @param databaseName Database/Cube name for default grid (required)
+   * @return ApiResponse&lt;Grid&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Grid> gridGetDefaultWithHttpInfo(String applicationName, String databaseName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = gridGetDefaultRequestBuilder(applicationName, databaseName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("gridGetDefault", localVarResponse);
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling gridExecuteDV(Async)");
+        return new ApiResponse<Grid>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Grid>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder gridGetDefaultRequestBuilder(String applicationName, String databaseName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling gridGetDefault");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling gridGetDefault");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/grid"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Layout Grid
+   * Returns the layout grid for the current grid to be saved as layout for the specified cube.
+   * @param applicationName Application name for default grid (required)
+   * @param databaseName Database/Cube name for default grid (required)
+   * @param body The current grid displayed (required)
+   * @return Grid
+   * @throws ApiException if fails to make API call
+   */
+  public Grid gridGetLayoutGrid(String applicationName, String databaseName, Grid body) throws ApiException {
+    ApiResponse<Grid> localVarResponse = gridGetLayoutGridWithHttpInfo(applicationName, databaseName, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Layout Grid
+   * Returns the layout grid for the current grid to be saved as layout for the specified cube.
+   * @param applicationName Application name for default grid (required)
+   * @param databaseName Database/Cube name for default grid (required)
+   * @param body The current grid displayed (required)
+   * @return ApiResponse&lt;Grid&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Grid> gridGetLayoutGridWithHttpInfo(String applicationName, String databaseName, Grid body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = gridGetLayoutGridRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("gridGetLayoutGrid", localVarResponse);
         }
-        
+        return new ApiResponse<Grid>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Grid>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = gridExecuteDVCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder gridGetLayoutGridRequestBuilder(String applicationName, String databaseName, Grid body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling gridGetLayoutGrid");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling gridGetLayoutGrid");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling gridGetLayoutGrid");
     }
 
-    /**
-     * Execute Grid Operation
-     * &lt;p&gt;Returns the grid for specified operation. Supported grid operations are Zoom In (zoomin), Zoom Out (zoomout), Refresh (refresh), Keep Only (keeponly), Remove Only (removeonly), Submit (submit), Pivot (pivot), and Pivot To POV (pivotToPOV).&lt;/p&gt;
-     * @param applicationName Application name for grid (required)
-     * @param databaseName Database/Cube name for grid (required)
-     * @param body Grid Operation to be performed. (optional)
-     * @return Grid
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Resultant Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Grid gridExecuteDV(String applicationName, String databaseName, DVGrid body) throws ApiException {
-        ApiResponse<Grid> localVarResp = gridExecuteDVWithHttpInfo(applicationName, databaseName, body);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/grid/layout"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Execute Grid Operation
-     * &lt;p&gt;Returns the grid for specified operation. Supported grid operations are Zoom In (zoomin), Zoom Out (zoomout), Refresh (refresh), Keep Only (keeponly), Remove Only (removeonly), Submit (submit), Pivot (pivot), and Pivot To POV (pivotToPOV).&lt;/p&gt;
-     * @param applicationName Application name for grid (required)
-     * @param databaseName Database/Cube name for grid (required)
-     * @param body Grid Operation to be performed. (optional)
-     * @return ApiResponse&lt;Grid&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Resultant Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Grid> gridExecuteDVWithHttpInfo(String applicationName, String databaseName, DVGrid body) throws ApiException {
-        okhttp3.Call localVarCall = gridExecuteDVValidateBeforeCall(applicationName, databaseName, body, null);
-        Type localVarReturnType = new TypeToken<Grid>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Execute Grid Operation (asynchronously)
-     * &lt;p&gt;Returns the grid for specified operation. Supported grid operations are Zoom In (zoomin), Zoom Out (zoomout), Refresh (refresh), Keep Only (keeponly), Remove Only (removeonly), Submit (submit), Pivot (pivot), and Pivot To POV (pivotToPOV).&lt;/p&gt;
-     * @param applicationName Application name for grid (required)
-     * @param databaseName Database/Cube name for grid (required)
-     * @param body Grid Operation to be performed. (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Resultant Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call gridExecuteDVAsync(String applicationName, String databaseName, DVGrid body, final ApiCallback<Grid> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = gridExecuteDVValidateBeforeCall(applicationName, databaseName, body, _callback);
-        Type localVarReturnType = new TypeToken<Grid>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for gridExecuteLayout
-     * @param applicationName Application name for layout grid (required)
-     * @param databaseName Database/Cube name for layout grid (required)
-     * @param layout Layout name to be executed (required)
-     * @param user Owner of the layout (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Layout Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call gridExecuteLayoutCall(String applicationName, String databaseName, String layout, String user, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/grid/layout/{layout}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "layout" + "\\}", localVarApiClient.escapeString(layout.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (user != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("user", user));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call gridExecuteLayoutValidateBeforeCall(String applicationName, String databaseName, String layout, String user, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling gridExecuteLayout(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling gridExecuteLayout(Async)");
-        }
-        
-        // verify the required parameter 'layout' is set
-        if (layout == null) {
-            throw new ApiException("Missing the required parameter 'layout' when calling gridExecuteLayout(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = gridExecuteLayoutCall(applicationName, databaseName, layout, user, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Execute Layout Grid
-     * Returns the grid for the specified layout.
-     * @param applicationName Application name for layout grid (required)
-     * @param databaseName Database/Cube name for layout grid (required)
-     * @param layout Layout name to be executed (required)
-     * @param user Owner of the layout (optional)
-     * @return Grid
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Layout Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Grid gridExecuteLayout(String applicationName, String databaseName, String layout, String user) throws ApiException {
-        ApiResponse<Grid> localVarResp = gridExecuteLayoutWithHttpInfo(applicationName, databaseName, layout, user);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Execute Layout Grid
-     * Returns the grid for the specified layout.
-     * @param applicationName Application name for layout grid (required)
-     * @param databaseName Database/Cube name for layout grid (required)
-     * @param layout Layout name to be executed (required)
-     * @param user Owner of the layout (optional)
-     * @return ApiResponse&lt;Grid&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Layout Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Grid> gridExecuteLayoutWithHttpInfo(String applicationName, String databaseName, String layout, String user) throws ApiException {
-        okhttp3.Call localVarCall = gridExecuteLayoutValidateBeforeCall(applicationName, databaseName, layout, user, null);
-        Type localVarReturnType = new TypeToken<Grid>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Execute Layout Grid (asynchronously)
-     * Returns the grid for the specified layout.
-     * @param applicationName Application name for layout grid (required)
-     * @param databaseName Database/Cube name for layout grid (required)
-     * @param layout Layout name to be executed (required)
-     * @param user Owner of the layout (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Layout Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call gridExecuteLayoutAsync(String applicationName, String databaseName, String layout, String user, final ApiCallback<Grid> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = gridExecuteLayoutValidateBeforeCall(applicationName, databaseName, layout, user, _callback);
-        Type localVarReturnType = new TypeToken<Grid>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for gridExecuteMDX
-     * @param applicationName Application name for grid. (required)
-     * @param databaseName Database/Cube name for grid. (required)
-     * @param body MDX query for grid (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Resultant Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call gridExecuteMDXCall(String applicationName, String databaseName, MDXOperation body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/grid/mdx"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call gridExecuteMDXValidateBeforeCall(String applicationName, String databaseName, MDXOperation body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling gridExecuteMDX(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling gridExecuteMDX(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling gridExecuteMDX(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = gridExecuteMDXCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Execute MDX Query
-     * Returns an output grid from the specified MDX query.
-     * @param applicationName Application name for grid. (required)
-     * @param databaseName Database/Cube name for grid. (required)
-     * @param body MDX query for grid (required)
-     * @return Grid
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Resultant Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Grid gridExecuteMDX(String applicationName, String databaseName, MDXOperation body) throws ApiException {
-        ApiResponse<Grid> localVarResp = gridExecuteMDXWithHttpInfo(applicationName, databaseName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Execute MDX Query
-     * Returns an output grid from the specified MDX query.
-     * @param applicationName Application name for grid. (required)
-     * @param databaseName Database/Cube name for grid. (required)
-     * @param body MDX query for grid (required)
-     * @return ApiResponse&lt;Grid&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Resultant Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Grid> gridExecuteMDXWithHttpInfo(String applicationName, String databaseName, MDXOperation body) throws ApiException {
-        okhttp3.Call localVarCall = gridExecuteMDXValidateBeforeCall(applicationName, databaseName, body, null);
-        Type localVarReturnType = new TypeToken<Grid>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Execute MDX Query (asynchronously)
-     * Returns an output grid from the specified MDX query.
-     * @param applicationName Application name for grid. (required)
-     * @param databaseName Database/Cube name for grid. (required)
-     * @param body MDX query for grid (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Resultant Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call gridExecuteMDXAsync(String applicationName, String databaseName, MDXOperation body, final ApiCallback<Grid> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = gridExecuteMDXValidateBeforeCall(applicationName, databaseName, body, _callback);
-        Type localVarReturnType = new TypeToken<Grid>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for gridGetDefault
-     * @param applicationName Application name for default grid (required)
-     * @param databaseName Database/Cube name for default grid (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call gridGetDefaultCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/grid"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call gridGetDefaultValidateBeforeCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling gridGetDefault(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling gridGetDefault(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = gridGetDefaultCall(applicationName, databaseName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Default Grid
-     * Returns the default grid from Essbase for the specified cube.
-     * @param applicationName Application name for default grid (required)
-     * @param databaseName Database/Cube name for default grid (required)
-     * @return Grid
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Grid gridGetDefault(String applicationName, String databaseName) throws ApiException {
-        ApiResponse<Grid> localVarResp = gridGetDefaultWithHttpInfo(applicationName, databaseName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Default Grid
-     * Returns the default grid from Essbase for the specified cube.
-     * @param applicationName Application name for default grid (required)
-     * @param databaseName Database/Cube name for default grid (required)
-     * @return ApiResponse&lt;Grid&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Grid> gridGetDefaultWithHttpInfo(String applicationName, String databaseName) throws ApiException {
-        okhttp3.Call localVarCall = gridGetDefaultValidateBeforeCall(applicationName, databaseName, null);
-        Type localVarReturnType = new TypeToken<Grid>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Default Grid (asynchronously)
-     * Returns the default grid from Essbase for the specified cube.
-     * @param applicationName Application name for default grid (required)
-     * @param databaseName Database/Cube name for default grid (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call gridGetDefaultAsync(String applicationName, String databaseName, final ApiCallback<Grid> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = gridGetDefaultValidateBeforeCall(applicationName, databaseName, _callback);
-        Type localVarReturnType = new TypeToken<Grid>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for gridGetLayoutGrid
-     * @param applicationName Application name for default grid (required)
-     * @param databaseName Database/Cube name for default grid (required)
-     * @param body The current grid displayed (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Layout Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call gridGetLayoutGridCall(String applicationName, String databaseName, Grid body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/grid/layout"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call gridGetLayoutGridValidateBeforeCall(String applicationName, String databaseName, Grid body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling gridGetLayoutGrid(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling gridGetLayoutGrid(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling gridGetLayoutGrid(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = gridGetLayoutGridCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Layout Grid
-     * Returns the layout grid for the current grid to be saved as layout for the specified cube.
-     * @param applicationName Application name for default grid (required)
-     * @param databaseName Database/Cube name for default grid (required)
-     * @param body The current grid displayed (required)
-     * @return Grid
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Layout Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Grid gridGetLayoutGrid(String applicationName, String databaseName, Grid body) throws ApiException {
-        ApiResponse<Grid> localVarResp = gridGetLayoutGridWithHttpInfo(applicationName, databaseName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Layout Grid
-     * Returns the layout grid for the current grid to be saved as layout for the specified cube.
-     * @param applicationName Application name for default grid (required)
-     * @param databaseName Database/Cube name for default grid (required)
-     * @param body The current grid displayed (required)
-     * @return ApiResponse&lt;Grid&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Layout Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Grid> gridGetLayoutGridWithHttpInfo(String applicationName, String databaseName, Grid body) throws ApiException {
-        okhttp3.Call localVarCall = gridGetLayoutGridValidateBeforeCall(applicationName, databaseName, body, null);
-        Type localVarReturnType = new TypeToken<Grid>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Layout Grid (asynchronously)
-     * Returns the layout grid for the current grid to be saved as layout for the specified cube.
-     * @param applicationName Application name for default grid (required)
-     * @param databaseName Database/Cube name for default grid (required)
-     * @param body The current grid displayed (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Layout Grid </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, database name not present or applicaion name not present. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call gridGetLayoutGridAsync(String applicationName, String databaseName, Grid body, final ApiCallback<Grid> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = gridGetLayoutGridValidateBeforeCall(applicationName, databaseName, body, _callback);
-        Type localVarReturnType = new TypeToken<Grid>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

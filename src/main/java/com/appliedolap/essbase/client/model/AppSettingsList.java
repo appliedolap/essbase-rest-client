@@ -13,145 +13,165 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.AppGeneralSettings;
 import com.appliedolap.essbase.client.model.AppSecuritySettings;
 import com.appliedolap.essbase.client.model.AppStartupSettings;
 import com.appliedolap.essbase.client.model.Link;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * AppSettingsList
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  AppSettingsList.JSON_PROPERTY_GENERAL,
+  AppSettingsList.JSON_PROPERTY_STARTUP,
+  AppSettingsList.JSON_PROPERTY_SECURITY,
+  AppSettingsList.JSON_PROPERTY_LINKS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class AppSettingsList {
-  public static final String SERIALIZED_NAME_GENERAL = "general";
-  @SerializedName(SERIALIZED_NAME_GENERAL)
+  public static final String JSON_PROPERTY_GENERAL = "general";
+  @jakarta.annotation.Nullable
   private AppGeneralSettings general;
 
-  public static final String SERIALIZED_NAME_STARTUP = "startup";
-  @SerializedName(SERIALIZED_NAME_STARTUP)
+  public static final String JSON_PROPERTY_STARTUP = "startup";
+  @jakarta.annotation.Nullable
   private AppStartupSettings startup;
 
-  public static final String SERIALIZED_NAME_SECURITY = "security";
-  @SerializedName(SERIALIZED_NAME_SECURITY)
+  public static final String JSON_PROPERTY_SECURITY = "security";
+  @jakarta.annotation.Nullable
   private AppSecuritySettings security;
 
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
+  public AppSettingsList() { 
+  }
 
-  public AppSettingsList general(AppGeneralSettings general) {
-    
+  public AppSettingsList general(@jakarta.annotation.Nullable AppGeneralSettings general) {
     this.general = general;
     return this;
   }
 
-   /**
+  /**
    * Get general
    * @return general
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GENERAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public AppGeneralSettings getGeneral() {
     return general;
   }
 
 
-  public void setGeneral(AppGeneralSettings general) {
+  @JsonProperty(JSON_PROPERTY_GENERAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGeneral(@jakarta.annotation.Nullable AppGeneralSettings general) {
     this.general = general;
   }
 
 
-  public AppSettingsList startup(AppStartupSettings startup) {
-    
+  public AppSettingsList startup(@jakarta.annotation.Nullable AppStartupSettings startup) {
     this.startup = startup;
     return this;
   }
 
-   /**
+  /**
    * Get startup
    * @return startup
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STARTUP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public AppStartupSettings getStartup() {
     return startup;
   }
 
 
-  public void setStartup(AppStartupSettings startup) {
+  @JsonProperty(JSON_PROPERTY_STARTUP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStartup(@jakarta.annotation.Nullable AppStartupSettings startup) {
     this.startup = startup;
   }
 
 
-  public AppSettingsList security(AppSecuritySettings security) {
-    
+  public AppSettingsList security(@jakarta.annotation.Nullable AppSecuritySettings security) {
     this.security = security;
     return this;
   }
 
-   /**
+  /**
    * Get security
    * @return security
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SECURITY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public AppSecuritySettings getSecurity() {
     return security;
   }
 
 
-  public void setSecurity(AppSecuritySettings security) {
+  @JsonProperty(JSON_PROPERTY_SECURITY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSecurity(@jakarta.annotation.Nullable AppSecuritySettings security) {
     this.security = security;
   }
 
 
-  public AppSettingsList links(List<Link> links) {
-    
+  public AppSettingsList links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public AppSettingsList addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
+  /**
+   * Return true if this AppSettingsList object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -195,5 +215,64 @@ public class AppSettingsList {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `general` to the URL query string
+    if (getGeneral() != null) {
+      joiner.add(getGeneral().toUrlQueryString(prefix + "general" + suffix));
+    }
+
+    // add `startup` to the URL query string
+    if (getStartup() != null) {
+      joiner.add(getStartup().toUrlQueryString(prefix + "startup" + suffix));
+    }
+
+    // add `security` to the URL query string
+    if (getSecurity() != null) {
+      joiner.add(getSecurity().toUrlQueryString(prefix + "security" + suffix));
+    }
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

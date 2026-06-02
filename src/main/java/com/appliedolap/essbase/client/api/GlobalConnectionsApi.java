@@ -10,983 +10,726 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.Connection;
 import com.appliedolap.essbase.client.model.ConnectionsList;
 import com.appliedolap.essbase.client.model.WalletLocation;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class GlobalConnectionsApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public GlobalConnectionsApi() {
-        this(Configuration.getDefaultApiClient());
+  public GlobalConnectionsApi() {
+    this(new ApiClient());
+  }
+
+  public GlobalConnectionsApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public GlobalConnectionsApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Create Connection
+   * &lt;p&gt;Creates a connection based on specified inputs. &lt;code&gt;name&lt;/code&gt; and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of connections. Other required inputs differ based on the type of connection.&lt;/p&gt;
+   * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void globalConnectionsCreateConnection(Connection body) throws ApiException {
+    globalConnectionsCreateConnectionWithHttpInfo(body);
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for globalConnectionsCreateConnection
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsCreateConnectionCall(Connection body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/connections";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Create Connection
+   * &lt;p&gt;Creates a connection based on specified inputs. &lt;code&gt;name&lt;/code&gt; and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of connections. Other required inputs differ based on the type of connection.&lt;/p&gt;
+   * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> globalConnectionsCreateConnectionWithHttpInfo(Connection body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalConnectionsCreateConnectionRequestBuilder(body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalConnectionsCreateConnection", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalConnectionsCreateConnectionValidateBeforeCall(Connection body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling globalConnectionsCreateConnection(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = globalConnectionsCreateConnectionCall(body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder globalConnectionsCreateConnectionRequestBuilder(Connection body) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling globalConnectionsCreateConnection");
     }
 
-    /**
-     * Create Connection
-     * &lt;p&gt;Creates a connection based on specified inputs. &lt;code&gt;name&lt;/code&gt; and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of connections. Other required inputs differ based on the type of connection.&lt;/p&gt;
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void globalConnectionsCreateConnection(Connection body) throws ApiException {
-        globalConnectionsCreateConnectionWithHttpInfo(body);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/connections";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Create Connection
-     * &lt;p&gt;Creates a connection based on specified inputs. &lt;code&gt;name&lt;/code&gt; and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of connections. Other required inputs differ based on the type of connection.&lt;/p&gt;
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> globalConnectionsCreateConnectionWithHttpInfo(Connection body) throws ApiException {
-        okhttp3.Call localVarCall = globalConnectionsCreateConnectionValidateBeforeCall(body, null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Create Connection (asynchronously)
-     * &lt;p&gt;Creates a connection based on specified inputs. &lt;code&gt;name&lt;/code&gt; and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of connections. Other required inputs differ based on the type of connection.&lt;/p&gt;
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsCreateConnectionAsync(Connection body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = globalConnectionsCreateConnectionValidateBeforeCall(body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for globalConnectionsDeleteConnection
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsDeleteConnectionCall(String connectionName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/connections/{connectionName}"
-            .replaceAll("\\{" + "connectionName" + "\\}", localVarApiClient.escapeString(connectionName.toString()));
+  /**
+   * Delete Connection
+   * &lt;p&gt;Deletes a named global connection.&lt;/p&gt;
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void globalConnectionsDeleteConnection(String connectionName) throws ApiException {
+    globalConnectionsDeleteConnectionWithHttpInfo(connectionName);
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Delete Connection
+   * &lt;p&gt;Deletes a named global connection.&lt;/p&gt;
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> globalConnectionsDeleteConnectionWithHttpInfo(String connectionName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalConnectionsDeleteConnectionRequestBuilder(connectionName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalConnectionsDeleteConnection", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalConnectionsDeleteConnectionValidateBeforeCall(String connectionName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'connectionName' is set
-        if (connectionName == null) {
-            throw new ApiException("Missing the required parameter 'connectionName' when calling globalConnectionsDeleteConnection(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = globalConnectionsDeleteConnectionCall(connectionName, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder globalConnectionsDeleteConnectionRequestBuilder(String connectionName) throws ApiException {
+    // verify the required parameter 'connectionName' is set
+    if (connectionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'connectionName' when calling globalConnectionsDeleteConnection");
     }
 
-    /**
-     * Delete Connection
-     * &lt;p&gt;Deletes a named global connection.&lt;/p&gt;
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void globalConnectionsDeleteConnection(String connectionName) throws ApiException {
-        globalConnectionsDeleteConnectionWithHttpInfo(connectionName);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/connections/{connectionName}"
+        .replace("{connectionName}", ApiClient.urlEncode(connectionName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Delete Connection
-     * &lt;p&gt;Deletes a named global connection.&lt;/p&gt;
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> globalConnectionsDeleteConnectionWithHttpInfo(String connectionName) throws ApiException {
-        okhttp3.Call localVarCall = globalConnectionsDeleteConnectionValidateBeforeCall(connectionName, null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Delete Connection (asynchronously)
-     * &lt;p&gt;Deletes a named global connection.&lt;/p&gt;
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsDeleteConnectionAsync(String connectionName, final ApiCallback<Void> _callback) throws ApiException {
+  /**
+   * Get Connection
+   * &lt;p&gt;Returns details about the specified global connection.&lt;/p&gt;
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @param password &lt;p&gt;If set to true, the encrypted password is returned in the result.&lt;/p&gt; (optional)
+   * @return Connection
+   * @throws ApiException if fails to make API call
+   */
+  public Connection globalConnectionsGetConnectionDetails(String connectionName, Boolean password) throws ApiException {
+    ApiResponse<Connection> localVarResponse = globalConnectionsGetConnectionDetailsWithHttpInfo(connectionName, password);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = globalConnectionsDeleteConnectionValidateBeforeCall(connectionName, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for globalConnectionsGetConnectionDetails
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param password &lt;p&gt;If set to true, the encrypted password is returned in the result.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get connection details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsGetConnectionDetailsCall(String connectionName, Boolean password, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/connections/{connectionName}"
-            .replaceAll("\\{" + "connectionName" + "\\}", localVarApiClient.escapeString(connectionName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (password != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("password", password));
+  /**
+   * Get Connection
+   * &lt;p&gt;Returns details about the specified global connection.&lt;/p&gt;
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @param password &lt;p&gt;If set to true, the encrypted password is returned in the result.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;Connection&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Connection> globalConnectionsGetConnectionDetailsWithHttpInfo(String connectionName, Boolean password) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalConnectionsGetConnectionDetailsRequestBuilder(connectionName, password);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalConnectionsGetConnectionDetails", localVarResponse);
         }
+        return new ApiResponse<Connection>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Connection>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  private HttpRequest.Builder globalConnectionsGetConnectionDetailsRequestBuilder(String connectionName, Boolean password) throws ApiException {
+    // verify the required parameter 'connectionName' is set
+    if (connectionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'connectionName' when calling globalConnectionsGetConnectionDetails");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/connections/{connectionName}"
+        .replace("{connectionName}", ApiClient.urlEncode(connectionName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "password";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("password", password));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * List Connections
+   * &lt;p&gt;Returns global connections list, including details such as name, description, and type.&lt;/p&gt;
+   * @param offset &lt;p&gt;Number of connections to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of connections to return. Default is 50.&lt;/p&gt; (optional, default to 50)
+   * @return ConnectionsList
+   * @throws ApiException if fails to make API call
+   */
+  public ConnectionsList globalConnectionsGetConnections(Integer offset, Integer limit) throws ApiException {
+    ApiResponse<ConnectionsList> localVarResponse = globalConnectionsGetConnectionsWithHttpInfo(offset, limit);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * List Connections
+   * &lt;p&gt;Returns global connections list, including details such as name, description, and type.&lt;/p&gt;
+   * @param offset &lt;p&gt;Number of connections to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of connections to return. Default is 50.&lt;/p&gt; (optional, default to 50)
+   * @return ApiResponse&lt;ConnectionsList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ConnectionsList> globalConnectionsGetConnectionsWithHttpInfo(Integer offset, Integer limit) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalConnectionsGetConnectionsRequestBuilder(offset, limit);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalConnectionsGetConnections", localVarResponse);
         }
+        return new ApiResponse<ConnectionsList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ConnectionsList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
+  private HttpRequest.Builder globalConnectionsGetConnectionsRequestBuilder(Integer offset, Integer limit) throws ApiException {
 
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/connections";
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "offset";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("offset", offset));
+    localVarQueryParameterBaseName = "limit";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("limit", limit));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalConnectionsGetConnectionDetailsValidateBeforeCall(String connectionName, Boolean password, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'connectionName' is set
-        if (connectionName == null) {
-            throw new ApiException("Missing the required parameter 'connectionName' when calling globalConnectionsGetConnectionDetails(Async)");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Test New Connection
+   * &lt;p&gt;Tests a new or updated global connection, using specified inputs, without saving it.&lt;/p&gt;
+   * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void globalConnectionsTestConnection(Connection body) throws ApiException {
+    globalConnectionsTestConnectionWithHttpInfo(body);
+  }
+
+  /**
+   * Test New Connection
+   * &lt;p&gt;Tests a new or updated global connection, using specified inputs, without saving it.&lt;/p&gt;
+   * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> globalConnectionsTestConnectionWithHttpInfo(Connection body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalConnectionsTestConnectionRequestBuilder(body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalConnectionsTestConnection", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = globalConnectionsGetConnectionDetailsCall(connectionName, password, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Connection
-     * &lt;p&gt;Returns details about the specified global connection.&lt;/p&gt;
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param password &lt;p&gt;If set to true, the encrypted password is returned in the result.&lt;/p&gt; (optional)
-     * @return Connection
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get connection details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Connection globalConnectionsGetConnectionDetails(String connectionName, Boolean password) throws ApiException {
-        ApiResponse<Connection> localVarResp = globalConnectionsGetConnectionDetailsWithHttpInfo(connectionName, password);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Connection
-     * &lt;p&gt;Returns details about the specified global connection.&lt;/p&gt;
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param password &lt;p&gt;If set to true, the encrypted password is returned in the result.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;Connection&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get connection details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Connection> globalConnectionsGetConnectionDetailsWithHttpInfo(String connectionName, Boolean password) throws ApiException {
-        okhttp3.Call localVarCall = globalConnectionsGetConnectionDetailsValidateBeforeCall(connectionName, password, null);
-        Type localVarReturnType = new TypeToken<Connection>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Connection (asynchronously)
-     * &lt;p&gt;Returns details about the specified global connection.&lt;/p&gt;
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param password &lt;p&gt;If set to true, the encrypted password is returned in the result.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get connection details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsGetConnectionDetailsAsync(String connectionName, Boolean password, final ApiCallback<Connection> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = globalConnectionsGetConnectionDetailsValidateBeforeCall(connectionName, password, _callback);
-        Type localVarReturnType = new TypeToken<Connection>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for globalConnectionsGetConnections
-     * @param offset &lt;p&gt;Number of connections to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of connections to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of connections returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to list connections.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsGetConnectionsCall(Integer offset, Integer limit, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/connections";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (offset != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("offset", offset));
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        if (limit != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+  private HttpRequest.Builder globalConnectionsTestConnectionRequestBuilder(Connection body) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling globalConnectionsTestConnection");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/connections/actions/test";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Test Saved Connection
+   * &lt;p&gt;Tests a saved global connection by name.&lt;/p&gt;
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void globalConnectionsTestConnectionExisting(String connectionName) throws ApiException {
+    globalConnectionsTestConnectionExistingWithHttpInfo(connectionName);
+  }
+
+  /**
+   * Test Saved Connection
+   * &lt;p&gt;Tests a saved global connection by name.&lt;/p&gt;
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> globalConnectionsTestConnectionExistingWithHttpInfo(String connectionName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalConnectionsTestConnectionExistingRequestBuilder(connectionName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalConnectionsTestConnectionExisting", localVarResponse);
         }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder globalConnectionsTestConnectionExistingRequestBuilder(String connectionName) throws ApiException {
+    // verify the required parameter 'connectionName' is set
+    if (connectionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'connectionName' when calling globalConnectionsTestConnectionExisting");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalConnectionsGetConnectionsValidateBeforeCall(Integer offset, Integer limit, final ApiCallback _callback) throws ApiException {
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = globalConnectionsGetConnectionsCall(offset, limit, _callback);
-        return localVarCall;
+    String localVarPath = "/connections/{connectionName}/actions/test"
+        .replace("{connectionName}", ApiClient.urlEncode(connectionName.toString()));
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * List Connections
-     * &lt;p&gt;Returns global connections list, including details such as name, description, and type.&lt;/p&gt;
-     * @param offset &lt;p&gt;Number of connections to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of connections to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @return ConnectionsList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of connections returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to list connections.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ConnectionsList globalConnectionsGetConnections(Integer offset, Integer limit) throws ApiException {
-        ApiResponse<ConnectionsList> localVarResp = globalConnectionsGetConnectionsWithHttpInfo(offset, limit);
-        return localVarResp.getData();
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * List Connections
-     * &lt;p&gt;Returns global connections list, including details such as name, description, and type.&lt;/p&gt;
-     * @param offset &lt;p&gt;Number of connections to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of connections to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @return ApiResponse&lt;ConnectionsList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of connections returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to list connections.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ConnectionsList> globalConnectionsGetConnectionsWithHttpInfo(Integer offset, Integer limit) throws ApiException {
-        okhttp3.Call localVarCall = globalConnectionsGetConnectionsValidateBeforeCall(offset, limit, null);
-        Type localVarReturnType = new TypeToken<ConnectionsList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
+  /**
+   * Update Connection
+   * &lt;p&gt;Update the named global connection. If the update is successful, returns details about the updated connection. &lt;code&gt;type&lt;/code&gt; is a required input for all types of connections. Other required inputs differ based on the type of the connection.&lt;/p&gt;
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
+   * @return Connection
+   * @throws ApiException if fails to make API call
+   */
+  public Connection globalConnectionsUpdateConnection(String connectionName, Connection body) throws ApiException {
+    ApiResponse<Connection> localVarResponse = globalConnectionsUpdateConnectionWithHttpInfo(connectionName, body);
+    return localVarResponse.getData();
+  }
 
-    /**
-     * List Connections (asynchronously)
-     * &lt;p&gt;Returns global connections list, including details such as name, description, and type.&lt;/p&gt;
-     * @param offset &lt;p&gt;Number of connections to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of connections to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of connections returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to list connections.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsGetConnectionsAsync(Integer offset, Integer limit, final ApiCallback<ConnectionsList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = globalConnectionsGetConnectionsValidateBeforeCall(offset, limit, _callback);
-        Type localVarReturnType = new TypeToken<ConnectionsList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for globalConnectionsTestConnection
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsTestConnectionCall(Connection body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/connections/actions/test";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Update Connection
+   * &lt;p&gt;Update the named global connection. If the update is successful, returns details about the updated connection. &lt;code&gt;type&lt;/code&gt; is a required input for all types of connections. Other required inputs differ based on the type of the connection.&lt;/p&gt;
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Connection&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Connection> globalConnectionsUpdateConnectionWithHttpInfo(String connectionName, Connection body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalConnectionsUpdateConnectionRequestBuilder(connectionName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalConnectionsUpdateConnection", localVarResponse);
         }
+        return new ApiResponse<Connection>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Connection>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder globalConnectionsUpdateConnectionRequestBuilder(String connectionName, Connection body) throws ApiException {
+    // verify the required parameter 'connectionName' is set
+    if (connectionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'connectionName' when calling globalConnectionsUpdateConnection");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling globalConnectionsUpdateConnection");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalConnectionsTestConnectionValidateBeforeCall(Connection body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling globalConnectionsTestConnection(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/connections/{connectionName}"
+        .replace("{connectionName}", ApiClient.urlEncode(connectionName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Upload a connection wallet file
+   * Upload a connection wallet file
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @return WalletLocation
+   * @throws ApiException if fails to make API call
+   */
+  public WalletLocation globalConnectionsWallets(String connectionName) throws ApiException {
+    ApiResponse<WalletLocation> localVarResponse = globalConnectionsWalletsWithHttpInfo(connectionName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Upload a connection wallet file
+   * Upload a connection wallet file
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;WalletLocation&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<WalletLocation> globalConnectionsWalletsWithHttpInfo(String connectionName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalConnectionsWalletsRequestBuilder(connectionName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalConnectionsWallets", localVarResponse);
         }
-        
+        return new ApiResponse<WalletLocation>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<WalletLocation>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = globalConnectionsTestConnectionCall(body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder globalConnectionsWalletsRequestBuilder(String connectionName) throws ApiException {
+    // verify the required parameter 'connectionName' is set
+    if (connectionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'connectionName' when calling globalConnectionsWallets");
     }
 
-    /**
-     * Test New Connection
-     * &lt;p&gt;Tests a new or updated global connection, using specified inputs, without saving it.&lt;/p&gt;
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void globalConnectionsTestConnection(Connection body) throws ApiException {
-        globalConnectionsTestConnectionWithHttpInfo(body);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/connections/{connectionName}/wallet"
+        .replace("{connectionName}", ApiClient.urlEncode(connectionName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Test New Connection
-     * &lt;p&gt;Tests a new or updated global connection, using specified inputs, without saving it.&lt;/p&gt;
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> globalConnectionsTestConnectionWithHttpInfo(Connection body) throws ApiException {
-        okhttp3.Call localVarCall = globalConnectionsTestConnectionValidateBeforeCall(body, null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Test New Connection (asynchronously)
-     * &lt;p&gt;Tests a new or updated global connection, using specified inputs, without saving it.&lt;/p&gt;
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsTestConnectionAsync(Connection body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = globalConnectionsTestConnectionValidateBeforeCall(body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for globalConnectionsTestConnectionExisting
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsTestConnectionExistingCall(String connectionName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/connections/{connectionName}/actions/test"
-            .replaceAll("\\{" + "connectionName" + "\\}", localVarApiClient.escapeString(connectionName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalConnectionsTestConnectionExistingValidateBeforeCall(String connectionName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'connectionName' is set
-        if (connectionName == null) {
-            throw new ApiException("Missing the required parameter 'connectionName' when calling globalConnectionsTestConnectionExisting(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = globalConnectionsTestConnectionExistingCall(connectionName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Test Saved Connection
-     * &lt;p&gt;Tests a saved global connection by name.&lt;/p&gt;
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void globalConnectionsTestConnectionExisting(String connectionName) throws ApiException {
-        globalConnectionsTestConnectionExistingWithHttpInfo(connectionName);
-    }
-
-    /**
-     * Test Saved Connection
-     * &lt;p&gt;Tests a saved global connection by name.&lt;/p&gt;
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> globalConnectionsTestConnectionExistingWithHttpInfo(String connectionName) throws ApiException {
-        okhttp3.Call localVarCall = globalConnectionsTestConnectionExistingValidateBeforeCall(connectionName, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Test Saved Connection (asynchronously)
-     * &lt;p&gt;Tests a saved global connection by name.&lt;/p&gt;
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsTestConnectionExistingAsync(String connectionName, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = globalConnectionsTestConnectionExistingValidateBeforeCall(connectionName, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for globalConnectionsUpdateConnection
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsUpdateConnectionCall(String connectionName, Connection body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/connections/{connectionName}"
-            .replaceAll("\\{" + "connectionName" + "\\}", localVarApiClient.escapeString(connectionName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalConnectionsUpdateConnectionValidateBeforeCall(String connectionName, Connection body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'connectionName' is set
-        if (connectionName == null) {
-            throw new ApiException("Missing the required parameter 'connectionName' when calling globalConnectionsUpdateConnection(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling globalConnectionsUpdateConnection(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = globalConnectionsUpdateConnectionCall(connectionName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Update Connection
-     * &lt;p&gt;Update the named global connection. If the update is successful, returns details about the updated connection. &lt;code&gt;type&lt;/code&gt; is a required input for all types of connections. Other required inputs differ based on the type of the connection.&lt;/p&gt;
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @return Connection
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Connection globalConnectionsUpdateConnection(String connectionName, Connection body) throws ApiException {
-        ApiResponse<Connection> localVarResp = globalConnectionsUpdateConnectionWithHttpInfo(connectionName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Update Connection
-     * &lt;p&gt;Update the named global connection. If the update is successful, returns details about the updated connection. &lt;code&gt;type&lt;/code&gt; is a required input for all types of connections. Other required inputs differ based on the type of the connection.&lt;/p&gt;
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Connection&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Connection> globalConnectionsUpdateConnectionWithHttpInfo(String connectionName, Connection body) throws ApiException {
-        okhttp3.Call localVarCall = globalConnectionsUpdateConnectionValidateBeforeCall(connectionName, body, null);
-        Type localVarReturnType = new TypeToken<Connection>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Update Connection (asynchronously)
-     * &lt;p&gt;Update the named global connection. If the update is successful, returns details about the updated connection. &lt;code&gt;type&lt;/code&gt; is a required input for all types of connections. Other required inputs differ based on the type of the connection.&lt;/p&gt;
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsUpdateConnectionAsync(String connectionName, Connection body, final ApiCallback<Connection> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = globalConnectionsUpdateConnectionValidateBeforeCall(connectionName, body, _callback);
-        Type localVarReturnType = new TypeToken<Connection>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for globalConnectionsWallets
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Return the wallet file location in catalog.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Unable to process wallet file.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsWalletsCall(String connectionName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/connections/{connectionName}/wallet"
-            .replaceAll("\\{" + "connectionName" + "\\}", localVarApiClient.escapeString(connectionName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalConnectionsWalletsValidateBeforeCall(String connectionName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'connectionName' is set
-        if (connectionName == null) {
-            throw new ApiException("Missing the required parameter 'connectionName' when calling globalConnectionsWallets(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = globalConnectionsWalletsCall(connectionName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Upload a connection wallet file
-     * Upload a connection wallet file
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @return WalletLocation
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Return the wallet file location in catalog.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Unable to process wallet file.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public WalletLocation globalConnectionsWallets(String connectionName) throws ApiException {
-        ApiResponse<WalletLocation> localVarResp = globalConnectionsWalletsWithHttpInfo(connectionName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Upload a connection wallet file
-     * Upload a connection wallet file
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;WalletLocation&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Return the wallet file location in catalog.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Unable to process wallet file.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<WalletLocation> globalConnectionsWalletsWithHttpInfo(String connectionName) throws ApiException {
-        okhttp3.Call localVarCall = globalConnectionsWalletsValidateBeforeCall(connectionName, null);
-        Type localVarReturnType = new TypeToken<WalletLocation>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Upload a connection wallet file (asynchronously)
-     * Upload a connection wallet file
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Return the wallet file location in catalog.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Unable to process wallet file.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalConnectionsWalletsAsync(String connectionName, final ApiCallback<WalletLocation> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = globalConnectionsWalletsValidateBeforeCall(connectionName, _callback);
-        Type localVarReturnType = new TypeToken<WalletLocation>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

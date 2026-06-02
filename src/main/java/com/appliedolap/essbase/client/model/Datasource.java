@@ -13,53 +13,94 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
-import com.appliedolap.essbase.client.model.FileProperties;
-import com.appliedolap.essbase.client.model.SQLProperties;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
+import com.appliedolap.essbase.client.model.ColumnsType;
+import com.appliedolap.essbase.client.model.HeaderType;
+import com.appliedolap.essbase.client.model.Link;
+import com.appliedolap.essbase.client.model.QueryParamsInfo;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * Datasource
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  Datasource.JSON_PROPERTY_TYPE,
+  Datasource.JSON_PROPERTY_CONNECTION,
+  Datasource.JSON_PROPERTY_DESCRIPTION,
+  Datasource.JSON_PROPERTY_COLUMNS,
+  Datasource.JSON_PROPERTY_NAME,
+  Datasource.JSON_PROPERTY_IGNORE_ERROR_RECORDS,
+  Datasource.JSON_PROPERTY_DELIMETER,
+  Datasource.JSON_PROPERTY_CUSTOM_DELIMITER,
+  Datasource.JSON_PROPERTY_QUERY,
+  Datasource.JSON_PROPERTY_APPLICATION,
+  Datasource.JSON_PROPERTY_CUBE,
+  Datasource.JSON_PROPERTY_START_ROW,
+  Datasource.JSON_PROPERTY_END_ROW,
+  Datasource.JSON_PROPERTY_HEADER_ROW,
+  Datasource.JSON_PROPERTY_SHEET,
+  Datasource.JSON_PROPERTY_SKIP_HIDDEN_ROWS,
+  Datasource.JSON_PROPERTY_WIDTHS,
+  Datasource.JSON_PROPERTY_QUERY_PARAMETERS,
+  Datasource.JSON_PROPERTY_HEADERS,
+  Datasource.JSON_PROPERTY_LINKS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class Datasource {
-  public static final String SERIALIZED_NAME_HEADER = "header";
-  @SerializedName(SERIALIZED_NAME_HEADER)
-  private String header;
-
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
-  private String name;
-
-  public static final String SERIALIZED_NAME_TOKENS = "tokens";
-  @SerializedName(SERIALIZED_NAME_TOKENS)
-  private List<String> tokens = null;
-
   /**
-   * Gets or Sets tokensCombineOption
+   * Gets or Sets type
    */
-  @JsonAdapter(TokensCombineOptionEnum.Adapter.class)
-  public enum TokensCombineOptionEnum {
-    AND("AND"),
+  public enum TypeEnum {
+    TEMPLATE(String.valueOf("TEMPLATE")),
     
-    OR("OR");
+    EXCELFILE(String.valueOf("EXCELFILE")),
+    
+    DB(String.valueOf("DB")),
+    
+    DELIMITEDFILE(String.valueOf("DELIMITEDFILE")),
+    
+    FIXEDWIDTHFILE(String.valueOf("FIXEDWIDTHFILE")),
+    
+    BI(String.valueOf("BI")),
+    
+    ESSBASE(String.valueOf("ESSBASE")),
+    
+    JDBC(String.valueOf("JDBC")),
+    
+    SPARK(String.valueOf("SPARK")),
+    
+    MS_SQL(String.valueOf("MS_SQL")),
+    
+    MYSQL(String.valueOf("MYSQL")),
+    
+    DB2(String.valueOf("DB2")),
+    
+    ORACLE(String.valueOf("ORACLE")),
+    
+    FILE(String.valueOf("FILE"));
 
     private String value;
 
-    TokensCombineOptionEnum(String value) {
+    TypeEnum(String value) {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -69,188 +110,615 @@ public class Datasource {
       return String.valueOf(value);
     }
 
-    public static TokensCombineOptionEnum fromValue(String value) {
-      for (TokensCombineOptionEnum b : TokensCombineOptionEnum.values()) {
+    @JsonCreator
+    public static TypeEnum fromValue(String value) {
+      for (TypeEnum b : TypeEnum.values()) {
         if (b.value.equals(value)) {
           return b;
         }
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<TokensCombineOptionEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final TokensCombineOptionEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public TokensCombineOptionEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return TokensCombineOptionEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_TOKENS_COMBINE_OPTION = "tokensCombineOption";
-  @SerializedName(SERIALIZED_NAME_TOKENS_COMBINE_OPTION)
-  private TokensCombineOptionEnum tokensCombineOption;
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nonnull
+  private TypeEnum type;
 
-  public static final String SERIALIZED_NAME_SQL_PROPERTIES = "sqlProperties";
-  @SerializedName(SERIALIZED_NAME_SQL_PROPERTIES)
-  private SQLProperties sqlProperties;
+  public static final String JSON_PROPERTY_CONNECTION = "connection";
+  @jakarta.annotation.Nonnull
+  private String connection;
 
-  public static final String SERIALIZED_NAME_FILE_PROPERTIES = "fileProperties";
-  @SerializedName(SERIALIZED_NAME_FILE_PROPERTIES)
-  private FileProperties fileProperties;
+  public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  @jakarta.annotation.Nullable
+  private String description;
 
+  public static final String JSON_PROPERTY_COLUMNS = "columns";
+  @jakarta.annotation.Nonnull
+  private ColumnsType columns;
 
-  public Datasource header(String header) {
-    
-    this.header = header;
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
+  private String name;
+
+  public static final String JSON_PROPERTY_IGNORE_ERROR_RECORDS = "ignoreErrorRecords";
+  @jakarta.annotation.Nullable
+  private Boolean ignoreErrorRecords;
+
+  public static final String JSON_PROPERTY_DELIMETER = "delimeter";
+  @jakarta.annotation.Nullable
+  private String delimeter;
+
+  public static final String JSON_PROPERTY_CUSTOM_DELIMITER = "customDelimiter";
+  @jakarta.annotation.Nullable
+  private String customDelimiter;
+
+  public static final String JSON_PROPERTY_QUERY = "query";
+  @jakarta.annotation.Nullable
+  private String query;
+
+  public static final String JSON_PROPERTY_APPLICATION = "application";
+  @jakarta.annotation.Nullable
+  private String application;
+
+  public static final String JSON_PROPERTY_CUBE = "cube";
+  @jakarta.annotation.Nullable
+  private String cube;
+
+  public static final String JSON_PROPERTY_START_ROW = "startRow";
+  @jakarta.annotation.Nullable
+  private Long startRow;
+
+  public static final String JSON_PROPERTY_END_ROW = "endRow";
+  @jakarta.annotation.Nullable
+  private Long endRow;
+
+  public static final String JSON_PROPERTY_HEADER_ROW = "headerRow";
+  @jakarta.annotation.Nullable
+  private Long headerRow;
+
+  public static final String JSON_PROPERTY_SHEET = "sheet";
+  @jakarta.annotation.Nullable
+  private String sheet;
+
+  public static final String JSON_PROPERTY_SKIP_HIDDEN_ROWS = "skipHiddenRows";
+  @jakarta.annotation.Nullable
+  private Boolean skipHiddenRows;
+
+  public static final String JSON_PROPERTY_WIDTHS = "widths";
+  @jakarta.annotation.Nullable
+  private List<Long> widths = new ArrayList<>();
+
+  public static final String JSON_PROPERTY_QUERY_PARAMETERS = "queryParameters";
+  @jakarta.annotation.Nullable
+  private List<QueryParamsInfo> queryParameters = new ArrayList<>();
+
+  public static final String JSON_PROPERTY_HEADERS = "headers";
+  @jakarta.annotation.Nullable
+  private List<HeaderType> headers = new ArrayList<>();
+
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
+
+  public Datasource() { 
+  }
+
+  public Datasource type(@jakarta.annotation.Nonnull TypeEnum type) {
+    this.type = type;
     return this;
   }
 
-   /**
-   * Get header
-   * @return header
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
-  public String getHeader() {
-    return header;
+  /**
+   * Get type
+   * @return type
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public TypeEnum getType() {
+    return type;
   }
 
 
-  public void setHeader(String header) {
-    this.header = header;
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setType(@jakarta.annotation.Nonnull TypeEnum type) {
+    this.type = type;
   }
 
 
-  public Datasource name(String name) {
-    
+  public Datasource connection(@jakarta.annotation.Nonnull String connection) {
+    this.connection = connection;
+    return this;
+  }
+
+  /**
+   * Get connection
+   * @return connection
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_CONNECTION)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public String getConnection() {
+    return connection;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CONNECTION)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setConnection(@jakarta.annotation.Nonnull String connection) {
+    this.connection = connection;
+  }
+
+
+  public Datasource description(@jakarta.annotation.Nullable String description) {
+    this.description = description;
+    return this;
+  }
+
+  /**
+   * Get description
+   * @return description
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getDescription() {
+    return description;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDescription(@jakarta.annotation.Nullable String description) {
+    this.description = description;
+  }
+
+
+  public Datasource columns(@jakarta.annotation.Nonnull ColumnsType columns) {
+    this.columns = columns;
+    return this;
+  }
+
+  /**
+   * Get columns
+   * @return columns
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public ColumnsType getColumns() {
+    return columns;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setColumns(@jakarta.annotation.Nonnull ColumnsType columns) {
+    this.columns = columns;
+  }
+
+
+  public Datasource name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
-  public Datasource tokens(List<String> tokens) {
-    
-    this.tokens = tokens;
+  public Datasource ignoreErrorRecords(@jakarta.annotation.Nullable Boolean ignoreErrorRecords) {
+    this.ignoreErrorRecords = ignoreErrorRecords;
     return this;
   }
 
-  public Datasource addTokensItem(String tokensItem) {
-    if (this.tokens == null) {
-      this.tokens = new ArrayList<String>();
+  /**
+   * Get ignoreErrorRecords
+   * @return ignoreErrorRecords
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_IGNORE_ERROR_RECORDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public Boolean getIgnoreErrorRecords() {
+    return ignoreErrorRecords;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_IGNORE_ERROR_RECORDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIgnoreErrorRecords(@jakarta.annotation.Nullable Boolean ignoreErrorRecords) {
+    this.ignoreErrorRecords = ignoreErrorRecords;
+  }
+
+
+  public Datasource delimeter(@jakarta.annotation.Nullable String delimeter) {
+    this.delimeter = delimeter;
+    return this;
+  }
+
+  /**
+   * Get delimeter
+   * @return delimeter
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DELIMETER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getDelimeter() {
+    return delimeter;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_DELIMETER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDelimeter(@jakarta.annotation.Nullable String delimeter) {
+    this.delimeter = delimeter;
+  }
+
+
+  public Datasource customDelimiter(@jakarta.annotation.Nullable String customDelimiter) {
+    this.customDelimiter = customDelimiter;
+    return this;
+  }
+
+  /**
+   * Get customDelimiter
+   * @return customDelimiter
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CUSTOM_DELIMITER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getCustomDelimiter() {
+    return customDelimiter;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CUSTOM_DELIMITER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCustomDelimiter(@jakarta.annotation.Nullable String customDelimiter) {
+    this.customDelimiter = customDelimiter;
+  }
+
+
+  public Datasource query(@jakarta.annotation.Nullable String query) {
+    this.query = query;
+    return this;
+  }
+
+  /**
+   * Get query
+   * @return query
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_QUERY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getQuery() {
+    return query;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_QUERY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setQuery(@jakarta.annotation.Nullable String query) {
+    this.query = query;
+  }
+
+
+  public Datasource application(@jakarta.annotation.Nullable String application) {
+    this.application = application;
+    return this;
+  }
+
+  /**
+   * Get application
+   * @return application
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getApplication() {
+    return application;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApplication(@jakarta.annotation.Nullable String application) {
+    this.application = application;
+  }
+
+
+  public Datasource cube(@jakarta.annotation.Nullable String cube) {
+    this.cube = cube;
+    return this;
+  }
+
+  /**
+   * Get cube
+   * @return cube
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CUBE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getCube() {
+    return cube;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CUBE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCube(@jakarta.annotation.Nullable String cube) {
+    this.cube = cube;
+  }
+
+
+  public Datasource startRow(@jakarta.annotation.Nullable Long startRow) {
+    this.startRow = startRow;
+    return this;
+  }
+
+  /**
+   * Get startRow
+   * @return startRow
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_START_ROW)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public Long getStartRow() {
+    return startRow;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_START_ROW)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStartRow(@jakarta.annotation.Nullable Long startRow) {
+    this.startRow = startRow;
+  }
+
+
+  public Datasource endRow(@jakarta.annotation.Nullable Long endRow) {
+    this.endRow = endRow;
+    return this;
+  }
+
+  /**
+   * Get endRow
+   * @return endRow
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_END_ROW)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public Long getEndRow() {
+    return endRow;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_END_ROW)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEndRow(@jakarta.annotation.Nullable Long endRow) {
+    this.endRow = endRow;
+  }
+
+
+  public Datasource headerRow(@jakarta.annotation.Nullable Long headerRow) {
+    this.headerRow = headerRow;
+    return this;
+  }
+
+  /**
+   * Get headerRow
+   * @return headerRow
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HEADER_ROW)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public Long getHeaderRow() {
+    return headerRow;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_HEADER_ROW)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHeaderRow(@jakarta.annotation.Nullable Long headerRow) {
+    this.headerRow = headerRow;
+  }
+
+
+  public Datasource sheet(@jakarta.annotation.Nullable String sheet) {
+    this.sheet = sheet;
+    return this;
+  }
+
+  /**
+   * Get sheet
+   * @return sheet
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SHEET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getSheet() {
+    return sheet;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_SHEET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSheet(@jakarta.annotation.Nullable String sheet) {
+    this.sheet = sheet;
+  }
+
+
+  public Datasource skipHiddenRows(@jakarta.annotation.Nullable Boolean skipHiddenRows) {
+    this.skipHiddenRows = skipHiddenRows;
+    return this;
+  }
+
+  /**
+   * Get skipHiddenRows
+   * @return skipHiddenRows
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SKIP_HIDDEN_ROWS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public Boolean getSkipHiddenRows() {
+    return skipHiddenRows;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_SKIP_HIDDEN_ROWS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSkipHiddenRows(@jakarta.annotation.Nullable Boolean skipHiddenRows) {
+    this.skipHiddenRows = skipHiddenRows;
+  }
+
+
+  public Datasource widths(@jakarta.annotation.Nullable List<Long> widths) {
+    this.widths = widths;
+    return this;
+  }
+
+  public Datasource addWidthsItem(Long widthsItem) {
+    if (this.widths == null) {
+      this.widths = new ArrayList<>();
     }
-    this.tokens.add(tokensItem);
+    this.widths.add(widthsItem);
     return this;
   }
 
-   /**
-   * Get tokens
-   * @return tokens
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
-  public List<String> getTokens() {
-    return tokens;
+  /**
+   * Get widths
+   * @return widths
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_WIDTHS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public List<Long> getWidths() {
+    return widths;
   }
 
 
-  public void setTokens(List<String> tokens) {
-    this.tokens = tokens;
+  @JsonProperty(JSON_PROPERTY_WIDTHS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWidths(@jakarta.annotation.Nullable List<Long> widths) {
+    this.widths = widths;
   }
 
 
-  public Datasource tokensCombineOption(TokensCombineOptionEnum tokensCombineOption) {
-    
-    this.tokensCombineOption = tokensCombineOption;
+  public Datasource queryParameters(@jakarta.annotation.Nullable List<QueryParamsInfo> queryParameters) {
+    this.queryParameters = queryParameters;
     return this;
   }
 
-   /**
-   * Get tokensCombineOption
-   * @return tokensCombineOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
-  public TokensCombineOptionEnum getTokensCombineOption() {
-    return tokensCombineOption;
-  }
-
-
-  public void setTokensCombineOption(TokensCombineOptionEnum tokensCombineOption) {
-    this.tokensCombineOption = tokensCombineOption;
-  }
-
-
-  public Datasource sqlProperties(SQLProperties sqlProperties) {
-    
-    this.sqlProperties = sqlProperties;
+  public Datasource addQueryParametersItem(QueryParamsInfo queryParametersItem) {
+    if (this.queryParameters == null) {
+      this.queryParameters = new ArrayList<>();
+    }
+    this.queryParameters.add(queryParametersItem);
     return this;
   }
 
-   /**
-   * Get sqlProperties
-   * @return sqlProperties
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
-  public SQLProperties getSqlProperties() {
-    return sqlProperties;
+  /**
+   * Get queryParameters
+   * @return queryParameters
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_QUERY_PARAMETERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public List<QueryParamsInfo> getQueryParameters() {
+    return queryParameters;
   }
 
 
-  public void setSqlProperties(SQLProperties sqlProperties) {
-    this.sqlProperties = sqlProperties;
+  @JsonProperty(JSON_PROPERTY_QUERY_PARAMETERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setQueryParameters(@jakarta.annotation.Nullable List<QueryParamsInfo> queryParameters) {
+    this.queryParameters = queryParameters;
   }
 
 
-  public Datasource fileProperties(FileProperties fileProperties) {
-    
-    this.fileProperties = fileProperties;
+  public Datasource headers(@jakarta.annotation.Nullable List<HeaderType> headers) {
+    this.headers = headers;
     return this;
   }
 
-   /**
-   * Get fileProperties
-   * @return fileProperties
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  public Datasource addHeadersItem(HeaderType headersItem) {
+    if (this.headers == null) {
+      this.headers = new ArrayList<>();
+    }
+    this.headers.add(headersItem);
+    return this;
+  }
 
-  public FileProperties getFileProperties() {
-    return fileProperties;
+  /**
+   * Get headers
+   * @return headers
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HEADERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public List<HeaderType> getHeaders() {
+    return headers;
   }
 
 
-  public void setFileProperties(FileProperties fileProperties) {
-    this.fileProperties = fileProperties;
+  @JsonProperty(JSON_PROPERTY_HEADERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHeaders(@jakarta.annotation.Nullable List<HeaderType> headers) {
+    this.headers = headers;
   }
 
 
+  public Datasource links(@jakarta.annotation.Nullable List<Link> links) {
+    this.links = links;
+    return this;
+  }
+
+  public Datasource addLinksItem(Link linksItem) {
+    if (this.links == null) {
+      this.links = new ArrayList<>();
+    }
+    this.links.add(linksItem);
+    return this;
+  }
+
+  /**
+   * Get links
+   * @return links
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public List<Link> getLinks() {
+    return links;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
+    this.links = links;
+  }
+
+
+  /**
+   * Return true if this Datasource object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -260,29 +728,57 @@ public class Datasource {
       return false;
     }
     Datasource datasource = (Datasource) o;
-    return Objects.equals(this.header, datasource.header) &&
+    return Objects.equals(this.type, datasource.type) &&
+        Objects.equals(this.connection, datasource.connection) &&
+        Objects.equals(this.description, datasource.description) &&
+        Objects.equals(this.columns, datasource.columns) &&
         Objects.equals(this.name, datasource.name) &&
-        Objects.equals(this.tokens, datasource.tokens) &&
-        Objects.equals(this.tokensCombineOption, datasource.tokensCombineOption) &&
-        Objects.equals(this.sqlProperties, datasource.sqlProperties) &&
-        Objects.equals(this.fileProperties, datasource.fileProperties);
+        Objects.equals(this.ignoreErrorRecords, datasource.ignoreErrorRecords) &&
+        Objects.equals(this.delimeter, datasource.delimeter) &&
+        Objects.equals(this.customDelimiter, datasource.customDelimiter) &&
+        Objects.equals(this.query, datasource.query) &&
+        Objects.equals(this.application, datasource.application) &&
+        Objects.equals(this.cube, datasource.cube) &&
+        Objects.equals(this.startRow, datasource.startRow) &&
+        Objects.equals(this.endRow, datasource.endRow) &&
+        Objects.equals(this.headerRow, datasource.headerRow) &&
+        Objects.equals(this.sheet, datasource.sheet) &&
+        Objects.equals(this.skipHiddenRows, datasource.skipHiddenRows) &&
+        Objects.equals(this.widths, datasource.widths) &&
+        Objects.equals(this.queryParameters, datasource.queryParameters) &&
+        Objects.equals(this.headers, datasource.headers) &&
+        Objects.equals(this.links, datasource.links);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(header, name, tokens, tokensCombineOption, sqlProperties, fileProperties);
+    return Objects.hash(type, connection, description, columns, name, ignoreErrorRecords, delimeter, customDelimiter, query, application, cube, startRow, endRow, headerRow, sheet, skipHiddenRows, widths, queryParameters, headers, links);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Datasource {\n");
-    sb.append("    header: ").append(toIndentedString(header)).append("\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("    connection: ").append(toIndentedString(connection)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    columns: ").append(toIndentedString(columns)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    tokens: ").append(toIndentedString(tokens)).append("\n");
-    sb.append("    tokensCombineOption: ").append(toIndentedString(tokensCombineOption)).append("\n");
-    sb.append("    sqlProperties: ").append(toIndentedString(sqlProperties)).append("\n");
-    sb.append("    fileProperties: ").append(toIndentedString(fileProperties)).append("\n");
+    sb.append("    ignoreErrorRecords: ").append(toIndentedString(ignoreErrorRecords)).append("\n");
+    sb.append("    delimeter: ").append(toIndentedString(delimeter)).append("\n");
+    sb.append("    customDelimiter: ").append(toIndentedString(customDelimiter)).append("\n");
+    sb.append("    query: ").append(toIndentedString(query)).append("\n");
+    sb.append("    application: ").append(toIndentedString(application)).append("\n");
+    sb.append("    cube: ").append(toIndentedString(cube)).append("\n");
+    sb.append("    startRow: ").append(toIndentedString(startRow)).append("\n");
+    sb.append("    endRow: ").append(toIndentedString(endRow)).append("\n");
+    sb.append("    headerRow: ").append(toIndentedString(headerRow)).append("\n");
+    sb.append("    sheet: ").append(toIndentedString(sheet)).append("\n");
+    sb.append("    skipHiddenRows: ").append(toIndentedString(skipHiddenRows)).append("\n");
+    sb.append("    widths: ").append(toIndentedString(widths)).append("\n");
+    sb.append("    queryParameters: ").append(toIndentedString(queryParameters)).append("\n");
+    sb.append("    headers: ").append(toIndentedString(headers)).append("\n");
+    sb.append("    links: ").append(toIndentedString(links)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -298,5 +794,158 @@ public class Datasource {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `connection` to the URL query string
+    if (getConnection() != null) {
+      joiner.add(String.format("%sconnection%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getConnection()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `description` to the URL query string
+    if (getDescription() != null) {
+      joiner.add(String.format("%sdescription%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDescription()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `columns` to the URL query string
+    if (getColumns() != null) {
+      joiner.add(getColumns().toUrlQueryString(prefix + "columns" + suffix));
+    }
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `ignoreErrorRecords` to the URL query string
+    if (getIgnoreErrorRecords() != null) {
+      joiner.add(String.format("%signoreErrorRecords%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIgnoreErrorRecords()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `delimeter` to the URL query string
+    if (getDelimeter() != null) {
+      joiner.add(String.format("%sdelimeter%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDelimeter()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `customDelimiter` to the URL query string
+    if (getCustomDelimiter() != null) {
+      joiner.add(String.format("%scustomDelimiter%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCustomDelimiter()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `query` to the URL query string
+    if (getQuery() != null) {
+      joiner.add(String.format("%squery%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getQuery()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `application` to the URL query string
+    if (getApplication() != null) {
+      joiner.add(String.format("%sapplication%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getApplication()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `cube` to the URL query string
+    if (getCube() != null) {
+      joiner.add(String.format("%scube%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCube()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `startRow` to the URL query string
+    if (getStartRow() != null) {
+      joiner.add(String.format("%sstartRow%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStartRow()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `endRow` to the URL query string
+    if (getEndRow() != null) {
+      joiner.add(String.format("%sendRow%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getEndRow()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `headerRow` to the URL query string
+    if (getHeaderRow() != null) {
+      joiner.add(String.format("%sheaderRow%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getHeaderRow()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `sheet` to the URL query string
+    if (getSheet() != null) {
+      joiner.add(String.format("%ssheet%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSheet()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `skipHiddenRows` to the URL query string
+    if (getSkipHiddenRows() != null) {
+      joiner.add(String.format("%sskipHiddenRows%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSkipHiddenRows()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `widths` to the URL query string
+    if (getWidths() != null) {
+      for (int i = 0; i < getWidths().size(); i++) {
+        joiner.add(String.format("%swidths%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getWidths().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `queryParameters` to the URL query string
+    if (getQueryParameters() != null) {
+      for (int i = 0; i < getQueryParameters().size(); i++) {
+        if (getQueryParameters().get(i) != null) {
+          joiner.add(getQueryParameters().get(i).toUrlQueryString(String.format("%squeryParameters%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `headers` to the URL query string
+    if (getHeaders() != null) {
+      for (int i = 0; i < getHeaders().size(); i++) {
+        if (getHeaders().get(i) != null) {
+          joiner.add(getHeaders().get(i).toUrlQueryString(String.format("%sheaders%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

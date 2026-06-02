@@ -13,104 +13,122 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * AboutInstance
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  AboutInstance.JSON_PROPERTY_PROVISIONING_SUPPORTED,
+  AboutInstance.JSON_PROPERTY_RESET_PASSWORD_SUPPORTED,
+  AboutInstance.JSON_PROPERTY_EAS_INSTALLED
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class AboutInstance {
-  public static final String SERIALIZED_NAME_PROVISIONING_SUPPORTED = "provisioningSupported";
-  @SerializedName(SERIALIZED_NAME_PROVISIONING_SUPPORTED)
+  public static final String JSON_PROPERTY_PROVISIONING_SUPPORTED = "provisioningSupported";
+  @jakarta.annotation.Nullable
   private Boolean provisioningSupported;
 
-  public static final String SERIALIZED_NAME_RESET_PASSWORD_SUPPORTED = "resetPasswordSupported";
-  @SerializedName(SERIALIZED_NAME_RESET_PASSWORD_SUPPORTED)
+  public static final String JSON_PROPERTY_RESET_PASSWORD_SUPPORTED = "resetPasswordSupported";
+  @jakarta.annotation.Nullable
   private Boolean resetPasswordSupported;
 
-  public static final String SERIALIZED_NAME_EAS_INSTALLED = "easInstalled";
-  @SerializedName(SERIALIZED_NAME_EAS_INSTALLED)
+  public static final String JSON_PROPERTY_EAS_INSTALLED = "easInstalled";
+  @jakarta.annotation.Nullable
   private Boolean easInstalled;
 
+  public AboutInstance() { 
+  }
 
-  public AboutInstance provisioningSupported(Boolean provisioningSupported) {
-    
+  public AboutInstance provisioningSupported(@jakarta.annotation.Nullable Boolean provisioningSupported) {
     this.provisioningSupported = provisioningSupported;
     return this;
   }
 
-   /**
+  /**
    * Get provisioningSupported
    * @return provisioningSupported
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PROVISIONING_SUPPORTED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getProvisioningSupported() {
     return provisioningSupported;
   }
 
 
-  public void setProvisioningSupported(Boolean provisioningSupported) {
+  @JsonProperty(JSON_PROPERTY_PROVISIONING_SUPPORTED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setProvisioningSupported(@jakarta.annotation.Nullable Boolean provisioningSupported) {
     this.provisioningSupported = provisioningSupported;
   }
 
 
-  public AboutInstance resetPasswordSupported(Boolean resetPasswordSupported) {
-    
+  public AboutInstance resetPasswordSupported(@jakarta.annotation.Nullable Boolean resetPasswordSupported) {
     this.resetPasswordSupported = resetPasswordSupported;
     return this;
   }
 
-   /**
+  /**
    * Get resetPasswordSupported
    * @return resetPasswordSupported
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RESET_PASSWORD_SUPPORTED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getResetPasswordSupported() {
     return resetPasswordSupported;
   }
 
 
-  public void setResetPasswordSupported(Boolean resetPasswordSupported) {
+  @JsonProperty(JSON_PROPERTY_RESET_PASSWORD_SUPPORTED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setResetPasswordSupported(@jakarta.annotation.Nullable Boolean resetPasswordSupported) {
     this.resetPasswordSupported = resetPasswordSupported;
   }
 
 
-  public AboutInstance easInstalled(Boolean easInstalled) {
-    
+  public AboutInstance easInstalled(@jakarta.annotation.Nullable Boolean easInstalled) {
     this.easInstalled = easInstalled;
     return this;
   }
 
-   /**
+  /**
    * Get easInstalled
    * @return easInstalled
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EAS_INSTALLED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getEasInstalled() {
     return easInstalled;
   }
 
 
-  public void setEasInstalled(Boolean easInstalled) {
+  @JsonProperty(JSON_PROPERTY_EAS_INSTALLED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEasInstalled(@jakarta.annotation.Nullable Boolean easInstalled) {
     this.easInstalled = easInstalled;
   }
 
 
+  /**
+   * Return true if this AboutInstance object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -152,5 +170,54 @@ public class AboutInstance {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `provisioningSupported` to the URL query string
+    if (getProvisioningSupported() != null) {
+      joiner.add(String.format("%sprovisioningSupported%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getProvisioningSupported()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `resetPasswordSupported` to the URL query string
+    if (getResetPasswordSupported() != null) {
+      joiner.add(String.format("%sresetPasswordSupported%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getResetPasswordSupported()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `easInstalled` to the URL query string
+    if (getEasInstalled() != null) {
+      joiner.add(String.format("%seasInstalled%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getEasInstalled()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

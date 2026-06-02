@@ -10,786 +10,529 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.PropertyEntry;
 import com.appliedolap.essbase.client.model.PropertyList;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class PropertiesApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public PropertiesApi() {
-        this(Configuration.getDefaultApiClient());
+  public PropertiesApi() {
+    this(new ApiClient());
+  }
+
+  public PropertiesApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public PropertiesApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Creates the property in the server
+   * Creates the property in the server and returns the created property
+   * @param body Property entry (required)
+   * @return PropertyEntry
+   * @throws ApiException if fails to make API call
+   */
+  public PropertyEntry propertiesAddProperty(PropertyEntry body) throws ApiException {
+    ApiResponse<PropertyEntry> localVarResponse = propertiesAddPropertyWithHttpInfo(body);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for propertiesAddProperty
-     * @param body Property entry (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Property is created successfully. Returns the property details and the links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to create the property. This happens when the property json is incorrect or when the given property name already added to the server </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call propertiesAddPropertyCall(PropertyEntry body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/properties";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Creates the property in the server
+   * Creates the property in the server and returns the created property
+   * @param body Property entry (required)
+   * @return ApiResponse&lt;PropertyEntry&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PropertyEntry> propertiesAddPropertyWithHttpInfo(PropertyEntry body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = propertiesAddPropertyRequestBuilder(body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("propertiesAddProperty", localVarResponse);
         }
+        return new ApiResponse<PropertyEntry>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<PropertyEntry>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder propertiesAddPropertyRequestBuilder(PropertyEntry body) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling propertiesAddProperty");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call propertiesAddPropertyValidateBeforeCall(PropertyEntry body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling propertiesAddProperty(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/properties";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Deletes a property in the server
+   * Deletes a property in the server
+   * @param propertyName Property name (required)
+   * @return PropertyEntry
+   * @throws ApiException if fails to make API call
+   */
+  public PropertyEntry propertiesDeleteProperty(String propertyName) throws ApiException {
+    ApiResponse<PropertyEntry> localVarResponse = propertiesDeletePropertyWithHttpInfo(propertyName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Deletes a property in the server
+   * Deletes a property in the server
+   * @param propertyName Property name (required)
+   * @return ApiResponse&lt;PropertyEntry&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PropertyEntry> propertiesDeletePropertyWithHttpInfo(String propertyName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = propertiesDeletePropertyRequestBuilder(propertyName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("propertiesDeleteProperty", localVarResponse);
         }
-        
+        return new ApiResponse<PropertyEntry>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<PropertyEntry>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = propertiesAddPropertyCall(body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder propertiesDeletePropertyRequestBuilder(String propertyName) throws ApiException {
+    // verify the required parameter 'propertyName' is set
+    if (propertyName == null) {
+      throw new ApiException(400, "Missing the required parameter 'propertyName' when calling propertiesDeleteProperty");
     }
 
-    /**
-     * Creates the property in the server
-     * Creates the property in the server and returns the created property
-     * @param body Property entry (required)
-     * @return PropertyEntry
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Property is created successfully. Returns the property details and the links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to create the property. This happens when the property json is incorrect or when the given property name already added to the server </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public PropertyEntry propertiesAddProperty(PropertyEntry body) throws ApiException {
-        ApiResponse<PropertyEntry> localVarResp = propertiesAddPropertyWithHttpInfo(body);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/properties/{propertyName}"
+        .replace("{propertyName}", ApiClient.urlEncode(propertyName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Creates the property in the server
-     * Creates the property in the server and returns the created property
-     * @param body Property entry (required)
-     * @return ApiResponse&lt;PropertyEntry&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Property is created successfully. Returns the property details and the links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to create the property. This happens when the property json is incorrect or when the given property name already added to the server </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<PropertyEntry> propertiesAddPropertyWithHttpInfo(PropertyEntry body) throws ApiException {
-        okhttp3.Call localVarCall = propertiesAddPropertyValidateBeforeCall(body, null);
-        Type localVarReturnType = new TypeToken<PropertyEntry>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Creates the property in the server (asynchronously)
-     * Creates the property in the server and returns the created property
-     * @param body Property entry (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Property is created successfully. Returns the property details and the links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to create the property. This happens when the property json is incorrect or when the given property name already added to the server </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call propertiesAddPropertyAsync(PropertyEntry body, final ApiCallback<PropertyEntry> _callback) throws ApiException {
+  /**
+   * Get Server Properties
+   * Returns all the properties from the server
+   * @return List&lt;PropertyList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public List<PropertyList> propertiesGetProperties() throws ApiException {
+    ApiResponse<List<PropertyList>> localVarResponse = propertiesGetPropertiesWithHttpInfo();
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = propertiesAddPropertyValidateBeforeCall(body, _callback);
-        Type localVarReturnType = new TypeToken<PropertyEntry>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for propertiesDeleteProperty
-     * @param propertyName Property name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> successful operation </td><td>  -  </td></tr>
-        <tr><td> 204 </td><td> Property is deleted successfully. Returns the property details and the links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to delete a property. This happens when the property json is incorrect or when the given property name already added to the server </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call propertiesDeletePropertyCall(String propertyName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/properties/{propertyName}"
-            .replaceAll("\\{" + "propertyName" + "\\}", localVarApiClient.escapeString(propertyName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Get Server Properties
+   * Returns all the properties from the server
+   * @return ApiResponse&lt;List&lt;PropertyList&gt;&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<List<PropertyList>> propertiesGetPropertiesWithHttpInfo() throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = propertiesGetPropertiesRequestBuilder();
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("propertiesGetProperties", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        return new ApiResponse<List<PropertyList>>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<List<PropertyList>>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call propertiesDeletePropertyValidateBeforeCall(String propertyName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'propertyName' is set
-        if (propertyName == null) {
-            throw new ApiException("Missing the required parameter 'propertyName' when calling propertiesDeleteProperty(Async)");
+  private HttpRequest.Builder propertiesGetPropertiesRequestBuilder() throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/properties";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Server Property
+   * Returns property based on name from the server
+   * @param propertyName Property name (required)
+   * @return PropertyEntry
+   * @throws ApiException if fails to make API call
+   */
+  public PropertyEntry propertiesGetProperty(String propertyName) throws ApiException {
+    ApiResponse<PropertyEntry> localVarResponse = propertiesGetPropertyWithHttpInfo(propertyName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Server Property
+   * Returns property based on name from the server
+   * @param propertyName Property name (required)
+   * @return ApiResponse&lt;PropertyEntry&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PropertyEntry> propertiesGetPropertyWithHttpInfo(String propertyName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = propertiesGetPropertyRequestBuilder(propertyName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("propertiesGetProperty", localVarResponse);
         }
-        
+        return new ApiResponse<PropertyEntry>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<PropertyEntry>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = propertiesDeletePropertyCall(propertyName, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder propertiesGetPropertyRequestBuilder(String propertyName) throws ApiException {
+    // verify the required parameter 'propertyName' is set
+    if (propertyName == null) {
+      throw new ApiException(400, "Missing the required parameter 'propertyName' when calling propertiesGetProperty");
     }
 
-    /**
-     * Deletes a property in the server
-     * Deletes a property in the server
-     * @param propertyName Property name (required)
-     * @return PropertyEntry
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> successful operation </td><td>  -  </td></tr>
-        <tr><td> 204 </td><td> Property is deleted successfully. Returns the property details and the links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to delete a property. This happens when the property json is incorrect or when the given property name already added to the server </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public PropertyEntry propertiesDeleteProperty(String propertyName) throws ApiException {
-        ApiResponse<PropertyEntry> localVarResp = propertiesDeletePropertyWithHttpInfo(propertyName);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/properties/{propertyName}"
+        .replace("{propertyName}", ApiClient.urlEncode(propertyName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Deletes a property in the server
-     * Deletes a property in the server
-     * @param propertyName Property name (required)
-     * @return ApiResponse&lt;PropertyEntry&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> successful operation </td><td>  -  </td></tr>
-        <tr><td> 204 </td><td> Property is deleted successfully. Returns the property details and the links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to delete a property. This happens when the property json is incorrect or when the given property name already added to the server </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<PropertyEntry> propertiesDeletePropertyWithHttpInfo(String propertyName) throws ApiException {
-        okhttp3.Call localVarCall = propertiesDeletePropertyValidateBeforeCall(propertyName, null);
-        Type localVarReturnType = new TypeToken<PropertyEntry>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Deletes a property in the server (asynchronously)
-     * Deletes a property in the server
-     * @param propertyName Property name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> successful operation </td><td>  -  </td></tr>
-        <tr><td> 204 </td><td> Property is deleted successfully. Returns the property details and the links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to delete a property. This happens when the property json is incorrect or when the given property name already added to the server </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call propertiesDeletePropertyAsync(String propertyName, final ApiCallback<PropertyEntry> _callback) throws ApiException {
+  /**
+   * Updates the property values in the server
+   * Updates the properties in the server and returns the list of updated properties
+   * @param body List of Property entries (required)
+   * @return PropertyEntry
+   * @throws ApiException if fails to make API call
+   */
+  public PropertyEntry propertiesSetProperties(List<PropertyEntry> body) throws ApiException {
+    ApiResponse<PropertyEntry> localVarResponse = propertiesSetPropertiesWithHttpInfo(body);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = propertiesDeletePropertyValidateBeforeCall(propertyName, _callback);
-        Type localVarReturnType = new TypeToken<PropertyEntry>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for propertiesGetProperties
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Properties are retrieved successfully. Returns all the properties from server and the links to get/edit each property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get the properties. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call propertiesGetPropertiesCall(final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/properties";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Updates the property values in the server
+   * Updates the properties in the server and returns the list of updated properties
+   * @param body List of Property entries (required)
+   * @return ApiResponse&lt;PropertyEntry&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PropertyEntry> propertiesSetPropertiesWithHttpInfo(List<PropertyEntry> body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = propertiesSetPropertiesRequestBuilder(body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("propertiesSetProperties", localVarResponse);
         }
+        return new ApiResponse<PropertyEntry>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<PropertyEntry>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder propertiesSetPropertiesRequestBuilder(List<PropertyEntry> body) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling propertiesSetProperties");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call propertiesGetPropertiesValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = propertiesGetPropertiesCall(_callback);
-        return localVarCall;
+    String localVarPath = "/properties";
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Get Server Properties
-     * Returns all the properties from the server
-     * @return List&lt;PropertyList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Properties are retrieved successfully. Returns all the properties from server and the links to get/edit each property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get the properties. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public List<PropertyList> propertiesGetProperties() throws ApiException {
-        ApiResponse<List<PropertyList>> localVarResp = propertiesGetPropertiesWithHttpInfo();
-        return localVarResp.getData();
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Server Properties
-     * Returns all the properties from the server
-     * @return ApiResponse&lt;List&lt;PropertyList&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Properties are retrieved successfully. Returns all the properties from server and the links to get/edit each property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get the properties. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<List<PropertyList>> propertiesGetPropertiesWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = propertiesGetPropertiesValidateBeforeCall(null);
-        Type localVarReturnType = new TypeToken<List<PropertyList>>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Get Server Properties (asynchronously)
-     * Returns all the properties from the server
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Properties are retrieved successfully. Returns all the properties from server and the links to get/edit each property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get the properties. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call propertiesGetPropertiesAsync(final ApiCallback<List<PropertyList>> _callback) throws ApiException {
+  /**
+   * Update Server Property
+   * Updates the property in the server and returns the updated property
+   * @param propertyName Property name (required)
+   * @param body Property entry (required)
+   * @return PropertyEntry
+   * @throws ApiException if fails to make API call
+   */
+  public PropertyEntry propertiesSetProperty(String propertyName, PropertyEntry body) throws ApiException {
+    ApiResponse<PropertyEntry> localVarResponse = propertiesSetPropertyWithHttpInfo(propertyName, body);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = propertiesGetPropertiesValidateBeforeCall(_callback);
-        Type localVarReturnType = new TypeToken<List<PropertyList>>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for propertiesGetProperty
-     * @param propertyName Property name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Property retrieved successfully. Returns property name and value from the server and links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get the property. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call propertiesGetPropertyCall(String propertyName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/properties/{propertyName}"
-            .replaceAll("\\{" + "propertyName" + "\\}", localVarApiClient.escapeString(propertyName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Update Server Property
+   * Updates the property in the server and returns the updated property
+   * @param propertyName Property name (required)
+   * @param body Property entry (required)
+   * @return ApiResponse&lt;PropertyEntry&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PropertyEntry> propertiesSetPropertyWithHttpInfo(String propertyName, PropertyEntry body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = propertiesSetPropertyRequestBuilder(propertyName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("propertiesSetProperty", localVarResponse);
         }
+        return new ApiResponse<PropertyEntry>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<PropertyEntry>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder propertiesSetPropertyRequestBuilder(String propertyName, PropertyEntry body) throws ApiException {
+    // verify the required parameter 'propertyName' is set
+    if (propertyName == null) {
+      throw new ApiException(400, "Missing the required parameter 'propertyName' when calling propertiesSetProperty");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling propertiesSetProperty");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call propertiesGetPropertyValidateBeforeCall(String propertyName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'propertyName' is set
-        if (propertyName == null) {
-            throw new ApiException("Missing the required parameter 'propertyName' when calling propertiesGetProperty(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = propertiesGetPropertyCall(propertyName, _callback);
-        return localVarCall;
+    String localVarPath = "/properties/{propertyName}"
+        .replace("{propertyName}", ApiClient.urlEncode(propertyName.toString()));
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Get Server Property
-     * Returns property based on name from the server
-     * @param propertyName Property name (required)
-     * @return PropertyEntry
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Property retrieved successfully. Returns property name and value from the server and links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get the property. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public PropertyEntry propertiesGetProperty(String propertyName) throws ApiException {
-        ApiResponse<PropertyEntry> localVarResp = propertiesGetPropertyWithHttpInfo(propertyName);
-        return localVarResp.getData();
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Server Property
-     * Returns property based on name from the server
-     * @param propertyName Property name (required)
-     * @return ApiResponse&lt;PropertyEntry&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Property retrieved successfully. Returns property name and value from the server and links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get the property. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<PropertyEntry> propertiesGetPropertyWithHttpInfo(String propertyName) throws ApiException {
-        okhttp3.Call localVarCall = propertiesGetPropertyValidateBeforeCall(propertyName, null);
-        Type localVarReturnType = new TypeToken<PropertyEntry>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Get Server Property (asynchronously)
-     * Returns property based on name from the server
-     * @param propertyName Property name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Property retrieved successfully. Returns property name and value from the server and links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get the property. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call propertiesGetPropertyAsync(String propertyName, final ApiCallback<PropertyEntry> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = propertiesGetPropertyValidateBeforeCall(propertyName, _callback);
-        Type localVarReturnType = new TypeToken<PropertyEntry>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for propertiesSetProperties
-     * @param body List of Property entries (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Properties are updated successfully. Returns the list of updated properties, its details and the links to get/edit the properties </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to update the property. This happens when the property json is incorrect or when the given property name is not added to the server </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call propertiesSetPropertiesCall(List<PropertyEntry> body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/properties";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call propertiesSetPropertiesValidateBeforeCall(List<PropertyEntry> body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling propertiesSetProperties(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = propertiesSetPropertiesCall(body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Updates the property values in the server
-     * Updates the properties in the server and returns the list of updated properties
-     * @param body List of Property entries (required)
-     * @return PropertyEntry
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Properties are updated successfully. Returns the list of updated properties, its details and the links to get/edit the properties </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to update the property. This happens when the property json is incorrect or when the given property name is not added to the server </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public PropertyEntry propertiesSetProperties(List<PropertyEntry> body) throws ApiException {
-        ApiResponse<PropertyEntry> localVarResp = propertiesSetPropertiesWithHttpInfo(body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Updates the property values in the server
-     * Updates the properties in the server and returns the list of updated properties
-     * @param body List of Property entries (required)
-     * @return ApiResponse&lt;PropertyEntry&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Properties are updated successfully. Returns the list of updated properties, its details and the links to get/edit the properties </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to update the property. This happens when the property json is incorrect or when the given property name is not added to the server </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<PropertyEntry> propertiesSetPropertiesWithHttpInfo(List<PropertyEntry> body) throws ApiException {
-        okhttp3.Call localVarCall = propertiesSetPropertiesValidateBeforeCall(body, null);
-        Type localVarReturnType = new TypeToken<PropertyEntry>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Updates the property values in the server (asynchronously)
-     * Updates the properties in the server and returns the list of updated properties
-     * @param body List of Property entries (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Properties are updated successfully. Returns the list of updated properties, its details and the links to get/edit the properties </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to update the property. This happens when the property json is incorrect or when the given property name is not added to the server </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call propertiesSetPropertiesAsync(List<PropertyEntry> body, final ApiCallback<PropertyEntry> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = propertiesSetPropertiesValidateBeforeCall(body, _callback);
-        Type localVarReturnType = new TypeToken<PropertyEntry>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for propertiesSetProperty
-     * @param propertyName Property name (required)
-     * @param body Property entry (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Property is updated successfully. Returns the property details and the links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the property. The JSON for the property may be incorrect, or the specified property name may not have been added to the server.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call propertiesSetPropertyCall(String propertyName, PropertyEntry body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/properties/{propertyName}"
-            .replaceAll("\\{" + "propertyName" + "\\}", localVarApiClient.escapeString(propertyName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call propertiesSetPropertyValidateBeforeCall(String propertyName, PropertyEntry body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'propertyName' is set
-        if (propertyName == null) {
-            throw new ApiException("Missing the required parameter 'propertyName' when calling propertiesSetProperty(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling propertiesSetProperty(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = propertiesSetPropertyCall(propertyName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Update Server Property
-     * Updates the property in the server and returns the updated property
-     * @param propertyName Property name (required)
-     * @param body Property entry (required)
-     * @return PropertyEntry
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Property is updated successfully. Returns the property details and the links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the property. The JSON for the property may be incorrect, or the specified property name may not have been added to the server.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public PropertyEntry propertiesSetProperty(String propertyName, PropertyEntry body) throws ApiException {
-        ApiResponse<PropertyEntry> localVarResp = propertiesSetPropertyWithHttpInfo(propertyName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Update Server Property
-     * Updates the property in the server and returns the updated property
-     * @param propertyName Property name (required)
-     * @param body Property entry (required)
-     * @return ApiResponse&lt;PropertyEntry&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Property is updated successfully. Returns the property details and the links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the property. The JSON for the property may be incorrect, or the specified property name may not have been added to the server.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<PropertyEntry> propertiesSetPropertyWithHttpInfo(String propertyName, PropertyEntry body) throws ApiException {
-        okhttp3.Call localVarCall = propertiesSetPropertyValidateBeforeCall(propertyName, body, null);
-        Type localVarReturnType = new TypeToken<PropertyEntry>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Update Server Property (asynchronously)
-     * Updates the property in the server and returns the updated property
-     * @param propertyName Property name (required)
-     * @param body Property entry (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Property is updated successfully. Returns the property details and the links to get/edit the property </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the property. The JSON for the property may be incorrect, or the specified property name may not have been added to the server.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call propertiesSetPropertyAsync(String propertyName, PropertyEntry body, final ApiCallback<PropertyEntry> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = propertiesSetPropertyValidateBeforeCall(propertyName, body, _callback);
-        Type localVarReturnType = new TypeToken<PropertyEntry>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

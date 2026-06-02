@@ -13,56 +13,71 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * CreateApplication
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  CreateApplication.JSON_PROPERTY_APPLICATION_NAME,
+  CreateApplication.JSON_PROPERTY_DATABASE_NAME,
+  CreateApplication.JSON_PROPERTY_ALLOW_DUPLICATES,
+  CreateApplication.JSON_PROPERTY_ENABLE_SCENARIO,
+  CreateApplication.JSON_PROPERTY_MEMBER_COUNT,
+  CreateApplication.JSON_PROPERTY_DATABASE_TYPE,
+  CreateApplication.JSON_PROPERTY_DB_TYPE,
+  CreateApplication.JSON_PROPERTY_APP_TYPE,
+  CreateApplication.JSON_PROPERTY_MEMBER_PREFIX
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class CreateApplication {
-  public static final String SERIALIZED_NAME_APPLICATION_NAME = "applicationName";
-  @SerializedName(SERIALIZED_NAME_APPLICATION_NAME)
+  public static final String JSON_PROPERTY_APPLICATION_NAME = "applicationName";
+  @jakarta.annotation.Nullable
   private String applicationName;
 
-  public static final String SERIALIZED_NAME_DATABASE_NAME = "databaseName";
-  @SerializedName(SERIALIZED_NAME_DATABASE_NAME)
+  public static final String JSON_PROPERTY_DATABASE_NAME = "databaseName";
+  @jakarta.annotation.Nullable
   private String databaseName;
 
-  public static final String SERIALIZED_NAME_ALLOW_DUPLICATES = "allowDuplicates";
-  @SerializedName(SERIALIZED_NAME_ALLOW_DUPLICATES)
+  public static final String JSON_PROPERTY_ALLOW_DUPLICATES = "allowDuplicates";
+  @jakarta.annotation.Nullable
   private Boolean allowDuplicates;
 
-  public static final String SERIALIZED_NAME_ENABLE_SCENARIO = "enableScenario";
-  @SerializedName(SERIALIZED_NAME_ENABLE_SCENARIO)
+  public static final String JSON_PROPERTY_ENABLE_SCENARIO = "enableScenario";
+  @jakarta.annotation.Nullable
   private Boolean enableScenario;
 
-  public static final String SERIALIZED_NAME_MEMBER_COUNT = "memberCount";
-  @SerializedName(SERIALIZED_NAME_MEMBER_COUNT)
+  public static final String JSON_PROPERTY_MEMBER_COUNT = "memberCount";
+  @jakarta.annotation.Nullable
   private Integer memberCount;
 
-  public static final String SERIALIZED_NAME_DATABASE_TYPE = "databaseType";
-  @SerializedName(SERIALIZED_NAME_DATABASE_TYPE)
+  public static final String JSON_PROPERTY_DATABASE_TYPE = "databaseType";
+  @jakarta.annotation.Nullable
   private String databaseType;
 
   /**
    * Gets or Sets dbType
    */
-  @JsonAdapter(DbTypeEnum.Adapter.class)
   public enum DbTypeEnum {
-    NORMAL("NORMAL"),
+    NORMAL(String.valueOf("NORMAL")),
     
-    CURRENCY("CURRENCY"),
+    CURRENCY(String.valueOf("CURRENCY")),
     
-    ASO("ASO");
+    ASO(String.valueOf("ASO"));
 
     private String value;
 
@@ -70,6 +85,7 @@ public class CreateApplication {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -79,6 +95,7 @@ public class CreateApplication {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static DbTypeEnum fromValue(String value) {
       for (DbTypeEnum b : DbTypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -87,33 +104,19 @@ public class CreateApplication {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<DbTypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final DbTypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public DbTypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return DbTypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_DB_TYPE = "dbType";
-  @SerializedName(SERIALIZED_NAME_DB_TYPE)
+  public static final String JSON_PROPERTY_DB_TYPE = "dbType";
+  @jakarta.annotation.Nullable
   private DbTypeEnum dbType;
 
   /**
    * Gets or Sets appType
    */
-  @JsonAdapter(AppTypeEnum.Adapter.class)
   public enum AppTypeEnum {
-    NATIVE("NATIVE"),
+    NATIVE(String.valueOf("NATIVE")),
     
-    UTF8("UTF8");
+    UTF8(String.valueOf("UTF8"));
 
     private String value;
 
@@ -121,6 +124,7 @@ public class CreateApplication {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -130,6 +134,7 @@ public class CreateApplication {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static AppTypeEnum fromValue(String value) {
       for (AppTypeEnum b : AppTypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -138,237 +143,238 @@ public class CreateApplication {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<AppTypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final AppTypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public AppTypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return AppTypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_APP_TYPE = "appType";
-  @SerializedName(SERIALIZED_NAME_APP_TYPE)
+  public static final String JSON_PROPERTY_APP_TYPE = "appType";
+  @jakarta.annotation.Nullable
   private AppTypeEnum appType;
 
-  public static final String SERIALIZED_NAME_MEMBER_PREFIX = "memberPrefix";
-  @SerializedName(SERIALIZED_NAME_MEMBER_PREFIX)
+  public static final String JSON_PROPERTY_MEMBER_PREFIX = "memberPrefix";
+  @jakarta.annotation.Nullable
   private String memberPrefix;
 
+  public CreateApplication() { 
+  }
 
-  public CreateApplication applicationName(String applicationName) {
-    
+  public CreateApplication applicationName(@jakarta.annotation.Nullable String applicationName) {
     this.applicationName = applicationName;
     return this;
   }
 
-   /**
+  /**
    * Get applicationName
    * @return applicationName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPLICATION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getApplicationName() {
     return applicationName;
   }
 
 
-  public void setApplicationName(String applicationName) {
+  @JsonProperty(JSON_PROPERTY_APPLICATION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApplicationName(@jakarta.annotation.Nullable String applicationName) {
     this.applicationName = applicationName;
   }
 
 
-  public CreateApplication databaseName(String databaseName) {
-    
+  public CreateApplication databaseName(@jakarta.annotation.Nullable String databaseName) {
     this.databaseName = databaseName;
     return this;
   }
 
-   /**
+  /**
    * Get databaseName
    * @return databaseName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATABASE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDatabaseName() {
     return databaseName;
   }
 
 
-  public void setDatabaseName(String databaseName) {
+  @JsonProperty(JSON_PROPERTY_DATABASE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatabaseName(@jakarta.annotation.Nullable String databaseName) {
     this.databaseName = databaseName;
   }
 
 
-  public CreateApplication allowDuplicates(Boolean allowDuplicates) {
-    
+  public CreateApplication allowDuplicates(@jakarta.annotation.Nullable Boolean allowDuplicates) {
     this.allowDuplicates = allowDuplicates;
     return this;
   }
 
-   /**
+  /**
    * Get allowDuplicates
    * @return allowDuplicates
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALLOW_DUPLICATES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAllowDuplicates() {
     return allowDuplicates;
   }
 
 
-  public void setAllowDuplicates(Boolean allowDuplicates) {
+  @JsonProperty(JSON_PROPERTY_ALLOW_DUPLICATES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAllowDuplicates(@jakarta.annotation.Nullable Boolean allowDuplicates) {
     this.allowDuplicates = allowDuplicates;
   }
 
 
-  public CreateApplication enableScenario(Boolean enableScenario) {
-    
+  public CreateApplication enableScenario(@jakarta.annotation.Nullable Boolean enableScenario) {
     this.enableScenario = enableScenario;
     return this;
   }
 
-   /**
+  /**
    * Get enableScenario
    * @return enableScenario
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ENABLE_SCENARIO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getEnableScenario() {
     return enableScenario;
   }
 
 
-  public void setEnableScenario(Boolean enableScenario) {
+  @JsonProperty(JSON_PROPERTY_ENABLE_SCENARIO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEnableScenario(@jakarta.annotation.Nullable Boolean enableScenario) {
     this.enableScenario = enableScenario;
   }
 
 
-  public CreateApplication memberCount(Integer memberCount) {
-    
+  public CreateApplication memberCount(@jakarta.annotation.Nullable Integer memberCount) {
     this.memberCount = memberCount;
     return this;
   }
 
-   /**
+  /**
    * Get memberCount
    * @return memberCount
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MEMBER_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getMemberCount() {
     return memberCount;
   }
 
 
-  public void setMemberCount(Integer memberCount) {
+  @JsonProperty(JSON_PROPERTY_MEMBER_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMemberCount(@jakarta.annotation.Nullable Integer memberCount) {
     this.memberCount = memberCount;
   }
 
 
-  public CreateApplication databaseType(String databaseType) {
-    
+  public CreateApplication databaseType(@jakarta.annotation.Nullable String databaseType) {
     this.databaseType = databaseType;
     return this;
   }
 
-   /**
+  /**
    * Get databaseType
    * @return databaseType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATABASE_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDatabaseType() {
     return databaseType;
   }
 
 
-  public void setDatabaseType(String databaseType) {
+  @JsonProperty(JSON_PROPERTY_DATABASE_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatabaseType(@jakarta.annotation.Nullable String databaseType) {
     this.databaseType = databaseType;
   }
 
 
-  public CreateApplication dbType(DbTypeEnum dbType) {
-    
+  public CreateApplication dbType(@jakarta.annotation.Nullable DbTypeEnum dbType) {
     this.dbType = dbType;
     return this;
   }
 
-   /**
+  /**
    * Get dbType
    * @return dbType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DB_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public DbTypeEnum getDbType() {
     return dbType;
   }
 
 
-  public void setDbType(DbTypeEnum dbType) {
+  @JsonProperty(JSON_PROPERTY_DB_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDbType(@jakarta.annotation.Nullable DbTypeEnum dbType) {
     this.dbType = dbType;
   }
 
 
-  public CreateApplication appType(AppTypeEnum appType) {
-    
+  public CreateApplication appType(@jakarta.annotation.Nullable AppTypeEnum appType) {
     this.appType = appType;
     return this;
   }
 
-   /**
+  /**
    * Get appType
    * @return appType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APP_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public AppTypeEnum getAppType() {
     return appType;
   }
 
 
-  public void setAppType(AppTypeEnum appType) {
+  @JsonProperty(JSON_PROPERTY_APP_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAppType(@jakarta.annotation.Nullable AppTypeEnum appType) {
     this.appType = appType;
   }
 
 
-  public CreateApplication memberPrefix(String memberPrefix) {
-    
+  public CreateApplication memberPrefix(@jakarta.annotation.Nullable String memberPrefix) {
     this.memberPrefix = memberPrefix;
     return this;
   }
 
-   /**
+  /**
    * Get memberPrefix
    * @return memberPrefix
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MEMBER_PREFIX)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getMemberPrefix() {
     return memberPrefix;
   }
 
 
-  public void setMemberPrefix(String memberPrefix) {
+  @JsonProperty(JSON_PROPERTY_MEMBER_PREFIX)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMemberPrefix(@jakarta.annotation.Nullable String memberPrefix) {
     this.memberPrefix = memberPrefix;
   }
 
 
+  /**
+   * Return true if this CreateApplication object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -422,5 +428,84 @@ public class CreateApplication {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `applicationName` to the URL query string
+    if (getApplicationName() != null) {
+      joiner.add(String.format("%sapplicationName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getApplicationName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `databaseName` to the URL query string
+    if (getDatabaseName() != null) {
+      joiner.add(String.format("%sdatabaseName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDatabaseName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `allowDuplicates` to the URL query string
+    if (getAllowDuplicates() != null) {
+      joiner.add(String.format("%sallowDuplicates%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAllowDuplicates()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `enableScenario` to the URL query string
+    if (getEnableScenario() != null) {
+      joiner.add(String.format("%senableScenario%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getEnableScenario()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `memberCount` to the URL query string
+    if (getMemberCount() != null) {
+      joiner.add(String.format("%smemberCount%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMemberCount()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `databaseType` to the URL query string
+    if (getDatabaseType() != null) {
+      joiner.add(String.format("%sdatabaseType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDatabaseType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dbType` to the URL query string
+    if (getDbType() != null) {
+      joiner.add(String.format("%sdbType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDbType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `appType` to the URL query string
+    if (getAppType() != null) {
+      joiner.add(String.format("%sappType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAppType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `memberPrefix` to the URL query string
+    if (getMemberPrefix() != null) {
+      joiner.add(String.format("%smemberPrefix%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMemberPrefix()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

@@ -10,768 +10,530 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.DimBuildStartPayload;
 import com.appliedolap.essbase.client.model.StreamProcessEndResponse;
 import com.appliedolap.essbase.client.model.StreamProcessStartResponse;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class StreamingDimensionBuildApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public StreamingDimensionBuildApi() {
-        this(Configuration.getDefaultApiClient());
+  public StreamingDimensionBuildApi() {
+    this(new ApiClient());
+  }
+
+  public StreamingDimensionBuildApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public StreamingDimensionBuildApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * End Streaming Dimension Build
+   * &lt;p&gt;Ends incremental dimension build and triggers a restructuring of the cube.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
+   * @return StreamProcessEndResponse
+   * @throws ApiException if fails to make API call
+   */
+  public StreamProcessEndResponse dimensionBuildEnd(String applicationName, String databaseName, String streamId) throws ApiException {
+    ApiResponse<StreamProcessEndResponse> localVarResponse = dimensionBuildEndWithHttpInfo(applicationName, databaseName, streamId);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for dimensionBuildEnd
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Dimension build ended successfully; includes status.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to end dimension build. The stream ID may be invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionBuildEndCall(String applicationName, String databaseName, String streamId, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimbuild/{streamId}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "streamId" + "\\}", localVarApiClient.escapeString(streamId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * End Streaming Dimension Build
+   * &lt;p&gt;Ends incremental dimension build and triggers a restructuring of the cube.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;StreamProcessEndResponse&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<StreamProcessEndResponse> dimensionBuildEndWithHttpInfo(String applicationName, String databaseName, String streamId) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = dimensionBuildEndRequestBuilder(applicationName, databaseName, streamId);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("dimensionBuildEnd", localVarResponse);
         }
+        return new ApiResponse<StreamProcessEndResponse>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<StreamProcessEndResponse>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder dimensionBuildEndRequestBuilder(String applicationName, String databaseName, String streamId) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling dimensionBuildEnd");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling dimensionBuildEnd");
+    }
+    // verify the required parameter 'streamId' is set
+    if (streamId == null) {
+      throw new ApiException(400, "Missing the required parameter 'streamId' when calling dimensionBuildEnd");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call dimensionBuildEndValidateBeforeCall(String applicationName, String databaseName, String streamId, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling dimensionBuildEnd(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimbuild/{streamId}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{streamId}", ApiClient.urlEncode(streamId.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * End dimension build for rule file
+   * Ends dimension build for rule file
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName Database name. (required)
+   * @param streamId Stream ID (required)
+   * @param ruleFileName Rule File Name (required)
+   * @return StreamProcessEndResponse
+   * @throws ApiException if fails to make API call
+   */
+  public StreamProcessEndResponse dimensionBuildEndDimBuild(String applicationName, String databaseName, String streamId, String ruleFileName) throws ApiException {
+    ApiResponse<StreamProcessEndResponse> localVarResponse = dimensionBuildEndDimBuildWithHttpInfo(applicationName, databaseName, streamId, ruleFileName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * End dimension build for rule file
+   * Ends dimension build for rule file
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName Database name. (required)
+   * @param streamId Stream ID (required)
+   * @param ruleFileName Rule File Name (required)
+   * @return ApiResponse&lt;StreamProcessEndResponse&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<StreamProcessEndResponse> dimensionBuildEndDimBuildWithHttpInfo(String applicationName, String databaseName, String streamId, String ruleFileName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = dimensionBuildEndDimBuildRequestBuilder(applicationName, databaseName, streamId, ruleFileName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("dimensionBuildEndDimBuild", localVarResponse);
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling dimensionBuildEnd(Async)");
+        return new ApiResponse<StreamProcessEndResponse>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<StreamProcessEndResponse>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder dimensionBuildEndDimBuildRequestBuilder(String applicationName, String databaseName, String streamId, String ruleFileName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling dimensionBuildEndDimBuild");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling dimensionBuildEndDimBuild");
+    }
+    // verify the required parameter 'streamId' is set
+    if (streamId == null) {
+      throw new ApiException(400, "Missing the required parameter 'streamId' when calling dimensionBuildEndDimBuild");
+    }
+    // verify the required parameter 'ruleFileName' is set
+    if (ruleFileName == null) {
+      throw new ApiException(400, "Missing the required parameter 'ruleFileName' when calling dimensionBuildEndDimBuild");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimbuild/{streamId}/{ruleFileName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{streamId}", ApiClient.urlEncode(streamId.toString()))
+        .replace("{ruleFileName}", ApiClient.urlEncode(ruleFileName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Start Streaming Dimension Build
+   * &lt;p&gt;Starts an incremental dimension build.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Dimension build attributes, such as the restructure option. If empty, the default value for restructure option is  &lt;code&gt;PRESERVE_ALL_DATA&lt;/code&gt;. (optional)
+   * @return StreamProcessStartResponse
+   * @throws ApiException if fails to make API call
+   */
+  public StreamProcessStartResponse dimensionBuildStart(String applicationName, String databaseName, DimBuildStartPayload body) throws ApiException {
+    ApiResponse<StreamProcessStartResponse> localVarResponse = dimensionBuildStartWithHttpInfo(applicationName, databaseName, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Start Streaming Dimension Build
+   * &lt;p&gt;Starts an incremental dimension build.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Dimension build attributes, such as the restructure option. If empty, the default value for restructure option is  &lt;code&gt;PRESERVE_ALL_DATA&lt;/code&gt;. (optional)
+   * @return ApiResponse&lt;StreamProcessStartResponse&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<StreamProcessStartResponse> dimensionBuildStartWithHttpInfo(String applicationName, String databaseName, DimBuildStartPayload body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = dimensionBuildStartRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("dimensionBuildStart", localVarResponse);
         }
-        
-        // verify the required parameter 'streamId' is set
-        if (streamId == null) {
-            throw new ApiException("Missing the required parameter 'streamId' when calling dimensionBuildEnd(Async)");
+        return new ApiResponse<StreamProcessStartResponse>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<StreamProcessStartResponse>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder dimensionBuildStartRequestBuilder(String applicationName, String databaseName, DimBuildStartPayload body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling dimensionBuildStart");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling dimensionBuildStart");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimbuild"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Start dimension build for rule file
+   * Starts dimension build for rule file
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName Database name. (required)
+   * @param streamId Stream ID (required)
+   * @param ruleFileName Rule File Name (required)
+   * @return StreamProcessStartResponse
+   * @throws ApiException if fails to make API call
+   */
+  public StreamProcessStartResponse dimensionBuildStartDimBuild(String applicationName, String databaseName, String streamId, String ruleFileName) throws ApiException {
+    ApiResponse<StreamProcessStartResponse> localVarResponse = dimensionBuildStartDimBuildWithHttpInfo(applicationName, databaseName, streamId, ruleFileName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Start dimension build for rule file
+   * Starts dimension build for rule file
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName Database name. (required)
+   * @param streamId Stream ID (required)
+   * @param ruleFileName Rule File Name (required)
+   * @return ApiResponse&lt;StreamProcessStartResponse&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<StreamProcessStartResponse> dimensionBuildStartDimBuildWithHttpInfo(String applicationName, String databaseName, String streamId, String ruleFileName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = dimensionBuildStartDimBuildRequestBuilder(applicationName, databaseName, streamId, ruleFileName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("dimensionBuildStartDimBuild", localVarResponse);
         }
-        
+        return new ApiResponse<StreamProcessStartResponse>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<StreamProcessStartResponse>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = dimensionBuildEndCall(applicationName, databaseName, streamId, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder dimensionBuildStartDimBuildRequestBuilder(String applicationName, String databaseName, String streamId, String ruleFileName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling dimensionBuildStartDimBuild");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling dimensionBuildStartDimBuild");
+    }
+    // verify the required parameter 'streamId' is set
+    if (streamId == null) {
+      throw new ApiException(400, "Missing the required parameter 'streamId' when calling dimensionBuildStartDimBuild");
+    }
+    // verify the required parameter 'ruleFileName' is set
+    if (ruleFileName == null) {
+      throw new ApiException(400, "Missing the required parameter 'ruleFileName' when calling dimensionBuildStartDimBuild");
     }
 
-    /**
-     * End Streaming Dimension Build
-     * &lt;p&gt;Ends incremental dimension build and triggers a restructuring of the cube.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @return StreamProcessEndResponse
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Dimension build ended successfully; includes status.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to end dimension build. The stream ID may be invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public StreamProcessEndResponse dimensionBuildEnd(String applicationName, String databaseName, String streamId) throws ApiException {
-        ApiResponse<StreamProcessEndResponse> localVarResp = dimensionBuildEndWithHttpInfo(applicationName, databaseName, streamId);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimbuild/{streamId}/{ruleFileName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{streamId}", ApiClient.urlEncode(streamId.toString()))
+        .replace("{ruleFileName}", ApiClient.urlEncode(ruleFileName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * End Streaming Dimension Build
-     * &lt;p&gt;Ends incremental dimension build and triggers a restructuring of the cube.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;StreamProcessEndResponse&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Dimension build ended successfully; includes status.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to end dimension build. The stream ID may be invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<StreamProcessEndResponse> dimensionBuildEndWithHttpInfo(String applicationName, String databaseName, String streamId) throws ApiException {
-        okhttp3.Call localVarCall = dimensionBuildEndValidateBeforeCall(applicationName, databaseName, streamId, null);
-        Type localVarReturnType = new TypeToken<StreamProcessEndResponse>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * End Streaming Dimension Build (asynchronously)
-     * &lt;p&gt;Ends incremental dimension build and triggers a restructuring of the cube.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Dimension build ended successfully; includes status.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to end dimension build. The stream ID may be invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionBuildEndAsync(String applicationName, String databaseName, String streamId, final ApiCallback<StreamProcessEndResponse> _callback) throws ApiException {
+  /**
+   * Push Data
+   * &lt;p&gt;Pushes data for streaming dimension build.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;CSV data.&lt;/p&gt; (optional)
+   * @return StreamProcessStartResponse
+   * @throws ApiException if fails to make API call
+   */
+  public StreamProcessStartResponse dimensionBuildStreamDimBuildData(String applicationName, String databaseName, String streamId, String body) throws ApiException {
+    ApiResponse<StreamProcessStartResponse> localVarResponse = dimensionBuildStreamDimBuildDataWithHttpInfo(applicationName, databaseName, streamId, body);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = dimensionBuildEndValidateBeforeCall(applicationName, databaseName, streamId, _callback);
-        Type localVarReturnType = new TypeToken<StreamProcessEndResponse>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for dimensionBuildEndDimBuild
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param streamId Stream ID (required)
-     * @param ruleFileName Rule File Name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Dimension build status and Links to restructure cube if links&#x3D;true query parameter is passed </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, specified stream id is invalid or dimension build is not started </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionBuildEndDimBuildCall(String applicationName, String databaseName, String streamId, String ruleFileName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimbuild/{streamId}/{ruleFileName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "streamId" + "\\}", localVarApiClient.escapeString(streamId.toString()))
-            .replaceAll("\\{" + "ruleFileName" + "\\}", localVarApiClient.escapeString(ruleFileName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Push Data
+   * &lt;p&gt;Pushes data for streaming dimension build.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;CSV data.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;StreamProcessStartResponse&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<StreamProcessStartResponse> dimensionBuildStreamDimBuildDataWithHttpInfo(String applicationName, String databaseName, String streamId, String body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = dimensionBuildStreamDimBuildDataRequestBuilder(applicationName, databaseName, streamId, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("dimensionBuildStreamDimBuildData", localVarResponse);
         }
+        return new ApiResponse<StreamProcessStartResponse>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<StreamProcessStartResponse>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder dimensionBuildStreamDimBuildDataRequestBuilder(String applicationName, String databaseName, String streamId, String body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling dimensionBuildStreamDimBuildData");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling dimensionBuildStreamDimBuildData");
+    }
+    // verify the required parameter 'streamId' is set
+    if (streamId == null) {
+      throw new ApiException(400, "Missing the required parameter 'streamId' when calling dimensionBuildStreamDimBuildData");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call dimensionBuildEndDimBuildValidateBeforeCall(String applicationName, String databaseName, String streamId, String ruleFileName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling dimensionBuildEndDimBuild(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling dimensionBuildEndDimBuild(Async)");
-        }
-        
-        // verify the required parameter 'streamId' is set
-        if (streamId == null) {
-            throw new ApiException("Missing the required parameter 'streamId' when calling dimensionBuildEndDimBuild(Async)");
-        }
-        
-        // verify the required parameter 'ruleFileName' is set
-        if (ruleFileName == null) {
-            throw new ApiException("Missing the required parameter 'ruleFileName' when calling dimensionBuildEndDimBuild(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = dimensionBuildEndDimBuildCall(applicationName, databaseName, streamId, ruleFileName, _callback);
-        return localVarCall;
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimbuild/{streamId}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{streamId}", ApiClient.urlEncode(streamId.toString()));
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "text/plain");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofString(body));
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * End dimension build for rule file
-     * Ends dimension build for rule file
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param streamId Stream ID (required)
-     * @param ruleFileName Rule File Name (required)
-     * @return StreamProcessEndResponse
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Dimension build status and Links to restructure cube if links&#x3D;true query parameter is passed </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, specified stream id is invalid or dimension build is not started </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public StreamProcessEndResponse dimensionBuildEndDimBuild(String applicationName, String databaseName, String streamId, String ruleFileName) throws ApiException {
-        ApiResponse<StreamProcessEndResponse> localVarResp = dimensionBuildEndDimBuildWithHttpInfo(applicationName, databaseName, streamId, ruleFileName);
-        return localVarResp.getData();
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * End dimension build for rule file
-     * Ends dimension build for rule file
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param streamId Stream ID (required)
-     * @param ruleFileName Rule File Name (required)
-     * @return ApiResponse&lt;StreamProcessEndResponse&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Dimension build status and Links to restructure cube if links&#x3D;true query parameter is passed </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, specified stream id is invalid or dimension build is not started </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<StreamProcessEndResponse> dimensionBuildEndDimBuildWithHttpInfo(String applicationName, String databaseName, String streamId, String ruleFileName) throws ApiException {
-        okhttp3.Call localVarCall = dimensionBuildEndDimBuildValidateBeforeCall(applicationName, databaseName, streamId, ruleFileName, null);
-        Type localVarReturnType = new TypeToken<StreamProcessEndResponse>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * End dimension build for rule file (asynchronously)
-     * Ends dimension build for rule file
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param streamId Stream ID (required)
-     * @param ruleFileName Rule File Name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Dimension build status and Links to restructure cube if links&#x3D;true query parameter is passed </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, specified stream id is invalid or dimension build is not started </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionBuildEndDimBuildAsync(String applicationName, String databaseName, String streamId, String ruleFileName, final ApiCallback<StreamProcessEndResponse> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = dimensionBuildEndDimBuildValidateBeforeCall(applicationName, databaseName, streamId, ruleFileName, _callback);
-        Type localVarReturnType = new TypeToken<StreamProcessEndResponse>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for dimensionBuildStart
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Dimension build attributes, such as the restructure option. If empty, the default value for restructure option is  &lt;code&gt;PRESERVE_ALL_DATA&lt;/code&gt;. (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Dimension build started successfully; includes unique stream id which can be passed to subsequent requests. If &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed, also includes links to start dimension build with rules file.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionBuildStartCall(String applicationName, String databaseName, DimBuildStartPayload body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimbuild"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call dimensionBuildStartValidateBeforeCall(String applicationName, String databaseName, DimBuildStartPayload body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling dimensionBuildStart(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling dimensionBuildStart(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = dimensionBuildStartCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Start Streaming Dimension Build
-     * &lt;p&gt;Starts an incremental dimension build.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Dimension build attributes, such as the restructure option. If empty, the default value for restructure option is  &lt;code&gt;PRESERVE_ALL_DATA&lt;/code&gt;. (optional)
-     * @return StreamProcessStartResponse
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Dimension build started successfully; includes unique stream id which can be passed to subsequent requests. If &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed, also includes links to start dimension build with rules file.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public StreamProcessStartResponse dimensionBuildStart(String applicationName, String databaseName, DimBuildStartPayload body) throws ApiException {
-        ApiResponse<StreamProcessStartResponse> localVarResp = dimensionBuildStartWithHttpInfo(applicationName, databaseName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Start Streaming Dimension Build
-     * &lt;p&gt;Starts an incremental dimension build.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Dimension build attributes, such as the restructure option. If empty, the default value for restructure option is  &lt;code&gt;PRESERVE_ALL_DATA&lt;/code&gt;. (optional)
-     * @return ApiResponse&lt;StreamProcessStartResponse&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Dimension build started successfully; includes unique stream id which can be passed to subsequent requests. If &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed, also includes links to start dimension build with rules file.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<StreamProcessStartResponse> dimensionBuildStartWithHttpInfo(String applicationName, String databaseName, DimBuildStartPayload body) throws ApiException {
-        okhttp3.Call localVarCall = dimensionBuildStartValidateBeforeCall(applicationName, databaseName, body, null);
-        Type localVarReturnType = new TypeToken<StreamProcessStartResponse>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Start Streaming Dimension Build (asynchronously)
-     * &lt;p&gt;Starts an incremental dimension build.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Dimension build attributes, such as the restructure option. If empty, the default value for restructure option is  &lt;code&gt;PRESERVE_ALL_DATA&lt;/code&gt;. (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Dimension build started successfully; includes unique stream id which can be passed to subsequent requests. If &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed, also includes links to start dimension build with rules file.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionBuildStartAsync(String applicationName, String databaseName, DimBuildStartPayload body, final ApiCallback<StreamProcessStartResponse> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = dimensionBuildStartValidateBeforeCall(applicationName, databaseName, body, _callback);
-        Type localVarReturnType = new TypeToken<StreamProcessStartResponse>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for dimensionBuildStartDimBuild
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param streamId Stream ID (required)
-     * @param ruleFileName Rule File Name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Links to push data if links&#x3D;true query parameter is passed </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, specified stream id or rule file name is invalid </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionBuildStartDimBuildCall(String applicationName, String databaseName, String streamId, String ruleFileName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimbuild/{streamId}/{ruleFileName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "streamId" + "\\}", localVarApiClient.escapeString(streamId.toString()))
-            .replaceAll("\\{" + "ruleFileName" + "\\}", localVarApiClient.escapeString(ruleFileName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call dimensionBuildStartDimBuildValidateBeforeCall(String applicationName, String databaseName, String streamId, String ruleFileName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling dimensionBuildStartDimBuild(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling dimensionBuildStartDimBuild(Async)");
-        }
-        
-        // verify the required parameter 'streamId' is set
-        if (streamId == null) {
-            throw new ApiException("Missing the required parameter 'streamId' when calling dimensionBuildStartDimBuild(Async)");
-        }
-        
-        // verify the required parameter 'ruleFileName' is set
-        if (ruleFileName == null) {
-            throw new ApiException("Missing the required parameter 'ruleFileName' when calling dimensionBuildStartDimBuild(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = dimensionBuildStartDimBuildCall(applicationName, databaseName, streamId, ruleFileName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Start dimension build for rule file
-     * Starts dimension build for rule file
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param streamId Stream ID (required)
-     * @param ruleFileName Rule File Name (required)
-     * @return StreamProcessStartResponse
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Links to push data if links&#x3D;true query parameter is passed </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, specified stream id or rule file name is invalid </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public StreamProcessStartResponse dimensionBuildStartDimBuild(String applicationName, String databaseName, String streamId, String ruleFileName) throws ApiException {
-        ApiResponse<StreamProcessStartResponse> localVarResp = dimensionBuildStartDimBuildWithHttpInfo(applicationName, databaseName, streamId, ruleFileName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Start dimension build for rule file
-     * Starts dimension build for rule file
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param streamId Stream ID (required)
-     * @param ruleFileName Rule File Name (required)
-     * @return ApiResponse&lt;StreamProcessStartResponse&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Links to push data if links&#x3D;true query parameter is passed </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, specified stream id or rule file name is invalid </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<StreamProcessStartResponse> dimensionBuildStartDimBuildWithHttpInfo(String applicationName, String databaseName, String streamId, String ruleFileName) throws ApiException {
-        okhttp3.Call localVarCall = dimensionBuildStartDimBuildValidateBeforeCall(applicationName, databaseName, streamId, ruleFileName, null);
-        Type localVarReturnType = new TypeToken<StreamProcessStartResponse>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Start dimension build for rule file (asynchronously)
-     * Starts dimension build for rule file
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param streamId Stream ID (required)
-     * @param ruleFileName Rule File Name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Links to push data if links&#x3D;true query parameter is passed </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation failed. For example, specified stream id or rule file name is invalid </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionBuildStartDimBuildAsync(String applicationName, String databaseName, String streamId, String ruleFileName, final ApiCallback<StreamProcessStartResponse> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = dimensionBuildStartDimBuildValidateBeforeCall(applicationName, databaseName, streamId, ruleFileName, _callback);
-        Type localVarReturnType = new TypeToken<StreamProcessStartResponse>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for dimensionBuildStreamDimBuildData
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;CSV data.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data pushed successfully; includes links to push more data and end dimension build if &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to push data. The stream ID may be invalid, or the dimension build may not have started.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionBuildStreamDimBuildDataCall(String applicationName, String databaseName, String streamId, String body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dimbuild/{streamId}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "streamId" + "\\}", localVarApiClient.escapeString(streamId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "text/plain", "text/csv"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call dimensionBuildStreamDimBuildDataValidateBeforeCall(String applicationName, String databaseName, String streamId, String body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling dimensionBuildStreamDimBuildData(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling dimensionBuildStreamDimBuildData(Async)");
-        }
-        
-        // verify the required parameter 'streamId' is set
-        if (streamId == null) {
-            throw new ApiException("Missing the required parameter 'streamId' when calling dimensionBuildStreamDimBuildData(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = dimensionBuildStreamDimBuildDataCall(applicationName, databaseName, streamId, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Push Data
-     * &lt;p&gt;Pushes data for streaming dimension build.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;CSV data.&lt;/p&gt; (optional)
-     * @return StreamProcessStartResponse
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data pushed successfully; includes links to push more data and end dimension build if &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to push data. The stream ID may be invalid, or the dimension build may not have started.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public StreamProcessStartResponse dimensionBuildStreamDimBuildData(String applicationName, String databaseName, String streamId, String body) throws ApiException {
-        ApiResponse<StreamProcessStartResponse> localVarResp = dimensionBuildStreamDimBuildDataWithHttpInfo(applicationName, databaseName, streamId, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Push Data
-     * &lt;p&gt;Pushes data for streaming dimension build.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;CSV data.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;StreamProcessStartResponse&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data pushed successfully; includes links to push more data and end dimension build if &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to push data. The stream ID may be invalid, or the dimension build may not have started.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<StreamProcessStartResponse> dimensionBuildStreamDimBuildDataWithHttpInfo(String applicationName, String databaseName, String streamId, String body) throws ApiException {
-        okhttp3.Call localVarCall = dimensionBuildStreamDimBuildDataValidateBeforeCall(applicationName, databaseName, streamId, body, null);
-        Type localVarReturnType = new TypeToken<StreamProcessStartResponse>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Push Data (asynchronously)
-     * &lt;p&gt;Pushes data for streaming dimension build.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;CSV data.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data pushed successfully; includes links to push more data and end dimension build if &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to push data. The stream ID may be invalid, or the dimension build may not have started.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dimensionBuildStreamDimBuildDataAsync(String applicationName, String databaseName, String streamId, String body, final ApiCallback<StreamProcessStartResponse> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = dimensionBuildStreamDimBuildDataValidateBeforeCall(applicationName, databaseName, streamId, body, _callback);
-        Type localVarReturnType = new TypeToken<StreamProcessStartResponse>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

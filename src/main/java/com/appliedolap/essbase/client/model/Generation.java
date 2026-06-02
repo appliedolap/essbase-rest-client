@@ -13,75 +13,93 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * Generation
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  Generation.JSON_PROPERTY_GENERATION_NUMBER,
+  Generation.JSON_PROPERTY_COLUMN_NAME
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class Generation {
-  public static final String SERIALIZED_NAME_GENERATION_NUMBER = "generationNumber";
-  @SerializedName(SERIALIZED_NAME_GENERATION_NUMBER)
+  public static final String JSON_PROPERTY_GENERATION_NUMBER = "generationNumber";
+  @jakarta.annotation.Nonnull
   private Integer generationNumber;
 
-  public static final String SERIALIZED_NAME_COLUMN_NAME = "columnName";
-  @SerializedName(SERIALIZED_NAME_COLUMN_NAME)
+  public static final String JSON_PROPERTY_COLUMN_NAME = "columnName";
+  @jakarta.annotation.Nonnull
   private String columnName;
 
+  public Generation() { 
+  }
 
-  public Generation generationNumber(Integer generationNumber) {
-    
+  public Generation generationNumber(@jakarta.annotation.Nonnull Integer generationNumber) {
     this.generationNumber = generationNumber;
     return this;
   }
 
-   /**
+  /**
    * Get generationNumber
    * @return generationNumber
-  **/
-  @ApiModelProperty(required = true, value = "")
-
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GENERATION_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public Integer getGenerationNumber() {
     return generationNumber;
   }
 
 
-  public void setGenerationNumber(Integer generationNumber) {
+  @JsonProperty(JSON_PROPERTY_GENERATION_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGenerationNumber(@jakarta.annotation.Nonnull Integer generationNumber) {
     this.generationNumber = generationNumber;
   }
 
 
-  public Generation columnName(String columnName) {
-    
+  public Generation columnName(@jakarta.annotation.Nonnull String columnName) {
     this.columnName = columnName;
     return this;
   }
 
-   /**
+  /**
    * Get columnName
    * @return columnName
-  **/
-  @ApiModelProperty(required = true, value = "")
-
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_COLUMN_NAME)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public String getColumnName() {
     return columnName;
   }
 
 
-  public void setColumnName(String columnName) {
+  @JsonProperty(JSON_PROPERTY_COLUMN_NAME)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setColumnName(@jakarta.annotation.Nonnull String columnName) {
     this.columnName = columnName;
   }
 
 
+  /**
+   * Return true if this Generation object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -121,5 +139,49 @@ public class Generation {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `generationNumber` to the URL query string
+    if (getGenerationNumber() != null) {
+      joiner.add(String.format("%sgenerationNumber%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getGenerationNumber()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `columnName` to the URL query string
+    if (getColumnName() != null) {
+      joiner.add(String.format("%scolumnName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getColumnName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

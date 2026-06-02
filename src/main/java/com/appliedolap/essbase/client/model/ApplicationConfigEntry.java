@@ -13,223 +13,249 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.Link;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ApplicationConfigEntry
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ApplicationConfigEntry.JSON_PROPERTY_KEY,
+  ApplicationConfigEntry.JSON_PROPERTY_DESCRIPTION,
+  ApplicationConfigEntry.JSON_PROPERTY_SYNTAX,
+  ApplicationConfigEntry.JSON_PROPERTY_EXAMPLE,
+  ApplicationConfigEntry.JSON_PROPERTY_VALUE,
+  ApplicationConfigEntry.JSON_PROPERTY_CONFIGURED,
+  ApplicationConfigEntry.JSON_PROPERTY_LINKS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ApplicationConfigEntry {
-  public static final String SERIALIZED_NAME_KEY = "key";
-  @SerializedName(SERIALIZED_NAME_KEY)
+  public static final String JSON_PROPERTY_KEY = "key";
+  @jakarta.annotation.Nullable
   private String key;
 
-  public static final String SERIALIZED_NAME_DESCRIPTION = "description";
-  @SerializedName(SERIALIZED_NAME_DESCRIPTION)
+  public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  @jakarta.annotation.Nullable
   private String description;
 
-  public static final String SERIALIZED_NAME_SYNTAX = "syntax";
-  @SerializedName(SERIALIZED_NAME_SYNTAX)
+  public static final String JSON_PROPERTY_SYNTAX = "syntax";
+  @jakarta.annotation.Nullable
   private String syntax;
 
-  public static final String SERIALIZED_NAME_EXAMPLE = "example";
-  @SerializedName(SERIALIZED_NAME_EXAMPLE)
+  public static final String JSON_PROPERTY_EXAMPLE = "example";
+  @jakarta.annotation.Nullable
   private String example;
 
-  public static final String SERIALIZED_NAME_VALUE = "value";
-  @SerializedName(SERIALIZED_NAME_VALUE)
+  public static final String JSON_PROPERTY_VALUE = "value";
+  @jakarta.annotation.Nullable
   private String value;
 
-  public static final String SERIALIZED_NAME_CONFIGURED = "configured";
-  @SerializedName(SERIALIZED_NAME_CONFIGURED)
+  public static final String JSON_PROPERTY_CONFIGURED = "configured";
+  @jakarta.annotation.Nullable
   private Boolean configured;
 
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
+  public ApplicationConfigEntry() { 
+  }
 
-  public ApplicationConfigEntry key(String key) {
-    
+  public ApplicationConfigEntry key(@jakarta.annotation.Nullable String key) {
     this.key = key;
     return this;
   }
 
-   /**
+  /**
    * Get key
    * @return key
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_KEY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getKey() {
     return key;
   }
 
 
-  public void setKey(String key) {
+  @JsonProperty(JSON_PROPERTY_KEY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setKey(@jakarta.annotation.Nullable String key) {
     this.key = key;
   }
 
 
-  public ApplicationConfigEntry description(String description) {
-    
+  public ApplicationConfigEntry description(@jakarta.annotation.Nullable String description) {
     this.description = description;
     return this;
   }
 
-   /**
+  /**
    * Get description
    * @return description
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDescription() {
     return description;
   }
 
 
-  public void setDescription(String description) {
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDescription(@jakarta.annotation.Nullable String description) {
     this.description = description;
   }
 
 
-  public ApplicationConfigEntry syntax(String syntax) {
-    
+  public ApplicationConfigEntry syntax(@jakarta.annotation.Nullable String syntax) {
     this.syntax = syntax;
     return this;
   }
 
-   /**
+  /**
    * Get syntax
    * @return syntax
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SYNTAX)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getSyntax() {
     return syntax;
   }
 
 
-  public void setSyntax(String syntax) {
+  @JsonProperty(JSON_PROPERTY_SYNTAX)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSyntax(@jakarta.annotation.Nullable String syntax) {
     this.syntax = syntax;
   }
 
 
-  public ApplicationConfigEntry example(String example) {
-    
+  public ApplicationConfigEntry example(@jakarta.annotation.Nullable String example) {
     this.example = example;
     return this;
   }
 
-   /**
+  /**
    * Get example
    * @return example
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EXAMPLE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getExample() {
     return example;
   }
 
 
-  public void setExample(String example) {
+  @JsonProperty(JSON_PROPERTY_EXAMPLE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setExample(@jakarta.annotation.Nullable String example) {
     this.example = example;
   }
 
 
-  public ApplicationConfigEntry value(String value) {
-    
+  public ApplicationConfigEntry value(@jakarta.annotation.Nullable String value) {
     this.value = value;
     return this;
   }
 
-   /**
+  /**
    * Get value
    * @return value
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getValue() {
     return value;
   }
 
 
-  public void setValue(String value) {
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setValue(@jakarta.annotation.Nullable String value) {
     this.value = value;
   }
 
 
-  public ApplicationConfigEntry configured(Boolean configured) {
-    
+  public ApplicationConfigEntry configured(@jakarta.annotation.Nullable Boolean configured) {
     this.configured = configured;
     return this;
   }
 
-   /**
+  /**
    * Get configured
    * @return configured
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CONFIGURED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getConfigured() {
     return configured;
   }
 
 
-  public void setConfigured(Boolean configured) {
+  @JsonProperty(JSON_PROPERTY_CONFIGURED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setConfigured(@jakarta.annotation.Nullable Boolean configured) {
     this.configured = configured;
   }
 
 
-  public ApplicationConfigEntry links(List<Link> links) {
-    
+  public ApplicationConfigEntry links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public ApplicationConfigEntry addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
+  /**
+   * Return true if this ApplicationConfigEntry object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -279,5 +305,79 @@ public class ApplicationConfigEntry {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `key` to the URL query string
+    if (getKey() != null) {
+      joiner.add(String.format("%skey%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getKey()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `description` to the URL query string
+    if (getDescription() != null) {
+      joiner.add(String.format("%sdescription%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDescription()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `syntax` to the URL query string
+    if (getSyntax() != null) {
+      joiner.add(String.format("%ssyntax%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSyntax()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `example` to the URL query string
+    if (getExample() != null) {
+      joiner.add(String.format("%sexample%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getExample()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `value` to the URL query string
+    if (getValue() != null) {
+      joiner.add(String.format("%svalue%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getValue()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `configured` to the URL query string
+    if (getConfigured() != null) {
+      joiner.add(String.format("%sconfigured%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getConfigured()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

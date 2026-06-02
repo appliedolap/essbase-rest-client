@@ -13,77 +13,93 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * MemberMappingBean
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  MemberMappingBean.JSON_PROPERTY_SOURCE_MEMBER,
+  MemberMappingBean.JSON_PROPERTY_TARGET_MEMBER
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class MemberMappingBean {
-  public static final String SERIALIZED_NAME_SOURCE_MEMBER = "sourceMember";
-  @SerializedName(SERIALIZED_NAME_SOURCE_MEMBER)
+  public static final String JSON_PROPERTY_SOURCE_MEMBER = "sourceMember";
+  @jakarta.annotation.Nullable
   private String sourceMember;
 
-  public static final String SERIALIZED_NAME_TARGET_MEMBER = "targetMember";
-  @SerializedName(SERIALIZED_NAME_TARGET_MEMBER)
+  public static final String JSON_PROPERTY_TARGET_MEMBER = "targetMember";
+  @jakarta.annotation.Nullable
   private String targetMember;
 
+  public MemberMappingBean() { 
+  }
 
-  public MemberMappingBean sourceMember(String sourceMember) {
-    
+  public MemberMappingBean sourceMember(@jakarta.annotation.Nullable String sourceMember) {
     this.sourceMember = sourceMember;
     return this;
   }
 
-   /**
+  /**
    * Get sourceMember
    * @return sourceMember
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SOURCE_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getSourceMember() {
     return sourceMember;
   }
 
 
-  public void setSourceMember(String sourceMember) {
+  @JsonProperty(JSON_PROPERTY_SOURCE_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSourceMember(@jakarta.annotation.Nullable String sourceMember) {
     this.sourceMember = sourceMember;
   }
 
 
-  public MemberMappingBean targetMember(String targetMember) {
-    
+  public MemberMappingBean targetMember(@jakarta.annotation.Nullable String targetMember) {
     this.targetMember = targetMember;
     return this;
   }
 
-   /**
+  /**
    * Get targetMember
    * @return targetMember
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TARGET_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getTargetMember() {
     return targetMember;
   }
 
 
-  public void setTargetMember(String targetMember) {
+  @JsonProperty(JSON_PROPERTY_TARGET_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTargetMember(@jakarta.annotation.Nullable String targetMember) {
     this.targetMember = targetMember;
   }
 
 
+  /**
+   * Return true if this MemberMappingBean object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -123,5 +139,49 @@ public class MemberMappingBean {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `sourceMember` to the URL query string
+    if (getSourceMember() != null) {
+      joiner.add(String.format("%ssourceMember%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSourceMember()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `targetMember` to the URL query string
+    if (getTargetMember() != null) {
+      joiner.add(String.format("%stargetMember%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTargetMember()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

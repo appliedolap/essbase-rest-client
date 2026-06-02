@@ -13,34 +13,41 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * DimBuildStartPayload
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  DimBuildStartPayload.JSON_PROPERTY_RESTRUCTURE_OPTION
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class DimBuildStartPayload {
   /**
    * Gets or Sets restructureOption
    */
-  @JsonAdapter(RestructureOptionEnum.Adapter.class)
   public enum RestructureOptionEnum {
-    ALL_DATA("PRESERVE_ALL_DATA"),
+    ALL_DATA(String.valueOf("PRESERVE_ALL_DATA")),
     
-    LEAFLEVEL_DATA("PRESERVE_LEAFLEVEL_DATA"),
+    LEAFLEVEL_DATA(String.valueOf("PRESERVE_LEAFLEVEL_DATA")),
     
-    INPUT_DATA("PRESERVE_INPUT_DATA"),
+    INPUT_DATA(String.valueOf("PRESERVE_INPUT_DATA")),
     
-    NO_DATA("PRESERVE_NO_DATA");
+    NO_DATA(String.valueOf("PRESERVE_NO_DATA"));
 
     private String value;
 
@@ -48,6 +55,7 @@ public class DimBuildStartPayload {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -57,6 +65,7 @@ public class DimBuildStartPayload {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static RestructureOptionEnum fromValue(String value) {
       for (RestructureOptionEnum b : RestructureOptionEnum.values()) {
         if (b.value.equals(value)) {
@@ -65,49 +74,42 @@ public class DimBuildStartPayload {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<RestructureOptionEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final RestructureOptionEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public RestructureOptionEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return RestructureOptionEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_RESTRUCTURE_OPTION = "restructureOption";
-  @SerializedName(SERIALIZED_NAME_RESTRUCTURE_OPTION)
+  public static final String JSON_PROPERTY_RESTRUCTURE_OPTION = "restructureOption";
+  @jakarta.annotation.Nullable
   private RestructureOptionEnum restructureOption;
 
+  public DimBuildStartPayload() { 
+  }
 
-  public DimBuildStartPayload restructureOption(RestructureOptionEnum restructureOption) {
-    
+  public DimBuildStartPayload restructureOption(@jakarta.annotation.Nullable RestructureOptionEnum restructureOption) {
     this.restructureOption = restructureOption;
     return this;
   }
 
-   /**
+  /**
    * Get restructureOption
    * @return restructureOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RESTRUCTURE_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public RestructureOptionEnum getRestructureOption() {
     return restructureOption;
   }
 
 
-  public void setRestructureOption(RestructureOptionEnum restructureOption) {
+  @JsonProperty(JSON_PROPERTY_RESTRUCTURE_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRestructureOption(@jakarta.annotation.Nullable RestructureOptionEnum restructureOption) {
     this.restructureOption = restructureOption;
   }
 
 
+  /**
+   * Return true if this DimBuildStartPayload object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -145,5 +147,44 @@ public class DimBuildStartPayload {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `restructureOption` to the URL query string
+    if (getRestructureOption() != null) {
+      joiner.add(String.format("%srestructureOption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRestructureOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

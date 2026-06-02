@@ -13,36 +13,46 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * DataLoadBuffer
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  DataLoadBuffer.JSON_PROPERTY_BUFFER_ID,
+  DataLoadBuffer.JSON_PROPERTY_DUPLICATE_AGGREGATION_METHOD,
+  DataLoadBuffer.JSON_PROPERTY_LOAD_BUFFER_OPTIONS,
+  DataLoadBuffer.JSON_PROPERTY_RESOURCE_USAGE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class DataLoadBuffer {
-  public static final String SERIALIZED_NAME_BUFFER_ID = "bufferId";
-  @SerializedName(SERIALIZED_NAME_BUFFER_ID)
+  public static final String JSON_PROPERTY_BUFFER_ID = "bufferId";
+  @jakarta.annotation.Nullable
   private Long bufferId;
 
   /**
    * Gets or Sets duplicateAggregationMethod
    */
-  @JsonAdapter(DuplicateAggregationMethodEnum.Adapter.class)
   public enum DuplicateAggregationMethodEnum {
-    ADD("ADD"),
+    ADD(String.valueOf("ADD")),
     
-    ASSUME_EQUAL("ASSUME_EQUAL"),
+    ASSUME_EQUAL(String.valueOf("ASSUME_EQUAL")),
     
-    USE_LAST("USE_LAST");
+    USE_LAST(String.valueOf("USE_LAST"));
 
     private String value;
 
@@ -50,6 +60,7 @@ public class DataLoadBuffer {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -59,6 +70,7 @@ public class DataLoadBuffer {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static DuplicateAggregationMethodEnum fromValue(String value) {
       for (DuplicateAggregationMethodEnum b : DuplicateAggregationMethodEnum.values()) {
         if (b.value.equals(value)) {
@@ -67,37 +79,23 @@ public class DataLoadBuffer {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<DuplicateAggregationMethodEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final DuplicateAggregationMethodEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public DuplicateAggregationMethodEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return DuplicateAggregationMethodEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_DUPLICATE_AGGREGATION_METHOD = "duplicateAggregationMethod";
-  @SerializedName(SERIALIZED_NAME_DUPLICATE_AGGREGATION_METHOD)
+  public static final String JSON_PROPERTY_DUPLICATE_AGGREGATION_METHOD = "duplicateAggregationMethod";
+  @jakarta.annotation.Nullable
   private DuplicateAggregationMethodEnum duplicateAggregationMethod;
 
   /**
    * Gets or Sets loadBufferOptions
    */
-  @JsonAdapter(LoadBufferOptionsEnum.Adapter.class)
   public enum LoadBufferOptionsEnum {
-    NONE("IGNORE_NONE"),
+    NONE(String.valueOf("IGNORE_NONE")),
     
-    MISSING_VALUES("IGNORE_MISSING_VALUES"),
+    MISSING_VALUES(String.valueOf("IGNORE_MISSING_VALUES")),
     
-    ZERO_VALUES("IGNORE_ZERO_VALUES"),
+    ZERO_VALUES(String.valueOf("IGNORE_ZERO_VALUES")),
     
-    MISSING_AND_ZERO_VALUES("IGNORE_MISSING_AND_ZERO_VALUES");
+    MISSING_AND_ZERO_VALUES(String.valueOf("IGNORE_MISSING_AND_ZERO_VALUES"));
 
     private String value;
 
@@ -105,6 +103,7 @@ public class DataLoadBuffer {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -114,6 +113,7 @@ public class DataLoadBuffer {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static LoadBufferOptionsEnum fromValue(String value) {
       for (LoadBufferOptionsEnum b : LoadBufferOptionsEnum.values()) {
         if (b.value.equals(value)) {
@@ -122,122 +122,118 @@ public class DataLoadBuffer {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<LoadBufferOptionsEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final LoadBufferOptionsEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public LoadBufferOptionsEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return LoadBufferOptionsEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_LOAD_BUFFER_OPTIONS = "loadBufferOptions";
-  @SerializedName(SERIALIZED_NAME_LOAD_BUFFER_OPTIONS)
+  public static final String JSON_PROPERTY_LOAD_BUFFER_OPTIONS = "loadBufferOptions";
+  @jakarta.annotation.Nullable
   private LoadBufferOptionsEnum loadBufferOptions;
 
-  public static final String SERIALIZED_NAME_RESOURCE_USAGE = "resourceUsage";
-  @SerializedName(SERIALIZED_NAME_RESOURCE_USAGE)
+  public static final String JSON_PROPERTY_RESOURCE_USAGE = "resourceUsage";
+  @jakarta.annotation.Nullable
   private Long resourceUsage;
 
+  public DataLoadBuffer() { 
+  }
 
-  public DataLoadBuffer bufferId(Long bufferId) {
-    
+  public DataLoadBuffer bufferId(@jakarta.annotation.Nullable Long bufferId) {
     this.bufferId = bufferId;
     return this;
   }
 
-   /**
+  /**
    * Get bufferId
    * @return bufferId
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BUFFER_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getBufferId() {
     return bufferId;
   }
 
 
-  public void setBufferId(Long bufferId) {
+  @JsonProperty(JSON_PROPERTY_BUFFER_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBufferId(@jakarta.annotation.Nullable Long bufferId) {
     this.bufferId = bufferId;
   }
 
 
-  public DataLoadBuffer duplicateAggregationMethod(DuplicateAggregationMethodEnum duplicateAggregationMethod) {
-    
+  public DataLoadBuffer duplicateAggregationMethod(@jakarta.annotation.Nullable DuplicateAggregationMethodEnum duplicateAggregationMethod) {
     this.duplicateAggregationMethod = duplicateAggregationMethod;
     return this;
   }
 
-   /**
+  /**
    * Get duplicateAggregationMethod
    * @return duplicateAggregationMethod
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DUPLICATE_AGGREGATION_METHOD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public DuplicateAggregationMethodEnum getDuplicateAggregationMethod() {
     return duplicateAggregationMethod;
   }
 
 
-  public void setDuplicateAggregationMethod(DuplicateAggregationMethodEnum duplicateAggregationMethod) {
+  @JsonProperty(JSON_PROPERTY_DUPLICATE_AGGREGATION_METHOD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDuplicateAggregationMethod(@jakarta.annotation.Nullable DuplicateAggregationMethodEnum duplicateAggregationMethod) {
     this.duplicateAggregationMethod = duplicateAggregationMethod;
   }
 
 
-  public DataLoadBuffer loadBufferOptions(LoadBufferOptionsEnum loadBufferOptions) {
-    
+  public DataLoadBuffer loadBufferOptions(@jakarta.annotation.Nullable LoadBufferOptionsEnum loadBufferOptions) {
     this.loadBufferOptions = loadBufferOptions;
     return this;
   }
 
-   /**
+  /**
    * Get loadBufferOptions
    * @return loadBufferOptions
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LOAD_BUFFER_OPTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public LoadBufferOptionsEnum getLoadBufferOptions() {
     return loadBufferOptions;
   }
 
 
-  public void setLoadBufferOptions(LoadBufferOptionsEnum loadBufferOptions) {
+  @JsonProperty(JSON_PROPERTY_LOAD_BUFFER_OPTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLoadBufferOptions(@jakarta.annotation.Nullable LoadBufferOptionsEnum loadBufferOptions) {
     this.loadBufferOptions = loadBufferOptions;
   }
 
 
-  public DataLoadBuffer resourceUsage(Long resourceUsage) {
-    
+  public DataLoadBuffer resourceUsage(@jakarta.annotation.Nullable Long resourceUsage) {
     this.resourceUsage = resourceUsage;
     return this;
   }
 
-   /**
+  /**
    * Percentage of the total load buffer resources that the load buffer will be allowed to use; must be within [0, 100], and the value of 0 is interpreted as default, which is currently 100.
    * @return resourceUsage
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "Percentage of the total load buffer resources that the load buffer will be allowed to use; must be within [0, 100], and the value of 0 is interpreted as default, which is currently 100.")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RESOURCE_USAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getResourceUsage() {
     return resourceUsage;
   }
 
 
-  public void setResourceUsage(Long resourceUsage) {
+  @JsonProperty(JSON_PROPERTY_RESOURCE_USAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setResourceUsage(@jakarta.annotation.Nullable Long resourceUsage) {
     this.resourceUsage = resourceUsage;
   }
 
 
+  /**
+   * Return true if this DataLoadBuffer object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -281,5 +277,59 @@ public class DataLoadBuffer {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `bufferId` to the URL query string
+    if (getBufferId() != null) {
+      joiner.add(String.format("%sbufferId%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getBufferId()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `duplicateAggregationMethod` to the URL query string
+    if (getDuplicateAggregationMethod() != null) {
+      joiner.add(String.format("%sduplicateAggregationMethod%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDuplicateAggregationMethod()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `loadBufferOptions` to the URL query string
+    if (getLoadBufferOptions() != null) {
+      joiner.add(String.format("%sloadBufferOptions%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLoadBufferOptions()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `resourceUsage` to the URL query string
+    if (getResourceUsage() != null) {
+      joiner.add(String.format("%sresourceUsage%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getResourceUsage()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

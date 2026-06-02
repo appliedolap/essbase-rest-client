@@ -13,158 +13,180 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ReplaceInfo
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ReplaceInfo.JSON_PROPERTY_FIND,
+  ReplaceInfo.JSON_PROPERTY_REPLACE,
+  ReplaceInfo.JSON_PROPERTY_MATCH_WHOLE_WORD,
+  ReplaceInfo.JSON_PROPERTY_REPLACE_ALL,
+  ReplaceInfo.JSON_PROPERTY_CASE_SENSITIVE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ReplaceInfo {
-  public static final String SERIALIZED_NAME_FIND = "find";
-  @SerializedName(SERIALIZED_NAME_FIND)
+  public static final String JSON_PROPERTY_FIND = "find";
+  @jakarta.annotation.Nullable
   private String find;
 
-  public static final String SERIALIZED_NAME_REPLACE = "replace";
-  @SerializedName(SERIALIZED_NAME_REPLACE)
+  public static final String JSON_PROPERTY_REPLACE = "replace";
+  @jakarta.annotation.Nullable
   private String replace;
 
-  public static final String SERIALIZED_NAME_MATCH_WHOLE_WORD = "matchWholeWord";
-  @SerializedName(SERIALIZED_NAME_MATCH_WHOLE_WORD)
+  public static final String JSON_PROPERTY_MATCH_WHOLE_WORD = "matchWholeWord";
+  @jakarta.annotation.Nullable
   private Boolean matchWholeWord;
 
-  public static final String SERIALIZED_NAME_REPLACE_ALL = "replaceAll";
-  @SerializedName(SERIALIZED_NAME_REPLACE_ALL)
+  public static final String JSON_PROPERTY_REPLACE_ALL = "replaceAll";
+  @jakarta.annotation.Nullable
   private Boolean replaceAll;
 
-  public static final String SERIALIZED_NAME_CASE_SENSITIVE = "caseSensitive";
-  @SerializedName(SERIALIZED_NAME_CASE_SENSITIVE)
+  public static final String JSON_PROPERTY_CASE_SENSITIVE = "caseSensitive";
+  @jakarta.annotation.Nullable
   private Boolean caseSensitive;
 
+  public ReplaceInfo() { 
+  }
 
-  public ReplaceInfo find(String find) {
-    
+  public ReplaceInfo find(@jakarta.annotation.Nullable String find) {
     this.find = find;
     return this;
   }
 
-   /**
+  /**
    * Get find
    * @return find
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FIND)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getFind() {
     return find;
   }
 
 
-  public void setFind(String find) {
+  @JsonProperty(JSON_PROPERTY_FIND)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFind(@jakarta.annotation.Nullable String find) {
     this.find = find;
   }
 
 
-  public ReplaceInfo replace(String replace) {
-    
+  public ReplaceInfo replace(@jakarta.annotation.Nullable String replace) {
     this.replace = replace;
     return this;
   }
 
-   /**
+  /**
    * Get replace
    * @return replace
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REPLACE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getReplace() {
     return replace;
   }
 
 
-  public void setReplace(String replace) {
+  @JsonProperty(JSON_PROPERTY_REPLACE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setReplace(@jakarta.annotation.Nullable String replace) {
     this.replace = replace;
   }
 
 
-  public ReplaceInfo matchWholeWord(Boolean matchWholeWord) {
-    
+  public ReplaceInfo matchWholeWord(@jakarta.annotation.Nullable Boolean matchWholeWord) {
     this.matchWholeWord = matchWholeWord;
     return this;
   }
 
-   /**
+  /**
    * Get matchWholeWord
    * @return matchWholeWord
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MATCH_WHOLE_WORD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getMatchWholeWord() {
     return matchWholeWord;
   }
 
 
-  public void setMatchWholeWord(Boolean matchWholeWord) {
+  @JsonProperty(JSON_PROPERTY_MATCH_WHOLE_WORD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMatchWholeWord(@jakarta.annotation.Nullable Boolean matchWholeWord) {
     this.matchWholeWord = matchWholeWord;
   }
 
 
-  public ReplaceInfo replaceAll(Boolean replaceAll) {
-    
+  public ReplaceInfo replaceAll(@jakarta.annotation.Nullable Boolean replaceAll) {
     this.replaceAll = replaceAll;
     return this;
   }
 
-   /**
+  /**
    * Get replaceAll
    * @return replaceAll
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REPLACE_ALL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getReplaceAll() {
     return replaceAll;
   }
 
 
-  public void setReplaceAll(Boolean replaceAll) {
+  @JsonProperty(JSON_PROPERTY_REPLACE_ALL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setReplaceAll(@jakarta.annotation.Nullable Boolean replaceAll) {
     this.replaceAll = replaceAll;
   }
 
 
-  public ReplaceInfo caseSensitive(Boolean caseSensitive) {
-    
+  public ReplaceInfo caseSensitive(@jakarta.annotation.Nullable Boolean caseSensitive) {
     this.caseSensitive = caseSensitive;
     return this;
   }
 
-   /**
+  /**
    * Get caseSensitive
    * @return caseSensitive
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CASE_SENSITIVE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getCaseSensitive() {
     return caseSensitive;
   }
 
 
-  public void setCaseSensitive(Boolean caseSensitive) {
+  @JsonProperty(JSON_PROPERTY_CASE_SENSITIVE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCaseSensitive(@jakarta.annotation.Nullable Boolean caseSensitive) {
     this.caseSensitive = caseSensitive;
   }
 
 
+  /**
+   * Return true if this ReplaceInfo object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -210,5 +232,64 @@ public class ReplaceInfo {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `find` to the URL query string
+    if (getFind() != null) {
+      joiner.add(String.format("%sfind%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFind()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `replace` to the URL query string
+    if (getReplace() != null) {
+      joiner.add(String.format("%sreplace%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getReplace()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `matchWholeWord` to the URL query string
+    if (getMatchWholeWord() != null) {
+      joiner.add(String.format("%smatchWholeWord%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMatchWholeWord()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `replaceAll` to the URL query string
+    if (getReplaceAll() != null) {
+      joiner.add(String.format("%sreplaceAll%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getReplaceAll()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `caseSensitive` to the URL query string
+    if (getCaseSensitive() != null) {
+      joiner.add(String.format("%scaseSensitive%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCaseSensitive()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

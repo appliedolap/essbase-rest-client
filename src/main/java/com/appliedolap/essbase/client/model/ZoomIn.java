@@ -13,30 +13,38 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ZoomIn
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ZoomIn.JSON_PROPERTY_ANCESTOR,
+  ZoomIn.JSON_PROPERTY_MODE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ZoomIn {
   /**
    * Gets or Sets ancestor
    */
-  @JsonAdapter(AncestorEnum.Adapter.class)
   public enum AncestorEnum {
-    TOP("top"),
+    TOP(String.valueOf("top")),
     
-    BOTTOM("bottom");
+    BOTTOM(String.valueOf("bottom"));
 
     private String value;
 
@@ -44,6 +52,7 @@ public class ZoomIn {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -53,6 +62,7 @@ public class ZoomIn {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static AncestorEnum fromValue(String value) {
       for (AncestorEnum b : AncestorEnum.values()) {
         if (b.value.equals(value)) {
@@ -61,35 +71,21 @@ public class ZoomIn {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<AncestorEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final AncestorEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public AncestorEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return AncestorEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_ANCESTOR = "ancestor";
-  @SerializedName(SERIALIZED_NAME_ANCESTOR)
+  public static final String JSON_PROPERTY_ANCESTOR = "ancestor";
+  @jakarta.annotation.Nullable
   private AncestorEnum ancestor;
 
   /**
    * Gets or Sets mode
    */
-  @JsonAdapter(ModeEnum.Adapter.class)
   public enum ModeEnum {
-    CHILDREN("children"),
+    CHILDREN(String.valueOf("children")),
     
-    DESCENDENTS("descendents"),
+    DESCENDENTS(String.valueOf("descendents")),
     
-    BASE("base");
+    BASE(String.valueOf("base"));
 
     private String value;
 
@@ -97,6 +93,7 @@ public class ZoomIn {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -106,6 +103,7 @@ public class ZoomIn {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static ModeEnum fromValue(String value) {
       for (ModeEnum b : ModeEnum.values()) {
         if (b.value.equals(value)) {
@@ -114,72 +112,66 @@ public class ZoomIn {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<ModeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final ModeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public ModeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return ModeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_MODE = "mode";
-  @SerializedName(SERIALIZED_NAME_MODE)
+  public static final String JSON_PROPERTY_MODE = "mode";
+  @jakarta.annotation.Nullable
   private ModeEnum mode;
 
+  public ZoomIn() { 
+  }
 
-  public ZoomIn ancestor(AncestorEnum ancestor) {
-    
+  public ZoomIn ancestor(@jakarta.annotation.Nullable AncestorEnum ancestor) {
     this.ancestor = ancestor;
     return this;
   }
 
-   /**
+  /**
    * Get ancestor
    * @return ancestor
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ANCESTOR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public AncestorEnum getAncestor() {
     return ancestor;
   }
 
 
-  public void setAncestor(AncestorEnum ancestor) {
+  @JsonProperty(JSON_PROPERTY_ANCESTOR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAncestor(@jakarta.annotation.Nullable AncestorEnum ancestor) {
     this.ancestor = ancestor;
   }
 
 
-  public ZoomIn mode(ModeEnum mode) {
-    
+  public ZoomIn mode(@jakarta.annotation.Nullable ModeEnum mode) {
     this.mode = mode;
     return this;
   }
 
-   /**
+  /**
    * Get mode
    * @return mode
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public ModeEnum getMode() {
     return mode;
   }
 
 
-  public void setMode(ModeEnum mode) {
+  @JsonProperty(JSON_PROPERTY_MODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMode(@jakarta.annotation.Nullable ModeEnum mode) {
     this.mode = mode;
   }
 
 
+  /**
+   * Return true if this ZoomIn object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -219,5 +211,49 @@ public class ZoomIn {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `ancestor` to the URL query string
+    if (getAncestor() != null) {
+      joiner.add(String.format("%sancestor%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAncestor()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `mode` to the URL query string
+    if (getMode() != null) {
+      joiner.add(String.format("%smode%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMode()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

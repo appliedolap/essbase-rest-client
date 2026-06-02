@@ -10,22 +10,12 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.AppSecuritySettings;
 import com.appliedolap.essbase.client.model.AppSettingsList;
@@ -33,646 +23,463 @@ import com.appliedolap.essbase.client.model.AppStartupSettings;
 import com.appliedolap.essbase.client.model.ApplicationStatistics;
 import com.appliedolap.essbase.client.model.PatchElement;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ApplicationSettingsAndStatisticsApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public ApplicationSettingsAndStatisticsApi() {
-        this(Configuration.getDefaultApiClient());
+  public ApplicationSettingsAndStatisticsApi() {
+    this(new ApiClient());
+  }
+
+  public ApplicationSettingsAndStatisticsApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public ApplicationSettingsAndStatisticsApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Get Application Security Settings
+   * Returns the security settings of the specified application.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @return AppSecuritySettings
+   * @throws ApiException if fails to make API call
+   */
+  public AppSecuritySettings applicationSettingsStatisticsGetSecuritySettings(String applicationName) throws ApiException {
+    ApiResponse<AppSecuritySettings> localVarResponse = applicationSettingsStatisticsGetSecuritySettingsWithHttpInfo(applicationName);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for applicationSettingsStatisticsGetSecuritySettings
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Security settings are retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the security settings. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationSettingsStatisticsGetSecuritySettingsCall(String applicationName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/settings/security"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Get Application Security Settings
+   * Returns the security settings of the specified application.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;AppSecuritySettings&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<AppSecuritySettings> applicationSettingsStatisticsGetSecuritySettingsWithHttpInfo(String applicationName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationSettingsStatisticsGetSecuritySettingsRequestBuilder(applicationName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationSettingsStatisticsGetSecuritySettings", localVarResponse);
         }
+        return new ApiResponse<AppSecuritySettings>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<AppSecuritySettings>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder applicationSettingsStatisticsGetSecuritySettingsRequestBuilder(String applicationName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationSettingsStatisticsGetSecuritySettings");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationSettingsStatisticsGetSecuritySettingsValidateBeforeCall(String applicationName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationSettingsStatisticsGetSecuritySettings(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/settings/security"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Application General Settings
+   * Returns general settings of the specified application. Additional settings can be retrieved using the &lt;code&gt;expand&lt;/code&gt; parameter.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param expand &lt;p&gt;Use &lt;code&gt;none&lt;/code&gt; to show only general settings (this is the default). Other options available: &lt;code&gt;startup&lt;/code&gt;, &lt;code&gt;security&lt;/code&gt;, and &lt;code&gt;all&lt;/code&gt;.&lt;/p&gt; (optional, default to none)
+   * @return AppSettingsList
+   * @throws ApiException if fails to make API call
+   */
+  public AppSettingsList applicationSettingsStatisticsGetSettings(String applicationName, String expand) throws ApiException {
+    ApiResponse<AppSettingsList> localVarResponse = applicationSettingsStatisticsGetSettingsWithHttpInfo(applicationName, expand);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Application General Settings
+   * Returns general settings of the specified application. Additional settings can be retrieved using the &lt;code&gt;expand&lt;/code&gt; parameter.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param expand &lt;p&gt;Use &lt;code&gt;none&lt;/code&gt; to show only general settings (this is the default). Other options available: &lt;code&gt;startup&lt;/code&gt;, &lt;code&gt;security&lt;/code&gt;, and &lt;code&gt;all&lt;/code&gt;.&lt;/p&gt; (optional, default to none)
+   * @return ApiResponse&lt;AppSettingsList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<AppSettingsList> applicationSettingsStatisticsGetSettingsWithHttpInfo(String applicationName, String expand) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationSettingsStatisticsGetSettingsRequestBuilder(applicationName, expand);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationSettingsStatisticsGetSettings", localVarResponse);
         }
-        
+        return new ApiResponse<AppSettingsList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<AppSettingsList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = applicationSettingsStatisticsGetSecuritySettingsCall(applicationName, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder applicationSettingsStatisticsGetSettingsRequestBuilder(String applicationName, String expand) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationSettingsStatisticsGetSettings");
     }
 
-    /**
-     * Get Application Security Settings
-     * Returns the security settings of the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @return AppSecuritySettings
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Security settings are retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the security settings. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public AppSecuritySettings applicationSettingsStatisticsGetSecuritySettings(String applicationName) throws ApiException {
-        ApiResponse<AppSecuritySettings> localVarResp = applicationSettingsStatisticsGetSecuritySettingsWithHttpInfo(applicationName);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/settings"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "expand";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("expand", expand));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Get Application Security Settings
-     * Returns the security settings of the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;AppSecuritySettings&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Security settings are retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the security settings. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<AppSecuritySettings> applicationSettingsStatisticsGetSecuritySettingsWithHttpInfo(String applicationName) throws ApiException {
-        okhttp3.Call localVarCall = applicationSettingsStatisticsGetSecuritySettingsValidateBeforeCall(applicationName, null);
-        Type localVarReturnType = new TypeToken<AppSecuritySettings>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Application Security Settings (asynchronously)
-     * Returns the security settings of the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Security settings are retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the security settings. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationSettingsStatisticsGetSecuritySettingsAsync(String applicationName, final ApiCallback<AppSecuritySettings> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationSettingsStatisticsGetSecuritySettingsValidateBeforeCall(applicationName, _callback);
-        Type localVarReturnType = new TypeToken<AppSecuritySettings>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for applicationSettingsStatisticsGetSettings
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param expand &lt;p&gt;Use &lt;code&gt;none&lt;/code&gt; to show only general settings (this is the default). Other options available: &lt;code&gt;startup&lt;/code&gt;, &lt;code&gt;security&lt;/code&gt;, and &lt;code&gt;all&lt;/code&gt;.&lt;/p&gt; (optional, default to none)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;General application settings returned successfully, with links to get expanded settings and to edit settings.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;Failed to get the settings. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationSettingsStatisticsGetSettingsCall(String applicationName, String expand, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/settings"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
+  /**
+   * Get Application Startup Settings
+   * Returns all the startup settings of the specified application.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @return AppStartupSettings
+   * @throws ApiException if fails to make API call
+   */
+  public AppStartupSettings applicationSettingsStatisticsGetStartupSettings(String applicationName) throws ApiException {
+    ApiResponse<AppStartupSettings> localVarResponse = applicationSettingsStatisticsGetStartupSettingsWithHttpInfo(applicationName);
+    return localVarResponse.getData();
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (expand != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("expand", expand));
+  /**
+   * Get Application Startup Settings
+   * Returns all the startup settings of the specified application.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;AppStartupSettings&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<AppStartupSettings> applicationSettingsStatisticsGetStartupSettingsWithHttpInfo(String applicationName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationSettingsStatisticsGetStartupSettingsRequestBuilder(applicationName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationSettingsStatisticsGetStartupSettings", localVarResponse);
         }
+        return new ApiResponse<AppStartupSettings>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<AppStartupSettings>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  private HttpRequest.Builder applicationSettingsStatisticsGetStartupSettingsRequestBuilder(String applicationName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationSettingsStatisticsGetStartupSettings");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/settings/startup"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Application Statistics
+   * Returns the statistics of the specified application.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @return ApplicationStatistics
+   * @throws ApiException if fails to make API call
+   */
+  public ApplicationStatistics applicationSettingsStatisticsGetStatistics(String applicationName) throws ApiException {
+    ApiResponse<ApplicationStatistics> localVarResponse = applicationSettingsStatisticsGetStatisticsWithHttpInfo(applicationName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Application Statistics
+   * Returns the statistics of the specified application.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;ApplicationStatistics&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ApplicationStatistics> applicationSettingsStatisticsGetStatisticsWithHttpInfo(String applicationName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationSettingsStatisticsGetStatisticsRequestBuilder(applicationName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationSettingsStatisticsGetStatistics", localVarResponse);
         }
+        return new ApiResponse<ApplicationStatistics>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ApplicationStatistics>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder applicationSettingsStatisticsGetStatisticsRequestBuilder(String applicationName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationSettingsStatisticsGetStatistics");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationSettingsStatisticsGetSettingsValidateBeforeCall(String applicationName, String expand, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationSettingsStatisticsGetSettings(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/statistics"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Update Application Settings
+   * Updates the settings of the specified application.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param body Application settings patch list (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationSettingsStatisticsUpdateSettings(String applicationName, List<PatchElement> body) throws ApiException {
+    applicationSettingsStatisticsUpdateSettingsWithHttpInfo(applicationName, body);
+  }
+
+  /**
+   * Update Application Settings
+   * Updates the settings of the specified application.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param body Application settings patch list (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationSettingsStatisticsUpdateSettingsWithHttpInfo(String applicationName, List<PatchElement> body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationSettingsStatisticsUpdateSettingsRequestBuilder(applicationName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationSettingsStatisticsUpdateSettings", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = applicationSettingsStatisticsGetSettingsCall(applicationName, expand, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Application General Settings
-     * Returns general settings of the specified application. Additional settings can be retrieved using the &lt;code&gt;expand&lt;/code&gt; parameter.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param expand &lt;p&gt;Use &lt;code&gt;none&lt;/code&gt; to show only general settings (this is the default). Other options available: &lt;code&gt;startup&lt;/code&gt;, &lt;code&gt;security&lt;/code&gt;, and &lt;code&gt;all&lt;/code&gt;.&lt;/p&gt; (optional, default to none)
-     * @return AppSettingsList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;General application settings returned successfully, with links to get expanded settings and to edit settings.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;Failed to get the settings. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public AppSettingsList applicationSettingsStatisticsGetSettings(String applicationName, String expand) throws ApiException {
-        ApiResponse<AppSettingsList> localVarResp = applicationSettingsStatisticsGetSettingsWithHttpInfo(applicationName, expand);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Application General Settings
-     * Returns general settings of the specified application. Additional settings can be retrieved using the &lt;code&gt;expand&lt;/code&gt; parameter.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param expand &lt;p&gt;Use &lt;code&gt;none&lt;/code&gt; to show only general settings (this is the default). Other options available: &lt;code&gt;startup&lt;/code&gt;, &lt;code&gt;security&lt;/code&gt;, and &lt;code&gt;all&lt;/code&gt;.&lt;/p&gt; (optional, default to none)
-     * @return ApiResponse&lt;AppSettingsList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;General application settings returned successfully, with links to get expanded settings and to edit settings.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;Failed to get the settings. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<AppSettingsList> applicationSettingsStatisticsGetSettingsWithHttpInfo(String applicationName, String expand) throws ApiException {
-        okhttp3.Call localVarCall = applicationSettingsStatisticsGetSettingsValidateBeforeCall(applicationName, expand, null);
-        Type localVarReturnType = new TypeToken<AppSettingsList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Application General Settings (asynchronously)
-     * Returns general settings of the specified application. Additional settings can be retrieved using the &lt;code&gt;expand&lt;/code&gt; parameter.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param expand &lt;p&gt;Use &lt;code&gt;none&lt;/code&gt; to show only general settings (this is the default). Other options available: &lt;code&gt;startup&lt;/code&gt;, &lt;code&gt;security&lt;/code&gt;, and &lt;code&gt;all&lt;/code&gt;.&lt;/p&gt; (optional, default to none)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;General application settings returned successfully, with links to get expanded settings and to edit settings.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;Failed to get the settings. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationSettingsStatisticsGetSettingsAsync(String applicationName, String expand, final ApiCallback<AppSettingsList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationSettingsStatisticsGetSettingsValidateBeforeCall(applicationName, expand, _callback);
-        Type localVarReturnType = new TypeToken<AppSettingsList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationSettingsStatisticsGetStartupSettings
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Startup settings retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the startup settings. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationSettingsStatisticsGetStartupSettingsCall(String applicationName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/settings/startup"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder applicationSettingsStatisticsUpdateSettingsRequestBuilder(String applicationName, List<PatchElement> body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationSettingsStatisticsUpdateSettings");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling applicationSettingsStatisticsUpdateSettings");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationSettingsStatisticsGetStartupSettingsValidateBeforeCall(String applicationName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationSettingsStatisticsGetStartupSettings(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = applicationSettingsStatisticsGetStartupSettingsCall(applicationName, _callback);
-        return localVarCall;
+    String localVarPath = "/applications/{applicationName}/settings"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PATCH", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Get Application Startup Settings
-     * Returns all the startup settings of the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @return AppStartupSettings
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Startup settings retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the startup settings. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public AppStartupSettings applicationSettingsStatisticsGetStartupSettings(String applicationName) throws ApiException {
-        ApiResponse<AppStartupSettings> localVarResp = applicationSettingsStatisticsGetStartupSettingsWithHttpInfo(applicationName);
-        return localVarResp.getData();
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Application Startup Settings
-     * Returns all the startup settings of the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;AppStartupSettings&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Startup settings retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the startup settings. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<AppStartupSettings> applicationSettingsStatisticsGetStartupSettingsWithHttpInfo(String applicationName) throws ApiException {
-        okhttp3.Call localVarCall = applicationSettingsStatisticsGetStartupSettingsValidateBeforeCall(applicationName, null);
-        Type localVarReturnType = new TypeToken<AppStartupSettings>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Get Application Startup Settings (asynchronously)
-     * Returns all the startup settings of the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Startup settings retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the startup settings. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationSettingsStatisticsGetStartupSettingsAsync(String applicationName, final ApiCallback<AppStartupSettings> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationSettingsStatisticsGetStartupSettingsValidateBeforeCall(applicationName, _callback);
-        Type localVarReturnType = new TypeToken<AppStartupSettings>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationSettingsStatisticsGetStatistics
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Statistics are retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the statistics. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationSettingsStatisticsGetStatisticsCall(String applicationName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/statistics"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationSettingsStatisticsGetStatisticsValidateBeforeCall(String applicationName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationSettingsStatisticsGetStatistics(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationSettingsStatisticsGetStatisticsCall(applicationName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Application Statistics
-     * Returns the statistics of the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @return ApplicationStatistics
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Statistics are retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the statistics. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApplicationStatistics applicationSettingsStatisticsGetStatistics(String applicationName) throws ApiException {
-        ApiResponse<ApplicationStatistics> localVarResp = applicationSettingsStatisticsGetStatisticsWithHttpInfo(applicationName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Application Statistics
-     * Returns the statistics of the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;ApplicationStatistics&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Statistics are retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the statistics. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ApplicationStatistics> applicationSettingsStatisticsGetStatisticsWithHttpInfo(String applicationName) throws ApiException {
-        okhttp3.Call localVarCall = applicationSettingsStatisticsGetStatisticsValidateBeforeCall(applicationName, null);
-        Type localVarReturnType = new TypeToken<ApplicationStatistics>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Application Statistics (asynchronously)
-     * Returns the statistics of the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Statistics are retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the statistics. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationSettingsStatisticsGetStatisticsAsync(String applicationName, final ApiCallback<ApplicationStatistics> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationSettingsStatisticsGetStatisticsValidateBeforeCall(applicationName, _callback);
-        Type localVarReturnType = new TypeToken<ApplicationStatistics>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationSettingsStatisticsUpdateSettings
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body Application settings patch list (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Settings are updated successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the settings. The application name may be incorrect, or the JSON for the settings may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationSettingsStatisticsUpdateSettingsCall(String applicationName, List<PatchElement> body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/settings"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PATCH", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationSettingsStatisticsUpdateSettingsValidateBeforeCall(String applicationName, List<PatchElement> body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationSettingsStatisticsUpdateSettings(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling applicationSettingsStatisticsUpdateSettings(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationSettingsStatisticsUpdateSettingsCall(applicationName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Update Application Settings
-     * Updates the settings of the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body Application settings patch list (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Settings are updated successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the settings. The application name may be incorrect, or the JSON for the settings may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationSettingsStatisticsUpdateSettings(String applicationName, List<PatchElement> body) throws ApiException {
-        applicationSettingsStatisticsUpdateSettingsWithHttpInfo(applicationName, body);
-    }
-
-    /**
-     * Update Application Settings
-     * Updates the settings of the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body Application settings patch list (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Settings are updated successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the settings. The application name may be incorrect, or the JSON for the settings may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationSettingsStatisticsUpdateSettingsWithHttpInfo(String applicationName, List<PatchElement> body) throws ApiException {
-        okhttp3.Call localVarCall = applicationSettingsStatisticsUpdateSettingsValidateBeforeCall(applicationName, body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Update Application Settings (asynchronously)
-     * Updates the settings of the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body Application settings patch list (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Settings are updated successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the settings. The application name may be incorrect, or the JSON for the settings may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationSettingsStatisticsUpdateSettingsAsync(String applicationName, List<PatchElement> body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationSettingsStatisticsUpdateSettingsValidateBeforeCall(applicationName, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
 }

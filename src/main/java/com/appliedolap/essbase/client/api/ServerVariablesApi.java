@@ -10,651 +10,454 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.Variable;
 import com.appliedolap.essbase.client.model.VariableList;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ServerVariablesApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public ServerVariablesApi() {
-        this(Configuration.getDefaultApiClient());
+  public ServerVariablesApi() {
+    this(new ApiClient());
+  }
+
+  public ServerVariablesApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public ServerVariablesApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Creates Variable in server
+   * Creates the variable in the server and returns the created variable
+   * @param body Variable details (required)
+   * @return Variable
+   * @throws ApiException if fails to make API call
+   */
+  public Variable variablesCreateServerVariable(Variable body) throws ApiException {
+    ApiResponse<Variable> localVarResponse = variablesCreateServerVariableWithHttpInfo(body);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for variablesCreateServerVariable
-     * @param body Variable details (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variable is created successfully. Returns the variable details and the links to get/edit/delete the variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to create the variable. This happens when the variable json is incorrect or when the given variable name already exists </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesCreateServerVariableCall(Variable body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/variables";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Creates Variable in server
+   * Creates the variable in the server and returns the created variable
+   * @param body Variable details (required)
+   * @return ApiResponse&lt;Variable&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Variable> variablesCreateServerVariableWithHttpInfo(Variable body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = variablesCreateServerVariableRequestBuilder(body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("variablesCreateServerVariable", localVarResponse);
         }
+        return new ApiResponse<Variable>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Variable>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder variablesCreateServerVariableRequestBuilder(Variable body) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling variablesCreateServerVariable");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call variablesCreateServerVariableValidateBeforeCall(Variable body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling variablesCreateServerVariable(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/variables";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Deletes Variable in server
+   * Deletes the given variable in the server
+   * @param variableName Variable name (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void variablesDeleteServerVariable(String variableName) throws ApiException {
+    variablesDeleteServerVariableWithHttpInfo(variableName);
+  }
+
+  /**
+   * Deletes Variable in server
+   * Deletes the given variable in the server
+   * @param variableName Variable name (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> variablesDeleteServerVariableWithHttpInfo(String variableName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = variablesDeleteServerVariableRequestBuilder(variableName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("variablesDeleteServerVariable", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = variablesCreateServerVariableCall(body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Creates Variable in server
-     * Creates the variable in the server and returns the created variable
-     * @param body Variable details (required)
-     * @return Variable
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variable is created successfully. Returns the variable details and the links to get/edit/delete the variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to create the variable. This happens when the variable json is incorrect or when the given variable name already exists </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public Variable variablesCreateServerVariable(Variable body) throws ApiException {
-        ApiResponse<Variable> localVarResp = variablesCreateServerVariableWithHttpInfo(body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Creates Variable in server
-     * Creates the variable in the server and returns the created variable
-     * @param body Variable details (required)
-     * @return ApiResponse&lt;Variable&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variable is created successfully. Returns the variable details and the links to get/edit/delete the variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to create the variable. This happens when the variable json is incorrect or when the given variable name already exists </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Variable> variablesCreateServerVariableWithHttpInfo(Variable body) throws ApiException {
-        okhttp3.Call localVarCall = variablesCreateServerVariableValidateBeforeCall(body, null);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Creates Variable in server (asynchronously)
-     * Creates the variable in the server and returns the created variable
-     * @param body Variable details (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variable is created successfully. Returns the variable details and the links to get/edit/delete the variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to create the variable. This happens when the variable json is incorrect or when the given variable name already exists </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesCreateServerVariableAsync(Variable body, final ApiCallback<Variable> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = variablesCreateServerVariableValidateBeforeCall(body, _callback);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for variablesDeleteServerVariable
-     * @param variableName Variable name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Variable is deleted successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to delete the variable. This happens when the variable name is incorrect </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesDeleteServerVariableCall(String variableName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/variables/{variableName}"
-            .replaceAll("\\{" + "variableName" + "\\}", localVarApiClient.escapeString(variableName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder variablesDeleteServerVariableRequestBuilder(String variableName) throws ApiException {
+    // verify the required parameter 'variableName' is set
+    if (variableName == null) {
+      throw new ApiException(400, "Missing the required parameter 'variableName' when calling variablesDeleteServerVariable");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call variablesDeleteServerVariableValidateBeforeCall(String variableName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'variableName' is set
-        if (variableName == null) {
-            throw new ApiException("Missing the required parameter 'variableName' when calling variablesDeleteServerVariable(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/variables/{variableName}"
+        .replace("{variableName}", ApiClient.urlEncode(variableName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Updates Variable in server
+   * Updates the variable in the server and returns the updated variable
+   * @param variableName Variable name (required)
+   * @param body Variable details (required)
+   * @return Variable
+   * @throws ApiException if fails to make API call
+   */
+  public Variable variablesEditServerVariable(String variableName, Variable body) throws ApiException {
+    ApiResponse<Variable> localVarResponse = variablesEditServerVariableWithHttpInfo(variableName, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Updates Variable in server
+   * Updates the variable in the server and returns the updated variable
+   * @param variableName Variable name (required)
+   * @param body Variable details (required)
+   * @return ApiResponse&lt;Variable&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Variable> variablesEditServerVariableWithHttpInfo(String variableName, Variable body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = variablesEditServerVariableRequestBuilder(variableName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("variablesEditServerVariable", localVarResponse);
         }
-        
+        return new ApiResponse<Variable>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Variable>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = variablesDeleteServerVariableCall(variableName, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder variablesEditServerVariableRequestBuilder(String variableName, Variable body) throws ApiException {
+    // verify the required parameter 'variableName' is set
+    if (variableName == null) {
+      throw new ApiException(400, "Missing the required parameter 'variableName' when calling variablesEditServerVariable");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling variablesEditServerVariable");
     }
 
-    /**
-     * Deletes Variable in server
-     * Deletes the given variable in the server
-     * @param variableName Variable name (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Variable is deleted successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to delete the variable. This happens when the variable name is incorrect </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public void variablesDeleteServerVariable(String variableName) throws ApiException {
-        variablesDeleteServerVariableWithHttpInfo(variableName);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/variables/{variableName}"
+        .replace("{variableName}", ApiClient.urlEncode(variableName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Deletes Variable in server
-     * Deletes the given variable in the server
-     * @param variableName Variable name (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Variable is deleted successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to delete the variable. This happens when the variable name is incorrect </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> variablesDeleteServerVariableWithHttpInfo(String variableName) throws ApiException {
-        okhttp3.Call localVarCall = variablesDeleteServerVariableValidateBeforeCall(variableName, null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Deletes Variable in server (asynchronously)
-     * Deletes the given variable in the server
-     * @param variableName Variable name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Variable is deleted successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to delete the variable. This happens when the variable name is incorrect </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesDeleteServerVariableAsync(String variableName, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = variablesDeleteServerVariableValidateBeforeCall(variableName, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for variablesEditServerVariable
-     * @param variableName Variable name (required)
-     * @param body Variable details (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variable is updated successfully. Returns the variable details and the links to get/edit/delete the variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to update the variable. This happens when the variable json is incorrect or when the given variable name does not exist </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesEditServerVariableCall(String variableName, Variable body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/variables/{variableName}"
-            .replaceAll("\\{" + "variableName" + "\\}", localVarApiClient.escapeString(variableName.toString()));
+  /**
+   * Retrieves Variable from server
+   * Returns the variable details from the server
+   * @param variableName Variable name (required)
+   * @return Variable
+   * @throws ApiException if fails to make API call
+   */
+  public Variable variablesGetServerVariable(String variableName) throws ApiException {
+    ApiResponse<Variable> localVarResponse = variablesGetServerVariableWithHttpInfo(variableName);
+    return localVarResponse.getData();
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Retrieves Variable from server
+   * Returns the variable details from the server
+   * @param variableName Variable name (required)
+   * @return ApiResponse&lt;Variable&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Variable> variablesGetServerVariableWithHttpInfo(String variableName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = variablesGetServerVariableRequestBuilder(variableName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("variablesGetServerVariable", localVarResponse);
         }
+        return new ApiResponse<Variable>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Variable>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder variablesGetServerVariableRequestBuilder(String variableName) throws ApiException {
+    // verify the required parameter 'variableName' is set
+    if (variableName == null) {
+      throw new ApiException(400, "Missing the required parameter 'variableName' when calling variablesGetServerVariable");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call variablesEditServerVariableValidateBeforeCall(String variableName, Variable body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'variableName' is set
-        if (variableName == null) {
-            throw new ApiException("Missing the required parameter 'variableName' when calling variablesEditServerVariable(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/variables/{variableName}"
+        .replace("{variableName}", ApiClient.urlEncode(variableName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Retrieves Variables from server
+   * Returns all the variables from the server
+   * @return VariableList
+   * @throws ApiException if fails to make API call
+   */
+  public VariableList variablesListServerVariables() throws ApiException {
+    ApiResponse<VariableList> localVarResponse = variablesListServerVariablesWithHttpInfo();
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Retrieves Variables from server
+   * Returns all the variables from the server
+   * @return ApiResponse&lt;VariableList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<VariableList> variablesListServerVariablesWithHttpInfo() throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = variablesListServerVariablesRequestBuilder();
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("variablesListServerVariables", localVarResponse);
         }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling variablesEditServerVariable(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = variablesEditServerVariableCall(variableName, body, _callback);
-        return localVarCall;
-
+        return new ApiResponse<VariableList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<VariableList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Updates Variable in server
-     * Updates the variable in the server and returns the updated variable
-     * @param variableName Variable name (required)
-     * @param body Variable details (required)
-     * @return Variable
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variable is updated successfully. Returns the variable details and the links to get/edit/delete the variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to update the variable. This happens when the variable json is incorrect or when the given variable name does not exist </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public Variable variablesEditServerVariable(String variableName, Variable body) throws ApiException {
-        ApiResponse<Variable> localVarResp = variablesEditServerVariableWithHttpInfo(variableName, body);
-        return localVarResp.getData();
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
     }
+  }
 
-    /**
-     * Updates Variable in server
-     * Updates the variable in the server and returns the updated variable
-     * @param variableName Variable name (required)
-     * @param body Variable details (required)
-     * @return ApiResponse&lt;Variable&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variable is updated successfully. Returns the variable details and the links to get/edit/delete the variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to update the variable. This happens when the variable json is incorrect or when the given variable name does not exist </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Variable> variablesEditServerVariableWithHttpInfo(String variableName, Variable body) throws ApiException {
-        okhttp3.Call localVarCall = variablesEditServerVariableValidateBeforeCall(variableName, body, null);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+  private HttpRequest.Builder variablesListServerVariablesRequestBuilder() throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/variables";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Updates Variable in server (asynchronously)
-     * Updates the variable in the server and returns the updated variable
-     * @param variableName Variable name (required)
-     * @param body Variable details (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variable is updated successfully. Returns the variable details and the links to get/edit/delete the variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to update the variable. This happens when the variable json is incorrect or when the given variable name does not exist </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> Unsupported Media Type </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesEditServerVariableAsync(String variableName, Variable body, final ApiCallback<Variable> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = variablesEditServerVariableValidateBeforeCall(variableName, body, _callback);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for variablesGetServerVariable
-     * @param variableName Variable name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variable is retrieved successfully. Gives the variable details along with the links to get/edit/delete the variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to get the variable. This happens when the variable name is incorrect </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesGetServerVariableCall(String variableName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/variables/{variableName}"
-            .replaceAll("\\{" + "variableName" + "\\}", localVarApiClient.escapeString(variableName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call variablesGetServerVariableValidateBeforeCall(String variableName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'variableName' is set
-        if (variableName == null) {
-            throw new ApiException("Missing the required parameter 'variableName' when calling variablesGetServerVariable(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = variablesGetServerVariableCall(variableName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Retrieves Variable from server
-     * Returns the variable details from the server
-     * @param variableName Variable name (required)
-     * @return Variable
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variable is retrieved successfully. Gives the variable details along with the links to get/edit/delete the variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to get the variable. This happens when the variable name is incorrect </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public Variable variablesGetServerVariable(String variableName) throws ApiException {
-        ApiResponse<Variable> localVarResp = variablesGetServerVariableWithHttpInfo(variableName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Retrieves Variable from server
-     * Returns the variable details from the server
-     * @param variableName Variable name (required)
-     * @return ApiResponse&lt;Variable&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variable is retrieved successfully. Gives the variable details along with the links to get/edit/delete the variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to get the variable. This happens when the variable name is incorrect </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Variable> variablesGetServerVariableWithHttpInfo(String variableName) throws ApiException {
-        okhttp3.Call localVarCall = variablesGetServerVariableValidateBeforeCall(variableName, null);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Retrieves Variable from server (asynchronously)
-     * Returns the variable details from the server
-     * @param variableName Variable name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variable is retrieved successfully. Gives the variable details along with the links to get/edit/delete the variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to get the variable. This happens when the variable name is incorrect </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesGetServerVariableAsync(String variableName, final ApiCallback<Variable> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = variablesGetServerVariableValidateBeforeCall(variableName, _callback);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for variablesListServerVariables
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variables are retrieved successfully. Gives the variable details along with the links to get/edit/delete each variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to get the variables. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesListServerVariablesCall(final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/variables";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call variablesListServerVariablesValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = variablesListServerVariablesCall(_callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Retrieves Variables from server
-     * Returns all the variables from the server
-     * @return VariableList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variables are retrieved successfully. Gives the variable details along with the links to get/edit/delete each variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to get the variables. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public VariableList variablesListServerVariables() throws ApiException {
-        ApiResponse<VariableList> localVarResp = variablesListServerVariablesWithHttpInfo();
-        return localVarResp.getData();
-    }
-
-    /**
-     * Retrieves Variables from server
-     * Returns all the variables from the server
-     * @return ApiResponse&lt;VariableList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variables are retrieved successfully. Gives the variable details along with the links to get/edit/delete each variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to get the variables. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<VariableList> variablesListServerVariablesWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = variablesListServerVariablesValidateBeforeCall(null);
-        Type localVarReturnType = new TypeToken<VariableList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Retrieves Variables from server (asynchronously)
-     * Returns all the variables from the server
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Variables are retrieved successfully. Gives the variable details along with the links to get/edit/delete each variable </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to get the variables. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesListServerVariablesAsync(final ApiCallback<VariableList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = variablesListServerVariablesValidateBeforeCall(_callback);
-        Type localVarReturnType = new TypeToken<VariableList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }
