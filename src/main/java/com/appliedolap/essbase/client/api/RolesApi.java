@@ -10,158 +10,158 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.Roles;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class RolesApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public RolesApi() {
-        this(Configuration.getDefaultApiClient());
+  public RolesApi() {
+    this(new ApiClient());
+  }
+
+  public RolesApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public RolesApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Essbase Roles
+   * &lt;p&gt;Returns the roles available in Essbase. Valid type values are &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt;. If type is empty, then both &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt; roles are returned.&lt;/p&gt;
+   * @param type &lt;p&gt;Valid type values are &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt;.&lt;/p&gt; (optional)
+   * @return Roles
+   * @throws ApiException if fails to make API call
+   */
+  public Roles rolesGetRoles(String type) throws ApiException {
+    ApiResponse<Roles> localVarResponse = rolesGetRolesWithHttpInfo(type);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for rolesGetRoles
-     * @param type &lt;p&gt;Valid type values are &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;Strong&gt;OK&lt;/strong&gt;&lt;p&gt;Returns roles for the specified type.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call rolesGetRolesCall(String type, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/roles";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (type != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("type", type));
+  /**
+   * Essbase Roles
+   * &lt;p&gt;Returns the roles available in Essbase. Valid type values are &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt;. If type is empty, then both &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt; roles are returned.&lt;/p&gt;
+   * @param type &lt;p&gt;Valid type values are &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt;.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;Roles&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Roles> rolesGetRolesWithHttpInfo(String type) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = rolesGetRolesRequestBuilder(type);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("rolesGetRoles", localVarResponse);
         }
+        return new ApiResponse<Roles>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Roles>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
+  private HttpRequest.Builder rolesGetRolesRequestBuilder(String type) throws ApiException {
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    String localVarPath = "/roles";
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "type";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("type", type));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call rolesGetRolesValidateBeforeCall(String type, final ApiCallback _callback) throws ApiException {
-        
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
 
-        okhttp3.Call localVarCall = rolesGetRolesCall(type, _callback);
-        return localVarCall;
-
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Essbase Roles
-     * &lt;p&gt;Returns the roles available in Essbase. Valid type values are &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt;. If type is empty, then both &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt; roles are returned.&lt;/p&gt;
-     * @param type &lt;p&gt;Valid type values are &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @return Roles
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;Strong&gt;OK&lt;/strong&gt;&lt;p&gt;Returns roles for the specified type.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Roles rolesGetRoles(String type) throws ApiException {
-        ApiResponse<Roles> localVarResp = rolesGetRolesWithHttpInfo(type);
-        return localVarResp.getData();
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Essbase Roles
-     * &lt;p&gt;Returns the roles available in Essbase. Valid type values are &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt;. If type is empty, then both &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt; roles are returned.&lt;/p&gt;
-     * @param type &lt;p&gt;Valid type values are &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;Roles&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;Strong&gt;OK&lt;/strong&gt;&lt;p&gt;Returns roles for the specified type.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Roles> rolesGetRolesWithHttpInfo(String type) throws ApiException {
-        okhttp3.Call localVarCall = rolesGetRolesValidateBeforeCall(type, null);
-        Type localVarReturnType = new TypeToken<Roles>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Essbase Roles (asynchronously)
-     * &lt;p&gt;Returns the roles available in Essbase. Valid type values are &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt;. If type is empty, then both &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt; roles are returned.&lt;/p&gt;
-     * @param type &lt;p&gt;Valid type values are &lt;code&gt;application&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;Strong&gt;OK&lt;/strong&gt;&lt;p&gt;Returns roles for the specified type.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call rolesGetRolesAsync(String type, final ApiCallback<Roles> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = rolesGetRolesValidateBeforeCall(type, _callback);
-        Type localVarReturnType = new TypeToken<Roles>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

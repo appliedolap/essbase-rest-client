@@ -5,16 +5,16 @@ import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.*;
 import com.appliedolap.essbase.exceptions.NoSuchEssbaseObjectException;
-import com.appliedolap.essbase.util.GenericApiCallback;
+import com.appliedolap.essbase.util.NativeHttp;
 import com.appliedolap.essbase.util.Utils;
 import com.appliedolap.essbase.util.WrapperUtil;
-import okhttp3.Response;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -164,11 +164,18 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     @Override
     public EssFolder getHomePath() {
         try {
-            String homepath = api.getFilesApi().filesGetUserHomePath();
-            return new EssFolderImpl(api, this, homepath, homepath);
-        } catch (ApiException apiException) {
-            logger.error("Unable to get home path: {}", apiException.getMessage());
-            throw new EssApiException(apiException);
+            // The native OpenAPI client tries to deserialize this endpoint as a JSON string, but Essbase
+            // returns plain text such as "/users/admin". Keep this call on the configured client while
+            // preserving the raw text body.
+            try (InputStream body = NativeHttp.send(api.getClient(), NativeHttp.request(api.getClient(), "/files/homepath")
+                    .header("Accept", "application/json, application/xml")
+                    .GET(), "filesGetUserHomePath").body()) {
+                String homepath = new String(body.readAllBytes(), StandardCharsets.UTF_8).trim();
+                return new EssFolderImpl(api, this, homepath, homepath);
+            }
+        } catch (ApiException | IOException e) {
+            logger.error("Unable to get home path: {}", e.getMessage());
+            throw new EssApiException(e);
         }
     }
 
@@ -340,9 +347,11 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
             datasourceQueryInfo.setQuery(query);
             datasourceQueryInfo.setDelimiter(delimiter);
             datasourceQueryInfo.setParams(params);
-            GenericApiCallback callback = new GenericApiCallback();
-            Response response = api.getGlobalDataSourcesApi().globalDatasourcesGetDataStreamCall(includeHeaders, datasourceQueryInfo, callback).execute();
-            IOUtils.copy(response.body().byteStream(), outputStream);
+            String path = NativeHttp.withQuery("/datasources/query/stream", "includeHeaders", includeHeaders);
+            NativeHttp.copyBodyTo(NativeHttp.send(api.getClient(), NativeHttp.request(api.getClient(), path)
+                    .header("Accept", "application/octet-stream, text/plain, text/csv, application/json")
+                    .header("Content-Type", "application/json")
+                    .POST(NativeHttp.jsonBody(api.getClient(), datasourceQueryInfo)), "globalDatasourcesGetDataStream"), outputStream);
         } catch (ApiException | IOException e) {
             throw new EssApiException(e);
         }

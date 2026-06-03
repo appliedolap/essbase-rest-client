@@ -10,468 +10,342 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.DataLoadStartPayload;
 import com.appliedolap.essbase.client.model.StreamProcessEndResponse;
 import com.appliedolap.essbase.client.model.StreamProcessStartResponse;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class StreamingDataLoadApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public StreamingDataLoadApi() {
-        this(Configuration.getDefaultApiClient());
+  public StreamingDataLoadApi() {
+    this(new ApiClient());
+  }
+
+  public StreamingDataLoadApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public StreamingDataLoadApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * End Dataload
+   * &lt;p&gt;Ends streaming data load.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
+   * @return StreamProcessEndResponse
+   * @throws ApiException if fails to make API call
+   */
+  public StreamProcessEndResponse dataloadEnd(String applicationName, String databaseName, String streamId) throws ApiException {
+    ApiResponse<StreamProcessEndResponse> localVarResponse = dataloadEndWithHttpInfo(applicationName, databaseName, streamId);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for dataloadEnd
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data load ended successfully; includes status.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to end data load. The stream ID may be invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dataloadEndCall(String applicationName, String databaseName, String streamId, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dataload/{streamId}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "streamId" + "\\}", localVarApiClient.escapeString(streamId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * End Dataload
+   * &lt;p&gt;Ends streaming data load.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;StreamProcessEndResponse&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<StreamProcessEndResponse> dataloadEndWithHttpInfo(String applicationName, String databaseName, String streamId) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = dataloadEndRequestBuilder(applicationName, databaseName, streamId);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("dataloadEnd", localVarResponse);
         }
+        return new ApiResponse<StreamProcessEndResponse>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<StreamProcessEndResponse>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder dataloadEndRequestBuilder(String applicationName, String databaseName, String streamId) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling dataloadEnd");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling dataloadEnd");
+    }
+    // verify the required parameter 'streamId' is set
+    if (streamId == null) {
+      throw new ApiException(400, "Missing the required parameter 'streamId' when calling dataloadEnd");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call dataloadEndValidateBeforeCall(String applicationName, String databaseName, String streamId, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling dataloadEnd(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dataload/{streamId}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{streamId}", ApiClient.urlEncode(streamId.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Start Dataload
+   * &lt;p&gt;Starts streaming data load.&lt;/p&gt;
+   * @param applicationName Application name (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Data load options such as rule file name and delimiter.&lt;/p&gt; (optional)
+   * @return StreamProcessStartResponse
+   * @throws ApiException if fails to make API call
+   */
+  public StreamProcessStartResponse dataloadStart(String applicationName, String databaseName, DataLoadStartPayload body) throws ApiException {
+    ApiResponse<StreamProcessStartResponse> localVarResponse = dataloadStartWithHttpInfo(applicationName, databaseName, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Start Dataload
+   * &lt;p&gt;Starts streaming data load.&lt;/p&gt;
+   * @param applicationName Application name (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Data load options such as rule file name and delimiter.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;StreamProcessStartResponse&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<StreamProcessStartResponse> dataloadStartWithHttpInfo(String applicationName, String databaseName, DataLoadStartPayload body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = dataloadStartRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("dataloadStart", localVarResponse);
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling dataloadEnd(Async)");
+        return new ApiResponse<StreamProcessStartResponse>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<StreamProcessStartResponse>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder dataloadStartRequestBuilder(String applicationName, String databaseName, DataLoadStartPayload body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling dataloadStart");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling dataloadStart");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dataload"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Push Data
+   * &lt;p&gt;Pushes data for data load. Data can be pushed in chunks in CSV format by repeating this request multiple times.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;CSV data.&lt;/p&gt; (optional)
+   * @return StreamProcessStartResponse
+   * @throws ApiException if fails to make API call
+   */
+  public StreamProcessStartResponse dataloadStreamData(String applicationName, String databaseName, String streamId, String body) throws ApiException {
+    ApiResponse<StreamProcessStartResponse> localVarResponse = dataloadStreamDataWithHttpInfo(applicationName, databaseName, streamId, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Push Data
+   * &lt;p&gt;Pushes data for data load. Data can be pushed in chunks in CSV format by repeating this request multiple times.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;CSV data.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;StreamProcessStartResponse&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<StreamProcessStartResponse> dataloadStreamDataWithHttpInfo(String applicationName, String databaseName, String streamId, String body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = dataloadStreamDataRequestBuilder(applicationName, databaseName, streamId, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("dataloadStreamData", localVarResponse);
         }
-        
-        // verify the required parameter 'streamId' is set
-        if (streamId == null) {
-            throw new ApiException("Missing the required parameter 'streamId' when calling dataloadEnd(Async)");
-        }
-        
+        return new ApiResponse<StreamProcessStartResponse>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<StreamProcessStartResponse>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = dataloadEndCall(applicationName, databaseName, streamId, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder dataloadStreamDataRequestBuilder(String applicationName, String databaseName, String streamId, String body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling dataloadStreamData");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling dataloadStreamData");
+    }
+    // verify the required parameter 'streamId' is set
+    if (streamId == null) {
+      throw new ApiException(400, "Missing the required parameter 'streamId' when calling dataloadStreamData");
     }
 
-    /**
-     * End Dataload
-     * &lt;p&gt;Ends streaming data load.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @return StreamProcessEndResponse
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data load ended successfully; includes status.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to end data load. The stream ID may be invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public StreamProcessEndResponse dataloadEnd(String applicationName, String databaseName, String streamId) throws ApiException {
-        ApiResponse<StreamProcessEndResponse> localVarResp = dataloadEndWithHttpInfo(applicationName, databaseName, streamId);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dataload/{streamId}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{streamId}", ApiClient.urlEncode(streamId.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "text/plain");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofString(body));
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * End Dataload
-     * &lt;p&gt;Ends streaming data load.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;StreamProcessEndResponse&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data load ended successfully; includes status.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to end data load. The stream ID may be invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<StreamProcessEndResponse> dataloadEndWithHttpInfo(String applicationName, String databaseName, String streamId) throws ApiException {
-        okhttp3.Call localVarCall = dataloadEndValidateBeforeCall(applicationName, databaseName, streamId, null);
-        Type localVarReturnType = new TypeToken<StreamProcessEndResponse>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * End Dataload (asynchronously)
-     * &lt;p&gt;Ends streaming data load.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data load ended successfully; includes status.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to end data load. The stream ID may be invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dataloadEndAsync(String applicationName, String databaseName, String streamId, final ApiCallback<StreamProcessEndResponse> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = dataloadEndValidateBeforeCall(applicationName, databaseName, streamId, _callback);
-        Type localVarReturnType = new TypeToken<StreamProcessEndResponse>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for dataloadStart
-     * @param applicationName Application name (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Data load options such as rule file name and delimiter.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data load started successfully; includes unique stream id which can be passed to subsequent requests. If &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed, also includes links to push more data and end the data load.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dataloadStartCall(String applicationName, String databaseName, DataLoadStartPayload body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dataload"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call dataloadStartValidateBeforeCall(String applicationName, String databaseName, DataLoadStartPayload body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling dataloadStart(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling dataloadStart(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = dataloadStartCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Start Dataload
-     * &lt;p&gt;Starts streaming data load.&lt;/p&gt;
-     * @param applicationName Application name (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Data load options such as rule file name and delimiter.&lt;/p&gt; (optional)
-     * @return StreamProcessStartResponse
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data load started successfully; includes unique stream id which can be passed to subsequent requests. If &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed, also includes links to push more data and end the data load.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public StreamProcessStartResponse dataloadStart(String applicationName, String databaseName, DataLoadStartPayload body) throws ApiException {
-        ApiResponse<StreamProcessStartResponse> localVarResp = dataloadStartWithHttpInfo(applicationName, databaseName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Start Dataload
-     * &lt;p&gt;Starts streaming data load.&lt;/p&gt;
-     * @param applicationName Application name (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Data load options such as rule file name and delimiter.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;StreamProcessStartResponse&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data load started successfully; includes unique stream id which can be passed to subsequent requests. If &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed, also includes links to push more data and end the data load.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<StreamProcessStartResponse> dataloadStartWithHttpInfo(String applicationName, String databaseName, DataLoadStartPayload body) throws ApiException {
-        okhttp3.Call localVarCall = dataloadStartValidateBeforeCall(applicationName, databaseName, body, null);
-        Type localVarReturnType = new TypeToken<StreamProcessStartResponse>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Start Dataload (asynchronously)
-     * &lt;p&gt;Starts streaming data load.&lt;/p&gt;
-     * @param applicationName Application name (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Data load options such as rule file name and delimiter.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data load started successfully; includes unique stream id which can be passed to subsequent requests. If &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed, also includes links to push more data and end the data load.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dataloadStartAsync(String applicationName, String databaseName, DataLoadStartPayload body, final ApiCallback<StreamProcessStartResponse> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = dataloadStartValidateBeforeCall(applicationName, databaseName, body, _callback);
-        Type localVarReturnType = new TypeToken<StreamProcessStartResponse>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for dataloadStreamData
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;CSV data.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data pushed successfully; includes links to push more data and end data load if  &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to push data. The stream ID may be invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dataloadStreamDataCall(String applicationName, String databaseName, String streamId, String body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/dataload/{streamId}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "streamId" + "\\}", localVarApiClient.escapeString(streamId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "text/plain", "text/csv"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call dataloadStreamDataValidateBeforeCall(String applicationName, String databaseName, String streamId, String body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling dataloadStreamData(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling dataloadStreamData(Async)");
-        }
-        
-        // verify the required parameter 'streamId' is set
-        if (streamId == null) {
-            throw new ApiException("Missing the required parameter 'streamId' when calling dataloadStreamData(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = dataloadStreamDataCall(applicationName, databaseName, streamId, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Push Data
-     * &lt;p&gt;Pushes data for data load. Data can be pushed in chunks in CSV format by repeating this request multiple times.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;CSV data.&lt;/p&gt; (optional)
-     * @return StreamProcessStartResponse
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data pushed successfully; includes links to push more data and end data load if  &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to push data. The stream ID may be invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public StreamProcessStartResponse dataloadStreamData(String applicationName, String databaseName, String streamId, String body) throws ApiException {
-        ApiResponse<StreamProcessStartResponse> localVarResp = dataloadStreamDataWithHttpInfo(applicationName, databaseName, streamId, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Push Data
-     * &lt;p&gt;Pushes data for data load. Data can be pushed in chunks in CSV format by repeating this request multiple times.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;CSV data.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;StreamProcessStartResponse&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data pushed successfully; includes links to push more data and end data load if  &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to push data. The stream ID may be invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<StreamProcessStartResponse> dataloadStreamDataWithHttpInfo(String applicationName, String databaseName, String streamId, String body) throws ApiException {
-        okhttp3.Call localVarCall = dataloadStreamDataValidateBeforeCall(applicationName, databaseName, streamId, body, null);
-        Type localVarReturnType = new TypeToken<StreamProcessStartResponse>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Push Data (asynchronously)
-     * &lt;p&gt;Pushes data for data load. Data can be pushed in chunks in CSV format by repeating this request multiple times.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param streamId &lt;p&gt;Stream ID.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;CSV data.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data pushed successfully; includes links to push more data and end data load if  &lt;code&gt;links&#x3D;true&lt;/code&gt; parameter is passed.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to push data. The stream ID may be invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call dataloadStreamDataAsync(String applicationName, String databaseName, String streamId, String body, final ApiCallback<StreamProcessStartResponse> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = dataloadStreamDataValidateBeforeCall(applicationName, databaseName, streamId, body, _callback);
-        Type localVarReturnType = new TypeToken<StreamProcessStartResponse>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

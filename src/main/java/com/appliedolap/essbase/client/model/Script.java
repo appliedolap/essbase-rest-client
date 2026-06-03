@@ -13,250 +13,278 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.Link;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * Script
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  Script.JSON_PROPERTY_CONTENT,
+  Script.JSON_PROPERTY_LINKS,
+  Script.JSON_PROPERTY_MODIFIED_TIME,
+  Script.JSON_PROPERTY_SIZE_IN_BYTES,
+  Script.JSON_PROPERTY_LOCKED_BY,
+  Script.JSON_PROPERTY_LOCKED,
+  Script.JSON_PROPERTY_LOCKED_TIME,
+  Script.JSON_PROPERTY_NAME
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class Script {
-  public static final String SERIALIZED_NAME_CONTENT = "content";
-  @SerializedName(SERIALIZED_NAME_CONTENT)
+  public static final String JSON_PROPERTY_CONTENT = "content";
+  @jakarta.annotation.Nullable
   private String content;
 
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_MODIFIED_TIME = "modifiedTime";
-  @SerializedName(SERIALIZED_NAME_MODIFIED_TIME)
+  public static final String JSON_PROPERTY_MODIFIED_TIME = "modifiedTime";
+  @jakarta.annotation.Nullable
   private Long modifiedTime;
 
-  public static final String SERIALIZED_NAME_SIZE_IN_BYTES = "sizeInBytes";
-  @SerializedName(SERIALIZED_NAME_SIZE_IN_BYTES)
+  public static final String JSON_PROPERTY_SIZE_IN_BYTES = "sizeInBytes";
+  @jakarta.annotation.Nullable
   private Long sizeInBytes;
 
-  public static final String SERIALIZED_NAME_LOCKED_BY = "lockedBy";
-  @SerializedName(SERIALIZED_NAME_LOCKED_BY)
+  public static final String JSON_PROPERTY_LOCKED_BY = "lockedBy";
+  @jakarta.annotation.Nullable
   private String lockedBy;
 
-  public static final String SERIALIZED_NAME_LOCKED = "locked";
-  @SerializedName(SERIALIZED_NAME_LOCKED)
+  public static final String JSON_PROPERTY_LOCKED = "locked";
+  @jakarta.annotation.Nullable
   private Boolean locked;
 
-  public static final String SERIALIZED_NAME_LOCKED_TIME = "lockedTime";
-  @SerializedName(SERIALIZED_NAME_LOCKED_TIME)
+  public static final String JSON_PROPERTY_LOCKED_TIME = "lockedTime";
+  @jakarta.annotation.Nullable
   private Long lockedTime;
 
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
+  public Script() { 
+  }
 
-  public Script content(String content) {
-    
+  public Script content(@jakarta.annotation.Nullable String content) {
     this.content = content;
     return this;
   }
 
-   /**
+  /**
    * Get content
    * @return content
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CONTENT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getContent() {
     return content;
   }
 
 
-  public void setContent(String content) {
+  @JsonProperty(JSON_PROPERTY_CONTENT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setContent(@jakarta.annotation.Nullable String content) {
     this.content = content;
   }
 
 
-  public Script links(List<Link> links) {
-    
+  public Script links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public Script addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
-  public Script modifiedTime(Long modifiedTime) {
-    
+  public Script modifiedTime(@jakarta.annotation.Nullable Long modifiedTime) {
     this.modifiedTime = modifiedTime;
     return this;
   }
 
-   /**
+  /**
    * Get modifiedTime
    * @return modifiedTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MODIFIED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getModifiedTime() {
     return modifiedTime;
   }
 
 
-  public void setModifiedTime(Long modifiedTime) {
+  @JsonProperty(JSON_PROPERTY_MODIFIED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setModifiedTime(@jakarta.annotation.Nullable Long modifiedTime) {
     this.modifiedTime = modifiedTime;
   }
 
 
-  public Script sizeInBytes(Long sizeInBytes) {
-    
+  public Script sizeInBytes(@jakarta.annotation.Nullable Long sizeInBytes) {
     this.sizeInBytes = sizeInBytes;
     return this;
   }
 
-   /**
+  /**
    * Get sizeInBytes
    * @return sizeInBytes
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SIZE_IN_BYTES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getSizeInBytes() {
     return sizeInBytes;
   }
 
 
-  public void setSizeInBytes(Long sizeInBytes) {
+  @JsonProperty(JSON_PROPERTY_SIZE_IN_BYTES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSizeInBytes(@jakarta.annotation.Nullable Long sizeInBytes) {
     this.sizeInBytes = sizeInBytes;
   }
 
 
-  public Script lockedBy(String lockedBy) {
-    
+  public Script lockedBy(@jakarta.annotation.Nullable String lockedBy) {
     this.lockedBy = lockedBy;
     return this;
   }
 
-   /**
+  /**
    * Get lockedBy
    * @return lockedBy
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LOCKED_BY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getLockedBy() {
     return lockedBy;
   }
 
 
-  public void setLockedBy(String lockedBy) {
+  @JsonProperty(JSON_PROPERTY_LOCKED_BY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLockedBy(@jakarta.annotation.Nullable String lockedBy) {
     this.lockedBy = lockedBy;
   }
 
 
-  public Script locked(Boolean locked) {
-    
+  public Script locked(@jakarta.annotation.Nullable Boolean locked) {
     this.locked = locked;
     return this;
   }
 
-   /**
+  /**
    * Get locked
    * @return locked
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LOCKED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getLocked() {
     return locked;
   }
 
 
-  public void setLocked(Boolean locked) {
+  @JsonProperty(JSON_PROPERTY_LOCKED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLocked(@jakarta.annotation.Nullable Boolean locked) {
     this.locked = locked;
   }
 
 
-  public Script lockedTime(Long lockedTime) {
-    
+  public Script lockedTime(@jakarta.annotation.Nullable Long lockedTime) {
     this.lockedTime = lockedTime;
     return this;
   }
 
-   /**
+  /**
    * Get lockedTime
    * @return lockedTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LOCKED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getLockedTime() {
     return lockedTime;
   }
 
 
-  public void setLockedTime(Long lockedTime) {
+  @JsonProperty(JSON_PROPERTY_LOCKED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLockedTime(@jakarta.annotation.Nullable Long lockedTime) {
     this.lockedTime = lockedTime;
   }
 
 
-  public Script name(String name) {
-    
+  public Script name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
+  /**
+   * Return true if this Script object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -308,5 +336,84 @@ public class Script {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `content` to the URL query string
+    if (getContent() != null) {
+      joiner.add(String.format("%scontent%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getContent()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `modifiedTime` to the URL query string
+    if (getModifiedTime() != null) {
+      joiner.add(String.format("%smodifiedTime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getModifiedTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `sizeInBytes` to the URL query string
+    if (getSizeInBytes() != null) {
+      joiner.add(String.format("%ssizeInBytes%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSizeInBytes()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `lockedBy` to the URL query string
+    if (getLockedBy() != null) {
+      joiner.add(String.format("%slockedBy%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLockedBy()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `locked` to the URL query string
+    if (getLocked() != null) {
+      joiner.add(String.format("%slocked%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLocked()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `lockedTime` to the URL query string
+    if (getLockedTime() != null) {
+      joiner.add(String.format("%slockedTime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLockedTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

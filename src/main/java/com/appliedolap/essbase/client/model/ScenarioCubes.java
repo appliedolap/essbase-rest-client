@@ -13,168 +13,190 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ScenarioCubes
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ScenarioCubes.JSON_PROPERTY_APPLICATION,
+  ScenarioCubes.JSON_PROPERTY_DATABASES,
+  ScenarioCubes.JSON_PROPERTY_CREATE_SCENARIO,
+  ScenarioCubes.JSON_PROPERTY_PARTICIPATE_IN_SCENARIO,
+  ScenarioCubes.JSON_PROPERTY_DATABASE_ADMIN
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ScenarioCubes {
-  public static final String SERIALIZED_NAME_APPLICATION = "application";
-  @SerializedName(SERIALIZED_NAME_APPLICATION)
+  public static final String JSON_PROPERTY_APPLICATION = "application";
+  @jakarta.annotation.Nullable
   private String application;
 
-  public static final String SERIALIZED_NAME_DATABASES = "databases";
-  @SerializedName(SERIALIZED_NAME_DATABASES)
-  private List<String> databases = null;
+  public static final String JSON_PROPERTY_DATABASES = "databases";
+  @jakarta.annotation.Nullable
+  private List<String> databases = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_CREATE_SCENARIO = "createScenario";
-  @SerializedName(SERIALIZED_NAME_CREATE_SCENARIO)
+  public static final String JSON_PROPERTY_CREATE_SCENARIO = "createScenario";
+  @jakarta.annotation.Nullable
   private Boolean createScenario;
 
-  public static final String SERIALIZED_NAME_PARTICIPATE_IN_SCENARIO = "participateInScenario";
-  @SerializedName(SERIALIZED_NAME_PARTICIPATE_IN_SCENARIO)
+  public static final String JSON_PROPERTY_PARTICIPATE_IN_SCENARIO = "participateInScenario";
+  @jakarta.annotation.Nullable
   private Boolean participateInScenario;
 
-  public static final String SERIALIZED_NAME_DATABASE_ADMIN = "databaseAdmin";
-  @SerializedName(SERIALIZED_NAME_DATABASE_ADMIN)
+  public static final String JSON_PROPERTY_DATABASE_ADMIN = "databaseAdmin";
+  @jakarta.annotation.Nullable
   private Boolean databaseAdmin;
 
+  public ScenarioCubes() { 
+  }
 
-  public ScenarioCubes application(String application) {
-    
+  public ScenarioCubes application(@jakarta.annotation.Nullable String application) {
     this.application = application;
     return this;
   }
 
-   /**
+  /**
    * Get application
    * @return application
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getApplication() {
     return application;
   }
 
 
-  public void setApplication(String application) {
+  @JsonProperty(JSON_PROPERTY_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApplication(@jakarta.annotation.Nullable String application) {
     this.application = application;
   }
 
 
-  public ScenarioCubes databases(List<String> databases) {
-    
+  public ScenarioCubes databases(@jakarta.annotation.Nullable List<String> databases) {
     this.databases = databases;
     return this;
   }
 
   public ScenarioCubes addDatabasesItem(String databasesItem) {
     if (this.databases == null) {
-      this.databases = new ArrayList<String>();
+      this.databases = new ArrayList<>();
     }
     this.databases.add(databasesItem);
     return this;
   }
 
-   /**
+  /**
    * Get databases
    * @return databases
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATABASES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getDatabases() {
     return databases;
   }
 
 
-  public void setDatabases(List<String> databases) {
+  @JsonProperty(JSON_PROPERTY_DATABASES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatabases(@jakarta.annotation.Nullable List<String> databases) {
     this.databases = databases;
   }
 
 
-  public ScenarioCubes createScenario(Boolean createScenario) {
-    
+  public ScenarioCubes createScenario(@jakarta.annotation.Nullable Boolean createScenario) {
     this.createScenario = createScenario;
     return this;
   }
 
-   /**
+  /**
    * Get createScenario
    * @return createScenario
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CREATE_SCENARIO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getCreateScenario() {
     return createScenario;
   }
 
 
-  public void setCreateScenario(Boolean createScenario) {
+  @JsonProperty(JSON_PROPERTY_CREATE_SCENARIO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCreateScenario(@jakarta.annotation.Nullable Boolean createScenario) {
     this.createScenario = createScenario;
   }
 
 
-  public ScenarioCubes participateInScenario(Boolean participateInScenario) {
-    
+  public ScenarioCubes participateInScenario(@jakarta.annotation.Nullable Boolean participateInScenario) {
     this.participateInScenario = participateInScenario;
     return this;
   }
 
-   /**
+  /**
    * Get participateInScenario
    * @return participateInScenario
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PARTICIPATE_IN_SCENARIO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getParticipateInScenario() {
     return participateInScenario;
   }
 
 
-  public void setParticipateInScenario(Boolean participateInScenario) {
+  @JsonProperty(JSON_PROPERTY_PARTICIPATE_IN_SCENARIO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setParticipateInScenario(@jakarta.annotation.Nullable Boolean participateInScenario) {
     this.participateInScenario = participateInScenario;
   }
 
 
-  public ScenarioCubes databaseAdmin(Boolean databaseAdmin) {
-    
+  public ScenarioCubes databaseAdmin(@jakarta.annotation.Nullable Boolean databaseAdmin) {
     this.databaseAdmin = databaseAdmin;
     return this;
   }
 
-   /**
+  /**
    * Get databaseAdmin
    * @return databaseAdmin
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATABASE_ADMIN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getDatabaseAdmin() {
     return databaseAdmin;
   }
 
 
-  public void setDatabaseAdmin(Boolean databaseAdmin) {
+  @JsonProperty(JSON_PROPERTY_DATABASE_ADMIN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatabaseAdmin(@jakarta.annotation.Nullable Boolean databaseAdmin) {
     this.databaseAdmin = databaseAdmin;
   }
 
 
+  /**
+   * Return true if this ScenarioCubes object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -220,5 +242,68 @@ public class ScenarioCubes {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `application` to the URL query string
+    if (getApplication() != null) {
+      joiner.add(String.format("%sapplication%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getApplication()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `databases` to the URL query string
+    if (getDatabases() != null) {
+      for (int i = 0; i < getDatabases().size(); i++) {
+        joiner.add(String.format("%sdatabases%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getDatabases().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `createScenario` to the URL query string
+    if (getCreateScenario() != null) {
+      joiner.add(String.format("%screateScenario%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCreateScenario()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `participateInScenario` to the URL query string
+    if (getParticipateInScenario() != null) {
+      joiner.add(String.format("%sparticipateInScenario%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getParticipateInScenario()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `databaseAdmin` to the URL query string
+    if (getDatabaseAdmin() != null) {
+      joiner.add(String.format("%sdatabaseAdmin%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDatabaseAdmin()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

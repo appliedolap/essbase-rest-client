@@ -13,131 +13,151 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * PatchElement
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  PatchElement.JSON_PROPERTY_OP,
+  PatchElement.JSON_PROPERTY_PATH,
+  PatchElement.JSON_PROPERTY_VALUE,
+  PatchElement.JSON_PROPERTY_FROM
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class PatchElement {
-  public static final String SERIALIZED_NAME_OP = "op";
-  @SerializedName(SERIALIZED_NAME_OP)
+  public static final String JSON_PROPERTY_OP = "op";
+  @jakarta.annotation.Nullable
   private String op;
 
-  public static final String SERIALIZED_NAME_PATH = "path";
-  @SerializedName(SERIALIZED_NAME_PATH)
+  public static final String JSON_PROPERTY_PATH = "path";
+  @jakarta.annotation.Nullable
   private String path;
 
-  public static final String SERIALIZED_NAME_VALUE = "value";
-  @SerializedName(SERIALIZED_NAME_VALUE)
+  public static final String JSON_PROPERTY_VALUE = "value";
+  @jakarta.annotation.Nullable
   private Object value;
 
-  public static final String SERIALIZED_NAME_FROM = "from";
-  @SerializedName(SERIALIZED_NAME_FROM)
+  public static final String JSON_PROPERTY_FROM = "from";
+  @jakarta.annotation.Nullable
   private String from;
 
+  public PatchElement() { 
+  }
 
-  public PatchElement op(String op) {
-    
+  public PatchElement op(@jakarta.annotation.Nullable String op) {
     this.op = op;
     return this;
   }
 
-   /**
+  /**
    * Get op
    * @return op
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getOp() {
     return op;
   }
 
 
-  public void setOp(String op) {
+  @JsonProperty(JSON_PROPERTY_OP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOp(@jakarta.annotation.Nullable String op) {
     this.op = op;
   }
 
 
-  public PatchElement path(String path) {
-    
+  public PatchElement path(@jakarta.annotation.Nullable String path) {
     this.path = path;
     return this;
   }
 
-   /**
+  /**
    * Get path
    * @return path
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PATH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getPath() {
     return path;
   }
 
 
-  public void setPath(String path) {
+  @JsonProperty(JSON_PROPERTY_PATH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPath(@jakarta.annotation.Nullable String path) {
     this.path = path;
   }
 
 
-  public PatchElement value(Object value) {
-    
+  public PatchElement value(@jakarta.annotation.Nullable Object value) {
     this.value = value;
     return this;
   }
 
-   /**
+  /**
    * Get value
    * @return value
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Object getValue() {
     return value;
   }
 
 
-  public void setValue(Object value) {
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setValue(@jakarta.annotation.Nullable Object value) {
     this.value = value;
   }
 
 
-  public PatchElement from(String from) {
-    
+  public PatchElement from(@jakarta.annotation.Nullable String from) {
     this.from = from;
     return this;
   }
 
-   /**
+  /**
    * Get from
    * @return from
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FROM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getFrom() {
     return from;
   }
 
 
-  public void setFrom(String from) {
+  @JsonProperty(JSON_PROPERTY_FROM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFrom(@jakarta.annotation.Nullable String from) {
     this.from = from;
   }
 
 
+  /**
+   * Return true if this PatchElement object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -181,5 +201,59 @@ public class PatchElement {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `op` to the URL query string
+    if (getOp() != null) {
+      joiner.add(String.format("%sop%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getOp()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `path` to the URL query string
+    if (getPath() != null) {
+      joiner.add(String.format("%spath%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPath()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `value` to the URL query string
+    if (getValue() != null) {
+      joiner.add(String.format("%svalue%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getValue()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `from` to the URL query string
+    if (getFrom() != null) {
+      joiner.add(String.format("%sfrom%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFrom()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

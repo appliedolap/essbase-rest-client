@@ -13,77 +13,93 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * StartupSettings
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  StartupSettings.JSON_PROPERTY_ALLOW_USERS_TO_START_DATABASE,
+  StartupSettings.JSON_PROPERTY_START_DATABASE_WHEN_APPLICATION_STARTS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class StartupSettings {
-  public static final String SERIALIZED_NAME_ALLOW_USERS_TO_START_DATABASE = "allowUsersToStartDatabase";
-  @SerializedName(SERIALIZED_NAME_ALLOW_USERS_TO_START_DATABASE)
+  public static final String JSON_PROPERTY_ALLOW_USERS_TO_START_DATABASE = "allowUsersToStartDatabase";
+  @jakarta.annotation.Nullable
   private Boolean allowUsersToStartDatabase;
 
-  public static final String SERIALIZED_NAME_START_DATABASE_WHEN_APPLICATION_STARTS = "startDatabaseWhenApplicationStarts";
-  @SerializedName(SERIALIZED_NAME_START_DATABASE_WHEN_APPLICATION_STARTS)
+  public static final String JSON_PROPERTY_START_DATABASE_WHEN_APPLICATION_STARTS = "startDatabaseWhenApplicationStarts";
+  @jakarta.annotation.Nullable
   private Boolean startDatabaseWhenApplicationStarts;
 
+  public StartupSettings() { 
+  }
 
-  public StartupSettings allowUsersToStartDatabase(Boolean allowUsersToStartDatabase) {
-    
+  public StartupSettings allowUsersToStartDatabase(@jakarta.annotation.Nullable Boolean allowUsersToStartDatabase) {
     this.allowUsersToStartDatabase = allowUsersToStartDatabase;
     return this;
   }
 
-   /**
+  /**
    * Get allowUsersToStartDatabase
    * @return allowUsersToStartDatabase
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALLOW_USERS_TO_START_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAllowUsersToStartDatabase() {
     return allowUsersToStartDatabase;
   }
 
 
-  public void setAllowUsersToStartDatabase(Boolean allowUsersToStartDatabase) {
+  @JsonProperty(JSON_PROPERTY_ALLOW_USERS_TO_START_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAllowUsersToStartDatabase(@jakarta.annotation.Nullable Boolean allowUsersToStartDatabase) {
     this.allowUsersToStartDatabase = allowUsersToStartDatabase;
   }
 
 
-  public StartupSettings startDatabaseWhenApplicationStarts(Boolean startDatabaseWhenApplicationStarts) {
-    
+  public StartupSettings startDatabaseWhenApplicationStarts(@jakarta.annotation.Nullable Boolean startDatabaseWhenApplicationStarts) {
     this.startDatabaseWhenApplicationStarts = startDatabaseWhenApplicationStarts;
     return this;
   }
 
-   /**
+  /**
    * Get startDatabaseWhenApplicationStarts
    * @return startDatabaseWhenApplicationStarts
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_START_DATABASE_WHEN_APPLICATION_STARTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getStartDatabaseWhenApplicationStarts() {
     return startDatabaseWhenApplicationStarts;
   }
 
 
-  public void setStartDatabaseWhenApplicationStarts(Boolean startDatabaseWhenApplicationStarts) {
+  @JsonProperty(JSON_PROPERTY_START_DATABASE_WHEN_APPLICATION_STARTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStartDatabaseWhenApplicationStarts(@jakarta.annotation.Nullable Boolean startDatabaseWhenApplicationStarts) {
     this.startDatabaseWhenApplicationStarts = startDatabaseWhenApplicationStarts;
   }
 
 
+  /**
+   * Return true if this StartupSettings object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -123,5 +139,49 @@ public class StartupSettings {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `allowUsersToStartDatabase` to the URL query string
+    if (getAllowUsersToStartDatabase() != null) {
+      joiner.add(String.format("%sallowUsersToStartDatabase%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAllowUsersToStartDatabase()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `startDatabaseWhenApplicationStarts` to the URL query string
+    if (getStartDatabaseWhenApplicationStarts() != null) {
+      joiner.add(String.format("%sstartDatabaseWhenApplicationStarts%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStartDatabaseWhenApplicationStarts()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

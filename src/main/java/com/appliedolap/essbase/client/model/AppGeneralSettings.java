@@ -13,158 +13,180 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * AppGeneralSettings
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  AppGeneralSettings.JSON_PROPERTY_DESCRIPTION,
+  AppGeneralSettings.JSON_PROPERTY_LOG_LEVEL_AS_STRING,
+  AppGeneralSettings.JSON_PROPERTY_TIMEOUT_ON_DATA_BLOCK_LOCKS,
+  AppGeneralSettings.JSON_PROPERTY_MAX_ATTACHMENT_FILE_SIZE_IN_KBS,
+  AppGeneralSettings.JSON_PROPERTY_PENDING_CACHE_SIZE_LIMIT_IN_MBS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class AppGeneralSettings {
-  public static final String SERIALIZED_NAME_DESCRIPTION = "description";
-  @SerializedName(SERIALIZED_NAME_DESCRIPTION)
+  public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  @jakarta.annotation.Nullable
   private String description;
 
-  public static final String SERIALIZED_NAME_LOG_LEVEL_AS_STRING = "logLevelAsString";
-  @SerializedName(SERIALIZED_NAME_LOG_LEVEL_AS_STRING)
+  public static final String JSON_PROPERTY_LOG_LEVEL_AS_STRING = "logLevelAsString";
+  @jakarta.annotation.Nullable
   private String logLevelAsString;
 
-  public static final String SERIALIZED_NAME_TIMEOUT_ON_DATA_BLOCK_LOCKS = "timeoutOnDataBlockLocks";
-  @SerializedName(SERIALIZED_NAME_TIMEOUT_ON_DATA_BLOCK_LOCKS)
+  public static final String JSON_PROPERTY_TIMEOUT_ON_DATA_BLOCK_LOCKS = "timeoutOnDataBlockLocks";
+  @jakarta.annotation.Nullable
   private Long timeoutOnDataBlockLocks;
 
-  public static final String SERIALIZED_NAME_MAX_ATTACHMENT_FILE_SIZE_IN_KBS = "maxAttachmentFileSizeInKbs";
-  @SerializedName(SERIALIZED_NAME_MAX_ATTACHMENT_FILE_SIZE_IN_KBS)
+  public static final String JSON_PROPERTY_MAX_ATTACHMENT_FILE_SIZE_IN_KBS = "maxAttachmentFileSizeInKbs";
+  @jakarta.annotation.Nullable
   private Long maxAttachmentFileSizeInKbs;
 
-  public static final String SERIALIZED_NAME_PENDING_CACHE_SIZE_LIMIT_IN_MBS = "pendingCacheSizeLimitInMbs";
-  @SerializedName(SERIALIZED_NAME_PENDING_CACHE_SIZE_LIMIT_IN_MBS)
+  public static final String JSON_PROPERTY_PENDING_CACHE_SIZE_LIMIT_IN_MBS = "pendingCacheSizeLimitInMbs";
+  @jakarta.annotation.Nullable
   private Long pendingCacheSizeLimitInMbs;
 
+  public AppGeneralSettings() { 
+  }
 
-  public AppGeneralSettings description(String description) {
-    
+  public AppGeneralSettings description(@jakarta.annotation.Nullable String description) {
     this.description = description;
     return this;
   }
 
-   /**
+  /**
    * Get description
    * @return description
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDescription() {
     return description;
   }
 
 
-  public void setDescription(String description) {
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDescription(@jakarta.annotation.Nullable String description) {
     this.description = description;
   }
 
 
-  public AppGeneralSettings logLevelAsString(String logLevelAsString) {
-    
+  public AppGeneralSettings logLevelAsString(@jakarta.annotation.Nullable String logLevelAsString) {
     this.logLevelAsString = logLevelAsString;
     return this;
   }
 
-   /**
+  /**
    * Get logLevelAsString
    * @return logLevelAsString
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LOG_LEVEL_AS_STRING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getLogLevelAsString() {
     return logLevelAsString;
   }
 
 
-  public void setLogLevelAsString(String logLevelAsString) {
+  @JsonProperty(JSON_PROPERTY_LOG_LEVEL_AS_STRING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLogLevelAsString(@jakarta.annotation.Nullable String logLevelAsString) {
     this.logLevelAsString = logLevelAsString;
   }
 
 
-  public AppGeneralSettings timeoutOnDataBlockLocks(Long timeoutOnDataBlockLocks) {
-    
+  public AppGeneralSettings timeoutOnDataBlockLocks(@jakarta.annotation.Nullable Long timeoutOnDataBlockLocks) {
     this.timeoutOnDataBlockLocks = timeoutOnDataBlockLocks;
     return this;
   }
 
-   /**
+  /**
    * Get timeoutOnDataBlockLocks
    * @return timeoutOnDataBlockLocks
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TIMEOUT_ON_DATA_BLOCK_LOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getTimeoutOnDataBlockLocks() {
     return timeoutOnDataBlockLocks;
   }
 
 
-  public void setTimeoutOnDataBlockLocks(Long timeoutOnDataBlockLocks) {
+  @JsonProperty(JSON_PROPERTY_TIMEOUT_ON_DATA_BLOCK_LOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTimeoutOnDataBlockLocks(@jakarta.annotation.Nullable Long timeoutOnDataBlockLocks) {
     this.timeoutOnDataBlockLocks = timeoutOnDataBlockLocks;
   }
 
 
-  public AppGeneralSettings maxAttachmentFileSizeInKbs(Long maxAttachmentFileSizeInKbs) {
-    
+  public AppGeneralSettings maxAttachmentFileSizeInKbs(@jakarta.annotation.Nullable Long maxAttachmentFileSizeInKbs) {
     this.maxAttachmentFileSizeInKbs = maxAttachmentFileSizeInKbs;
     return this;
   }
 
-   /**
+  /**
    * Get maxAttachmentFileSizeInKbs
    * @return maxAttachmentFileSizeInKbs
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MAX_ATTACHMENT_FILE_SIZE_IN_KBS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getMaxAttachmentFileSizeInKbs() {
     return maxAttachmentFileSizeInKbs;
   }
 
 
-  public void setMaxAttachmentFileSizeInKbs(Long maxAttachmentFileSizeInKbs) {
+  @JsonProperty(JSON_PROPERTY_MAX_ATTACHMENT_FILE_SIZE_IN_KBS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMaxAttachmentFileSizeInKbs(@jakarta.annotation.Nullable Long maxAttachmentFileSizeInKbs) {
     this.maxAttachmentFileSizeInKbs = maxAttachmentFileSizeInKbs;
   }
 
 
-  public AppGeneralSettings pendingCacheSizeLimitInMbs(Long pendingCacheSizeLimitInMbs) {
-    
+  public AppGeneralSettings pendingCacheSizeLimitInMbs(@jakarta.annotation.Nullable Long pendingCacheSizeLimitInMbs) {
     this.pendingCacheSizeLimitInMbs = pendingCacheSizeLimitInMbs;
     return this;
   }
 
-   /**
+  /**
    * Get pendingCacheSizeLimitInMbs
    * @return pendingCacheSizeLimitInMbs
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PENDING_CACHE_SIZE_LIMIT_IN_MBS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getPendingCacheSizeLimitInMbs() {
     return pendingCacheSizeLimitInMbs;
   }
 
 
-  public void setPendingCacheSizeLimitInMbs(Long pendingCacheSizeLimitInMbs) {
+  @JsonProperty(JSON_PROPERTY_PENDING_CACHE_SIZE_LIMIT_IN_MBS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPendingCacheSizeLimitInMbs(@jakarta.annotation.Nullable Long pendingCacheSizeLimitInMbs) {
     this.pendingCacheSizeLimitInMbs = pendingCacheSizeLimitInMbs;
   }
 
 
+  /**
+   * Return true if this AppGeneralSettings object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -210,5 +232,64 @@ public class AppGeneralSettings {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `description` to the URL query string
+    if (getDescription() != null) {
+      joiner.add(String.format("%sdescription%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDescription()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `logLevelAsString` to the URL query string
+    if (getLogLevelAsString() != null) {
+      joiner.add(String.format("%slogLevelAsString%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLogLevelAsString()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `timeoutOnDataBlockLocks` to the URL query string
+    if (getTimeoutOnDataBlockLocks() != null) {
+      joiner.add(String.format("%stimeoutOnDataBlockLocks%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTimeoutOnDataBlockLocks()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `maxAttachmentFileSizeInKbs` to the URL query string
+    if (getMaxAttachmentFileSizeInKbs() != null) {
+      joiner.add(String.format("%smaxAttachmentFileSizeInKbs%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMaxAttachmentFileSizeInKbs()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `pendingCacheSizeLimitInMbs` to the URL query string
+    if (getPendingCacheSizeLimitInMbs() != null) {
+      joiner.add(String.format("%spendingCacheSizeLimitInMbs%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPendingCacheSizeLimitInMbs()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

@@ -13,43 +13,55 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.IndepDimension;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * AttributeOptions
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  AttributeOptions.JSON_PROPERTY_INDEP_DIMENSIONS,
+  AttributeOptions.JSON_PROPERTY_TYPE,
+  AttributeOptions.JSON_PROPERTY_BASE_DIMENSION,
+  AttributeOptions.JSON_PROPERTY_MODIFIED,
+  AttributeOptions.JSON_PROPERTY_SCAASSOCIATION_MODE,
+  AttributeOptions.JSON_PROPERTY_SCADIS_ASSOCIATION_MODE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class AttributeOptions {
-  public static final String SERIALIZED_NAME_INDEP_DIMENSIONS = "indepDimensions";
-  @SerializedName(SERIALIZED_NAME_INDEP_DIMENSIONS)
-  private List<IndepDimension> indepDimensions = null;
+  public static final String JSON_PROPERTY_INDEP_DIMENSIONS = "indepDimensions";
+  @jakarta.annotation.Nullable
+  private List<IndepDimension> indepDimensions = new ArrayList<>();
 
   /**
    * Gets or Sets type
    */
-  @JsonAdapter(TypeEnum.Adapter.class)
   public enum TypeEnum {
-    NUMERIC("NUMERIC"),
+    NUMERIC(String.valueOf("NUMERIC")),
     
-    BOOLEAN("BOOLEAN"),
+    BOOLEAN(String.valueOf("BOOLEAN")),
     
-    TEXT("TEXT"),
+    TEXT(String.valueOf("TEXT")),
     
-    DATE("DATE"),
+    DATE(String.valueOf("DATE")),
     
-    EXISTING("EXISTING");
+    EXISTING(String.valueOf("EXISTING"));
 
     private String value;
 
@@ -57,6 +69,7 @@ public class AttributeOptions {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -66,6 +79,7 @@ public class AttributeOptions {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static TypeEnum fromValue(String value) {
       for (TypeEnum b : TypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -74,41 +88,27 @@ public class AttributeOptions {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<TypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final TypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public TypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return TypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nullable
   private TypeEnum type;
 
-  public static final String SERIALIZED_NAME_BASE_DIMENSION = "baseDimension";
-  @SerializedName(SERIALIZED_NAME_BASE_DIMENSION)
+  public static final String JSON_PROPERTY_BASE_DIMENSION = "baseDimension";
+  @jakarta.annotation.Nullable
   private String baseDimension;
 
-  public static final String SERIALIZED_NAME_MODIFIED = "modified";
-  @SerializedName(SERIALIZED_NAME_MODIFIED)
+  public static final String JSON_PROPERTY_MODIFIED = "modified";
+  @jakarta.annotation.Nullable
   private Boolean modified;
 
   /**
    * Gets or Sets scaassociationMode
    */
-  @JsonAdapter(ScaassociationModeEnum.Adapter.class)
   public enum ScaassociationModeEnum {
-    NOOVERWRITE("NOOVERWRITE"),
+    NOOVERWRITE(String.valueOf("NOOVERWRITE")),
     
-    OVERWRITE("OVERWRITE");
+    OVERWRITE(String.valueOf("OVERWRITE"));
 
     private String value;
 
@@ -116,6 +116,7 @@ public class AttributeOptions {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -125,6 +126,7 @@ public class AttributeOptions {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static ScaassociationModeEnum fromValue(String value) {
       for (ScaassociationModeEnum b : ScaassociationModeEnum.values()) {
         if (b.value.equals(value)) {
@@ -133,35 +135,21 @@ public class AttributeOptions {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<ScaassociationModeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final ScaassociationModeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public ScaassociationModeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return ScaassociationModeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_SCAASSOCIATION_MODE = "scaassociationMode";
-  @SerializedName(SERIALIZED_NAME_SCAASSOCIATION_MODE)
+  public static final String JSON_PROPERTY_SCAASSOCIATION_MODE = "scaassociationMode";
+  @jakarta.annotation.Nullable
   private ScaassociationModeEnum scaassociationMode;
 
   /**
    * Gets or Sets scadisAssociationMode
    */
-  @JsonAdapter(ScadisAssociationModeEnum.Adapter.class)
   public enum ScadisAssociationModeEnum {
-    NOOVERWRITE("NOOVERWRITE"),
+    NOOVERWRITE(String.valueOf("NOOVERWRITE")),
     
-    OVERWRITE("OVERWRITE"),
+    OVERWRITE(String.valueOf("OVERWRITE")),
     
-    EXTEND("EXTEND");
+    EXTEND(String.valueOf("EXTEND"));
 
     private String value;
 
@@ -169,6 +157,7 @@ public class AttributeOptions {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -178,6 +167,7 @@ public class AttributeOptions {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static ScadisAssociationModeEnum fromValue(String value) {
       for (ScadisAssociationModeEnum b : ScadisAssociationModeEnum.values()) {
         if (b.value.equals(value)) {
@@ -186,172 +176,170 @@ public class AttributeOptions {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<ScadisAssociationModeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final ScadisAssociationModeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public ScadisAssociationModeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return ScadisAssociationModeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_SCADIS_ASSOCIATION_MODE = "scadisAssociationMode";
-  @SerializedName(SERIALIZED_NAME_SCADIS_ASSOCIATION_MODE)
+  public static final String JSON_PROPERTY_SCADIS_ASSOCIATION_MODE = "scadisAssociationMode";
+  @jakarta.annotation.Nullable
   private ScadisAssociationModeEnum scadisAssociationMode;
 
+  public AttributeOptions() { 
+  }
 
-  public AttributeOptions indepDimensions(List<IndepDimension> indepDimensions) {
-    
+  public AttributeOptions indepDimensions(@jakarta.annotation.Nullable List<IndepDimension> indepDimensions) {
     this.indepDimensions = indepDimensions;
     return this;
   }
 
   public AttributeOptions addIndepDimensionsItem(IndepDimension indepDimensionsItem) {
     if (this.indepDimensions == null) {
-      this.indepDimensions = new ArrayList<IndepDimension>();
+      this.indepDimensions = new ArrayList<>();
     }
     this.indepDimensions.add(indepDimensionsItem);
     return this;
   }
 
-   /**
+  /**
    * Get indepDimensions
    * @return indepDimensions
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INDEP_DIMENSIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<IndepDimension> getIndepDimensions() {
     return indepDimensions;
   }
 
 
-  public void setIndepDimensions(List<IndepDimension> indepDimensions) {
+  @JsonProperty(JSON_PROPERTY_INDEP_DIMENSIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIndepDimensions(@jakarta.annotation.Nullable List<IndepDimension> indepDimensions) {
     this.indepDimensions = indepDimensions;
   }
 
 
-  public AttributeOptions type(TypeEnum type) {
-    
+  public AttributeOptions type(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public TypeEnum getType() {
     return type;
   }
 
 
-  public void setType(TypeEnum type) {
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setType(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
   }
 
 
-  public AttributeOptions baseDimension(String baseDimension) {
-    
+  public AttributeOptions baseDimension(@jakarta.annotation.Nullable String baseDimension) {
     this.baseDimension = baseDimension;
     return this;
   }
 
-   /**
+  /**
    * Get baseDimension
    * @return baseDimension
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BASE_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getBaseDimension() {
     return baseDimension;
   }
 
 
-  public void setBaseDimension(String baseDimension) {
+  @JsonProperty(JSON_PROPERTY_BASE_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBaseDimension(@jakarta.annotation.Nullable String baseDimension) {
     this.baseDimension = baseDimension;
   }
 
 
-  public AttributeOptions modified(Boolean modified) {
-    
+  public AttributeOptions modified(@jakarta.annotation.Nullable Boolean modified) {
     this.modified = modified;
     return this;
   }
 
-   /**
+  /**
    * Get modified
    * @return modified
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MODIFIED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getModified() {
     return modified;
   }
 
 
-  public void setModified(Boolean modified) {
+  @JsonProperty(JSON_PROPERTY_MODIFIED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setModified(@jakarta.annotation.Nullable Boolean modified) {
     this.modified = modified;
   }
 
 
-  public AttributeOptions scaassociationMode(ScaassociationModeEnum scaassociationMode) {
-    
+  public AttributeOptions scaassociationMode(@jakarta.annotation.Nullable ScaassociationModeEnum scaassociationMode) {
     this.scaassociationMode = scaassociationMode;
     return this;
   }
 
-   /**
+  /**
    * Get scaassociationMode
    * @return scaassociationMode
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SCAASSOCIATION_MODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public ScaassociationModeEnum getScaassociationMode() {
     return scaassociationMode;
   }
 
 
-  public void setScaassociationMode(ScaassociationModeEnum scaassociationMode) {
+  @JsonProperty(JSON_PROPERTY_SCAASSOCIATION_MODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setScaassociationMode(@jakarta.annotation.Nullable ScaassociationModeEnum scaassociationMode) {
     this.scaassociationMode = scaassociationMode;
   }
 
 
-  public AttributeOptions scadisAssociationMode(ScadisAssociationModeEnum scadisAssociationMode) {
-    
+  public AttributeOptions scadisAssociationMode(@jakarta.annotation.Nullable ScadisAssociationModeEnum scadisAssociationMode) {
     this.scadisAssociationMode = scadisAssociationMode;
     return this;
   }
 
-   /**
+  /**
    * Get scadisAssociationMode
    * @return scadisAssociationMode
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SCADIS_ASSOCIATION_MODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public ScadisAssociationModeEnum getScadisAssociationMode() {
     return scadisAssociationMode;
   }
 
 
-  public void setScadisAssociationMode(ScadisAssociationModeEnum scadisAssociationMode) {
+  @JsonProperty(JSON_PROPERTY_SCADIS_ASSOCIATION_MODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setScadisAssociationMode(@jakarta.annotation.Nullable ScadisAssociationModeEnum scadisAssociationMode) {
     this.scadisAssociationMode = scadisAssociationMode;
   }
 
 
+  /**
+   * Return true if this AttributeOptions object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -399,5 +387,74 @@ public class AttributeOptions {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `indepDimensions` to the URL query string
+    if (getIndepDimensions() != null) {
+      for (int i = 0; i < getIndepDimensions().size(); i++) {
+        if (getIndepDimensions().get(i) != null) {
+          joiner.add(getIndepDimensions().get(i).toUrlQueryString(String.format("%sindepDimensions%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `baseDimension` to the URL query string
+    if (getBaseDimension() != null) {
+      joiner.add(String.format("%sbaseDimension%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getBaseDimension()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `modified` to the URL query string
+    if (getModified() != null) {
+      joiner.add(String.format("%smodified%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getModified()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `scaassociationMode` to the URL query string
+    if (getScaassociationMode() != null) {
+      joiner.add(String.format("%sscaassociationMode%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getScaassociationMode()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `scadisAssociationMode` to the URL query string
+    if (getScadisAssociationMode() != null) {
+      joiner.add(String.format("%sscadisAssociationMode%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getScadisAssociationMode()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

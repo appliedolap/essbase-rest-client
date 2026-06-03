@@ -13,169 +13,191 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.Link;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * LayoutMetadata
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  LayoutMetadata.JSON_PROPERTY_NAME,
+  LayoutMetadata.JSON_PROPERTY_USER,
+  LayoutMetadata.JSON_PROPERTY_USER_DEFAULT,
+  LayoutMetadata.JSON_PROPERTY_DB_DEFAULT,
+  LayoutMetadata.JSON_PROPERTY_LINKS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class LayoutMetadata {
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
-  public static final String SERIALIZED_NAME_USER = "user";
-  @SerializedName(SERIALIZED_NAME_USER)
+  public static final String JSON_PROPERTY_USER = "user";
+  @jakarta.annotation.Nullable
   private String user;
 
-  public static final String SERIALIZED_NAME_USER_DEFAULT = "userDefault";
-  @SerializedName(SERIALIZED_NAME_USER_DEFAULT)
+  public static final String JSON_PROPERTY_USER_DEFAULT = "userDefault";
+  @jakarta.annotation.Nullable
   private Boolean userDefault;
 
-  public static final String SERIALIZED_NAME_DB_DEFAULT = "dbDefault";
-  @SerializedName(SERIALIZED_NAME_DB_DEFAULT)
+  public static final String JSON_PROPERTY_DB_DEFAULT = "dbDefault";
+  @jakarta.annotation.Nullable
   private Boolean dbDefault;
 
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
+  public LayoutMetadata() { 
+  }
 
-  public LayoutMetadata name(String name) {
-    
+  public LayoutMetadata name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
-  public LayoutMetadata user(String user) {
-    
+  public LayoutMetadata user(@jakarta.annotation.Nullable String user) {
     this.user = user;
     return this;
   }
 
-   /**
+  /**
    * Get user
    * @return user
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getUser() {
     return user;
   }
 
 
-  public void setUser(String user) {
+  @JsonProperty(JSON_PROPERTY_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUser(@jakarta.annotation.Nullable String user) {
     this.user = user;
   }
 
 
-  public LayoutMetadata userDefault(Boolean userDefault) {
-    
+  public LayoutMetadata userDefault(@jakarta.annotation.Nullable Boolean userDefault) {
     this.userDefault = userDefault;
     return this;
   }
 
-   /**
+  /**
    * Get userDefault
    * @return userDefault
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER_DEFAULT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getUserDefault() {
     return userDefault;
   }
 
 
-  public void setUserDefault(Boolean userDefault) {
+  @JsonProperty(JSON_PROPERTY_USER_DEFAULT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUserDefault(@jakarta.annotation.Nullable Boolean userDefault) {
     this.userDefault = userDefault;
   }
 
 
-  public LayoutMetadata dbDefault(Boolean dbDefault) {
-    
+  public LayoutMetadata dbDefault(@jakarta.annotation.Nullable Boolean dbDefault) {
     this.dbDefault = dbDefault;
     return this;
   }
 
-   /**
+  /**
    * Get dbDefault
    * @return dbDefault
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DB_DEFAULT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getDbDefault() {
     return dbDefault;
   }
 
 
-  public void setDbDefault(Boolean dbDefault) {
+  @JsonProperty(JSON_PROPERTY_DB_DEFAULT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDbDefault(@jakarta.annotation.Nullable Boolean dbDefault) {
     this.dbDefault = dbDefault;
   }
 
 
-  public LayoutMetadata links(List<Link> links) {
-    
+  public LayoutMetadata links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public LayoutMetadata addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
+  /**
+   * Return true if this LayoutMetadata object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -221,5 +243,69 @@ public class LayoutMetadata {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `user` to the URL query string
+    if (getUser() != null) {
+      joiner.add(String.format("%suser%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUser()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `userDefault` to the URL query string
+    if (getUserDefault() != null) {
+      joiner.add(String.format("%suserDefault%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUserDefault()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dbDefault` to the URL query string
+    if (getDbDefault() != null) {
+      joiner.add(String.format("%sdbDefault%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDbDefault()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

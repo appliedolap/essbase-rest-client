@@ -13,42 +13,50 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * Transform
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  Transform.JSON_PROPERTY_NODES,
+  Transform.JSON_PROPERTY_TYPE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class Transform {
-  public static final String SERIALIZED_NAME_NODES = "nodes";
-  @SerializedName(SERIALIZED_NAME_NODES)
-  private List<Transform> nodes = null;
+  public static final String JSON_PROPERTY_NODES = "nodes";
+  @jakarta.annotation.Nullable
+  private List<Transform> nodes = new ArrayList<>();
 
   /**
    * Gets or Sets type
    */
-  @JsonAdapter(TypeEnum.Adapter.class)
   public enum TypeEnum {
-    COLUMN("COLUMN"),
+    COLUMN(String.valueOf("COLUMN")),
     
-    SUBSTR("SUBSTR"),
+    SUBSTR(String.valueOf("SUBSTR")),
     
-    CONCAT("CONCAT"),
+    CONCAT(String.valueOf("CONCAT")),
     
-    STATICSTR("STATICSTR"),
+    STATICSTR(String.valueOf("STATICSTR")),
     
-    IGNORE("IGNORE");
+    IGNORE(String.valueOf("IGNORE"));
 
     private String value;
 
@@ -56,6 +64,7 @@ public class Transform {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -65,6 +74,7 @@ public class Transform {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static TypeEnum fromValue(String value) {
       for (TypeEnum b : TypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -73,80 +83,74 @@ public class Transform {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<TypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final TypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public TypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return TypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nullable
   private TypeEnum type;
 
+  public Transform() { 
+  }
 
-  public Transform nodes(List<Transform> nodes) {
-    
+  public Transform nodes(@jakarta.annotation.Nullable List<Transform> nodes) {
     this.nodes = nodes;
     return this;
   }
 
   public Transform addNodesItem(Transform nodesItem) {
     if (this.nodes == null) {
-      this.nodes = new ArrayList<Transform>();
+      this.nodes = new ArrayList<>();
     }
     this.nodes.add(nodesItem);
     return this;
   }
 
-   /**
+  /**
    * Get nodes
    * @return nodes
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NODES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Transform> getNodes() {
     return nodes;
   }
 
 
-  public void setNodes(List<Transform> nodes) {
+  @JsonProperty(JSON_PROPERTY_NODES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNodes(@jakarta.annotation.Nullable List<Transform> nodes) {
     this.nodes = nodes;
   }
 
 
-  public Transform type(TypeEnum type) {
-    
+  public Transform type(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public TypeEnum getType() {
     return type;
   }
 
 
-  public void setType(TypeEnum type) {
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setType(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
   }
 
 
+  /**
+   * Return true if this Transform object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -186,5 +190,54 @@ public class Transform {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `nodes` to the URL query string
+    if (getNodes() != null) {
+      for (int i = 0; i < getNodes().size(); i++) {
+        if (getNodes().get(i) != null) {
+          joiner.add(getNodes().get(i).toUrlQueryString(String.format("%snodes%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

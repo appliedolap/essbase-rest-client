@@ -10,827 +10,560 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.ListLinkResponseObject;
 import com.appliedolap.essbase.client.model.ServerConfiguration;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class EmailApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public EmailApi() {
-        this(Configuration.getDefaultApiClient());
+  public EmailApi() {
+    this(new ApiClient());
+  }
+
+  public EmailApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public EmailApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Add IMAP Configuration
+   * &lt;p&gt;Configure IMAP e-mail server information. IMAP is the protocol used for receiving e-mails related to scenario management workflow and approval.&lt;/p&gt;
+   * @param body &lt;p&gt;IMAP server configuration details. Provide the host name, port, user e-mail address, and encoded password.&lt;/p&gt; (optional)
+   * @return ListLinkResponseObject
+   * @throws ApiException if fails to make API call
+   */
+  public ListLinkResponseObject emailAddIMAPDetails(ServerConfiguration body) throws ApiException {
+    ApiResponse<ListLinkResponseObject> localVarResponse = emailAddIMAPDetailsWithHttpInfo(body);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for emailAddIMAPDetails
-     * @param body &lt;p&gt;IMAP server configuration details. Provide the host name, port, user e-mail address, and encoded password.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call emailAddIMAPDetailsCall(ServerConfiguration body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/email/imap";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Add IMAP Configuration
+   * &lt;p&gt;Configure IMAP e-mail server information. IMAP is the protocol used for receiving e-mails related to scenario management workflow and approval.&lt;/p&gt;
+   * @param body &lt;p&gt;IMAP server configuration details. Provide the host name, port, user e-mail address, and encoded password.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;ListLinkResponseObject&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListLinkResponseObject> emailAddIMAPDetailsWithHttpInfo(ServerConfiguration body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = emailAddIMAPDetailsRequestBuilder(body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("emailAddIMAPDetails", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        return new ApiResponse<ListLinkResponseObject>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ListLinkResponseObject>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call emailAddIMAPDetailsValidateBeforeCall(ServerConfiguration body, final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = emailAddIMAPDetailsCall(body, _callback);
-        return localVarCall;
-
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
     }
+  }
 
-    /**
-     * Add IMAP Configuration
-     * &lt;p&gt;Configure IMAP e-mail server information. IMAP is the protocol used for receiving e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @param body &lt;p&gt;IMAP server configuration details. Provide the host name, port, user e-mail address, and encoded password.&lt;/p&gt; (optional)
-     * @return ListLinkResponseObject
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ListLinkResponseObject emailAddIMAPDetails(ServerConfiguration body) throws ApiException {
-        ApiResponse<ListLinkResponseObject> localVarResp = emailAddIMAPDetailsWithHttpInfo(body);
-        return localVarResp.getData();
+  private HttpRequest.Builder emailAddIMAPDetailsRequestBuilder(ServerConfiguration body) throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/email/imap";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Add IMAP Configuration
-     * &lt;p&gt;Configure IMAP e-mail server information. IMAP is the protocol used for receiving e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @param body &lt;p&gt;IMAP server configuration details. Provide the host name, port, user e-mail address, and encoded password.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;ListLinkResponseObject&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ListLinkResponseObject> emailAddIMAPDetailsWithHttpInfo(ServerConfiguration body) throws ApiException {
-        okhttp3.Call localVarCall = emailAddIMAPDetailsValidateBeforeCall(body, null);
-        Type localVarReturnType = new TypeToken<ListLinkResponseObject>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Add IMAP Configuration (asynchronously)
-     * &lt;p&gt;Configure IMAP e-mail server information. IMAP is the protocol used for receiving e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @param body &lt;p&gt;IMAP server configuration details. Provide the host name, port, user e-mail address, and encoded password.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call emailAddIMAPDetailsAsync(ServerConfiguration body, final ApiCallback<ListLinkResponseObject> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = emailAddIMAPDetailsValidateBeforeCall(body, _callback);
-        Type localVarReturnType = new TypeToken<ListLinkResponseObject>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for emailAddSMTPDetails
-     * @param body &lt;p&gt;SMTP server configuration details. Provide the host name, port, user e-mail address, and encoded password.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call emailAddSMTPDetailsCall(ServerConfiguration body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/email/smtp";
+  /**
+   * Add SMTP Configuration
+   * &lt;p&gt;Configure SMTP e-mail server information. SMTP is the protocol Essbase uses for sending e-mails related to scenario management workflow and approval.&lt;/p&gt;
+   * @param body &lt;p&gt;SMTP server configuration details. Provide the host name, port, user e-mail address, and encoded password.&lt;/p&gt; (optional)
+   * @return ListLinkResponseObject
+   * @throws ApiException if fails to make API call
+   */
+  public ListLinkResponseObject emailAddSMTPDetails(ServerConfiguration body) throws ApiException {
+    ApiResponse<ListLinkResponseObject> localVarResponse = emailAddSMTPDetailsWithHttpInfo(body);
+    return localVarResponse.getData();
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Add SMTP Configuration
+   * &lt;p&gt;Configure SMTP e-mail server information. SMTP is the protocol Essbase uses for sending e-mails related to scenario management workflow and approval.&lt;/p&gt;
+   * @param body &lt;p&gt;SMTP server configuration details. Provide the host name, port, user e-mail address, and encoded password.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;ListLinkResponseObject&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListLinkResponseObject> emailAddSMTPDetailsWithHttpInfo(ServerConfiguration body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = emailAddSMTPDetailsRequestBuilder(body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("emailAddSMTPDetails", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        return new ApiResponse<ListLinkResponseObject>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ListLinkResponseObject>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call emailAddSMTPDetailsValidateBeforeCall(ServerConfiguration body, final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = emailAddSMTPDetailsCall(body, _callback);
-        return localVarCall;
-
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
     }
+  }
 
-    /**
-     * Add SMTP Configuration
-     * &lt;p&gt;Configure SMTP e-mail server information. SMTP is the protocol Essbase uses for sending e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @param body &lt;p&gt;SMTP server configuration details. Provide the host name, port, user e-mail address, and encoded password.&lt;/p&gt; (optional)
-     * @return ListLinkResponseObject
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ListLinkResponseObject emailAddSMTPDetails(ServerConfiguration body) throws ApiException {
-        ApiResponse<ListLinkResponseObject> localVarResp = emailAddSMTPDetailsWithHttpInfo(body);
-        return localVarResp.getData();
+  private HttpRequest.Builder emailAddSMTPDetailsRequestBuilder(ServerConfiguration body) throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/email/smtp";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Add SMTP Configuration
-     * &lt;p&gt;Configure SMTP e-mail server information. SMTP is the protocol Essbase uses for sending e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @param body &lt;p&gt;SMTP server configuration details. Provide the host name, port, user e-mail address, and encoded password.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;ListLinkResponseObject&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ListLinkResponseObject> emailAddSMTPDetailsWithHttpInfo(ServerConfiguration body) throws ApiException {
-        okhttp3.Call localVarCall = emailAddSMTPDetailsValidateBeforeCall(body, null);
-        Type localVarReturnType = new TypeToken<ListLinkResponseObject>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Add SMTP Configuration (asynchronously)
-     * &lt;p&gt;Configure SMTP e-mail server information. SMTP is the protocol Essbase uses for sending e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @param body &lt;p&gt;SMTP server configuration details. Provide the host name, port, user e-mail address, and encoded password.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call emailAddSMTPDetailsAsync(ServerConfiguration body, final ApiCallback<ListLinkResponseObject> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = emailAddSMTPDetailsValidateBeforeCall(body, _callback);
-        Type localVarReturnType = new TypeToken<ListLinkResponseObject>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for emailDeleteIMAPDetails
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call emailDeleteIMAPDetailsCall(final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/email/imap";
+  /**
+   * Delete IMAP Configuration
+   * &lt;p&gt;Deletes the IMAP server configuration details. IMAP is the protocol used for receiving e-mails related to scenario management workflow and approval.&lt;/p&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public void emailDeleteIMAPDetails() throws ApiException {
+    emailDeleteIMAPDetailsWithHttpInfo();
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Delete IMAP Configuration
+   * &lt;p&gt;Deletes the IMAP server configuration details. IMAP is the protocol used for receiving e-mails related to scenario management workflow and approval.&lt;/p&gt;
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> emailDeleteIMAPDetailsWithHttpInfo() throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = emailDeleteIMAPDetailsRequestBuilder();
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("emailDeleteIMAPDetails", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call emailDeleteIMAPDetailsValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = emailDeleteIMAPDetailsCall(_callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Delete IMAP Configuration
-     * &lt;p&gt;Deletes the IMAP server configuration details. IMAP is the protocol used for receiving e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void emailDeleteIMAPDetails() throws ApiException {
-        emailDeleteIMAPDetailsWithHttpInfo();
-    }
-
-    /**
-     * Delete IMAP Configuration
-     * &lt;p&gt;Deletes the IMAP server configuration details. IMAP is the protocol used for receiving e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> emailDeleteIMAPDetailsWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = emailDeleteIMAPDetailsValidateBeforeCall(null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Delete IMAP Configuration (asynchronously)
-     * &lt;p&gt;Deletes the IMAP server configuration details. IMAP is the protocol used for receiving e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call emailDeleteIMAPDetailsAsync(final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = emailDeleteIMAPDetailsValidateBeforeCall(_callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for emailDeleteSMTPDetails
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call emailDeleteSMTPDetailsCall(final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/email/smtp";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call emailDeleteSMTPDetailsValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = emailDeleteSMTPDetailsCall(_callback);
-        return localVarCall;
-
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
     }
+  }
 
-    /**
-     * Delete SMTP Configuration
-     * &lt;p&gt;Deletes the SMTP server configuration details. SMTP is the protocol Essbase uses to send e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void emailDeleteSMTPDetails() throws ApiException {
-        emailDeleteSMTPDetailsWithHttpInfo();
+  private HttpRequest.Builder emailDeleteIMAPDetailsRequestBuilder() throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/email/imap";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Delete SMTP Configuration
-     * &lt;p&gt;Deletes the SMTP server configuration details. SMTP is the protocol Essbase uses to send e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> emailDeleteSMTPDetailsWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = emailDeleteSMTPDetailsValidateBeforeCall(null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Delete SMTP Configuration (asynchronously)
-     * &lt;p&gt;Deletes the SMTP server configuration details. SMTP is the protocol Essbase uses to send e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call emailDeleteSMTPDetailsAsync(final ApiCallback<Void> _callback) throws ApiException {
+  /**
+   * Delete SMTP Configuration
+   * &lt;p&gt;Deletes the SMTP server configuration details. SMTP is the protocol Essbase uses to send e-mails related to scenario management workflow and approval.&lt;/p&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public void emailDeleteSMTPDetails() throws ApiException {
+    emailDeleteSMTPDetailsWithHttpInfo();
+  }
 
-        okhttp3.Call localVarCall = emailDeleteSMTPDetailsValidateBeforeCall(_callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for emailGetEmailLinks
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call emailGetEmailLinksCall(final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/email";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Delete SMTP Configuration
+   * &lt;p&gt;Deletes the SMTP server configuration details. SMTP is the protocol Essbase uses to send e-mails related to scenario management workflow and approval.&lt;/p&gt;
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> emailDeleteSMTPDetailsWithHttpInfo() throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = emailDeleteSMTPDetailsRequestBuilder();
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("emailDeleteSMTPDetails", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call emailGetEmailLinksValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = emailGetEmailLinksCall(_callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get E-mail Configuration
-     * &lt;p&gt;Returns a URL to access the saved SMTP and IMAP server details. SMTP is the protocol Essbase uses for sending e-mails related to scenario management. IMAP is the protocol for receiving e-mails.&lt;/p&gt;
-     * @return ListLinkResponseObject
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ListLinkResponseObject emailGetEmailLinks() throws ApiException {
-        ApiResponse<ListLinkResponseObject> localVarResp = emailGetEmailLinksWithHttpInfo();
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get E-mail Configuration
-     * &lt;p&gt;Returns a URL to access the saved SMTP and IMAP server details. SMTP is the protocol Essbase uses for sending e-mails related to scenario management. IMAP is the protocol for receiving e-mails.&lt;/p&gt;
-     * @return ApiResponse&lt;ListLinkResponseObject&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ListLinkResponseObject> emailGetEmailLinksWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = emailGetEmailLinksValidateBeforeCall(null);
-        Type localVarReturnType = new TypeToken<ListLinkResponseObject>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get E-mail Configuration (asynchronously)
-     * &lt;p&gt;Returns a URL to access the saved SMTP and IMAP server details. SMTP is the protocol Essbase uses for sending e-mails related to scenario management. IMAP is the protocol for receiving e-mails.&lt;/p&gt;
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call emailGetEmailLinksAsync(final ApiCallback<ListLinkResponseObject> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = emailGetEmailLinksValidateBeforeCall(_callback);
-        Type localVarReturnType = new TypeToken<ListLinkResponseObject>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for emailGetIMAPServerDetail
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration is not present.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call emailGetIMAPServerDetailCall(final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/email/imap";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call emailGetIMAPServerDetailValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = emailGetIMAPServerDetailCall(_callback);
-        return localVarCall;
-
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
     }
+  }
 
-    /**
-     * Get IMAP Configuration
-     * &lt;p&gt;Returns IMAP server configuration details. IMAP is the protocol used for receiving e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @return ServerConfiguration
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration is not present.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ServerConfiguration emailGetIMAPServerDetail() throws ApiException {
-        ApiResponse<ServerConfiguration> localVarResp = emailGetIMAPServerDetailWithHttpInfo();
-        return localVarResp.getData();
+  private HttpRequest.Builder emailDeleteSMTPDetailsRequestBuilder() throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/email/smtp";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get IMAP Configuration
-     * &lt;p&gt;Returns IMAP server configuration details. IMAP is the protocol used for receiving e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @return ApiResponse&lt;ServerConfiguration&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration is not present.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ServerConfiguration> emailGetIMAPServerDetailWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = emailGetIMAPServerDetailValidateBeforeCall(null);
-        Type localVarReturnType = new TypeToken<ServerConfiguration>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Get IMAP Configuration (asynchronously)
-     * &lt;p&gt;Returns IMAP server configuration details. IMAP is the protocol used for receiving e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration is not present.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call emailGetIMAPServerDetailAsync(final ApiCallback<ServerConfiguration> _callback) throws ApiException {
+  /**
+   * Get E-mail Configuration
+   * &lt;p&gt;Returns a URL to access the saved SMTP and IMAP server details. SMTP is the protocol Essbase uses for sending e-mails related to scenario management. IMAP is the protocol for receiving e-mails.&lt;/p&gt;
+   * @return ListLinkResponseObject
+   * @throws ApiException if fails to make API call
+   */
+  public ListLinkResponseObject emailGetEmailLinks() throws ApiException {
+    ApiResponse<ListLinkResponseObject> localVarResponse = emailGetEmailLinksWithHttpInfo();
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = emailGetIMAPServerDetailValidateBeforeCall(_callback);
-        Type localVarReturnType = new TypeToken<ServerConfiguration>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for emailGetSMTPServerDetail
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration is not present.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call emailGetSMTPServerDetailCall(final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/email/smtp";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Get E-mail Configuration
+   * &lt;p&gt;Returns a URL to access the saved SMTP and IMAP server details. SMTP is the protocol Essbase uses for sending e-mails related to scenario management. IMAP is the protocol for receiving e-mails.&lt;/p&gt;
+   * @return ApiResponse&lt;ListLinkResponseObject&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListLinkResponseObject> emailGetEmailLinksWithHttpInfo() throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = emailGetEmailLinksRequestBuilder();
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("emailGetEmailLinks", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        return new ApiResponse<ListLinkResponseObject>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ListLinkResponseObject>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call emailGetSMTPServerDetailValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = emailGetSMTPServerDetailCall(_callback);
-        return localVarCall;
-
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
     }
+  }
 
-    /**
-     * Get SMTP Configuration
-     * &lt;p&gt;Returns SMTP server configuration details. SMTP is the protocol Essbase uses for sending e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @return ServerConfiguration
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration is not present.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ServerConfiguration emailGetSMTPServerDetail() throws ApiException {
-        ApiResponse<ServerConfiguration> localVarResp = emailGetSMTPServerDetailWithHttpInfo();
-        return localVarResp.getData();
+  private HttpRequest.Builder emailGetEmailLinksRequestBuilder() throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/email";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get SMTP Configuration
-     * &lt;p&gt;Returns SMTP server configuration details. SMTP is the protocol Essbase uses for sending e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @return ApiResponse&lt;ServerConfiguration&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration is not present.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ServerConfiguration> emailGetSMTPServerDetailWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = emailGetSMTPServerDetailValidateBeforeCall(null);
-        Type localVarReturnType = new TypeToken<ServerConfiguration>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Get SMTP Configuration (asynchronously)
-     * &lt;p&gt;Returns SMTP server configuration details. SMTP is the protocol Essbase uses for sending e-mails related to scenario management workflow and approval.&lt;/p&gt;
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration was retrieved successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user must be a service administrator to execute this request.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The e-mail configuration is not present.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call emailGetSMTPServerDetailAsync(final ApiCallback<ServerConfiguration> _callback) throws ApiException {
+  /**
+   * Get IMAP Configuration
+   * &lt;p&gt;Returns IMAP server configuration details. IMAP is the protocol used for receiving e-mails related to scenario management workflow and approval.&lt;/p&gt;
+   * @return ServerConfiguration
+   * @throws ApiException if fails to make API call
+   */
+  public ServerConfiguration emailGetIMAPServerDetail() throws ApiException {
+    ApiResponse<ServerConfiguration> localVarResponse = emailGetIMAPServerDetailWithHttpInfo();
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = emailGetSMTPServerDetailValidateBeforeCall(_callback);
-        Type localVarReturnType = new TypeToken<ServerConfiguration>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+  /**
+   * Get IMAP Configuration
+   * &lt;p&gt;Returns IMAP server configuration details. IMAP is the protocol used for receiving e-mails related to scenario management workflow and approval.&lt;/p&gt;
+   * @return ApiResponse&lt;ServerConfiguration&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ServerConfiguration> emailGetIMAPServerDetailWithHttpInfo() throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = emailGetIMAPServerDetailRequestBuilder();
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("emailGetIMAPServerDetail", localVarResponse);
+        }
+        return new ApiResponse<ServerConfiguration>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ServerConfiguration>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder emailGetIMAPServerDetailRequestBuilder() throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/email/imap";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get SMTP Configuration
+   * &lt;p&gt;Returns SMTP server configuration details. SMTP is the protocol Essbase uses for sending e-mails related to scenario management workflow and approval.&lt;/p&gt;
+   * @return ServerConfiguration
+   * @throws ApiException if fails to make API call
+   */
+  public ServerConfiguration emailGetSMTPServerDetail() throws ApiException {
+    ApiResponse<ServerConfiguration> localVarResponse = emailGetSMTPServerDetailWithHttpInfo();
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get SMTP Configuration
+   * &lt;p&gt;Returns SMTP server configuration details. SMTP is the protocol Essbase uses for sending e-mails related to scenario management workflow and approval.&lt;/p&gt;
+   * @return ApiResponse&lt;ServerConfiguration&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ServerConfiguration> emailGetSMTPServerDetailWithHttpInfo() throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = emailGetSMTPServerDetailRequestBuilder();
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("emailGetSMTPServerDetail", localVarResponse);
+        }
+        return new ApiResponse<ServerConfiguration>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ServerConfiguration>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder emailGetSMTPServerDetailRequestBuilder() throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/email/smtp";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
 }

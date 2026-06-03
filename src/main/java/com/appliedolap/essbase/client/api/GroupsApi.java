@@ -10,1393 +10,936 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.GroupBean;
 import com.appliedolap.essbase.client.model.Groups;
 import com.appliedolap.essbase.client.model.UserBean;
 import com.appliedolap.essbase.client.model.Users;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class GroupsApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public GroupsApi() {
-        this(Configuration.getDefaultApiClient());
+  public GroupsApi() {
+    this(new ApiClient());
+  }
+
+  public GroupsApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public GroupsApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Add or Import Group(s)
+   * Add/Import group(s)
+   * @param body Group details to add group if header Content-Type&#x3D;&#39;application/json&#39; or &#39;application/xml&#39; else CSV file to import group(s) if header Content-Type&#x3D;&#39;application/octet-stream&#39; (required)
+   * @return GroupBean
+   * @throws ApiException if fails to make API call
+   */
+  public GroupBean groupsAdd(GroupBean body) throws ApiException {
+    ApiResponse<GroupBean> localVarResponse = groupsAddWithHttpInfo(body);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for groupsAdd
-     * @param body Group details to add group if header Content-Type&#x3D;&#39;application/json&#39; or &#39;application/xml&#39; else CSV file to import group(s) if header Content-Type&#x3D;&#39;application/octet-stream&#39; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Group added successfully. If Content-Type&#x3D;&#39;application/json&#39; or &#39;application/xml&#39;, then result will be returned in group added successfully as shown below else in case of Content-Type&#x3D;&#39;application/octet-stream&#39;, result will be returned as group imported successfully, which is not shown due to a Swagger limitation. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsAddCall(GroupBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/groups";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Add or Import Group(s)
+   * Add/Import group(s)
+   * @param body Group details to add group if header Content-Type&#x3D;&#39;application/json&#39; or &#39;application/xml&#39; else CSV file to import group(s) if header Content-Type&#x3D;&#39;application/octet-stream&#39; (required)
+   * @return ApiResponse&lt;GroupBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<GroupBean> groupsAddWithHttpInfo(GroupBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = groupsAddRequestBuilder(body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("groupsAdd", localVarResponse);
         }
+        return new ApiResponse<GroupBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<GroupBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder groupsAddRequestBuilder(GroupBean body) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling groupsAdd");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call groupsAddValidateBeforeCall(GroupBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling groupsAdd(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/groups";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Add groups to group
+   * Add multiple group members to a group
+   * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Array of group ID&lt;/p&gt; (required)
+   * @return UserBean
+   * @throws ApiException if fails to make API call
+   */
+  public UserBean groupsAddGroupMembersToGroup(String id, List<String> body) throws ApiException {
+    ApiResponse<UserBean> localVarResponse = groupsAddGroupMembersToGroupWithHttpInfo(id, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Add groups to group
+   * Add multiple group members to a group
+   * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Array of group ID&lt;/p&gt; (required)
+   * @return ApiResponse&lt;UserBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<UserBean> groupsAddGroupMembersToGroupWithHttpInfo(String id, List<String> body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = groupsAddGroupMembersToGroupRequestBuilder(id, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("groupsAddGroupMembersToGroup", localVarResponse);
         }
-        
+        return new ApiResponse<UserBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<UserBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = groupsAddCall(body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder groupsAddGroupMembersToGroupRequestBuilder(String id, List<String> body) throws ApiException {
+    // verify the required parameter 'id' is set
+    if (id == null) {
+      throw new ApiException(400, "Missing the required parameter 'id' when calling groupsAddGroupMembersToGroup");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling groupsAddGroupMembersToGroup");
     }
 
-    /**
-     * Add or Import Group(s)
-     * Add/Import group(s)
-     * @param body Group details to add group if header Content-Type&#x3D;&#39;application/json&#39; or &#39;application/xml&#39; else CSV file to import group(s) if header Content-Type&#x3D;&#39;application/octet-stream&#39; (required)
-     * @return GroupBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Group added successfully. If Content-Type&#x3D;&#39;application/json&#39; or &#39;application/xml&#39;, then result will be returned in group added successfully as shown below else in case of Content-Type&#x3D;&#39;application/octet-stream&#39;, result will be returned as group imported successfully, which is not shown due to a Swagger limitation. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public GroupBean groupsAdd(GroupBean body) throws ApiException {
-        ApiResponse<GroupBean> localVarResp = groupsAddWithHttpInfo(body);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/groups/{id}/members/groups"
+        .replace("{id}", ApiClient.urlEncode(id.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Add or Import Group(s)
-     * Add/Import group(s)
-     * @param body Group details to add group if header Content-Type&#x3D;&#39;application/json&#39; or &#39;application/xml&#39; else CSV file to import group(s) if header Content-Type&#x3D;&#39;application/octet-stream&#39; (required)
-     * @return ApiResponse&lt;GroupBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Group added successfully. If Content-Type&#x3D;&#39;application/json&#39; or &#39;application/xml&#39;, then result will be returned in group added successfully as shown below else in case of Content-Type&#x3D;&#39;application/octet-stream&#39;, result will be returned as group imported successfully, which is not shown due to a Swagger limitation. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<GroupBean> groupsAddWithHttpInfo(GroupBean body) throws ApiException {
-        okhttp3.Call localVarCall = groupsAddValidateBeforeCall(body, null);
-        Type localVarReturnType = new TypeToken<GroupBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Add or Import Group(s) (asynchronously)
-     * Add/Import group(s)
-     * @param body Group details to add group if header Content-Type&#x3D;&#39;application/json&#39; or &#39;application/xml&#39; else CSV file to import group(s) if header Content-Type&#x3D;&#39;application/octet-stream&#39; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Group added successfully. If Content-Type&#x3D;&#39;application/json&#39; or &#39;application/xml&#39;, then result will be returned in group added successfully as shown below else in case of Content-Type&#x3D;&#39;application/octet-stream&#39;, result will be returned as group imported successfully, which is not shown due to a Swagger limitation. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsAddAsync(GroupBean body, final ApiCallback<GroupBean> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = groupsAddValidateBeforeCall(body, _callback);
-        Type localVarReturnType = new TypeToken<GroupBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for groupsAddGroupMembersToGroup
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Array of group ID&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group updated successfully. Returns link to get group members of a group&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsAddGroupMembersToGroupCall(String id, List<String> body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/groups/{id}/members/groups"
-            .replaceAll("\\{" + "id" + "\\}", localVarApiClient.escapeString(id.toString()));
+  /**
+   * Add users to group
+   * Add multiple user members to a group
+   * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Array of user ID&lt;/p&gt; (required)
+   * @return UserBean
+   * @throws ApiException if fails to make API call
+   */
+  public UserBean groupsAddUserMembersToGroup(String id, List<String> body) throws ApiException {
+    ApiResponse<UserBean> localVarResponse = groupsAddUserMembersToGroupWithHttpInfo(id, body);
+    return localVarResponse.getData();
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Add users to group
+   * Add multiple user members to a group
+   * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Array of user ID&lt;/p&gt; (required)
+   * @return ApiResponse&lt;UserBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<UserBean> groupsAddUserMembersToGroupWithHttpInfo(String id, List<String> body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = groupsAddUserMembersToGroupRequestBuilder(id, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("groupsAddUserMembersToGroup", localVarResponse);
         }
+        return new ApiResponse<UserBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<UserBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder groupsAddUserMembersToGroupRequestBuilder(String id, List<String> body) throws ApiException {
+    // verify the required parameter 'id' is set
+    if (id == null) {
+      throw new ApiException(400, "Missing the required parameter 'id' when calling groupsAddUserMembersToGroup");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling groupsAddUserMembersToGroup");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call groupsAddGroupMembersToGroupValidateBeforeCall(String id, List<String> body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling groupsAddGroupMembersToGroup(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/groups/{id}/members/users"
+        .replace("{id}", ApiClient.urlEncode(id.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Delete Group
+   * Delete a group.
+   * @param id ID of group. (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void groupsDelete(String id) throws ApiException {
+    groupsDeleteWithHttpInfo(id);
+  }
+
+  /**
+   * Delete Group
+   * Delete a group.
+   * @param id ID of group. (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> groupsDeleteWithHttpInfo(String id) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = groupsDeleteRequestBuilder(id);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("groupsDelete", localVarResponse);
         }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling groupsAddGroupMembersToGroup(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = groupsAddGroupMembersToGroupCall(id, body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder groupsDeleteRequestBuilder(String id) throws ApiException {
+    // verify the required parameter 'id' is set
+    if (id == null) {
+      throw new ApiException(400, "Missing the required parameter 'id' when calling groupsDelete");
     }
 
-    /**
-     * Add groups to group
-     * Add multiple group members to a group
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Array of group ID&lt;/p&gt; (required)
-     * @return UserBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group updated successfully. Returns link to get group members of a group&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public UserBean groupsAddGroupMembersToGroup(String id, List<String> body) throws ApiException {
-        ApiResponse<UserBean> localVarResp = groupsAddGroupMembersToGroupWithHttpInfo(id, body);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/groups/{id}"
+        .replace("{id}", ApiClient.urlEncode(id.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Add groups to group
-     * Add multiple group members to a group
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Array of group ID&lt;/p&gt; (required)
-     * @return ApiResponse&lt;UserBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group updated successfully. Returns link to get group members of a group&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<UserBean> groupsAddGroupMembersToGroupWithHttpInfo(String id, List<String> body) throws ApiException {
-        okhttp3.Call localVarCall = groupsAddGroupMembersToGroupValidateBeforeCall(id, body, null);
-        Type localVarReturnType = new TypeToken<UserBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Add groups to group (asynchronously)
-     * Add multiple group members to a group
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Array of group ID&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group updated successfully. Returns link to get group members of a group&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsAddGroupMembersToGroupAsync(String id, List<String> body, final ApiCallback<UserBean> _callback) throws ApiException {
+  /**
+   * Update Group
+   * Update a group.
+   * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Group details to update.&lt;/p&gt; (required)
+   * @return GroupBean
+   * @throws ApiException if fails to make API call
+   */
+  public GroupBean groupsEdit(String id, GroupBean body) throws ApiException {
+    ApiResponse<GroupBean> localVarResponse = groupsEditWithHttpInfo(id, body);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = groupsAddGroupMembersToGroupValidateBeforeCall(id, body, _callback);
-        Type localVarReturnType = new TypeToken<UserBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for groupsAddUserMembersToGroup
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Array of user ID&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group updated successfully. Returns link to get user members of a group&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsAddUserMembersToGroupCall(String id, List<String> body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/groups/{id}/members/users"
-            .replaceAll("\\{" + "id" + "\\}", localVarApiClient.escapeString(id.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Update Group
+   * Update a group.
+   * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Group details to update.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;GroupBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<GroupBean> groupsEditWithHttpInfo(String id, GroupBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = groupsEditRequestBuilder(id, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("groupsEdit", localVarResponse);
         }
+        return new ApiResponse<GroupBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<GroupBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder groupsEditRequestBuilder(String id, GroupBean body) throws ApiException {
+    // verify the required parameter 'id' is set
+    if (id == null) {
+      throw new ApiException(400, "Missing the required parameter 'id' when calling groupsEdit");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling groupsEdit");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call groupsAddUserMembersToGroupValidateBeforeCall(String id, List<String> body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling groupsAddUserMembersToGroup(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/groups/{id}"
+        .replace("{id}", ApiClient.urlEncode(id.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Group
+   * &lt;p&gt;Get group details.&lt;/p&gt;
+   * @param id &lt;p&gt;Group ID.&lt;/p&gt; (required)
+   * @return GroupBean
+   * @throws ApiException if fails to make API call
+   */
+  public GroupBean groupsGet(String id) throws ApiException {
+    ApiResponse<GroupBean> localVarResponse = groupsGetWithHttpInfo(id);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Group
+   * &lt;p&gt;Get group details.&lt;/p&gt;
+   * @param id &lt;p&gt;Group ID.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;GroupBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<GroupBean> groupsGetWithHttpInfo(String id) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = groupsGetRequestBuilder(id);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("groupsGet", localVarResponse);
         }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling groupsAddUserMembersToGroup(Async)");
+        return new ApiResponse<GroupBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<GroupBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder groupsGetRequestBuilder(String id) throws ApiException {
+    // verify the required parameter 'id' is set
+    if (id == null) {
+      throw new ApiException(400, "Missing the required parameter 'id' when calling groupsGet");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/groups/{id}"
+        .replace("{id}", ApiClient.urlEncode(id.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get groups of group
+   * Get group members of a group
+   * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
+   * @return Groups
+   * @throws ApiException if fails to make API call
+   */
+  public Groups groupsGetGroupMembersOfGroup(String id) throws ApiException {
+    ApiResponse<Groups> localVarResponse = groupsGetGroupMembersOfGroupWithHttpInfo(id);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get groups of group
+   * Get group members of a group
+   * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Groups&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Groups> groupsGetGroupMembersOfGroupWithHttpInfo(String id) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = groupsGetGroupMembersOfGroupRequestBuilder(id);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("groupsGetGroupMembersOfGroup", localVarResponse);
         }
-        
+        return new ApiResponse<Groups>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Groups>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = groupsAddUserMembersToGroupCall(id, body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder groupsGetGroupMembersOfGroupRequestBuilder(String id) throws ApiException {
+    // verify the required parameter 'id' is set
+    if (id == null) {
+      throw new ApiException(400, "Missing the required parameter 'id' when calling groupsGetGroupMembersOfGroup");
     }
 
-    /**
-     * Add users to group
-     * Add multiple user members to a group
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Array of user ID&lt;/p&gt; (required)
-     * @return UserBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group updated successfully. Returns link to get user members of a group&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public UserBean groupsAddUserMembersToGroup(String id, List<String> body) throws ApiException {
-        ApiResponse<UserBean> localVarResp = groupsAddUserMembersToGroupWithHttpInfo(id, body);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/groups/{id}/members/groups"
+        .replace("{id}", ApiClient.urlEncode(id.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Add users to group
-     * Add multiple user members to a group
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Array of user ID&lt;/p&gt; (required)
-     * @return ApiResponse&lt;UserBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group updated successfully. Returns link to get user members of a group&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<UserBean> groupsAddUserMembersToGroupWithHttpInfo(String id, List<String> body) throws ApiException {
-        okhttp3.Call localVarCall = groupsAddUserMembersToGroupValidateBeforeCall(id, body, null);
-        Type localVarReturnType = new TypeToken<UserBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Add users to group (asynchronously)
-     * Add multiple user members to a group
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Array of user ID&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group updated successfully. Returns link to get user members of a group&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsAddUserMembersToGroupAsync(String id, List<String> body, final ApiCallback<UserBean> _callback) throws ApiException {
+  /**
+   * Group members
+   * List links to get user and group members of a group
+   * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
+   * @return UserBean
+   * @throws ApiException if fails to make API call
+   */
+  public UserBean groupsGetMembers(String id) throws ApiException {
+    ApiResponse<UserBean> localVarResponse = groupsGetMembersWithHttpInfo(id);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = groupsAddUserMembersToGroupValidateBeforeCall(id, body, _callback);
-        Type localVarReturnType = new TypeToken<UserBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for groupsDelete
-     * @param id ID of group. (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsDeleteCall(String id, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/groups/{id}"
-            .replaceAll("\\{" + "id" + "\\}", localVarApiClient.escapeString(id.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Group members
+   * List links to get user and group members of a group
+   * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;UserBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<UserBean> groupsGetMembersWithHttpInfo(String id) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = groupsGetMembersRequestBuilder(id);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("groupsGetMembers", localVarResponse);
         }
+        return new ApiResponse<UserBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<UserBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder groupsGetMembersRequestBuilder(String id) throws ApiException {
+    // verify the required parameter 'id' is set
+    if (id == null) {
+      throw new ApiException(400, "Missing the required parameter 'id' when calling groupsGetMembers");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call groupsDeleteValidateBeforeCall(String id, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling groupsDelete(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/groups/{id}/members"
+        .replace("{id}", ApiClient.urlEncode(id.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get users of group
+   * Get user members of a group
+   * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
+   * @return Users
+   * @throws ApiException if fails to make API call
+   */
+  public Users groupsGetUserMembersOfGroup(String id) throws ApiException {
+    ApiResponse<Users> localVarResponse = groupsGetUserMembersOfGroupWithHttpInfo(id);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get users of group
+   * Get user members of a group
+   * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Users&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Users> groupsGetUserMembersOfGroupWithHttpInfo(String id) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = groupsGetUserMembersOfGroupRequestBuilder(id);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("groupsGetUserMembersOfGroup", localVarResponse);
         }
-        
+        return new ApiResponse<Users>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Users>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = groupsDeleteCall(id, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder groupsGetUserMembersOfGroupRequestBuilder(String id) throws ApiException {
+    // verify the required parameter 'id' is set
+    if (id == null) {
+      throw new ApiException(400, "Missing the required parameter 'id' when calling groupsGetUserMembersOfGroup");
     }
 
-    /**
-     * Delete Group
-     * Delete a group.
-     * @param id ID of group. (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void groupsDelete(String id) throws ApiException {
-        groupsDeleteWithHttpInfo(id);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/groups/{id}/members/users"
+        .replace("{id}", ApiClient.urlEncode(id.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Delete Group
-     * Delete a group.
-     * @param id ID of group. (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> groupsDeleteWithHttpInfo(String id) throws ApiException {
-        okhttp3.Call localVarCall = groupsDeleteValidateBeforeCall(id, null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Delete Group (asynchronously)
-     * Delete a group.
-     * @param id ID of group. (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsDeleteAsync(String id, final ApiCallback<Void> _callback) throws ApiException {
+  /**
+   * Search or Export Groups
+   * &lt;p&gt;Get a list of groups based on search results, or export groups as CSV file.&lt;/p&gt;
+   * @param filter &lt;p&gt;Group ID wildcard pattern. Filter by name of groups if header &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
+   * @param limit &lt;p&gt;Maximum number of groups to return, if header &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional, default to -1)
+   * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;all&lt;/code&gt;, meaning service role and parent groups are returned for each group. If &lt;code&gt;none&lt;/code&gt; is specified, service role and parent groups are not returned.&lt;/p&gt; (optional, default to all)
+   * @return Groups
+   * @throws ApiException if fails to make API call
+   */
+  public Groups groupsSearch(String filter, Integer limit, String expand) throws ApiException {
+    ApiResponse<Groups> localVarResponse = groupsSearchWithHttpInfo(filter, limit, expand);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = groupsDeleteValidateBeforeCall(id, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for groupsEdit
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Group details to update.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsEditCall(String id, GroupBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/groups/{id}"
-            .replaceAll("\\{" + "id" + "\\}", localVarApiClient.escapeString(id.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Search or Export Groups
+   * &lt;p&gt;Get a list of groups based on search results, or export groups as CSV file.&lt;/p&gt;
+   * @param filter &lt;p&gt;Group ID wildcard pattern. Filter by name of groups if header &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
+   * @param limit &lt;p&gt;Maximum number of groups to return, if header &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional, default to -1)
+   * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;all&lt;/code&gt;, meaning service role and parent groups are returned for each group. If &lt;code&gt;none&lt;/code&gt; is specified, service role and parent groups are not returned.&lt;/p&gt; (optional, default to all)
+   * @return ApiResponse&lt;Groups&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Groups> groupsSearchWithHttpInfo(String filter, Integer limit, String expand) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = groupsSearchRequestBuilder(filter, limit, expand);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("groupsSearch", localVarResponse);
         }
+        return new ApiResponse<Groups>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Groups>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
+  private HttpRequest.Builder groupsSearchRequestBuilder(String filter, Integer limit, String expand) throws ApiException {
 
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/groups";
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "filter";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("filter", filter));
+    localVarQueryParameterBaseName = "limit";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("limit", limit));
+    localVarQueryParameterBaseName = "expand";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("expand", expand));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call groupsEditValidateBeforeCall(String id, GroupBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling groupsEdit(Async)");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Delete the groups specified in the text file
+   * Delete the groups specified in the text file
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object usersDeleteGroups() throws ApiException {
+    ApiResponse<Object> localVarResponse = usersDeleteGroupsWithHttpInfo();
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Delete the groups specified in the text file
+   * Delete the groups specified in the text file
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> usersDeleteGroupsWithHttpInfo() throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = usersDeleteGroupsRequestBuilder();
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("usersDeleteGroups", localVarResponse);
         }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling groupsEdit(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = groupsEditCall(id, body, _callback);
-        return localVarCall;
-
+        return new ApiResponse<Object>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Object>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Update Group
-     * Update a group.
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Group details to update.&lt;/p&gt; (required)
-     * @return GroupBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public GroupBean groupsEdit(String id, GroupBean body) throws ApiException {
-        ApiResponse<GroupBean> localVarResp = groupsEditWithHttpInfo(id, body);
-        return localVarResp.getData();
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
     }
+  }
 
-    /**
-     * Update Group
-     * Update a group.
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Group details to update.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;GroupBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<GroupBean> groupsEditWithHttpInfo(String id, GroupBean body) throws ApiException {
-        okhttp3.Call localVarCall = groupsEditValidateBeforeCall(id, body, null);
-        Type localVarReturnType = new TypeToken<GroupBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+  private HttpRequest.Builder usersDeleteGroupsRequestBuilder() throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/groups/actions/delete";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/octet-stream");
+
+    localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Update Group (asynchronously)
-     * Update a group.
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Group details to update.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Group updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsEditAsync(String id, GroupBean body, final ApiCallback<GroupBean> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = groupsEditValidateBeforeCall(id, body, _callback);
-        Type localVarReturnType = new TypeToken<GroupBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for groupsGet
-     * @param id &lt;p&gt;Group ID.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Group details&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The group with that ID does not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsGetCall(String id, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/groups/{id}"
-            .replaceAll("\\{" + "id" + "\\}", localVarApiClient.escapeString(id.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call groupsGetValidateBeforeCall(String id, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling groupsGet(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = groupsGetCall(id, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Group
-     * &lt;p&gt;Get group details.&lt;/p&gt;
-     * @param id &lt;p&gt;Group ID.&lt;/p&gt; (required)
-     * @return GroupBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Group details&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The group with that ID does not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public GroupBean groupsGet(String id) throws ApiException {
-        ApiResponse<GroupBean> localVarResp = groupsGetWithHttpInfo(id);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Group
-     * &lt;p&gt;Get group details.&lt;/p&gt;
-     * @param id &lt;p&gt;Group ID.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;GroupBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Group details&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The group with that ID does not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<GroupBean> groupsGetWithHttpInfo(String id) throws ApiException {
-        okhttp3.Call localVarCall = groupsGetValidateBeforeCall(id, null);
-        Type localVarReturnType = new TypeToken<GroupBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Group (asynchronously)
-     * &lt;p&gt;Get group details.&lt;/p&gt;
-     * @param id &lt;p&gt;Group ID.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Group details&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> &lt;p&gt;&lt;strong&gt;Not Found&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The group with that ID does not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsGetAsync(String id, final ApiCallback<GroupBean> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = groupsGetValidateBeforeCall(id, _callback);
-        Type localVarReturnType = new TypeToken<GroupBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for groupsGetGroupMembersOfGroup
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns list of group members of a group </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsGetGroupMembersOfGroupCall(String id, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/groups/{id}/members/groups"
-            .replaceAll("\\{" + "id" + "\\}", localVarApiClient.escapeString(id.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call groupsGetGroupMembersOfGroupValidateBeforeCall(String id, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling groupsGetGroupMembersOfGroup(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = groupsGetGroupMembersOfGroupCall(id, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get groups of group
-     * Get group members of a group
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @return Groups
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns list of group members of a group </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Groups groupsGetGroupMembersOfGroup(String id) throws ApiException {
-        ApiResponse<Groups> localVarResp = groupsGetGroupMembersOfGroupWithHttpInfo(id);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get groups of group
-     * Get group members of a group
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Groups&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns list of group members of a group </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Groups> groupsGetGroupMembersOfGroupWithHttpInfo(String id) throws ApiException {
-        okhttp3.Call localVarCall = groupsGetGroupMembersOfGroupValidateBeforeCall(id, null);
-        Type localVarReturnType = new TypeToken<Groups>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get groups of group (asynchronously)
-     * Get group members of a group
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns list of group members of a group </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsGetGroupMembersOfGroupAsync(String id, final ApiCallback<Groups> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = groupsGetGroupMembersOfGroupValidateBeforeCall(id, _callback);
-        Type localVarReturnType = new TypeToken<Groups>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for groupsGetMembers
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return links to get user and group members of a group </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsGetMembersCall(String id, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/groups/{id}/members"
-            .replaceAll("\\{" + "id" + "\\}", localVarApiClient.escapeString(id.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call groupsGetMembersValidateBeforeCall(String id, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling groupsGetMembers(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = groupsGetMembersCall(id, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Group members
-     * List links to get user and group members of a group
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @return UserBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return links to get user and group members of a group </td><td>  -  </td></tr>
-     </table>
-     */
-    public UserBean groupsGetMembers(String id) throws ApiException {
-        ApiResponse<UserBean> localVarResp = groupsGetMembersWithHttpInfo(id);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Group members
-     * List links to get user and group members of a group
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;UserBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return links to get user and group members of a group </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<UserBean> groupsGetMembersWithHttpInfo(String id) throws ApiException {
-        okhttp3.Call localVarCall = groupsGetMembersValidateBeforeCall(id, null);
-        Type localVarReturnType = new TypeToken<UserBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Group members (asynchronously)
-     * List links to get user and group members of a group
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return links to get user and group members of a group </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsGetMembersAsync(String id, final ApiCallback<UserBean> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = groupsGetMembersValidateBeforeCall(id, _callback);
-        Type localVarReturnType = new TypeToken<UserBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for groupsGetUserMembersOfGroup
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns list of user members of a group </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsGetUserMembersOfGroupCall(String id, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/groups/{id}/members/users"
-            .replaceAll("\\{" + "id" + "\\}", localVarApiClient.escapeString(id.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call groupsGetUserMembersOfGroupValidateBeforeCall(String id, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling groupsGetUserMembersOfGroup(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = groupsGetUserMembersOfGroupCall(id, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get users of group
-     * Get user members of a group
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @return Users
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns list of user members of a group </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Users groupsGetUserMembersOfGroup(String id) throws ApiException {
-        ApiResponse<Users> localVarResp = groupsGetUserMembersOfGroupWithHttpInfo(id);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get users of group
-     * Get user members of a group
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Users&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns list of user members of a group </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Users> groupsGetUserMembersOfGroupWithHttpInfo(String id) throws ApiException {
-        okhttp3.Call localVarCall = groupsGetUserMembersOfGroupValidateBeforeCall(id, null);
-        Type localVarReturnType = new TypeToken<Users>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get users of group (asynchronously)
-     * Get user members of a group
-     * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns list of user members of a group </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsGetUserMembersOfGroupAsync(String id, final ApiCallback<Users> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = groupsGetUserMembersOfGroupValidateBeforeCall(id, _callback);
-        Type localVarReturnType = new TypeToken<Users>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for groupsSearch
-     * @param filter &lt;p&gt;Group ID wildcard pattern. Filter by name of groups if header &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @param limit &lt;p&gt;Maximum number of groups to return, if header &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional, default to -1)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;all&lt;/code&gt;, meaning service role and parent groups are returned for each group. If &lt;code&gt;none&lt;/code&gt; is specified, service role and parent groups are not returned.&lt;/p&gt; (optional, default to all)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of groups matching search criteria. Response type can be either JSON, XML, or CSV stream, depending on the Accept header. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;, the search result is returned in the response. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, search result is returned as stream (not shown due to a Swagger limitation).&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsSearchCall(String filter, Integer limit, String expand, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/groups";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (filter != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("filter", filter));
-        }
-
-        if (limit != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
-        }
-
-        if (expand != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("expand", expand));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call groupsSearchValidateBeforeCall(String filter, Integer limit, String expand, final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = groupsSearchCall(filter, limit, expand, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Search or Export Groups
-     * &lt;p&gt;Get a list of groups based on search results, or export groups as CSV file.&lt;/p&gt;
-     * @param filter &lt;p&gt;Group ID wildcard pattern. Filter by name of groups if header &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @param limit &lt;p&gt;Maximum number of groups to return, if header &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional, default to -1)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;all&lt;/code&gt;, meaning service role and parent groups are returned for each group. If &lt;code&gt;none&lt;/code&gt; is specified, service role and parent groups are not returned.&lt;/p&gt; (optional, default to all)
-     * @return Groups
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of groups matching search criteria. Response type can be either JSON, XML, or CSV stream, depending on the Accept header. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;, the search result is returned in the response. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, search result is returned as stream (not shown due to a Swagger limitation).&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Groups groupsSearch(String filter, Integer limit, String expand) throws ApiException {
-        ApiResponse<Groups> localVarResp = groupsSearchWithHttpInfo(filter, limit, expand);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Search or Export Groups
-     * &lt;p&gt;Get a list of groups based on search results, or export groups as CSV file.&lt;/p&gt;
-     * @param filter &lt;p&gt;Group ID wildcard pattern. Filter by name of groups if header &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @param limit &lt;p&gt;Maximum number of groups to return, if header &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional, default to -1)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;all&lt;/code&gt;, meaning service role and parent groups are returned for each group. If &lt;code&gt;none&lt;/code&gt; is specified, service role and parent groups are not returned.&lt;/p&gt; (optional, default to all)
-     * @return ApiResponse&lt;Groups&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of groups matching search criteria. Response type can be either JSON, XML, or CSV stream, depending on the Accept header. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;, the search result is returned in the response. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, search result is returned as stream (not shown due to a Swagger limitation).&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Groups> groupsSearchWithHttpInfo(String filter, Integer limit, String expand) throws ApiException {
-        okhttp3.Call localVarCall = groupsSearchValidateBeforeCall(filter, limit, expand, null);
-        Type localVarReturnType = new TypeToken<Groups>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Search or Export Groups (asynchronously)
-     * &lt;p&gt;Get a list of groups based on search results, or export groups as CSV file.&lt;/p&gt;
-     * @param filter &lt;p&gt;Group ID wildcard pattern. Filter by name of groups if header &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional)
-     * @param limit &lt;p&gt;Maximum number of groups to return, if header &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;.&lt;/p&gt; (optional, default to -1)
-     * @param expand &lt;p&gt;Value can be &lt;code&gt;all&lt;/code&gt; or &lt;code&gt;none&lt;/code&gt;. Default value is &lt;code&gt;all&lt;/code&gt;, meaning service role and parent groups are returned for each group. If &lt;code&gt;none&lt;/code&gt; is specified, service role and parent groups are not returned.&lt;/p&gt; (optional, default to all)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of groups matching search criteria. Response type can be either JSON, XML, or CSV stream, depending on the Accept header. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;, the search result is returned in the response. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, search result is returned as stream (not shown due to a Swagger limitation).&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Logged in user may not have appropriate permissions.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call groupsSearchAsync(String filter, Integer limit, String expand, final ApiCallback<Groups> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = groupsSearchValidateBeforeCall(filter, limit, expand, _callback);
-        Type localVarReturnType = new TypeToken<Groups>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for usersDeleteGroups
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation fails. For example, logged in user doesn&#39;t have appropriate service role </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call usersDeleteGroupsCall(final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/groups/actions/delete";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/octet-stream"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call usersDeleteGroupsValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = usersDeleteGroupsCall(_callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Delete the groups specified in the text file
-     * Delete the groups specified in the text file
-     * @return Object
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation fails. For example, logged in user doesn&#39;t have appropriate service role </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public Object usersDeleteGroups() throws ApiException {
-        ApiResponse<Object> localVarResp = usersDeleteGroupsWithHttpInfo();
-        return localVarResp.getData();
-    }
-
-    /**
-     * Delete the groups specified in the text file
-     * Delete the groups specified in the text file
-     * @return ApiResponse&lt;Object&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation fails. For example, logged in user doesn&#39;t have appropriate service role </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Object> usersDeleteGroupsWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = usersDeleteGroupsValidateBeforeCall(null);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Delete the groups specified in the text file (asynchronously)
-     * Delete the groups specified in the text file
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation fails. For example, logged in user doesn&#39;t have appropriate service role </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call usersDeleteGroupsAsync(final ApiCallback<Object> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = usersDeleteGroupsValidateBeforeCall(_callback);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

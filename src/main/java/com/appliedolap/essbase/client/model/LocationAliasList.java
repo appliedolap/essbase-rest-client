@@ -13,269 +13,297 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.Link;
 import com.appliedolap.essbase.client.model.LocationAliasBean;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * LocationAliasList
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  LocationAliasList.JSON_PROPERTY_ITEMS,
+  LocationAliasList.JSON_PROPERTY_OFFSET,
+  LocationAliasList.JSON_PROPERTY_LIMIT,
+  LocationAliasList.JSON_PROPERTY_TOTAL_RESULTS,
+  LocationAliasList.JSON_PROPERTY_LINKS,
+  LocationAliasList.JSON_PROPERTY_COUNT,
+  LocationAliasList.JSON_PROPERTY_HAS_MORE,
+  LocationAliasList.JSON_PROPERTY_PROPERTIES
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class LocationAliasList {
-  public static final String SERIALIZED_NAME_ITEMS = "items";
-  @SerializedName(SERIALIZED_NAME_ITEMS)
-  private List<LocationAliasBean> items = null;
+  public static final String JSON_PROPERTY_ITEMS = "items";
+  @jakarta.annotation.Nullable
+  private List<LocationAliasBean> items = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_OFFSET = "offset";
-  @SerializedName(SERIALIZED_NAME_OFFSET)
+  public static final String JSON_PROPERTY_OFFSET = "offset";
+  @jakarta.annotation.Nullable
   private Long offset;
 
-  public static final String SERIALIZED_NAME_LIMIT = "limit";
-  @SerializedName(SERIALIZED_NAME_LIMIT)
+  public static final String JSON_PROPERTY_LIMIT = "limit";
+  @jakarta.annotation.Nullable
   private Long limit;
 
-  public static final String SERIALIZED_NAME_TOTAL_RESULTS = "totalResults";
-  @SerializedName(SERIALIZED_NAME_TOTAL_RESULTS)
+  public static final String JSON_PROPERTY_TOTAL_RESULTS = "totalResults";
+  @jakarta.annotation.Nullable
   private Long totalResults;
 
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_COUNT = "count";
-  @SerializedName(SERIALIZED_NAME_COUNT)
+  public static final String JSON_PROPERTY_COUNT = "count";
+  @jakarta.annotation.Nullable
   private Long count;
 
-  public static final String SERIALIZED_NAME_HAS_MORE = "hasMore";
-  @SerializedName(SERIALIZED_NAME_HAS_MORE)
+  public static final String JSON_PROPERTY_HAS_MORE = "hasMore";
+  @jakarta.annotation.Nullable
   private Boolean hasMore;
 
-  public static final String SERIALIZED_NAME_PROPERTIES = "properties";
-  @SerializedName(SERIALIZED_NAME_PROPERTIES)
-  private Map<String, String> properties = null;
+  public static final String JSON_PROPERTY_PROPERTIES = "properties";
+  @jakarta.annotation.Nullable
+  private Map<String, String> properties = new HashMap<>();
 
+  public LocationAliasList() { 
+  }
 
-  public LocationAliasList items(List<LocationAliasBean> items) {
-    
+  public LocationAliasList items(@jakarta.annotation.Nullable List<LocationAliasBean> items) {
     this.items = items;
     return this;
   }
 
   public LocationAliasList addItemsItem(LocationAliasBean itemsItem) {
     if (this.items == null) {
-      this.items = new ArrayList<LocationAliasBean>();
+      this.items = new ArrayList<>();
     }
     this.items.add(itemsItem);
     return this;
   }
 
-   /**
+  /**
    * Get items
    * @return items
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ITEMS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<LocationAliasBean> getItems() {
     return items;
   }
 
 
-  public void setItems(List<LocationAliasBean> items) {
+  @JsonProperty(JSON_PROPERTY_ITEMS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setItems(@jakarta.annotation.Nullable List<LocationAliasBean> items) {
     this.items = items;
   }
 
 
-  public LocationAliasList offset(Long offset) {
-    
+  public LocationAliasList offset(@jakarta.annotation.Nullable Long offset) {
     this.offset = offset;
     return this;
   }
 
-   /**
+  /**
    * Get offset
    * @return offset
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OFFSET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getOffset() {
     return offset;
   }
 
 
-  public void setOffset(Long offset) {
+  @JsonProperty(JSON_PROPERTY_OFFSET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOffset(@jakarta.annotation.Nullable Long offset) {
     this.offset = offset;
   }
 
 
-  public LocationAliasList limit(Long limit) {
-    
+  public LocationAliasList limit(@jakarta.annotation.Nullable Long limit) {
     this.limit = limit;
     return this;
   }
 
-   /**
+  /**
    * Get limit
    * @return limit
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LIMIT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getLimit() {
     return limit;
   }
 
 
-  public void setLimit(Long limit) {
+  @JsonProperty(JSON_PROPERTY_LIMIT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLimit(@jakarta.annotation.Nullable Long limit) {
     this.limit = limit;
   }
 
 
-  public LocationAliasList totalResults(Long totalResults) {
-    
+  public LocationAliasList totalResults(@jakarta.annotation.Nullable Long totalResults) {
     this.totalResults = totalResults;
     return this;
   }
 
-   /**
+  /**
    * Get totalResults
    * @return totalResults
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TOTAL_RESULTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getTotalResults() {
     return totalResults;
   }
 
 
-  public void setTotalResults(Long totalResults) {
+  @JsonProperty(JSON_PROPERTY_TOTAL_RESULTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTotalResults(@jakarta.annotation.Nullable Long totalResults) {
     this.totalResults = totalResults;
   }
 
 
-  public LocationAliasList links(List<Link> links) {
-    
+  public LocationAliasList links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public LocationAliasList addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
-  public LocationAliasList count(Long count) {
-    
+  public LocationAliasList count(@jakarta.annotation.Nullable Long count) {
     this.count = count;
     return this;
   }
 
-   /**
+  /**
    * Get count
    * @return count
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getCount() {
     return count;
   }
 
 
-  public void setCount(Long count) {
+  @JsonProperty(JSON_PROPERTY_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCount(@jakarta.annotation.Nullable Long count) {
     this.count = count;
   }
 
 
-  public LocationAliasList hasMore(Boolean hasMore) {
-    
+  public LocationAliasList hasMore(@jakarta.annotation.Nullable Boolean hasMore) {
     this.hasMore = hasMore;
     return this;
   }
 
-   /**
+  /**
    * Get hasMore
    * @return hasMore
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HAS_MORE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getHasMore() {
     return hasMore;
   }
 
 
-  public void setHasMore(Boolean hasMore) {
+  @JsonProperty(JSON_PROPERTY_HAS_MORE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHasMore(@jakarta.annotation.Nullable Boolean hasMore) {
     this.hasMore = hasMore;
   }
 
 
-  public LocationAliasList properties(Map<String, String> properties) {
-    
+  public LocationAliasList properties(@jakarta.annotation.Nullable Map<String, String> properties) {
     this.properties = properties;
     return this;
   }
 
   public LocationAliasList putPropertiesItem(String key, String propertiesItem) {
     if (this.properties == null) {
-      this.properties = new HashMap<String, String>();
+      this.properties = new HashMap<>();
     }
     this.properties.put(key, propertiesItem);
     return this;
   }
 
-   /**
+  /**
    * Get properties
    * @return properties
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PROPERTIES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Map<String, String> getProperties() {
     return properties;
   }
 
 
-  public void setProperties(Map<String, String> properties) {
+  @JsonProperty(JSON_PROPERTY_PROPERTIES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setProperties(@jakarta.annotation.Nullable Map<String, String> properties) {
     this.properties = properties;
   }
 
 
+  /**
+   * Return true if this LocationAliasList object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -327,5 +355,93 @@ public class LocationAliasList {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `items` to the URL query string
+    if (getItems() != null) {
+      for (int i = 0; i < getItems().size(); i++) {
+        if (getItems().get(i) != null) {
+          joiner.add(getItems().get(i).toUrlQueryString(String.format("%sitems%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `offset` to the URL query string
+    if (getOffset() != null) {
+      joiner.add(String.format("%soffset%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getOffset()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `limit` to the URL query string
+    if (getLimit() != null) {
+      joiner.add(String.format("%slimit%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLimit()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `totalResults` to the URL query string
+    if (getTotalResults() != null) {
+      joiner.add(String.format("%stotalResults%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTotalResults()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `count` to the URL query string
+    if (getCount() != null) {
+      joiner.add(String.format("%scount%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCount()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `hasMore` to the URL query string
+    if (getHasMore() != null) {
+      joiner.add(String.format("%shasMore%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getHasMore()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `properties` to the URL query string
+    if (getProperties() != null) {
+      for (String _key : getProperties().keySet()) {
+        joiner.add(String.format("%sproperties%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, _key, containerSuffix),
+            getProperties().get(_key), URLEncoder.encode(ApiClient.valueToString(getProperties().get(_key)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

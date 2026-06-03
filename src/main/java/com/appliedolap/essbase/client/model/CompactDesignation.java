@@ -13,85 +13,112 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.CompactDesignationColumn;
 import com.appliedolap.essbase.client.model.DimCompactDesignation;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import org.threeten.bp.OffsetDateTime;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * CompactDesignation
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  CompactDesignation.JSON_PROPERTY_FILE,
+  CompactDesignation.JSON_PROPERTY_EXCEL_SHEET_NAME,
+  CompactDesignation.JSON_PROPERTY_COLUMN_OFFSET,
+  CompactDesignation.JSON_PROPERTY_BAD_ROW_LIST_STRING,
+  CompactDesignation.JSON_PROPERTY_NR,
+  CompactDesignation.JSON_PROPERTY_NRH,
+  CompactDesignation.JSON_PROPERTY_COMPACT_DESIGNATION_COLUMN,
+  CompactDesignation.JSON_PROPERTY_BSO_LIMITS_EXCEEDED,
+  CompactDesignation.JSON_PROPERTY_FAST_ANALYSIS,
+  CompactDesignation.JSON_PROPERTY_MEASURE_DIMENSION_NAME,
+  CompactDesignation.JSON_PROPERTY_DIM_DESIGNATION_MODE,
+  CompactDesignation.JSON_PROPERTY_NAMING_PRIORITY,
+  CompactDesignation.JSON_PROPERTY_DATE_COLUMN_ID,
+  CompactDesignation.JSON_PROPERTY_DATE_FORMAT_STRING,
+  CompactDesignation.JSON_PROPERTY_DATE_DIM_STRING,
+  CompactDesignation.JSON_PROPERTY_DATE_DIMENSION_LEAVES,
+  CompactDesignation.JSON_PROPERTY_MAX_DATE,
+  CompactDesignation.JSON_PROPERTY_MIN_DATE,
+  CompactDesignation.JSON_PROPERTY_TABLE_NAME,
+  CompactDesignation.JSON_PROPERTY_DIM_COMPACT_DESIGNATION_LIST,
+  CompactDesignation.JSON_PROPERTY_QUERY
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class CompactDesignation {
-  public static final String SERIALIZED_NAME_FILE = "file";
-  @SerializedName(SERIALIZED_NAME_FILE)
-  private String file;
+  public static final String JSON_PROPERTY_FILE = "file";
+  @jakarta.annotation.Nullable
+  private String _file;
 
-  public static final String SERIALIZED_NAME_EXCEL_SHEET_NAME = "excelSheetName";
-  @SerializedName(SERIALIZED_NAME_EXCEL_SHEET_NAME)
+  public static final String JSON_PROPERTY_EXCEL_SHEET_NAME = "excelSheetName";
+  @jakarta.annotation.Nullable
   private String excelSheetName;
 
-  public static final String SERIALIZED_NAME_COLUMN_OFFSET = "columnOffset";
-  @SerializedName(SERIALIZED_NAME_COLUMN_OFFSET)
+  public static final String JSON_PROPERTY_COLUMN_OFFSET = "columnOffset";
+  @jakarta.annotation.Nullable
   private Integer columnOffset;
 
-  public static final String SERIALIZED_NAME_BAD_ROW_LIST_STRING = "badRowListString";
-  @SerializedName(SERIALIZED_NAME_BAD_ROW_LIST_STRING)
+  public static final String JSON_PROPERTY_BAD_ROW_LIST_STRING = "badRowListString";
+  @jakarta.annotation.Nullable
   private String badRowListString;
 
-  public static final String SERIALIZED_NAME_NR = "nr";
-  @SerializedName(SERIALIZED_NAME_NR)
+  public static final String JSON_PROPERTY_NR = "nr";
+  @jakarta.annotation.Nullable
   private Integer nr;
 
-  public static final String SERIALIZED_NAME_NRH = "nrh";
-  @SerializedName(SERIALIZED_NAME_NRH)
+  public static final String JSON_PROPERTY_NRH = "nrh";
+  @jakarta.annotation.Nullable
   private Integer nrh;
 
-  public static final String SERIALIZED_NAME_COMPACT_DESIGNATION_COLUMN = "compactDesignationColumn";
-  @SerializedName(SERIALIZED_NAME_COMPACT_DESIGNATION_COLUMN)
-  private List<CompactDesignationColumn> compactDesignationColumn = null;
+  public static final String JSON_PROPERTY_COMPACT_DESIGNATION_COLUMN = "compactDesignationColumn";
+  @jakarta.annotation.Nullable
+  private List<CompactDesignationColumn> compactDesignationColumn = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_BSO_LIMITS_EXCEEDED = "bsoLimitsExceeded";
-  @SerializedName(SERIALIZED_NAME_BSO_LIMITS_EXCEEDED)
+  public static final String JSON_PROPERTY_BSO_LIMITS_EXCEEDED = "bsoLimitsExceeded";
+  @jakarta.annotation.Nullable
   private Boolean bsoLimitsExceeded;
 
-  public static final String SERIALIZED_NAME_FAST_ANALYSIS = "fastAnalysis";
-  @SerializedName(SERIALIZED_NAME_FAST_ANALYSIS)
+  public static final String JSON_PROPERTY_FAST_ANALYSIS = "fastAnalysis";
+  @jakarta.annotation.Nullable
   private Boolean fastAnalysis;
 
-  public static final String SERIALIZED_NAME_MEASURE_DIMENSION_NAME = "measureDimensionName";
-  @SerializedName(SERIALIZED_NAME_MEASURE_DIMENSION_NAME)
+  public static final String JSON_PROPERTY_MEASURE_DIMENSION_NAME = "measureDimensionName";
+  @jakarta.annotation.Nullable
   private String measureDimensionName;
 
   /**
    * Gets or Sets dimDesignationMode
    */
-  @JsonAdapter(DimDesignationModeEnum.Adapter.class)
   public enum DimDesignationModeEnum {
-    DIM_DESIGNATION_MODE_ATTRIBS_AS_MULTILEVEL_DIMS("DIM_DESIGNATION_MODE_ATTRIBS_AS_MULTILEVEL_DIMS"),
+    DIM_DESIGNATION_MODE_ATTRIBS_AS_MULTILEVEL_DIMS(String.valueOf("DIM_DESIGNATION_MODE_ATTRIBS_AS_MULTILEVEL_DIMS")),
     
-    DIM_DESIGNATION_MODE_ATTRIBS_AS_FLAT_DIMS("DIM_DESIGNATION_MODE_ATTRIBS_AS_FLAT_DIMS"),
+    DIM_DESIGNATION_MODE_ATTRIBS_AS_FLAT_DIMS(String.valueOf("DIM_DESIGNATION_MODE_ATTRIBS_AS_FLAT_DIMS")),
     
-    DIM_DESIGNATION_MODE_ALL_FLAT("DIM_DESIGNATION_MODE_ALL_FLAT"),
+    DIM_DESIGNATION_MODE_ALL_FLAT(String.valueOf("DIM_DESIGNATION_MODE_ALL_FLAT")),
     
-    DIM_DESIGNATION_MODE_OAV("DIM_DESIGNATION_MODE_OAV"),
+    DIM_DESIGNATION_MODE_OAV(String.valueOf("DIM_DESIGNATION_MODE_OAV")),
     
-    DIM_DESIGNATION_MODE_OAV_DIM("DIM_DESIGNATION_MODE_OAV_DIM"),
+    DIM_DESIGNATION_MODE_OAV_DIM(String.valueOf("DIM_DESIGNATION_MODE_OAV_DIM")),
     
-    CONVERT_TO_CSV("CONVERT_TO_CSV"),
+    CONVERT_TO_CSV(String.valueOf("CONVERT_TO_CSV")),
     
-    DIM_DESIGNATION_MODE_ATTRIBS_AS_ATTRIBS("DIM_DESIGNATION_MODE_ATTRIBS_AS_ATTRIBS");
+    DIM_DESIGNATION_MODE_ATTRIBS_AS_ATTRIBS(String.valueOf("DIM_DESIGNATION_MODE_ATTRIBS_AS_ATTRIBS"));
 
     private String value;
 
@@ -99,6 +126,7 @@ public class CompactDesignation {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -108,6 +136,7 @@ public class CompactDesignation {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static DimDesignationModeEnum fromValue(String value) {
       for (DimDesignationModeEnum b : DimDesignationModeEnum.values()) {
         if (b.value.equals(value)) {
@@ -116,35 +145,21 @@ public class CompactDesignation {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<DimDesignationModeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final DimDesignationModeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public DimDesignationModeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return DimDesignationModeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_DIM_DESIGNATION_MODE = "dimDesignationMode";
-  @SerializedName(SERIALIZED_NAME_DIM_DESIGNATION_MODE)
+  public static final String JSON_PROPERTY_DIM_DESIGNATION_MODE = "dimDesignationMode";
+  @jakarta.annotation.Nullable
   private DimDesignationModeEnum dimDesignationMode;
 
   /**
    * Gets or Sets namingPriority
    */
-  @JsonAdapter(NamingPriorityEnum.Adapter.class)
   public enum NamingPriorityEnum {
-    NONE("NONE"),
+    NONE(String.valueOf("NONE")),
     
-    GENERATIONS("GENERATIONS"),
+    GENERATIONS(String.valueOf("GENERATIONS")),
     
-    DIMENSIONS("DIMENSIONS");
+    DIMENSIONS(String.valueOf("DIMENSIONS"));
 
     private String value;
 
@@ -152,6 +167,7 @@ public class CompactDesignation {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -161,6 +177,7 @@ public class CompactDesignation {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static NamingPriorityEnum fromValue(String value) {
       for (NamingPriorityEnum b : NamingPriorityEnum.values()) {
         if (b.value.equals(value)) {
@@ -169,569 +186,582 @@ public class CompactDesignation {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<NamingPriorityEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final NamingPriorityEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public NamingPriorityEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return NamingPriorityEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_NAMING_PRIORITY = "namingPriority";
-  @SerializedName(SERIALIZED_NAME_NAMING_PRIORITY)
+  public static final String JSON_PROPERTY_NAMING_PRIORITY = "namingPriority";
+  @jakarta.annotation.Nullable
   private NamingPriorityEnum namingPriority;
 
-  public static final String SERIALIZED_NAME_DATE_COLUMN_ID = "dateColumnId";
-  @SerializedName(SERIALIZED_NAME_DATE_COLUMN_ID)
+  public static final String JSON_PROPERTY_DATE_COLUMN_ID = "dateColumnId";
+  @jakarta.annotation.Nullable
   private Integer dateColumnId;
 
-  public static final String SERIALIZED_NAME_DATE_FORMAT_STRING = "dateFormatString";
-  @SerializedName(SERIALIZED_NAME_DATE_FORMAT_STRING)
+  public static final String JSON_PROPERTY_DATE_FORMAT_STRING = "dateFormatString";
+  @jakarta.annotation.Nullable
   private String dateFormatString;
 
-  public static final String SERIALIZED_NAME_DATE_DIM_STRING = "dateDimString";
-  @SerializedName(SERIALIZED_NAME_DATE_DIM_STRING)
+  public static final String JSON_PROPERTY_DATE_DIM_STRING = "dateDimString";
+  @jakarta.annotation.Nullable
   private String dateDimString;
 
-  public static final String SERIALIZED_NAME_DATE_DIMENSION_LEAVES = "dateDimensionLeaves";
-  @SerializedName(SERIALIZED_NAME_DATE_DIMENSION_LEAVES)
-  private List<String> dateDimensionLeaves = null;
+  public static final String JSON_PROPERTY_DATE_DIMENSION_LEAVES = "dateDimensionLeaves";
+  @jakarta.annotation.Nullable
+  private List<String> dateDimensionLeaves = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_MAX_DATE = "maxDate";
-  @SerializedName(SERIALIZED_NAME_MAX_DATE)
-  private OffsetDateTime maxDate;
+  public static final String JSON_PROPERTY_MAX_DATE = "maxDate";
+  @jakarta.annotation.Nullable
+  private Date maxDate;
 
-  public static final String SERIALIZED_NAME_MIN_DATE = "minDate";
-  @SerializedName(SERIALIZED_NAME_MIN_DATE)
-  private OffsetDateTime minDate;
+  public static final String JSON_PROPERTY_MIN_DATE = "minDate";
+  @jakarta.annotation.Nullable
+  private Date minDate;
 
-  public static final String SERIALIZED_NAME_TABLE_NAME = "tableName";
-  @SerializedName(SERIALIZED_NAME_TABLE_NAME)
+  public static final String JSON_PROPERTY_TABLE_NAME = "tableName";
+  @jakarta.annotation.Nullable
   private String tableName;
 
-  public static final String SERIALIZED_NAME_DIM_COMPACT_DESIGNATION_LIST = "dimCompactDesignationList";
-  @SerializedName(SERIALIZED_NAME_DIM_COMPACT_DESIGNATION_LIST)
-  private List<DimCompactDesignation> dimCompactDesignationList = null;
+  public static final String JSON_PROPERTY_DIM_COMPACT_DESIGNATION_LIST = "dimCompactDesignationList";
+  @jakarta.annotation.Nullable
+  private List<DimCompactDesignation> dimCompactDesignationList = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_QUERY = "query";
-  @SerializedName(SERIALIZED_NAME_QUERY)
+  public static final String JSON_PROPERTY_QUERY = "query";
+  @jakarta.annotation.Nullable
   private String query;
 
+  public CompactDesignation() { 
+  }
 
-  public CompactDesignation file(String file) {
-    
-    this.file = file;
+  public CompactDesignation _file(@jakarta.annotation.Nullable String _file) {
+    this._file = _file;
     return this;
   }
 
-   /**
-   * Get file
-   * @return file
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+  /**
+   * Get _file
+   * @return _file
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FILE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getFile() {
-    return file;
+    return _file;
   }
 
 
-  public void setFile(String file) {
-    this.file = file;
+  @JsonProperty(JSON_PROPERTY_FILE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFile(@jakarta.annotation.Nullable String _file) {
+    this._file = _file;
   }
 
 
-  public CompactDesignation excelSheetName(String excelSheetName) {
-    
+  public CompactDesignation excelSheetName(@jakarta.annotation.Nullable String excelSheetName) {
     this.excelSheetName = excelSheetName;
     return this;
   }
 
-   /**
+  /**
    * Get excelSheetName
    * @return excelSheetName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EXCEL_SHEET_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getExcelSheetName() {
     return excelSheetName;
   }
 
 
-  public void setExcelSheetName(String excelSheetName) {
+  @JsonProperty(JSON_PROPERTY_EXCEL_SHEET_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setExcelSheetName(@jakarta.annotation.Nullable String excelSheetName) {
     this.excelSheetName = excelSheetName;
   }
 
 
-  public CompactDesignation columnOffset(Integer columnOffset) {
-    
+  public CompactDesignation columnOffset(@jakarta.annotation.Nullable Integer columnOffset) {
     this.columnOffset = columnOffset;
     return this;
   }
 
-   /**
+  /**
    * Get columnOffset
    * @return columnOffset
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COLUMN_OFFSET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getColumnOffset() {
     return columnOffset;
   }
 
 
-  public void setColumnOffset(Integer columnOffset) {
+  @JsonProperty(JSON_PROPERTY_COLUMN_OFFSET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setColumnOffset(@jakarta.annotation.Nullable Integer columnOffset) {
     this.columnOffset = columnOffset;
   }
 
 
-  public CompactDesignation badRowListString(String badRowListString) {
-    
+  public CompactDesignation badRowListString(@jakarta.annotation.Nullable String badRowListString) {
     this.badRowListString = badRowListString;
     return this;
   }
 
-   /**
+  /**
    * Get badRowListString
    * @return badRowListString
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BAD_ROW_LIST_STRING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getBadRowListString() {
     return badRowListString;
   }
 
 
-  public void setBadRowListString(String badRowListString) {
+  @JsonProperty(JSON_PROPERTY_BAD_ROW_LIST_STRING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBadRowListString(@jakarta.annotation.Nullable String badRowListString) {
     this.badRowListString = badRowListString;
   }
 
 
-  public CompactDesignation nr(Integer nr) {
-    
+  public CompactDesignation nr(@jakarta.annotation.Nullable Integer nr) {
     this.nr = nr;
     return this;
   }
 
-   /**
+  /**
    * Get nr
    * @return nr
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getNr() {
     return nr;
   }
 
 
-  public void setNr(Integer nr) {
+  @JsonProperty(JSON_PROPERTY_NR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNr(@jakarta.annotation.Nullable Integer nr) {
     this.nr = nr;
   }
 
 
-  public CompactDesignation nrh(Integer nrh) {
-    
+  public CompactDesignation nrh(@jakarta.annotation.Nullable Integer nrh) {
     this.nrh = nrh;
     return this;
   }
 
-   /**
+  /**
    * Get nrh
    * @return nrh
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NRH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getNrh() {
     return nrh;
   }
 
 
-  public void setNrh(Integer nrh) {
+  @JsonProperty(JSON_PROPERTY_NRH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNrh(@jakarta.annotation.Nullable Integer nrh) {
     this.nrh = nrh;
   }
 
 
-  public CompactDesignation compactDesignationColumn(List<CompactDesignationColumn> compactDesignationColumn) {
-    
+  public CompactDesignation compactDesignationColumn(@jakarta.annotation.Nullable List<CompactDesignationColumn> compactDesignationColumn) {
     this.compactDesignationColumn = compactDesignationColumn;
     return this;
   }
 
   public CompactDesignation addCompactDesignationColumnItem(CompactDesignationColumn compactDesignationColumnItem) {
     if (this.compactDesignationColumn == null) {
-      this.compactDesignationColumn = new ArrayList<CompactDesignationColumn>();
+      this.compactDesignationColumn = new ArrayList<>();
     }
     this.compactDesignationColumn.add(compactDesignationColumnItem);
     return this;
   }
 
-   /**
+  /**
    * Get compactDesignationColumn
    * @return compactDesignationColumn
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COMPACT_DESIGNATION_COLUMN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<CompactDesignationColumn> getCompactDesignationColumn() {
     return compactDesignationColumn;
   }
 
 
-  public void setCompactDesignationColumn(List<CompactDesignationColumn> compactDesignationColumn) {
+  @JsonProperty(JSON_PROPERTY_COMPACT_DESIGNATION_COLUMN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCompactDesignationColumn(@jakarta.annotation.Nullable List<CompactDesignationColumn> compactDesignationColumn) {
     this.compactDesignationColumn = compactDesignationColumn;
   }
 
 
-  public CompactDesignation bsoLimitsExceeded(Boolean bsoLimitsExceeded) {
-    
+  public CompactDesignation bsoLimitsExceeded(@jakarta.annotation.Nullable Boolean bsoLimitsExceeded) {
     this.bsoLimitsExceeded = bsoLimitsExceeded;
     return this;
   }
 
-   /**
+  /**
    * Get bsoLimitsExceeded
    * @return bsoLimitsExceeded
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BSO_LIMITS_EXCEEDED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getBsoLimitsExceeded() {
     return bsoLimitsExceeded;
   }
 
 
-  public void setBsoLimitsExceeded(Boolean bsoLimitsExceeded) {
+  @JsonProperty(JSON_PROPERTY_BSO_LIMITS_EXCEEDED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBsoLimitsExceeded(@jakarta.annotation.Nullable Boolean bsoLimitsExceeded) {
     this.bsoLimitsExceeded = bsoLimitsExceeded;
   }
 
 
-  public CompactDesignation fastAnalysis(Boolean fastAnalysis) {
-    
+  public CompactDesignation fastAnalysis(@jakarta.annotation.Nullable Boolean fastAnalysis) {
     this.fastAnalysis = fastAnalysis;
     return this;
   }
 
-   /**
+  /**
    * Get fastAnalysis
    * @return fastAnalysis
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FAST_ANALYSIS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getFastAnalysis() {
     return fastAnalysis;
   }
 
 
-  public void setFastAnalysis(Boolean fastAnalysis) {
+  @JsonProperty(JSON_PROPERTY_FAST_ANALYSIS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFastAnalysis(@jakarta.annotation.Nullable Boolean fastAnalysis) {
     this.fastAnalysis = fastAnalysis;
   }
 
 
-  public CompactDesignation measureDimensionName(String measureDimensionName) {
-    
+  public CompactDesignation measureDimensionName(@jakarta.annotation.Nullable String measureDimensionName) {
     this.measureDimensionName = measureDimensionName;
     return this;
   }
 
-   /**
+  /**
    * Get measureDimensionName
    * @return measureDimensionName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MEASURE_DIMENSION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getMeasureDimensionName() {
     return measureDimensionName;
   }
 
 
-  public void setMeasureDimensionName(String measureDimensionName) {
+  @JsonProperty(JSON_PROPERTY_MEASURE_DIMENSION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMeasureDimensionName(@jakarta.annotation.Nullable String measureDimensionName) {
     this.measureDimensionName = measureDimensionName;
   }
 
 
-  public CompactDesignation dimDesignationMode(DimDesignationModeEnum dimDesignationMode) {
-    
+  public CompactDesignation dimDesignationMode(@jakarta.annotation.Nullable DimDesignationModeEnum dimDesignationMode) {
     this.dimDesignationMode = dimDesignationMode;
     return this;
   }
 
-   /**
+  /**
    * Get dimDesignationMode
    * @return dimDesignationMode
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIM_DESIGNATION_MODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public DimDesignationModeEnum getDimDesignationMode() {
     return dimDesignationMode;
   }
 
 
-  public void setDimDesignationMode(DimDesignationModeEnum dimDesignationMode) {
+  @JsonProperty(JSON_PROPERTY_DIM_DESIGNATION_MODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimDesignationMode(@jakarta.annotation.Nullable DimDesignationModeEnum dimDesignationMode) {
     this.dimDesignationMode = dimDesignationMode;
   }
 
 
-  public CompactDesignation namingPriority(NamingPriorityEnum namingPriority) {
-    
+  public CompactDesignation namingPriority(@jakarta.annotation.Nullable NamingPriorityEnum namingPriority) {
     this.namingPriority = namingPriority;
     return this;
   }
 
-   /**
+  /**
    * Get namingPriority
    * @return namingPriority
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAMING_PRIORITY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public NamingPriorityEnum getNamingPriority() {
     return namingPriority;
   }
 
 
-  public void setNamingPriority(NamingPriorityEnum namingPriority) {
+  @JsonProperty(JSON_PROPERTY_NAMING_PRIORITY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNamingPriority(@jakarta.annotation.Nullable NamingPriorityEnum namingPriority) {
     this.namingPriority = namingPriority;
   }
 
 
-  public CompactDesignation dateColumnId(Integer dateColumnId) {
-    
+  public CompactDesignation dateColumnId(@jakarta.annotation.Nullable Integer dateColumnId) {
     this.dateColumnId = dateColumnId;
     return this;
   }
 
-   /**
+  /**
    * Get dateColumnId
    * @return dateColumnId
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATE_COLUMN_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getDateColumnId() {
     return dateColumnId;
   }
 
 
-  public void setDateColumnId(Integer dateColumnId) {
+  @JsonProperty(JSON_PROPERTY_DATE_COLUMN_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDateColumnId(@jakarta.annotation.Nullable Integer dateColumnId) {
     this.dateColumnId = dateColumnId;
   }
 
 
-  public CompactDesignation dateFormatString(String dateFormatString) {
-    
+  public CompactDesignation dateFormatString(@jakarta.annotation.Nullable String dateFormatString) {
     this.dateFormatString = dateFormatString;
     return this;
   }
 
-   /**
+  /**
    * Get dateFormatString
    * @return dateFormatString
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATE_FORMAT_STRING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDateFormatString() {
     return dateFormatString;
   }
 
 
-  public void setDateFormatString(String dateFormatString) {
+  @JsonProperty(JSON_PROPERTY_DATE_FORMAT_STRING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDateFormatString(@jakarta.annotation.Nullable String dateFormatString) {
     this.dateFormatString = dateFormatString;
   }
 
 
-  public CompactDesignation dateDimString(String dateDimString) {
-    
+  public CompactDesignation dateDimString(@jakarta.annotation.Nullable String dateDimString) {
     this.dateDimString = dateDimString;
     return this;
   }
 
-   /**
+  /**
    * Get dateDimString
    * @return dateDimString
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATE_DIM_STRING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDateDimString() {
     return dateDimString;
   }
 
 
-  public void setDateDimString(String dateDimString) {
+  @JsonProperty(JSON_PROPERTY_DATE_DIM_STRING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDateDimString(@jakarta.annotation.Nullable String dateDimString) {
     this.dateDimString = dateDimString;
   }
 
 
-  public CompactDesignation dateDimensionLeaves(List<String> dateDimensionLeaves) {
-    
+  public CompactDesignation dateDimensionLeaves(@jakarta.annotation.Nullable List<String> dateDimensionLeaves) {
     this.dateDimensionLeaves = dateDimensionLeaves;
     return this;
   }
 
   public CompactDesignation addDateDimensionLeavesItem(String dateDimensionLeavesItem) {
     if (this.dateDimensionLeaves == null) {
-      this.dateDimensionLeaves = new ArrayList<String>();
+      this.dateDimensionLeaves = new ArrayList<>();
     }
     this.dateDimensionLeaves.add(dateDimensionLeavesItem);
     return this;
   }
 
-   /**
+  /**
    * Get dateDimensionLeaves
    * @return dateDimensionLeaves
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATE_DIMENSION_LEAVES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getDateDimensionLeaves() {
     return dateDimensionLeaves;
   }
 
 
-  public void setDateDimensionLeaves(List<String> dateDimensionLeaves) {
+  @JsonProperty(JSON_PROPERTY_DATE_DIMENSION_LEAVES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDateDimensionLeaves(@jakarta.annotation.Nullable List<String> dateDimensionLeaves) {
     this.dateDimensionLeaves = dateDimensionLeaves;
   }
 
 
-  public CompactDesignation maxDate(OffsetDateTime maxDate) {
-    
+  public CompactDesignation maxDate(@jakarta.annotation.Nullable Date maxDate) {
     this.maxDate = maxDate;
     return this;
   }
 
-   /**
+  /**
    * Get maxDate
    * @return maxDate
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
-  public OffsetDateTime getMaxDate() {
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MAX_DATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public Date getMaxDate() {
     return maxDate;
   }
 
 
-  public void setMaxDate(OffsetDateTime maxDate) {
+  @JsonProperty(JSON_PROPERTY_MAX_DATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMaxDate(@jakarta.annotation.Nullable Date maxDate) {
     this.maxDate = maxDate;
   }
 
 
-  public CompactDesignation minDate(OffsetDateTime minDate) {
-    
+  public CompactDesignation minDate(@jakarta.annotation.Nullable Date minDate) {
     this.minDate = minDate;
     return this;
   }
 
-   /**
+  /**
    * Get minDate
    * @return minDate
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
-  public OffsetDateTime getMinDate() {
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MIN_DATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public Date getMinDate() {
     return minDate;
   }
 
 
-  public void setMinDate(OffsetDateTime minDate) {
+  @JsonProperty(JSON_PROPERTY_MIN_DATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMinDate(@jakarta.annotation.Nullable Date minDate) {
     this.minDate = minDate;
   }
 
 
-  public CompactDesignation tableName(String tableName) {
-    
+  public CompactDesignation tableName(@jakarta.annotation.Nullable String tableName) {
     this.tableName = tableName;
     return this;
   }
 
-   /**
+  /**
    * Get tableName
    * @return tableName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TABLE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getTableName() {
     return tableName;
   }
 
 
-  public void setTableName(String tableName) {
+  @JsonProperty(JSON_PROPERTY_TABLE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTableName(@jakarta.annotation.Nullable String tableName) {
     this.tableName = tableName;
   }
 
 
-  public CompactDesignation dimCompactDesignationList(List<DimCompactDesignation> dimCompactDesignationList) {
-    
+  public CompactDesignation dimCompactDesignationList(@jakarta.annotation.Nullable List<DimCompactDesignation> dimCompactDesignationList) {
     this.dimCompactDesignationList = dimCompactDesignationList;
     return this;
   }
 
   public CompactDesignation addDimCompactDesignationListItem(DimCompactDesignation dimCompactDesignationListItem) {
     if (this.dimCompactDesignationList == null) {
-      this.dimCompactDesignationList = new ArrayList<DimCompactDesignation>();
+      this.dimCompactDesignationList = new ArrayList<>();
     }
     this.dimCompactDesignationList.add(dimCompactDesignationListItem);
     return this;
   }
 
-   /**
+  /**
    * Get dimCompactDesignationList
    * @return dimCompactDesignationList
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIM_COMPACT_DESIGNATION_LIST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<DimCompactDesignation> getDimCompactDesignationList() {
     return dimCompactDesignationList;
   }
 
 
-  public void setDimCompactDesignationList(List<DimCompactDesignation> dimCompactDesignationList) {
+  @JsonProperty(JSON_PROPERTY_DIM_COMPACT_DESIGNATION_LIST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimCompactDesignationList(@jakarta.annotation.Nullable List<DimCompactDesignation> dimCompactDesignationList) {
     this.dimCompactDesignationList = dimCompactDesignationList;
   }
 
 
-  public CompactDesignation query(String query) {
-    
+  public CompactDesignation query(@jakarta.annotation.Nullable String query) {
     this.query = query;
     return this;
   }
 
-   /**
+  /**
    * Get query
    * @return query
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_QUERY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getQuery() {
     return query;
   }
 
 
-  public void setQuery(String query) {
+  @JsonProperty(JSON_PROPERTY_QUERY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setQuery(@jakarta.annotation.Nullable String query) {
     this.query = query;
   }
 
 
+  /**
+   * Return true if this CompactDesignation object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -741,7 +771,7 @@ public class CompactDesignation {
       return false;
     }
     CompactDesignation compactDesignation = (CompactDesignation) o;
-    return Objects.equals(this.file, compactDesignation.file) &&
+    return Objects.equals(this._file, compactDesignation._file) &&
         Objects.equals(this.excelSheetName, compactDesignation.excelSheetName) &&
         Objects.equals(this.columnOffset, compactDesignation.columnOffset) &&
         Objects.equals(this.badRowListString, compactDesignation.badRowListString) &&
@@ -766,14 +796,14 @@ public class CompactDesignation {
 
   @Override
   public int hashCode() {
-    return Objects.hash(file, excelSheetName, columnOffset, badRowListString, nr, nrh, compactDesignationColumn, bsoLimitsExceeded, fastAnalysis, measureDimensionName, dimDesignationMode, namingPriority, dateColumnId, dateFormatString, dateDimString, dateDimensionLeaves, maxDate, minDate, tableName, dimCompactDesignationList, query);
+    return Objects.hash(_file, excelSheetName, columnOffset, badRowListString, nr, nrh, compactDesignationColumn, bsoLimitsExceeded, fastAnalysis, measureDimensionName, dimDesignationMode, namingPriority, dateColumnId, dateFormatString, dateDimString, dateDimensionLeaves, maxDate, minDate, tableName, dimCompactDesignationList, query);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CompactDesignation {\n");
-    sb.append("    file: ").append(toIndentedString(file)).append("\n");
+    sb.append("    _file: ").append(toIndentedString(_file)).append("\n");
     sb.append("    excelSheetName: ").append(toIndentedString(excelSheetName)).append("\n");
     sb.append("    columnOffset: ").append(toIndentedString(columnOffset)).append("\n");
     sb.append("    badRowListString: ").append(toIndentedString(badRowListString)).append("\n");
@@ -809,5 +839,158 @@ public class CompactDesignation {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `file` to the URL query string
+    if (getFile() != null) {
+      joiner.add(String.format("%sfile%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFile()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `excelSheetName` to the URL query string
+    if (getExcelSheetName() != null) {
+      joiner.add(String.format("%sexcelSheetName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getExcelSheetName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `columnOffset` to the URL query string
+    if (getColumnOffset() != null) {
+      joiner.add(String.format("%scolumnOffset%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getColumnOffset()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `badRowListString` to the URL query string
+    if (getBadRowListString() != null) {
+      joiner.add(String.format("%sbadRowListString%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getBadRowListString()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `nr` to the URL query string
+    if (getNr() != null) {
+      joiner.add(String.format("%snr%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNr()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `nrh` to the URL query string
+    if (getNrh() != null) {
+      joiner.add(String.format("%snrh%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNrh()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `compactDesignationColumn` to the URL query string
+    if (getCompactDesignationColumn() != null) {
+      for (int i = 0; i < getCompactDesignationColumn().size(); i++) {
+        if (getCompactDesignationColumn().get(i) != null) {
+          joiner.add(getCompactDesignationColumn().get(i).toUrlQueryString(String.format("%scompactDesignationColumn%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `bsoLimitsExceeded` to the URL query string
+    if (getBsoLimitsExceeded() != null) {
+      joiner.add(String.format("%sbsoLimitsExceeded%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getBsoLimitsExceeded()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `fastAnalysis` to the URL query string
+    if (getFastAnalysis() != null) {
+      joiner.add(String.format("%sfastAnalysis%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFastAnalysis()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `measureDimensionName` to the URL query string
+    if (getMeasureDimensionName() != null) {
+      joiner.add(String.format("%smeasureDimensionName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMeasureDimensionName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dimDesignationMode` to the URL query string
+    if (getDimDesignationMode() != null) {
+      joiner.add(String.format("%sdimDesignationMode%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDimDesignationMode()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `namingPriority` to the URL query string
+    if (getNamingPriority() != null) {
+      joiner.add(String.format("%snamingPriority%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNamingPriority()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dateColumnId` to the URL query string
+    if (getDateColumnId() != null) {
+      joiner.add(String.format("%sdateColumnId%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDateColumnId()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dateFormatString` to the URL query string
+    if (getDateFormatString() != null) {
+      joiner.add(String.format("%sdateFormatString%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDateFormatString()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dateDimString` to the URL query string
+    if (getDateDimString() != null) {
+      joiner.add(String.format("%sdateDimString%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDateDimString()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dateDimensionLeaves` to the URL query string
+    if (getDateDimensionLeaves() != null) {
+      for (int i = 0; i < getDateDimensionLeaves().size(); i++) {
+        joiner.add(String.format("%sdateDimensionLeaves%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getDateDimensionLeaves().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `maxDate` to the URL query string
+    if (getMaxDate() != null) {
+      joiner.add(String.format("%smaxDate%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMaxDate()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `minDate` to the URL query string
+    if (getMinDate() != null) {
+      joiner.add(String.format("%sminDate%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMinDate()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `tableName` to the URL query string
+    if (getTableName() != null) {
+      joiner.add(String.format("%stableName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTableName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dimCompactDesignationList` to the URL query string
+    if (getDimCompactDesignationList() != null) {
+      for (int i = 0; i < getDimCompactDesignationList().size(); i++) {
+        if (getDimCompactDesignationList().get(i) != null) {
+          joiner.add(getDimCompactDesignationList().get(i).toUrlQueryString(String.format("%sdimCompactDesignationList%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `query` to the URL query string
+    if (getQuery() != null) {
+      joiner.add(String.format("%squery%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getQuery()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

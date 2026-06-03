@@ -13,88 +13,104 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.ProvisionReportItem;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * DatabaseProvisionReportItem
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  DatabaseProvisionReportItem.JSON_PROPERTY_DATABASE,
+  DatabaseProvisionReportItem.JSON_PROPERTY_ITEMS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class DatabaseProvisionReportItem {
-  public static final String SERIALIZED_NAME_DATABASE = "database";
-  @SerializedName(SERIALIZED_NAME_DATABASE)
+  public static final String JSON_PROPERTY_DATABASE = "database";
+  @jakarta.annotation.Nullable
   private String database;
 
-  public static final String SERIALIZED_NAME_ITEMS = "items";
-  @SerializedName(SERIALIZED_NAME_ITEMS)
-  private List<ProvisionReportItem> items = null;
+  public static final String JSON_PROPERTY_ITEMS = "items";
+  @jakarta.annotation.Nullable
+  private List<ProvisionReportItem> items = new ArrayList<>();
 
+  public DatabaseProvisionReportItem() { 
+  }
 
-  public DatabaseProvisionReportItem database(String database) {
-    
+  public DatabaseProvisionReportItem database(@jakarta.annotation.Nullable String database) {
     this.database = database;
     return this;
   }
 
-   /**
+  /**
    * Get database
    * @return database
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDatabase() {
     return database;
   }
 
 
-  public void setDatabase(String database) {
+  @JsonProperty(JSON_PROPERTY_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatabase(@jakarta.annotation.Nullable String database) {
     this.database = database;
   }
 
 
-  public DatabaseProvisionReportItem items(List<ProvisionReportItem> items) {
-    
+  public DatabaseProvisionReportItem items(@jakarta.annotation.Nullable List<ProvisionReportItem> items) {
     this.items = items;
     return this;
   }
 
   public DatabaseProvisionReportItem addItemsItem(ProvisionReportItem itemsItem) {
     if (this.items == null) {
-      this.items = new ArrayList<ProvisionReportItem>();
+      this.items = new ArrayList<>();
     }
     this.items.add(itemsItem);
     return this;
   }
 
-   /**
+  /**
    * Get items
    * @return items
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ITEMS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<ProvisionReportItem> getItems() {
     return items;
   }
 
 
-  public void setItems(List<ProvisionReportItem> items) {
+  @JsonProperty(JSON_PROPERTY_ITEMS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setItems(@jakarta.annotation.Nullable List<ProvisionReportItem> items) {
     this.items = items;
   }
 
 
+  /**
+   * Return true if this DatabaseProvisionReportItem object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -134,5 +150,54 @@ public class DatabaseProvisionReportItem {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `database` to the URL query string
+    if (getDatabase() != null) {
+      joiner.add(String.format("%sdatabase%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDatabase()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `items` to the URL query string
+    if (getItems() != null) {
+      for (int i = 0; i < getItems().size(); i++) {
+        if (getItems().get(i) != null) {
+          joiner.add(getItems().get(i).toUrlQueryString(String.format("%sitems%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

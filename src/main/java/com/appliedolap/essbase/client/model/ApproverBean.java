@@ -13,158 +13,180 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ApproverBean
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ApproverBean.JSON_PROPERTY_EMAIL,
+  ApproverBean.JSON_PROPERTY_APPROVED,
+  ApproverBean.JSON_PROPERTY_TIME,
+  ApproverBean.JSON_PROPERTY_ID,
+  ApproverBean.JSON_PROPERTY_NAME
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ApproverBean {
-  public static final String SERIALIZED_NAME_EMAIL = "email";
-  @SerializedName(SERIALIZED_NAME_EMAIL)
+  public static final String JSON_PROPERTY_EMAIL = "email";
+  @jakarta.annotation.Nullable
   private String email;
 
-  public static final String SERIALIZED_NAME_APPROVED = "approved";
-  @SerializedName(SERIALIZED_NAME_APPROVED)
+  public static final String JSON_PROPERTY_APPROVED = "approved";
+  @jakarta.annotation.Nullable
   private Boolean approved;
 
-  public static final String SERIALIZED_NAME_TIME = "time";
-  @SerializedName(SERIALIZED_NAME_TIME)
+  public static final String JSON_PROPERTY_TIME = "time";
+  @jakarta.annotation.Nullable
   private Long time;
 
-  public static final String SERIALIZED_NAME_ID = "id";
-  @SerializedName(SERIALIZED_NAME_ID)
+  public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nullable
   private String id;
 
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
+  public ApproverBean() { 
+  }
 
-  public ApproverBean email(String email) {
-    
+  public ApproverBean email(@jakarta.annotation.Nullable String email) {
     this.email = email;
     return this;
   }
 
-   /**
+  /**
    * Get email
    * @return email
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EMAIL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getEmail() {
     return email;
   }
 
 
-  public void setEmail(String email) {
+  @JsonProperty(JSON_PROPERTY_EMAIL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEmail(@jakarta.annotation.Nullable String email) {
     this.email = email;
   }
 
 
-  public ApproverBean approved(Boolean approved) {
-    
+  public ApproverBean approved(@jakarta.annotation.Nullable Boolean approved) {
     this.approved = approved;
     return this;
   }
 
-   /**
+  /**
    * Get approved
    * @return approved
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPROVED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getApproved() {
     return approved;
   }
 
 
-  public void setApproved(Boolean approved) {
+  @JsonProperty(JSON_PROPERTY_APPROVED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApproved(@jakarta.annotation.Nullable Boolean approved) {
     this.approved = approved;
   }
 
 
-  public ApproverBean time(Long time) {
-    
+  public ApproverBean time(@jakarta.annotation.Nullable Long time) {
     this.time = time;
     return this;
   }
 
-   /**
+  /**
    * Get time
    * @return time
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getTime() {
     return time;
   }
 
 
-  public void setTime(Long time) {
+  @JsonProperty(JSON_PROPERTY_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTime(@jakarta.annotation.Nullable Long time) {
     this.time = time;
   }
 
 
-  public ApproverBean id(String id) {
-    
+  public ApproverBean id(@jakarta.annotation.Nullable String id) {
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getId() {
     return id;
   }
 
 
-  public void setId(String id) {
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setId(@jakarta.annotation.Nullable String id) {
     this.id = id;
   }
 
 
-  public ApproverBean name(String name) {
-    
+  public ApproverBean name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
+  /**
+   * Return true if this ApproverBean object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -210,5 +232,64 @@ public class ApproverBean {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `email` to the URL query string
+    if (getEmail() != null) {
+      joiner.add(String.format("%semail%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getEmail()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `approved` to the URL query string
+    if (getApproved() != null) {
+      joiner.add(String.format("%sapproved%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getApproved()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `time` to the URL query string
+    if (getTime() != null) {
+      joiner.add(String.format("%stime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `id` to the URL query string
+    if (getId() != null) {
+      joiner.add(String.format("%sid%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getId()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

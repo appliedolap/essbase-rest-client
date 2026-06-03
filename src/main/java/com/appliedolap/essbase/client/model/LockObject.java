@@ -13,107 +13,118 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.Link;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * LockObject
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  LockObject.JSON_PROPERTY_LINKS,
+  LockObject.JSON_PROPERTY_USER,
+  LockObject.JSON_PROPERTY_TYPE,
+  LockObject.JSON_PROPERTY_TIME,
+  LockObject.JSON_PROPERTY_NAME
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class LockObject {
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_USER = "user";
-  @SerializedName(SERIALIZED_NAME_USER)
+  public static final String JSON_PROPERTY_USER = "user";
+  @jakarta.annotation.Nullable
   private String user;
 
   /**
    * Gets or Sets type
    */
-  @JsonAdapter(TypeEnum.Adapter.class)
   public enum TypeEnum {
-    OUTLINE("OUTLINE"),
+    OUTLINE(String.valueOf("OUTLINE")),
     
-    CALCSCRIPT("CALCSCRIPT"),
+    CALCSCRIPT(String.valueOf("CALCSCRIPT")),
     
-    REPORT("REPORT"),
+    REPORT(String.valueOf("REPORT")),
     
-    RULES("RULES"),
+    RULES(String.valueOf("RULES")),
     
-    ALIAS("ALIAS"),
+    ALIAS(String.valueOf("ALIAS")),
     
-    STRUCTURE("STRUCTURE"),
+    STRUCTURE(String.valueOf("STRUCTURE")),
     
-    ASCBACKUP("ASCBACKUP"),
+    ASCBACKUP(String.valueOf("ASCBACKUP")),
     
-    BINBACKUP("BINBACKUP"),
+    BINBACKUP(String.valueOf("BINBACKUP")),
     
-    EXCEL("EXCEL"),
+    EXCEL(String.valueOf("EXCEL")),
     
-    XLSX("XLSX"),
+    XLSX(String.valueOf("XLSX")),
     
-    XLSM("XLSM"),
+    XLSM(String.valueOf("XLSM")),
     
-    MAXL("MAXL"),
+    MAXL(String.valueOf("MAXL")),
     
-    ZIP("ZIP"),
+    ZIP(String.valueOf("ZIP")),
     
-    CSV("CSV"),
+    CSV(String.valueOf("CSV")),
     
-    LOTUS2("LOTUS2"),
+    LOTUS2(String.valueOf("LOTUS2")),
     
-    LOTUS3("LOTUS3"),
+    LOTUS3(String.valueOf("LOTUS3")),
     
-    TEXT("TEXT"),
+    TEXT(String.valueOf("TEXT")),
     
-    LOTUS4("LOTUS4"),
+    LOTUS4(String.valueOf("LOTUS4")),
     
-    WIZARD("WIZARD"),
+    WIZARD(String.valueOf("WIZARD")),
     
-    PARTITION("PARTITION"),
+    PARTITION(String.valueOf("PARTITION")),
     
-    SELECTION("SELECTION"),
+    SELECTION(String.valueOf("SELECTION")),
     
-    LRO("LRO"),
+    LRO(String.valueOf("LRO")),
     
-    EQD("EQD"),
+    EQD(String.valueOf("EQD")),
     
-    XML("XML"),
+    XML(String.valueOf("XML")),
     
-    JAVA_CDF("JAVA_CDF"),
+    JAVA_CDF(String.valueOf("JAVA_CDF")),
     
-    MAX("MAX"),
+    MAX(String.valueOf("MAX")),
     
-    BACKUP("BACKUP"),
+    BACKUP(String.valueOf("BACKUP")),
     
-    WORKSHEET("WORKSHEET"),
+    WORKSHEET(String.valueOf("WORKSHEET")),
     
-    DATA("DATA"),
+    DATA(String.valueOf("DATA")),
     
-    ERROR("ERROR"),
+    ERROR(String.valueOf("ERROR")),
     
-    OUT("OUT"),
+    OUT(String.valueOf("OUT")),
     
-    GROOVY("GROOVY"),
+    GROOVY(String.valueOf("GROOVY")),
     
-    DRILLTHROUGH("DRILLTHROUGH"),
+    DRILLTHROUGH(String.valueOf("DRILLTHROUGH")),
     
-    ALL("ALL"),
+    ALL(String.valueOf("ALL")),
     
-    MDX("MDX");
+    MDX(String.valueOf("MDX"));
 
     private String value;
 
@@ -121,6 +132,7 @@ public class LockObject {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -130,6 +142,7 @@ public class LockObject {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static TypeEnum fromValue(String value) {
       for (TypeEnum b : TypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -138,157 +151,154 @@ public class LockObject {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<TypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final TypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public TypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return TypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nullable
   private TypeEnum type;
 
-  public static final String SERIALIZED_NAME_TIME = "time";
-  @SerializedName(SERIALIZED_NAME_TIME)
+  public static final String JSON_PROPERTY_TIME = "time";
+  @jakarta.annotation.Nullable
   private Long time;
 
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
+  public LockObject() { 
+  }
 
-  public LockObject links(List<Link> links) {
-    
+  public LockObject links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public LockObject addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
-  public LockObject user(String user) {
-    
+  public LockObject user(@jakarta.annotation.Nullable String user) {
     this.user = user;
     return this;
   }
 
-   /**
+  /**
    * Get user
    * @return user
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getUser() {
     return user;
   }
 
 
-  public void setUser(String user) {
+  @JsonProperty(JSON_PROPERTY_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUser(@jakarta.annotation.Nullable String user) {
     this.user = user;
   }
 
 
-  public LockObject type(TypeEnum type) {
-    
+  public LockObject type(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public TypeEnum getType() {
     return type;
   }
 
 
-  public void setType(TypeEnum type) {
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setType(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
   }
 
 
-  public LockObject time(Long time) {
-    
+  public LockObject time(@jakarta.annotation.Nullable Long time) {
     this.time = time;
     return this;
   }
 
-   /**
+  /**
    * Get time
    * @return time
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getTime() {
     return time;
   }
 
 
-  public void setTime(Long time) {
+  @JsonProperty(JSON_PROPERTY_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTime(@jakarta.annotation.Nullable Long time) {
     this.time = time;
   }
 
 
-  public LockObject name(String name) {
-    
+  public LockObject name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
+  /**
+   * Return true if this LockObject object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -334,5 +344,69 @@ public class LockObject {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `user` to the URL query string
+    if (getUser() != null) {
+      joiner.add(String.format("%suser%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUser()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `time` to the URL query string
+    if (getTime() != null) {
+      joiner.add(String.format("%stime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

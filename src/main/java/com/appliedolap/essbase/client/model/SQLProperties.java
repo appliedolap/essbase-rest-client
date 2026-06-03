@@ -13,212 +13,238 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * SQLProperties
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  SQLProperties.JSON_PROPERTY_SERVER,
+  SQLProperties.JSON_PROPERTY_APPLICATION,
+  SQLProperties.JSON_PROPERTY_DATABASE,
+  SQLProperties.JSON_PROPERTY_DICTIONARY,
+  SQLProperties.JSON_PROPERTY_SELECT,
+  SQLProperties.JSON_PROPERTY_FROM,
+  SQLProperties.JSON_PROPERTY_WHERE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class SQLProperties {
-  public static final String SERIALIZED_NAME_SERVER = "server";
-  @SerializedName(SERIALIZED_NAME_SERVER)
+  public static final String JSON_PROPERTY_SERVER = "server";
+  @jakarta.annotation.Nullable
   private String server;
 
-  public static final String SERIALIZED_NAME_APPLICATION = "application";
-  @SerializedName(SERIALIZED_NAME_APPLICATION)
+  public static final String JSON_PROPERTY_APPLICATION = "application";
+  @jakarta.annotation.Nullable
   private String application;
 
-  public static final String SERIALIZED_NAME_DATABASE = "database";
-  @SerializedName(SERIALIZED_NAME_DATABASE)
+  public static final String JSON_PROPERTY_DATABASE = "database";
+  @jakarta.annotation.Nullable
   private String database;
 
-  public static final String SERIALIZED_NAME_DICTIONARY = "dictionary";
-  @SerializedName(SERIALIZED_NAME_DICTIONARY)
+  public static final String JSON_PROPERTY_DICTIONARY = "dictionary";
+  @jakarta.annotation.Nullable
   private String dictionary;
 
-  public static final String SERIALIZED_NAME_SELECT = "select";
-  @SerializedName(SERIALIZED_NAME_SELECT)
+  public static final String JSON_PROPERTY_SELECT = "select";
+  @jakarta.annotation.Nullable
   private String select;
 
-  public static final String SERIALIZED_NAME_FROM = "from";
-  @SerializedName(SERIALIZED_NAME_FROM)
+  public static final String JSON_PROPERTY_FROM = "from";
+  @jakarta.annotation.Nullable
   private String from;
 
-  public static final String SERIALIZED_NAME_WHERE = "where";
-  @SerializedName(SERIALIZED_NAME_WHERE)
+  public static final String JSON_PROPERTY_WHERE = "where";
+  @jakarta.annotation.Nullable
   private String where;
 
+  public SQLProperties() { 
+  }
 
-  public SQLProperties server(String server) {
-    
+  public SQLProperties server(@jakarta.annotation.Nullable String server) {
     this.server = server;
     return this;
   }
 
-   /**
+  /**
    * Get server
    * @return server
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SERVER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getServer() {
     return server;
   }
 
 
-  public void setServer(String server) {
+  @JsonProperty(JSON_PROPERTY_SERVER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setServer(@jakarta.annotation.Nullable String server) {
     this.server = server;
   }
 
 
-  public SQLProperties application(String application) {
-    
+  public SQLProperties application(@jakarta.annotation.Nullable String application) {
     this.application = application;
     return this;
   }
 
-   /**
+  /**
    * Get application
    * @return application
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getApplication() {
     return application;
   }
 
 
-  public void setApplication(String application) {
+  @JsonProperty(JSON_PROPERTY_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApplication(@jakarta.annotation.Nullable String application) {
     this.application = application;
   }
 
 
-  public SQLProperties database(String database) {
-    
+  public SQLProperties database(@jakarta.annotation.Nullable String database) {
     this.database = database;
     return this;
   }
 
-   /**
+  /**
    * Get database
    * @return database
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDatabase() {
     return database;
   }
 
 
-  public void setDatabase(String database) {
+  @JsonProperty(JSON_PROPERTY_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatabase(@jakarta.annotation.Nullable String database) {
     this.database = database;
   }
 
 
-  public SQLProperties dictionary(String dictionary) {
-    
+  public SQLProperties dictionary(@jakarta.annotation.Nullable String dictionary) {
     this.dictionary = dictionary;
     return this;
   }
 
-   /**
+  /**
    * Get dictionary
    * @return dictionary
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DICTIONARY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDictionary() {
     return dictionary;
   }
 
 
-  public void setDictionary(String dictionary) {
+  @JsonProperty(JSON_PROPERTY_DICTIONARY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDictionary(@jakarta.annotation.Nullable String dictionary) {
     this.dictionary = dictionary;
   }
 
 
-  public SQLProperties select(String select) {
-    
+  public SQLProperties select(@jakarta.annotation.Nullable String select) {
     this.select = select;
     return this;
   }
 
-   /**
+  /**
    * Get select
    * @return select
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SELECT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getSelect() {
     return select;
   }
 
 
-  public void setSelect(String select) {
+  @JsonProperty(JSON_PROPERTY_SELECT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSelect(@jakarta.annotation.Nullable String select) {
     this.select = select;
   }
 
 
-  public SQLProperties from(String from) {
-    
+  public SQLProperties from(@jakarta.annotation.Nullable String from) {
     this.from = from;
     return this;
   }
 
-   /**
+  /**
    * Get from
    * @return from
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FROM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getFrom() {
     return from;
   }
 
 
-  public void setFrom(String from) {
+  @JsonProperty(JSON_PROPERTY_FROM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFrom(@jakarta.annotation.Nullable String from) {
     this.from = from;
   }
 
 
-  public SQLProperties where(String where) {
-    
+  public SQLProperties where(@jakarta.annotation.Nullable String where) {
     this.where = where;
     return this;
   }
 
-   /**
+  /**
    * Get where
    * @return where
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_WHERE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getWhere() {
     return where;
   }
 
 
-  public void setWhere(String where) {
+  @JsonProperty(JSON_PROPERTY_WHERE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWhere(@jakarta.annotation.Nullable String where) {
     this.where = where;
   }
 
 
+  /**
+   * Return true if this SQLProperties object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -268,5 +294,74 @@ public class SQLProperties {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `server` to the URL query string
+    if (getServer() != null) {
+      joiner.add(String.format("%sserver%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getServer()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `application` to the URL query string
+    if (getApplication() != null) {
+      joiner.add(String.format("%sapplication%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getApplication()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `database` to the URL query string
+    if (getDatabase() != null) {
+      joiner.add(String.format("%sdatabase%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDatabase()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dictionary` to the URL query string
+    if (getDictionary() != null) {
+      joiner.add(String.format("%sdictionary%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDictionary()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `select` to the URL query string
+    if (getSelect() != null) {
+      joiner.add(String.format("%sselect%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSelect()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `from` to the URL query string
+    if (getFrom() != null) {
+      joiner.add(String.format("%sfrom%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFrom()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `where` to the URL query string
+    if (getWhere() != null) {
+      joiner.add(String.format("%swhere%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getWhere()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

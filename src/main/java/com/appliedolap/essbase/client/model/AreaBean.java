@@ -13,169 +13,191 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.MemberMappingBean;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * AreaBean
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  AreaBean.JSON_PROPERTY_SOURCE_AREA,
+  AreaBean.JSON_PROPERTY_TARGET_AREA,
+  AreaBean.JSON_PROPERTY_SOURCE_CELL_COUNT,
+  AreaBean.JSON_PROPERTY_TARGET_CELL_COUNT,
+  AreaBean.JSON_PROPERTY_SLICES
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class AreaBean {
-  public static final String SERIALIZED_NAME_SOURCE_AREA = "sourceArea";
-  @SerializedName(SERIALIZED_NAME_SOURCE_AREA)
+  public static final String JSON_PROPERTY_SOURCE_AREA = "sourceArea";
+  @jakarta.annotation.Nullable
   private String sourceArea;
 
-  public static final String SERIALIZED_NAME_TARGET_AREA = "targetArea";
-  @SerializedName(SERIALIZED_NAME_TARGET_AREA)
+  public static final String JSON_PROPERTY_TARGET_AREA = "targetArea";
+  @jakarta.annotation.Nullable
   private String targetArea;
 
-  public static final String SERIALIZED_NAME_SOURCE_CELL_COUNT = "sourceCellCount";
-  @SerializedName(SERIALIZED_NAME_SOURCE_CELL_COUNT)
+  public static final String JSON_PROPERTY_SOURCE_CELL_COUNT = "sourceCellCount";
+  @jakarta.annotation.Nullable
   private Long sourceCellCount;
 
-  public static final String SERIALIZED_NAME_TARGET_CELL_COUNT = "targetCellCount";
-  @SerializedName(SERIALIZED_NAME_TARGET_CELL_COUNT)
+  public static final String JSON_PROPERTY_TARGET_CELL_COUNT = "targetCellCount";
+  @jakarta.annotation.Nullable
   private Long targetCellCount;
 
-  public static final String SERIALIZED_NAME_SLICES = "slices";
-  @SerializedName(SERIALIZED_NAME_SLICES)
-  private List<MemberMappingBean> slices = null;
+  public static final String JSON_PROPERTY_SLICES = "slices";
+  @jakarta.annotation.Nullable
+  private List<MemberMappingBean> slices = new ArrayList<>();
 
+  public AreaBean() { 
+  }
 
-  public AreaBean sourceArea(String sourceArea) {
-    
+  public AreaBean sourceArea(@jakarta.annotation.Nullable String sourceArea) {
     this.sourceArea = sourceArea;
     return this;
   }
 
-   /**
+  /**
    * Get sourceArea
    * @return sourceArea
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SOURCE_AREA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getSourceArea() {
     return sourceArea;
   }
 
 
-  public void setSourceArea(String sourceArea) {
+  @JsonProperty(JSON_PROPERTY_SOURCE_AREA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSourceArea(@jakarta.annotation.Nullable String sourceArea) {
     this.sourceArea = sourceArea;
   }
 
 
-  public AreaBean targetArea(String targetArea) {
-    
+  public AreaBean targetArea(@jakarta.annotation.Nullable String targetArea) {
     this.targetArea = targetArea;
     return this;
   }
 
-   /**
+  /**
    * Get targetArea
    * @return targetArea
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TARGET_AREA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getTargetArea() {
     return targetArea;
   }
 
 
-  public void setTargetArea(String targetArea) {
+  @JsonProperty(JSON_PROPERTY_TARGET_AREA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTargetArea(@jakarta.annotation.Nullable String targetArea) {
     this.targetArea = targetArea;
   }
 
 
-  public AreaBean sourceCellCount(Long sourceCellCount) {
-    
+  public AreaBean sourceCellCount(@jakarta.annotation.Nullable Long sourceCellCount) {
     this.sourceCellCount = sourceCellCount;
     return this;
   }
 
-   /**
+  /**
    * Get sourceCellCount
    * @return sourceCellCount
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SOURCE_CELL_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getSourceCellCount() {
     return sourceCellCount;
   }
 
 
-  public void setSourceCellCount(Long sourceCellCount) {
+  @JsonProperty(JSON_PROPERTY_SOURCE_CELL_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSourceCellCount(@jakarta.annotation.Nullable Long sourceCellCount) {
     this.sourceCellCount = sourceCellCount;
   }
 
 
-  public AreaBean targetCellCount(Long targetCellCount) {
-    
+  public AreaBean targetCellCount(@jakarta.annotation.Nullable Long targetCellCount) {
     this.targetCellCount = targetCellCount;
     return this;
   }
 
-   /**
+  /**
    * Get targetCellCount
    * @return targetCellCount
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TARGET_CELL_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getTargetCellCount() {
     return targetCellCount;
   }
 
 
-  public void setTargetCellCount(Long targetCellCount) {
+  @JsonProperty(JSON_PROPERTY_TARGET_CELL_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTargetCellCount(@jakarta.annotation.Nullable Long targetCellCount) {
     this.targetCellCount = targetCellCount;
   }
 
 
-  public AreaBean slices(List<MemberMappingBean> slices) {
-    
+  public AreaBean slices(@jakarta.annotation.Nullable List<MemberMappingBean> slices) {
     this.slices = slices;
     return this;
   }
 
   public AreaBean addSlicesItem(MemberMappingBean slicesItem) {
     if (this.slices == null) {
-      this.slices = new ArrayList<MemberMappingBean>();
+      this.slices = new ArrayList<>();
     }
     this.slices.add(slicesItem);
     return this;
   }
 
-   /**
+  /**
    * Get slices
    * @return slices
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SLICES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<MemberMappingBean> getSlices() {
     return slices;
   }
 
 
-  public void setSlices(List<MemberMappingBean> slices) {
+  @JsonProperty(JSON_PROPERTY_SLICES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSlices(@jakarta.annotation.Nullable List<MemberMappingBean> slices) {
     this.slices = slices;
   }
 
 
+  /**
+   * Return true if this AreaBean object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -221,5 +243,69 @@ public class AreaBean {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `sourceArea` to the URL query string
+    if (getSourceArea() != null) {
+      joiner.add(String.format("%ssourceArea%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSourceArea()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `targetArea` to the URL query string
+    if (getTargetArea() != null) {
+      joiner.add(String.format("%stargetArea%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTargetArea()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `sourceCellCount` to the URL query string
+    if (getSourceCellCount() != null) {
+      joiner.add(String.format("%ssourceCellCount%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSourceCellCount()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `targetCellCount` to the URL query string
+    if (getTargetCellCount() != null) {
+      joiner.add(String.format("%stargetCellCount%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTargetCellCount()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `slices` to the URL query string
+    if (getSlices() != null) {
+      for (int i = 0; i < getSlices().size(); i++) {
+        if (getSlices().get(i) != null) {
+          joiner.add(getSlices().get(i).toUrlQueryString(String.format("%sslices%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

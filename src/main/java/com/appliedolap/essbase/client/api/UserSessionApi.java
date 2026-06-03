@@ -10,376 +10,309 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.ResetPasswordBean;
 import com.appliedolap.essbase.client.model.UserBean;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class UserSessionApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public UserSessionApi() {
-        this(Configuration.getDefaultApiClient());
+  public UserSessionApi() {
+    this(new ApiClient());
+  }
+
+  public UserSessionApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public UserSessionApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Get Session
+   * Returns logged in user information.
+   * @param token  (optional)
+   * @return UserBean
+   * @throws ApiException if fails to make API call
+   */
+  public UserBean userSessionGetSession(Boolean token) throws ApiException {
+    ApiResponse<UserBean> localVarResponse = userSessionGetSessionWithHttpInfo(token);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for userSessionGetSession
-     * @param token  (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns logged in user information. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to get user information. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userSessionGetSessionCall(Boolean token, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/session";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (token != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("token", token));
+  /**
+   * Get Session
+   * Returns logged in user information.
+   * @param token  (optional)
+   * @return ApiResponse&lt;UserBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<UserBean> userSessionGetSessionWithHttpInfo(Boolean token) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = userSessionGetSessionRequestBuilder(token);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("userSessionGetSession", localVarResponse);
         }
+        return new ApiResponse<UserBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<UserBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  private HttpRequest.Builder userSessionGetSessionRequestBuilder(Boolean token) throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/session";
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "token";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("token", token));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Reset Password.
+   * Reset the password.
+   * @param body Reset password details. (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void userSessionResetPassword(ResetPasswordBean body) throws ApiException {
+    userSessionResetPasswordWithHttpInfo(body);
+  }
+
+  /**
+   * Reset Password.
+   * Reset the password.
+   * @param body Reset password details. (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> userSessionResetPasswordWithHttpInfo(ResetPasswordBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = userSessionResetPasswordRequestBuilder(body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("userSessionResetPassword", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call userSessionGetSessionValidateBeforeCall(Boolean token, final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = userSessionGetSessionCall(token, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Session
-     * Returns logged in user information.
-     * @param token  (optional)
-     * @return UserBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns logged in user information. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to get user information. </td><td>  -  </td></tr>
-     </table>
-     */
-    public UserBean userSessionGetSession(Boolean token) throws ApiException {
-        ApiResponse<UserBean> localVarResp = userSessionGetSessionWithHttpInfo(token);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Session
-     * Returns logged in user information.
-     * @param token  (optional)
-     * @return ApiResponse&lt;UserBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns logged in user information. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to get user information. </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<UserBean> userSessionGetSessionWithHttpInfo(Boolean token) throws ApiException {
-        okhttp3.Call localVarCall = userSessionGetSessionValidateBeforeCall(token, null);
-        Type localVarReturnType = new TypeToken<UserBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Session (asynchronously)
-     * Returns logged in user information.
-     * @param token  (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns logged in user information. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to get user information. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userSessionGetSessionAsync(Boolean token, final ApiCallback<UserBean> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = userSessionGetSessionValidateBeforeCall(token, _callback);
-        Type localVarReturnType = new TypeToken<UserBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for userSessionResetPassword
-     * @param body Reset password details. (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Reset password is successful. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Reset password failed. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userSessionResetPasswordCall(ResetPasswordBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/session/password";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder userSessionResetPasswordRequestBuilder(ResetPasswordBean body) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling userSessionResetPassword");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call userSessionResetPasswordValidateBeforeCall(ResetPasswordBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling userSessionResetPassword(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/session/password";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Logout Session
+   * Deactivates current session.
+   * @throws ApiException if fails to make API call
+   */
+  public void userSessionSignoff() throws ApiException {
+    userSessionSignoffWithHttpInfo();
+  }
+
+  /**
+   * Logout Session
+   * Deactivates current session.
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> userSessionSignoffWithHttpInfo() throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = userSessionSignoffRequestBuilder();
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("userSessionSignoff", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = userSessionResetPasswordCall(body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Reset Password.
-     * Reset the password.
-     * @param body Reset password details. (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Reset password is successful. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Reset password failed. </td><td>  -  </td></tr>
-     </table>
-     */
-    public void userSessionResetPassword(ResetPasswordBean body) throws ApiException {
-        userSessionResetPasswordWithHttpInfo(body);
-    }
-
-    /**
-     * Reset Password.
-     * Reset the password.
-     * @param body Reset password details. (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Reset password is successful. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Reset password failed. </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> userSessionResetPasswordWithHttpInfo(ResetPasswordBean body) throws ApiException {
-        okhttp3.Call localVarCall = userSessionResetPasswordValidateBeforeCall(body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Reset Password. (asynchronously)
-     * Reset the password.
-     * @param body Reset password details. (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Reset password is successful. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Reset password failed. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userSessionResetPasswordAsync(ResetPasswordBean body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = userSessionResetPasswordValidateBeforeCall(body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for userSessionSignoff
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Session deactivation is successful. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Session deactivation Failed. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userSessionSignoffCall(final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/session";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call userSessionSignoffValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = userSessionSignoffCall(_callback);
-        return localVarCall;
-
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
     }
+  }
 
-    /**
-     * Logout Session
-     * Deactivates current session.
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Session deactivation is successful. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Session deactivation Failed. </td><td>  -  </td></tr>
-     </table>
-     */
-    public void userSessionSignoff() throws ApiException {
-        userSessionSignoffWithHttpInfo();
+  private HttpRequest.Builder userSessionSignoffRequestBuilder() throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/session";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Logout Session
-     * Deactivates current session.
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Session deactivation is successful. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Session deactivation Failed. </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> userSessionSignoffWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = userSessionSignoffValidateBeforeCall(null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Logout Session (asynchronously)
-     * Deactivates current session.
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Session deactivation is successful. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Session deactivation Failed. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call userSessionSignoffAsync(final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = userSessionSignoffValidateBeforeCall(_callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
 }

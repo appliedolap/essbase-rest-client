@@ -13,79 +13,113 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.AttributeOptions;
 import com.appliedolap.essbase.client.model.Level;
 import com.appliedolap.essbase.client.model.MeasureOptions;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * Dimension
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  Dimension.JSON_PROPERTY_GENERATIONS,
+  Dimension.JSON_PROPERTY_LEVELS,
+  Dimension.JSON_PROPERTY_ALLOWASSOCIATION_CHANGES,
+  Dimension.JSON_PROPERTY_ALLOW_FORMULA_CHANGES,
+  Dimension.JSON_PROPERTY_ALLOW_PROPERTY_CHANGES,
+  Dimension.JSON_PROPERTY_ALLOW_U_D_A_CHANGES,
+  Dimension.JSON_PROPERTY_MEASURE_OPTIONS,
+  Dimension.JSON_PROPERTY_AGGREGATE_LEVEL_USAGE,
+  Dimension.JSON_PROPERTY_ADD_MEMBER_OPTION,
+  Dimension.JSON_PROPERTY_ATTRIBUTE_OPTIONS,
+  Dimension.JSON_PROPERTY_CONFIG_OPTION,
+  Dimension.JSON_PROPERTY_UNIQUE,
+  Dimension.JSON_PROPERTY_HIERARCHY_TYPE,
+  Dimension.JSON_PROPERTY_SORT_OPTION,
+  Dimension.JSON_PROPERTY_STORAGE_TYPE,
+  Dimension.JSON_PROPERTY_TYPE,
+  Dimension.JSON_PROPERTY_UPDATE_OPTION,
+  Dimension.JSON_PROPERTY_ALLOW_MOVES,
+  Dimension.JSON_PROPERTY_SOLVE_ORDER,
+  Dimension.JSON_PROPERTY_CREATE_ATTRIBUTE_MEMBERS,
+  Dimension.JSON_PROPERTY_SHARE,
+  Dimension.JSON_PROPERTY_INCREMENTAL_SORT,
+  Dimension.JSON_PROPERTY_AUTO_FIX_SHARED_MEMBER,
+  Dimension.JSON_PROPERTY_FLEXIBLE,
+  Dimension.JSON_PROPERTY_MEMBER_NAME,
+  Dimension.JSON_PROPERTY_NAME,
+  Dimension.JSON_PROPERTY_DIMENSION_SOLVE_ORDER,
+  Dimension.JSON_PROPERTY_ADDED
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class Dimension {
-  public static final String SERIALIZED_NAME_GENERATIONS = "generations";
-  @SerializedName(SERIALIZED_NAME_GENERATIONS)
-  private List<Level> generations = null;
+  public static final String JSON_PROPERTY_GENERATIONS = "generations";
+  @jakarta.annotation.Nullable
+  private List<Level> generations = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_LEVELS = "levels";
-  @SerializedName(SERIALIZED_NAME_LEVELS)
-  private List<Level> levels = null;
+  public static final String JSON_PROPERTY_LEVELS = "levels";
+  @jakarta.annotation.Nullable
+  private List<Level> levels = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_ALLOWASSOCIATION_CHANGES = "allowassociationChanges";
-  @SerializedName(SERIALIZED_NAME_ALLOWASSOCIATION_CHANGES)
+  public static final String JSON_PROPERTY_ALLOWASSOCIATION_CHANGES = "allowassociationChanges";
+  @jakarta.annotation.Nullable
   private Boolean allowassociationChanges;
 
-  public static final String SERIALIZED_NAME_ALLOW_FORMULA_CHANGES = "allowFormulaChanges";
-  @SerializedName(SERIALIZED_NAME_ALLOW_FORMULA_CHANGES)
+  public static final String JSON_PROPERTY_ALLOW_FORMULA_CHANGES = "allowFormulaChanges";
+  @jakarta.annotation.Nullable
   private Boolean allowFormulaChanges;
 
-  public static final String SERIALIZED_NAME_ALLOW_PROPERTY_CHANGES = "allowPropertyChanges";
-  @SerializedName(SERIALIZED_NAME_ALLOW_PROPERTY_CHANGES)
+  public static final String JSON_PROPERTY_ALLOW_PROPERTY_CHANGES = "allowPropertyChanges";
+  @jakarta.annotation.Nullable
   private Boolean allowPropertyChanges;
 
-  public static final String SERIALIZED_NAME_ALLOW_U_D_A_CHANGES = "allowUDAChanges";
-  @SerializedName(SERIALIZED_NAME_ALLOW_U_D_A_CHANGES)
+  public static final String JSON_PROPERTY_ALLOW_U_D_A_CHANGES = "allowUDAChanges";
+  @jakarta.annotation.Nullable
   private Boolean allowUDAChanges;
 
-  public static final String SERIALIZED_NAME_MEASURE_OPTIONS = "measureOptions";
-  @SerializedName(SERIALIZED_NAME_MEASURE_OPTIONS)
+  public static final String JSON_PROPERTY_MEASURE_OPTIONS = "measureOptions";
+  @jakarta.annotation.Nullable
   private MeasureOptions measureOptions;
 
-  public static final String SERIALIZED_NAME_AGGREGATE_LEVEL_USAGE = "aggregateLevelUsage";
-  @SerializedName(SERIALIZED_NAME_AGGREGATE_LEVEL_USAGE)
+  public static final String JSON_PROPERTY_AGGREGATE_LEVEL_USAGE = "aggregateLevelUsage";
+  @jakarta.annotation.Nullable
   private Integer aggregateLevelUsage;
 
   /**
    * Gets or Sets addMemberOption
    */
-  @JsonAdapter(AddMemberOptionEnum.Adapter.class)
   public enum AddMemberOptionEnum {
-    GENERATION("GENERATION"),
+    GENERATION(String.valueOf("GENERATION")),
     
-    SIBLING_LOWEST_LEVEL("SIBLING_LOWEST_LEVEL"),
+    SIBLING_LOWEST_LEVEL(String.valueOf("SIBLING_LOWEST_LEVEL")),
     
-    CHILD("CHILD"),
+    CHILD(String.valueOf("CHILD")),
     
-    SIBLING_MATCHING_STRING("SIBLING_MATCHING_STRING"),
+    SIBLING_MATCHING_STRING(String.valueOf("SIBLING_MATCHING_STRING")),
     
-    LEVEL("LEVEL"),
+    LEVEL(String.valueOf("LEVEL")),
     
-    PARENT_CHILD("PARENT_CHILD"),
+    PARENT_CHILD(String.valueOf("PARENT_CHILD")),
     
-    GEN_NULLS("GEN_NULLS"),
+    GEN_NULLS(String.valueOf("GEN_NULLS")),
     
-    LEVEL_NULLS("LEVEL_NULLS");
+    LEVEL_NULLS(String.valueOf("LEVEL_NULLS"));
 
     private String value;
 
@@ -93,6 +127,7 @@ public class Dimension {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -102,6 +137,7 @@ public class Dimension {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static AddMemberOptionEnum fromValue(String value) {
       for (AddMemberOptionEnum b : AddMemberOptionEnum.values()) {
         if (b.value.equals(value)) {
@@ -110,39 +146,25 @@ public class Dimension {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<AddMemberOptionEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final AddMemberOptionEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public AddMemberOptionEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return AddMemberOptionEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_ADD_MEMBER_OPTION = "addMemberOption";
-  @SerializedName(SERIALIZED_NAME_ADD_MEMBER_OPTION)
+  public static final String JSON_PROPERTY_ADD_MEMBER_OPTION = "addMemberOption";
+  @jakarta.annotation.Nullable
   private AddMemberOptionEnum addMemberOption;
 
-  public static final String SERIALIZED_NAME_ATTRIBUTE_OPTIONS = "attributeOptions";
-  @SerializedName(SERIALIZED_NAME_ATTRIBUTE_OPTIONS)
+  public static final String JSON_PROPERTY_ATTRIBUTE_OPTIONS = "attributeOptions";
+  @jakarta.annotation.Nullable
   private AttributeOptions attributeOptions;
 
   /**
    * Gets or Sets configOption
    */
-  @JsonAdapter(ConfigOptionEnum.Adapter.class)
   public enum ConfigOptionEnum {
-    EXISTING("EXISTING"),
+    EXISTING(String.valueOf("EXISTING")),
     
-    DENSE("DENSE"),
+    DENSE(String.valueOf("DENSE")),
     
-    SPARSE("SPARSE");
+    SPARSE(String.valueOf("SPARSE"));
 
     private String value;
 
@@ -150,6 +172,7 @@ public class Dimension {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -159,6 +182,7 @@ public class Dimension {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static ConfigOptionEnum fromValue(String value) {
       for (ConfigOptionEnum b : ConfigOptionEnum.values()) {
         if (b.value.equals(value)) {
@@ -167,37 +191,23 @@ public class Dimension {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<ConfigOptionEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final ConfigOptionEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public ConfigOptionEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return ConfigOptionEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_CONFIG_OPTION = "configOption";
-  @SerializedName(SERIALIZED_NAME_CONFIG_OPTION)
+  public static final String JSON_PROPERTY_CONFIG_OPTION = "configOption";
+  @jakarta.annotation.Nullable
   private ConfigOptionEnum configOption;
 
   /**
    * Gets or Sets unique
    */
-  @JsonAdapter(UniqueEnum.Adapter.class)
   public enum UniqueEnum {
-    EXISTING("EXISTING"),
+    EXISTING(String.valueOf("EXISTING")),
     
-    UNIQUE("UNIQUE"),
+    UNIQUE(String.valueOf("UNIQUE")),
     
-    DUPLICATE("DUPLICATE"),
+    DUPLICATE(String.valueOf("DUPLICATE")),
     
-    NONE("NONE");
+    NONE(String.valueOf("NONE"));
 
     private String value;
 
@@ -205,6 +215,7 @@ public class Dimension {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -214,6 +225,7 @@ public class Dimension {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static UniqueEnum fromValue(String value) {
       for (UniqueEnum b : UniqueEnum.values()) {
         if (b.value.equals(value)) {
@@ -222,37 +234,23 @@ public class Dimension {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<UniqueEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final UniqueEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public UniqueEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return UniqueEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_UNIQUE = "unique";
-  @SerializedName(SERIALIZED_NAME_UNIQUE)
+  public static final String JSON_PROPERTY_UNIQUE = "unique";
+  @jakarta.annotation.Nullable
   private UniqueEnum unique;
 
   /**
    * Gets or Sets hierarchyType
    */
-  @JsonAdapter(HierarchyTypeEnum.Adapter.class)
   public enum HierarchyTypeEnum {
-    EXISTING("EXISTING"),
+    EXISTING(String.valueOf("EXISTING")),
     
-    MULTIPLE("MULTIPLE"),
+    MULTIPLE(String.valueOf("MULTIPLE")),
     
-    STORED("STORED"),
+    STORED(String.valueOf("STORED")),
     
-    DYNAMIC("DYNAMIC");
+    DYNAMIC(String.valueOf("DYNAMIC"));
 
     private String value;
 
@@ -260,6 +258,7 @@ public class Dimension {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -269,6 +268,7 @@ public class Dimension {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static HierarchyTypeEnum fromValue(String value) {
       for (HierarchyTypeEnum b : HierarchyTypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -277,35 +277,21 @@ public class Dimension {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<HierarchyTypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final HierarchyTypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public HierarchyTypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return HierarchyTypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_HIERARCHY_TYPE = "hierarchyType";
-  @SerializedName(SERIALIZED_NAME_HIERARCHY_TYPE)
+  public static final String JSON_PROPERTY_HIERARCHY_TYPE = "hierarchyType";
+  @jakarta.annotation.Nullable
   private HierarchyTypeEnum hierarchyType;
 
   /**
    * Gets or Sets sortOption
    */
-  @JsonAdapter(SortOptionEnum.Adapter.class)
   public enum SortOptionEnum {
-    NONE("NONE"),
+    NONE(String.valueOf("NONE")),
     
-    ASCENDING("ASCENDING"),
+    ASCENDING(String.valueOf("ASCENDING")),
     
-    DESCENDING("DESCENDING");
+    DESCENDING(String.valueOf("DESCENDING"));
 
     private String value;
 
@@ -313,6 +299,7 @@ public class Dimension {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -322,6 +309,7 @@ public class Dimension {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static SortOptionEnum fromValue(String value) {
       for (SortOptionEnum b : SortOptionEnum.values()) {
         if (b.value.equals(value)) {
@@ -330,41 +318,27 @@ public class Dimension {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<SortOptionEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final SortOptionEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public SortOptionEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return SortOptionEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_SORT_OPTION = "sortOption";
-  @SerializedName(SERIALIZED_NAME_SORT_OPTION)
+  public static final String JSON_PROPERTY_SORT_OPTION = "sortOption";
+  @jakarta.annotation.Nullable
   private SortOptionEnum sortOption;
 
   /**
    * Gets or Sets storageType
    */
-  @JsonAdapter(StorageTypeEnum.Adapter.class)
   public enum StorageTypeEnum {
-    EXISTING("EXISTING"),
+    EXISTING(String.valueOf("EXISTING")),
     
-    STORE("STORE"),
+    STORE(String.valueOf("STORE")),
     
-    NEVER_SHARE("NEVER_SHARE"),
+    NEVER_SHARE(String.valueOf("NEVER_SHARE")),
     
-    LABEL_ONLY("LABEL_ONLY"),
+    LABEL_ONLY(String.valueOf("LABEL_ONLY")),
     
-    DYNAMIC_CALC_STORE("DYNAMIC_CALC_STORE"),
+    DYNAMIC_CALC_STORE(String.valueOf("DYNAMIC_CALC_STORE")),
     
-    DYNAMIC_CALC("DYNAMIC_CALC");
+    DYNAMIC_CALC(String.valueOf("DYNAMIC_CALC"));
 
     private String value;
 
@@ -372,6 +346,7 @@ public class Dimension {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -381,6 +356,7 @@ public class Dimension {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static StorageTypeEnum fromValue(String value) {
       for (StorageTypeEnum b : StorageTypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -389,41 +365,27 @@ public class Dimension {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<StorageTypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final StorageTypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public StorageTypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return StorageTypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_STORAGE_TYPE = "storageType";
-  @SerializedName(SERIALIZED_NAME_STORAGE_TYPE)
+  public static final String JSON_PROPERTY_STORAGE_TYPE = "storageType";
+  @jakarta.annotation.Nullable
   private StorageTypeEnum storageType;
 
   /**
    * Gets or Sets type
    */
-  @JsonAdapter(TypeEnum.Adapter.class)
   public enum TypeEnum {
-    EXISTING("EXISTING"),
+    EXISTING(String.valueOf("EXISTING")),
     
-    NONE("NONE"),
+    NONE(String.valueOf("NONE")),
     
-    ACCOUNTS("ACCOUNTS"),
+    ACCOUNTS(String.valueOf("ACCOUNTS")),
     
-    TIME("TIME"),
+    TIME(String.valueOf("TIME")),
     
-    COUNTRY("COUNTRY"),
+    COUNTRY(String.valueOf("COUNTRY")),
     
-    ATTRIBUTES("ATTRIBUTES");
+    ATTRIBUTES(String.valueOf("ATTRIBUTES"));
 
     private String value;
 
@@ -431,6 +393,7 @@ public class Dimension {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -440,6 +403,7 @@ public class Dimension {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static TypeEnum fromValue(String value) {
       for (TypeEnum b : TypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -448,33 +412,19 @@ public class Dimension {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<TypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final TypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public TypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return TypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nullable
   private TypeEnum type;
 
   /**
    * Gets or Sets updateOption
    */
-  @JsonAdapter(UpdateOptionEnum.Adapter.class)
   public enum UpdateOptionEnum {
-    MERGE("MERGE"),
+    MERGE(String.valueOf("MERGE")),
     
-    REMOVE_UNSPECIFIED("REMOVE_UNSPECIFIED");
+    REMOVE_UNSPECIFIED(String.valueOf("REMOVE_UNSPECIFIED"));
 
     private String value;
 
@@ -482,6 +432,7 @@ public class Dimension {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -491,6 +442,7 @@ public class Dimension {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static UpdateOptionEnum fromValue(String value) {
       for (UpdateOptionEnum b : UpdateOptionEnum.values()) {
         if (b.value.equals(value)) {
@@ -499,39 +451,25 @@ public class Dimension {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<UpdateOptionEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final UpdateOptionEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public UpdateOptionEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return UpdateOptionEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_UPDATE_OPTION = "updateOption";
-  @SerializedName(SERIALIZED_NAME_UPDATE_OPTION)
+  public static final String JSON_PROPERTY_UPDATE_OPTION = "updateOption";
+  @jakarta.annotation.Nullable
   private UpdateOptionEnum updateOption;
 
   /**
    * Gets or Sets allowMoves
    */
-  @JsonAdapter(AllowMovesEnum.Adapter.class)
   public enum AllowMovesEnum {
-    NOTOK("NOTOK"),
+    NOTOK(String.valueOf("NOTOK")),
     
-    OK("OK"),
+    OK(String.valueOf("OK")),
     
-    IGNORE("IGNORE"),
+    IGNORE(String.valueOf("IGNORE")),
     
-    GEN2("GEN2"),
+    GEN2(String.valueOf("GEN2")),
     
-    NOTGEN2("NOTGEN2");
+    NOTGEN2(String.valueOf("NOTGEN2"));
 
     private String value;
 
@@ -539,6 +477,7 @@ public class Dimension {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -548,6 +487,7 @@ public class Dimension {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static AllowMovesEnum fromValue(String value) {
       for (AllowMovesEnum b : AllowMovesEnum.values()) {
         if (b.value.equals(value)) {
@@ -556,726 +496,746 @@ public class Dimension {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<AllowMovesEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final AllowMovesEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public AllowMovesEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return AllowMovesEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_ALLOW_MOVES = "allowMoves";
-  @SerializedName(SERIALIZED_NAME_ALLOW_MOVES)
+  public static final String JSON_PROPERTY_ALLOW_MOVES = "allowMoves";
+  @jakarta.annotation.Nullable
   private AllowMovesEnum allowMoves;
 
-  public static final String SERIALIZED_NAME_SOLVE_ORDER = "solveOrder";
-  @SerializedName(SERIALIZED_NAME_SOLVE_ORDER)
+  public static final String JSON_PROPERTY_SOLVE_ORDER = "solveOrder";
+  @jakarta.annotation.Nullable
   private Integer solveOrder;
 
-  public static final String SERIALIZED_NAME_CREATE_ATTRIBUTE_MEMBERS = "createAttributeMembers";
-  @SerializedName(SERIALIZED_NAME_CREATE_ATTRIBUTE_MEMBERS)
+  public static final String JSON_PROPERTY_CREATE_ATTRIBUTE_MEMBERS = "createAttributeMembers";
+  @jakarta.annotation.Nullable
   private Boolean createAttributeMembers;
 
-  public static final String SERIALIZED_NAME_SHARE = "share";
-  @SerializedName(SERIALIZED_NAME_SHARE)
+  public static final String JSON_PROPERTY_SHARE = "share";
+  @jakarta.annotation.Nullable
   private Boolean share;
 
-  public static final String SERIALIZED_NAME_INCREMENTAL_SORT = "incrementalSort";
-  @SerializedName(SERIALIZED_NAME_INCREMENTAL_SORT)
+  public static final String JSON_PROPERTY_INCREMENTAL_SORT = "incrementalSort";
+  @jakarta.annotation.Nullable
   private Boolean incrementalSort;
 
-  public static final String SERIALIZED_NAME_AUTO_FIX_SHARED_MEMBER = "autoFixSharedMember";
-  @SerializedName(SERIALIZED_NAME_AUTO_FIX_SHARED_MEMBER)
+  public static final String JSON_PROPERTY_AUTO_FIX_SHARED_MEMBER = "autoFixSharedMember";
+  @jakarta.annotation.Nullable
   private Boolean autoFixSharedMember;
 
-  public static final String SERIALIZED_NAME_FLEXIBLE = "flexible";
-  @SerializedName(SERIALIZED_NAME_FLEXIBLE)
+  public static final String JSON_PROPERTY_FLEXIBLE = "flexible";
+  @jakarta.annotation.Nullable
   private Boolean flexible;
 
-  public static final String SERIALIZED_NAME_MEMBER_NAME = "memberName";
-  @SerializedName(SERIALIZED_NAME_MEMBER_NAME)
+  public static final String JSON_PROPERTY_MEMBER_NAME = "memberName";
+  @jakarta.annotation.Nullable
   private String memberName;
 
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
-  public static final String SERIALIZED_NAME_DIMENSION_SOLVE_ORDER = "dimensionSolveOrder";
-  @SerializedName(SERIALIZED_NAME_DIMENSION_SOLVE_ORDER)
+  public static final String JSON_PROPERTY_DIMENSION_SOLVE_ORDER = "dimensionSolveOrder";
+  @jakarta.annotation.Nullable
   private Integer dimensionSolveOrder;
 
-  public static final String SERIALIZED_NAME_ADDED = "added";
-  @SerializedName(SERIALIZED_NAME_ADDED)
+  public static final String JSON_PROPERTY_ADDED = "added";
+  @jakarta.annotation.Nullable
   private Boolean added;
 
+  public Dimension() { 
+  }
 
-  public Dimension generations(List<Level> generations) {
-    
+  public Dimension generations(@jakarta.annotation.Nullable List<Level> generations) {
     this.generations = generations;
     return this;
   }
 
   public Dimension addGenerationsItem(Level generationsItem) {
     if (this.generations == null) {
-      this.generations = new ArrayList<Level>();
+      this.generations = new ArrayList<>();
     }
     this.generations.add(generationsItem);
     return this;
   }
 
-   /**
+  /**
    * Get generations
    * @return generations
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GENERATIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Level> getGenerations() {
     return generations;
   }
 
 
-  public void setGenerations(List<Level> generations) {
+  @JsonProperty(JSON_PROPERTY_GENERATIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGenerations(@jakarta.annotation.Nullable List<Level> generations) {
     this.generations = generations;
   }
 
 
-  public Dimension levels(List<Level> levels) {
-    
+  public Dimension levels(@jakarta.annotation.Nullable List<Level> levels) {
     this.levels = levels;
     return this;
   }
 
   public Dimension addLevelsItem(Level levelsItem) {
     if (this.levels == null) {
-      this.levels = new ArrayList<Level>();
+      this.levels = new ArrayList<>();
     }
     this.levels.add(levelsItem);
     return this;
   }
 
-   /**
+  /**
    * Get levels
    * @return levels
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LEVELS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Level> getLevels() {
     return levels;
   }
 
 
-  public void setLevels(List<Level> levels) {
+  @JsonProperty(JSON_PROPERTY_LEVELS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLevels(@jakarta.annotation.Nullable List<Level> levels) {
     this.levels = levels;
   }
 
 
-  public Dimension allowassociationChanges(Boolean allowassociationChanges) {
-    
+  public Dimension allowassociationChanges(@jakarta.annotation.Nullable Boolean allowassociationChanges) {
     this.allowassociationChanges = allowassociationChanges;
     return this;
   }
 
-   /**
+  /**
    * Get allowassociationChanges
    * @return allowassociationChanges
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALLOWASSOCIATION_CHANGES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAllowassociationChanges() {
     return allowassociationChanges;
   }
 
 
-  public void setAllowassociationChanges(Boolean allowassociationChanges) {
+  @JsonProperty(JSON_PROPERTY_ALLOWASSOCIATION_CHANGES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAllowassociationChanges(@jakarta.annotation.Nullable Boolean allowassociationChanges) {
     this.allowassociationChanges = allowassociationChanges;
   }
 
 
-  public Dimension allowFormulaChanges(Boolean allowFormulaChanges) {
-    
+  public Dimension allowFormulaChanges(@jakarta.annotation.Nullable Boolean allowFormulaChanges) {
     this.allowFormulaChanges = allowFormulaChanges;
     return this;
   }
 
-   /**
+  /**
    * Get allowFormulaChanges
    * @return allowFormulaChanges
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALLOW_FORMULA_CHANGES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAllowFormulaChanges() {
     return allowFormulaChanges;
   }
 
 
-  public void setAllowFormulaChanges(Boolean allowFormulaChanges) {
+  @JsonProperty(JSON_PROPERTY_ALLOW_FORMULA_CHANGES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAllowFormulaChanges(@jakarta.annotation.Nullable Boolean allowFormulaChanges) {
     this.allowFormulaChanges = allowFormulaChanges;
   }
 
 
-  public Dimension allowPropertyChanges(Boolean allowPropertyChanges) {
-    
+  public Dimension allowPropertyChanges(@jakarta.annotation.Nullable Boolean allowPropertyChanges) {
     this.allowPropertyChanges = allowPropertyChanges;
     return this;
   }
 
-   /**
+  /**
    * Get allowPropertyChanges
    * @return allowPropertyChanges
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALLOW_PROPERTY_CHANGES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAllowPropertyChanges() {
     return allowPropertyChanges;
   }
 
 
-  public void setAllowPropertyChanges(Boolean allowPropertyChanges) {
+  @JsonProperty(JSON_PROPERTY_ALLOW_PROPERTY_CHANGES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAllowPropertyChanges(@jakarta.annotation.Nullable Boolean allowPropertyChanges) {
     this.allowPropertyChanges = allowPropertyChanges;
   }
 
 
-  public Dimension allowUDAChanges(Boolean allowUDAChanges) {
-    
+  public Dimension allowUDAChanges(@jakarta.annotation.Nullable Boolean allowUDAChanges) {
     this.allowUDAChanges = allowUDAChanges;
     return this;
   }
 
-   /**
+  /**
    * Get allowUDAChanges
    * @return allowUDAChanges
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALLOW_U_D_A_CHANGES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAllowUDAChanges() {
     return allowUDAChanges;
   }
 
 
-  public void setAllowUDAChanges(Boolean allowUDAChanges) {
+  @JsonProperty(JSON_PROPERTY_ALLOW_U_D_A_CHANGES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAllowUDAChanges(@jakarta.annotation.Nullable Boolean allowUDAChanges) {
     this.allowUDAChanges = allowUDAChanges;
   }
 
 
-  public Dimension measureOptions(MeasureOptions measureOptions) {
-    
+  public Dimension measureOptions(@jakarta.annotation.Nullable MeasureOptions measureOptions) {
     this.measureOptions = measureOptions;
     return this;
   }
 
-   /**
+  /**
    * Get measureOptions
    * @return measureOptions
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MEASURE_OPTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public MeasureOptions getMeasureOptions() {
     return measureOptions;
   }
 
 
-  public void setMeasureOptions(MeasureOptions measureOptions) {
+  @JsonProperty(JSON_PROPERTY_MEASURE_OPTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMeasureOptions(@jakarta.annotation.Nullable MeasureOptions measureOptions) {
     this.measureOptions = measureOptions;
   }
 
 
-  public Dimension aggregateLevelUsage(Integer aggregateLevelUsage) {
-    
+  public Dimension aggregateLevelUsage(@jakarta.annotation.Nullable Integer aggregateLevelUsage) {
     this.aggregateLevelUsage = aggregateLevelUsage;
     return this;
   }
 
-   /**
+  /**
    * Get aggregateLevelUsage
    * @return aggregateLevelUsage
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_AGGREGATE_LEVEL_USAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getAggregateLevelUsage() {
     return aggregateLevelUsage;
   }
 
 
-  public void setAggregateLevelUsage(Integer aggregateLevelUsage) {
+  @JsonProperty(JSON_PROPERTY_AGGREGATE_LEVEL_USAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAggregateLevelUsage(@jakarta.annotation.Nullable Integer aggregateLevelUsage) {
     this.aggregateLevelUsage = aggregateLevelUsage;
   }
 
 
-  public Dimension addMemberOption(AddMemberOptionEnum addMemberOption) {
-    
+  public Dimension addMemberOption(@jakarta.annotation.Nullable AddMemberOptionEnum addMemberOption) {
     this.addMemberOption = addMemberOption;
     return this;
   }
 
-   /**
+  /**
    * Get addMemberOption
    * @return addMemberOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ADD_MEMBER_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public AddMemberOptionEnum getAddMemberOption() {
     return addMemberOption;
   }
 
 
-  public void setAddMemberOption(AddMemberOptionEnum addMemberOption) {
+  @JsonProperty(JSON_PROPERTY_ADD_MEMBER_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAddMemberOption(@jakarta.annotation.Nullable AddMemberOptionEnum addMemberOption) {
     this.addMemberOption = addMemberOption;
   }
 
 
-  public Dimension attributeOptions(AttributeOptions attributeOptions) {
-    
+  public Dimension attributeOptions(@jakarta.annotation.Nullable AttributeOptions attributeOptions) {
     this.attributeOptions = attributeOptions;
     return this;
   }
 
-   /**
+  /**
    * Get attributeOptions
    * @return attributeOptions
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ATTRIBUTE_OPTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public AttributeOptions getAttributeOptions() {
     return attributeOptions;
   }
 
 
-  public void setAttributeOptions(AttributeOptions attributeOptions) {
+  @JsonProperty(JSON_PROPERTY_ATTRIBUTE_OPTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAttributeOptions(@jakarta.annotation.Nullable AttributeOptions attributeOptions) {
     this.attributeOptions = attributeOptions;
   }
 
 
-  public Dimension configOption(ConfigOptionEnum configOption) {
-    
+  public Dimension configOption(@jakarta.annotation.Nullable ConfigOptionEnum configOption) {
     this.configOption = configOption;
     return this;
   }
 
-   /**
+  /**
    * Get configOption
    * @return configOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CONFIG_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public ConfigOptionEnum getConfigOption() {
     return configOption;
   }
 
 
-  public void setConfigOption(ConfigOptionEnum configOption) {
+  @JsonProperty(JSON_PROPERTY_CONFIG_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setConfigOption(@jakarta.annotation.Nullable ConfigOptionEnum configOption) {
     this.configOption = configOption;
   }
 
 
-  public Dimension unique(UniqueEnum unique) {
-    
+  public Dimension unique(@jakarta.annotation.Nullable UniqueEnum unique) {
     this.unique = unique;
     return this;
   }
 
-   /**
+  /**
    * Get unique
    * @return unique
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UNIQUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public UniqueEnum getUnique() {
     return unique;
   }
 
 
-  public void setUnique(UniqueEnum unique) {
+  @JsonProperty(JSON_PROPERTY_UNIQUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUnique(@jakarta.annotation.Nullable UniqueEnum unique) {
     this.unique = unique;
   }
 
 
-  public Dimension hierarchyType(HierarchyTypeEnum hierarchyType) {
-    
+  public Dimension hierarchyType(@jakarta.annotation.Nullable HierarchyTypeEnum hierarchyType) {
     this.hierarchyType = hierarchyType;
     return this;
   }
 
-   /**
+  /**
    * Get hierarchyType
    * @return hierarchyType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HIERARCHY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public HierarchyTypeEnum getHierarchyType() {
     return hierarchyType;
   }
 
 
-  public void setHierarchyType(HierarchyTypeEnum hierarchyType) {
+  @JsonProperty(JSON_PROPERTY_HIERARCHY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHierarchyType(@jakarta.annotation.Nullable HierarchyTypeEnum hierarchyType) {
     this.hierarchyType = hierarchyType;
   }
 
 
-  public Dimension sortOption(SortOptionEnum sortOption) {
-    
+  public Dimension sortOption(@jakarta.annotation.Nullable SortOptionEnum sortOption) {
     this.sortOption = sortOption;
     return this;
   }
 
-   /**
+  /**
    * Get sortOption
    * @return sortOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SORT_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public SortOptionEnum getSortOption() {
     return sortOption;
   }
 
 
-  public void setSortOption(SortOptionEnum sortOption) {
+  @JsonProperty(JSON_PROPERTY_SORT_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSortOption(@jakarta.annotation.Nullable SortOptionEnum sortOption) {
     this.sortOption = sortOption;
   }
 
 
-  public Dimension storageType(StorageTypeEnum storageType) {
-    
+  public Dimension storageType(@jakarta.annotation.Nullable StorageTypeEnum storageType) {
     this.storageType = storageType;
     return this;
   }
 
-   /**
+  /**
    * Get storageType
    * @return storageType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STORAGE_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public StorageTypeEnum getStorageType() {
     return storageType;
   }
 
 
-  public void setStorageType(StorageTypeEnum storageType) {
+  @JsonProperty(JSON_PROPERTY_STORAGE_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStorageType(@jakarta.annotation.Nullable StorageTypeEnum storageType) {
     this.storageType = storageType;
   }
 
 
-  public Dimension type(TypeEnum type) {
-    
+  public Dimension type(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public TypeEnum getType() {
     return type;
   }
 
 
-  public void setType(TypeEnum type) {
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setType(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
   }
 
 
-  public Dimension updateOption(UpdateOptionEnum updateOption) {
-    
+  public Dimension updateOption(@jakarta.annotation.Nullable UpdateOptionEnum updateOption) {
     this.updateOption = updateOption;
     return this;
   }
 
-   /**
+  /**
    * Get updateOption
    * @return updateOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UPDATE_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public UpdateOptionEnum getUpdateOption() {
     return updateOption;
   }
 
 
-  public void setUpdateOption(UpdateOptionEnum updateOption) {
+  @JsonProperty(JSON_PROPERTY_UPDATE_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUpdateOption(@jakarta.annotation.Nullable UpdateOptionEnum updateOption) {
     this.updateOption = updateOption;
   }
 
 
-  public Dimension allowMoves(AllowMovesEnum allowMoves) {
-    
+  public Dimension allowMoves(@jakarta.annotation.Nullable AllowMovesEnum allowMoves) {
     this.allowMoves = allowMoves;
     return this;
   }
 
-   /**
+  /**
    * Get allowMoves
    * @return allowMoves
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALLOW_MOVES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public AllowMovesEnum getAllowMoves() {
     return allowMoves;
   }
 
 
-  public void setAllowMoves(AllowMovesEnum allowMoves) {
+  @JsonProperty(JSON_PROPERTY_ALLOW_MOVES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAllowMoves(@jakarta.annotation.Nullable AllowMovesEnum allowMoves) {
     this.allowMoves = allowMoves;
   }
 
 
-  public Dimension solveOrder(Integer solveOrder) {
-    
+  public Dimension solveOrder(@jakarta.annotation.Nullable Integer solveOrder) {
     this.solveOrder = solveOrder;
     return this;
   }
 
-   /**
+  /**
    * Get solveOrder
    * @return solveOrder
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SOLVE_ORDER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getSolveOrder() {
     return solveOrder;
   }
 
 
-  public void setSolveOrder(Integer solveOrder) {
+  @JsonProperty(JSON_PROPERTY_SOLVE_ORDER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSolveOrder(@jakarta.annotation.Nullable Integer solveOrder) {
     this.solveOrder = solveOrder;
   }
 
 
-  public Dimension createAttributeMembers(Boolean createAttributeMembers) {
-    
+  public Dimension createAttributeMembers(@jakarta.annotation.Nullable Boolean createAttributeMembers) {
     this.createAttributeMembers = createAttributeMembers;
     return this;
   }
 
-   /**
+  /**
    * Get createAttributeMembers
    * @return createAttributeMembers
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CREATE_ATTRIBUTE_MEMBERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getCreateAttributeMembers() {
     return createAttributeMembers;
   }
 
 
-  public void setCreateAttributeMembers(Boolean createAttributeMembers) {
+  @JsonProperty(JSON_PROPERTY_CREATE_ATTRIBUTE_MEMBERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCreateAttributeMembers(@jakarta.annotation.Nullable Boolean createAttributeMembers) {
     this.createAttributeMembers = createAttributeMembers;
   }
 
 
-  public Dimension share(Boolean share) {
-    
+  public Dimension share(@jakarta.annotation.Nullable Boolean share) {
     this.share = share;
     return this;
   }
 
-   /**
+  /**
    * Get share
    * @return share
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SHARE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getShare() {
     return share;
   }
 
 
-  public void setShare(Boolean share) {
+  @JsonProperty(JSON_PROPERTY_SHARE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setShare(@jakarta.annotation.Nullable Boolean share) {
     this.share = share;
   }
 
 
-  public Dimension incrementalSort(Boolean incrementalSort) {
-    
+  public Dimension incrementalSort(@jakarta.annotation.Nullable Boolean incrementalSort) {
     this.incrementalSort = incrementalSort;
     return this;
   }
 
-   /**
+  /**
    * Get incrementalSort
    * @return incrementalSort
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INCREMENTAL_SORT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getIncrementalSort() {
     return incrementalSort;
   }
 
 
-  public void setIncrementalSort(Boolean incrementalSort) {
+  @JsonProperty(JSON_PROPERTY_INCREMENTAL_SORT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIncrementalSort(@jakarta.annotation.Nullable Boolean incrementalSort) {
     this.incrementalSort = incrementalSort;
   }
 
 
-  public Dimension autoFixSharedMember(Boolean autoFixSharedMember) {
-    
+  public Dimension autoFixSharedMember(@jakarta.annotation.Nullable Boolean autoFixSharedMember) {
     this.autoFixSharedMember = autoFixSharedMember;
     return this;
   }
 
-   /**
+  /**
    * Get autoFixSharedMember
    * @return autoFixSharedMember
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_AUTO_FIX_SHARED_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAutoFixSharedMember() {
     return autoFixSharedMember;
   }
 
 
-  public void setAutoFixSharedMember(Boolean autoFixSharedMember) {
+  @JsonProperty(JSON_PROPERTY_AUTO_FIX_SHARED_MEMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAutoFixSharedMember(@jakarta.annotation.Nullable Boolean autoFixSharedMember) {
     this.autoFixSharedMember = autoFixSharedMember;
   }
 
 
-  public Dimension flexible(Boolean flexible) {
-    
+  public Dimension flexible(@jakarta.annotation.Nullable Boolean flexible) {
     this.flexible = flexible;
     return this;
   }
 
-   /**
+  /**
    * Get flexible
    * @return flexible
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FLEXIBLE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getFlexible() {
     return flexible;
   }
 
 
-  public void setFlexible(Boolean flexible) {
+  @JsonProperty(JSON_PROPERTY_FLEXIBLE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFlexible(@jakarta.annotation.Nullable Boolean flexible) {
     this.flexible = flexible;
   }
 
 
-  public Dimension memberName(String memberName) {
-    
+  public Dimension memberName(@jakarta.annotation.Nullable String memberName) {
     this.memberName = memberName;
     return this;
   }
 
-   /**
+  /**
    * Get memberName
    * @return memberName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MEMBER_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getMemberName() {
     return memberName;
   }
 
 
-  public void setMemberName(String memberName) {
+  @JsonProperty(JSON_PROPERTY_MEMBER_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMemberName(@jakarta.annotation.Nullable String memberName) {
     this.memberName = memberName;
   }
 
 
-  public Dimension name(String name) {
-    
+  public Dimension name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
-  public Dimension dimensionSolveOrder(Integer dimensionSolveOrder) {
-    
+  public Dimension dimensionSolveOrder(@jakarta.annotation.Nullable Integer dimensionSolveOrder) {
     this.dimensionSolveOrder = dimensionSolveOrder;
     return this;
   }
 
-   /**
+  /**
    * Get dimensionSolveOrder
    * @return dimensionSolveOrder
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIMENSION_SOLVE_ORDER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getDimensionSolveOrder() {
     return dimensionSolveOrder;
   }
 
 
-  public void setDimensionSolveOrder(Integer dimensionSolveOrder) {
+  @JsonProperty(JSON_PROPERTY_DIMENSION_SOLVE_ORDER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimensionSolveOrder(@jakarta.annotation.Nullable Integer dimensionSolveOrder) {
     this.dimensionSolveOrder = dimensionSolveOrder;
   }
 
 
-  public Dimension added(Boolean added) {
-    
+  public Dimension added(@jakarta.annotation.Nullable Boolean added) {
     this.added = added;
     return this;
   }
 
-   /**
+  /**
    * Get added
    * @return added
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ADDED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAdded() {
     return added;
   }
 
 
-  public void setAdded(Boolean added) {
+  @JsonProperty(JSON_PROPERTY_ADDED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAdded(@jakarta.annotation.Nullable Boolean added) {
     this.added = added;
   }
 
 
+  /**
+   * Return true if this Dimension object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -1367,5 +1327,189 @@ public class Dimension {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `generations` to the URL query string
+    if (getGenerations() != null) {
+      for (int i = 0; i < getGenerations().size(); i++) {
+        if (getGenerations().get(i) != null) {
+          joiner.add(getGenerations().get(i).toUrlQueryString(String.format("%sgenerations%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `levels` to the URL query string
+    if (getLevels() != null) {
+      for (int i = 0; i < getLevels().size(); i++) {
+        if (getLevels().get(i) != null) {
+          joiner.add(getLevels().get(i).toUrlQueryString(String.format("%slevels%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `allowassociationChanges` to the URL query string
+    if (getAllowassociationChanges() != null) {
+      joiner.add(String.format("%sallowassociationChanges%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAllowassociationChanges()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `allowFormulaChanges` to the URL query string
+    if (getAllowFormulaChanges() != null) {
+      joiner.add(String.format("%sallowFormulaChanges%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAllowFormulaChanges()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `allowPropertyChanges` to the URL query string
+    if (getAllowPropertyChanges() != null) {
+      joiner.add(String.format("%sallowPropertyChanges%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAllowPropertyChanges()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `allowUDAChanges` to the URL query string
+    if (getAllowUDAChanges() != null) {
+      joiner.add(String.format("%sallowUDAChanges%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAllowUDAChanges()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `measureOptions` to the URL query string
+    if (getMeasureOptions() != null) {
+      joiner.add(getMeasureOptions().toUrlQueryString(prefix + "measureOptions" + suffix));
+    }
+
+    // add `aggregateLevelUsage` to the URL query string
+    if (getAggregateLevelUsage() != null) {
+      joiner.add(String.format("%saggregateLevelUsage%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAggregateLevelUsage()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `addMemberOption` to the URL query string
+    if (getAddMemberOption() != null) {
+      joiner.add(String.format("%saddMemberOption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAddMemberOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `attributeOptions` to the URL query string
+    if (getAttributeOptions() != null) {
+      joiner.add(getAttributeOptions().toUrlQueryString(prefix + "attributeOptions" + suffix));
+    }
+
+    // add `configOption` to the URL query string
+    if (getConfigOption() != null) {
+      joiner.add(String.format("%sconfigOption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getConfigOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `unique` to the URL query string
+    if (getUnique() != null) {
+      joiner.add(String.format("%sunique%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUnique()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `hierarchyType` to the URL query string
+    if (getHierarchyType() != null) {
+      joiner.add(String.format("%shierarchyType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getHierarchyType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `sortOption` to the URL query string
+    if (getSortOption() != null) {
+      joiner.add(String.format("%ssortOption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSortOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `storageType` to the URL query string
+    if (getStorageType() != null) {
+      joiner.add(String.format("%sstorageType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStorageType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `updateOption` to the URL query string
+    if (getUpdateOption() != null) {
+      joiner.add(String.format("%supdateOption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUpdateOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `allowMoves` to the URL query string
+    if (getAllowMoves() != null) {
+      joiner.add(String.format("%sallowMoves%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAllowMoves()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `solveOrder` to the URL query string
+    if (getSolveOrder() != null) {
+      joiner.add(String.format("%ssolveOrder%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSolveOrder()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `createAttributeMembers` to the URL query string
+    if (getCreateAttributeMembers() != null) {
+      joiner.add(String.format("%screateAttributeMembers%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCreateAttributeMembers()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `share` to the URL query string
+    if (getShare() != null) {
+      joiner.add(String.format("%sshare%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getShare()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `incrementalSort` to the URL query string
+    if (getIncrementalSort() != null) {
+      joiner.add(String.format("%sincrementalSort%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIncrementalSort()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `autoFixSharedMember` to the URL query string
+    if (getAutoFixSharedMember() != null) {
+      joiner.add(String.format("%sautoFixSharedMember%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAutoFixSharedMember()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `flexible` to the URL query string
+    if (getFlexible() != null) {
+      joiner.add(String.format("%sflexible%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFlexible()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `memberName` to the URL query string
+    if (getMemberName() != null) {
+      joiner.add(String.format("%smemberName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMemberName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dimensionSolveOrder` to the URL query string
+    if (getDimensionSolveOrder() != null) {
+      joiner.add(String.format("%sdimensionSolveOrder%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDimensionSolveOrder()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `added` to the URL query string
+    if (getAdded() != null) {
+      joiner.add(String.format("%sadded%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAdded()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

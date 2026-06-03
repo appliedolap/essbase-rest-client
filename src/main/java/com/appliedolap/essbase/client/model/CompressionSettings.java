@@ -13,185 +13,209 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * CompressionSettings
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  CompressionSettings.JSON_PROPERTY_DIMENSION_NAME,
+  CompressionSettings.JSON_PROPERTY_AVERAGE_BUNDLE_FILL,
+  CompressionSettings.JSON_PROPERTY_AVERAGE_VALUE_LENGTH,
+  CompressionSettings.JSON_PROPERTY_IS_COMPRESSION,
+  CompressionSettings.JSON_PROPERTY_LEVEL0_M_B,
+  CompressionSettings.JSON_PROPERTY_STORED_LEVEL0_MEMBERS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class CompressionSettings {
-  public static final String SERIALIZED_NAME_DIMENSION_NAME = "dimensionName";
-  @SerializedName(SERIALIZED_NAME_DIMENSION_NAME)
+  public static final String JSON_PROPERTY_DIMENSION_NAME = "dimensionName";
+  @jakarta.annotation.Nullable
   private String dimensionName;
 
-  public static final String SERIALIZED_NAME_AVERAGE_BUNDLE_FILL = "averageBundleFill";
-  @SerializedName(SERIALIZED_NAME_AVERAGE_BUNDLE_FILL)
+  public static final String JSON_PROPERTY_AVERAGE_BUNDLE_FILL = "averageBundleFill";
+  @jakarta.annotation.Nullable
   private Double averageBundleFill;
 
-  public static final String SERIALIZED_NAME_AVERAGE_VALUE_LENGTH = "averageValueLength";
-  @SerializedName(SERIALIZED_NAME_AVERAGE_VALUE_LENGTH)
+  public static final String JSON_PROPERTY_AVERAGE_VALUE_LENGTH = "averageValueLength";
+  @jakarta.annotation.Nullable
   private Double averageValueLength;
 
-  public static final String SERIALIZED_NAME_IS_COMPRESSION = "isCompression";
-  @SerializedName(SERIALIZED_NAME_IS_COMPRESSION)
+  public static final String JSON_PROPERTY_IS_COMPRESSION = "isCompression";
+  @jakarta.annotation.Nullable
   private Boolean isCompression;
 
-  public static final String SERIALIZED_NAME_LEVEL0_M_B = "level0MB";
-  @SerializedName(SERIALIZED_NAME_LEVEL0_M_B)
+  public static final String JSON_PROPERTY_LEVEL0_M_B = "level0MB";
+  @jakarta.annotation.Nullable
   private Double level0MB;
 
-  public static final String SERIALIZED_NAME_STORED_LEVEL0_MEMBERS = "storedLevel0Members";
-  @SerializedName(SERIALIZED_NAME_STORED_LEVEL0_MEMBERS)
+  public static final String JSON_PROPERTY_STORED_LEVEL0_MEMBERS = "storedLevel0Members";
+  @jakarta.annotation.Nullable
   private Double storedLevel0Members;
 
+  public CompressionSettings() { 
+  }
 
-  public CompressionSettings dimensionName(String dimensionName) {
-    
+  public CompressionSettings dimensionName(@jakarta.annotation.Nullable String dimensionName) {
     this.dimensionName = dimensionName;
     return this;
   }
 
-   /**
+  /**
    * Get dimensionName
    * @return dimensionName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIMENSION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDimensionName() {
     return dimensionName;
   }
 
 
-  public void setDimensionName(String dimensionName) {
+  @JsonProperty(JSON_PROPERTY_DIMENSION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimensionName(@jakarta.annotation.Nullable String dimensionName) {
     this.dimensionName = dimensionName;
   }
 
 
-  public CompressionSettings averageBundleFill(Double averageBundleFill) {
-    
+  public CompressionSettings averageBundleFill(@jakarta.annotation.Nullable Double averageBundleFill) {
     this.averageBundleFill = averageBundleFill;
     return this;
   }
 
-   /**
+  /**
    * Get averageBundleFill
    * @return averageBundleFill
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_AVERAGE_BUNDLE_FILL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getAverageBundleFill() {
     return averageBundleFill;
   }
 
 
-  public void setAverageBundleFill(Double averageBundleFill) {
+  @JsonProperty(JSON_PROPERTY_AVERAGE_BUNDLE_FILL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAverageBundleFill(@jakarta.annotation.Nullable Double averageBundleFill) {
     this.averageBundleFill = averageBundleFill;
   }
 
 
-  public CompressionSettings averageValueLength(Double averageValueLength) {
-    
+  public CompressionSettings averageValueLength(@jakarta.annotation.Nullable Double averageValueLength) {
     this.averageValueLength = averageValueLength;
     return this;
   }
 
-   /**
+  /**
    * Get averageValueLength
    * @return averageValueLength
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_AVERAGE_VALUE_LENGTH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getAverageValueLength() {
     return averageValueLength;
   }
 
 
-  public void setAverageValueLength(Double averageValueLength) {
+  @JsonProperty(JSON_PROPERTY_AVERAGE_VALUE_LENGTH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAverageValueLength(@jakarta.annotation.Nullable Double averageValueLength) {
     this.averageValueLength = averageValueLength;
   }
 
 
-  public CompressionSettings isCompression(Boolean isCompression) {
-    
+  public CompressionSettings isCompression(@jakarta.annotation.Nullable Boolean isCompression) {
     this.isCompression = isCompression;
     return this;
   }
 
-   /**
+  /**
    * Get isCompression
    * @return isCompression
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_IS_COMPRESSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getIsCompression() {
     return isCompression;
   }
 
 
-  public void setIsCompression(Boolean isCompression) {
+  @JsonProperty(JSON_PROPERTY_IS_COMPRESSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIsCompression(@jakarta.annotation.Nullable Boolean isCompression) {
     this.isCompression = isCompression;
   }
 
 
-  public CompressionSettings level0MB(Double level0MB) {
-    
+  public CompressionSettings level0MB(@jakarta.annotation.Nullable Double level0MB) {
     this.level0MB = level0MB;
     return this;
   }
 
-   /**
+  /**
    * Get level0MB
    * @return level0MB
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LEVEL0_M_B)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getLevel0MB() {
     return level0MB;
   }
 
 
-  public void setLevel0MB(Double level0MB) {
+  @JsonProperty(JSON_PROPERTY_LEVEL0_M_B)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLevel0MB(@jakarta.annotation.Nullable Double level0MB) {
     this.level0MB = level0MB;
   }
 
 
-  public CompressionSettings storedLevel0Members(Double storedLevel0Members) {
-    
+  public CompressionSettings storedLevel0Members(@jakarta.annotation.Nullable Double storedLevel0Members) {
     this.storedLevel0Members = storedLevel0Members;
     return this;
   }
 
-   /**
+  /**
    * Get storedLevel0Members
    * @return storedLevel0Members
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STORED_LEVEL0_MEMBERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getStoredLevel0Members() {
     return storedLevel0Members;
   }
 
 
-  public void setStoredLevel0Members(Double storedLevel0Members) {
+  @JsonProperty(JSON_PROPERTY_STORED_LEVEL0_MEMBERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStoredLevel0Members(@jakarta.annotation.Nullable Double storedLevel0Members) {
     this.storedLevel0Members = storedLevel0Members;
   }
 
 
+  /**
+   * Return true if this CompressionSettings object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -239,5 +263,69 @@ public class CompressionSettings {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `dimensionName` to the URL query string
+    if (getDimensionName() != null) {
+      joiner.add(String.format("%sdimensionName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDimensionName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `averageBundleFill` to the URL query string
+    if (getAverageBundleFill() != null) {
+      joiner.add(String.format("%saverageBundleFill%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAverageBundleFill()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `averageValueLength` to the URL query string
+    if (getAverageValueLength() != null) {
+      joiner.add(String.format("%saverageValueLength%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAverageValueLength()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `isCompression` to the URL query string
+    if (getIsCompression() != null) {
+      joiner.add(String.format("%sisCompression%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIsCompression()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `level0MB` to the URL query string
+    if (getLevel0MB() != null) {
+      joiner.add(String.format("%slevel0MB%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLevel0MB()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `storedLevel0Members` to the URL query string
+    if (getStoredLevel0Members() != null) {
+      joiner.add(String.format("%sstoredLevel0Members%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStoredLevel0Members()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

@@ -10,890 +10,642 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.LockBlock;
 import com.appliedolap.essbase.client.model.LockBlockList;
 import com.appliedolap.essbase.client.model.LockObject;
 import com.appliedolap.essbase.client.model.LockObjectList;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class LocksApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public LocksApi() {
-        this(Configuration.getDefaultApiClient());
+  public LocksApi() {
+    this(new ApiClient());
+  }
+
+  public LocksApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public LocksApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * List Locked Blocks
+   * Returns all the locked blocks from the specified application and database.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param offset &lt;p&gt;Number of items to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
+   * @param limit Maximum number of blocks to return. Default is 50. (optional, default to 50)
+   * @return List&lt;LockBlockList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public List<LockBlockList> locksGetLockedBlocks(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
+    ApiResponse<List<LockBlockList>> localVarResponse = locksGetLockedBlocksWithHttpInfo(applicationName, databaseName, offset, limit);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for locksGetLockedBlocks
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of items to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit Maximum number of blocks to return. Default is 50. (optional, default to 50)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Locked blocks returned successfully, including details of locked blocks and links to unlock the objects.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the locked blocks. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locksGetLockedBlocksCall(String applicationName, String databaseName, Integer offset, Integer limit, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locks/blocks"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (offset != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("offset", offset));
+  /**
+   * List Locked Blocks
+   * Returns all the locked blocks from the specified application and database.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param offset &lt;p&gt;Number of items to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
+   * @param limit Maximum number of blocks to return. Default is 50. (optional, default to 50)
+   * @return ApiResponse&lt;List&lt;LockBlockList&gt;&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<List<LockBlockList>> locksGetLockedBlocksWithHttpInfo(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = locksGetLockedBlocksRequestBuilder(applicationName, databaseName, offset, limit);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("locksGetLockedBlocks", localVarResponse);
         }
+        return new ApiResponse<List<LockBlockList>>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<List<LockBlockList>>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        if (limit != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+  private HttpRequest.Builder locksGetLockedBlocksRequestBuilder(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling locksGetLockedBlocks");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling locksGetLockedBlocks");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locks/blocks"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "offset";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("offset", offset));
+    localVarQueryParameterBaseName = "limit";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("limit", limit));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * List Locked Objects
+   * Returns all the locked objects from the specified application and database.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param offset &lt;p&gt;Number of items to omit from the start of the result set. Default value is 0.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of objects to return. Default is 50.&lt;/p&gt; (optional, default to 50)
+   * @return LockObjectList
+   * @throws ApiException if fails to make API call
+   */
+  public LockObjectList locksGetLockedObjects(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
+    ApiResponse<LockObjectList> localVarResponse = locksGetLockedObjectsWithHttpInfo(applicationName, databaseName, offset, limit);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * List Locked Objects
+   * Returns all the locked objects from the specified application and database.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param offset &lt;p&gt;Number of items to omit from the start of the result set. Default value is 0.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of objects to return. Default is 50.&lt;/p&gt; (optional, default to 50)
+   * @return ApiResponse&lt;LockObjectList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<LockObjectList> locksGetLockedObjectsWithHttpInfo(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = locksGetLockedObjectsRequestBuilder(applicationName, databaseName, offset, limit);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("locksGetLockedObjects", localVarResponse);
         }
+        return new ApiResponse<LockObjectList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<LockObjectList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  private HttpRequest.Builder locksGetLockedObjectsRequestBuilder(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling locksGetLockedObjects");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling locksGetLockedObjects");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locks/objects"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "offset";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("offset", offset));
+    localVarQueryParameterBaseName = "limit";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("limit", limit));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * List Locks
+   * Returns links for locked objects and locked blocks from the specified application and database.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return LockObject
+   * @throws ApiException if fails to make API call
+   */
+  public LockObject locksGetLocks(String applicationName, String databaseName) throws ApiException {
+    ApiResponse<LockObject> localVarResponse = locksGetLocksWithHttpInfo(applicationName, databaseName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * List Locks
+   * Returns links for locked objects and locked blocks from the specified application and database.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;LockObject&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<LockObject> locksGetLocksWithHttpInfo(String applicationName, String databaseName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = locksGetLocksRequestBuilder(applicationName, databaseName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("locksGetLocks", localVarResponse);
         }
+        return new ApiResponse<LockObject>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<LockObject>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder locksGetLocksRequestBuilder(String applicationName, String databaseName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling locksGetLocks");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling locksGetLocks");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call locksGetLockedBlocksValidateBeforeCall(String applicationName, String databaseName, Integer offset, Integer limit, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling locksGetLockedBlocks(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locks"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Lock Object
+   * Locks the object in the specified application and database and returns the details of the locked object
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Object details to be locked (required)
+   * @return LockObject
+   * @throws ApiException if fails to make API call
+   */
+  public LockObject locksLockObject(String applicationName, String databaseName, LockObject body) throws ApiException {
+    ApiResponse<LockObject> localVarResponse = locksLockObjectWithHttpInfo(applicationName, databaseName, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Lock Object
+   * Locks the object in the specified application and database and returns the details of the locked object
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Object details to be locked (required)
+   * @return ApiResponse&lt;LockObject&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<LockObject> locksLockObjectWithHttpInfo(String applicationName, String databaseName, LockObject body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = locksLockObjectRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("locksLockObject", localVarResponse);
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling locksGetLockedBlocks(Async)");
+        return new ApiResponse<LockObject>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<LockObject>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder locksLockObjectRequestBuilder(String applicationName, String databaseName, LockObject body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling locksLockObject");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling locksLockObject");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling locksLockObject");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locks/objects/lock"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Unlock Block
+   * Unlocks the locked block in the specified application and database.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Block details to be unlocked (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void locksUnLockBlock(String applicationName, String databaseName, LockBlock body) throws ApiException {
+    locksUnLockBlockWithHttpInfo(applicationName, databaseName, body);
+  }
+
+  /**
+   * Unlock Block
+   * Unlocks the locked block in the specified application and database.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Block details to be unlocked (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> locksUnLockBlockWithHttpInfo(String applicationName, String databaseName, LockBlock body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = locksUnLockBlockRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("locksUnLockBlock", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = locksGetLockedBlocksCall(applicationName, databaseName, offset, limit, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * List Locked Blocks
-     * Returns all the locked blocks from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of items to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit Maximum number of blocks to return. Default is 50. (optional, default to 50)
-     * @return List&lt;LockBlockList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Locked blocks returned successfully, including details of locked blocks and links to unlock the objects.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the locked blocks. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public List<LockBlockList> locksGetLockedBlocks(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
-        ApiResponse<List<LockBlockList>> localVarResp = locksGetLockedBlocksWithHttpInfo(applicationName, databaseName, offset, limit);
-        return localVarResp.getData();
-    }
-
-    /**
-     * List Locked Blocks
-     * Returns all the locked blocks from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of items to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit Maximum number of blocks to return. Default is 50. (optional, default to 50)
-     * @return ApiResponse&lt;List&lt;LockBlockList&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Locked blocks returned successfully, including details of locked blocks and links to unlock the objects.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the locked blocks. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<List<LockBlockList>> locksGetLockedBlocksWithHttpInfo(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
-        okhttp3.Call localVarCall = locksGetLockedBlocksValidateBeforeCall(applicationName, databaseName, offset, limit, null);
-        Type localVarReturnType = new TypeToken<List<LockBlockList>>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List Locked Blocks (asynchronously)
-     * Returns all the locked blocks from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of items to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit Maximum number of blocks to return. Default is 50. (optional, default to 50)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Locked blocks returned successfully, including details of locked blocks and links to unlock the objects.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the locked blocks. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locksGetLockedBlocksAsync(String applicationName, String databaseName, Integer offset, Integer limit, final ApiCallback<List<LockBlockList>> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = locksGetLockedBlocksValidateBeforeCall(applicationName, databaseName, offset, limit, _callback);
-        Type localVarReturnType = new TypeToken<List<LockBlockList>>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for locksGetLockedObjects
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of items to omit from the start of the result set. Default value is 0.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of objects to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Locked objects retrieved successfully. Gives the details of locked objects along with the links to lock/unlock the object </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the locked objects. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locksGetLockedObjectsCall(String applicationName, String databaseName, Integer offset, Integer limit, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locks/objects"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (offset != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("offset", offset));
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        if (limit != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+  private HttpRequest.Builder locksUnLockBlockRequestBuilder(String applicationName, String databaseName, LockBlock body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling locksUnLockBlock");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling locksUnLockBlock");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling locksUnLockBlock");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locks/blocks/unlock"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Unlock Object
+   * Unlocks the object in the specified application and database
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Details about object to be unlocked.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void locksUnLockObject(String applicationName, String databaseName, LockObject body) throws ApiException {
+    locksUnLockObjectWithHttpInfo(applicationName, databaseName, body);
+  }
+
+  /**
+   * Unlock Object
+   * Unlocks the object in the specified application and database
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Details about object to be unlocked.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> locksUnLockObjectWithHttpInfo(String applicationName, String databaseName, LockObject body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = locksUnLockObjectRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("locksUnLockObject", localVarResponse);
         }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder locksUnLockObjectRequestBuilder(String applicationName, String databaseName, LockObject body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling locksUnLockObject");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling locksUnLockObject");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling locksUnLockObject");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call locksGetLockedObjectsValidateBeforeCall(String applicationName, String databaseName, Integer offset, Integer limit, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling locksGetLockedObjects(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling locksGetLockedObjects(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = locksGetLockedObjectsCall(applicationName, databaseName, offset, limit, _callback);
-        return localVarCall;
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locks/objects/unlock"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * List Locked Objects
-     * Returns all the locked objects from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of items to omit from the start of the result set. Default value is 0.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of objects to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @return LockObjectList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Locked objects retrieved successfully. Gives the details of locked objects along with the links to lock/unlock the object </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the locked objects. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public LockObjectList locksGetLockedObjects(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
-        ApiResponse<LockObjectList> localVarResp = locksGetLockedObjectsWithHttpInfo(applicationName, databaseName, offset, limit);
-        return localVarResp.getData();
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * List Locked Objects
-     * Returns all the locked objects from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of items to omit from the start of the result set. Default value is 0.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of objects to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @return ApiResponse&lt;LockObjectList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Locked objects retrieved successfully. Gives the details of locked objects along with the links to lock/unlock the object </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the locked objects. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<LockObjectList> locksGetLockedObjectsWithHttpInfo(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
-        okhttp3.Call localVarCall = locksGetLockedObjectsValidateBeforeCall(applicationName, databaseName, offset, limit, null);
-        Type localVarReturnType = new TypeToken<LockObjectList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * List Locked Objects (asynchronously)
-     * Returns all the locked objects from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of items to omit from the start of the result set. Default value is 0.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of objects to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Locked objects retrieved successfully. Gives the details of locked objects along with the links to lock/unlock the object </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the locked objects. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locksGetLockedObjectsAsync(String applicationName, String databaseName, Integer offset, Integer limit, final ApiCallback<LockObjectList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = locksGetLockedObjectsValidateBeforeCall(applicationName, databaseName, offset, limit, _callback);
-        Type localVarReturnType = new TypeToken<LockObjectList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for locksGetLocks
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Locks listed successfully, including links to unlock.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locksGetLocksCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locks"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call locksGetLocksValidateBeforeCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling locksGetLocks(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling locksGetLocks(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = locksGetLocksCall(applicationName, databaseName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * List Locks
-     * Returns links for locked objects and locked blocks from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return LockObject
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Locks listed successfully, including links to unlock.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public LockObject locksGetLocks(String applicationName, String databaseName) throws ApiException {
-        ApiResponse<LockObject> localVarResp = locksGetLocksWithHttpInfo(applicationName, databaseName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * List Locks
-     * Returns links for locked objects and locked blocks from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;LockObject&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Locks listed successfully, including links to unlock.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<LockObject> locksGetLocksWithHttpInfo(String applicationName, String databaseName) throws ApiException {
-        okhttp3.Call localVarCall = locksGetLocksValidateBeforeCall(applicationName, databaseName, null);
-        Type localVarReturnType = new TypeToken<LockObject>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List Locks (asynchronously)
-     * Returns links for locked objects and locked blocks from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Locks listed successfully, including links to unlock.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locksGetLocksAsync(String applicationName, String databaseName, final ApiCallback<LockObject> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = locksGetLocksValidateBeforeCall(applicationName, databaseName, _callback);
-        Type localVarReturnType = new TypeToken<LockObject>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for locksLockObject
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Object details to be locked (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Object is locked successfully. Gives the details of locked object along with the links to lock/unlock the object </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to lock the object. The application, database, or object name may be incorrect, or the object type may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locksLockObjectCall(String applicationName, String databaseName, LockObject body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locks/objects/lock"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call locksLockObjectValidateBeforeCall(String applicationName, String databaseName, LockObject body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling locksLockObject(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling locksLockObject(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling locksLockObject(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = locksLockObjectCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Lock Object
-     * Locks the object in the specified application and database and returns the details of the locked object
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Object details to be locked (required)
-     * @return LockObject
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Object is locked successfully. Gives the details of locked object along with the links to lock/unlock the object </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to lock the object. The application, database, or object name may be incorrect, or the object type may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public LockObject locksLockObject(String applicationName, String databaseName, LockObject body) throws ApiException {
-        ApiResponse<LockObject> localVarResp = locksLockObjectWithHttpInfo(applicationName, databaseName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Lock Object
-     * Locks the object in the specified application and database and returns the details of the locked object
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Object details to be locked (required)
-     * @return ApiResponse&lt;LockObject&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Object is locked successfully. Gives the details of locked object along with the links to lock/unlock the object </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to lock the object. The application, database, or object name may be incorrect, or the object type may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<LockObject> locksLockObjectWithHttpInfo(String applicationName, String databaseName, LockObject body) throws ApiException {
-        okhttp3.Call localVarCall = locksLockObjectValidateBeforeCall(applicationName, databaseName, body, null);
-        Type localVarReturnType = new TypeToken<LockObject>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Lock Object (asynchronously)
-     * Locks the object in the specified application and database and returns the details of the locked object
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Object details to be locked (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Object is locked successfully. Gives the details of locked object along with the links to lock/unlock the object </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to lock the object. The application, database, or object name may be incorrect, or the object type may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locksLockObjectAsync(String applicationName, String databaseName, LockObject body, final ApiCallback<LockObject> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = locksLockObjectValidateBeforeCall(applicationName, databaseName, body, _callback);
-        Type localVarReturnType = new TypeToken<LockObject>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for locksUnLockBlock
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Block details to be unlocked (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Block is unlocked successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the settings. The application or database name may be incorrect, or the JSON for the username in the block details may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locksUnLockBlockCall(String applicationName, String databaseName, LockBlock body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locks/blocks/unlock"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call locksUnLockBlockValidateBeforeCall(String applicationName, String databaseName, LockBlock body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling locksUnLockBlock(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling locksUnLockBlock(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling locksUnLockBlock(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = locksUnLockBlockCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Unlock Block
-     * Unlocks the locked block in the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Block details to be unlocked (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Block is unlocked successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the settings. The application or database name may be incorrect, or the JSON for the username in the block details may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void locksUnLockBlock(String applicationName, String databaseName, LockBlock body) throws ApiException {
-        locksUnLockBlockWithHttpInfo(applicationName, databaseName, body);
-    }
-
-    /**
-     * Unlock Block
-     * Unlocks the locked block in the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Block details to be unlocked (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Block is unlocked successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the settings. The application or database name may be incorrect, or the JSON for the username in the block details may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> locksUnLockBlockWithHttpInfo(String applicationName, String databaseName, LockBlock body) throws ApiException {
-        okhttp3.Call localVarCall = locksUnLockBlockValidateBeforeCall(applicationName, databaseName, body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Unlock Block (asynchronously)
-     * Unlocks the locked block in the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Block details to be unlocked (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Block is unlocked successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the settings. The application or database name may be incorrect, or the JSON for the username in the block details may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locksUnLockBlockAsync(String applicationName, String databaseName, LockBlock body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = locksUnLockBlockValidateBeforeCall(applicationName, databaseName, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for locksUnLockObject
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Details about object to be unlocked.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Object unlocked successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to unlock the object. The application, database, or object name may be incorrect, or the object type may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locksUnLockObjectCall(String applicationName, String databaseName, LockObject body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locks/objects/unlock"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call locksUnLockObjectValidateBeforeCall(String applicationName, String databaseName, LockObject body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling locksUnLockObject(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling locksUnLockObject(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling locksUnLockObject(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = locksUnLockObjectCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Unlock Object
-     * Unlocks the object in the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Details about object to be unlocked.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Object unlocked successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to unlock the object. The application, database, or object name may be incorrect, or the object type may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void locksUnLockObject(String applicationName, String databaseName, LockObject body) throws ApiException {
-        locksUnLockObjectWithHttpInfo(applicationName, databaseName, body);
-    }
-
-    /**
-     * Unlock Object
-     * Unlocks the object in the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Details about object to be unlocked.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Object unlocked successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to unlock the object. The application, database, or object name may be incorrect, or the object type may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> locksUnLockObjectWithHttpInfo(String applicationName, String databaseName, LockObject body) throws ApiException {
-        okhttp3.Call localVarCall = locksUnLockObjectValidateBeforeCall(applicationName, databaseName, body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Unlock Object (asynchronously)
-     * Unlocks the object in the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Details about object to be unlocked.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Object unlocked successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to unlock the object. The application, database, or object name may be incorrect, or the object type may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locksUnLockObjectAsync(String applicationName, String databaseName, LockObject body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = locksUnLockObjectValidateBeforeCall(applicationName, databaseName, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
 }

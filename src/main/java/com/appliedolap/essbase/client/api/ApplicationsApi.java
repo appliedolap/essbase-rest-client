@@ -10,22 +10,12 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.Application;
 import com.appliedolap.essbase.client.model.ApplicationList;
@@ -36,2672 +26,1851 @@ import com.appliedolap.essbase.client.model.CubeCopy;
 import com.appliedolap.essbase.client.model.CubeList;
 import com.appliedolap.essbase.client.model.StringCollectionResponse;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ApplicationsApi {
-    private ApiClient localVarApiClient;
-
-    public ApplicationsApi() {
-        this(Configuration.getDefaultApiClient());
-    }
-
-    public ApplicationsApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for applicationsCopyApplication
-     * @param body Source and destination application information (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Application copied successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to copy application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsCopyApplicationCall(CopyRenameBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/actions/copy";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsCopyApplicationValidateBeforeCall(CopyRenameBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling applicationsCopyApplication(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsCopyApplicationCall(body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Copy Application
-     * Copies application. User need to provide source and destination application name.
-     * @param body Source and destination application information (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Application copied successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to copy application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationsCopyApplication(CopyRenameBean body) throws ApiException {
-        applicationsCopyApplicationWithHttpInfo(body);
-    }
-
-    /**
-     * Copy Application
-     * Copies application. User need to provide source and destination application name.
-     * @param body Source and destination application information (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Application copied successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to copy application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationsCopyApplicationWithHttpInfo(CopyRenameBean body) throws ApiException {
-        okhttp3.Call localVarCall = applicationsCopyApplicationValidateBeforeCall(body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Copy Application (asynchronously)
-     * Copies application. User need to provide source and destination application name.
-     * @param body Source and destination application information (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Application copied successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to copy application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsCopyApplicationAsync(CopyRenameBean body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsCopyApplicationValidateBeforeCall(body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsCopyDatabase
-     * @param applicationName Source application name (required)
-     * @param body Source and destination database information (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Database copied successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to copy database. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsCopyDatabaseCall(String applicationName, CubeCopy body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/actions/copy"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsCopyDatabaseValidateBeforeCall(String applicationName, CubeCopy body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationsCopyDatabase(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling applicationsCopyDatabase(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsCopyDatabaseCall(applicationName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Copy Database
-     * Copies database. User need to provide source and destination application and database name.
-     * @param applicationName Source application name (required)
-     * @param body Source and destination database information (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Database copied successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to copy database. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationsCopyDatabase(String applicationName, CubeCopy body) throws ApiException {
-        applicationsCopyDatabaseWithHttpInfo(applicationName, body);
-    }
-
-    /**
-     * Copy Database
-     * Copies database. User need to provide source and destination application and database name.
-     * @param applicationName Source application name (required)
-     * @param body Source and destination database information (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Database copied successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to copy database. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationsCopyDatabaseWithHttpInfo(String applicationName, CubeCopy body) throws ApiException {
-        okhttp3.Call localVarCall = applicationsCopyDatabaseValidateBeforeCall(applicationName, body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Copy Database (asynchronously)
-     * Copies database. User need to provide source and destination application and database name.
-     * @param applicationName Source application name (required)
-     * @param body Source and destination database information (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Database copied successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to copy database. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsCopyDatabaseAsync(String applicationName, CubeCopy body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsCopyDatabaseValidateBeforeCall(applicationName, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsCreateApplications
-     * @param body Application details (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Application created successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsCreateApplicationsCall(CreateApplication body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsCreateApplicationsValidateBeforeCall(CreateApplication body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling applicationsCreateApplications(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsCreateApplicationsCall(body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Create Application
-     * Create application with specified details.
-     * @param body Application details (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Application created successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationsCreateApplications(CreateApplication body) throws ApiException {
-        applicationsCreateApplicationsWithHttpInfo(body);
-    }
-
-    /**
-     * Create Application
-     * Create application with specified details.
-     * @param body Application details (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Application created successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationsCreateApplicationsWithHttpInfo(CreateApplication body) throws ApiException {
-        okhttp3.Call localVarCall = applicationsCreateApplicationsValidateBeforeCall(body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Create Application (asynchronously)
-     * Create application with specified details.
-     * @param body Application details (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Application created successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsCreateApplicationsAsync(CreateApplication body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsCreateApplicationsValidateBeforeCall(body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsDeleteApplication
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;Application deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;Failed to delete application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsDeleteApplicationCall(String applicationName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsDeleteApplicationValidateBeforeCall(String applicationName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationsDeleteApplication(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsDeleteApplicationCall(applicationName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Delete Application
-     * Delete application with specified name.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;Application deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;Failed to delete application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationsDeleteApplication(String applicationName) throws ApiException {
-        applicationsDeleteApplicationWithHttpInfo(applicationName);
-    }
-
-    /**
-     * Delete Application
-     * Delete application with specified name.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;Application deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;Failed to delete application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationsDeleteApplicationWithHttpInfo(String applicationName) throws ApiException {
-        okhttp3.Call localVarCall = applicationsDeleteApplicationValidateBeforeCall(applicationName, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Delete Application (asynchronously)
-     * Delete application with specified name.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;Application deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;Failed to delete application.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsDeleteApplicationAsync(String applicationName, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsDeleteApplicationValidateBeforeCall(applicationName, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsDeleteDatabase
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;Database deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;Failed to delete database.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsDeleteDatabaseCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsDeleteDatabaseValidateBeforeCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationsDeleteDatabase(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling applicationsDeleteDatabase(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsDeleteDatabaseCall(applicationName, databaseName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Delete Database
-     * Delete database with specified name.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;Database deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;Failed to delete database.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationsDeleteDatabase(String applicationName, String databaseName) throws ApiException {
-        applicationsDeleteDatabaseWithHttpInfo(applicationName, databaseName);
-    }
-
-    /**
-     * Delete Database
-     * Delete database with specified name.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;Database deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;Failed to delete database.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationsDeleteDatabaseWithHttpInfo(String applicationName, String databaseName) throws ApiException {
-        okhttp3.Call localVarCall = applicationsDeleteDatabaseValidateBeforeCall(applicationName, databaseName, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Delete Database (asynchronously)
-     * Delete database with specified name.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;Database deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;Failed to delete database.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsDeleteDatabaseAsync(String applicationName, String databaseName, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsDeleteDatabaseValidateBeforeCall(applicationName, databaseName, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsGetActiveAlias
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns aliases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetActiveAliasCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/aliases/getActiveAlias"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsGetActiveAliasValidateBeforeCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationsGetActiveAlias(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling applicationsGetActiveAlias(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsGetActiveAliasCall(applicationName, databaseName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * List Aliases
-     * &lt;p&gt;Returns alias tables associated with the specified application and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return String
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns aliases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public String applicationsGetActiveAlias(String applicationName, String databaseName) throws ApiException {
-        ApiResponse<String> localVarResp = applicationsGetActiveAliasWithHttpInfo(applicationName, databaseName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * List Aliases
-     * &lt;p&gt;Returns alias tables associated with the specified application and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;String&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns aliases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<String> applicationsGetActiveAliasWithHttpInfo(String applicationName, String databaseName) throws ApiException {
-        okhttp3.Call localVarCall = applicationsGetActiveAliasValidateBeforeCall(applicationName, databaseName, null);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List Aliases (asynchronously)
-     * &lt;p&gt;Returns alias tables associated with the specified application and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns aliases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetActiveAliasAsync(String applicationName, String databaseName, final ApiCallback<String> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsGetActiveAliasValidateBeforeCall(applicationName, databaseName, _callback);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsGetAliases
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns aliases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetAliasesCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/aliases"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsGetAliasesValidateBeforeCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationsGetAliases(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling applicationsGetAliases(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsGetAliasesCall(applicationName, databaseName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * List Aliases
-     * &lt;p&gt;Returns alias tables associated with the specified application and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return StringCollectionResponse
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns aliases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public StringCollectionResponse applicationsGetAliases(String applicationName, String databaseName) throws ApiException {
-        ApiResponse<StringCollectionResponse> localVarResp = applicationsGetAliasesWithHttpInfo(applicationName, databaseName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * List Aliases
-     * &lt;p&gt;Returns alias tables associated with the specified application and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;StringCollectionResponse&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns aliases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<StringCollectionResponse> applicationsGetAliasesWithHttpInfo(String applicationName, String databaseName) throws ApiException {
-        okhttp3.Call localVarCall = applicationsGetAliasesValidateBeforeCall(applicationName, databaseName, null);
-        Type localVarReturnType = new TypeToken<StringCollectionResponse>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List Aliases (asynchronously)
-     * &lt;p&gt;Returns alias tables associated with the specified application and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns aliases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetAliasesAsync(String applicationName, String databaseName, final ApiCallback<StringCollectionResponse> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsGetAliasesValidateBeforeCall(applicationName, databaseName, _callback);
-        Type localVarReturnType = new TypeToken<StringCollectionResponse>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsGetApplication
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param role &lt;p&gt;Role.&lt;/p&gt; (optional, default to false)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns application details. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetApplicationCall(String applicationName, Boolean role, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (role != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("role", role));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsGetApplicationValidateBeforeCall(String applicationName, Boolean role, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationsGetApplication(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsGetApplicationCall(applicationName, role, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Application
-     * Returns details of application with specified name.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param role &lt;p&gt;Role.&lt;/p&gt; (optional, default to false)
-     * @return Application
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns application details. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Application applicationsGetApplication(String applicationName, Boolean role) throws ApiException {
-        ApiResponse<Application> localVarResp = applicationsGetApplicationWithHttpInfo(applicationName, role);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Application
-     * Returns details of application with specified name.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param role &lt;p&gt;Role.&lt;/p&gt; (optional, default to false)
-     * @return ApiResponse&lt;Application&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns application details. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Application> applicationsGetApplicationWithHttpInfo(String applicationName, Boolean role) throws ApiException {
-        okhttp3.Call localVarCall = applicationsGetApplicationValidateBeforeCall(applicationName, role, null);
-        Type localVarReturnType = new TypeToken<Application>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Application (asynchronously)
-     * Returns details of application with specified name.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param role &lt;p&gt;Role.&lt;/p&gt; (optional, default to false)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns application details. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetApplicationAsync(String applicationName, Boolean role, final ApiCallback<Application> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsGetApplicationValidateBeforeCall(applicationName, role, _callback);
-        Type localVarReturnType = new TypeToken<Application>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsGetApplicationProvisionReport
-     * @param applicationName Application name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Provisioning report as excel stream  at specified application for all the users and groups having at least one application role(direct/inherited through groups). Logged in user should have at least &#39;Database Manager&#39; role for specified application to invoke this API. Application roles will be included only when logged in user has &#39;Application Manager&#39; role for specified application. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation fails. For example, logged in user doesn&#39;t have appropriate application role </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetApplicationProvisionReportCall(String applicationName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/provisionReport"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsGetApplicationProvisionReportValidateBeforeCall(String applicationName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationsGetApplicationProvisionReport(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsGetApplicationProvisionReportCall(applicationName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Application Provisioning Report
-     * Gets provisioning report at specified application for all the users and groups having at least one application role(direct/inherited through groups)
-     * @param applicationName Application name (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Provisioning report as excel stream  at specified application for all the users and groups having at least one application role(direct/inherited through groups). Logged in user should have at least &#39;Database Manager&#39; role for specified application to invoke this API. Application roles will be included only when logged in user has &#39;Application Manager&#39; role for specified application. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation fails. For example, logged in user doesn&#39;t have appropriate application role </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationsGetApplicationProvisionReport(String applicationName) throws ApiException {
-        applicationsGetApplicationProvisionReportWithHttpInfo(applicationName);
-    }
-
-    /**
-     * Application Provisioning Report
-     * Gets provisioning report at specified application for all the users and groups having at least one application role(direct/inherited through groups)
-     * @param applicationName Application name (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Provisioning report as excel stream  at specified application for all the users and groups having at least one application role(direct/inherited through groups). Logged in user should have at least &#39;Database Manager&#39; role for specified application to invoke this API. Application roles will be included only when logged in user has &#39;Application Manager&#39; role for specified application. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation fails. For example, logged in user doesn&#39;t have appropriate application role </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationsGetApplicationProvisionReportWithHttpInfo(String applicationName) throws ApiException {
-        okhttp3.Call localVarCall = applicationsGetApplicationProvisionReportValidateBeforeCall(applicationName, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Application Provisioning Report (asynchronously)
-     * Gets provisioning report at specified application for all the users and groups having at least one application role(direct/inherited through groups)
-     * @param applicationName Application name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Provisioning report as excel stream  at specified application for all the users and groups having at least one application role(direct/inherited through groups). Logged in user should have at least &#39;Database Manager&#39; role for specified application to invoke this API. Application roles will be included only when logged in user has &#39;Application Manager&#39; role for specified application. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Validation fails. For example, logged in user doesn&#39;t have appropriate application role </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetApplicationProvisionReportAsync(String applicationName, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsGetApplicationProvisionReportValidateBeforeCall(applicationName, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsGetApplications
-     * @param filter  (optional, default to *)
-     * @param offset &lt;p&gt;Number of applications to omit from the start of the result set. Default value is 0.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of applications to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (optional)
-     * @param applicationNameForConnection Application name for connection (optional)
-     * @param fields Comma separated list of fields to be returned in response fields. This query parameter is used to specify what fields should be returned. If not field is provided, it will return all fields. (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns applications list.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get applications. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetApplicationsCall(String filter, Integer offset, Integer limit, String connectionName, String applicationNameForConnection, String fields, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (filter != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("filter", filter));
-        }
-
-        if (offset != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("offset", offset));
-        }
-
-        if (limit != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
-        }
-
-        if (connectionName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("connectionName", connectionName));
-        }
-
-        if (applicationNameForConnection != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("applicationNameForConnection", applicationNameForConnection));
-        }
-
-        if (fields != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("fields", fields));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsGetApplicationsValidateBeforeCall(String filter, Integer offset, Integer limit, String connectionName, String applicationNameForConnection, String fields, final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = applicationsGetApplicationsCall(filter, offset, limit, connectionName, applicationNameForConnection, fields, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * List Applications
-     * &lt;p&gt;Returns the list of Essbase applications. Connection name and  application name for connection are optional parameters.&lt;/p&gt; &lt;p&gt;If you provide only a connection name with no application name, this API fetches all applications using that named connection.&lt;/p&gt; &lt;p&gt;If you provide a connection name and application name, this API fetches the specified applications using the specified connection.&lt;/p&gt; &lt;p&gt;Use the &lt;code&gt;fields&lt;/code&gt; parameter to return only required fields.&lt;/p&gt; &lt;p&gt;Limitation: If application status is required in response, limit must be &lt;&#x3D; 100.&lt;/p&gt;
-     * @param filter  (optional, default to *)
-     * @param offset &lt;p&gt;Number of applications to omit from the start of the result set. Default value is 0.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of applications to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (optional)
-     * @param applicationNameForConnection Application name for connection (optional)
-     * @param fields Comma separated list of fields to be returned in response fields. This query parameter is used to specify what fields should be returned. If not field is provided, it will return all fields. (optional)
-     * @return ApplicationList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns applications list.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get applications. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApplicationList applicationsGetApplications(String filter, Integer offset, Integer limit, String connectionName, String applicationNameForConnection, String fields) throws ApiException {
-        ApiResponse<ApplicationList> localVarResp = applicationsGetApplicationsWithHttpInfo(filter, offset, limit, connectionName, applicationNameForConnection, fields);
-        return localVarResp.getData();
-    }
-
-    /**
-     * List Applications
-     * &lt;p&gt;Returns the list of Essbase applications. Connection name and  application name for connection are optional parameters.&lt;/p&gt; &lt;p&gt;If you provide only a connection name with no application name, this API fetches all applications using that named connection.&lt;/p&gt; &lt;p&gt;If you provide a connection name and application name, this API fetches the specified applications using the specified connection.&lt;/p&gt; &lt;p&gt;Use the &lt;code&gt;fields&lt;/code&gt; parameter to return only required fields.&lt;/p&gt; &lt;p&gt;Limitation: If application status is required in response, limit must be &lt;&#x3D; 100.&lt;/p&gt;
-     * @param filter  (optional, default to *)
-     * @param offset &lt;p&gt;Number of applications to omit from the start of the result set. Default value is 0.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of applications to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (optional)
-     * @param applicationNameForConnection Application name for connection (optional)
-     * @param fields Comma separated list of fields to be returned in response fields. This query parameter is used to specify what fields should be returned. If not field is provided, it will return all fields. (optional)
-     * @return ApiResponse&lt;ApplicationList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns applications list.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get applications. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ApplicationList> applicationsGetApplicationsWithHttpInfo(String filter, Integer offset, Integer limit, String connectionName, String applicationNameForConnection, String fields) throws ApiException {
-        okhttp3.Call localVarCall = applicationsGetApplicationsValidateBeforeCall(filter, offset, limit, connectionName, applicationNameForConnection, fields, null);
-        Type localVarReturnType = new TypeToken<ApplicationList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List Applications (asynchronously)
-     * &lt;p&gt;Returns the list of Essbase applications. Connection name and  application name for connection are optional parameters.&lt;/p&gt; &lt;p&gt;If you provide only a connection name with no application name, this API fetches all applications using that named connection.&lt;/p&gt; &lt;p&gt;If you provide a connection name and application name, this API fetches the specified applications using the specified connection.&lt;/p&gt; &lt;p&gt;Use the &lt;code&gt;fields&lt;/code&gt; parameter to return only required fields.&lt;/p&gt; &lt;p&gt;Limitation: If application status is required in response, limit must be &lt;&#x3D; 100.&lt;/p&gt;
-     * @param filter  (optional, default to *)
-     * @param offset &lt;p&gt;Number of applications to omit from the start of the result set. Default value is 0.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of applications to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (optional)
-     * @param applicationNameForConnection Application name for connection (optional)
-     * @param fields Comma separated list of fields to be returned in response fields. This query parameter is used to specify what fields should be returned. If not field is provided, it will return all fields. (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns applications list.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get applications. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetApplicationsAsync(String filter, Integer offset, Integer limit, String connectionName, String applicationNameForConnection, String fields, final ApiCallback<ApplicationList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsGetApplicationsValidateBeforeCall(filter, offset, limit, connectionName, applicationNameForConnection, fields, _callback);
-        Type localVarReturnType = new TypeToken<ApplicationList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsGetApplicationsTree
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK, Success </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal Server Error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetApplicationsTreeCall(final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/actions/tree";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsGetApplicationsTreeValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = applicationsGetApplicationsTreeCall(_callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get the list of applications and databases in a tree view
-     * Get the list of applications and databases in a tree view
-     * @return String
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK, Success </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal Server Error </td><td>  -  </td></tr>
-     </table>
-     */
-    public String applicationsGetApplicationsTree() throws ApiException {
-        ApiResponse<String> localVarResp = applicationsGetApplicationsTreeWithHttpInfo();
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get the list of applications and databases in a tree view
-     * Get the list of applications and databases in a tree view
-     * @return ApiResponse&lt;String&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK, Success </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal Server Error </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<String> applicationsGetApplicationsTreeWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = applicationsGetApplicationsTreeValidateBeforeCall(null);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get the list of applications and databases in a tree view (asynchronously)
-     * Get the list of applications and databases in a tree view
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK, Success </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal Server Error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetApplicationsTreeAsync(final ApiCallback<String> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsGetApplicationsTreeValidateBeforeCall(_callback);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsGetCube
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns database details. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get database. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetCubeCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsGetCubeValidateBeforeCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationsGetCube(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling applicationsGetCube(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsGetCubeCall(applicationName, databaseName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Database
-     * Returns details of database with specified database name and application name.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return Cube
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns database details. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get database. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Cube applicationsGetCube(String applicationName, String databaseName) throws ApiException {
-        ApiResponse<Cube> localVarResp = applicationsGetCubeWithHttpInfo(applicationName, databaseName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Database
-     * Returns details of database with specified database name and application name.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Cube&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns database details. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get database. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Cube> applicationsGetCubeWithHttpInfo(String applicationName, String databaseName) throws ApiException {
-        okhttp3.Call localVarCall = applicationsGetCubeValidateBeforeCall(applicationName, databaseName, null);
-        Type localVarReturnType = new TypeToken<Cube>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Database (asynchronously)
-     * Returns details of database with specified database name and application name.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns database details. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get database. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetCubeAsync(String applicationName, String databaseName, final ApiCallback<Cube> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsGetCubeValidateBeforeCall(applicationName, databaseName, _callback);
-        Type localVarReturnType = new TypeToken<Cube>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsGetCubes
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (optional)
-     * @param applicationNameForConnection Application name to list databases (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns databases list. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get databases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetCubesCall(String applicationName, String connectionName, String applicationNameForConnection, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (connectionName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("connectionName", connectionName));
-        }
-
-        if (applicationNameForConnection != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("applicationNameForConnection", applicationNameForConnection));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsGetCubesValidateBeforeCall(String applicationName, String connectionName, String applicationNameForConnection, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationsGetCubes(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsGetCubesCall(applicationName, connectionName, applicationNameForConnection, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * List Databases
-     * Returns the list of databases. Connection name and application name to list databases are optional parameters.  If user provides connection, connection created at specified application will be used to fetch databases.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (optional)
-     * @param applicationNameForConnection Application name to list databases (optional)
-     * @return CubeList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns databases list. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get databases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public CubeList applicationsGetCubes(String applicationName, String connectionName, String applicationNameForConnection) throws ApiException {
-        ApiResponse<CubeList> localVarResp = applicationsGetCubesWithHttpInfo(applicationName, connectionName, applicationNameForConnection);
-        return localVarResp.getData();
-    }
-
-    /**
-     * List Databases
-     * Returns the list of databases. Connection name and application name to list databases are optional parameters.  If user provides connection, connection created at specified application will be used to fetch databases.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (optional)
-     * @param applicationNameForConnection Application name to list databases (optional)
-     * @return ApiResponse&lt;CubeList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns databases list. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get databases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<CubeList> applicationsGetCubesWithHttpInfo(String applicationName, String connectionName, String applicationNameForConnection) throws ApiException {
-        okhttp3.Call localVarCall = applicationsGetCubesValidateBeforeCall(applicationName, connectionName, applicationNameForConnection, null);
-        Type localVarReturnType = new TypeToken<CubeList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List Databases (asynchronously)
-     * Returns the list of databases. Connection name and application name to list databases are optional parameters.  If user provides connection, connection created at specified application will be used to fetch databases.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (optional)
-     * @param applicationNameForConnection Application name to list databases (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns databases list. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get databases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsGetCubesAsync(String applicationName, String connectionName, String applicationNameForConnection, final ApiCallback<CubeList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsGetCubesValidateBeforeCall(applicationName, connectionName, applicationNameForConnection, _callback);
-        Type localVarReturnType = new TypeToken<CubeList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsPerformDbOperation
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param action Action (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Action performed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to perform action. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsPerformDbOperationCall(String applicationName, String databaseName, String action, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (action != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("action", action));
-        }
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsPerformDbOperationValidateBeforeCall(String applicationName, String databaseName, String action, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationsPerformDbOperation(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling applicationsPerformDbOperation(Async)");
-        }
-        
-        // verify the required parameter 'action' is set
-        if (action == null) {
-            throw new ApiException("Missing the required parameter 'action' when calling applicationsPerformDbOperation(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsPerformDbOperationCall(applicationName, databaseName, action, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Start or Stop Database
-     * Performs specified action on specified application and database. Valid actions are &#39;Start&#39; and &#39;Stop&#39;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param action Action (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Action performed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to perform action. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationsPerformDbOperation(String applicationName, String databaseName, String action) throws ApiException {
-        applicationsPerformDbOperationWithHttpInfo(applicationName, databaseName, action);
-    }
-
-    /**
-     * Start or Stop Database
-     * Performs specified action on specified application and database. Valid actions are &#39;Start&#39; and &#39;Stop&#39;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param action Action (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Action performed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to perform action. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationsPerformDbOperationWithHttpInfo(String applicationName, String databaseName, String action) throws ApiException {
-        okhttp3.Call localVarCall = applicationsPerformDbOperationValidateBeforeCall(applicationName, databaseName, action, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Start or Stop Database (asynchronously)
-     * Performs specified action on specified application and database. Valid actions are &#39;Start&#39; and &#39;Stop&#39;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param action Action (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Action performed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to perform action. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsPerformDbOperationAsync(String applicationName, String databaseName, String action, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsPerformDbOperationValidateBeforeCall(applicationName, databaseName, action, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsPerformOperation
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param action Action (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Action performed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to perform action. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsPerformOperationCall(String applicationName, String action, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (action != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("action", action));
-        }
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsPerformOperationValidateBeforeCall(String applicationName, String action, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationsPerformOperation(Async)");
-        }
-        
-        // verify the required parameter 'action' is set
-        if (action == null) {
-            throw new ApiException("Missing the required parameter 'action' when calling applicationsPerformOperation(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsPerformOperationCall(applicationName, action, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Start or Stop Application
-     * Performs specified action on specified application. Valid actions are &#39;Start&#39; and &#39;Stop&#39;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param action Action (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Action performed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to perform action. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationsPerformOperation(String applicationName, String action) throws ApiException {
-        applicationsPerformOperationWithHttpInfo(applicationName, action);
-    }
-
-    /**
-     * Start or Stop Application
-     * Performs specified action on specified application. Valid actions are &#39;Start&#39; and &#39;Stop&#39;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param action Action (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Action performed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to perform action. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationsPerformOperationWithHttpInfo(String applicationName, String action) throws ApiException {
-        okhttp3.Call localVarCall = applicationsPerformOperationValidateBeforeCall(applicationName, action, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Start or Stop Application (asynchronously)
-     * Performs specified action on specified application. Valid actions are &#39;Start&#39; and &#39;Stop&#39;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param action Action (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Action performed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to perform action. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsPerformOperationAsync(String applicationName, String action, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsPerformOperationValidateBeforeCall(applicationName, action, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsRenameApplication
-     * @param body Source and destination application information (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Application renamed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to rename application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsRenameApplicationCall(CopyRenameBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/actions/rename";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsRenameApplicationValidateBeforeCall(CopyRenameBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling applicationsRenameApplication(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsRenameApplicationCall(body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Rename application
-     * Renames application. User need to provide source and destination application name.
-     * @param body Source and destination application information (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Application renamed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to rename application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationsRenameApplication(CopyRenameBean body) throws ApiException {
-        applicationsRenameApplicationWithHttpInfo(body);
-    }
-
-    /**
-     * Rename application
-     * Renames application. User need to provide source and destination application name.
-     * @param body Source and destination application information (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Application renamed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to rename application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationsRenameApplicationWithHttpInfo(CopyRenameBean body) throws ApiException {
-        okhttp3.Call localVarCall = applicationsRenameApplicationValidateBeforeCall(body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Rename application (asynchronously)
-     * Renames application. User need to provide source and destination application name.
-     * @param body Source and destination application information (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Application renamed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to rename application. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsRenameApplicationAsync(CopyRenameBean body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsRenameApplicationValidateBeforeCall(body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsRenameDatabase
-     * @param applicationName Source application name (required)
-     * @param body Source and destination database information (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Database renamed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to rename database. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsRenameDatabaseCall(String applicationName, CopyRenameBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/actions/rename"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsRenameDatabaseValidateBeforeCall(String applicationName, CopyRenameBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationsRenameDatabase(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling applicationsRenameDatabase(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsRenameDatabaseCall(applicationName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Rename database
-     * Renames database. User need to provide source and destination database name. Destination application name is not required
-     * @param applicationName Source application name (required)
-     * @param body Source and destination database information (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Database renamed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to rename database. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationsRenameDatabase(String applicationName, CopyRenameBean body) throws ApiException {
-        applicationsRenameDatabaseWithHttpInfo(applicationName, body);
-    }
-
-    /**
-     * Rename database
-     * Renames database. User need to provide source and destination database name. Destination application name is not required
-     * @param applicationName Source application name (required)
-     * @param body Source and destination database information (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Database renamed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to rename database. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationsRenameDatabaseWithHttpInfo(String applicationName, CopyRenameBean body) throws ApiException {
-        okhttp3.Call localVarCall = applicationsRenameDatabaseValidateBeforeCall(applicationName, body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Rename database (asynchronously)
-     * Renames database. User need to provide source and destination database name. Destination application name is not required
-     * @param applicationName Source application name (required)
-     * @param body Source and destination database information (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Database renamed successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Fails to rename database. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsRenameDatabaseAsync(String applicationName, CopyRenameBean body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsRenameDatabaseValidateBeforeCall(applicationName, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationsSetAliases
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param aliasTableName  (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns aliases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsSetAliasesCall(String applicationName, String databaseName, String aliasTableName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/aliases/setActiveAlias"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (aliasTableName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("aliasTableName", aliasTableName));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationsSetAliasesValidateBeforeCall(String applicationName, String databaseName, String aliasTableName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationsSetAliases(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling applicationsSetAliases(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationsSetAliasesCall(applicationName, databaseName, aliasTableName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * List Aliases
-     * &lt;p&gt;Returns alias tables associated with the specified application and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param aliasTableName  (optional)
-     * @return StringCollectionResponse
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns aliases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public StringCollectionResponse applicationsSetAliases(String applicationName, String databaseName, String aliasTableName) throws ApiException {
-        ApiResponse<StringCollectionResponse> localVarResp = applicationsSetAliasesWithHttpInfo(applicationName, databaseName, aliasTableName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * List Aliases
-     * &lt;p&gt;Returns alias tables associated with the specified application and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param aliasTableName  (optional)
-     * @return ApiResponse&lt;StringCollectionResponse&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns aliases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<StringCollectionResponse> applicationsSetAliasesWithHttpInfo(String applicationName, String databaseName, String aliasTableName) throws ApiException {
-        okhttp3.Call localVarCall = applicationsSetAliasesValidateBeforeCall(applicationName, databaseName, aliasTableName, null);
-        Type localVarReturnType = new TypeToken<StringCollectionResponse>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List Aliases (asynchronously)
-     * &lt;p&gt;Returns alias tables associated with the specified application and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param aliasTableName  (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns aliases. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationsSetAliasesAsync(String applicationName, String databaseName, String aliasTableName, final ApiCallback<StringCollectionResponse> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationsSetAliasesValidateBeforeCall(applicationName, databaseName, aliasTableName, _callback);
-        Type localVarReturnType = new TypeToken<StringCollectionResponse>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for databasesFormulaFunctions
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return XML or JSON string containing list of MDX functions or Calculation functions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call databasesFormulaFunctionsCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/formulaFunctions"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call databasesFormulaFunctionsValidateBeforeCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling databasesFormulaFunctions(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling databasesFormulaFunctions(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = databasesFormulaFunctionsCall(applicationName, databaseName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get functions list for formula editor
-     * Return list of MDX functions for ASO cube and Calculation functions for BSO cube
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @return String
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return XML or JSON string containing list of MDX functions or Calculation functions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public String databasesFormulaFunctions(String applicationName, String databaseName) throws ApiException {
-        ApiResponse<String> localVarResp = databasesFormulaFunctionsWithHttpInfo(applicationName, databaseName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get functions list for formula editor
-     * Return list of MDX functions for ASO cube and Calculation functions for BSO cube
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @return ApiResponse&lt;String&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return XML or JSON string containing list of MDX functions or Calculation functions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<String> databasesFormulaFunctionsWithHttpInfo(String applicationName, String databaseName) throws ApiException {
-        okhttp3.Call localVarCall = databasesFormulaFunctionsValidateBeforeCall(applicationName, databaseName, null);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get functions list for formula editor (asynchronously)
-     * Return list of MDX functions for ASO cube and Calculation functions for BSO cube
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return XML or JSON string containing list of MDX functions or Calculation functions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call databasesFormulaFunctionsAsync(String applicationName, String databaseName, final ApiCallback<String> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = databasesFormulaFunctionsValidateBeforeCall(applicationName, databaseName, _callback);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for databasesGetCalculationFunctions
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return XML or JSON string containing list of calculation functions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call databasesGetCalculationFunctionsCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/calculationFunctions"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
+
+  public ApplicationsApi() {
+    this(new ApiClient());
+  }
+
+  public ApplicationsApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
+    }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
+
+  /**
+   * Copy Application
+   * Copies application. User need to provide source and destination application name.
+   * @param body Source and destination application information (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationsCopyApplication(CopyRenameBean body) throws ApiException {
+    applicationsCopyApplicationWithHttpInfo(body);
+  }
+
+  /**
+   * Copy Application
+   * Copies application. User need to provide source and destination application name.
+   * @param body Source and destination application information (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationsCopyApplicationWithHttpInfo(CopyRenameBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsCopyApplicationRequestBuilder(body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsCopyApplication", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsCopyApplicationRequestBuilder(CopyRenameBean body) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling applicationsCopyApplication");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/actions/copy";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Copy Database
+   * Copies database. User need to provide source and destination application and database name.
+   * @param applicationName Source application name (required)
+   * @param body Source and destination database information (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationsCopyDatabase(String applicationName, CubeCopy body) throws ApiException {
+    applicationsCopyDatabaseWithHttpInfo(applicationName, body);
+  }
+
+  /**
+   * Copy Database
+   * Copies database. User need to provide source and destination application and database name.
+   * @param applicationName Source application name (required)
+   * @param body Source and destination database information (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationsCopyDatabaseWithHttpInfo(String applicationName, CubeCopy body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsCopyDatabaseRequestBuilder(applicationName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsCopyDatabase", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsCopyDatabaseRequestBuilder(String applicationName, CubeCopy body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationsCopyDatabase");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling applicationsCopyDatabase");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/actions/copy"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Create Application
+   * Create application with specified details.
+   * @param body Application details (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationsCreateApplications(CreateApplication body) throws ApiException {
+    applicationsCreateApplicationsWithHttpInfo(body);
+  }
+
+  /**
+   * Create Application
+   * Create application with specified details.
+   * @param body Application details (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationsCreateApplicationsWithHttpInfo(CreateApplication body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsCreateApplicationsRequestBuilder(body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsCreateApplications", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsCreateApplicationsRequestBuilder(CreateApplication body) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling applicationsCreateApplications");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Delete Application
+   * Delete application with specified name.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationsDeleteApplication(String applicationName) throws ApiException {
+    applicationsDeleteApplicationWithHttpInfo(applicationName);
+  }
+
+  /**
+   * Delete Application
+   * Delete application with specified name.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationsDeleteApplicationWithHttpInfo(String applicationName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsDeleteApplicationRequestBuilder(applicationName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsDeleteApplication", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsDeleteApplicationRequestBuilder(String applicationName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationsDeleteApplication");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Delete Database
+   * Delete database with specified name.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationsDeleteDatabase(String applicationName, String databaseName) throws ApiException {
+    applicationsDeleteDatabaseWithHttpInfo(applicationName, databaseName);
+  }
+
+  /**
+   * Delete Database
+   * Delete database with specified name.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationsDeleteDatabaseWithHttpInfo(String applicationName, String databaseName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsDeleteDatabaseRequestBuilder(applicationName, databaseName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsDeleteDatabase", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsDeleteDatabaseRequestBuilder(String applicationName, String databaseName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationsDeleteDatabase");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling applicationsDeleteDatabase");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * List Aliases
+   * &lt;p&gt;Returns alias tables associated with the specified application and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return String
+   * @throws ApiException if fails to make API call
+   */
+  public String applicationsGetActiveAlias(String applicationName, String databaseName) throws ApiException {
+    ApiResponse<String> localVarResponse = applicationsGetActiveAliasWithHttpInfo(applicationName, databaseName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * List Aliases
+   * &lt;p&gt;Returns alias tables associated with the specified application and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;String&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<String> applicationsGetActiveAliasWithHttpInfo(String applicationName, String databaseName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsGetActiveAliasRequestBuilder(applicationName, databaseName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsGetActiveAlias", localVarResponse);
+        }
+        return new ApiResponse<String>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<String>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsGetActiveAliasRequestBuilder(String applicationName, String databaseName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationsGetActiveAlias");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling applicationsGetActiveAlias");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/aliases/getActiveAlias"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * List Aliases
+   * &lt;p&gt;Returns alias tables associated with the specified application and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return StringCollectionResponse
+   * @throws ApiException if fails to make API call
+   */
+  public StringCollectionResponse applicationsGetAliases(String applicationName, String databaseName) throws ApiException {
+    ApiResponse<StringCollectionResponse> localVarResponse = applicationsGetAliasesWithHttpInfo(applicationName, databaseName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * List Aliases
+   * &lt;p&gt;Returns alias tables associated with the specified application and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;StringCollectionResponse&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<StringCollectionResponse> applicationsGetAliasesWithHttpInfo(String applicationName, String databaseName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsGetAliasesRequestBuilder(applicationName, databaseName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsGetAliases", localVarResponse);
+        }
+        return new ApiResponse<StringCollectionResponse>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<StringCollectionResponse>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsGetAliasesRequestBuilder(String applicationName, String databaseName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationsGetAliases");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling applicationsGetAliases");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/aliases"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Application
+   * Returns details of application with specified name.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param role &lt;p&gt;Role.&lt;/p&gt; (optional, default to false)
+   * @return Application
+   * @throws ApiException if fails to make API call
+   */
+  public Application applicationsGetApplication(String applicationName, Boolean role) throws ApiException {
+    ApiResponse<Application> localVarResponse = applicationsGetApplicationWithHttpInfo(applicationName, role);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Application
+   * Returns details of application with specified name.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param role &lt;p&gt;Role.&lt;/p&gt; (optional, default to false)
+   * @return ApiResponse&lt;Application&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Application> applicationsGetApplicationWithHttpInfo(String applicationName, Boolean role) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsGetApplicationRequestBuilder(applicationName, role);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsGetApplication", localVarResponse);
+        }
+        return new ApiResponse<Application>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Application>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsGetApplicationRequestBuilder(String applicationName, Boolean role) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationsGetApplication");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "role";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("role", role));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Application Provisioning Report
+   * Gets provisioning report at specified application for all the users and groups having at least one application role(direct/inherited through groups)
+   * @param applicationName Application name (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationsGetApplicationProvisionReport(String applicationName) throws ApiException {
+    applicationsGetApplicationProvisionReportWithHttpInfo(applicationName);
+  }
+
+  /**
+   * Application Provisioning Report
+   * Gets provisioning report at specified application for all the users and groups having at least one application role(direct/inherited through groups)
+   * @param applicationName Application name (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationsGetApplicationProvisionReportWithHttpInfo(String applicationName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsGetApplicationProvisionReportRequestBuilder(applicationName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsGetApplicationProvisionReport", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsGetApplicationProvisionReportRequestBuilder(String applicationName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationsGetApplicationProvisionReport");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/provisionReport"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * List Applications
+   * &lt;p&gt;Returns the list of Essbase applications. Connection name and  application name for connection are optional parameters.&lt;/p&gt; &lt;p&gt;If you provide only a connection name with no application name, this API fetches all applications using that named connection.&lt;/p&gt; &lt;p&gt;If you provide a connection name and application name, this API fetches the specified applications using the specified connection.&lt;/p&gt; &lt;p&gt;Use the &lt;code&gt;fields&lt;/code&gt; parameter to return only required fields.&lt;/p&gt; &lt;p&gt;Limitation: If application status is required in response, limit must be &lt;&#x3D; 100.&lt;/p&gt;
+   * @param filter  (optional, default to *)
+   * @param offset &lt;p&gt;Number of applications to omit from the start of the result set. Default value is 0.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of applications to return. Default is 50.&lt;/p&gt; (optional, default to 50)
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (optional)
+   * @param applicationNameForConnection Application name for connection (optional)
+   * @param fields Comma separated list of fields to be returned in response fields. This query parameter is used to specify what fields should be returned. If not field is provided, it will return all fields. (optional)
+   * @return ApplicationList
+   * @throws ApiException if fails to make API call
+   */
+  public ApplicationList applicationsGetApplications(String filter, Integer offset, Integer limit, String connectionName, String applicationNameForConnection, String fields) throws ApiException {
+    ApiResponse<ApplicationList> localVarResponse = applicationsGetApplicationsWithHttpInfo(filter, offset, limit, connectionName, applicationNameForConnection, fields);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * List Applications
+   * &lt;p&gt;Returns the list of Essbase applications. Connection name and  application name for connection are optional parameters.&lt;/p&gt; &lt;p&gt;If you provide only a connection name with no application name, this API fetches all applications using that named connection.&lt;/p&gt; &lt;p&gt;If you provide a connection name and application name, this API fetches the specified applications using the specified connection.&lt;/p&gt; &lt;p&gt;Use the &lt;code&gt;fields&lt;/code&gt; parameter to return only required fields.&lt;/p&gt; &lt;p&gt;Limitation: If application status is required in response, limit must be &lt;&#x3D; 100.&lt;/p&gt;
+   * @param filter  (optional, default to *)
+   * @param offset &lt;p&gt;Number of applications to omit from the start of the result set. Default value is 0.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of applications to return. Default is 50.&lt;/p&gt; (optional, default to 50)
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (optional)
+   * @param applicationNameForConnection Application name for connection (optional)
+   * @param fields Comma separated list of fields to be returned in response fields. This query parameter is used to specify what fields should be returned. If not field is provided, it will return all fields. (optional)
+   * @return ApiResponse&lt;ApplicationList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ApplicationList> applicationsGetApplicationsWithHttpInfo(String filter, Integer offset, Integer limit, String connectionName, String applicationNameForConnection, String fields) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsGetApplicationsRequestBuilder(filter, offset, limit, connectionName, applicationNameForConnection, fields);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsGetApplications", localVarResponse);
+        }
+        return new ApiResponse<ApplicationList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ApplicationList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsGetApplicationsRequestBuilder(String filter, Integer offset, Integer limit, String connectionName, String applicationNameForConnection, String fields) throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications";
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "filter";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("filter", filter));
+    localVarQueryParameterBaseName = "offset";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("offset", offset));
+    localVarQueryParameterBaseName = "limit";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("limit", limit));
+    localVarQueryParameterBaseName = "connectionName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("connectionName", connectionName));
+    localVarQueryParameterBaseName = "applicationNameForConnection";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("applicationNameForConnection", applicationNameForConnection));
+    localVarQueryParameterBaseName = "fields";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("fields", fields));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get the list of applications and databases in a tree view
+   * Get the list of applications and databases in a tree view
+   * @return String
+   * @throws ApiException if fails to make API call
+   */
+  public String applicationsGetApplicationsTree() throws ApiException {
+    ApiResponse<String> localVarResponse = applicationsGetApplicationsTreeWithHttpInfo();
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get the list of applications and databases in a tree view
+   * Get the list of applications and databases in a tree view
+   * @return ApiResponse&lt;String&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<String> applicationsGetApplicationsTreeWithHttpInfo() throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsGetApplicationsTreeRequestBuilder();
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsGetApplicationsTree", localVarResponse);
+        }
+        return new ApiResponse<String>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<String>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsGetApplicationsTreeRequestBuilder() throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/actions/tree";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Database
+   * Returns details of database with specified database name and application name.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return Cube
+   * @throws ApiException if fails to make API call
+   */
+  public Cube applicationsGetCube(String applicationName, String databaseName) throws ApiException {
+    ApiResponse<Cube> localVarResponse = applicationsGetCubeWithHttpInfo(applicationName, databaseName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Database
+   * Returns details of database with specified database name and application name.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Cube&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Cube> applicationsGetCubeWithHttpInfo(String applicationName, String databaseName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsGetCubeRequestBuilder(applicationName, databaseName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsGetCube", localVarResponse);
+        }
+        return new ApiResponse<Cube>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Cube>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsGetCubeRequestBuilder(String applicationName, String databaseName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationsGetCube");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling applicationsGetCube");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * List Databases
+   * Returns the list of databases. Connection name and application name to list databases are optional parameters.  If user provides connection, connection created at specified application will be used to fetch databases.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (optional)
+   * @param applicationNameForConnection Application name to list databases (optional)
+   * @return CubeList
+   * @throws ApiException if fails to make API call
+   */
+  public CubeList applicationsGetCubes(String applicationName, String connectionName, String applicationNameForConnection) throws ApiException {
+    ApiResponse<CubeList> localVarResponse = applicationsGetCubesWithHttpInfo(applicationName, connectionName, applicationNameForConnection);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * List Databases
+   * Returns the list of databases. Connection name and application name to list databases are optional parameters.  If user provides connection, connection created at specified application will be used to fetch databases.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (optional)
+   * @param applicationNameForConnection Application name to list databases (optional)
+   * @return ApiResponse&lt;CubeList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CubeList> applicationsGetCubesWithHttpInfo(String applicationName, String connectionName, String applicationNameForConnection) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsGetCubesRequestBuilder(applicationName, connectionName, applicationNameForConnection);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsGetCubes", localVarResponse);
+        }
+        return new ApiResponse<CubeList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<CubeList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsGetCubesRequestBuilder(String applicationName, String connectionName, String applicationNameForConnection) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationsGetCubes");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "connectionName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("connectionName", connectionName));
+    localVarQueryParameterBaseName = "applicationNameForConnection";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("applicationNameForConnection", applicationNameForConnection));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Start or Stop Database
+   * Performs specified action on specified application and database. Valid actions are &#39;Start&#39; and &#39;Stop&#39;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param action Action (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationsPerformDbOperation(String applicationName, String databaseName, String action) throws ApiException {
+    applicationsPerformDbOperationWithHttpInfo(applicationName, databaseName, action);
+  }
+
+  /**
+   * Start or Stop Database
+   * Performs specified action on specified application and database. Valid actions are &#39;Start&#39; and &#39;Stop&#39;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param action Action (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationsPerformDbOperationWithHttpInfo(String applicationName, String databaseName, String action) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsPerformDbOperationRequestBuilder(applicationName, databaseName, action);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsPerformDbOperation", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsPerformDbOperationRequestBuilder(String applicationName, String databaseName, String action) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationsPerformDbOperation");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling applicationsPerformDbOperation");
+    }
+    // verify the required parameter 'action' is set
+    if (action == null) {
+      throw new ApiException(400, "Missing the required parameter 'action' when calling applicationsPerformDbOperation");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "action";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("action", action));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Start or Stop Application
+   * Performs specified action on specified application. Valid actions are &#39;Start&#39; and &#39;Stop&#39;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param action Action (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationsPerformOperation(String applicationName, String action) throws ApiException {
+    applicationsPerformOperationWithHttpInfo(applicationName, action);
+  }
+
+  /**
+   * Start or Stop Application
+   * Performs specified action on specified application. Valid actions are &#39;Start&#39; and &#39;Stop&#39;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param action Action (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationsPerformOperationWithHttpInfo(String applicationName, String action) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsPerformOperationRequestBuilder(applicationName, action);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsPerformOperation", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsPerformOperationRequestBuilder(String applicationName, String action) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationsPerformOperation");
+    }
+    // verify the required parameter 'action' is set
+    if (action == null) {
+      throw new ApiException(400, "Missing the required parameter 'action' when calling applicationsPerformOperation");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "action";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("action", action));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Rename application
+   * Renames application. User need to provide source and destination application name.
+   * @param body Source and destination application information (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationsRenameApplication(CopyRenameBean body) throws ApiException {
+    applicationsRenameApplicationWithHttpInfo(body);
+  }
+
+  /**
+   * Rename application
+   * Renames application. User need to provide source and destination application name.
+   * @param body Source and destination application information (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationsRenameApplicationWithHttpInfo(CopyRenameBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsRenameApplicationRequestBuilder(body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsRenameApplication", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsRenameApplicationRequestBuilder(CopyRenameBean body) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling applicationsRenameApplication");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/actions/rename";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Rename database
+   * Renames database. User need to provide source and destination database name. Destination application name is not required
+   * @param applicationName Source application name (required)
+   * @param body Source and destination database information (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationsRenameDatabase(String applicationName, CopyRenameBean body) throws ApiException {
+    applicationsRenameDatabaseWithHttpInfo(applicationName, body);
+  }
+
+  /**
+   * Rename database
+   * Renames database. User need to provide source and destination database name. Destination application name is not required
+   * @param applicationName Source application name (required)
+   * @param body Source and destination database information (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationsRenameDatabaseWithHttpInfo(String applicationName, CopyRenameBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsRenameDatabaseRequestBuilder(applicationName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsRenameDatabase", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsRenameDatabaseRequestBuilder(String applicationName, CopyRenameBean body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationsRenameDatabase");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling applicationsRenameDatabase");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/actions/rename"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * List Aliases
+   * &lt;p&gt;Returns alias tables associated with the specified application and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param aliasTableName  (optional)
+   * @return StringCollectionResponse
+   * @throws ApiException if fails to make API call
+   */
+  public StringCollectionResponse applicationsSetAliases(String applicationName, String databaseName, String aliasTableName) throws ApiException {
+    ApiResponse<StringCollectionResponse> localVarResponse = applicationsSetAliasesWithHttpInfo(applicationName, databaseName, aliasTableName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * List Aliases
+   * &lt;p&gt;Returns alias tables associated with the specified application and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param aliasTableName  (optional)
+   * @return ApiResponse&lt;StringCollectionResponse&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<StringCollectionResponse> applicationsSetAliasesWithHttpInfo(String applicationName, String databaseName, String aliasTableName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationsSetAliasesRequestBuilder(applicationName, databaseName, aliasTableName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationsSetAliases", localVarResponse);
+        }
+        return new ApiResponse<StringCollectionResponse>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<StringCollectionResponse>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationsSetAliasesRequestBuilder(String applicationName, String databaseName, String aliasTableName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationsSetAliases");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling applicationsSetAliases");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/aliases/setActiveAlias"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "aliasTableName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("aliasTableName", aliasTableName));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get functions list for formula editor
+   * Return list of MDX functions for ASO cube and Calculation functions for BSO cube
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @return String
+   * @throws ApiException if fails to make API call
+   */
+  public String databasesFormulaFunctions(String applicationName, String databaseName) throws ApiException {
+    ApiResponse<String> localVarResponse = databasesFormulaFunctionsWithHttpInfo(applicationName, databaseName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get functions list for formula editor
+   * Return list of MDX functions for ASO cube and Calculation functions for BSO cube
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @return ApiResponse&lt;String&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<String> databasesFormulaFunctionsWithHttpInfo(String applicationName, String databaseName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = databasesFormulaFunctionsRequestBuilder(applicationName, databaseName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("databasesFormulaFunctions", localVarResponse);
+        }
+        return new ApiResponse<String>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<String>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder databasesFormulaFunctionsRequestBuilder(String applicationName, String databaseName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling databasesFormulaFunctions");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling databasesFormulaFunctions");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/formulaFunctions"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Calculation Functions
+   * Return list of common and database specific calculation functions
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @return String
+   * @throws ApiException if fails to make API call
+   */
+  public String databasesGetCalculationFunctions(String applicationName, String databaseName) throws ApiException {
+    ApiResponse<String> localVarResponse = databasesGetCalculationFunctionsWithHttpInfo(applicationName, databaseName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Calculation Functions
+   * Return list of common and database specific calculation functions
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @return ApiResponse&lt;String&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<String> databasesGetCalculationFunctionsWithHttpInfo(String applicationName, String databaseName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = databasesGetCalculationFunctionsRequestBuilder(applicationName, databaseName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("databasesGetCalculationFunctions", localVarResponse);
+        }
+        return new ApiResponse<String>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<String>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder databasesGetCalculationFunctionsRequestBuilder(String applicationName, String databaseName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling databasesGetCalculationFunctions");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling databasesGetCalculationFunctions");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/calculationFunctions"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get MDX Functions
+   * Return list of MDX functions
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @return String
+   * @throws ApiException if fails to make API call
+   */
+  public String databasesGetMdxFunctions(String applicationName, String databaseName) throws ApiException {
+    ApiResponse<String> localVarResponse = databasesGetMdxFunctionsWithHttpInfo(applicationName, databaseName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get MDX Functions
+   * Return list of MDX functions
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @return ApiResponse&lt;String&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<String> databasesGetMdxFunctionsWithHttpInfo(String applicationName, String databaseName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = databasesGetMdxFunctionsRequestBuilder(applicationName, databaseName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("databasesGetMdxFunctions", localVarResponse);
+        }
+        return new ApiResponse<String>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<String>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder databasesGetMdxFunctionsRequestBuilder(String applicationName, String databaseName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling databasesGetMdxFunctions");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling databasesGetMdxFunctions");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/mdxFunctions"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call databasesGetCalculationFunctionsValidateBeforeCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling databasesGetCalculationFunctions(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling databasesGetCalculationFunctions(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = databasesGetCalculationFunctionsCall(applicationName, databaseName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Calculation Functions
-     * Return list of common and database specific calculation functions
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @return String
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return XML or JSON string containing list of calculation functions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public String databasesGetCalculationFunctions(String applicationName, String databaseName) throws ApiException {
-        ApiResponse<String> localVarResp = databasesGetCalculationFunctionsWithHttpInfo(applicationName, databaseName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Calculation Functions
-     * Return list of common and database specific calculation functions
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @return ApiResponse&lt;String&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return XML or JSON string containing list of calculation functions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<String> databasesGetCalculationFunctionsWithHttpInfo(String applicationName, String databaseName) throws ApiException {
-        okhttp3.Call localVarCall = databasesGetCalculationFunctionsValidateBeforeCall(applicationName, databaseName, null);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Calculation Functions (asynchronously)
-     * Return list of common and database specific calculation functions
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return XML or JSON string containing list of calculation functions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call databasesGetCalculationFunctionsAsync(String applicationName, String databaseName, final ApiCallback<String> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = databasesGetCalculationFunctionsValidateBeforeCall(applicationName, databaseName, _callback);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for databasesGetMdxFunctions
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return XML or JSON string containing list of MDX functions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call databasesGetMdxFunctionsCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/mdxFunctions"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call databasesGetMdxFunctionsValidateBeforeCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling databasesGetMdxFunctions(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling databasesGetMdxFunctions(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = databasesGetMdxFunctionsCall(applicationName, databaseName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get MDX Functions
-     * Return list of MDX functions
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @return String
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return XML or JSON string containing list of MDX functions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public String databasesGetMdxFunctions(String applicationName, String databaseName) throws ApiException {
-        ApiResponse<String> localVarResp = databasesGetMdxFunctionsWithHttpInfo(applicationName, databaseName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get MDX Functions
-     * Return list of MDX functions
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @return ApiResponse&lt;String&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return XML or JSON string containing list of MDX functions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<String> databasesGetMdxFunctionsWithHttpInfo(String applicationName, String databaseName) throws ApiException {
-        okhttp3.Call localVarCall = databasesGetMdxFunctionsValidateBeforeCall(applicationName, databaseName, null);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get MDX Functions (asynchronously)
-     * Return list of MDX functions
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Return XML or JSON string containing list of MDX functions </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call databasesGetMdxFunctionsAsync(String applicationName, String databaseName, final ApiCallback<String> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = databasesGetMdxFunctionsValidateBeforeCall(applicationName, databaseName, _callback);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

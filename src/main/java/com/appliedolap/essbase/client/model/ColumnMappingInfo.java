@@ -13,46 +13,57 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ColumnMappingInfo
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ColumnMappingInfo.JSON_PROPERTY_DIMENSION,
+  ColumnMappingInfo.JSON_PROPERTY_GENERATION,
+  ColumnMappingInfo.JSON_PROPERTY_LEVEL,
+  ColumnMappingInfo.JSON_PROPERTY_TYPE,
+  ColumnMappingInfo.JSON_PROPERTY_GENERATION_NUMBER
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ColumnMappingInfo {
-  public static final String SERIALIZED_NAME_DIMENSION = "dimension";
-  @SerializedName(SERIALIZED_NAME_DIMENSION)
+  public static final String JSON_PROPERTY_DIMENSION = "dimension";
+  @jakarta.annotation.Nullable
   private String dimension;
 
-  public static final String SERIALIZED_NAME_GENERATION = "generation";
-  @SerializedName(SERIALIZED_NAME_GENERATION)
+  public static final String JSON_PROPERTY_GENERATION = "generation";
+  @jakarta.annotation.Nullable
   private String generation;
 
-  public static final String SERIALIZED_NAME_LEVEL = "level";
-  @SerializedName(SERIALIZED_NAME_LEVEL)
+  public static final String JSON_PROPERTY_LEVEL = "level";
+  @jakarta.annotation.Nullable
   private String level;
 
   /**
    * Gets or Sets type
    */
-  @JsonAdapter(TypeEnum.Adapter.class)
   public enum TypeEnum {
-    DIMENSION("DIMENSION"),
+    DIMENSION(String.valueOf("DIMENSION")),
     
-    GENERATION("GENERATION"),
+    GENERATION(String.valueOf("GENERATION")),
     
-    LEVEL0("LEVEL0"),
+    LEVEL0(String.valueOf("LEVEL0")),
     
-    PARENT_CHILD("PARENT_CHILD");
+    PARENT_CHILD(String.valueOf("PARENT_CHILD"));
 
     private String value;
 
@@ -60,6 +71,7 @@ public class ColumnMappingInfo {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -69,6 +81,7 @@ public class ColumnMappingInfo {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static TypeEnum fromValue(String value) {
       for (TypeEnum b : TypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -77,145 +90,142 @@ public class ColumnMappingInfo {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<TypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final TypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public TypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return TypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nullable
   private TypeEnum type;
 
-  public static final String SERIALIZED_NAME_GENERATION_NUMBER = "generationNumber";
-  @SerializedName(SERIALIZED_NAME_GENERATION_NUMBER)
+  public static final String JSON_PROPERTY_GENERATION_NUMBER = "generationNumber";
+  @jakarta.annotation.Nullable
   private Integer generationNumber;
 
+  public ColumnMappingInfo() { 
+  }
 
-  public ColumnMappingInfo dimension(String dimension) {
-    
+  public ColumnMappingInfo dimension(@jakarta.annotation.Nullable String dimension) {
     this.dimension = dimension;
     return this;
   }
 
-   /**
+  /**
    * Get dimension
    * @return dimension
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDimension() {
     return dimension;
   }
 
 
-  public void setDimension(String dimension) {
+  @JsonProperty(JSON_PROPERTY_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimension(@jakarta.annotation.Nullable String dimension) {
     this.dimension = dimension;
   }
 
 
-  public ColumnMappingInfo generation(String generation) {
-    
+  public ColumnMappingInfo generation(@jakarta.annotation.Nullable String generation) {
     this.generation = generation;
     return this;
   }
 
-   /**
+  /**
    * Get generation
    * @return generation
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GENERATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getGeneration() {
     return generation;
   }
 
 
-  public void setGeneration(String generation) {
+  @JsonProperty(JSON_PROPERTY_GENERATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGeneration(@jakarta.annotation.Nullable String generation) {
     this.generation = generation;
   }
 
 
-  public ColumnMappingInfo level(String level) {
-    
+  public ColumnMappingInfo level(@jakarta.annotation.Nullable String level) {
     this.level = level;
     return this;
   }
 
-   /**
+  /**
    * Get level
    * @return level
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LEVEL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getLevel() {
     return level;
   }
 
 
-  public void setLevel(String level) {
+  @JsonProperty(JSON_PROPERTY_LEVEL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLevel(@jakarta.annotation.Nullable String level) {
     this.level = level;
   }
 
 
-  public ColumnMappingInfo type(TypeEnum type) {
-    
+  public ColumnMappingInfo type(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public TypeEnum getType() {
     return type;
   }
 
 
-  public void setType(TypeEnum type) {
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setType(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
   }
 
 
-  public ColumnMappingInfo generationNumber(Integer generationNumber) {
-    
+  public ColumnMappingInfo generationNumber(@jakarta.annotation.Nullable Integer generationNumber) {
     this.generationNumber = generationNumber;
     return this;
   }
 
-   /**
+  /**
    * Get generationNumber
    * @return generationNumber
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GENERATION_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getGenerationNumber() {
     return generationNumber;
   }
 
 
-  public void setGenerationNumber(Integer generationNumber) {
+  @JsonProperty(JSON_PROPERTY_GENERATION_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGenerationNumber(@jakarta.annotation.Nullable Integer generationNumber) {
     this.generationNumber = generationNumber;
   }
 
 
+  /**
+   * Return true if this ColumnMappingInfo object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -261,5 +271,64 @@ public class ColumnMappingInfo {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `dimension` to the URL query string
+    if (getDimension() != null) {
+      joiner.add(String.format("%sdimension%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDimension()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `generation` to the URL query string
+    if (getGeneration() != null) {
+      joiner.add(String.format("%sgeneration%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getGeneration()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `level` to the URL query string
+    if (getLevel() != null) {
+      joiner.add(String.format("%slevel%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLevel()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `generationNumber` to the URL query string
+    if (getGenerationNumber() != null) {
+      joiner.add(String.format("%sgenerationNumber%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getGenerationNumber()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

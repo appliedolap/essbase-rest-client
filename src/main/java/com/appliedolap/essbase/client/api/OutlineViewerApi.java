@@ -10,928 +10,676 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.ExportOptions;
 import com.appliedolap.essbase.client.model.MemberBean;
 import com.appliedolap.essbase.client.model.RestCollectionResponse;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class OutlineViewerApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public OutlineViewerApi() {
-        this(Configuration.getDefaultApiClient());
+  public OutlineViewerApi() {
+    this(new ApiClient());
+  }
+
+  public OutlineViewerApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public OutlineViewerApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * 
+   * 
+   * @param app  (required)
+   * @param cube  (required)
+   * @param accept  (optional, default to application/json)
+   * @throws ApiException if fails to make API call
+   */
+  public void getAllSmartList(String app, String cube, String accept) throws ApiException {
+    getAllSmartListWithHttpInfo(app, cube, accept);
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for getAllSmartList
-     * @param app  (required)
-     * @param cube  (required)
-     * @param accept  (optional, default to application/json)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 0 </td><td> successful operation </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call getAllSmartListCall(String app, String cube, String accept, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/outline/{app}/{cube}/settings/smartlist"
-            .replaceAll("\\{" + "app" + "\\}", localVarApiClient.escapeString(app.toString()))
-            .replaceAll("\\{" + "cube" + "\\}", localVarApiClient.escapeString(cube.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (accept != null) {
-            localVarHeaderParams.put("accept", localVarApiClient.parameterToString(accept));
+  /**
+   * 
+   * 
+   * @param app  (required)
+   * @param cube  (required)
+   * @param accept  (optional, default to application/json)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> getAllSmartListWithHttpInfo(String app, String cube, String accept) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = getAllSmartListRequestBuilder(app, cube, accept);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("getAllSmartList", localVarResponse);
         }
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder getAllSmartListRequestBuilder(String app, String cube, String accept) throws ApiException {
+    // verify the required parameter 'app' is set
+    if (app == null) {
+      throw new ApiException(400, "Missing the required parameter 'app' when calling getAllSmartList");
+    }
+    // verify the required parameter 'cube' is set
+    if (cube == null) {
+      throw new ApiException(400, "Missing the required parameter 'cube' when calling getAllSmartList");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call getAllSmartListValidateBeforeCall(String app, String cube, String accept, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'app' is set
-        if (app == null) {
-            throw new ApiException("Missing the required parameter 'app' when calling getAllSmartList(Async)");
-        }
-        
-        // verify the required parameter 'cube' is set
-        if (cube == null) {
-            throw new ApiException("Missing the required parameter 'cube' when calling getAllSmartList(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = getAllSmartListCall(app, cube, accept, _callback);
-        return localVarCall;
+    String localVarPath = "/outline/{app}/{cube}/settings/smartlist"
+        .replace("{app}", ApiClient.urlEncode(app.toString()))
+        .replace("{cube}", ApiClient.urlEncode(cube.toString()));
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    if (accept != null) {
+      localVarRequestBuilder.header("accept", accept.toString());
+    }
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Member Ancestors
+   * Returns all ancestors of the requested member
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param memberUniqueName Member unique name (Fully qualified name) (required)
+   * @param fields Comma separated list of member properties to fetch (optional)
+   * @return MemberBean
+   * @throws ApiException if fails to make API call
+   */
+  public MemberBean outlineGetAncestorsMemberInfo(String app, String cube, String memberUniqueName, String fields) throws ApiException {
+    ApiResponse<MemberBean> localVarResponse = outlineGetAncestorsMemberInfoWithHttpInfo(app, cube, memberUniqueName, fields);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Member Ancestors
+   * Returns all ancestors of the requested member
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param memberUniqueName Member unique name (Fully qualified name) (required)
+   * @param fields Comma separated list of member properties to fetch (optional)
+   * @return ApiResponse&lt;MemberBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<MemberBean> outlineGetAncestorsMemberInfoWithHttpInfo(String app, String cube, String memberUniqueName, String fields) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = outlineGetAncestorsMemberInfoRequestBuilder(app, cube, memberUniqueName, fields);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("outlineGetAncestorsMemberInfo", localVarResponse);
+        }
+        return new ApiResponse<MemberBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<MemberBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder outlineGetAncestorsMemberInfoRequestBuilder(String app, String cube, String memberUniqueName, String fields) throws ApiException {
+    // verify the required parameter 'app' is set
+    if (app == null) {
+      throw new ApiException(400, "Missing the required parameter 'app' when calling outlineGetAncestorsMemberInfo");
+    }
+    // verify the required parameter 'cube' is set
+    if (cube == null) {
+      throw new ApiException(400, "Missing the required parameter 'cube' when calling outlineGetAncestorsMemberInfo");
+    }
+    // verify the required parameter 'memberUniqueName' is set
+    if (memberUniqueName == null) {
+      throw new ApiException(400, "Missing the required parameter 'memberUniqueName' when calling outlineGetAncestorsMemberInfo");
     }
 
-    /**
-     * 
-     * 
-     * @param app  (required)
-     * @param cube  (required)
-     * @param accept  (optional, default to application/json)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 0 </td><td> successful operation </td><td>  -  </td></tr>
-     </table>
-     */
-    public void getAllSmartList(String app, String cube, String accept) throws ApiException {
-        getAllSmartListWithHttpInfo(app, cube, accept);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/outline/{app}/{cube}/ancestors/{memberUniqueName}"
+        .replace("{app}", ApiClient.urlEncode(app.toString()))
+        .replace("{cube}", ApiClient.urlEncode(cube.toString()))
+        .replace("{memberUniqueName}", ApiClient.urlEncode(memberUniqueName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "fields";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("fields", fields));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * 
-     * 
-     * @param app  (required)
-     * @param cube  (required)
-     * @param accept  (optional, default to application/json)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 0 </td><td> successful operation </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> getAllSmartListWithHttpInfo(String app, String cube, String accept) throws ApiException {
-        okhttp3.Call localVarCall = getAllSmartListValidateBeforeCall(app, cube, accept, null);
-        return localVarApiClient.execute(localVarCall);
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Descendants Count
+   * Returns descendants count for the requested member
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param memberUniqueName Member unique name (Fully qualified name) (required)
+   * @return Integer
+   * @throws ApiException if fails to make API call
+   */
+  public Integer outlineGetDescendantsCount(String app, String cube, String memberUniqueName) throws ApiException {
+    ApiResponse<Integer> localVarResponse = outlineGetDescendantsCountWithHttpInfo(app, cube, memberUniqueName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Descendants Count
+   * Returns descendants count for the requested member
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param memberUniqueName Member unique name (Fully qualified name) (required)
+   * @return ApiResponse&lt;Integer&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Integer> outlineGetDescendantsCountWithHttpInfo(String app, String cube, String memberUniqueName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = outlineGetDescendantsCountRequestBuilder(app, cube, memberUniqueName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("outlineGetDescendantsCount", localVarResponse);
+        }
+        return new ApiResponse<Integer>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Integer>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder outlineGetDescendantsCountRequestBuilder(String app, String cube, String memberUniqueName) throws ApiException {
+    // verify the required parameter 'app' is set
+    if (app == null) {
+      throw new ApiException(400, "Missing the required parameter 'app' when calling outlineGetDescendantsCount");
+    }
+    // verify the required parameter 'cube' is set
+    if (cube == null) {
+      throw new ApiException(400, "Missing the required parameter 'cube' when calling outlineGetDescendantsCount");
+    }
+    // verify the required parameter 'memberUniqueName' is set
+    if (memberUniqueName == null) {
+      throw new ApiException(400, "Missing the required parameter 'memberUniqueName' when calling outlineGetDescendantsCount");
     }
 
-    /**
-     *  (asynchronously)
-     * 
-     * @param app  (required)
-     * @param cube  (required)
-     * @param accept  (optional, default to application/json)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 0 </td><td> successful operation </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call getAllSmartListAsync(String app, String cube, String accept, final ApiCallback<Void> _callback) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = getAllSmartListValidateBeforeCall(app, cube, accept, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
+    String localVarPath = "/outline/{app}/{cube}/descendantsCount/{memberUniqueName}"
+        .replace("{app}", ApiClient.urlEncode(app.toString()))
+        .replace("{cube}", ApiClient.urlEncode(cube.toString()))
+        .replace("{memberUniqueName}", ApiClient.urlEncode(memberUniqueName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "text/plain");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-    /**
-     * Build call for outlineGetAncestorsMemberInfo
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param memberUniqueName Member unique name (Fully qualified name) (required)
-     * @param fields Comma separated list of member properties to fetch (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successfully returned list of Ancestors </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get ancestors </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call outlineGetAncestorsMemberInfoCall(String app, String cube, String memberUniqueName, String fields, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/outline/{app}/{cube}/ancestors/{memberUniqueName}"
-            .replaceAll("\\{" + "app" + "\\}", localVarApiClient.escapeString(app.toString()))
-            .replaceAll("\\{" + "cube" + "\\}", localVarApiClient.escapeString(cube.toString()))
-            .replaceAll("\\{" + "memberUniqueName" + "\\}", localVarApiClient.escapeString(memberUniqueName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (fields != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("fields", fields));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call outlineGetAncestorsMemberInfoValidateBeforeCall(String app, String cube, String memberUniqueName, String fields, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'app' is set
-        if (app == null) {
-            throw new ApiException("Missing the required parameter 'app' when calling outlineGetAncestorsMemberInfo(Async)");
-        }
-        
-        // verify the required parameter 'cube' is set
-        if (cube == null) {
-            throw new ApiException("Missing the required parameter 'cube' when calling outlineGetAncestorsMemberInfo(Async)");
-        }
-        
-        // verify the required parameter 'memberUniqueName' is set
-        if (memberUniqueName == null) {
-            throw new ApiException("Missing the required parameter 'memberUniqueName' when calling outlineGetAncestorsMemberInfo(Async)");
-        }
-        
+  /**
+   * Get Member Info
+   * Returns either all or requested member properties
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param memberUniqueName Member unique name (Fully qualified name) (required)
+   * @param fields Comma separated list of member properties to fetch (optional)
+   * @return MemberBean
+   * @throws ApiException if fails to make API call
+   */
+  public MemberBean outlineGetMemberInfo(String app, String cube, String memberUniqueName, String fields) throws ApiException {
+    ApiResponse<MemberBean> localVarResponse = outlineGetMemberInfoWithHttpInfo(app, cube, memberUniqueName, fields);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = outlineGetAncestorsMemberInfoCall(app, cube, memberUniqueName, fields, _callback);
-        return localVarCall;
+  /**
+   * Get Member Info
+   * Returns either all or requested member properties
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param memberUniqueName Member unique name (Fully qualified name) (required)
+   * @param fields Comma separated list of member properties to fetch (optional)
+   * @return ApiResponse&lt;MemberBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<MemberBean> outlineGetMemberInfoWithHttpInfo(String app, String cube, String memberUniqueName, String fields) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = outlineGetMemberInfoRequestBuilder(app, cube, memberUniqueName, fields);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("outlineGetMemberInfo", localVarResponse);
+        }
+        return new ApiResponse<MemberBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<MemberBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
+  private HttpRequest.Builder outlineGetMemberInfoRequestBuilder(String app, String cube, String memberUniqueName, String fields) throws ApiException {
+    // verify the required parameter 'app' is set
+    if (app == null) {
+      throw new ApiException(400, "Missing the required parameter 'app' when calling outlineGetMemberInfo");
+    }
+    // verify the required parameter 'cube' is set
+    if (cube == null) {
+      throw new ApiException(400, "Missing the required parameter 'cube' when calling outlineGetMemberInfo");
+    }
+    // verify the required parameter 'memberUniqueName' is set
+    if (memberUniqueName == null) {
+      throw new ApiException(400, "Missing the required parameter 'memberUniqueName' when calling outlineGetMemberInfo");
     }
 
-    /**
-     * Get Member Ancestors
-     * Returns all ancestors of the requested member
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param memberUniqueName Member unique name (Fully qualified name) (required)
-     * @param fields Comma separated list of member properties to fetch (optional)
-     * @return MemberBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successfully returned list of Ancestors </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get ancestors </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public MemberBean outlineGetAncestorsMemberInfo(String app, String cube, String memberUniqueName, String fields) throws ApiException {
-        ApiResponse<MemberBean> localVarResp = outlineGetAncestorsMemberInfoWithHttpInfo(app, cube, memberUniqueName, fields);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/outline/{app}/{cube}/{memberUniqueName}"
+        .replace("{app}", ApiClient.urlEncode(app.toString()))
+        .replace("{cube}", ApiClient.urlEncode(cube.toString()))
+        .replace("{memberUniqueName}", ApiClient.urlEncode(memberUniqueName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "fields";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("fields", fields));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Get Member Ancestors
-     * Returns all ancestors of the requested member
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param memberUniqueName Member unique name (Fully qualified name) (required)
-     * @param fields Comma separated list of member properties to fetch (optional)
-     * @return ApiResponse&lt;MemberBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successfully returned list of Ancestors </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get ancestors </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<MemberBean> outlineGetAncestorsMemberInfoWithHttpInfo(String app, String cube, String memberUniqueName, String fields) throws ApiException {
-        okhttp3.Call localVarCall = outlineGetAncestorsMemberInfoValidateBeforeCall(app, cube, memberUniqueName, fields, null);
-        Type localVarReturnType = new TypeToken<MemberBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Dimensions, Children, or Search
+   * &lt;p&gt;Returns a list of dimensions when no parameters are provided. Returns a list of child members when &lt;i&gt;parent&lt;/i&gt; or &lt;i&gt;parentUniqueName&lt;/i&gt; parameters are provided. Returns search results when a search keyword parameter is used.&lt;/p&gt;
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param keyword &lt;p&gt;Keyword to search for member.&lt;/p&gt; (optional)
+   * @param matchWholeWord &lt;p&gt;Match member name with keyword.&lt;/p&gt; (optional, default to false)
+   * @param parent &lt;p&gt;Parent name.&lt;/p&gt; (optional)
+   * @param parentUniqueName &lt;p&gt;Parent unique name (fully qualified).&lt;/p&gt; (optional)
+   * @param isMbrId Parent ID (optional)
+   * @param fields &lt;p&gt;Comma-separated list of member properties to fetch.&lt;/p&gt; (optional)
+   * @param offset &lt;p&gt;Number of members to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of members to return.&lt;/p&gt; (optional, default to 50)
+   * @return RestCollectionResponse
+   * @throws ApiException if fails to make API call
+   */
+  public RestCollectionResponse outlineGetMembers(String app, String cube, String keyword, Boolean matchWholeWord, String parent, String parentUniqueName, String isMbrId, String fields, Integer offset, Integer limit) throws ApiException {
+    ApiResponse<RestCollectionResponse> localVarResponse = outlineGetMembersWithHttpInfo(app, cube, keyword, matchWholeWord, parent, parentUniqueName, isMbrId, fields, offset, limit);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Dimensions, Children, or Search
+   * &lt;p&gt;Returns a list of dimensions when no parameters are provided. Returns a list of child members when &lt;i&gt;parent&lt;/i&gt; or &lt;i&gt;parentUniqueName&lt;/i&gt; parameters are provided. Returns search results when a search keyword parameter is used.&lt;/p&gt;
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param keyword &lt;p&gt;Keyword to search for member.&lt;/p&gt; (optional)
+   * @param matchWholeWord &lt;p&gt;Match member name with keyword.&lt;/p&gt; (optional, default to false)
+   * @param parent &lt;p&gt;Parent name.&lt;/p&gt; (optional)
+   * @param parentUniqueName &lt;p&gt;Parent unique name (fully qualified).&lt;/p&gt; (optional)
+   * @param isMbrId Parent ID (optional)
+   * @param fields &lt;p&gt;Comma-separated list of member properties to fetch.&lt;/p&gt; (optional)
+   * @param offset &lt;p&gt;Number of members to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of members to return.&lt;/p&gt; (optional, default to 50)
+   * @return ApiResponse&lt;RestCollectionResponse&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<RestCollectionResponse> outlineGetMembersWithHttpInfo(String app, String cube, String keyword, Boolean matchWholeWord, String parent, String parentUniqueName, String isMbrId, String fields, Integer offset, Integer limit) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = outlineGetMembersRequestBuilder(app, cube, keyword, matchWholeWord, parent, parentUniqueName, isMbrId, fields, offset, limit);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("outlineGetMembers", localVarResponse);
+        }
+        return new ApiResponse<RestCollectionResponse>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<RestCollectionResponse>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder outlineGetMembersRequestBuilder(String app, String cube, String keyword, Boolean matchWholeWord, String parent, String parentUniqueName, String isMbrId, String fields, Integer offset, Integer limit) throws ApiException {
+    // verify the required parameter 'app' is set
+    if (app == null) {
+      throw new ApiException(400, "Missing the required parameter 'app' when calling outlineGetMembers");
+    }
+    // verify the required parameter 'cube' is set
+    if (cube == null) {
+      throw new ApiException(400, "Missing the required parameter 'cube' when calling outlineGetMembers");
     }
 
-    /**
-     * Get Member Ancestors (asynchronously)
-     * Returns all ancestors of the requested member
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param memberUniqueName Member unique name (Fully qualified name) (required)
-     * @param fields Comma separated list of member properties to fetch (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successfully returned list of Ancestors </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get ancestors </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call outlineGetAncestorsMemberInfoAsync(String app, String cube, String memberUniqueName, String fields, final ApiCallback<MemberBean> _callback) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = outlineGetAncestorsMemberInfoValidateBeforeCall(app, cube, memberUniqueName, fields, _callback);
-        Type localVarReturnType = new TypeToken<MemberBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for outlineGetDescendantsCount
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param memberUniqueName Member unique name (Fully qualified name) (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> successfully returned descendants count </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get descendants count </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call outlineGetDescendantsCountCall(String app, String cube, String memberUniqueName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    String localVarPath = "/outline/{app}/{cube}"
+        .replace("{app}", ApiClient.urlEncode(app.toString()))
+        .replace("{cube}", ApiClient.urlEncode(cube.toString()));
 
-        // create path and map variables
-        String localVarPath = "/outline/{app}/{cube}/descendantsCount/{memberUniqueName}"
-            .replaceAll("\\{" + "app" + "\\}", localVarApiClient.escapeString(app.toString()))
-            .replaceAll("\\{" + "cube" + "\\}", localVarApiClient.escapeString(cube.toString()))
-            .replaceAll("\\{" + "memberUniqueName" + "\\}", localVarApiClient.escapeString(memberUniqueName.toString()));
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "keyword";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("keyword", keyword));
+    localVarQueryParameterBaseName = "matchWholeWord";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("matchWholeWord", matchWholeWord));
+    localVarQueryParameterBaseName = "parent";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("parent", parent));
+    localVarQueryParameterBaseName = "parentUniqueName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("parentUniqueName", parentUniqueName));
+    localVarQueryParameterBaseName = "isMbrId";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("isMbrId", isMbrId));
+    localVarQueryParameterBaseName = "fields";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("fields", fields));
+    localVarQueryParameterBaseName = "offset";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("offset", offset));
+    localVarQueryParameterBaseName = "limit";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("limit", limit));
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "text/plain"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call outlineGetDescendantsCountValidateBeforeCall(String app, String cube, String memberUniqueName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'app' is set
-        if (app == null) {
-            throw new ApiException("Missing the required parameter 'app' when calling outlineGetDescendantsCount(Async)");
-        }
-        
-        // verify the required parameter 'cube' is set
-        if (cube == null) {
-            throw new ApiException("Missing the required parameter 'cube' when calling outlineGetDescendantsCount(Async)");
-        }
-        
-        // verify the required parameter 'memberUniqueName' is set
-        if (memberUniqueName == null) {
-            throw new ApiException("Missing the required parameter 'memberUniqueName' when calling outlineGetDescendantsCount(Async)");
-        }
-        
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
 
-        okhttp3.Call localVarCall = outlineGetDescendantsCountCall(app, cube, memberUniqueName, _callback);
-        return localVarCall;
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
 
+  /**
+   * Export the outline to XML.
+   * Export the outline to XML. If tree is true then aliasTable will be ignored. Tree mode exports only member names. If aliasTable is provided then only alias values of the members for specified alias table will be exported
+   * @param app  (required)
+   * @param cube  (required)
+   * @param body  (optional)
+   * @throws ApiException if fails to make API call
+   */
+  public void outlineGetOutlineXML(String app, String cube, ExportOptions body) throws ApiException {
+    outlineGetOutlineXMLWithHttpInfo(app, cube, body);
+  }
+
+  /**
+   * Export the outline to XML.
+   * Export the outline to XML. If tree is true then aliasTable will be ignored. Tree mode exports only member names. If aliasTable is provided then only alias values of the members for specified alias table will be exported
+   * @param app  (required)
+   * @param cube  (required)
+   * @param body  (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> outlineGetOutlineXMLWithHttpInfo(String app, String cube, ExportOptions body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = outlineGetOutlineXMLRequestBuilder(app, cube, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("outlineGetOutlineXML", localVarResponse);
+        }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder outlineGetOutlineXMLRequestBuilder(String app, String cube, ExportOptions body) throws ApiException {
+    // verify the required parameter 'app' is set
+    if (app == null) {
+      throw new ApiException(400, "Missing the required parameter 'app' when calling outlineGetOutlineXML");
+    }
+    // verify the required parameter 'cube' is set
+    if (cube == null) {
+      throw new ApiException(400, "Missing the required parameter 'cube' when calling outlineGetOutlineXML");
     }
 
-    /**
-     * Get Descendants Count
-     * Returns descendants count for the requested member
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param memberUniqueName Member unique name (Fully qualified name) (required)
-     * @return Integer
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> successfully returned descendants count </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get descendants count </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Integer outlineGetDescendantsCount(String app, String cube, String memberUniqueName) throws ApiException {
-        ApiResponse<Integer> localVarResp = outlineGetDescendantsCountWithHttpInfo(app, cube, memberUniqueName);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/outline/{app}/{cube}/xml"
+        .replace("{app}", ApiClient.urlEncode(app.toString()))
+        .replace("{cube}", ApiClient.urlEncode(cube.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Get Descendants Count
-     * Returns descendants count for the requested member
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param memberUniqueName Member unique name (Fully qualified name) (required)
-     * @return ApiResponse&lt;Integer&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> successfully returned descendants count </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get descendants count </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Integer> outlineGetDescendantsCountWithHttpInfo(String app, String cube, String memberUniqueName) throws ApiException {
-        okhttp3.Call localVarCall = outlineGetDescendantsCountValidateBeforeCall(app, cube, memberUniqueName, null);
-        Type localVarReturnType = new TypeToken<Integer>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Descendants Count (asynchronously)
-     * Returns descendants count for the requested member
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param memberUniqueName Member unique name (Fully qualified name) (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> successfully returned descendants count </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get descendants count </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call outlineGetDescendantsCountAsync(String app, String cube, String memberUniqueName, final ApiCallback<Integer> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = outlineGetDescendantsCountValidateBeforeCall(app, cube, memberUniqueName, _callback);
-        Type localVarReturnType = new TypeToken<Integer>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for outlineGetMemberInfo
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param memberUniqueName Member unique name (Fully qualified name) (required)
-     * @param fields Comma separated list of member properties to fetch (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successfully returns member information </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get member information </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call outlineGetMemberInfoCall(String app, String cube, String memberUniqueName, String fields, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/outline/{app}/{cube}/{memberUniqueName}"
-            .replaceAll("\\{" + "app" + "\\}", localVarApiClient.escapeString(app.toString()))
-            .replaceAll("\\{" + "cube" + "\\}", localVarApiClient.escapeString(cube.toString()))
-            .replaceAll("\\{" + "memberUniqueName" + "\\}", localVarApiClient.escapeString(memberUniqueName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (fields != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("fields", fields));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call outlineGetMemberInfoValidateBeforeCall(String app, String cube, String memberUniqueName, String fields, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'app' is set
-        if (app == null) {
-            throw new ApiException("Missing the required parameter 'app' when calling outlineGetMemberInfo(Async)");
-        }
-        
-        // verify the required parameter 'cube' is set
-        if (cube == null) {
-            throw new ApiException("Missing the required parameter 'cube' when calling outlineGetMemberInfo(Async)");
-        }
-        
-        // verify the required parameter 'memberUniqueName' is set
-        if (memberUniqueName == null) {
-            throw new ApiException("Missing the required parameter 'memberUniqueName' when calling outlineGetMemberInfo(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = outlineGetMemberInfoCall(app, cube, memberUniqueName, fields, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Member Info
-     * Returns either all or requested member properties
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param memberUniqueName Member unique name (Fully qualified name) (required)
-     * @param fields Comma separated list of member properties to fetch (optional)
-     * @return MemberBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successfully returns member information </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get member information </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public MemberBean outlineGetMemberInfo(String app, String cube, String memberUniqueName, String fields) throws ApiException {
-        ApiResponse<MemberBean> localVarResp = outlineGetMemberInfoWithHttpInfo(app, cube, memberUniqueName, fields);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Member Info
-     * Returns either all or requested member properties
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param memberUniqueName Member unique name (Fully qualified name) (required)
-     * @param fields Comma separated list of member properties to fetch (optional)
-     * @return ApiResponse&lt;MemberBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successfully returns member information </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get member information </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<MemberBean> outlineGetMemberInfoWithHttpInfo(String app, String cube, String memberUniqueName, String fields) throws ApiException {
-        okhttp3.Call localVarCall = outlineGetMemberInfoValidateBeforeCall(app, cube, memberUniqueName, fields, null);
-        Type localVarReturnType = new TypeToken<MemberBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Member Info (asynchronously)
-     * Returns either all or requested member properties
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param memberUniqueName Member unique name (Fully qualified name) (required)
-     * @param fields Comma separated list of member properties to fetch (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successfully returns member information </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get member information </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call outlineGetMemberInfoAsync(String app, String cube, String memberUniqueName, String fields, final ApiCallback<MemberBean> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = outlineGetMemberInfoValidateBeforeCall(app, cube, memberUniqueName, fields, _callback);
-        Type localVarReturnType = new TypeToken<MemberBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for outlineGetMembers
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param keyword &lt;p&gt;Keyword to search for member.&lt;/p&gt; (optional)
-     * @param matchWholeWord &lt;p&gt;Match member name with keyword.&lt;/p&gt; (optional, default to false)
-     * @param parent &lt;p&gt;Parent name.&lt;/p&gt; (optional)
-     * @param parentUniqueName &lt;p&gt;Parent unique name (fully qualified).&lt;/p&gt; (optional)
-     * @param isMbrId Parent ID (optional)
-     * @param fields &lt;p&gt;Comma-separated list of member properties to fetch.&lt;/p&gt; (optional)
-     * @param offset &lt;p&gt;Number of members to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of members to return.&lt;/p&gt; (optional, default to 50)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns either list of dimensions or children or search results. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get members or search results </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call outlineGetMembersCall(String app, String cube, String keyword, Boolean matchWholeWord, String parent, String parentUniqueName, String isMbrId, String fields, Integer offset, Integer limit, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/outline/{app}/{cube}"
-            .replaceAll("\\{" + "app" + "\\}", localVarApiClient.escapeString(app.toString()))
-            .replaceAll("\\{" + "cube" + "\\}", localVarApiClient.escapeString(cube.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (keyword != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("keyword", keyword));
-        }
-
-        if (matchWholeWord != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("matchWholeWord", matchWholeWord));
-        }
-
-        if (parent != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("parent", parent));
-        }
-
-        if (parentUniqueName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("parentUniqueName", parentUniqueName));
-        }
-
-        if (isMbrId != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("isMbrId", isMbrId));
-        }
-
-        if (fields != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("fields", fields));
-        }
-
-        if (offset != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("offset", offset));
-        }
-
-        if (limit != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call outlineGetMembersValidateBeforeCall(String app, String cube, String keyword, Boolean matchWholeWord, String parent, String parentUniqueName, String isMbrId, String fields, Integer offset, Integer limit, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'app' is set
-        if (app == null) {
-            throw new ApiException("Missing the required parameter 'app' when calling outlineGetMembers(Async)");
-        }
-        
-        // verify the required parameter 'cube' is set
-        if (cube == null) {
-            throw new ApiException("Missing the required parameter 'cube' when calling outlineGetMembers(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = outlineGetMembersCall(app, cube, keyword, matchWholeWord, parent, parentUniqueName, isMbrId, fields, offset, limit, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Dimensions, Children, or Search
-     * &lt;p&gt;Returns a list of dimensions when no parameters are provided. Returns a list of child members when &lt;i&gt;parent&lt;/i&gt; or &lt;i&gt;parentUniqueName&lt;/i&gt; parameters are provided. Returns search results when a search keyword parameter is used.&lt;/p&gt;
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param keyword &lt;p&gt;Keyword to search for member.&lt;/p&gt; (optional)
-     * @param matchWholeWord &lt;p&gt;Match member name with keyword.&lt;/p&gt; (optional, default to false)
-     * @param parent &lt;p&gt;Parent name.&lt;/p&gt; (optional)
-     * @param parentUniqueName &lt;p&gt;Parent unique name (fully qualified).&lt;/p&gt; (optional)
-     * @param isMbrId Parent ID (optional)
-     * @param fields &lt;p&gt;Comma-separated list of member properties to fetch.&lt;/p&gt; (optional)
-     * @param offset &lt;p&gt;Number of members to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of members to return.&lt;/p&gt; (optional, default to 50)
-     * @return RestCollectionResponse
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns either list of dimensions or children or search results. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get members or search results </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public RestCollectionResponse outlineGetMembers(String app, String cube, String keyword, Boolean matchWholeWord, String parent, String parentUniqueName, String isMbrId, String fields, Integer offset, Integer limit) throws ApiException {
-        ApiResponse<RestCollectionResponse> localVarResp = outlineGetMembersWithHttpInfo(app, cube, keyword, matchWholeWord, parent, parentUniqueName, isMbrId, fields, offset, limit);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Dimensions, Children, or Search
-     * &lt;p&gt;Returns a list of dimensions when no parameters are provided. Returns a list of child members when &lt;i&gt;parent&lt;/i&gt; or &lt;i&gt;parentUniqueName&lt;/i&gt; parameters are provided. Returns search results when a search keyword parameter is used.&lt;/p&gt;
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param keyword &lt;p&gt;Keyword to search for member.&lt;/p&gt; (optional)
-     * @param matchWholeWord &lt;p&gt;Match member name with keyword.&lt;/p&gt; (optional, default to false)
-     * @param parent &lt;p&gt;Parent name.&lt;/p&gt; (optional)
-     * @param parentUniqueName &lt;p&gt;Parent unique name (fully qualified).&lt;/p&gt; (optional)
-     * @param isMbrId Parent ID (optional)
-     * @param fields &lt;p&gt;Comma-separated list of member properties to fetch.&lt;/p&gt; (optional)
-     * @param offset &lt;p&gt;Number of members to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of members to return.&lt;/p&gt; (optional, default to 50)
-     * @return ApiResponse&lt;RestCollectionResponse&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns either list of dimensions or children or search results. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get members or search results </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<RestCollectionResponse> outlineGetMembersWithHttpInfo(String app, String cube, String keyword, Boolean matchWholeWord, String parent, String parentUniqueName, String isMbrId, String fields, Integer offset, Integer limit) throws ApiException {
-        okhttp3.Call localVarCall = outlineGetMembersValidateBeforeCall(app, cube, keyword, matchWholeWord, parent, parentUniqueName, isMbrId, fields, offset, limit, null);
-        Type localVarReturnType = new TypeToken<RestCollectionResponse>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Dimensions, Children, or Search (asynchronously)
-     * &lt;p&gt;Returns a list of dimensions when no parameters are provided. Returns a list of child members when &lt;i&gt;parent&lt;/i&gt; or &lt;i&gt;parentUniqueName&lt;/i&gt; parameters are provided. Returns search results when a search keyword parameter is used.&lt;/p&gt;
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param cube &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param keyword &lt;p&gt;Keyword to search for member.&lt;/p&gt; (optional)
-     * @param matchWholeWord &lt;p&gt;Match member name with keyword.&lt;/p&gt; (optional, default to false)
-     * @param parent &lt;p&gt;Parent name.&lt;/p&gt; (optional)
-     * @param parentUniqueName &lt;p&gt;Parent unique name (fully qualified).&lt;/p&gt; (optional)
-     * @param isMbrId Parent ID (optional)
-     * @param fields &lt;p&gt;Comma-separated list of member properties to fetch.&lt;/p&gt; (optional)
-     * @param offset &lt;p&gt;Number of members to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of members to return.&lt;/p&gt; (optional, default to 50)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns either list of dimensions or children or search results. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get members or search results </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call outlineGetMembersAsync(String app, String cube, String keyword, Boolean matchWholeWord, String parent, String parentUniqueName, String isMbrId, String fields, Integer offset, Integer limit, final ApiCallback<RestCollectionResponse> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = outlineGetMembersValidateBeforeCall(app, cube, keyword, matchWholeWord, parent, parentUniqueName, isMbrId, fields, offset, limit, _callback);
-        Type localVarReturnType = new TypeToken<RestCollectionResponse>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for outlineGetOutlineXML
-     * @param app  (required)
-     * @param cube  (required)
-     * @param body  (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 0 </td><td> successful operation </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call outlineGetOutlineXMLCall(String app, String cube, ExportOptions body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/outline/{app}/{cube}/xml"
-            .replaceAll("\\{" + "app" + "\\}", localVarApiClient.escapeString(app.toString()))
-            .replaceAll("\\{" + "cube" + "\\}", localVarApiClient.escapeString(cube.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call outlineGetOutlineXMLValidateBeforeCall(String app, String cube, ExportOptions body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'app' is set
-        if (app == null) {
-            throw new ApiException("Missing the required parameter 'app' when calling outlineGetOutlineXML(Async)");
-        }
-        
-        // verify the required parameter 'cube' is set
-        if (cube == null) {
-            throw new ApiException("Missing the required parameter 'cube' when calling outlineGetOutlineXML(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = outlineGetOutlineXMLCall(app, cube, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Export the outline to XML.
-     * Export the outline to XML. If tree is true then aliasTable will be ignored. Tree mode exports only member names. If aliasTable is provided then only alias values of the members for specified alias table will be exported
-     * @param app  (required)
-     * @param cube  (required)
-     * @param body  (optional)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 0 </td><td> successful operation </td><td>  -  </td></tr>
-     </table>
-     */
-    public void outlineGetOutlineXML(String app, String cube, ExportOptions body) throws ApiException {
-        outlineGetOutlineXMLWithHttpInfo(app, cube, body);
-    }
-
-    /**
-     * Export the outline to XML.
-     * Export the outline to XML. If tree is true then aliasTable will be ignored. Tree mode exports only member names. If aliasTable is provided then only alias values of the members for specified alias table will be exported
-     * @param app  (required)
-     * @param cube  (required)
-     * @param body  (optional)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 0 </td><td> successful operation </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> outlineGetOutlineXMLWithHttpInfo(String app, String cube, ExportOptions body) throws ApiException {
-        okhttp3.Call localVarCall = outlineGetOutlineXMLValidateBeforeCall(app, cube, body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Export the outline to XML. (asynchronously)
-     * Export the outline to XML. If tree is true then aliasTable will be ignored. Tree mode exports only member names. If aliasTable is provided then only alias values of the members for specified alias table will be exported
-     * @param app  (required)
-     * @param cube  (required)
-     * @param body  (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 0 </td><td> successful operation </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call outlineGetOutlineXMLAsync(String app, String cube, ExportOptions body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = outlineGetOutlineXMLValidateBeforeCall(app, cube, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
 }

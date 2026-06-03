@@ -10,1403 +10,937 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.Variable;
 import com.appliedolap.essbase.client.model.VariableList;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class VariablesApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public VariablesApi() {
-        this(Configuration.getDefaultApiClient());
+  public VariablesApi() {
+    this(new ApiClient());
+  }
+
+  public VariablesApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public VariablesApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Create Application Variable
+   * Creates a substitution variable in the specified application, and returns the created variable.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param body Variable details. (required)
+   * @return Variable
+   * @throws ApiException if fails to make API call
+   */
+  public Variable variablesCreateAppVariable(String applicationName, Variable body) throws ApiException {
+    ApiResponse<Variable> localVarResponse = variablesCreateAppVariableWithHttpInfo(applicationName, body);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for variablesCreateAppVariable
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body Variable details. (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable created successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the variable. The application or database name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesCreateAppVariableCall(String applicationName, Variable body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/variables"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Create Application Variable
+   * Creates a substitution variable in the specified application, and returns the created variable.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param body Variable details. (required)
+   * @return ApiResponse&lt;Variable&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Variable> variablesCreateAppVariableWithHttpInfo(String applicationName, Variable body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = variablesCreateAppVariableRequestBuilder(applicationName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("variablesCreateAppVariable", localVarResponse);
         }
+        return new ApiResponse<Variable>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Variable>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder variablesCreateAppVariableRequestBuilder(String applicationName, Variable body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling variablesCreateAppVariable");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling variablesCreateAppVariable");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call variablesCreateAppVariableValidateBeforeCall(String applicationName, Variable body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling variablesCreateAppVariable(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/variables"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Create Database Variable
+   * Creates a substitution variable in the specified application and database, and returns the created variable.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName Database name. (required)
+   * @param body Variable details. (required)
+   * @return Variable
+   * @throws ApiException if fails to make API call
+   */
+  public Variable variablesCreateVariable(String applicationName, String databaseName, Variable body) throws ApiException {
+    ApiResponse<Variable> localVarResponse = variablesCreateVariableWithHttpInfo(applicationName, databaseName, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Create Database Variable
+   * Creates a substitution variable in the specified application and database, and returns the created variable.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName Database name. (required)
+   * @param body Variable details. (required)
+   * @return ApiResponse&lt;Variable&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Variable> variablesCreateVariableWithHttpInfo(String applicationName, String databaseName, Variable body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = variablesCreateVariableRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("variablesCreateVariable", localVarResponse);
         }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling variablesCreateAppVariable(Async)");
+        return new ApiResponse<Variable>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Variable>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder variablesCreateVariableRequestBuilder(String applicationName, String databaseName, Variable body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling variablesCreateVariable");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling variablesCreateVariable");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling variablesCreateVariable");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/variables"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Delete Application Variable
+   * Deletes the specified substitution variable from the specified application.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param variableName Variable name. (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void variablesDeleteAppVariable(String applicationName, String variableName) throws ApiException {
+    variablesDeleteAppVariableWithHttpInfo(applicationName, variableName);
+  }
+
+  /**
+   * Delete Application Variable
+   * Deletes the specified substitution variable from the specified application.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param variableName Variable name. (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> variablesDeleteAppVariableWithHttpInfo(String applicationName, String variableName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = variablesDeleteAppVariableRequestBuilder(applicationName, variableName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("variablesDeleteAppVariable", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = variablesCreateAppVariableCall(applicationName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Create Application Variable
-     * Creates a substitution variable in the specified application, and returns the created variable.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body Variable details. (required)
-     * @return Variable
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable created successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the variable. The application or database name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Variable variablesCreateAppVariable(String applicationName, Variable body) throws ApiException {
-        ApiResponse<Variable> localVarResp = variablesCreateAppVariableWithHttpInfo(applicationName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Create Application Variable
-     * Creates a substitution variable in the specified application, and returns the created variable.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body Variable details. (required)
-     * @return ApiResponse&lt;Variable&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable created successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the variable. The application or database name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Variable> variablesCreateAppVariableWithHttpInfo(String applicationName, Variable body) throws ApiException {
-        okhttp3.Call localVarCall = variablesCreateAppVariableValidateBeforeCall(applicationName, body, null);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Create Application Variable (asynchronously)
-     * Creates a substitution variable in the specified application, and returns the created variable.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body Variable details. (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable created successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the variable. The application or database name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesCreateAppVariableAsync(String applicationName, Variable body, final ApiCallback<Variable> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = variablesCreateAppVariableValidateBeforeCall(applicationName, body, _callback);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for variablesCreateVariable
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param body Variable details. (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable created successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the variable. The application or database name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesCreateVariableCall(String applicationName, String databaseName, Variable body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/variables"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder variablesDeleteAppVariableRequestBuilder(String applicationName, String variableName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling variablesDeleteAppVariable");
+    }
+    // verify the required parameter 'variableName' is set
+    if (variableName == null) {
+      throw new ApiException(400, "Missing the required parameter 'variableName' when calling variablesDeleteAppVariable");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call variablesCreateVariableValidateBeforeCall(String applicationName, String databaseName, Variable body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling variablesCreateVariable(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/variables/{variableName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{variableName}", ApiClient.urlEncode(variableName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Delete Database Variable
+   * Deletes the specified substitution variable from the specified application and database.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName Database name. (required)
+   * @param variableName Variable name. (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void variablesDeleteVariable(String applicationName, String databaseName, String variableName) throws ApiException {
+    variablesDeleteVariableWithHttpInfo(applicationName, databaseName, variableName);
+  }
+
+  /**
+   * Delete Database Variable
+   * Deletes the specified substitution variable from the specified application and database.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName Database name. (required)
+   * @param variableName Variable name. (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> variablesDeleteVariableWithHttpInfo(String applicationName, String databaseName, String variableName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = variablesDeleteVariableRequestBuilder(applicationName, databaseName, variableName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("variablesDeleteVariable", localVarResponse);
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling variablesCreateVariable(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling variablesCreateVariable(Async)");
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder variablesDeleteVariableRequestBuilder(String applicationName, String databaseName, String variableName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling variablesDeleteVariable");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling variablesDeleteVariable");
+    }
+    // verify the required parameter 'variableName' is set
+    if (variableName == null) {
+      throw new ApiException(400, "Missing the required parameter 'variableName' when calling variablesDeleteVariable");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/variables/{variableName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{variableName}", ApiClient.urlEncode(variableName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Update Application Variable
+   * Updates the substitution variable in the specified application, and returns the updated variable
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param variableName Variable name. (required)
+   * @param body Variable details. (required)
+   * @return Variable
+   * @throws ApiException if fails to make API call
+   */
+  public Variable variablesEditAppVariable(String applicationName, String variableName, Variable body) throws ApiException {
+    ApiResponse<Variable> localVarResponse = variablesEditAppVariableWithHttpInfo(applicationName, variableName, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Update Application Variable
+   * Updates the substitution variable in the specified application, and returns the updated variable
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param variableName Variable name. (required)
+   * @param body Variable details. (required)
+   * @return ApiResponse&lt;Variable&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Variable> variablesEditAppVariableWithHttpInfo(String applicationName, String variableName, Variable body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = variablesEditAppVariableRequestBuilder(applicationName, variableName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("variablesEditAppVariable", localVarResponse);
         }
-        
+        return new ApiResponse<Variable>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Variable>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = variablesCreateVariableCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder variablesEditAppVariableRequestBuilder(String applicationName, String variableName, Variable body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling variablesEditAppVariable");
+    }
+    // verify the required parameter 'variableName' is set
+    if (variableName == null) {
+      throw new ApiException(400, "Missing the required parameter 'variableName' when calling variablesEditAppVariable");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling variablesEditAppVariable");
     }
 
-    /**
-     * Create Database Variable
-     * Creates a substitution variable in the specified application and database, and returns the created variable.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param body Variable details. (required)
-     * @return Variable
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable created successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the variable. The application or database name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Variable variablesCreateVariable(String applicationName, String databaseName, Variable body) throws ApiException {
-        ApiResponse<Variable> localVarResp = variablesCreateVariableWithHttpInfo(applicationName, databaseName, body);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/variables/{variableName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{variableName}", ApiClient.urlEncode(variableName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Create Database Variable
-     * Creates a substitution variable in the specified application and database, and returns the created variable.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param body Variable details. (required)
-     * @return ApiResponse&lt;Variable&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable created successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the variable. The application or database name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Variable> variablesCreateVariableWithHttpInfo(String applicationName, String databaseName, Variable body) throws ApiException {
-        okhttp3.Call localVarCall = variablesCreateVariableValidateBeforeCall(applicationName, databaseName, body, null);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Create Database Variable (asynchronously)
-     * Creates a substitution variable in the specified application and database, and returns the created variable.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param body Variable details. (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable created successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the variable. The application or database name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesCreateVariableAsync(String applicationName, String databaseName, Variable body, final ApiCallback<Variable> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = variablesCreateVariableValidateBeforeCall(applicationName, databaseName, body, _callback);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for variablesDeleteAppVariable
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param variableName Variable name. (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the variable. The application name or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesDeleteAppVariableCall(String applicationName, String variableName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/variables/{variableName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "variableName" + "\\}", localVarApiClient.escapeString(variableName.toString()));
+  /**
+   * Update Database Variable
+   * Updates a substitution variable in the specified application and database, and returns the updated variable.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName Database name. (required)
+   * @param variableName Variable name. (required)
+   * @param body Variable details. (required)
+   * @return Variable
+   * @throws ApiException if fails to make API call
+   */
+  public Variable variablesEditVariable(String applicationName, String databaseName, String variableName, Variable body) throws ApiException {
+    ApiResponse<Variable> localVarResponse = variablesEditVariableWithHttpInfo(applicationName, databaseName, variableName, body);
+    return localVarResponse.getData();
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Update Database Variable
+   * Updates a substitution variable in the specified application and database, and returns the updated variable.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName Database name. (required)
+   * @param variableName Variable name. (required)
+   * @param body Variable details. (required)
+   * @return ApiResponse&lt;Variable&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Variable> variablesEditVariableWithHttpInfo(String applicationName, String databaseName, String variableName, Variable body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = variablesEditVariableRequestBuilder(applicationName, databaseName, variableName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("variablesEditVariable", localVarResponse);
         }
+        return new ApiResponse<Variable>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Variable>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder variablesEditVariableRequestBuilder(String applicationName, String databaseName, String variableName, Variable body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling variablesEditVariable");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling variablesEditVariable");
+    }
+    // verify the required parameter 'variableName' is set
+    if (variableName == null) {
+      throw new ApiException(400, "Missing the required parameter 'variableName' when calling variablesEditVariable");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling variablesEditVariable");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call variablesDeleteAppVariableValidateBeforeCall(String applicationName, String variableName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling variablesDeleteAppVariable(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/variables/{variableName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{variableName}", ApiClient.urlEncode(variableName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Application Variable
+   * Returns substitution variable details from the specified application.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param variableName Variable name. (required)
+   * @return Variable
+   * @throws ApiException if fails to make API call
+   */
+  public Variable variablesGetAppVariable(String applicationName, String variableName) throws ApiException {
+    ApiResponse<Variable> localVarResponse = variablesGetAppVariableWithHttpInfo(applicationName, variableName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Application Variable
+   * Returns substitution variable details from the specified application.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param variableName Variable name. (required)
+   * @return ApiResponse&lt;Variable&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Variable> variablesGetAppVariableWithHttpInfo(String applicationName, String variableName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = variablesGetAppVariableRequestBuilder(applicationName, variableName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("variablesGetAppVariable", localVarResponse);
         }
-        
-        // verify the required parameter 'variableName' is set
-        if (variableName == null) {
-            throw new ApiException("Missing the required parameter 'variableName' when calling variablesDeleteAppVariable(Async)");
+        return new ApiResponse<Variable>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Variable>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder variablesGetAppVariableRequestBuilder(String applicationName, String variableName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling variablesGetAppVariable");
+    }
+    // verify the required parameter 'variableName' is set
+    if (variableName == null) {
+      throw new ApiException(400, "Missing the required parameter 'variableName' when calling variablesGetAppVariable");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/variables/{variableName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{variableName}", ApiClient.urlEncode(variableName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Database Variable
+   * Returns the substitution variable details from the specified application and database.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName Database name. (required)
+   * @param variableName Variable name. (required)
+   * @return Variable
+   * @throws ApiException if fails to make API call
+   */
+  public Variable variablesGetVariable(String applicationName, String databaseName, String variableName) throws ApiException {
+    ApiResponse<Variable> localVarResponse = variablesGetVariableWithHttpInfo(applicationName, databaseName, variableName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Database Variable
+   * Returns the substitution variable details from the specified application and database.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName Database name. (required)
+   * @param variableName Variable name. (required)
+   * @return ApiResponse&lt;Variable&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Variable> variablesGetVariableWithHttpInfo(String applicationName, String databaseName, String variableName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = variablesGetVariableRequestBuilder(applicationName, databaseName, variableName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("variablesGetVariable", localVarResponse);
         }
-        
+        return new ApiResponse<Variable>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Variable>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = variablesDeleteAppVariableCall(applicationName, variableName, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder variablesGetVariableRequestBuilder(String applicationName, String databaseName, String variableName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling variablesGetVariable");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling variablesGetVariable");
+    }
+    // verify the required parameter 'variableName' is set
+    if (variableName == null) {
+      throw new ApiException(400, "Missing the required parameter 'variableName' when calling variablesGetVariable");
     }
 
-    /**
-     * Delete Application Variable
-     * Deletes the specified substitution variable from the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param variableName Variable name. (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the variable. The application name or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void variablesDeleteAppVariable(String applicationName, String variableName) throws ApiException {
-        variablesDeleteAppVariableWithHttpInfo(applicationName, variableName);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/variables/{variableName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{variableName}", ApiClient.urlEncode(variableName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Delete Application Variable
-     * Deletes the specified substitution variable from the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param variableName Variable name. (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the variable. The application name or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> variablesDeleteAppVariableWithHttpInfo(String applicationName, String variableName) throws ApiException {
-        okhttp3.Call localVarCall = variablesDeleteAppVariableValidateBeforeCall(applicationName, variableName, null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Delete Application Variable (asynchronously)
-     * Deletes the specified substitution variable from the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param variableName Variable name. (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the variable. The application name or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesDeleteAppVariableAsync(String applicationName, String variableName, final ApiCallback<Void> _callback) throws ApiException {
+  /**
+   * Get Application Variables
+   * Returns all substitution variables from the specified application.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @return VariableList
+   * @throws ApiException if fails to make API call
+   */
+  public VariableList variablesListAppVariables(String applicationName) throws ApiException {
+    ApiResponse<VariableList> localVarResponse = variablesListAppVariablesWithHttpInfo(applicationName);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = variablesDeleteAppVariableValidateBeforeCall(applicationName, variableName, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for variablesDeleteVariable
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param variableName Variable name. (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the variable. The application, database, or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesDeleteVariableCall(String applicationName, String databaseName, String variableName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/variables/{variableName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "variableName" + "\\}", localVarApiClient.escapeString(variableName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Get Application Variables
+   * Returns all substitution variables from the specified application.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;VariableList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<VariableList> variablesListAppVariablesWithHttpInfo(String applicationName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = variablesListAppVariablesRequestBuilder(applicationName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("variablesListAppVariables", localVarResponse);
         }
+        return new ApiResponse<VariableList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<VariableList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder variablesListAppVariablesRequestBuilder(String applicationName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling variablesListAppVariables");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call variablesDeleteVariableValidateBeforeCall(String applicationName, String databaseName, String variableName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling variablesDeleteVariable(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/variables"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Database Variables
+   * Returns all substitution variables from the specified application and database.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName Database name. (required)
+   * @return VariableList
+   * @throws ApiException if fails to make API call
+   */
+  public VariableList variablesListVariables(String applicationName, String databaseName) throws ApiException {
+    ApiResponse<VariableList> localVarResponse = variablesListVariablesWithHttpInfo(applicationName, databaseName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Database Variables
+   * Returns all substitution variables from the specified application and database.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName Database name. (required)
+   * @return ApiResponse&lt;VariableList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<VariableList> variablesListVariablesWithHttpInfo(String applicationName, String databaseName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = variablesListVariablesRequestBuilder(applicationName, databaseName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("variablesListVariables", localVarResponse);
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling variablesDeleteVariable(Async)");
-        }
-        
-        // verify the required parameter 'variableName' is set
-        if (variableName == null) {
-            throw new ApiException("Missing the required parameter 'variableName' when calling variablesDeleteVariable(Async)");
-        }
-        
+        return new ApiResponse<VariableList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<VariableList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = variablesDeleteVariableCall(applicationName, databaseName, variableName, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder variablesListVariablesRequestBuilder(String applicationName, String databaseName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling variablesListVariables");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling variablesListVariables");
     }
 
-    /**
-     * Delete Database Variable
-     * Deletes the specified substitution variable from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param variableName Variable name. (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the variable. The application, database, or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void variablesDeleteVariable(String applicationName, String databaseName, String variableName) throws ApiException {
-        variablesDeleteVariableWithHttpInfo(applicationName, databaseName, variableName);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/variables"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Delete Database Variable
-     * Deletes the specified substitution variable from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param variableName Variable name. (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the variable. The application, database, or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> variablesDeleteVariableWithHttpInfo(String applicationName, String databaseName, String variableName) throws ApiException {
-        okhttp3.Call localVarCall = variablesDeleteVariableValidateBeforeCall(applicationName, databaseName, variableName, null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Delete Database Variable (asynchronously)
-     * Deletes the specified substitution variable from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param variableName Variable name. (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the variable. The application, database, or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesDeleteVariableAsync(String applicationName, String databaseName, String variableName, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = variablesDeleteVariableValidateBeforeCall(applicationName, databaseName, variableName, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for variablesEditAppVariable
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param variableName Variable name. (required)
-     * @param body Variable details. (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable updated successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the variable. The application name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesEditAppVariableCall(String applicationName, String variableName, Variable body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/variables/{variableName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "variableName" + "\\}", localVarApiClient.escapeString(variableName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call variablesEditAppVariableValidateBeforeCall(String applicationName, String variableName, Variable body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling variablesEditAppVariable(Async)");
-        }
-        
-        // verify the required parameter 'variableName' is set
-        if (variableName == null) {
-            throw new ApiException("Missing the required parameter 'variableName' when calling variablesEditAppVariable(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling variablesEditAppVariable(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = variablesEditAppVariableCall(applicationName, variableName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Update Application Variable
-     * Updates the substitution variable in the specified application, and returns the updated variable
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param variableName Variable name. (required)
-     * @param body Variable details. (required)
-     * @return Variable
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable updated successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the variable. The application name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Variable variablesEditAppVariable(String applicationName, String variableName, Variable body) throws ApiException {
-        ApiResponse<Variable> localVarResp = variablesEditAppVariableWithHttpInfo(applicationName, variableName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Update Application Variable
-     * Updates the substitution variable in the specified application, and returns the updated variable
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param variableName Variable name. (required)
-     * @param body Variable details. (required)
-     * @return ApiResponse&lt;Variable&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable updated successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the variable. The application name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Variable> variablesEditAppVariableWithHttpInfo(String applicationName, String variableName, Variable body) throws ApiException {
-        okhttp3.Call localVarCall = variablesEditAppVariableValidateBeforeCall(applicationName, variableName, body, null);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Update Application Variable (asynchronously)
-     * Updates the substitution variable in the specified application, and returns the updated variable
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param variableName Variable name. (required)
-     * @param body Variable details. (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable updated successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the variable. The application name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesEditAppVariableAsync(String applicationName, String variableName, Variable body, final ApiCallback<Variable> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = variablesEditAppVariableValidateBeforeCall(applicationName, variableName, body, _callback);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for variablesEditVariable
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param variableName Variable name. (required)
-     * @param body Variable details. (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable updated successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the variable. The application or database name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesEditVariableCall(String applicationName, String databaseName, String variableName, Variable body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/variables/{variableName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "variableName" + "\\}", localVarApiClient.escapeString(variableName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call variablesEditVariableValidateBeforeCall(String applicationName, String databaseName, String variableName, Variable body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling variablesEditVariable(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling variablesEditVariable(Async)");
-        }
-        
-        // verify the required parameter 'variableName' is set
-        if (variableName == null) {
-            throw new ApiException("Missing the required parameter 'variableName' when calling variablesEditVariable(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling variablesEditVariable(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = variablesEditVariableCall(applicationName, databaseName, variableName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Update Database Variable
-     * Updates a substitution variable in the specified application and database, and returns the updated variable.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param variableName Variable name. (required)
-     * @param body Variable details. (required)
-     * @return Variable
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable updated successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the variable. The application or database name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Variable variablesEditVariable(String applicationName, String databaseName, String variableName, Variable body) throws ApiException {
-        ApiResponse<Variable> localVarResp = variablesEditVariableWithHttpInfo(applicationName, databaseName, variableName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Update Database Variable
-     * Updates a substitution variable in the specified application and database, and returns the updated variable.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param variableName Variable name. (required)
-     * @param body Variable details. (required)
-     * @return ApiResponse&lt;Variable&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable updated successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the variable. The application or database name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Variable> variablesEditVariableWithHttpInfo(String applicationName, String databaseName, String variableName, Variable body) throws ApiException {
-        okhttp3.Call localVarCall = variablesEditVariableValidateBeforeCall(applicationName, databaseName, variableName, body, null);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Update Database Variable (asynchronously)
-     * Updates a substitution variable in the specified application and database, and returns the updated variable.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param variableName Variable name. (required)
-     * @param body Variable details. (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable updated successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the variable. The application or database name may be incorrect, the JSON for the variable may be incorrect, or the specified variable name may not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesEditVariableAsync(String applicationName, String databaseName, String variableName, Variable body, final ApiCallback<Variable> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = variablesEditVariableValidateBeforeCall(applicationName, databaseName, variableName, body, _callback);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for variablesGetAppVariable
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param variableName Variable name. (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variable. The application name or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesGetAppVariableCall(String applicationName, String variableName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/variables/{variableName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "variableName" + "\\}", localVarApiClient.escapeString(variableName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call variablesGetAppVariableValidateBeforeCall(String applicationName, String variableName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling variablesGetAppVariable(Async)");
-        }
-        
-        // verify the required parameter 'variableName' is set
-        if (variableName == null) {
-            throw new ApiException("Missing the required parameter 'variableName' when calling variablesGetAppVariable(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = variablesGetAppVariableCall(applicationName, variableName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Application Variable
-     * Returns substitution variable details from the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param variableName Variable name. (required)
-     * @return Variable
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variable. The application name or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Variable variablesGetAppVariable(String applicationName, String variableName) throws ApiException {
-        ApiResponse<Variable> localVarResp = variablesGetAppVariableWithHttpInfo(applicationName, variableName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Application Variable
-     * Returns substitution variable details from the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param variableName Variable name. (required)
-     * @return ApiResponse&lt;Variable&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variable. The application name or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Variable> variablesGetAppVariableWithHttpInfo(String applicationName, String variableName) throws ApiException {
-        okhttp3.Call localVarCall = variablesGetAppVariableValidateBeforeCall(applicationName, variableName, null);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Application Variable (asynchronously)
-     * Returns substitution variable details from the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param variableName Variable name. (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variable. The application name or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesGetAppVariableAsync(String applicationName, String variableName, final ApiCallback<Variable> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = variablesGetAppVariableValidateBeforeCall(applicationName, variableName, _callback);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for variablesGetVariable
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param variableName Variable name. (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variable. The application, database, or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesGetVariableCall(String applicationName, String databaseName, String variableName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/variables/{variableName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "variableName" + "\\}", localVarApiClient.escapeString(variableName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call variablesGetVariableValidateBeforeCall(String applicationName, String databaseName, String variableName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling variablesGetVariable(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling variablesGetVariable(Async)");
-        }
-        
-        // verify the required parameter 'variableName' is set
-        if (variableName == null) {
-            throw new ApiException("Missing the required parameter 'variableName' when calling variablesGetVariable(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = variablesGetVariableCall(applicationName, databaseName, variableName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Database Variable
-     * Returns the substitution variable details from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param variableName Variable name. (required)
-     * @return Variable
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variable. The application, database, or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Variable variablesGetVariable(String applicationName, String databaseName, String variableName) throws ApiException {
-        ApiResponse<Variable> localVarResp = variablesGetVariableWithHttpInfo(applicationName, databaseName, variableName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Database Variable
-     * Returns the substitution variable details from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param variableName Variable name. (required)
-     * @return ApiResponse&lt;Variable&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variable. The application, database, or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Variable> variablesGetVariableWithHttpInfo(String applicationName, String databaseName, String variableName) throws ApiException {
-        okhttp3.Call localVarCall = variablesGetVariableValidateBeforeCall(applicationName, databaseName, variableName, null);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Database Variable (asynchronously)
-     * Returns the substitution variable details from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param variableName Variable name. (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variable returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variable. The application, database, or variable name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesGetVariableAsync(String applicationName, String databaseName, String variableName, final ApiCallback<Variable> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = variablesGetVariableValidateBeforeCall(applicationName, databaseName, variableName, _callback);
-        Type localVarReturnType = new TypeToken<Variable>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for variablesListAppVariables
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variables returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variables. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesListAppVariablesCall(String applicationName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/variables"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call variablesListAppVariablesValidateBeforeCall(String applicationName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling variablesListAppVariables(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = variablesListAppVariablesCall(applicationName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Application Variables
-     * Returns all substitution variables from the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @return VariableList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variables returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variables. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public VariableList variablesListAppVariables(String applicationName) throws ApiException {
-        ApiResponse<VariableList> localVarResp = variablesListAppVariablesWithHttpInfo(applicationName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Application Variables
-     * Returns all substitution variables from the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;VariableList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variables returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variables. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<VariableList> variablesListAppVariablesWithHttpInfo(String applicationName) throws ApiException {
-        okhttp3.Call localVarCall = variablesListAppVariablesValidateBeforeCall(applicationName, null);
-        Type localVarReturnType = new TypeToken<VariableList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Application Variables (asynchronously)
-     * Returns all substitution variables from the specified application.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variables returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variables. The application name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesListAppVariablesAsync(String applicationName, final ApiCallback<VariableList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = variablesListAppVariablesValidateBeforeCall(applicationName, _callback);
-        Type localVarReturnType = new TypeToken<VariableList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for variablesListVariables
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variables returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variables. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesListVariablesCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/variables"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call variablesListVariablesValidateBeforeCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling variablesListVariables(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling variablesListVariables(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = variablesListVariablesCall(applicationName, databaseName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Database Variables
-     * Returns all substitution variables from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @return VariableList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variables returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variables. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public VariableList variablesListVariables(String applicationName, String databaseName) throws ApiException {
-        ApiResponse<VariableList> localVarResp = variablesListVariablesWithHttpInfo(applicationName, databaseName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Database Variables
-     * Returns all substitution variables from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @return ApiResponse&lt;VariableList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variables returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variables. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<VariableList> variablesListVariablesWithHttpInfo(String applicationName, String databaseName) throws ApiException {
-        okhttp3.Call localVarCall = variablesListVariablesValidateBeforeCall(applicationName, databaseName, null);
-        Type localVarReturnType = new TypeToken<VariableList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Database Variables (asynchronously)
-     * Returns all substitution variables from the specified application and database.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName Database name. (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Variables returned successfully, with links to get, edit, or delete.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the variables. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call variablesListVariablesAsync(String applicationName, String databaseName, final ApiCallback<VariableList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = variablesListVariablesValidateBeforeCall(applicationName, databaseName, _callback);
-        Type localVarReturnType = new TypeToken<VariableList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

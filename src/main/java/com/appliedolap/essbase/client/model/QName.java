@@ -13,104 +13,122 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * QName
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  QName.JSON_PROPERTY_NAMESPACE_U_R_I,
+  QName.JSON_PROPERTY_LOCAL_PART,
+  QName.JSON_PROPERTY_PREFIX
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class QName {
-  public static final String SERIALIZED_NAME_NAMESPACE_U_R_I = "namespaceURI";
-  @SerializedName(SERIALIZED_NAME_NAMESPACE_U_R_I)
+  public static final String JSON_PROPERTY_NAMESPACE_U_R_I = "namespaceURI";
+  @jakarta.annotation.Nullable
   private String namespaceURI;
 
-  public static final String SERIALIZED_NAME_LOCAL_PART = "localPart";
-  @SerializedName(SERIALIZED_NAME_LOCAL_PART)
+  public static final String JSON_PROPERTY_LOCAL_PART = "localPart";
+  @jakarta.annotation.Nullable
   private String localPart;
 
-  public static final String SERIALIZED_NAME_PREFIX = "prefix";
-  @SerializedName(SERIALIZED_NAME_PREFIX)
+  public static final String JSON_PROPERTY_PREFIX = "prefix";
+  @jakarta.annotation.Nullable
   private String prefix;
 
+  public QName() { 
+  }
 
-  public QName namespaceURI(String namespaceURI) {
-    
+  public QName namespaceURI(@jakarta.annotation.Nullable String namespaceURI) {
     this.namespaceURI = namespaceURI;
     return this;
   }
 
-   /**
+  /**
    * Get namespaceURI
    * @return namespaceURI
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAMESPACE_U_R_I)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getNamespaceURI() {
     return namespaceURI;
   }
 
 
-  public void setNamespaceURI(String namespaceURI) {
+  @JsonProperty(JSON_PROPERTY_NAMESPACE_U_R_I)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNamespaceURI(@jakarta.annotation.Nullable String namespaceURI) {
     this.namespaceURI = namespaceURI;
   }
 
 
-  public QName localPart(String localPart) {
-    
+  public QName localPart(@jakarta.annotation.Nullable String localPart) {
     this.localPart = localPart;
     return this;
   }
 
-   /**
+  /**
    * Get localPart
    * @return localPart
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LOCAL_PART)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getLocalPart() {
     return localPart;
   }
 
 
-  public void setLocalPart(String localPart) {
+  @JsonProperty(JSON_PROPERTY_LOCAL_PART)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLocalPart(@jakarta.annotation.Nullable String localPart) {
     this.localPart = localPart;
   }
 
 
-  public QName prefix(String prefix) {
-    
+  public QName prefix(@jakarta.annotation.Nullable String prefix) {
     this.prefix = prefix;
     return this;
   }
 
-   /**
+  /**
    * Get prefix
    * @return prefix
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PREFIX)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getPrefix() {
     return prefix;
   }
 
 
-  public void setPrefix(String prefix) {
+  @JsonProperty(JSON_PROPERTY_PREFIX)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPrefix(@jakarta.annotation.Nullable String prefix) {
     this.prefix = prefix;
   }
 
 
+  /**
+   * Return true if this QName object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -152,5 +170,54 @@ public class QName {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `namespaceURI` to the URL query string
+    if (getNamespaceURI() != null) {
+      joiner.add(String.format("%snamespaceURI%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNamespaceURI()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `localPart` to the URL query string
+    if (getLocalPart() != null) {
+      joiner.add(String.format("%slocalPart%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLocalPart()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `prefix` to the URL query string
+    if (getPrefix() != null) {
+      joiner.add(String.format("%sprefix%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPrefix()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

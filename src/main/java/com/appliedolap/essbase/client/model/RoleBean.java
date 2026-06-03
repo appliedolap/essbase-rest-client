@@ -13,114 +13,132 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * RoleBean
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  RoleBean.JSON_PROPERTY_TYPE,
+  RoleBean.JSON_PROPERTY_ROLES,
+  RoleBean.JSON_PROPERTY_DEFAULT_ROLE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class RoleBean {
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nullable
   private String type;
 
-  public static final String SERIALIZED_NAME_ROLES = "roles";
-  @SerializedName(SERIALIZED_NAME_ROLES)
-  private List<String> roles = null;
+  public static final String JSON_PROPERTY_ROLES = "roles";
+  @jakarta.annotation.Nullable
+  private List<String> roles = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_DEFAULT_ROLE = "defaultRole";
-  @SerializedName(SERIALIZED_NAME_DEFAULT_ROLE)
+  public static final String JSON_PROPERTY_DEFAULT_ROLE = "defaultRole";
+  @jakarta.annotation.Nullable
   private String defaultRole;
 
+  public RoleBean() { 
+  }
 
-  public RoleBean type(String type) {
-    
+  public RoleBean type(@jakarta.annotation.Nullable String type) {
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getType() {
     return type;
   }
 
 
-  public void setType(String type) {
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setType(@jakarta.annotation.Nullable String type) {
     this.type = type;
   }
 
 
-  public RoleBean roles(List<String> roles) {
-    
+  public RoleBean roles(@jakarta.annotation.Nullable List<String> roles) {
     this.roles = roles;
     return this;
   }
 
   public RoleBean addRolesItem(String rolesItem) {
     if (this.roles == null) {
-      this.roles = new ArrayList<String>();
+      this.roles = new ArrayList<>();
     }
     this.roles.add(rolesItem);
     return this;
   }
 
-   /**
+  /**
    * Get roles
    * @return roles
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ROLES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getRoles() {
     return roles;
   }
 
 
-  public void setRoles(List<String> roles) {
+  @JsonProperty(JSON_PROPERTY_ROLES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRoles(@jakarta.annotation.Nullable List<String> roles) {
     this.roles = roles;
   }
 
 
-  public RoleBean defaultRole(String defaultRole) {
-    
+  public RoleBean defaultRole(@jakarta.annotation.Nullable String defaultRole) {
     this.defaultRole = defaultRole;
     return this;
   }
 
-   /**
+  /**
    * Get defaultRole
    * @return defaultRole
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DEFAULT_ROLE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDefaultRole() {
     return defaultRole;
   }
 
 
-  public void setDefaultRole(String defaultRole) {
+  @JsonProperty(JSON_PROPERTY_DEFAULT_ROLE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDefaultRole(@jakarta.annotation.Nullable String defaultRole) {
     this.defaultRole = defaultRole;
   }
 
 
+  /**
+   * Return true if this RoleBean object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -162,5 +180,58 @@ public class RoleBean {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `roles` to the URL query string
+    if (getRoles() != null) {
+      for (int i = 0; i < getRoles().size(); i++) {
+        joiner.add(String.format("%sroles%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getRoles().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `defaultRole` to the URL query string
+    if (getDefaultRole() != null) {
+      joiner.add(String.format("%sdefaultRole%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDefaultRole()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

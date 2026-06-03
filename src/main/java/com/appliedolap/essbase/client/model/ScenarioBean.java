@@ -13,114 +13,142 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.ApproverBean;
 import com.appliedolap.essbase.client.model.Link;
 import com.appliedolap.essbase.client.model.ParticipantBean;
 import com.appliedolap.essbase.client.model.ScriptBean;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ScenarioBean
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ScenarioBean.JSON_PROPERTY_LINKS,
+  ScenarioBean.JSON_PROPERTY_SCENARIO_USER,
+  ScenarioBean.JSON_PROPERTY_SCRIPTS,
+  ScenarioBean.JSON_PROPERTY_DATABASE,
+  ScenarioBean.JSON_PROPERTY_APPLICATION,
+  ScenarioBean.JSON_PROPERTY_PARTICIPANTS,
+  ScenarioBean.JSON_PROPERTY_DESCRIPTION,
+  ScenarioBean.JSON_PROPERTY_CREATED_TIME,
+  ScenarioBean.JSON_PROPERTY_OVERDUE,
+  ScenarioBean.JSON_PROPERTY_SUBMITTED_TIME,
+  ScenarioBean.JSON_PROPERTY_APPLIED_TIME,
+  ScenarioBean.JSON_PROPERTY_REFRESHED_TIME,
+  ScenarioBean.JSON_PROPERTY_COMMENTS_COUNT,
+  ScenarioBean.JSON_PROPERTY_USE_CALCULATED_VALUES,
+  ScenarioBean.JSON_PROPERTY_OWNER,
+  ScenarioBean.JSON_PROPERTY_APPROVERS,
+  ScenarioBean.JSON_PROPERTY_SANDBOX,
+  ScenarioBean.JSON_PROPERTY_DUE_DATE,
+  ScenarioBean.JSON_PROPERTY_STATE,
+  ScenarioBean.JSON_PROPERTY_ID,
+  ScenarioBean.JSON_PROPERTY_NAME,
+  ScenarioBean.JSON_PROPERTY_PRIORITY
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ScenarioBean {
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_SCENARIO_USER = "scenarioUser";
-  @SerializedName(SERIALIZED_NAME_SCENARIO_USER)
+  public static final String JSON_PROPERTY_SCENARIO_USER = "scenarioUser";
+  @jakarta.annotation.Nullable
   private Boolean scenarioUser;
 
-  public static final String SERIALIZED_NAME_SCRIPTS = "scripts";
-  @SerializedName(SERIALIZED_NAME_SCRIPTS)
-  private List<ScriptBean> scripts = null;
+  public static final String JSON_PROPERTY_SCRIPTS = "scripts";
+  @jakarta.annotation.Nullable
+  private List<ScriptBean> scripts = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_DATABASE = "database";
-  @SerializedName(SERIALIZED_NAME_DATABASE)
+  public static final String JSON_PROPERTY_DATABASE = "database";
+  @jakarta.annotation.Nullable
   private String database;
 
-  public static final String SERIALIZED_NAME_APPLICATION = "application";
-  @SerializedName(SERIALIZED_NAME_APPLICATION)
+  public static final String JSON_PROPERTY_APPLICATION = "application";
+  @jakarta.annotation.Nullable
   private String application;
 
-  public static final String SERIALIZED_NAME_PARTICIPANTS = "participants";
-  @SerializedName(SERIALIZED_NAME_PARTICIPANTS)
-  private List<ParticipantBean> participants = null;
+  public static final String JSON_PROPERTY_PARTICIPANTS = "participants";
+  @jakarta.annotation.Nullable
+  private List<ParticipantBean> participants = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_DESCRIPTION = "description";
-  @SerializedName(SERIALIZED_NAME_DESCRIPTION)
+  public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  @jakarta.annotation.Nullable
   private String description;
 
-  public static final String SERIALIZED_NAME_CREATED_TIME = "createdTime";
-  @SerializedName(SERIALIZED_NAME_CREATED_TIME)
+  public static final String JSON_PROPERTY_CREATED_TIME = "createdTime";
+  @jakarta.annotation.Nullable
   private Long createdTime;
 
-  public static final String SERIALIZED_NAME_OVERDUE = "overdue";
-  @SerializedName(SERIALIZED_NAME_OVERDUE)
+  public static final String JSON_PROPERTY_OVERDUE = "overdue";
+  @jakarta.annotation.Nullable
   private Boolean overdue;
 
-  public static final String SERIALIZED_NAME_SUBMITTED_TIME = "submittedTime";
-  @SerializedName(SERIALIZED_NAME_SUBMITTED_TIME)
+  public static final String JSON_PROPERTY_SUBMITTED_TIME = "submittedTime";
+  @jakarta.annotation.Nullable
   private Long submittedTime;
 
-  public static final String SERIALIZED_NAME_APPLIED_TIME = "appliedTime";
-  @SerializedName(SERIALIZED_NAME_APPLIED_TIME)
+  public static final String JSON_PROPERTY_APPLIED_TIME = "appliedTime";
+  @jakarta.annotation.Nullable
   private Long appliedTime;
 
-  public static final String SERIALIZED_NAME_REFRESHED_TIME = "refreshedTime";
-  @SerializedName(SERIALIZED_NAME_REFRESHED_TIME)
+  public static final String JSON_PROPERTY_REFRESHED_TIME = "refreshedTime";
+  @jakarta.annotation.Nullable
   private Long refreshedTime;
 
-  public static final String SERIALIZED_NAME_COMMENTS_COUNT = "commentsCount";
-  @SerializedName(SERIALIZED_NAME_COMMENTS_COUNT)
+  public static final String JSON_PROPERTY_COMMENTS_COUNT = "commentsCount";
+  @jakarta.annotation.Nullable
   private Integer commentsCount;
 
-  public static final String SERIALIZED_NAME_USE_CALCULATED_VALUES = "useCalculatedValues";
-  @SerializedName(SERIALIZED_NAME_USE_CALCULATED_VALUES)
+  public static final String JSON_PROPERTY_USE_CALCULATED_VALUES = "useCalculatedValues";
+  @jakarta.annotation.Nullable
   private Boolean useCalculatedValues;
 
-  public static final String SERIALIZED_NAME_OWNER = "owner";
-  @SerializedName(SERIALIZED_NAME_OWNER)
+  public static final String JSON_PROPERTY_OWNER = "owner";
+  @jakarta.annotation.Nullable
   private String owner;
 
-  public static final String SERIALIZED_NAME_APPROVERS = "approvers";
-  @SerializedName(SERIALIZED_NAME_APPROVERS)
-  private List<ApproverBean> approvers = null;
+  public static final String JSON_PROPERTY_APPROVERS = "approvers";
+  @jakarta.annotation.Nullable
+  private List<ApproverBean> approvers = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_SANDBOX = "sandbox";
-  @SerializedName(SERIALIZED_NAME_SANDBOX)
+  public static final String JSON_PROPERTY_SANDBOX = "sandbox";
+  @jakarta.annotation.Nullable
   private String sandbox;
 
-  public static final String SERIALIZED_NAME_DUE_DATE = "dueDate";
-  @SerializedName(SERIALIZED_NAME_DUE_DATE)
+  public static final String JSON_PROPERTY_DUE_DATE = "dueDate";
+  @jakarta.annotation.Nullable
   private Long dueDate;
 
   /**
    * Gets or Sets state
    */
-  @JsonAdapter(StateEnum.Adapter.class)
   public enum StateEnum {
-    NEW("NEW"),
+    NEW(String.valueOf("NEW")),
     
-    SUBMITTED("SUBMITTED"),
+    SUBMITTED(String.valueOf("SUBMITTED")),
     
-    APPROVED("APPROVED"),
+    APPROVED(String.valueOf("APPROVED")),
     
-    REJECTED("REJECTED"),
+    REJECTED(String.valueOf("REJECTED")),
     
-    APPLIED("APPLIED");
+    APPLIED(String.valueOf("APPLIED"));
 
     private String value;
 
@@ -128,6 +156,7 @@ public class ScenarioBean {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -137,6 +166,7 @@ public class ScenarioBean {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static StateEnum fromValue(String value) {
       for (StateEnum b : StateEnum.values()) {
         if (b.value.equals(value)) {
@@ -145,43 +175,29 @@ public class ScenarioBean {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<StateEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final StateEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public StateEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return StateEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_STATE = "state";
-  @SerializedName(SERIALIZED_NAME_STATE)
+  public static final String JSON_PROPERTY_STATE = "state";
+  @jakarta.annotation.Nullable
   private StateEnum state;
 
-  public static final String SERIALIZED_NAME_ID = "id";
-  @SerializedName(SERIALIZED_NAME_ID)
+  public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nullable
   private Long id;
 
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
   /**
    * Gets or Sets priority
    */
-  @JsonAdapter(PriorityEnum.Adapter.class)
   public enum PriorityEnum {
-    LOW("LOW"),
+    LOW(String.valueOf("LOW")),
     
-    MEDIUM("MEDIUM"),
+    MEDIUM(String.valueOf("MEDIUM")),
     
-    HIGH("HIGH");
+    HIGH(String.valueOf("HIGH"));
 
     private String value;
 
@@ -189,6 +205,7 @@ public class ScenarioBean {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -198,6 +215,7 @@ public class ScenarioBean {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static PriorityEnum fromValue(String value) {
       for (PriorityEnum b : PriorityEnum.values()) {
         if (b.value.equals(value)) {
@@ -206,564 +224,578 @@ public class ScenarioBean {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<PriorityEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final PriorityEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public PriorityEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return PriorityEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_PRIORITY = "priority";
-  @SerializedName(SERIALIZED_NAME_PRIORITY)
+  public static final String JSON_PROPERTY_PRIORITY = "priority";
+  @jakarta.annotation.Nullable
   private PriorityEnum priority;
 
+  public ScenarioBean() { 
+  }
 
-  public ScenarioBean links(List<Link> links) {
-    
+  public ScenarioBean links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public ScenarioBean addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
-  public ScenarioBean scenarioUser(Boolean scenarioUser) {
-    
+  public ScenarioBean scenarioUser(@jakarta.annotation.Nullable Boolean scenarioUser) {
     this.scenarioUser = scenarioUser;
     return this;
   }
 
-   /**
+  /**
    * Get scenarioUser
    * @return scenarioUser
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SCENARIO_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getScenarioUser() {
     return scenarioUser;
   }
 
 
-  public void setScenarioUser(Boolean scenarioUser) {
+  @JsonProperty(JSON_PROPERTY_SCENARIO_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setScenarioUser(@jakarta.annotation.Nullable Boolean scenarioUser) {
     this.scenarioUser = scenarioUser;
   }
 
 
-  public ScenarioBean scripts(List<ScriptBean> scripts) {
-    
+  public ScenarioBean scripts(@jakarta.annotation.Nullable List<ScriptBean> scripts) {
     this.scripts = scripts;
     return this;
   }
 
   public ScenarioBean addScriptsItem(ScriptBean scriptsItem) {
     if (this.scripts == null) {
-      this.scripts = new ArrayList<ScriptBean>();
+      this.scripts = new ArrayList<>();
     }
     this.scripts.add(scriptsItem);
     return this;
   }
 
-   /**
+  /**
    * Get scripts
    * @return scripts
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SCRIPTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<ScriptBean> getScripts() {
     return scripts;
   }
 
 
-  public void setScripts(List<ScriptBean> scripts) {
+  @JsonProperty(JSON_PROPERTY_SCRIPTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setScripts(@jakarta.annotation.Nullable List<ScriptBean> scripts) {
     this.scripts = scripts;
   }
 
 
-  public ScenarioBean database(String database) {
-    
+  public ScenarioBean database(@jakarta.annotation.Nullable String database) {
     this.database = database;
     return this;
   }
 
-   /**
+  /**
    * Get database
    * @return database
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDatabase() {
     return database;
   }
 
 
-  public void setDatabase(String database) {
+  @JsonProperty(JSON_PROPERTY_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatabase(@jakarta.annotation.Nullable String database) {
     this.database = database;
   }
 
 
-  public ScenarioBean application(String application) {
-    
+  public ScenarioBean application(@jakarta.annotation.Nullable String application) {
     this.application = application;
     return this;
   }
 
-   /**
+  /**
    * Get application
    * @return application
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getApplication() {
     return application;
   }
 
 
-  public void setApplication(String application) {
+  @JsonProperty(JSON_PROPERTY_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApplication(@jakarta.annotation.Nullable String application) {
     this.application = application;
   }
 
 
-  public ScenarioBean participants(List<ParticipantBean> participants) {
-    
+  public ScenarioBean participants(@jakarta.annotation.Nullable List<ParticipantBean> participants) {
     this.participants = participants;
     return this;
   }
 
   public ScenarioBean addParticipantsItem(ParticipantBean participantsItem) {
     if (this.participants == null) {
-      this.participants = new ArrayList<ParticipantBean>();
+      this.participants = new ArrayList<>();
     }
     this.participants.add(participantsItem);
     return this;
   }
 
-   /**
+  /**
    * Get participants
    * @return participants
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PARTICIPANTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<ParticipantBean> getParticipants() {
     return participants;
   }
 
 
-  public void setParticipants(List<ParticipantBean> participants) {
+  @JsonProperty(JSON_PROPERTY_PARTICIPANTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setParticipants(@jakarta.annotation.Nullable List<ParticipantBean> participants) {
     this.participants = participants;
   }
 
 
-  public ScenarioBean description(String description) {
-    
+  public ScenarioBean description(@jakarta.annotation.Nullable String description) {
     this.description = description;
     return this;
   }
 
-   /**
+  /**
    * Get description
    * @return description
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDescription() {
     return description;
   }
 
 
-  public void setDescription(String description) {
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDescription(@jakarta.annotation.Nullable String description) {
     this.description = description;
   }
 
 
-  public ScenarioBean createdTime(Long createdTime) {
-    
+  public ScenarioBean createdTime(@jakarta.annotation.Nullable Long createdTime) {
     this.createdTime = createdTime;
     return this;
   }
 
-   /**
+  /**
    * Get createdTime
    * @return createdTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CREATED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getCreatedTime() {
     return createdTime;
   }
 
 
-  public void setCreatedTime(Long createdTime) {
+  @JsonProperty(JSON_PROPERTY_CREATED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCreatedTime(@jakarta.annotation.Nullable Long createdTime) {
     this.createdTime = createdTime;
   }
 
 
-  public ScenarioBean overdue(Boolean overdue) {
-    
+  public ScenarioBean overdue(@jakarta.annotation.Nullable Boolean overdue) {
     this.overdue = overdue;
     return this;
   }
 
-   /**
+  /**
    * Get overdue
    * @return overdue
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OVERDUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getOverdue() {
     return overdue;
   }
 
 
-  public void setOverdue(Boolean overdue) {
+  @JsonProperty(JSON_PROPERTY_OVERDUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOverdue(@jakarta.annotation.Nullable Boolean overdue) {
     this.overdue = overdue;
   }
 
 
-  public ScenarioBean submittedTime(Long submittedTime) {
-    
+  public ScenarioBean submittedTime(@jakarta.annotation.Nullable Long submittedTime) {
     this.submittedTime = submittedTime;
     return this;
   }
 
-   /**
+  /**
    * Get submittedTime
    * @return submittedTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SUBMITTED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getSubmittedTime() {
     return submittedTime;
   }
 
 
-  public void setSubmittedTime(Long submittedTime) {
+  @JsonProperty(JSON_PROPERTY_SUBMITTED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSubmittedTime(@jakarta.annotation.Nullable Long submittedTime) {
     this.submittedTime = submittedTime;
   }
 
 
-  public ScenarioBean appliedTime(Long appliedTime) {
-    
+  public ScenarioBean appliedTime(@jakarta.annotation.Nullable Long appliedTime) {
     this.appliedTime = appliedTime;
     return this;
   }
 
-   /**
+  /**
    * Get appliedTime
    * @return appliedTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPLIED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getAppliedTime() {
     return appliedTime;
   }
 
 
-  public void setAppliedTime(Long appliedTime) {
+  @JsonProperty(JSON_PROPERTY_APPLIED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAppliedTime(@jakarta.annotation.Nullable Long appliedTime) {
     this.appliedTime = appliedTime;
   }
 
 
-  public ScenarioBean refreshedTime(Long refreshedTime) {
-    
+  public ScenarioBean refreshedTime(@jakarta.annotation.Nullable Long refreshedTime) {
     this.refreshedTime = refreshedTime;
     return this;
   }
 
-   /**
+  /**
    * Get refreshedTime
    * @return refreshedTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REFRESHED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getRefreshedTime() {
     return refreshedTime;
   }
 
 
-  public void setRefreshedTime(Long refreshedTime) {
+  @JsonProperty(JSON_PROPERTY_REFRESHED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRefreshedTime(@jakarta.annotation.Nullable Long refreshedTime) {
     this.refreshedTime = refreshedTime;
   }
 
 
-  public ScenarioBean commentsCount(Integer commentsCount) {
-    
+  public ScenarioBean commentsCount(@jakarta.annotation.Nullable Integer commentsCount) {
     this.commentsCount = commentsCount;
     return this;
   }
 
-   /**
+  /**
    * Get commentsCount
    * @return commentsCount
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COMMENTS_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getCommentsCount() {
     return commentsCount;
   }
 
 
-  public void setCommentsCount(Integer commentsCount) {
+  @JsonProperty(JSON_PROPERTY_COMMENTS_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCommentsCount(@jakarta.annotation.Nullable Integer commentsCount) {
     this.commentsCount = commentsCount;
   }
 
 
-  public ScenarioBean useCalculatedValues(Boolean useCalculatedValues) {
-    
+  public ScenarioBean useCalculatedValues(@jakarta.annotation.Nullable Boolean useCalculatedValues) {
     this.useCalculatedValues = useCalculatedValues;
     return this;
   }
 
-   /**
+  /**
    * Get useCalculatedValues
    * @return useCalculatedValues
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USE_CALCULATED_VALUES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getUseCalculatedValues() {
     return useCalculatedValues;
   }
 
 
-  public void setUseCalculatedValues(Boolean useCalculatedValues) {
+  @JsonProperty(JSON_PROPERTY_USE_CALCULATED_VALUES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUseCalculatedValues(@jakarta.annotation.Nullable Boolean useCalculatedValues) {
     this.useCalculatedValues = useCalculatedValues;
   }
 
 
-  public ScenarioBean owner(String owner) {
-    
+  public ScenarioBean owner(@jakarta.annotation.Nullable String owner) {
     this.owner = owner;
     return this;
   }
 
-   /**
+  /**
    * Get owner
    * @return owner
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OWNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getOwner() {
     return owner;
   }
 
 
-  public void setOwner(String owner) {
+  @JsonProperty(JSON_PROPERTY_OWNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOwner(@jakarta.annotation.Nullable String owner) {
     this.owner = owner;
   }
 
 
-  public ScenarioBean approvers(List<ApproverBean> approvers) {
-    
+  public ScenarioBean approvers(@jakarta.annotation.Nullable List<ApproverBean> approvers) {
     this.approvers = approvers;
     return this;
   }
 
   public ScenarioBean addApproversItem(ApproverBean approversItem) {
     if (this.approvers == null) {
-      this.approvers = new ArrayList<ApproverBean>();
+      this.approvers = new ArrayList<>();
     }
     this.approvers.add(approversItem);
     return this;
   }
 
-   /**
+  /**
    * Get approvers
    * @return approvers
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPROVERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<ApproverBean> getApprovers() {
     return approvers;
   }
 
 
-  public void setApprovers(List<ApproverBean> approvers) {
+  @JsonProperty(JSON_PROPERTY_APPROVERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApprovers(@jakarta.annotation.Nullable List<ApproverBean> approvers) {
     this.approvers = approvers;
   }
 
 
-  public ScenarioBean sandbox(String sandbox) {
-    
+  public ScenarioBean sandbox(@jakarta.annotation.Nullable String sandbox) {
     this.sandbox = sandbox;
     return this;
   }
 
-   /**
+  /**
    * Get sandbox
    * @return sandbox
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SANDBOX)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getSandbox() {
     return sandbox;
   }
 
 
-  public void setSandbox(String sandbox) {
+  @JsonProperty(JSON_PROPERTY_SANDBOX)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSandbox(@jakarta.annotation.Nullable String sandbox) {
     this.sandbox = sandbox;
   }
 
 
-  public ScenarioBean dueDate(Long dueDate) {
-    
+  public ScenarioBean dueDate(@jakarta.annotation.Nullable Long dueDate) {
     this.dueDate = dueDate;
     return this;
   }
 
-   /**
+  /**
    * Get dueDate
    * @return dueDate
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DUE_DATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getDueDate() {
     return dueDate;
   }
 
 
-  public void setDueDate(Long dueDate) {
+  @JsonProperty(JSON_PROPERTY_DUE_DATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDueDate(@jakarta.annotation.Nullable Long dueDate) {
     this.dueDate = dueDate;
   }
 
 
-  public ScenarioBean state(StateEnum state) {
-    
+  public ScenarioBean state(@jakarta.annotation.Nullable StateEnum state) {
     this.state = state;
     return this;
   }
 
-   /**
+  /**
    * Get state
    * @return state
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public StateEnum getState() {
     return state;
   }
 
 
-  public void setState(StateEnum state) {
+  @JsonProperty(JSON_PROPERTY_STATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setState(@jakarta.annotation.Nullable StateEnum state) {
     this.state = state;
   }
 
 
-  public ScenarioBean id(Long id) {
-    
+  public ScenarioBean id(@jakarta.annotation.Nullable Long id) {
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getId() {
     return id;
   }
 
 
-  public void setId(Long id) {
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setId(@jakarta.annotation.Nullable Long id) {
     this.id = id;
   }
 
 
-  public ScenarioBean name(String name) {
-    
+  public ScenarioBean name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
-  public ScenarioBean priority(PriorityEnum priority) {
-    
+  public ScenarioBean priority(@jakarta.annotation.Nullable PriorityEnum priority) {
     this.priority = priority;
     return this;
   }
 
-   /**
+  /**
    * Get priority
    * @return priority
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PRIORITY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public PriorityEnum getPriority() {
     return priority;
   }
 
 
-  public void setPriority(PriorityEnum priority) {
+  @JsonProperty(JSON_PROPERTY_PRIORITY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPriority(@jakarta.annotation.Nullable PriorityEnum priority) {
     this.priority = priority;
   }
 
 
+  /**
+   * Return true if this ScenarioBean object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -843,5 +875,169 @@ public class ScenarioBean {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `scenarioUser` to the URL query string
+    if (getScenarioUser() != null) {
+      joiner.add(String.format("%sscenarioUser%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getScenarioUser()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `scripts` to the URL query string
+    if (getScripts() != null) {
+      for (int i = 0; i < getScripts().size(); i++) {
+        if (getScripts().get(i) != null) {
+          joiner.add(getScripts().get(i).toUrlQueryString(String.format("%sscripts%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `database` to the URL query string
+    if (getDatabase() != null) {
+      joiner.add(String.format("%sdatabase%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDatabase()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `application` to the URL query string
+    if (getApplication() != null) {
+      joiner.add(String.format("%sapplication%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getApplication()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `participants` to the URL query string
+    if (getParticipants() != null) {
+      for (int i = 0; i < getParticipants().size(); i++) {
+        if (getParticipants().get(i) != null) {
+          joiner.add(getParticipants().get(i).toUrlQueryString(String.format("%sparticipants%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `description` to the URL query string
+    if (getDescription() != null) {
+      joiner.add(String.format("%sdescription%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDescription()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `createdTime` to the URL query string
+    if (getCreatedTime() != null) {
+      joiner.add(String.format("%screatedTime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCreatedTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `overdue` to the URL query string
+    if (getOverdue() != null) {
+      joiner.add(String.format("%soverdue%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getOverdue()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `submittedTime` to the URL query string
+    if (getSubmittedTime() != null) {
+      joiner.add(String.format("%ssubmittedTime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSubmittedTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `appliedTime` to the URL query string
+    if (getAppliedTime() != null) {
+      joiner.add(String.format("%sappliedTime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAppliedTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `refreshedTime` to the URL query string
+    if (getRefreshedTime() != null) {
+      joiner.add(String.format("%srefreshedTime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRefreshedTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `commentsCount` to the URL query string
+    if (getCommentsCount() != null) {
+      joiner.add(String.format("%scommentsCount%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCommentsCount()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `useCalculatedValues` to the URL query string
+    if (getUseCalculatedValues() != null) {
+      joiner.add(String.format("%suseCalculatedValues%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUseCalculatedValues()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `owner` to the URL query string
+    if (getOwner() != null) {
+      joiner.add(String.format("%sowner%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getOwner()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `approvers` to the URL query string
+    if (getApprovers() != null) {
+      for (int i = 0; i < getApprovers().size(); i++) {
+        if (getApprovers().get(i) != null) {
+          joiner.add(getApprovers().get(i).toUrlQueryString(String.format("%sapprovers%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `sandbox` to the URL query string
+    if (getSandbox() != null) {
+      joiner.add(String.format("%ssandbox%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSandbox()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dueDate` to the URL query string
+    if (getDueDate() != null) {
+      joiner.add(String.format("%sdueDate%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDueDate()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `state` to the URL query string
+    if (getState() != null) {
+      joiner.add(String.format("%sstate%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getState()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `id` to the URL query string
+    if (getId() != null) {
+      joiner.add(String.format("%sid%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getId()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `priority` to the URL query string
+    if (getPriority() != null) {
+      joiner.add(String.format("%spriority%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPriority()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

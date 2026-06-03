@@ -13,131 +13,151 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ApplicationStatistics
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ApplicationStatistics.JSON_PROPERTY_APPLICATION_START_TIME,
+  ApplicationStatistics.JSON_PROPERTY_APPLICATION_ELAPSED_TIME,
+  ApplicationStatistics.JSON_PROPERTY_NUMBER_OF_CONNECTIONS,
+  ApplicationStatistics.JSON_PROPERTY_LOAD_STATUS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ApplicationStatistics {
-  public static final String SERIALIZED_NAME_APPLICATION_START_TIME = "applicationStartTime";
-  @SerializedName(SERIALIZED_NAME_APPLICATION_START_TIME)
+  public static final String JSON_PROPERTY_APPLICATION_START_TIME = "applicationStartTime";
+  @jakarta.annotation.Nullable
   private Long applicationStartTime;
 
-  public static final String SERIALIZED_NAME_APPLICATION_ELAPSED_TIME = "applicationElapsedTime";
-  @SerializedName(SERIALIZED_NAME_APPLICATION_ELAPSED_TIME)
+  public static final String JSON_PROPERTY_APPLICATION_ELAPSED_TIME = "applicationElapsedTime";
+  @jakarta.annotation.Nullable
   private String applicationElapsedTime;
 
-  public static final String SERIALIZED_NAME_NUMBER_OF_CONNECTIONS = "numberOfConnections";
-  @SerializedName(SERIALIZED_NAME_NUMBER_OF_CONNECTIONS)
+  public static final String JSON_PROPERTY_NUMBER_OF_CONNECTIONS = "numberOfConnections";
+  @jakarta.annotation.Nullable
   private Integer numberOfConnections;
 
-  public static final String SERIALIZED_NAME_LOAD_STATUS = "loadStatus";
-  @SerializedName(SERIALIZED_NAME_LOAD_STATUS)
+  public static final String JSON_PROPERTY_LOAD_STATUS = "loadStatus";
+  @jakarta.annotation.Nullable
   private String loadStatus;
 
+  public ApplicationStatistics() { 
+  }
 
-  public ApplicationStatistics applicationStartTime(Long applicationStartTime) {
-    
+  public ApplicationStatistics applicationStartTime(@jakarta.annotation.Nullable Long applicationStartTime) {
     this.applicationStartTime = applicationStartTime;
     return this;
   }
 
-   /**
+  /**
    * Get applicationStartTime
    * @return applicationStartTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPLICATION_START_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getApplicationStartTime() {
     return applicationStartTime;
   }
 
 
-  public void setApplicationStartTime(Long applicationStartTime) {
+  @JsonProperty(JSON_PROPERTY_APPLICATION_START_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApplicationStartTime(@jakarta.annotation.Nullable Long applicationStartTime) {
     this.applicationStartTime = applicationStartTime;
   }
 
 
-  public ApplicationStatistics applicationElapsedTime(String applicationElapsedTime) {
-    
+  public ApplicationStatistics applicationElapsedTime(@jakarta.annotation.Nullable String applicationElapsedTime) {
     this.applicationElapsedTime = applicationElapsedTime;
     return this;
   }
 
-   /**
+  /**
    * Get applicationElapsedTime
    * @return applicationElapsedTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPLICATION_ELAPSED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getApplicationElapsedTime() {
     return applicationElapsedTime;
   }
 
 
-  public void setApplicationElapsedTime(String applicationElapsedTime) {
+  @JsonProperty(JSON_PROPERTY_APPLICATION_ELAPSED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApplicationElapsedTime(@jakarta.annotation.Nullable String applicationElapsedTime) {
     this.applicationElapsedTime = applicationElapsedTime;
   }
 
 
-  public ApplicationStatistics numberOfConnections(Integer numberOfConnections) {
-    
+  public ApplicationStatistics numberOfConnections(@jakarta.annotation.Nullable Integer numberOfConnections) {
     this.numberOfConnections = numberOfConnections;
     return this;
   }
 
-   /**
+  /**
    * Get numberOfConnections
    * @return numberOfConnections
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_CONNECTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getNumberOfConnections() {
     return numberOfConnections;
   }
 
 
-  public void setNumberOfConnections(Integer numberOfConnections) {
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_CONNECTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumberOfConnections(@jakarta.annotation.Nullable Integer numberOfConnections) {
     this.numberOfConnections = numberOfConnections;
   }
 
 
-  public ApplicationStatistics loadStatus(String loadStatus) {
-    
+  public ApplicationStatistics loadStatus(@jakarta.annotation.Nullable String loadStatus) {
     this.loadStatus = loadStatus;
     return this;
   }
 
-   /**
+  /**
    * Get loadStatus
    * @return loadStatus
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LOAD_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getLoadStatus() {
     return loadStatus;
   }
 
 
-  public void setLoadStatus(String loadStatus) {
+  @JsonProperty(JSON_PROPERTY_LOAD_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLoadStatus(@jakarta.annotation.Nullable String loadStatus) {
     this.loadStatus = loadStatus;
   }
 
 
+  /**
+   * Return true if this ApplicationStatistics object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -181,5 +201,59 @@ public class ApplicationStatistics {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `applicationStartTime` to the URL query string
+    if (getApplicationStartTime() != null) {
+      joiner.add(String.format("%sapplicationStartTime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getApplicationStartTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `applicationElapsedTime` to the URL query string
+    if (getApplicationElapsedTime() != null) {
+      joiner.add(String.format("%sapplicationElapsedTime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getApplicationElapsedTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numberOfConnections` to the URL query string
+    if (getNumberOfConnections() != null) {
+      joiner.add(String.format("%snumberOfConnections%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumberOfConnections()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `loadStatus` to the URL query string
+    if (getLoadStatus() != null) {
+      joiner.add(String.format("%sloadStatus%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLoadStatus()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

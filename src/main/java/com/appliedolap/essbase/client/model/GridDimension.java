@@ -13,212 +13,238 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * GridDimension
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  GridDimension.JSON_PROPERTY_COLUMN,
+  GridDimension.JSON_PROPERTY_ROW,
+  GridDimension.JSON_PROPERTY_POV,
+  GridDimension.JSON_PROPERTY_EXPANDED,
+  GridDimension.JSON_PROPERTY_DISPLAY_NAME,
+  GridDimension.JSON_PROPERTY_HIDDEN,
+  GridDimension.JSON_PROPERTY_NAME
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class GridDimension {
-  public static final String SERIALIZED_NAME_COLUMN = "column";
-  @SerializedName(SERIALIZED_NAME_COLUMN)
+  public static final String JSON_PROPERTY_COLUMN = "column";
+  @jakarta.annotation.Nullable
   private Integer column;
 
-  public static final String SERIALIZED_NAME_ROW = "row";
-  @SerializedName(SERIALIZED_NAME_ROW)
+  public static final String JSON_PROPERTY_ROW = "row";
+  @jakarta.annotation.Nullable
   private Integer row;
 
-  public static final String SERIALIZED_NAME_POV = "pov";
-  @SerializedName(SERIALIZED_NAME_POV)
+  public static final String JSON_PROPERTY_POV = "pov";
+  @jakarta.annotation.Nullable
   private String pov;
 
-  public static final String SERIALIZED_NAME_EXPANDED = "expanded";
-  @SerializedName(SERIALIZED_NAME_EXPANDED)
+  public static final String JSON_PROPERTY_EXPANDED = "expanded";
+  @jakarta.annotation.Nullable
   private Boolean expanded;
 
-  public static final String SERIALIZED_NAME_DISPLAY_NAME = "displayName";
-  @SerializedName(SERIALIZED_NAME_DISPLAY_NAME)
+  public static final String JSON_PROPERTY_DISPLAY_NAME = "displayName";
+  @jakarta.annotation.Nullable
   private String displayName;
 
-  public static final String SERIALIZED_NAME_HIDDEN = "hidden";
-  @SerializedName(SERIALIZED_NAME_HIDDEN)
+  public static final String JSON_PROPERTY_HIDDEN = "hidden";
+  @jakarta.annotation.Nullable
   private Boolean hidden;
 
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
+  public GridDimension() { 
+  }
 
-  public GridDimension column(Integer column) {
-    
+  public GridDimension column(@jakarta.annotation.Nullable Integer column) {
     this.column = column;
     return this;
   }
 
-   /**
+  /**
    * Get column
    * @return column
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COLUMN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getColumn() {
     return column;
   }
 
 
-  public void setColumn(Integer column) {
+  @JsonProperty(JSON_PROPERTY_COLUMN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setColumn(@jakarta.annotation.Nullable Integer column) {
     this.column = column;
   }
 
 
-  public GridDimension row(Integer row) {
-    
+  public GridDimension row(@jakarta.annotation.Nullable Integer row) {
     this.row = row;
     return this;
   }
 
-   /**
+  /**
    * Get row
    * @return row
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ROW)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getRow() {
     return row;
   }
 
 
-  public void setRow(Integer row) {
+  @JsonProperty(JSON_PROPERTY_ROW)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRow(@jakarta.annotation.Nullable Integer row) {
     this.row = row;
   }
 
 
-  public GridDimension pov(String pov) {
-    
+  public GridDimension pov(@jakarta.annotation.Nullable String pov) {
     this.pov = pov;
     return this;
   }
 
-   /**
+  /**
    * Get pov
    * @return pov
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_POV)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getPov() {
     return pov;
   }
 
 
-  public void setPov(String pov) {
+  @JsonProperty(JSON_PROPERTY_POV)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPov(@jakarta.annotation.Nullable String pov) {
     this.pov = pov;
   }
 
 
-  public GridDimension expanded(Boolean expanded) {
-    
+  public GridDimension expanded(@jakarta.annotation.Nullable Boolean expanded) {
     this.expanded = expanded;
     return this;
   }
 
-   /**
+  /**
    * Get expanded
    * @return expanded
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EXPANDED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getExpanded() {
     return expanded;
   }
 
 
-  public void setExpanded(Boolean expanded) {
+  @JsonProperty(JSON_PROPERTY_EXPANDED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setExpanded(@jakarta.annotation.Nullable Boolean expanded) {
     this.expanded = expanded;
   }
 
 
-  public GridDimension displayName(String displayName) {
-    
+  public GridDimension displayName(@jakarta.annotation.Nullable String displayName) {
     this.displayName = displayName;
     return this;
   }
 
-   /**
+  /**
    * Get displayName
    * @return displayName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DISPLAY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDisplayName() {
     return displayName;
   }
 
 
-  public void setDisplayName(String displayName) {
+  @JsonProperty(JSON_PROPERTY_DISPLAY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDisplayName(@jakarta.annotation.Nullable String displayName) {
     this.displayName = displayName;
   }
 
 
-  public GridDimension hidden(Boolean hidden) {
-    
+  public GridDimension hidden(@jakarta.annotation.Nullable Boolean hidden) {
     this.hidden = hidden;
     return this;
   }
 
-   /**
+  /**
    * Get hidden
    * @return hidden
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HIDDEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getHidden() {
     return hidden;
   }
 
 
-  public void setHidden(Boolean hidden) {
+  @JsonProperty(JSON_PROPERTY_HIDDEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHidden(@jakarta.annotation.Nullable Boolean hidden) {
     this.hidden = hidden;
   }
 
 
-  public GridDimension name(String name) {
-    
+  public GridDimension name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
+  /**
+   * Return true if this GridDimension object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -268,5 +294,74 @@ public class GridDimension {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `column` to the URL query string
+    if (getColumn() != null) {
+      joiner.add(String.format("%scolumn%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getColumn()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `row` to the URL query string
+    if (getRow() != null) {
+      joiner.add(String.format("%srow%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRow()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `pov` to the URL query string
+    if (getPov() != null) {
+      joiner.add(String.format("%spov%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPov()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `expanded` to the URL query string
+    if (getExpanded() != null) {
+      joiner.add(String.format("%sexpanded%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getExpanded()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `displayName` to the URL query string
+    if (getDisplayName() != null) {
+      joiner.add(String.format("%sdisplayName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDisplayName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `hidden` to the URL query string
+    if (getHidden() != null) {
+      joiner.add(String.format("%shidden%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getHidden()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

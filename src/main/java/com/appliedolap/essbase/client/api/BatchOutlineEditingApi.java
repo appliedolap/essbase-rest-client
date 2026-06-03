@@ -10,184 +10,168 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.BOEOutput;
 import com.appliedolap.essbase.client.model.OtlEditMain;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class BatchOutlineEditingApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public BatchOutlineEditingApi() {
-        this(Configuration.getDefaultApiClient());
+  public BatchOutlineEditingApi() {
+    this(new ApiClient());
+  }
+
+  public BatchOutlineEditingApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public BatchOutlineEditingApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Run Batch Outline Edit
+   * &lt;p&gt;Executes batch outline editing process. Based on the XML or JSON body, adds or removes members from the outline in the active cube.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Batch outline JSON/XML (required)
+   * @return BOEOutput
+   * @throws ApiException if fails to make API call
+   */
+  public BOEOutput batchOutlineEditingExecute(String application, String database, OtlEditMain body) throws ApiException {
+    ApiResponse<BOEOutput> localVarResponse = batchOutlineEditingExecuteWithHttpInfo(application, database, body);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for batchOutlineEditingExecute
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Batch outline JSON/XML (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The batch outline edit completed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to complete batch outline editing. The output may be invalid, the sequence of metadata operations may be incorrect, or saving the outline may have failed.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call batchOutlineEditingExecuteCall(String application, String database, OtlEditMain body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{application}/databases/{database}/boe"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "database" + "\\}", localVarApiClient.escapeString(database.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Run Batch Outline Edit
+   * &lt;p&gt;Executes batch outline editing process. Based on the XML or JSON body, adds or removes members from the outline in the active cube.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Batch outline JSON/XML (required)
+   * @return ApiResponse&lt;BOEOutput&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<BOEOutput> batchOutlineEditingExecuteWithHttpInfo(String application, String database, OtlEditMain body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = batchOutlineEditingExecuteRequestBuilder(application, database, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("batchOutlineEditingExecute", localVarResponse);
         }
+        return new ApiResponse<BOEOutput>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<BOEOutput>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder batchOutlineEditingExecuteRequestBuilder(String application, String database, OtlEditMain body) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling batchOutlineEditingExecute");
+    }
+    // verify the required parameter 'database' is set
+    if (database == null) {
+      throw new ApiException(400, "Missing the required parameter 'database' when calling batchOutlineEditingExecute");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling batchOutlineEditingExecute");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call batchOutlineEditingExecuteValidateBeforeCall(String application, String database, OtlEditMain body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling batchOutlineEditingExecute(Async)");
-        }
-        
-        // verify the required parameter 'database' is set
-        if (database == null) {
-            throw new ApiException("Missing the required parameter 'database' when calling batchOutlineEditingExecute(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling batchOutlineEditingExecute(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = batchOutlineEditingExecuteCall(application, database, body, _callback);
-        return localVarCall;
+    String localVarPath = "/applications/{application}/databases/{database}/boe"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{database}", ApiClient.urlEncode(database.toString()));
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Run Batch Outline Edit
-     * &lt;p&gt;Executes batch outline editing process. Based on the XML or JSON body, adds or removes members from the outline in the active cube.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Batch outline JSON/XML (required)
-     * @return BOEOutput
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The batch outline edit completed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to complete batch outline editing. The output may be invalid, the sequence of metadata operations may be incorrect, or saving the outline may have failed.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public BOEOutput batchOutlineEditingExecute(String application, String database, OtlEditMain body) throws ApiException {
-        ApiResponse<BOEOutput> localVarResp = batchOutlineEditingExecuteWithHttpInfo(application, database, body);
-        return localVarResp.getData();
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Run Batch Outline Edit
-     * &lt;p&gt;Executes batch outline editing process. Based on the XML or JSON body, adds or removes members from the outline in the active cube.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Batch outline JSON/XML (required)
-     * @return ApiResponse&lt;BOEOutput&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The batch outline edit completed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to complete batch outline editing. The output may be invalid, the sequence of metadata operations may be incorrect, or saving the outline may have failed.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<BOEOutput> batchOutlineEditingExecuteWithHttpInfo(String application, String database, OtlEditMain body) throws ApiException {
-        okhttp3.Call localVarCall = batchOutlineEditingExecuteValidateBeforeCall(application, database, body, null);
-        Type localVarReturnType = new TypeToken<BOEOutput>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Run Batch Outline Edit (asynchronously)
-     * &lt;p&gt;Executes batch outline editing process. Based on the XML or JSON body, adds or removes members from the outline in the active cube.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Batch outline JSON/XML (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The batch outline edit completed successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to complete batch outline editing. The output may be invalid, the sequence of metadata operations may be incorrect, or saving the outline may have failed.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call batchOutlineEditingExecuteAsync(String application, String database, OtlEditMain body, final ApiCallback<BOEOutput> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = batchOutlineEditingExecuteValidateBeforeCall(application, database, body, _callback);
-        Type localVarReturnType = new TypeToken<BOEOutput>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

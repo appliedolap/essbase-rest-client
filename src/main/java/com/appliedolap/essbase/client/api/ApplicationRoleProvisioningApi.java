@@ -10,727 +10,546 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.UserGroupProvisionInfo;
 import com.appliedolap.essbase.client.model.UserGroupProvisionInfoList;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ApplicationRoleProvisioningApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public ApplicationRoleProvisioningApi() {
-        this(Configuration.getDefaultApiClient());
+  public ApplicationRoleProvisioningApi() {
+    this(new ApiClient());
+  }
+
+  public ApplicationRoleProvisioningApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public ApplicationRoleProvisioningApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Deprovision User or Group
+   * &lt;p&gt;Deprovision a single user or group on the specified application.&lt;/p&gt;
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param id &lt;p&gt;User or group ID.&lt;/p&gt; (required)
+   * @param group &lt;p&gt;If true, ID is for a group. If false, ID is for a user. Default is false (ID is considered to be for a user.)&lt;/p&gt; (optional, default to false)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationRoleProvisioningDeprovision(String app, String id, Boolean group) throws ApiException {
+    applicationRoleProvisioningDeprovisionWithHttpInfo(app, id, group);
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for applicationRoleProvisioningDeprovision
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id &lt;p&gt;User or group ID.&lt;/p&gt; (required)
-     * @param group &lt;p&gt;If true, ID is for a group. If false, ID is for a user. Default is false (ID is considered to be for a user.)&lt;/p&gt; (optional, default to false)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Deprovisioned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationRoleProvisioningDeprovisionCall(String app, String id, Boolean group, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{app}/permissions/{id}"
-            .replaceAll("\\{" + "app" + "\\}", localVarApiClient.escapeString(app.toString()))
-            .replaceAll("\\{" + "id" + "\\}", localVarApiClient.escapeString(id.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (group != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("group", group));
+  /**
+   * Deprovision User or Group
+   * &lt;p&gt;Deprovision a single user or group on the specified application.&lt;/p&gt;
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param id &lt;p&gt;User or group ID.&lt;/p&gt; (required)
+   * @param group &lt;p&gt;If true, ID is for a group. If false, ID is for a user. Default is false (ID is considered to be for a user.)&lt;/p&gt; (optional, default to false)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationRoleProvisioningDeprovisionWithHttpInfo(String app, String id, Boolean group) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationRoleProvisioningDeprovisionRequestBuilder(app, id, group);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationRoleProvisioningDeprovision", localVarResponse);
         }
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder applicationRoleProvisioningDeprovisionRequestBuilder(String app, String id, Boolean group) throws ApiException {
+    // verify the required parameter 'app' is set
+    if (app == null) {
+      throw new ApiException(400, "Missing the required parameter 'app' when calling applicationRoleProvisioningDeprovision");
+    }
+    // verify the required parameter 'id' is set
+    if (id == null) {
+      throw new ApiException(400, "Missing the required parameter 'id' when calling applicationRoleProvisioningDeprovision");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationRoleProvisioningDeprovisionValidateBeforeCall(String app, String id, Boolean group, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'app' is set
-        if (app == null) {
-            throw new ApiException("Missing the required parameter 'app' when calling applicationRoleProvisioningDeprovision(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{app}/permissions/{id}"
+        .replace("{app}", ApiClient.urlEncode(app.toString()))
+        .replace("{id}", ApiClient.urlEncode(id.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "group";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("group", group));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Provision
+   * Get provisioning information on the specified application.
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param id &lt;p&gt;User or group ID.&lt;/p&gt; (required)
+   * @param group &lt;p&gt;If true, ID is for a group. If false, ID is for a user. Default is false (ID is considered to be for a user.)&lt;/p&gt; (optional, default to false)
+   * @param inherited &lt;p&gt;If true, consider roles derived through parent groups. Default is false.&lt;/p&gt; (optional, default to false)
+   * @return UserGroupProvisionInfo
+   * @throws ApiException if fails to make API call
+   */
+  public UserGroupProvisionInfo applicationRoleProvisioningGetProvision(String app, String id, Boolean group, Boolean inherited) throws ApiException {
+    ApiResponse<UserGroupProvisionInfo> localVarResponse = applicationRoleProvisioningGetProvisionWithHttpInfo(app, id, group, inherited);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Provision
+   * Get provisioning information on the specified application.
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param id &lt;p&gt;User or group ID.&lt;/p&gt; (required)
+   * @param group &lt;p&gt;If true, ID is for a group. If false, ID is for a user. Default is false (ID is considered to be for a user.)&lt;/p&gt; (optional, default to false)
+   * @param inherited &lt;p&gt;If true, consider roles derived through parent groups. Default is false.&lt;/p&gt; (optional, default to false)
+   * @return ApiResponse&lt;UserGroupProvisionInfo&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<UserGroupProvisionInfo> applicationRoleProvisioningGetProvisionWithHttpInfo(String app, String id, Boolean group, Boolean inherited) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationRoleProvisioningGetProvisionRequestBuilder(app, id, group, inherited);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationRoleProvisioningGetProvision", localVarResponse);
         }
-        
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling applicationRoleProvisioningDeprovision(Async)");
+        return new ApiResponse<UserGroupProvisionInfo>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<UserGroupProvisionInfo>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationRoleProvisioningGetProvisionRequestBuilder(String app, String id, Boolean group, Boolean inherited) throws ApiException {
+    // verify the required parameter 'app' is set
+    if (app == null) {
+      throw new ApiException(400, "Missing the required parameter 'app' when calling applicationRoleProvisioningGetProvision");
+    }
+    // verify the required parameter 'id' is set
+    if (id == null) {
+      throw new ApiException(400, "Missing the required parameter 'id' when calling applicationRoleProvisioningGetProvision");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{app}/permissions/{id}"
+        .replace("{app}", ApiClient.urlEncode(app.toString()))
+        .replace("{id}", ApiClient.urlEncode(id.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "group";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("group", group));
+    localVarQueryParameterBaseName = "inherited";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("inherited", inherited));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Import Provision
+   * Import provisioning information for multiple users or groups on the specified application.
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationRoleProvisioningImportProvision(String app) throws ApiException {
+    applicationRoleProvisioningImportProvisionWithHttpInfo(app);
+  }
+
+  /**
+   * Import Provision
+   * Import provisioning information for multiple users or groups on the specified application.
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationRoleProvisioningImportProvisionWithHttpInfo(String app) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationRoleProvisioningImportProvisionRequestBuilder(app);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationRoleProvisioningImportProvision", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = applicationRoleProvisioningDeprovisionCall(app, id, group, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Deprovision User or Group
-     * &lt;p&gt;Deprovision a single user or group on the specified application.&lt;/p&gt;
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id &lt;p&gt;User or group ID.&lt;/p&gt; (required)
-     * @param group &lt;p&gt;If true, ID is for a group. If false, ID is for a user. Default is false (ID is considered to be for a user.)&lt;/p&gt; (optional, default to false)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Deprovisioned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationRoleProvisioningDeprovision(String app, String id, Boolean group) throws ApiException {
-        applicationRoleProvisioningDeprovisionWithHttpInfo(app, id, group);
-    }
-
-    /**
-     * Deprovision User or Group
-     * &lt;p&gt;Deprovision a single user or group on the specified application.&lt;/p&gt;
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id &lt;p&gt;User or group ID.&lt;/p&gt; (required)
-     * @param group &lt;p&gt;If true, ID is for a group. If false, ID is for a user. Default is false (ID is considered to be for a user.)&lt;/p&gt; (optional, default to false)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Deprovisioned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationRoleProvisioningDeprovisionWithHttpInfo(String app, String id, Boolean group) throws ApiException {
-        okhttp3.Call localVarCall = applicationRoleProvisioningDeprovisionValidateBeforeCall(app, id, group, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Deprovision User or Group (asynchronously)
-     * &lt;p&gt;Deprovision a single user or group on the specified application.&lt;/p&gt;
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id &lt;p&gt;User or group ID.&lt;/p&gt; (required)
-     * @param group &lt;p&gt;If true, ID is for a group. If false, ID is for a user. Default is false (ID is considered to be for a user.)&lt;/p&gt; (optional, default to false)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Deprovisioned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationRoleProvisioningDeprovisionAsync(String app, String id, Boolean group, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationRoleProvisioningDeprovisionValidateBeforeCall(app, id, group, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationRoleProvisioningGetProvision
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id &lt;p&gt;User or group ID.&lt;/p&gt; (required)
-     * @param group &lt;p&gt;If true, ID is for a group. If false, ID is for a user. Default is false (ID is considered to be for a user.)&lt;/p&gt; (optional, default to false)
-     * @param inherited &lt;p&gt;If true, consider roles derived through parent groups. Default is false.&lt;/p&gt; (optional, default to false)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning information returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationRoleProvisioningGetProvisionCall(String app, String id, Boolean group, Boolean inherited, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{app}/permissions/{id}"
-            .replaceAll("\\{" + "app" + "\\}", localVarApiClient.escapeString(app.toString()))
-            .replaceAll("\\{" + "id" + "\\}", localVarApiClient.escapeString(id.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (group != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("group", group));
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        if (inherited != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("inherited", inherited));
+  private HttpRequest.Builder applicationRoleProvisioningImportProvisionRequestBuilder(String app) throws ApiException {
+    // verify the required parameter 'app' is set
+    if (app == null) {
+      throw new ApiException(400, "Missing the required parameter 'app' when calling applicationRoleProvisioningImportProvision");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{app}/permissions"
+        .replace("{app}", ApiClient.urlEncode(app.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Provision User or Group
+   * Provision a single user or group on the specified application.
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param id User or group ID. (required)
+   * @param body User or group provisioning information. (optional)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationRoleProvisioningProvision(String app, String id, UserGroupProvisionInfo body) throws ApiException {
+    applicationRoleProvisioningProvisionWithHttpInfo(app, id, body);
+  }
+
+  /**
+   * Provision User or Group
+   * Provision a single user or group on the specified application.
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param id User or group ID. (required)
+   * @param body User or group provisioning information. (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationRoleProvisioningProvisionWithHttpInfo(String app, String id, UserGroupProvisionInfo body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationRoleProvisioningProvisionRequestBuilder(app, id, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationRoleProvisioningProvision", localVarResponse);
         }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder applicationRoleProvisioningProvisionRequestBuilder(String app, String id, UserGroupProvisionInfo body) throws ApiException {
+    // verify the required parameter 'app' is set
+    if (app == null) {
+      throw new ApiException(400, "Missing the required parameter 'app' when calling applicationRoleProvisioningProvision");
+    }
+    // verify the required parameter 'id' is set
+    if (id == null) {
+      throw new ApiException(400, "Missing the required parameter 'id' when calling applicationRoleProvisioningProvision");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationRoleProvisioningGetProvisionValidateBeforeCall(String app, String id, Boolean group, Boolean inherited, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'app' is set
-        if (app == null) {
-            throw new ApiException("Missing the required parameter 'app' when calling applicationRoleProvisioningGetProvision(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{app}/permissions/{id}"
+        .replace("{app}", ApiClient.urlEncode(app.toString()))
+        .replace("{id}", ApiClient.urlEncode(id.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Search Application Provisioning
+   * Search provisioning information on specified application.
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param id &lt;p&gt;User or group ID wildcard pattern. if specified, returns users and groups matching the pattern, if not specified, returns all the users and groups having some role. Users or groups having no role are not returned.&lt;/p&gt; (optional, default to *)
+   * @param role &lt;p&gt;Input may include &lt;code&gt;all&lt;/code&gt;, &lt;code&gt;none&lt;/code&gt;, or a comma-separated list of roles (for example, &lt;code&gt;app_manager&lt;/code&gt;, &lt;code&gt;db_manager&lt;/code&gt;, &lt;code&gt;db_update&lt;/code&gt;,or &lt;code&gt;db_access&lt;/code&gt;). Default value is &lt;code&gt;all&lt;/code&gt;, so if this query parameter is not specified, all users and groups having some role are returned. If &lt;code&gt;none&lt;/code&gt; is specified, only users and groups having no role will be returned. If named roles are specified, then only users and groups having any of the named roles are returned.&lt;/p&gt; (optional, default to all)
+   * @param filter &lt;p&gt;Input may include &lt;code&gt;all&lt;/code&gt;, &lt;code&gt;group&lt;/code&gt;, or &lt;code&gt;user&lt;/code&gt;. Default value is &lt;code&gt;all&lt;/code&gt;, so if this query parameter is not specified, all users and groups are returned.&lt;/p&gt; (optional, default to all)
+   * @param inherited &lt;p&gt;If true, consider roles derived through parent groups. Default is false.&lt;/p&gt; (optional, default to false)
+   * @return UserGroupProvisionInfoList
+   * @throws ApiException if fails to make API call
+   */
+  public UserGroupProvisionInfoList applicationRoleProvisioningSearchProvision(String app, String id, String role, String filter, Boolean inherited) throws ApiException {
+    ApiResponse<UserGroupProvisionInfoList> localVarResponse = applicationRoleProvisioningSearchProvisionWithHttpInfo(app, id, role, filter, inherited);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Search Application Provisioning
+   * Search provisioning information on specified application.
+   * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param id &lt;p&gt;User or group ID wildcard pattern. if specified, returns users and groups matching the pattern, if not specified, returns all the users and groups having some role. Users or groups having no role are not returned.&lt;/p&gt; (optional, default to *)
+   * @param role &lt;p&gt;Input may include &lt;code&gt;all&lt;/code&gt;, &lt;code&gt;none&lt;/code&gt;, or a comma-separated list of roles (for example, &lt;code&gt;app_manager&lt;/code&gt;, &lt;code&gt;db_manager&lt;/code&gt;, &lt;code&gt;db_update&lt;/code&gt;,or &lt;code&gt;db_access&lt;/code&gt;). Default value is &lt;code&gt;all&lt;/code&gt;, so if this query parameter is not specified, all users and groups having some role are returned. If &lt;code&gt;none&lt;/code&gt; is specified, only users and groups having no role will be returned. If named roles are specified, then only users and groups having any of the named roles are returned.&lt;/p&gt; (optional, default to all)
+   * @param filter &lt;p&gt;Input may include &lt;code&gt;all&lt;/code&gt;, &lt;code&gt;group&lt;/code&gt;, or &lt;code&gt;user&lt;/code&gt;. Default value is &lt;code&gt;all&lt;/code&gt;, so if this query parameter is not specified, all users and groups are returned.&lt;/p&gt; (optional, default to all)
+   * @param inherited &lt;p&gt;If true, consider roles derived through parent groups. Default is false.&lt;/p&gt; (optional, default to false)
+   * @return ApiResponse&lt;UserGroupProvisionInfoList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<UserGroupProvisionInfoList> applicationRoleProvisioningSearchProvisionWithHttpInfo(String app, String id, String role, String filter, Boolean inherited) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationRoleProvisioningSearchProvisionRequestBuilder(app, id, role, filter, inherited);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationRoleProvisioningSearchProvision", localVarResponse);
         }
-        
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling applicationRoleProvisioningGetProvision(Async)");
-        }
-        
+        return new ApiResponse<UserGroupProvisionInfoList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<UserGroupProvisionInfoList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = applicationRoleProvisioningGetProvisionCall(app, id, group, inherited, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder applicationRoleProvisioningSearchProvisionRequestBuilder(String app, String id, String role, String filter, Boolean inherited) throws ApiException {
+    // verify the required parameter 'app' is set
+    if (app == null) {
+      throw new ApiException(400, "Missing the required parameter 'app' when calling applicationRoleProvisioningSearchProvision");
     }
 
-    /**
-     * Get Provision
-     * Get provisioning information on the specified application.
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id &lt;p&gt;User or group ID.&lt;/p&gt; (required)
-     * @param group &lt;p&gt;If true, ID is for a group. If false, ID is for a user. Default is false (ID is considered to be for a user.)&lt;/p&gt; (optional, default to false)
-     * @param inherited &lt;p&gt;If true, consider roles derived through parent groups. Default is false.&lt;/p&gt; (optional, default to false)
-     * @return UserGroupProvisionInfo
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning information returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public UserGroupProvisionInfo applicationRoleProvisioningGetProvision(String app, String id, Boolean group, Boolean inherited) throws ApiException {
-        ApiResponse<UserGroupProvisionInfo> localVarResp = applicationRoleProvisioningGetProvisionWithHttpInfo(app, id, group, inherited);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{app}/permissions"
+        .replace("{app}", ApiClient.urlEncode(app.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "id";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("id", id));
+    localVarQueryParameterBaseName = "role";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("role", role));
+    localVarQueryParameterBaseName = "filter";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("filter", filter));
+    localVarQueryParameterBaseName = "inherited";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("inherited", inherited));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Get Provision
-     * Get provisioning information on the specified application.
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id &lt;p&gt;User or group ID.&lt;/p&gt; (required)
-     * @param group &lt;p&gt;If true, ID is for a group. If false, ID is for a user. Default is false (ID is considered to be for a user.)&lt;/p&gt; (optional, default to false)
-     * @param inherited &lt;p&gt;If true, consider roles derived through parent groups. Default is false.&lt;/p&gt; (optional, default to false)
-     * @return ApiResponse&lt;UserGroupProvisionInfo&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning information returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<UserGroupProvisionInfo> applicationRoleProvisioningGetProvisionWithHttpInfo(String app, String id, Boolean group, Boolean inherited) throws ApiException {
-        okhttp3.Call localVarCall = applicationRoleProvisioningGetProvisionValidateBeforeCall(app, id, group, inherited, null);
-        Type localVarReturnType = new TypeToken<UserGroupProvisionInfo>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Provision (asynchronously)
-     * Get provisioning information on the specified application.
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id &lt;p&gt;User or group ID.&lt;/p&gt; (required)
-     * @param group &lt;p&gt;If true, ID is for a group. If false, ID is for a user. Default is false (ID is considered to be for a user.)&lt;/p&gt; (optional, default to false)
-     * @param inherited &lt;p&gt;If true, consider roles derived through parent groups. Default is false.&lt;/p&gt; (optional, default to false)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning information returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationRoleProvisioningGetProvisionAsync(String app, String id, Boolean group, Boolean inherited, final ApiCallback<UserGroupProvisionInfo> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationRoleProvisioningGetProvisionValidateBeforeCall(app, id, group, inherited, _callback);
-        Type localVarReturnType = new TypeToken<UserGroupProvisionInfo>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for applicationRoleProvisioningImportProvision
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning imported successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationRoleProvisioningImportProvisionCall(String app, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{app}/permissions"
-            .replaceAll("\\{" + "app" + "\\}", localVarApiClient.escapeString(app.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationRoleProvisioningImportProvisionValidateBeforeCall(String app, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'app' is set
-        if (app == null) {
-            throw new ApiException("Missing the required parameter 'app' when calling applicationRoleProvisioningImportProvision(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationRoleProvisioningImportProvisionCall(app, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Import Provision
-     * Import provisioning information for multiple users or groups on the specified application.
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning imported successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationRoleProvisioningImportProvision(String app) throws ApiException {
-        applicationRoleProvisioningImportProvisionWithHttpInfo(app);
-    }
-
-    /**
-     * Import Provision
-     * Import provisioning information for multiple users or groups on the specified application.
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning imported successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationRoleProvisioningImportProvisionWithHttpInfo(String app) throws ApiException {
-        okhttp3.Call localVarCall = applicationRoleProvisioningImportProvisionValidateBeforeCall(app, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Import Provision (asynchronously)
-     * Import provisioning information for multiple users or groups on the specified application.
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioning imported successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationRoleProvisioningImportProvisionAsync(String app, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationRoleProvisioningImportProvisionValidateBeforeCall(app, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationRoleProvisioningProvision
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id User or group ID. (required)
-     * @param body User or group provisioning information. (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationRoleProvisioningProvisionCall(String app, String id, UserGroupProvisionInfo body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{app}/permissions/{id}"
-            .replaceAll("\\{" + "app" + "\\}", localVarApiClient.escapeString(app.toString()))
-            .replaceAll("\\{" + "id" + "\\}", localVarApiClient.escapeString(id.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationRoleProvisioningProvisionValidateBeforeCall(String app, String id, UserGroupProvisionInfo body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'app' is set
-        if (app == null) {
-            throw new ApiException("Missing the required parameter 'app' when calling applicationRoleProvisioningProvision(Async)");
-        }
-        
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling applicationRoleProvisioningProvision(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationRoleProvisioningProvisionCall(app, id, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Provision User or Group
-     * Provision a single user or group on the specified application.
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id User or group ID. (required)
-     * @param body User or group provisioning information. (optional)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationRoleProvisioningProvision(String app, String id, UserGroupProvisionInfo body) throws ApiException {
-        applicationRoleProvisioningProvisionWithHttpInfo(app, id, body);
-    }
-
-    /**
-     * Provision User or Group
-     * Provision a single user or group on the specified application.
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id User or group ID. (required)
-     * @param body User or group provisioning information. (optional)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationRoleProvisioningProvisionWithHttpInfo(String app, String id, UserGroupProvisionInfo body) throws ApiException {
-        okhttp3.Call localVarCall = applicationRoleProvisioningProvisionValidateBeforeCall(app, id, body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Provision User or Group (asynchronously)
-     * Provision a single user or group on the specified application.
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id User or group ID. (required)
-     * @param body User or group provisioning information. (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Provisioned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationRoleProvisioningProvisionAsync(String app, String id, UserGroupProvisionInfo body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationRoleProvisioningProvisionValidateBeforeCall(app, id, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationRoleProvisioningSearchProvision
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id &lt;p&gt;User or group ID wildcard pattern. if specified, returns users and groups matching the pattern, if not specified, returns all the users and groups having some role. Users or groups having no role are not returned.&lt;/p&gt; (optional, default to *)
-     * @param role &lt;p&gt;Input may include &lt;code&gt;all&lt;/code&gt;, &lt;code&gt;none&lt;/code&gt;, or a comma-separated list of roles (for example, &lt;code&gt;app_manager&lt;/code&gt;, &lt;code&gt;db_manager&lt;/code&gt;, &lt;code&gt;db_update&lt;/code&gt;,or &lt;code&gt;db_access&lt;/code&gt;). Default value is &lt;code&gt;all&lt;/code&gt;, so if this query parameter is not specified, all users and groups having some role are returned. If &lt;code&gt;none&lt;/code&gt; is specified, only users and groups having no role will be returned. If named roles are specified, then only users and groups having any of the named roles are returned.&lt;/p&gt; (optional, default to all)
-     * @param filter &lt;p&gt;Input may include &lt;code&gt;all&lt;/code&gt;, &lt;code&gt;group&lt;/code&gt;, or &lt;code&gt;user&lt;/code&gt;. Default value is &lt;code&gt;all&lt;/code&gt;, so if this query parameter is not specified, all users and groups are returned.&lt;/p&gt; (optional, default to all)
-     * @param inherited &lt;p&gt;If true, consider roles derived through parent groups. Default is false.&lt;/p&gt; (optional, default to false)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Successfully returned provisioning information for users or groups matching search criteria.  Response type can be either JSON, XML, or CSV stream, depending on the Accept header. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;, the search result will be returned in the response body. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, the search result will be returned as a stream.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationRoleProvisioningSearchProvisionCall(String app, String id, String role, String filter, Boolean inherited, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{app}/permissions"
-            .replaceAll("\\{" + "app" + "\\}", localVarApiClient.escapeString(app.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (id != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("id", id));
-        }
-
-        if (role != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("role", role));
-        }
-
-        if (filter != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("filter", filter));
-        }
-
-        if (inherited != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("inherited", inherited));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationRoleProvisioningSearchProvisionValidateBeforeCall(String app, String id, String role, String filter, Boolean inherited, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'app' is set
-        if (app == null) {
-            throw new ApiException("Missing the required parameter 'app' when calling applicationRoleProvisioningSearchProvision(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationRoleProvisioningSearchProvisionCall(app, id, role, filter, inherited, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Search Application Provisioning
-     * Search provisioning information on specified application.
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id &lt;p&gt;User or group ID wildcard pattern. if specified, returns users and groups matching the pattern, if not specified, returns all the users and groups having some role. Users or groups having no role are not returned.&lt;/p&gt; (optional, default to *)
-     * @param role &lt;p&gt;Input may include &lt;code&gt;all&lt;/code&gt;, &lt;code&gt;none&lt;/code&gt;, or a comma-separated list of roles (for example, &lt;code&gt;app_manager&lt;/code&gt;, &lt;code&gt;db_manager&lt;/code&gt;, &lt;code&gt;db_update&lt;/code&gt;,or &lt;code&gt;db_access&lt;/code&gt;). Default value is &lt;code&gt;all&lt;/code&gt;, so if this query parameter is not specified, all users and groups having some role are returned. If &lt;code&gt;none&lt;/code&gt; is specified, only users and groups having no role will be returned. If named roles are specified, then only users and groups having any of the named roles are returned.&lt;/p&gt; (optional, default to all)
-     * @param filter &lt;p&gt;Input may include &lt;code&gt;all&lt;/code&gt;, &lt;code&gt;group&lt;/code&gt;, or &lt;code&gt;user&lt;/code&gt;. Default value is &lt;code&gt;all&lt;/code&gt;, so if this query parameter is not specified, all users and groups are returned.&lt;/p&gt; (optional, default to all)
-     * @param inherited &lt;p&gt;If true, consider roles derived through parent groups. Default is false.&lt;/p&gt; (optional, default to false)
-     * @return UserGroupProvisionInfoList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Successfully returned provisioning information for users or groups matching search criteria.  Response type can be either JSON, XML, or CSV stream, depending on the Accept header. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;, the search result will be returned in the response body. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, the search result will be returned as a stream.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public UserGroupProvisionInfoList applicationRoleProvisioningSearchProvision(String app, String id, String role, String filter, Boolean inherited) throws ApiException {
-        ApiResponse<UserGroupProvisionInfoList> localVarResp = applicationRoleProvisioningSearchProvisionWithHttpInfo(app, id, role, filter, inherited);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Search Application Provisioning
-     * Search provisioning information on specified application.
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id &lt;p&gt;User or group ID wildcard pattern. if specified, returns users and groups matching the pattern, if not specified, returns all the users and groups having some role. Users or groups having no role are not returned.&lt;/p&gt; (optional, default to *)
-     * @param role &lt;p&gt;Input may include &lt;code&gt;all&lt;/code&gt;, &lt;code&gt;none&lt;/code&gt;, or a comma-separated list of roles (for example, &lt;code&gt;app_manager&lt;/code&gt;, &lt;code&gt;db_manager&lt;/code&gt;, &lt;code&gt;db_update&lt;/code&gt;,or &lt;code&gt;db_access&lt;/code&gt;). Default value is &lt;code&gt;all&lt;/code&gt;, so if this query parameter is not specified, all users and groups having some role are returned. If &lt;code&gt;none&lt;/code&gt; is specified, only users and groups having no role will be returned. If named roles are specified, then only users and groups having any of the named roles are returned.&lt;/p&gt; (optional, default to all)
-     * @param filter &lt;p&gt;Input may include &lt;code&gt;all&lt;/code&gt;, &lt;code&gt;group&lt;/code&gt;, or &lt;code&gt;user&lt;/code&gt;. Default value is &lt;code&gt;all&lt;/code&gt;, so if this query parameter is not specified, all users and groups are returned.&lt;/p&gt; (optional, default to all)
-     * @param inherited &lt;p&gt;If true, consider roles derived through parent groups. Default is false.&lt;/p&gt; (optional, default to false)
-     * @return ApiResponse&lt;UserGroupProvisionInfoList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Successfully returned provisioning information for users or groups matching search criteria.  Response type can be either JSON, XML, or CSV stream, depending on the Accept header. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;, the search result will be returned in the response body. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, the search result will be returned as a stream.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<UserGroupProvisionInfoList> applicationRoleProvisioningSearchProvisionWithHttpInfo(String app, String id, String role, String filter, Boolean inherited) throws ApiException {
-        okhttp3.Call localVarCall = applicationRoleProvisioningSearchProvisionValidateBeforeCall(app, id, role, filter, inherited, null);
-        Type localVarReturnType = new TypeToken<UserGroupProvisionInfoList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Search Application Provisioning (asynchronously)
-     * Search provisioning information on specified application.
-     * @param app &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param id &lt;p&gt;User or group ID wildcard pattern. if specified, returns users and groups matching the pattern, if not specified, returns all the users and groups having some role. Users or groups having no role are not returned.&lt;/p&gt; (optional, default to *)
-     * @param role &lt;p&gt;Input may include &lt;code&gt;all&lt;/code&gt;, &lt;code&gt;none&lt;/code&gt;, or a comma-separated list of roles (for example, &lt;code&gt;app_manager&lt;/code&gt;, &lt;code&gt;db_manager&lt;/code&gt;, &lt;code&gt;db_update&lt;/code&gt;,or &lt;code&gt;db_access&lt;/code&gt;). Default value is &lt;code&gt;all&lt;/code&gt;, so if this query parameter is not specified, all users and groups having some role are returned. If &lt;code&gt;none&lt;/code&gt; is specified, only users and groups having no role will be returned. If named roles are specified, then only users and groups having any of the named roles are returned.&lt;/p&gt; (optional, default to all)
-     * @param filter &lt;p&gt;Input may include &lt;code&gt;all&lt;/code&gt;, &lt;code&gt;group&lt;/code&gt;, or &lt;code&gt;user&lt;/code&gt;. Default value is &lt;code&gt;all&lt;/code&gt;, so if this query parameter is not specified, all users and groups are returned.&lt;/p&gt; (optional, default to all)
-     * @param inherited &lt;p&gt;If true, consider roles derived through parent groups. Default is false.&lt;/p&gt; (optional, default to false)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Successfully returned provisioning information for users or groups matching search criteria.  Response type can be either JSON, XML, or CSV stream, depending on the Accept header. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;application/xml&#39;&lt;/code&gt;, the search result will be returned in the response body. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, the search result will be returned as a stream.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The logged in user may not have the appropriate application role.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationRoleProvisioningSearchProvisionAsync(String app, String id, String role, String filter, Boolean inherited, final ApiCallback<UserGroupProvisionInfoList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationRoleProvisioningSearchProvisionValidateBeforeCall(app, id, role, filter, inherited, _callback);
-        Type localVarReturnType = new TypeToken<UserGroupProvisionInfoList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

@@ -3,11 +3,11 @@ package com.appliedolap.essbase.impl;
 import com.appliedolap.essbase.AbstractEssObject;
 import com.appliedolap.essbase.ApiContext;
 import com.appliedolap.essbase.EssUtility;
+import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.Resource;
-import com.appliedolap.essbase.util.GenericApiCallback;
 import com.appliedolap.essbase.util.GenericDownload;
-import okhttp3.Call;
+import com.appliedolap.essbase.util.NativeHttp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,8 +46,10 @@ public class EssUtilityImpl extends AbstractEssObject implements EssUtility {
     public void download() {
         if (isDownloadable()) {
             try {
-                Call call = api.getTemplatesAndUtilitiesApi().resourcesDownloadUtilityCall(resource.getId(), new GenericApiCallback());
-                GenericDownload.download(call.execute());
+                String path = "/utilities/" + ApiClient.urlEncode(resource.getId());
+                GenericDownload.download(NativeHttp.send(api.getClient(), NativeHttp.request(api.getClient(), path)
+                        .header("Accept", "application/octet-stream")
+                        .GET(), "resourcesDownloadUtility"));
             } catch (ApiException | IOException e) {
                 logger.error("Unable to download: {}", e.getMessage());
                 throw new RuntimeException(e);

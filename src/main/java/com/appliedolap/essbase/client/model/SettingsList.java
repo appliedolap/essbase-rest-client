@@ -13,8 +13,12 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.BufferSettings;
 import com.appliedolap.essbase.client.model.CacheSettings;
 import com.appliedolap.essbase.client.model.CalculationSettings;
@@ -23,255 +27,279 @@ import com.appliedolap.essbase.client.model.GeneralSettings;
 import com.appliedolap.essbase.client.model.Link;
 import com.appliedolap.essbase.client.model.StartupSettings;
 import com.appliedolap.essbase.client.model.TransactionSettings;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * SettingsList
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  SettingsList.JSON_PROPERTY_GENERAL,
+  SettingsList.JSON_PROPERTY_STARTUP,
+  SettingsList.JSON_PROPERTY_CALCULATION,
+  SettingsList.JSON_PROPERTY_BUFFERS,
+  SettingsList.JSON_PROPERTY_COMPRESSION,
+  SettingsList.JSON_PROPERTY_CACHES,
+  SettingsList.JSON_PROPERTY_TRANSACTIONS,
+  SettingsList.JSON_PROPERTY_LINKS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class SettingsList {
-  public static final String SERIALIZED_NAME_GENERAL = "general";
-  @SerializedName(SERIALIZED_NAME_GENERAL)
+  public static final String JSON_PROPERTY_GENERAL = "general";
+  @jakarta.annotation.Nullable
   private GeneralSettings general;
 
-  public static final String SERIALIZED_NAME_STARTUP = "startup";
-  @SerializedName(SERIALIZED_NAME_STARTUP)
+  public static final String JSON_PROPERTY_STARTUP = "startup";
+  @jakarta.annotation.Nullable
   private StartupSettings startup;
 
-  public static final String SERIALIZED_NAME_CALCULATION = "calculation";
-  @SerializedName(SERIALIZED_NAME_CALCULATION)
+  public static final String JSON_PROPERTY_CALCULATION = "calculation";
+  @jakarta.annotation.Nullable
   private CalculationSettings calculation;
 
-  public static final String SERIALIZED_NAME_BUFFERS = "buffers";
-  @SerializedName(SERIALIZED_NAME_BUFFERS)
+  public static final String JSON_PROPERTY_BUFFERS = "buffers";
+  @jakarta.annotation.Nullable
   private BufferSettings buffers;
 
-  public static final String SERIALIZED_NAME_COMPRESSION = "compression";
-  @SerializedName(SERIALIZED_NAME_COMPRESSION)
-  private List<CompressionSettings> compression = null;
+  public static final String JSON_PROPERTY_COMPRESSION = "compression";
+  @jakarta.annotation.Nullable
+  private List<CompressionSettings> compression = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_CACHES = "caches";
-  @SerializedName(SERIALIZED_NAME_CACHES)
+  public static final String JSON_PROPERTY_CACHES = "caches";
+  @jakarta.annotation.Nullable
   private CacheSettings caches;
 
-  public static final String SERIALIZED_NAME_TRANSACTIONS = "transactions";
-  @SerializedName(SERIALIZED_NAME_TRANSACTIONS)
+  public static final String JSON_PROPERTY_TRANSACTIONS = "transactions";
+  @jakarta.annotation.Nullable
   private TransactionSettings transactions;
 
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
+  public SettingsList() { 
+  }
 
-  public SettingsList general(GeneralSettings general) {
-    
+  public SettingsList general(@jakarta.annotation.Nullable GeneralSettings general) {
     this.general = general;
     return this;
   }
 
-   /**
+  /**
    * Get general
    * @return general
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GENERAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public GeneralSettings getGeneral() {
     return general;
   }
 
 
-  public void setGeneral(GeneralSettings general) {
+  @JsonProperty(JSON_PROPERTY_GENERAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGeneral(@jakarta.annotation.Nullable GeneralSettings general) {
     this.general = general;
   }
 
 
-  public SettingsList startup(StartupSettings startup) {
-    
+  public SettingsList startup(@jakarta.annotation.Nullable StartupSettings startup) {
     this.startup = startup;
     return this;
   }
 
-   /**
+  /**
    * Get startup
    * @return startup
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STARTUP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public StartupSettings getStartup() {
     return startup;
   }
 
 
-  public void setStartup(StartupSettings startup) {
+  @JsonProperty(JSON_PROPERTY_STARTUP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStartup(@jakarta.annotation.Nullable StartupSettings startup) {
     this.startup = startup;
   }
 
 
-  public SettingsList calculation(CalculationSettings calculation) {
-    
+  public SettingsList calculation(@jakarta.annotation.Nullable CalculationSettings calculation) {
     this.calculation = calculation;
     return this;
   }
 
-   /**
+  /**
    * Get calculation
    * @return calculation
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CALCULATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public CalculationSettings getCalculation() {
     return calculation;
   }
 
 
-  public void setCalculation(CalculationSettings calculation) {
+  @JsonProperty(JSON_PROPERTY_CALCULATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCalculation(@jakarta.annotation.Nullable CalculationSettings calculation) {
     this.calculation = calculation;
   }
 
 
-  public SettingsList buffers(BufferSettings buffers) {
-    
+  public SettingsList buffers(@jakarta.annotation.Nullable BufferSettings buffers) {
     this.buffers = buffers;
     return this;
   }
 
-   /**
+  /**
    * Get buffers
    * @return buffers
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BUFFERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public BufferSettings getBuffers() {
     return buffers;
   }
 
 
-  public void setBuffers(BufferSettings buffers) {
+  @JsonProperty(JSON_PROPERTY_BUFFERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBuffers(@jakarta.annotation.Nullable BufferSettings buffers) {
     this.buffers = buffers;
   }
 
 
-  public SettingsList compression(List<CompressionSettings> compression) {
-    
+  public SettingsList compression(@jakarta.annotation.Nullable List<CompressionSettings> compression) {
     this.compression = compression;
     return this;
   }
 
   public SettingsList addCompressionItem(CompressionSettings compressionItem) {
     if (this.compression == null) {
-      this.compression = new ArrayList<CompressionSettings>();
+      this.compression = new ArrayList<>();
     }
     this.compression.add(compressionItem);
     return this;
   }
 
-   /**
+  /**
    * Get compression
    * @return compression
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COMPRESSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<CompressionSettings> getCompression() {
     return compression;
   }
 
 
-  public void setCompression(List<CompressionSettings> compression) {
+  @JsonProperty(JSON_PROPERTY_COMPRESSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCompression(@jakarta.annotation.Nullable List<CompressionSettings> compression) {
     this.compression = compression;
   }
 
 
-  public SettingsList caches(CacheSettings caches) {
-    
+  public SettingsList caches(@jakarta.annotation.Nullable CacheSettings caches) {
     this.caches = caches;
     return this;
   }
 
-   /**
+  /**
    * Get caches
    * @return caches
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CACHES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public CacheSettings getCaches() {
     return caches;
   }
 
 
-  public void setCaches(CacheSettings caches) {
+  @JsonProperty(JSON_PROPERTY_CACHES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCaches(@jakarta.annotation.Nullable CacheSettings caches) {
     this.caches = caches;
   }
 
 
-  public SettingsList transactions(TransactionSettings transactions) {
-    
+  public SettingsList transactions(@jakarta.annotation.Nullable TransactionSettings transactions) {
     this.transactions = transactions;
     return this;
   }
 
-   /**
+  /**
    * Get transactions
    * @return transactions
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TRANSACTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public TransactionSettings getTransactions() {
     return transactions;
   }
 
 
-  public void setTransactions(TransactionSettings transactions) {
+  @JsonProperty(JSON_PROPERTY_TRANSACTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTransactions(@jakarta.annotation.Nullable TransactionSettings transactions) {
     this.transactions = transactions;
   }
 
 
-  public SettingsList links(List<Link> links) {
-    
+  public SettingsList links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public SettingsList addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
+  /**
+   * Return true if this SettingsList object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -323,5 +351,89 @@ public class SettingsList {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `general` to the URL query string
+    if (getGeneral() != null) {
+      joiner.add(getGeneral().toUrlQueryString(prefix + "general" + suffix));
+    }
+
+    // add `startup` to the URL query string
+    if (getStartup() != null) {
+      joiner.add(getStartup().toUrlQueryString(prefix + "startup" + suffix));
+    }
+
+    // add `calculation` to the URL query string
+    if (getCalculation() != null) {
+      joiner.add(getCalculation().toUrlQueryString(prefix + "calculation" + suffix));
+    }
+
+    // add `buffers` to the URL query string
+    if (getBuffers() != null) {
+      joiner.add(getBuffers().toUrlQueryString(prefix + "buffers" + suffix));
+    }
+
+    // add `compression` to the URL query string
+    if (getCompression() != null) {
+      for (int i = 0; i < getCompression().size(); i++) {
+        if (getCompression().get(i) != null) {
+          joiner.add(getCompression().get(i).toUrlQueryString(String.format("%scompression%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `caches` to the URL query string
+    if (getCaches() != null) {
+      joiner.add(getCaches().toUrlQueryString(prefix + "caches" + suffix));
+    }
+
+    // add `transactions` to the URL query string
+    if (getTransactions() != null) {
+      joiner.add(getTransactions().toUrlQueryString(prefix + "transactions" + suffix));
+    }
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

@@ -13,145 +13,165 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.GeneralStatistics;
 import com.appliedolap.essbase.client.model.Link;
 import com.appliedolap.essbase.client.model.RuntimeStatistics;
 import com.appliedolap.essbase.client.model.StorageStatistics;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * StatisticsList
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  StatisticsList.JSON_PROPERTY_GENERAL,
+  StatisticsList.JSON_PROPERTY_STORAGE,
+  StatisticsList.JSON_PROPERTY_RUNTIME,
+  StatisticsList.JSON_PROPERTY_LINKS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class StatisticsList {
-  public static final String SERIALIZED_NAME_GENERAL = "general";
-  @SerializedName(SERIALIZED_NAME_GENERAL)
+  public static final String JSON_PROPERTY_GENERAL = "general";
+  @jakarta.annotation.Nullable
   private GeneralStatistics general;
 
-  public static final String SERIALIZED_NAME_STORAGE = "storage";
-  @SerializedName(SERIALIZED_NAME_STORAGE)
+  public static final String JSON_PROPERTY_STORAGE = "storage";
+  @jakarta.annotation.Nullable
   private StorageStatistics storage;
 
-  public static final String SERIALIZED_NAME_RUNTIME = "runtime";
-  @SerializedName(SERIALIZED_NAME_RUNTIME)
+  public static final String JSON_PROPERTY_RUNTIME = "runtime";
+  @jakarta.annotation.Nullable
   private RuntimeStatistics runtime;
 
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
+  public StatisticsList() { 
+  }
 
-  public StatisticsList general(GeneralStatistics general) {
-    
+  public StatisticsList general(@jakarta.annotation.Nullable GeneralStatistics general) {
     this.general = general;
     return this;
   }
 
-   /**
+  /**
    * Get general
    * @return general
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GENERAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public GeneralStatistics getGeneral() {
     return general;
   }
 
 
-  public void setGeneral(GeneralStatistics general) {
+  @JsonProperty(JSON_PROPERTY_GENERAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGeneral(@jakarta.annotation.Nullable GeneralStatistics general) {
     this.general = general;
   }
 
 
-  public StatisticsList storage(StorageStatistics storage) {
-    
+  public StatisticsList storage(@jakarta.annotation.Nullable StorageStatistics storage) {
     this.storage = storage;
     return this;
   }
 
-   /**
+  /**
    * Get storage
    * @return storage
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STORAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public StorageStatistics getStorage() {
     return storage;
   }
 
 
-  public void setStorage(StorageStatistics storage) {
+  @JsonProperty(JSON_PROPERTY_STORAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStorage(@jakarta.annotation.Nullable StorageStatistics storage) {
     this.storage = storage;
   }
 
 
-  public StatisticsList runtime(RuntimeStatistics runtime) {
-    
+  public StatisticsList runtime(@jakarta.annotation.Nullable RuntimeStatistics runtime) {
     this.runtime = runtime;
     return this;
   }
 
-   /**
+  /**
    * Get runtime
    * @return runtime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RUNTIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public RuntimeStatistics getRuntime() {
     return runtime;
   }
 
 
-  public void setRuntime(RuntimeStatistics runtime) {
+  @JsonProperty(JSON_PROPERTY_RUNTIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRuntime(@jakarta.annotation.Nullable RuntimeStatistics runtime) {
     this.runtime = runtime;
   }
 
 
-  public StatisticsList links(List<Link> links) {
-    
+  public StatisticsList links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public StatisticsList addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
+  /**
+   * Return true if this StatisticsList object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -195,5 +215,64 @@ public class StatisticsList {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `general` to the URL query string
+    if (getGeneral() != null) {
+      joiner.add(getGeneral().toUrlQueryString(prefix + "general" + suffix));
+    }
+
+    // add `storage` to the URL query string
+    if (getStorage() != null) {
+      joiner.add(getStorage().toUrlQueryString(prefix + "storage" + suffix));
+    }
+
+    // add `runtime` to the URL query string
+    if (getRuntime() != null) {
+      joiner.add(getRuntime().toUrlQueryString(prefix + "runtime" + suffix));
+    }
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

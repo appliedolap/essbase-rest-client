@@ -13,116 +13,134 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.LayoutData;
 import com.appliedolap.essbase.client.model.LayoutDimension;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * LayoutGrid
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  LayoutGrid.JSON_PROPERTY_ALIAS,
+  LayoutGrid.JSON_PROPERTY_DIMENSIONS,
+  LayoutGrid.JSON_PROPERTY_DATA
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class LayoutGrid {
-  public static final String SERIALIZED_NAME_ALIAS = "alias";
-  @SerializedName(SERIALIZED_NAME_ALIAS)
+  public static final String JSON_PROPERTY_ALIAS = "alias";
+  @jakarta.annotation.Nullable
   private String alias;
 
-  public static final String SERIALIZED_NAME_DIMENSIONS = "dimensions";
-  @SerializedName(SERIALIZED_NAME_DIMENSIONS)
-  private List<LayoutDimension> dimensions = null;
+  public static final String JSON_PROPERTY_DIMENSIONS = "dimensions";
+  @jakarta.annotation.Nullable
+  private List<LayoutDimension> dimensions = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_DATA = "data";
-  @SerializedName(SERIALIZED_NAME_DATA)
+  public static final String JSON_PROPERTY_DATA = "data";
+  @jakarta.annotation.Nullable
   private LayoutData data;
 
+  public LayoutGrid() { 
+  }
 
-  public LayoutGrid alias(String alias) {
-    
+  public LayoutGrid alias(@jakarta.annotation.Nullable String alias) {
     this.alias = alias;
     return this;
   }
 
-   /**
+  /**
    * Get alias
    * @return alias
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALIAS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getAlias() {
     return alias;
   }
 
 
-  public void setAlias(String alias) {
+  @JsonProperty(JSON_PROPERTY_ALIAS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAlias(@jakarta.annotation.Nullable String alias) {
     this.alias = alias;
   }
 
 
-  public LayoutGrid dimensions(List<LayoutDimension> dimensions) {
-    
+  public LayoutGrid dimensions(@jakarta.annotation.Nullable List<LayoutDimension> dimensions) {
     this.dimensions = dimensions;
     return this;
   }
 
   public LayoutGrid addDimensionsItem(LayoutDimension dimensionsItem) {
     if (this.dimensions == null) {
-      this.dimensions = new ArrayList<LayoutDimension>();
+      this.dimensions = new ArrayList<>();
     }
     this.dimensions.add(dimensionsItem);
     return this;
   }
 
-   /**
+  /**
    * Get dimensions
    * @return dimensions
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIMENSIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<LayoutDimension> getDimensions() {
     return dimensions;
   }
 
 
-  public void setDimensions(List<LayoutDimension> dimensions) {
+  @JsonProperty(JSON_PROPERTY_DIMENSIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimensions(@jakarta.annotation.Nullable List<LayoutDimension> dimensions) {
     this.dimensions = dimensions;
   }
 
 
-  public LayoutGrid data(LayoutData data) {
-    
+  public LayoutGrid data(@jakarta.annotation.Nullable LayoutData data) {
     this.data = data;
     return this;
   }
 
-   /**
+  /**
    * Get data
    * @return data
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public LayoutData getData() {
     return data;
   }
 
 
-  public void setData(LayoutData data) {
+  @JsonProperty(JSON_PROPERTY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setData(@jakarta.annotation.Nullable LayoutData data) {
     this.data = data;
   }
 
 
+  /**
+   * Return true if this LayoutGrid object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -164,5 +182,59 @@ public class LayoutGrid {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `alias` to the URL query string
+    if (getAlias() != null) {
+      joiner.add(String.format("%salias%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAlias()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dimensions` to the URL query string
+    if (getDimensions() != null) {
+      for (int i = 0; i < getDimensions().size(); i++) {
+        if (getDimensions().get(i) != null) {
+          joiner.add(getDimensions().get(i).toUrlQueryString(String.format("%sdimensions%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `data` to the URL query string
+    if (getData() != null) {
+      joiner.add(getData().toUrlQueryString(prefix + "data" + suffix));
+    }
+
+    return joiner.toString();
+  }
 }
 

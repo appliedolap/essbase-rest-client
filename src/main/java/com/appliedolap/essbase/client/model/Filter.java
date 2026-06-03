@@ -13,50 +13,61 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * Filter
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  Filter.JSON_PROPERTY_STRING_FILTER,
+  Filter.JSON_PROPERTY_VALUE,
+  Filter.JSON_PROPERTY_CONDITION,
+  Filter.JSON_PROPERTY_CASE_SENSITIVE,
+  Filter.JSON_PROPERTY_TYPE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class Filter {
-  public static final String SERIALIZED_NAME_STRING_FILTER = "stringFilter";
-  @SerializedName(SERIALIZED_NAME_STRING_FILTER)
+  public static final String JSON_PROPERTY_STRING_FILTER = "stringFilter";
+  @jakarta.annotation.Nullable
   private Boolean stringFilter;
 
-  public static final String SERIALIZED_NAME_VALUE = "value";
-  @SerializedName(SERIALIZED_NAME_VALUE)
+  public static final String JSON_PROPERTY_VALUE = "value";
+  @jakarta.annotation.Nullable
   private String value;
 
   /**
    * Gets or Sets condition
    */
-  @JsonAdapter(ConditionEnum.Adapter.class)
   public enum ConditionEnum {
-    EQUAL_TO("EQUAL_TO"),
+    EQUAL_TO(String.valueOf("EQUAL_TO")),
     
-    NOT_EQUAL_TO("NOT_EQUAL_TO"),
+    NOT_EQUAL_TO(String.valueOf("NOT_EQUAL_TO")),
     
-    GREATER_THAN("GREATER_THAN"),
+    GREATER_THAN(String.valueOf("GREATER_THAN")),
     
-    GREATER_THAN_EQUAL_TO("GREATER_THAN_EQUAL_TO"),
+    GREATER_THAN_EQUAL_TO(String.valueOf("GREATER_THAN_EQUAL_TO")),
     
-    LESS_THAN("LESS_THAN"),
+    LESS_THAN(String.valueOf("LESS_THAN")),
     
-    LESS_THAN_EQUAL_TO("LESS_THAN_EQUAL_TO"),
+    LESS_THAN_EQUAL_TO(String.valueOf("LESS_THAN_EQUAL_TO")),
     
-    CONTAIN("CONTAIN"),
+    CONTAIN(String.valueOf("CONTAIN")),
     
-    DOES_NOT_CONTAIN("DOES_NOT_CONTAIN");
+    DOES_NOT_CONTAIN(String.valueOf("DOES_NOT_CONTAIN"));
 
     private String value;
 
@@ -64,6 +75,7 @@ public class Filter {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -73,6 +85,7 @@ public class Filter {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static ConditionEnum fromValue(String value) {
       for (ConditionEnum b : ConditionEnum.values()) {
         if (b.value.equals(value)) {
@@ -81,37 +94,23 @@ public class Filter {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<ConditionEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final ConditionEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public ConditionEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return ConditionEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_CONDITION = "condition";
-  @SerializedName(SERIALIZED_NAME_CONDITION)
+  public static final String JSON_PROPERTY_CONDITION = "condition";
+  @jakarta.annotation.Nullable
   private ConditionEnum condition;
 
-  public static final String SERIALIZED_NAME_CASE_SENSITIVE = "caseSensitive";
-  @SerializedName(SERIALIZED_NAME_CASE_SENSITIVE)
+  public static final String JSON_PROPERTY_CASE_SENSITIVE = "caseSensitive";
+  @jakarta.annotation.Nullable
   private Boolean caseSensitive;
 
   /**
    * Gets or Sets type
    */
-  @JsonAdapter(TypeEnum.Adapter.class)
   public enum TypeEnum {
-    REJECT("REJECT"),
+    REJECT(String.valueOf("REJECT")),
     
-    SELECT("SELECT");
+    SELECT(String.valueOf("SELECT"));
 
     private String value;
 
@@ -119,6 +118,7 @@ public class Filter {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -128,6 +128,7 @@ public class Filter {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static TypeEnum fromValue(String value) {
       for (TypeEnum b : TypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -136,141 +137,138 @@ public class Filter {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<TypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final TypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public TypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return TypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nullable
   private TypeEnum type;
 
+  public Filter() { 
+  }
 
-  public Filter stringFilter(Boolean stringFilter) {
-    
+  public Filter stringFilter(@jakarta.annotation.Nullable Boolean stringFilter) {
     this.stringFilter = stringFilter;
     return this;
   }
 
-   /**
+  /**
    * Get stringFilter
    * @return stringFilter
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STRING_FILTER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getStringFilter() {
     return stringFilter;
   }
 
 
-  public void setStringFilter(Boolean stringFilter) {
+  @JsonProperty(JSON_PROPERTY_STRING_FILTER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStringFilter(@jakarta.annotation.Nullable Boolean stringFilter) {
     this.stringFilter = stringFilter;
   }
 
 
-  public Filter value(String value) {
-    
+  public Filter value(@jakarta.annotation.Nullable String value) {
     this.value = value;
     return this;
   }
 
-   /**
+  /**
    * Get value
    * @return value
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getValue() {
     return value;
   }
 
 
-  public void setValue(String value) {
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setValue(@jakarta.annotation.Nullable String value) {
     this.value = value;
   }
 
 
-  public Filter condition(ConditionEnum condition) {
-    
+  public Filter condition(@jakarta.annotation.Nullable ConditionEnum condition) {
     this.condition = condition;
     return this;
   }
 
-   /**
+  /**
    * Get condition
    * @return condition
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CONDITION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public ConditionEnum getCondition() {
     return condition;
   }
 
 
-  public void setCondition(ConditionEnum condition) {
+  @JsonProperty(JSON_PROPERTY_CONDITION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCondition(@jakarta.annotation.Nullable ConditionEnum condition) {
     this.condition = condition;
   }
 
 
-  public Filter caseSensitive(Boolean caseSensitive) {
-    
+  public Filter caseSensitive(@jakarta.annotation.Nullable Boolean caseSensitive) {
     this.caseSensitive = caseSensitive;
     return this;
   }
 
-   /**
+  /**
    * Get caseSensitive
    * @return caseSensitive
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CASE_SENSITIVE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getCaseSensitive() {
     return caseSensitive;
   }
 
 
-  public void setCaseSensitive(Boolean caseSensitive) {
+  @JsonProperty(JSON_PROPERTY_CASE_SENSITIVE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCaseSensitive(@jakarta.annotation.Nullable Boolean caseSensitive) {
     this.caseSensitive = caseSensitive;
   }
 
 
-  public Filter type(TypeEnum type) {
-    
+  public Filter type(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public TypeEnum getType() {
     return type;
   }
 
 
-  public void setType(TypeEnum type) {
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setType(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
   }
 
 
+  /**
+   * Return true if this Filter object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -316,5 +314,64 @@ public class Filter {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `stringFilter` to the URL query string
+    if (getStringFilter() != null) {
+      joiner.add(String.format("%sstringFilter%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStringFilter()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `value` to the URL query string
+    if (getValue() != null) {
+      joiner.add(String.format("%svalue%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getValue()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `condition` to the URL query string
+    if (getCondition() != null) {
+      joiner.add(String.format("%scondition%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCondition()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `caseSensitive` to the URL query string
+    if (getCaseSensitive() != null) {
+      joiner.add(String.format("%scaseSensitive%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCaseSensitive()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

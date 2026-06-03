@@ -13,158 +13,180 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * EssbaseInfo
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  EssbaseInfo.JSON_PROPERTY_SERVER,
+  EssbaseInfo.JSON_PROPERTY_APPLICATION,
+  EssbaseInfo.JSON_PROPERTY_DATABASE,
+  EssbaseInfo.JSON_PROPERTY_USER,
+  EssbaseInfo.JSON_PROPERTY_PASSWORD
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class EssbaseInfo {
-  public static final String SERIALIZED_NAME_SERVER = "server";
-  @SerializedName(SERIALIZED_NAME_SERVER)
+  public static final String JSON_PROPERTY_SERVER = "server";
+  @jakarta.annotation.Nullable
   private String server;
 
-  public static final String SERIALIZED_NAME_APPLICATION = "application";
-  @SerializedName(SERIALIZED_NAME_APPLICATION)
+  public static final String JSON_PROPERTY_APPLICATION = "application";
+  @jakarta.annotation.Nullable
   private String application;
 
-  public static final String SERIALIZED_NAME_DATABASE = "database";
-  @SerializedName(SERIALIZED_NAME_DATABASE)
+  public static final String JSON_PROPERTY_DATABASE = "database";
+  @jakarta.annotation.Nullable
   private String database;
 
-  public static final String SERIALIZED_NAME_USER = "user";
-  @SerializedName(SERIALIZED_NAME_USER)
+  public static final String JSON_PROPERTY_USER = "user";
+  @jakarta.annotation.Nullable
   private String user;
 
-  public static final String SERIALIZED_NAME_PASSWORD = "password";
-  @SerializedName(SERIALIZED_NAME_PASSWORD)
+  public static final String JSON_PROPERTY_PASSWORD = "password";
+  @jakarta.annotation.Nullable
   private String password;
 
+  public EssbaseInfo() { 
+  }
 
-  public EssbaseInfo server(String server) {
-    
+  public EssbaseInfo server(@jakarta.annotation.Nullable String server) {
     this.server = server;
     return this;
   }
 
-   /**
+  /**
    * Get server
    * @return server
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SERVER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getServer() {
     return server;
   }
 
 
-  public void setServer(String server) {
+  @JsonProperty(JSON_PROPERTY_SERVER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setServer(@jakarta.annotation.Nullable String server) {
     this.server = server;
   }
 
 
-  public EssbaseInfo application(String application) {
-    
+  public EssbaseInfo application(@jakarta.annotation.Nullable String application) {
     this.application = application;
     return this;
   }
 
-   /**
+  /**
    * Get application
    * @return application
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getApplication() {
     return application;
   }
 
 
-  public void setApplication(String application) {
+  @JsonProperty(JSON_PROPERTY_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApplication(@jakarta.annotation.Nullable String application) {
     this.application = application;
   }
 
 
-  public EssbaseInfo database(String database) {
-    
+  public EssbaseInfo database(@jakarta.annotation.Nullable String database) {
     this.database = database;
     return this;
   }
 
-   /**
+  /**
    * Get database
    * @return database
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDatabase() {
     return database;
   }
 
 
-  public void setDatabase(String database) {
+  @JsonProperty(JSON_PROPERTY_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatabase(@jakarta.annotation.Nullable String database) {
     this.database = database;
   }
 
 
-  public EssbaseInfo user(String user) {
-    
+  public EssbaseInfo user(@jakarta.annotation.Nullable String user) {
     this.user = user;
     return this;
   }
 
-   /**
+  /**
    * Get user
    * @return user
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getUser() {
     return user;
   }
 
 
-  public void setUser(String user) {
+  @JsonProperty(JSON_PROPERTY_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUser(@jakarta.annotation.Nullable String user) {
     this.user = user;
   }
 
 
-  public EssbaseInfo password(String password) {
-    
+  public EssbaseInfo password(@jakarta.annotation.Nullable String password) {
     this.password = password;
     return this;
   }
 
-   /**
+  /**
    * Get password
    * @return password
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PASSWORD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getPassword() {
     return password;
   }
 
 
-  public void setPassword(String password) {
+  @JsonProperty(JSON_PROPERTY_PASSWORD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPassword(@jakarta.annotation.Nullable String password) {
     this.password = password;
   }
 
 
+  /**
+   * Return true if this EssbaseInfo object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -210,5 +232,64 @@ public class EssbaseInfo {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `server` to the URL query string
+    if (getServer() != null) {
+      joiner.add(String.format("%sserver%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getServer()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `application` to the URL query string
+    if (getApplication() != null) {
+      joiner.add(String.format("%sapplication%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getApplication()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `database` to the URL query string
+    if (getDatabase() != null) {
+      joiner.add(String.format("%sdatabase%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDatabase()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `user` to the URL query string
+    if (getUser() != null) {
+      joiner.add(String.format("%suser%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUser()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `password` to the URL query string
+    if (getPassword() != null) {
+      joiner.add(String.format("%spassword%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPassword()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

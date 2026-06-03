@@ -13,57 +13,75 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.ColumnType2;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ColumnsType
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ColumnsType.JSON_PROPERTY_COLUMN
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ColumnsType {
-  public static final String SERIALIZED_NAME_COLUMN = "column";
-  @SerializedName(SERIALIZED_NAME_COLUMN)
-  private List<ColumnType2> column = new ArrayList<ColumnType2>();
+  public static final String JSON_PROPERTY_COLUMN = "column";
+  @jakarta.annotation.Nonnull
+  private List<ColumnType2> column = new ArrayList<>();
 
+  public ColumnsType() { 
+  }
 
-  public ColumnsType column(List<ColumnType2> column) {
-    
+  public ColumnsType column(@jakarta.annotation.Nonnull List<ColumnType2> column) {
     this.column = column;
     return this;
   }
 
   public ColumnsType addColumnItem(ColumnType2 columnItem) {
+    if (this.column == null) {
+      this.column = new ArrayList<>();
+    }
     this.column.add(columnItem);
     return this;
   }
 
-   /**
+  /**
    * Get column
    * @return column
-  **/
-  @ApiModelProperty(required = true, value = "")
-
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_COLUMN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public List<ColumnType2> getColumn() {
     return column;
   }
 
 
-  public void setColumn(List<ColumnType2> column) {
+  @JsonProperty(JSON_PROPERTY_COLUMN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setColumn(@jakarta.annotation.Nonnull List<ColumnType2> column) {
     this.column = column;
   }
 
 
+  /**
+   * Return true if this ColumnsType object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -101,5 +119,49 @@ public class ColumnsType {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `column` to the URL query string
+    if (getColumn() != null) {
+      for (int i = 0; i < getColumn().size(); i++) {
+        if (getColumn().get(i) != null) {
+          joiner.add(getColumn().get(i).toUrlQueryString(String.format("%scolumn%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

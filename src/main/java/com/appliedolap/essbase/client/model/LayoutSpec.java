@@ -13,106 +13,124 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.LayoutGrid;
 import com.appliedolap.essbase.client.model.LayoutPreferences;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * LayoutSpec
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  LayoutSpec.JSON_PROPERTY_DESCRIPTION,
+  LayoutSpec.JSON_PROPERTY_GRID,
+  LayoutSpec.JSON_PROPERTY_PREFERENCES
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class LayoutSpec {
-  public static final String SERIALIZED_NAME_DESCRIPTION = "description";
-  @SerializedName(SERIALIZED_NAME_DESCRIPTION)
+  public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  @jakarta.annotation.Nullable
   private String description;
 
-  public static final String SERIALIZED_NAME_GRID = "grid";
-  @SerializedName(SERIALIZED_NAME_GRID)
+  public static final String JSON_PROPERTY_GRID = "grid";
+  @jakarta.annotation.Nullable
   private LayoutGrid grid;
 
-  public static final String SERIALIZED_NAME_PREFERENCES = "preferences";
-  @SerializedName(SERIALIZED_NAME_PREFERENCES)
+  public static final String JSON_PROPERTY_PREFERENCES = "preferences";
+  @jakarta.annotation.Nullable
   private LayoutPreferences preferences;
 
+  public LayoutSpec() { 
+  }
 
-  public LayoutSpec description(String description) {
-    
+  public LayoutSpec description(@jakarta.annotation.Nullable String description) {
     this.description = description;
     return this;
   }
 
-   /**
+  /**
    * Get description
    * @return description
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDescription() {
     return description;
   }
 
 
-  public void setDescription(String description) {
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDescription(@jakarta.annotation.Nullable String description) {
     this.description = description;
   }
 
 
-  public LayoutSpec grid(LayoutGrid grid) {
-    
+  public LayoutSpec grid(@jakarta.annotation.Nullable LayoutGrid grid) {
     this.grid = grid;
     return this;
   }
 
-   /**
+  /**
    * Get grid
    * @return grid
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GRID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public LayoutGrid getGrid() {
     return grid;
   }
 
 
-  public void setGrid(LayoutGrid grid) {
+  @JsonProperty(JSON_PROPERTY_GRID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGrid(@jakarta.annotation.Nullable LayoutGrid grid) {
     this.grid = grid;
   }
 
 
-  public LayoutSpec preferences(LayoutPreferences preferences) {
-    
+  public LayoutSpec preferences(@jakarta.annotation.Nullable LayoutPreferences preferences) {
     this.preferences = preferences;
     return this;
   }
 
-   /**
+  /**
    * Get preferences
    * @return preferences
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PREFERENCES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public LayoutPreferences getPreferences() {
     return preferences;
   }
 
 
-  public void setPreferences(LayoutPreferences preferences) {
+  @JsonProperty(JSON_PROPERTY_PREFERENCES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPreferences(@jakarta.annotation.Nullable LayoutPreferences preferences) {
     this.preferences = preferences;
   }
 
 
+  /**
+   * Return true if this LayoutSpec object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -154,5 +172,54 @@ public class LayoutSpec {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `description` to the URL query string
+    if (getDescription() != null) {
+      joiner.add(String.format("%sdescription%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDescription()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `grid` to the URL query string
+    if (getGrid() != null) {
+      joiner.add(getGrid().toUrlQueryString(prefix + "grid" + suffix));
+    }
+
+    // add `preferences` to the URL query string
+    if (getPreferences() != null) {
+      joiner.add(getPreferences().toUrlQueryString(prefix + "preferences" + suffix));
+    }
+
+    return joiner.toString();
+  }
 }
 

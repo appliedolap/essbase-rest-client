@@ -13,158 +13,180 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * GeneralStatistics
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  GeneralStatistics.JSON_PROPERTY_DATABASE_START_TIME,
+  GeneralStatistics.JSON_PROPERTY_DATABASE_ELAPSED_TIME,
+  GeneralStatistics.JSON_PROPERTY_NUMBER_OF_CONNECTIONS,
+  GeneralStatistics.JSON_PROPERTY_NUMBER_OF_DIMENSIONS,
+  GeneralStatistics.JSON_PROPERTY_LOAD_STATUS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class GeneralStatistics {
-  public static final String SERIALIZED_NAME_DATABASE_START_TIME = "databaseStartTime";
-  @SerializedName(SERIALIZED_NAME_DATABASE_START_TIME)
+  public static final String JSON_PROPERTY_DATABASE_START_TIME = "databaseStartTime";
+  @jakarta.annotation.Nullable
   private Long databaseStartTime;
 
-  public static final String SERIALIZED_NAME_DATABASE_ELAPSED_TIME = "databaseElapsedTime";
-  @SerializedName(SERIALIZED_NAME_DATABASE_ELAPSED_TIME)
+  public static final String JSON_PROPERTY_DATABASE_ELAPSED_TIME = "databaseElapsedTime";
+  @jakarta.annotation.Nullable
   private String databaseElapsedTime;
 
-  public static final String SERIALIZED_NAME_NUMBER_OF_CONNECTIONS = "numberOfConnections";
-  @SerializedName(SERIALIZED_NAME_NUMBER_OF_CONNECTIONS)
+  public static final String JSON_PROPERTY_NUMBER_OF_CONNECTIONS = "numberOfConnections";
+  @jakarta.annotation.Nullable
   private Integer numberOfConnections;
 
-  public static final String SERIALIZED_NAME_NUMBER_OF_DIMENSIONS = "numberOfDimensions";
-  @SerializedName(SERIALIZED_NAME_NUMBER_OF_DIMENSIONS)
+  public static final String JSON_PROPERTY_NUMBER_OF_DIMENSIONS = "numberOfDimensions";
+  @jakarta.annotation.Nullable
   private Integer numberOfDimensions;
 
-  public static final String SERIALIZED_NAME_LOAD_STATUS = "loadStatus";
-  @SerializedName(SERIALIZED_NAME_LOAD_STATUS)
+  public static final String JSON_PROPERTY_LOAD_STATUS = "loadStatus";
+  @jakarta.annotation.Nullable
   private String loadStatus;
 
+  public GeneralStatistics() { 
+  }
 
-  public GeneralStatistics databaseStartTime(Long databaseStartTime) {
-    
+  public GeneralStatistics databaseStartTime(@jakarta.annotation.Nullable Long databaseStartTime) {
     this.databaseStartTime = databaseStartTime;
     return this;
   }
 
-   /**
+  /**
    * Get databaseStartTime
    * @return databaseStartTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATABASE_START_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getDatabaseStartTime() {
     return databaseStartTime;
   }
 
 
-  public void setDatabaseStartTime(Long databaseStartTime) {
+  @JsonProperty(JSON_PROPERTY_DATABASE_START_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatabaseStartTime(@jakarta.annotation.Nullable Long databaseStartTime) {
     this.databaseStartTime = databaseStartTime;
   }
 
 
-  public GeneralStatistics databaseElapsedTime(String databaseElapsedTime) {
-    
+  public GeneralStatistics databaseElapsedTime(@jakarta.annotation.Nullable String databaseElapsedTime) {
     this.databaseElapsedTime = databaseElapsedTime;
     return this;
   }
 
-   /**
+  /**
    * Get databaseElapsedTime
    * @return databaseElapsedTime
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATABASE_ELAPSED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDatabaseElapsedTime() {
     return databaseElapsedTime;
   }
 
 
-  public void setDatabaseElapsedTime(String databaseElapsedTime) {
+  @JsonProperty(JSON_PROPERTY_DATABASE_ELAPSED_TIME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatabaseElapsedTime(@jakarta.annotation.Nullable String databaseElapsedTime) {
     this.databaseElapsedTime = databaseElapsedTime;
   }
 
 
-  public GeneralStatistics numberOfConnections(Integer numberOfConnections) {
-    
+  public GeneralStatistics numberOfConnections(@jakarta.annotation.Nullable Integer numberOfConnections) {
     this.numberOfConnections = numberOfConnections;
     return this;
   }
 
-   /**
+  /**
    * Get numberOfConnections
    * @return numberOfConnections
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_CONNECTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getNumberOfConnections() {
     return numberOfConnections;
   }
 
 
-  public void setNumberOfConnections(Integer numberOfConnections) {
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_CONNECTIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumberOfConnections(@jakarta.annotation.Nullable Integer numberOfConnections) {
     this.numberOfConnections = numberOfConnections;
   }
 
 
-  public GeneralStatistics numberOfDimensions(Integer numberOfDimensions) {
-    
+  public GeneralStatistics numberOfDimensions(@jakarta.annotation.Nullable Integer numberOfDimensions) {
     this.numberOfDimensions = numberOfDimensions;
     return this;
   }
 
-   /**
+  /**
    * Get numberOfDimensions
    * @return numberOfDimensions
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_DIMENSIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getNumberOfDimensions() {
     return numberOfDimensions;
   }
 
 
-  public void setNumberOfDimensions(Integer numberOfDimensions) {
+  @JsonProperty(JSON_PROPERTY_NUMBER_OF_DIMENSIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNumberOfDimensions(@jakarta.annotation.Nullable Integer numberOfDimensions) {
     this.numberOfDimensions = numberOfDimensions;
   }
 
 
-  public GeneralStatistics loadStatus(String loadStatus) {
-    
+  public GeneralStatistics loadStatus(@jakarta.annotation.Nullable String loadStatus) {
     this.loadStatus = loadStatus;
     return this;
   }
 
-   /**
+  /**
    * Get loadStatus
    * @return loadStatus
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LOAD_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getLoadStatus() {
     return loadStatus;
   }
 
 
-  public void setLoadStatus(String loadStatus) {
+  @JsonProperty(JSON_PROPERTY_LOAD_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLoadStatus(@jakarta.annotation.Nullable String loadStatus) {
     this.loadStatus = loadStatus;
   }
 
 
+  /**
+   * Return true if this GeneralStatistics object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -210,5 +232,64 @@ public class GeneralStatistics {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `databaseStartTime` to the URL query string
+    if (getDatabaseStartTime() != null) {
+      joiner.add(String.format("%sdatabaseStartTime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDatabaseStartTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `databaseElapsedTime` to the URL query string
+    if (getDatabaseElapsedTime() != null) {
+      joiner.add(String.format("%sdatabaseElapsedTime%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDatabaseElapsedTime()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numberOfConnections` to the URL query string
+    if (getNumberOfConnections() != null) {
+      joiner.add(String.format("%snumberOfConnections%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumberOfConnections()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `numberOfDimensions` to the URL query string
+    if (getNumberOfDimensions() != null) {
+      joiner.add(String.format("%snumberOfDimensions%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNumberOfDimensions()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `loadStatus` to the URL query string
+    if (getLoadStatus() != null) {
+      joiner.add(String.format("%sloadStatus%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLoadStatus()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

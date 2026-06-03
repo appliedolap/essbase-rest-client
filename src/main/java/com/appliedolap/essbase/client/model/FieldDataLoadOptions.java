@@ -13,68 +13,84 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * FieldDataLoadOptions
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  FieldDataLoadOptions.JSON_PROPERTY_REFER_DIMENSION,
+  FieldDataLoadOptions.JSON_PROPERTY_REFER_NUMBER,
+  FieldDataLoadOptions.JSON_PROPERTY_REFER_OPTION,
+  FieldDataLoadOptions.JSON_PROPERTY_IGNORE,
+  FieldDataLoadOptions.JSON_PROPERTY_SCALE,
+  FieldDataLoadOptions.JSON_PROPERTY_USE_REFERENCE,
+  FieldDataLoadOptions.JSON_PROPERTY_DATA,
+  FieldDataLoadOptions.JSON_PROPERTY_SCALINGFACTOR,
+  FieldDataLoadOptions.JSON_PROPERTY_STORE_TYPE,
+  FieldDataLoadOptions.JSON_PROPERTY_STORE_TYPE_COUNT_MISSING
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class FieldDataLoadOptions {
-  public static final String SERIALIZED_NAME_REFER_DIMENSION = "referDimension";
-  @SerializedName(SERIALIZED_NAME_REFER_DIMENSION)
+  public static final String JSON_PROPERTY_REFER_DIMENSION = "referDimension";
+  @jakarta.annotation.Nullable
   private String referDimension;
 
-  public static final String SERIALIZED_NAME_REFER_NUMBER = "referNumber";
-  @SerializedName(SERIALIZED_NAME_REFER_NUMBER)
+  public static final String JSON_PROPERTY_REFER_NUMBER = "referNumber";
+  @jakarta.annotation.Nullable
   private Integer referNumber;
 
-  public static final String SERIALIZED_NAME_REFER_OPTION = "referOption";
-  @SerializedName(SERIALIZED_NAME_REFER_OPTION)
+  public static final String JSON_PROPERTY_REFER_OPTION = "referOption";
+  @jakarta.annotation.Nullable
   private Integer referOption;
 
-  public static final String SERIALIZED_NAME_IGNORE = "ignore";
-  @SerializedName(SERIALIZED_NAME_IGNORE)
+  public static final String JSON_PROPERTY_IGNORE = "ignore";
+  @jakarta.annotation.Nullable
   private Boolean ignore;
 
-  public static final String SERIALIZED_NAME_SCALE = "scale";
-  @SerializedName(SERIALIZED_NAME_SCALE)
+  public static final String JSON_PROPERTY_SCALE = "scale";
+  @jakarta.annotation.Nullable
   private Boolean scale;
 
-  public static final String SERIALIZED_NAME_USE_REFERENCE = "useReference";
-  @SerializedName(SERIALIZED_NAME_USE_REFERENCE)
+  public static final String JSON_PROPERTY_USE_REFERENCE = "useReference";
+  @jakarta.annotation.Nullable
   private Boolean useReference;
 
-  public static final String SERIALIZED_NAME_DATA = "data";
-  @SerializedName(SERIALIZED_NAME_DATA)
+  public static final String JSON_PROPERTY_DATA = "data";
+  @jakarta.annotation.Nullable
   private Boolean data;
 
-  public static final String SERIALIZED_NAME_SCALINGFACTOR = "scalingfactor";
-  @SerializedName(SERIALIZED_NAME_SCALINGFACTOR)
+  public static final String JSON_PROPERTY_SCALINGFACTOR = "scalingfactor";
+  @jakarta.annotation.Nullable
   private Double scalingfactor;
 
   /**
    * Gets or Sets storeType
    */
-  @JsonAdapter(StoreTypeEnum.Adapter.class)
   public enum StoreTypeEnum {
-    MIN("MIN"),
+    MIN(String.valueOf("MIN")),
     
-    MAX("MAX"),
+    MAX(String.valueOf("MAX")),
     
-    AVG("AVG"),
+    AVG(String.valueOf("AVG")),
     
-    SUM("SUM"),
+    SUM(String.valueOf("SUM")),
     
-    COUNT("COUNT");
+    COUNT(String.valueOf("COUNT"));
 
     private String value;
 
@@ -82,6 +98,7 @@ public class FieldDataLoadOptions {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -91,6 +108,7 @@ public class FieldDataLoadOptions {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static StoreTypeEnum fromValue(String value) {
       for (StoreTypeEnum b : StoreTypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -99,260 +117,262 @@ public class FieldDataLoadOptions {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<StoreTypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final StoreTypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public StoreTypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return StoreTypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_STORE_TYPE = "storeType";
-  @SerializedName(SERIALIZED_NAME_STORE_TYPE)
+  public static final String JSON_PROPERTY_STORE_TYPE = "storeType";
+  @jakarta.annotation.Nullable
   private StoreTypeEnum storeType;
 
-  public static final String SERIALIZED_NAME_STORE_TYPE_COUNT_MISSING = "storeTypeCountMissing";
-  @SerializedName(SERIALIZED_NAME_STORE_TYPE_COUNT_MISSING)
+  public static final String JSON_PROPERTY_STORE_TYPE_COUNT_MISSING = "storeTypeCountMissing";
+  @jakarta.annotation.Nullable
   private Boolean storeTypeCountMissing;
 
+  public FieldDataLoadOptions() { 
+  }
 
-  public FieldDataLoadOptions referDimension(String referDimension) {
-    
+  public FieldDataLoadOptions referDimension(@jakarta.annotation.Nullable String referDimension) {
     this.referDimension = referDimension;
     return this;
   }
 
-   /**
+  /**
    * Get referDimension
    * @return referDimension
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REFER_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getReferDimension() {
     return referDimension;
   }
 
 
-  public void setReferDimension(String referDimension) {
+  @JsonProperty(JSON_PROPERTY_REFER_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setReferDimension(@jakarta.annotation.Nullable String referDimension) {
     this.referDimension = referDimension;
   }
 
 
-  public FieldDataLoadOptions referNumber(Integer referNumber) {
-    
+  public FieldDataLoadOptions referNumber(@jakarta.annotation.Nullable Integer referNumber) {
     this.referNumber = referNumber;
     return this;
   }
 
-   /**
+  /**
    * Get referNumber
    * @return referNumber
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REFER_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getReferNumber() {
     return referNumber;
   }
 
 
-  public void setReferNumber(Integer referNumber) {
+  @JsonProperty(JSON_PROPERTY_REFER_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setReferNumber(@jakarta.annotation.Nullable Integer referNumber) {
     this.referNumber = referNumber;
   }
 
 
-  public FieldDataLoadOptions referOption(Integer referOption) {
-    
+  public FieldDataLoadOptions referOption(@jakarta.annotation.Nullable Integer referOption) {
     this.referOption = referOption;
     return this;
   }
 
-   /**
+  /**
    * Get referOption
    * @return referOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REFER_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getReferOption() {
     return referOption;
   }
 
 
-  public void setReferOption(Integer referOption) {
+  @JsonProperty(JSON_PROPERTY_REFER_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setReferOption(@jakarta.annotation.Nullable Integer referOption) {
     this.referOption = referOption;
   }
 
 
-  public FieldDataLoadOptions ignore(Boolean ignore) {
-    
+  public FieldDataLoadOptions ignore(@jakarta.annotation.Nullable Boolean ignore) {
     this.ignore = ignore;
     return this;
   }
 
-   /**
+  /**
    * Get ignore
    * @return ignore
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_IGNORE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getIgnore() {
     return ignore;
   }
 
 
-  public void setIgnore(Boolean ignore) {
+  @JsonProperty(JSON_PROPERTY_IGNORE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIgnore(@jakarta.annotation.Nullable Boolean ignore) {
     this.ignore = ignore;
   }
 
 
-  public FieldDataLoadOptions scale(Boolean scale) {
-    
+  public FieldDataLoadOptions scale(@jakarta.annotation.Nullable Boolean scale) {
     this.scale = scale;
     return this;
   }
 
-   /**
+  /**
    * Get scale
    * @return scale
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SCALE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getScale() {
     return scale;
   }
 
 
-  public void setScale(Boolean scale) {
+  @JsonProperty(JSON_PROPERTY_SCALE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setScale(@jakarta.annotation.Nullable Boolean scale) {
     this.scale = scale;
   }
 
 
-  public FieldDataLoadOptions useReference(Boolean useReference) {
-    
+  public FieldDataLoadOptions useReference(@jakarta.annotation.Nullable Boolean useReference) {
     this.useReference = useReference;
     return this;
   }
 
-   /**
+  /**
    * Get useReference
    * @return useReference
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USE_REFERENCE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getUseReference() {
     return useReference;
   }
 
 
-  public void setUseReference(Boolean useReference) {
+  @JsonProperty(JSON_PROPERTY_USE_REFERENCE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUseReference(@jakarta.annotation.Nullable Boolean useReference) {
     this.useReference = useReference;
   }
 
 
-  public FieldDataLoadOptions data(Boolean data) {
-    
+  public FieldDataLoadOptions data(@jakarta.annotation.Nullable Boolean data) {
     this.data = data;
     return this;
   }
 
-   /**
+  /**
    * Get data
    * @return data
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getData() {
     return data;
   }
 
 
-  public void setData(Boolean data) {
+  @JsonProperty(JSON_PROPERTY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setData(@jakarta.annotation.Nullable Boolean data) {
     this.data = data;
   }
 
 
-  public FieldDataLoadOptions scalingfactor(Double scalingfactor) {
-    
+  public FieldDataLoadOptions scalingfactor(@jakarta.annotation.Nullable Double scalingfactor) {
     this.scalingfactor = scalingfactor;
     return this;
   }
 
-   /**
+  /**
    * Get scalingfactor
    * @return scalingfactor
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SCALINGFACTOR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Double getScalingfactor() {
     return scalingfactor;
   }
 
 
-  public void setScalingfactor(Double scalingfactor) {
+  @JsonProperty(JSON_PROPERTY_SCALINGFACTOR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setScalingfactor(@jakarta.annotation.Nullable Double scalingfactor) {
     this.scalingfactor = scalingfactor;
   }
 
 
-  public FieldDataLoadOptions storeType(StoreTypeEnum storeType) {
-    
+  public FieldDataLoadOptions storeType(@jakarta.annotation.Nullable StoreTypeEnum storeType) {
     this.storeType = storeType;
     return this;
   }
 
-   /**
+  /**
    * Get storeType
    * @return storeType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STORE_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public StoreTypeEnum getStoreType() {
     return storeType;
   }
 
 
-  public void setStoreType(StoreTypeEnum storeType) {
+  @JsonProperty(JSON_PROPERTY_STORE_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStoreType(@jakarta.annotation.Nullable StoreTypeEnum storeType) {
     this.storeType = storeType;
   }
 
 
-  public FieldDataLoadOptions storeTypeCountMissing(Boolean storeTypeCountMissing) {
-    
+  public FieldDataLoadOptions storeTypeCountMissing(@jakarta.annotation.Nullable Boolean storeTypeCountMissing) {
     this.storeTypeCountMissing = storeTypeCountMissing;
     return this;
   }
 
-   /**
+  /**
    * Get storeTypeCountMissing
    * @return storeTypeCountMissing
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STORE_TYPE_COUNT_MISSING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getStoreTypeCountMissing() {
     return storeTypeCountMissing;
   }
 
 
-  public void setStoreTypeCountMissing(Boolean storeTypeCountMissing) {
+  @JsonProperty(JSON_PROPERTY_STORE_TYPE_COUNT_MISSING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStoreTypeCountMissing(@jakarta.annotation.Nullable Boolean storeTypeCountMissing) {
     this.storeTypeCountMissing = storeTypeCountMissing;
   }
 
 
+  /**
+   * Return true if this FieldDataLoadOptions object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -408,5 +428,89 @@ public class FieldDataLoadOptions {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `referDimension` to the URL query string
+    if (getReferDimension() != null) {
+      joiner.add(String.format("%sreferDimension%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getReferDimension()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `referNumber` to the URL query string
+    if (getReferNumber() != null) {
+      joiner.add(String.format("%sreferNumber%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getReferNumber()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `referOption` to the URL query string
+    if (getReferOption() != null) {
+      joiner.add(String.format("%sreferOption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getReferOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `ignore` to the URL query string
+    if (getIgnore() != null) {
+      joiner.add(String.format("%signore%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIgnore()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `scale` to the URL query string
+    if (getScale() != null) {
+      joiner.add(String.format("%sscale%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getScale()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `useReference` to the URL query string
+    if (getUseReference() != null) {
+      joiner.add(String.format("%suseReference%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUseReference()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `data` to the URL query string
+    if (getData() != null) {
+      joiner.add(String.format("%sdata%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getData()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `scalingfactor` to the URL query string
+    if (getScalingfactor() != null) {
+      joiner.add(String.format("%sscalingfactor%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getScalingfactor()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `storeType` to the URL query string
+    if (getStoreType() != null) {
+      joiner.add(String.format("%sstoreType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStoreType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `storeTypeCountMissing` to the URL query string
+    if (getStoreTypeCountMissing() != null) {
+      joiner.add(String.format("%sstoreTypeCountMissing%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStoreTypeCountMissing()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

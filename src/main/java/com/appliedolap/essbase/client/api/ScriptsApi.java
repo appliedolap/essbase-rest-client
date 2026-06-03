@@ -10,22 +10,12 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.RTSVList;
 import com.appliedolap.essbase.client.model.Script;
@@ -34,1940 +24,1393 @@ import com.appliedolap.essbase.client.model.ScriptList;
 import com.appliedolap.essbase.client.model.UserGroupProvisionInfo;
 import com.appliedolap.essbase.client.model.UserGroupProvisionInfoList;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ScriptsApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public ScriptsApi() {
-        this(Configuration.getDefaultApiClient());
+  public ScriptsApi() {
+    this(new ApiClient());
+  }
+
+  public ScriptsApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public ScriptsApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Add Essbase Script Permissions
+   * Adds permissions to the specified script for the specified user or group. Applicable only for calculation scripts.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @param body User or group details (required)
+   * @return UserGroupProvisionInfo
+   * @throws ApiException if fails to make API call
+   */
+  public UserGroupProvisionInfo scriptsAddScriptPermission(String applicationName, String databaseName, String scriptName, UserGroupProvisionInfo body) throws ApiException {
+    ApiResponse<UserGroupProvisionInfo> localVarResponse = scriptsAddScriptPermissionWithHttpInfo(applicationName, databaseName, scriptName, body);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for scriptsAddScriptPermission
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param body User or group details (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Permission is added successfully to the script </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to add permissions for the script. The application, database, or script name may be incorrect; the user or group ID may be incorrect; or the specified user or group may not have sufficient privileges.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsAddScriptPermissionCall(String applicationName, String databaseName, String scriptName, UserGroupProvisionInfo body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/permissions"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "scriptName" + "\\}", localVarApiClient.escapeString(scriptName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Add Essbase Script Permissions
+   * Adds permissions to the specified script for the specified user or group. Applicable only for calculation scripts.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @param body User or group details (required)
+   * @return ApiResponse&lt;UserGroupProvisionInfo&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<UserGroupProvisionInfo> scriptsAddScriptPermissionWithHttpInfo(String applicationName, String databaseName, String scriptName, UserGroupProvisionInfo body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = scriptsAddScriptPermissionRequestBuilder(applicationName, databaseName, scriptName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("scriptsAddScriptPermission", localVarResponse);
         }
+        return new ApiResponse<UserGroupProvisionInfo>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<UserGroupProvisionInfo>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder scriptsAddScriptPermissionRequestBuilder(String applicationName, String databaseName, String scriptName, UserGroupProvisionInfo body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling scriptsAddScriptPermission");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling scriptsAddScriptPermission");
+    }
+    // verify the required parameter 'scriptName' is set
+    if (scriptName == null) {
+      throw new ApiException(400, "Missing the required parameter 'scriptName' when calling scriptsAddScriptPermission");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling scriptsAddScriptPermission");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call scriptsAddScriptPermissionValidateBeforeCall(String applicationName, String databaseName, String scriptName, UserGroupProvisionInfo body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling scriptsAddScriptPermission(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/permissions"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{scriptName}", ApiClient.urlEncode(scriptName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Copy Essbase Script
+   * Copies the script in the specified application and database and returns the created script. Applicable only for calculation scripts.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Script copy details (required)
+   * @return Script
+   * @throws ApiException if fails to make API call
+   */
+  public Script scriptsCopyScript(String applicationName, String databaseName, ScriptCopy body) throws ApiException {
+    ApiResponse<Script> localVarResponse = scriptsCopyScriptWithHttpInfo(applicationName, databaseName, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Copy Essbase Script
+   * Copies the script in the specified application and database and returns the created script. Applicable only for calculation scripts.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Script copy details (required)
+   * @return ApiResponse&lt;Script&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Script> scriptsCopyScriptWithHttpInfo(String applicationName, String databaseName, ScriptCopy body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = scriptsCopyScriptRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("scriptsCopyScript", localVarResponse);
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling scriptsAddScriptPermission(Async)");
+        return new ApiResponse<Script>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Script>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder scriptsCopyScriptRequestBuilder(String applicationName, String databaseName, ScriptCopy body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling scriptsCopyScript");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling scriptsCopyScript");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling scriptsCopyScript");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/scriptops/copy"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Create Essbase Script
+   * Creates the script in the specified application and database and returns the created script
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Script details (required)
+   * @param _file Type of script file (optional, default to calc)
+   * @return Script
+   * @throws ApiException if fails to make API call
+   */
+  public Script scriptsCreateScript(String applicationName, String databaseName, Script body, String _file) throws ApiException {
+    ApiResponse<Script> localVarResponse = scriptsCreateScriptWithHttpInfo(applicationName, databaseName, body, _file);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Create Essbase Script
+   * Creates the script in the specified application and database and returns the created script
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Script details (required)
+   * @param _file Type of script file (optional, default to calc)
+   * @return ApiResponse&lt;Script&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Script> scriptsCreateScriptWithHttpInfo(String applicationName, String databaseName, Script body, String _file) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = scriptsCreateScriptRequestBuilder(applicationName, databaseName, body, _file);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("scriptsCreateScript", localVarResponse);
         }
-        
-        // verify the required parameter 'scriptName' is set
-        if (scriptName == null) {
-            throw new ApiException("Missing the required parameter 'scriptName' when calling scriptsAddScriptPermission(Async)");
+        return new ApiResponse<Script>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Script>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder scriptsCreateScriptRequestBuilder(String applicationName, String databaseName, Script body, String _file) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling scriptsCreateScript");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling scriptsCreateScript");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling scriptsCreateScript");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "file";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("file", _file));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Delete Essbase Script
+   * Deletes the specified script in the specified application and database
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @param _file Type of script file (optional, default to calc)
+   * @throws ApiException if fails to make API call
+   */
+  public void scriptsDeleteScript(String applicationName, String databaseName, String scriptName, String _file) throws ApiException {
+    scriptsDeleteScriptWithHttpInfo(applicationName, databaseName, scriptName, _file);
+  }
+
+  /**
+   * Delete Essbase Script
+   * Deletes the specified script in the specified application and database
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @param _file Type of script file (optional, default to calc)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> scriptsDeleteScriptWithHttpInfo(String applicationName, String databaseName, String scriptName, String _file) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = scriptsDeleteScriptRequestBuilder(applicationName, databaseName, scriptName, _file);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("scriptsDeleteScript", localVarResponse);
         }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling scriptsAddScriptPermission(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = scriptsAddScriptPermissionCall(applicationName, databaseName, scriptName, body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder scriptsDeleteScriptRequestBuilder(String applicationName, String databaseName, String scriptName, String _file) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling scriptsDeleteScript");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling scriptsDeleteScript");
+    }
+    // verify the required parameter 'scriptName' is set
+    if (scriptName == null) {
+      throw new ApiException(400, "Missing the required parameter 'scriptName' when calling scriptsDeleteScript");
     }
 
-    /**
-     * Add Essbase Script Permissions
-     * Adds permissions to the specified script for the specified user or group. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param body User or group details (required)
-     * @return UserGroupProvisionInfo
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Permission is added successfully to the script </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to add permissions for the script. The application, database, or script name may be incorrect; the user or group ID may be incorrect; or the specified user or group may not have sufficient privileges.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public UserGroupProvisionInfo scriptsAddScriptPermission(String applicationName, String databaseName, String scriptName, UserGroupProvisionInfo body) throws ApiException {
-        ApiResponse<UserGroupProvisionInfo> localVarResp = scriptsAddScriptPermissionWithHttpInfo(applicationName, databaseName, scriptName, body);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{scriptName}", ApiClient.urlEncode(scriptName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "file";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("file", _file));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Add Essbase Script Permissions
-     * Adds permissions to the specified script for the specified user or group. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param body User or group details (required)
-     * @return ApiResponse&lt;UserGroupProvisionInfo&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Permission is added successfully to the script </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to add permissions for the script. The application, database, or script name may be incorrect; the user or group ID may be incorrect; or the specified user or group may not have sufficient privileges.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<UserGroupProvisionInfo> scriptsAddScriptPermissionWithHttpInfo(String applicationName, String databaseName, String scriptName, UserGroupProvisionInfo body) throws ApiException {
-        okhttp3.Call localVarCall = scriptsAddScriptPermissionValidateBeforeCall(applicationName, databaseName, scriptName, body, null);
-        Type localVarReturnType = new TypeToken<UserGroupProvisionInfo>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Add Essbase Script Permissions (asynchronously)
-     * Adds permissions to the specified script for the specified user or group. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param body User or group details (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Permission is added successfully to the script </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to add permissions for the script. The application, database, or script name may be incorrect; the user or group ID may be incorrect; or the specified user or group may not have sufficient privileges.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsAddScriptPermissionAsync(String applicationName, String databaseName, String scriptName, UserGroupProvisionInfo body, final ApiCallback<UserGroupProvisionInfo> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = scriptsAddScriptPermissionValidateBeforeCall(applicationName, databaseName, scriptName, body, _callback);
-        Type localVarReturnType = new TypeToken<UserGroupProvisionInfo>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for scriptsCopyScript
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Script copy details (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is copied successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to copy the script. The application, database, or script name may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsCopyScriptCall(String applicationName, String databaseName, ScriptCopy body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/scriptops/copy"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
+  /**
+   * Update Essbase Script
+   * Updates the specified script in the specified application and database and returns the updated script
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @param body Script details (required)
+   * @param _file Type of script file (optional, default to calc)
+   * @return Script
+   * @throws ApiException if fails to make API call
+   */
+  public Script scriptsEditScript(String applicationName, String databaseName, String scriptName, Script body, String _file) throws ApiException {
+    ApiResponse<Script> localVarResponse = scriptsEditScriptWithHttpInfo(applicationName, databaseName, scriptName, body, _file);
+    return localVarResponse.getData();
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Update Essbase Script
+   * Updates the specified script in the specified application and database and returns the updated script
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @param body Script details (required)
+   * @param _file Type of script file (optional, default to calc)
+   * @return ApiResponse&lt;Script&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Script> scriptsEditScriptWithHttpInfo(String applicationName, String databaseName, String scriptName, Script body, String _file) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = scriptsEditScriptRequestBuilder(applicationName, databaseName, scriptName, body, _file);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("scriptsEditScript", localVarResponse);
         }
+        return new ApiResponse<Script>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Script>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder scriptsEditScriptRequestBuilder(String applicationName, String databaseName, String scriptName, Script body, String _file) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling scriptsEditScript");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling scriptsEditScript");
+    }
+    // verify the required parameter 'scriptName' is set
+    if (scriptName == null) {
+      throw new ApiException(400, "Missing the required parameter 'scriptName' when calling scriptsEditScript");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling scriptsEditScript");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call scriptsCopyScriptValidateBeforeCall(String applicationName, String databaseName, ScriptCopy body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling scriptsCopyScript(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{scriptName}", ApiClient.urlEncode(scriptName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "file";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("file", _file));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Essbase Script RTSVs
+   * Returns the script runtime substitution variables from specified script name
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @return List&lt;RTSVList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public List<RTSVList> scriptsGetRTSVsForScripts(String applicationName, String databaseName, String scriptName) throws ApiException {
+    ApiResponse<List<RTSVList>> localVarResponse = scriptsGetRTSVsForScriptsWithHttpInfo(applicationName, databaseName, scriptName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Essbase Script RTSVs
+   * Returns the script runtime substitution variables from specified script name
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @return ApiResponse&lt;List&lt;RTSVList&gt;&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<List<RTSVList>> scriptsGetRTSVsForScriptsWithHttpInfo(String applicationName, String databaseName, String scriptName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = scriptsGetRTSVsForScriptsRequestBuilder(applicationName, databaseName, scriptName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("scriptsGetRTSVsForScripts", localVarResponse);
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling scriptsCopyScript(Async)");
+        return new ApiResponse<List<RTSVList>>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<List<RTSVList>>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder scriptsGetRTSVsForScriptsRequestBuilder(String applicationName, String databaseName, String scriptName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling scriptsGetRTSVsForScripts");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling scriptsGetRTSVsForScripts");
+    }
+    // verify the required parameter 'scriptName' is set
+    if (scriptName == null) {
+      throw new ApiException(400, "Missing the required parameter 'scriptName' when calling scriptsGetRTSVsForScripts");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/rtsv"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{scriptName}", ApiClient.urlEncode(scriptName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Essbase Script
+   * Returns the script from the specified application and database based on the script name
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @param _file Type of script file (optional, default to calc)
+   * @return Script
+   * @throws ApiException if fails to make API call
+   */
+  public Script scriptsGetScript(String applicationName, String databaseName, String scriptName, String _file) throws ApiException {
+    ApiResponse<Script> localVarResponse = scriptsGetScriptWithHttpInfo(applicationName, databaseName, scriptName, _file);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Essbase Script
+   * Returns the script from the specified application and database based on the script name
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @param _file Type of script file (optional, default to calc)
+   * @return ApiResponse&lt;Script&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Script> scriptsGetScriptWithHttpInfo(String applicationName, String databaseName, String scriptName, String _file) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = scriptsGetScriptRequestBuilder(applicationName, databaseName, scriptName, _file);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("scriptsGetScript", localVarResponse);
         }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling scriptsCopyScript(Async)");
+        return new ApiResponse<Script>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Script>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder scriptsGetScriptRequestBuilder(String applicationName, String databaseName, String scriptName, String _file) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling scriptsGetScript");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling scriptsGetScript");
+    }
+    // verify the required parameter 'scriptName' is set
+    if (scriptName == null) {
+      throw new ApiException(400, "Missing the required parameter 'scriptName' when calling scriptsGetScript");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{scriptName}", ApiClient.urlEncode(scriptName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "file";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("file", _file));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Essbase Script Contents
+   * Returns the script contents of the specified script name from the specified application and database
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @param _file Type of script file (optional, default to calc)
+   * @throws ApiException if fails to make API call
+   */
+  public void scriptsGetScriptContent(String applicationName, String databaseName, String scriptName, String _file) throws ApiException {
+    scriptsGetScriptContentWithHttpInfo(applicationName, databaseName, scriptName, _file);
+  }
+
+  /**
+   * Get Essbase Script Contents
+   * Returns the script contents of the specified script name from the specified application and database
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @param _file Type of script file (optional, default to calc)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> scriptsGetScriptContentWithHttpInfo(String applicationName, String databaseName, String scriptName, String _file) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = scriptsGetScriptContentRequestBuilder(applicationName, databaseName, scriptName, _file);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("scriptsGetScriptContent", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = scriptsCopyScriptCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Copy Essbase Script
-     * Copies the script in the specified application and database and returns the created script. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Script copy details (required)
-     * @return Script
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is copied successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to copy the script. The application, database, or script name may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Script scriptsCopyScript(String applicationName, String databaseName, ScriptCopy body) throws ApiException {
-        ApiResponse<Script> localVarResp = scriptsCopyScriptWithHttpInfo(applicationName, databaseName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Copy Essbase Script
-     * Copies the script in the specified application and database and returns the created script. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Script copy details (required)
-     * @return ApiResponse&lt;Script&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is copied successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to copy the script. The application, database, or script name may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Script> scriptsCopyScriptWithHttpInfo(String applicationName, String databaseName, ScriptCopy body) throws ApiException {
-        okhttp3.Call localVarCall = scriptsCopyScriptValidateBeforeCall(applicationName, databaseName, body, null);
-        Type localVarReturnType = new TypeToken<Script>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Copy Essbase Script (asynchronously)
-     * Copies the script in the specified application and database and returns the created script. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Script copy details (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is copied successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to copy the script. The application, database, or script name may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsCopyScriptAsync(String applicationName, String databaseName, ScriptCopy body, final ApiCallback<Script> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = scriptsCopyScriptValidateBeforeCall(applicationName, databaseName, body, _callback);
-        Type localVarReturnType = new TypeToken<Script>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for scriptsCreateScript
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Script details (required)
-     * @param file Type of script file (optional, default to calc)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is created successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the script. The application or database name may be incorrect, the JSON for the script may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsCreateScriptCall(String applicationName, String databaseName, Script body, String file, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (file != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("file", file));
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            "application/json"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  private HttpRequest.Builder scriptsGetScriptContentRequestBuilder(String applicationName, String databaseName, String scriptName, String _file) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling scriptsGetScriptContent");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling scriptsGetScriptContent");
+    }
+    // verify the required parameter 'scriptName' is set
+    if (scriptName == null) {
+      throw new ApiException(400, "Missing the required parameter 'scriptName' when calling scriptsGetScriptContent");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/content"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{scriptName}", ApiClient.urlEncode(scriptName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "file";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("file", _file));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Essbase Script Permissions
+   * Retrieves permissions for the specified script. Applicable only for calculation scripts.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @return List&lt;UserGroupProvisionInfoList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public List<UserGroupProvisionInfoList> scriptsGetScriptPermissions(String applicationName, String databaseName, String scriptName) throws ApiException {
+    ApiResponse<List<UserGroupProvisionInfoList>> localVarResponse = scriptsGetScriptPermissionsWithHttpInfo(applicationName, databaseName, scriptName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Essbase Script Permissions
+   * Retrieves permissions for the specified script. Applicable only for calculation scripts.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @return ApiResponse&lt;List&lt;UserGroupProvisionInfoList&gt;&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<List<UserGroupProvisionInfoList>> scriptsGetScriptPermissionsWithHttpInfo(String applicationName, String databaseName, String scriptName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = scriptsGetScriptPermissionsRequestBuilder(applicationName, databaseName, scriptName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("scriptsGetScriptPermissions", localVarResponse);
         }
+        return new ApiResponse<List<UserGroupProvisionInfoList>>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<List<UserGroupProvisionInfoList>>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder scriptsGetScriptPermissionsRequestBuilder(String applicationName, String databaseName, String scriptName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling scriptsGetScriptPermissions");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling scriptsGetScriptPermissions");
+    }
+    // verify the required parameter 'scriptName' is set
+    if (scriptName == null) {
+      throw new ApiException(400, "Missing the required parameter 'scriptName' when calling scriptsGetScriptPermissions");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call scriptsCreateScriptValidateBeforeCall(String applicationName, String databaseName, Script body, String file, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling scriptsCreateScript(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/permissions"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{scriptName}", ApiClient.urlEncode(scriptName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * List Essbase Scripts
+   * Returns all the scripts from the specified application and database
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param _file Type of script file (optional, default to calc)
+   * @return ScriptList
+   * @throws ApiException if fails to make API call
+   */
+  public ScriptList scriptsListScripts(String applicationName, String databaseName, String _file) throws ApiException {
+    ApiResponse<ScriptList> localVarResponse = scriptsListScriptsWithHttpInfo(applicationName, databaseName, _file);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * List Essbase Scripts
+   * Returns all the scripts from the specified application and database
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param _file Type of script file (optional, default to calc)
+   * @return ApiResponse&lt;ScriptList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ScriptList> scriptsListScriptsWithHttpInfo(String applicationName, String databaseName, String _file) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = scriptsListScriptsRequestBuilder(applicationName, databaseName, _file);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("scriptsListScripts", localVarResponse);
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling scriptsCreateScript(Async)");
+        return new ApiResponse<ScriptList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ScriptList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder scriptsListScriptsRequestBuilder(String applicationName, String databaseName, String _file) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling scriptsListScripts");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling scriptsListScripts");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "file";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("file", _file));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Remove Essbase Script Permissions
+   * Removes permissions from the specified script for the specified user or group. Applicable only for calculation scripts.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @param userGroupId Id of the user or group (required)
+   * @param group Says whether the userGroupId is a group or not (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void scriptsRemoveScriptPermission(String applicationName, String databaseName, String scriptName, String userGroupId, Boolean group) throws ApiException {
+    scriptsRemoveScriptPermissionWithHttpInfo(applicationName, databaseName, scriptName, userGroupId, group);
+  }
+
+  /**
+   * Remove Essbase Script Permissions
+   * Removes permissions from the specified script for the specified user or group. Applicable only for calculation scripts.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param scriptName Script name (required)
+   * @param userGroupId Id of the user or group (required)
+   * @param group Says whether the userGroupId is a group or not (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> scriptsRemoveScriptPermissionWithHttpInfo(String applicationName, String databaseName, String scriptName, String userGroupId, Boolean group) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = scriptsRemoveScriptPermissionRequestBuilder(applicationName, databaseName, scriptName, userGroupId, group);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("scriptsRemoveScriptPermission", localVarResponse);
         }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling scriptsCreateScript(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = scriptsCreateScriptCall(applicationName, databaseName, body, file, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder scriptsRemoveScriptPermissionRequestBuilder(String applicationName, String databaseName, String scriptName, String userGroupId, Boolean group) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling scriptsRemoveScriptPermission");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling scriptsRemoveScriptPermission");
+    }
+    // verify the required parameter 'scriptName' is set
+    if (scriptName == null) {
+      throw new ApiException(400, "Missing the required parameter 'scriptName' when calling scriptsRemoveScriptPermission");
+    }
+    // verify the required parameter 'userGroupId' is set
+    if (userGroupId == null) {
+      throw new ApiException(400, "Missing the required parameter 'userGroupId' when calling scriptsRemoveScriptPermission");
+    }
+    // verify the required parameter 'group' is set
+    if (group == null) {
+      throw new ApiException(400, "Missing the required parameter 'group' when calling scriptsRemoveScriptPermission");
     }
 
-    /**
-     * Create Essbase Script
-     * Creates the script in the specified application and database and returns the created script
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Script details (required)
-     * @param file Type of script file (optional, default to calc)
-     * @return Script
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is created successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the script. The application or database name may be incorrect, the JSON for the script may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Script scriptsCreateScript(String applicationName, String databaseName, Script body, String file) throws ApiException {
-        ApiResponse<Script> localVarResp = scriptsCreateScriptWithHttpInfo(applicationName, databaseName, body, file);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/permissions/{userGroupId}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{scriptName}", ApiClient.urlEncode(scriptName.toString()))
+        .replace("{userGroupId}", ApiClient.urlEncode(userGroupId.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "group";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("group", group));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Create Essbase Script
-     * Creates the script in the specified application and database and returns the created script
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Script details (required)
-     * @param file Type of script file (optional, default to calc)
-     * @return ApiResponse&lt;Script&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is created successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the script. The application or database name may be incorrect, the JSON for the script may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Script> scriptsCreateScriptWithHttpInfo(String applicationName, String databaseName, Script body, String file) throws ApiException {
-        okhttp3.Call localVarCall = scriptsCreateScriptValidateBeforeCall(applicationName, databaseName, body, file, null);
-        Type localVarReturnType = new TypeToken<Script>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Create Essbase Script (asynchronously)
-     * Creates the script in the specified application and database and returns the created script
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Script details (required)
-     * @param file Type of script file (optional, default to calc)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is created successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the script. The application or database name may be incorrect, the JSON for the script may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsCreateScriptAsync(String applicationName, String databaseName, Script body, String file, final ApiCallback<Script> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = scriptsCreateScriptValidateBeforeCall(applicationName, databaseName, body, file, _callback);
-        Type localVarReturnType = new TypeToken<Script>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for scriptsDeleteScript
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param file Type of script file (optional, default to calc)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Script is deleted successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the script. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsDeleteScriptCall(String applicationName, String databaseName, String scriptName, String file, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "scriptName" + "\\}", localVarApiClient.escapeString(scriptName.toString()));
+  /**
+   * Rename Essbase Script
+   * Renames the script in the specified application and database and returns the created script. Applicable only for calculation scripts.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Script rename details (required)
+   * @return Script
+   * @throws ApiException if fails to make API call
+   */
+  public Script scriptsRenameScript(String applicationName, String databaseName, ScriptCopy body) throws ApiException {
+    ApiResponse<Script> localVarResponse = scriptsRenameScriptWithHttpInfo(applicationName, databaseName, body);
+    return localVarResponse.getData();
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (file != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("file", file));
+  /**
+   * Rename Essbase Script
+   * Renames the script in the specified application and database and returns the created script. Applicable only for calculation scripts.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body Script rename details (required)
+   * @return ApiResponse&lt;Script&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Script> scriptsRenameScriptWithHttpInfo(String applicationName, String databaseName, ScriptCopy body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = scriptsRenameScriptRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("scriptsRenameScript", localVarResponse);
         }
+        return new ApiResponse<Script>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Script>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  private HttpRequest.Builder scriptsRenameScriptRequestBuilder(String applicationName, String databaseName, ScriptCopy body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling scriptsRenameScript");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling scriptsRenameScript");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling scriptsRenameScript");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/scriptops/rename"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Validate Essbase Script
+   * Validates the specified script. Applicable only for calculation scripts.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Script details.&lt;/p&gt; (required)
+   * @param _file File (optional, default to calc)
+   * @throws ApiException if fails to make API call
+   */
+  public void scriptsValidateScript(String applicationName, String databaseName, Script body, String _file) throws ApiException {
+    scriptsValidateScriptWithHttpInfo(applicationName, databaseName, body, _file);
+  }
+
+  /**
+   * Validate Essbase Script
+   * Validates the specified script. Applicable only for calculation scripts.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Script details.&lt;/p&gt; (required)
+   * @param _file File (optional, default to calc)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> scriptsValidateScriptWithHttpInfo(String applicationName, String databaseName, Script body, String _file) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = scriptsValidateScriptRequestBuilder(applicationName, databaseName, body, _file);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("scriptsValidateScript", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call scriptsDeleteScriptValidateBeforeCall(String applicationName, String databaseName, String scriptName, String file, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling scriptsDeleteScript(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling scriptsDeleteScript(Async)");
-        }
-        
-        // verify the required parameter 'scriptName' is set
-        if (scriptName == null) {
-            throw new ApiException("Missing the required parameter 'scriptName' when calling scriptsDeleteScript(Async)");
-        }
-        
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = scriptsDeleteScriptCall(applicationName, databaseName, scriptName, file, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder scriptsValidateScriptRequestBuilder(String applicationName, String databaseName, Script body, String _file) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling scriptsValidateScript");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling scriptsValidateScript");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling scriptsValidateScript");
     }
 
-    /**
-     * Delete Essbase Script
-     * Deletes the specified script in the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param file Type of script file (optional, default to calc)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Script is deleted successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the script. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void scriptsDeleteScript(String applicationName, String databaseName, String scriptName, String file) throws ApiException {
-        scriptsDeleteScriptWithHttpInfo(applicationName, databaseName, scriptName, file);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/scriptops/validate"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "file";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("file", _file));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Delete Essbase Script
-     * Deletes the specified script in the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param file Type of script file (optional, default to calc)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Script is deleted successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the script. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> scriptsDeleteScriptWithHttpInfo(String applicationName, String databaseName, String scriptName, String file) throws ApiException {
-        okhttp3.Call localVarCall = scriptsDeleteScriptValidateBeforeCall(applicationName, databaseName, scriptName, file, null);
-        return localVarApiClient.execute(localVarCall);
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Delete Essbase Script (asynchronously)
-     * Deletes the specified script in the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param file Type of script file (optional, default to calc)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Script is deleted successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the script. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsDeleteScriptAsync(String applicationName, String databaseName, String scriptName, String file, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = scriptsDeleteScriptValidateBeforeCall(applicationName, databaseName, scriptName, file, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-    /**
-     * Build call for scriptsEditScript
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param body Script details (required)
-     * @param file Type of script file (optional, default to calc)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is updated successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the script. The application or database name may be incorrect, the JSON for the script may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsEditScriptCall(String applicationName, String databaseName, String scriptName, Script body, String file, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "scriptName" + "\\}", localVarApiClient.escapeString(scriptName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (file != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("file", file));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call scriptsEditScriptValidateBeforeCall(String applicationName, String databaseName, String scriptName, Script body, String file, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling scriptsEditScript(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling scriptsEditScript(Async)");
-        }
-        
-        // verify the required parameter 'scriptName' is set
-        if (scriptName == null) {
-            throw new ApiException("Missing the required parameter 'scriptName' when calling scriptsEditScript(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling scriptsEditScript(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = scriptsEditScriptCall(applicationName, databaseName, scriptName, body, file, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Update Essbase Script
-     * Updates the specified script in the specified application and database and returns the updated script
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param body Script details (required)
-     * @param file Type of script file (optional, default to calc)
-     * @return Script
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is updated successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the script. The application or database name may be incorrect, the JSON for the script may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Script scriptsEditScript(String applicationName, String databaseName, String scriptName, Script body, String file) throws ApiException {
-        ApiResponse<Script> localVarResp = scriptsEditScriptWithHttpInfo(applicationName, databaseName, scriptName, body, file);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Update Essbase Script
-     * Updates the specified script in the specified application and database and returns the updated script
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param body Script details (required)
-     * @param file Type of script file (optional, default to calc)
-     * @return ApiResponse&lt;Script&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is updated successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the script. The application or database name may be incorrect, the JSON for the script may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Script> scriptsEditScriptWithHttpInfo(String applicationName, String databaseName, String scriptName, Script body, String file) throws ApiException {
-        okhttp3.Call localVarCall = scriptsEditScriptValidateBeforeCall(applicationName, databaseName, scriptName, body, file, null);
-        Type localVarReturnType = new TypeToken<Script>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Update Essbase Script (asynchronously)
-     * Updates the specified script in the specified application and database and returns the updated script
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param body Script details (required)
-     * @param file Type of script file (optional, default to calc)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is updated successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the script. The application or database name may be incorrect, the JSON for the script may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsEditScriptAsync(String applicationName, String databaseName, String scriptName, Script body, String file, final ApiCallback<Script> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = scriptsEditScriptValidateBeforeCall(applicationName, databaseName, scriptName, body, file, _callback);
-        Type localVarReturnType = new TypeToken<Script>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for scriptsGetRTSVsForScripts
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> List of RTSVs retrived successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get script RTSVs. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsGetRTSVsForScriptsCall(String applicationName, String databaseName, String scriptName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/rtsv"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "scriptName" + "\\}", localVarApiClient.escapeString(scriptName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call scriptsGetRTSVsForScriptsValidateBeforeCall(String applicationName, String databaseName, String scriptName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling scriptsGetRTSVsForScripts(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling scriptsGetRTSVsForScripts(Async)");
-        }
-        
-        // verify the required parameter 'scriptName' is set
-        if (scriptName == null) {
-            throw new ApiException("Missing the required parameter 'scriptName' when calling scriptsGetRTSVsForScripts(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = scriptsGetRTSVsForScriptsCall(applicationName, databaseName, scriptName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Essbase Script RTSVs
-     * Returns the script runtime substitution variables from specified script name
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @return List&lt;RTSVList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> List of RTSVs retrived successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get script RTSVs. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public List<RTSVList> scriptsGetRTSVsForScripts(String applicationName, String databaseName, String scriptName) throws ApiException {
-        ApiResponse<List<RTSVList>> localVarResp = scriptsGetRTSVsForScriptsWithHttpInfo(applicationName, databaseName, scriptName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Essbase Script RTSVs
-     * Returns the script runtime substitution variables from specified script name
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @return ApiResponse&lt;List&lt;RTSVList&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> List of RTSVs retrived successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get script RTSVs. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<List<RTSVList>> scriptsGetRTSVsForScriptsWithHttpInfo(String applicationName, String databaseName, String scriptName) throws ApiException {
-        okhttp3.Call localVarCall = scriptsGetRTSVsForScriptsValidateBeforeCall(applicationName, databaseName, scriptName, null);
-        Type localVarReturnType = new TypeToken<List<RTSVList>>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Essbase Script RTSVs (asynchronously)
-     * Returns the script runtime substitution variables from specified script name
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> List of RTSVs retrived successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get script RTSVs. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsGetRTSVsForScriptsAsync(String applicationName, String databaseName, String scriptName, final ApiCallback<List<RTSVList>> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = scriptsGetRTSVsForScriptsValidateBeforeCall(applicationName, databaseName, scriptName, _callback);
-        Type localVarReturnType = new TypeToken<List<RTSVList>>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for scriptsGetScript
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param file Type of script file (optional, default to calc)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is retrieved successfully. Returns the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the script. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsGetScriptCall(String applicationName, String databaseName, String scriptName, String file, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "scriptName" + "\\}", localVarApiClient.escapeString(scriptName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (file != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("file", file));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call scriptsGetScriptValidateBeforeCall(String applicationName, String databaseName, String scriptName, String file, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling scriptsGetScript(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling scriptsGetScript(Async)");
-        }
-        
-        // verify the required parameter 'scriptName' is set
-        if (scriptName == null) {
-            throw new ApiException("Missing the required parameter 'scriptName' when calling scriptsGetScript(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = scriptsGetScriptCall(applicationName, databaseName, scriptName, file, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Essbase Script
-     * Returns the script from the specified application and database based on the script name
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param file Type of script file (optional, default to calc)
-     * @return Script
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is retrieved successfully. Returns the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the script. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Script scriptsGetScript(String applicationName, String databaseName, String scriptName, String file) throws ApiException {
-        ApiResponse<Script> localVarResp = scriptsGetScriptWithHttpInfo(applicationName, databaseName, scriptName, file);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Essbase Script
-     * Returns the script from the specified application and database based on the script name
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param file Type of script file (optional, default to calc)
-     * @return ApiResponse&lt;Script&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is retrieved successfully. Returns the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the script. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Script> scriptsGetScriptWithHttpInfo(String applicationName, String databaseName, String scriptName, String file) throws ApiException {
-        okhttp3.Call localVarCall = scriptsGetScriptValidateBeforeCall(applicationName, databaseName, scriptName, file, null);
-        Type localVarReturnType = new TypeToken<Script>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Essbase Script (asynchronously)
-     * Returns the script from the specified application and database based on the script name
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param file Type of script file (optional, default to calc)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is retrieved successfully. Returns the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the script. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsGetScriptAsync(String applicationName, String databaseName, String scriptName, String file, final ApiCallback<Script> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = scriptsGetScriptValidateBeforeCall(applicationName, databaseName, scriptName, file, _callback);
-        Type localVarReturnType = new TypeToken<Script>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for scriptsGetScriptContent
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param file Type of script file (optional, default to calc)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script content is retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get script contents. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsGetScriptContentCall(String applicationName, String databaseName, String scriptName, String file, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/content"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "scriptName" + "\\}", localVarApiClient.escapeString(scriptName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (file != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("file", file));
-        }
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call scriptsGetScriptContentValidateBeforeCall(String applicationName, String databaseName, String scriptName, String file, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling scriptsGetScriptContent(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling scriptsGetScriptContent(Async)");
-        }
-        
-        // verify the required parameter 'scriptName' is set
-        if (scriptName == null) {
-            throw new ApiException("Missing the required parameter 'scriptName' when calling scriptsGetScriptContent(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = scriptsGetScriptContentCall(applicationName, databaseName, scriptName, file, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Essbase Script Contents
-     * Returns the script contents of the specified script name from the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param file Type of script file (optional, default to calc)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script content is retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get script contents. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void scriptsGetScriptContent(String applicationName, String databaseName, String scriptName, String file) throws ApiException {
-        scriptsGetScriptContentWithHttpInfo(applicationName, databaseName, scriptName, file);
-    }
-
-    /**
-     * Get Essbase Script Contents
-     * Returns the script contents of the specified script name from the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param file Type of script file (optional, default to calc)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script content is retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get script contents. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> scriptsGetScriptContentWithHttpInfo(String applicationName, String databaseName, String scriptName, String file) throws ApiException {
-        okhttp3.Call localVarCall = scriptsGetScriptContentValidateBeforeCall(applicationName, databaseName, scriptName, file, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Get Essbase Script Contents (asynchronously)
-     * Returns the script contents of the specified script name from the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param file Type of script file (optional, default to calc)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script content is retrieved successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get script contents. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsGetScriptContentAsync(String applicationName, String databaseName, String scriptName, String file, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = scriptsGetScriptContentValidateBeforeCall(applicationName, databaseName, scriptName, file, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for scriptsGetScriptPermissions
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Permissions are retrieved successfully for the script </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get permissions for the script. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsGetScriptPermissionsCall(String applicationName, String databaseName, String scriptName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/permissions"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "scriptName" + "\\}", localVarApiClient.escapeString(scriptName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call scriptsGetScriptPermissionsValidateBeforeCall(String applicationName, String databaseName, String scriptName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling scriptsGetScriptPermissions(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling scriptsGetScriptPermissions(Async)");
-        }
-        
-        // verify the required parameter 'scriptName' is set
-        if (scriptName == null) {
-            throw new ApiException("Missing the required parameter 'scriptName' when calling scriptsGetScriptPermissions(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = scriptsGetScriptPermissionsCall(applicationName, databaseName, scriptName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Essbase Script Permissions
-     * Retrieves permissions for the specified script. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @return List&lt;UserGroupProvisionInfoList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Permissions are retrieved successfully for the script </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get permissions for the script. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public List<UserGroupProvisionInfoList> scriptsGetScriptPermissions(String applicationName, String databaseName, String scriptName) throws ApiException {
-        ApiResponse<List<UserGroupProvisionInfoList>> localVarResp = scriptsGetScriptPermissionsWithHttpInfo(applicationName, databaseName, scriptName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Essbase Script Permissions
-     * Retrieves permissions for the specified script. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @return ApiResponse&lt;List&lt;UserGroupProvisionInfoList&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Permissions are retrieved successfully for the script </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get permissions for the script. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<List<UserGroupProvisionInfoList>> scriptsGetScriptPermissionsWithHttpInfo(String applicationName, String databaseName, String scriptName) throws ApiException {
-        okhttp3.Call localVarCall = scriptsGetScriptPermissionsValidateBeforeCall(applicationName, databaseName, scriptName, null);
-        Type localVarReturnType = new TypeToken<List<UserGroupProvisionInfoList>>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Essbase Script Permissions (asynchronously)
-     * Retrieves permissions for the specified script. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Permissions are retrieved successfully for the script </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get permissions for the script. The application, database, or script name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsGetScriptPermissionsAsync(String applicationName, String databaseName, String scriptName, final ApiCallback<List<UserGroupProvisionInfoList>> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = scriptsGetScriptPermissionsValidateBeforeCall(applicationName, databaseName, scriptName, _callback);
-        Type localVarReturnType = new TypeToken<List<UserGroupProvisionInfoList>>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for scriptsListScripts
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param file Type of script file (optional, default to calc)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Scripts are retrieved successfully. Gives the script details along with the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the scripts. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsListScriptsCall(String applicationName, String databaseName, String file, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (file != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("file", file));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call scriptsListScriptsValidateBeforeCall(String applicationName, String databaseName, String file, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling scriptsListScripts(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling scriptsListScripts(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = scriptsListScriptsCall(applicationName, databaseName, file, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * List Essbase Scripts
-     * Returns all the scripts from the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param file Type of script file (optional, default to calc)
-     * @return ScriptList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Scripts are retrieved successfully. Gives the script details along with the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the scripts. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ScriptList scriptsListScripts(String applicationName, String databaseName, String file) throws ApiException {
-        ApiResponse<ScriptList> localVarResp = scriptsListScriptsWithHttpInfo(applicationName, databaseName, file);
-        return localVarResp.getData();
-    }
-
-    /**
-     * List Essbase Scripts
-     * Returns all the scripts from the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param file Type of script file (optional, default to calc)
-     * @return ApiResponse&lt;ScriptList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Scripts are retrieved successfully. Gives the script details along with the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the scripts. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ScriptList> scriptsListScriptsWithHttpInfo(String applicationName, String databaseName, String file) throws ApiException {
-        okhttp3.Call localVarCall = scriptsListScriptsValidateBeforeCall(applicationName, databaseName, file, null);
-        Type localVarReturnType = new TypeToken<ScriptList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List Essbase Scripts (asynchronously)
-     * Returns all the scripts from the specified application and database
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param file Type of script file (optional, default to calc)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Scripts are retrieved successfully. Gives the script details along with the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the scripts. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsListScriptsAsync(String applicationName, String databaseName, String file, final ApiCallback<ScriptList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = scriptsListScriptsValidateBeforeCall(applicationName, databaseName, file, _callback);
-        Type localVarReturnType = new TypeToken<ScriptList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for scriptsRemoveScriptPermission
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param userGroupId Id of the user or group (required)
-     * @param group Says whether the userGroupId is a group or not (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Permission is removed successfully from the script </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete permissions for the script. The application, database, or script name may be incorrect, or the user or group ID may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsRemoveScriptPermissionCall(String applicationName, String databaseName, String scriptName, String userGroupId, Boolean group, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/permissions/{userGroupId}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "scriptName" + "\\}", localVarApiClient.escapeString(scriptName.toString()))
-            .replaceAll("\\{" + "userGroupId" + "\\}", localVarApiClient.escapeString(userGroupId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (group != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("group", group));
-        }
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call scriptsRemoveScriptPermissionValidateBeforeCall(String applicationName, String databaseName, String scriptName, String userGroupId, Boolean group, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling scriptsRemoveScriptPermission(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling scriptsRemoveScriptPermission(Async)");
-        }
-        
-        // verify the required parameter 'scriptName' is set
-        if (scriptName == null) {
-            throw new ApiException("Missing the required parameter 'scriptName' when calling scriptsRemoveScriptPermission(Async)");
-        }
-        
-        // verify the required parameter 'userGroupId' is set
-        if (userGroupId == null) {
-            throw new ApiException("Missing the required parameter 'userGroupId' when calling scriptsRemoveScriptPermission(Async)");
-        }
-        
-        // verify the required parameter 'group' is set
-        if (group == null) {
-            throw new ApiException("Missing the required parameter 'group' when calling scriptsRemoveScriptPermission(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = scriptsRemoveScriptPermissionCall(applicationName, databaseName, scriptName, userGroupId, group, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Remove Essbase Script Permissions
-     * Removes permissions from the specified script for the specified user or group. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param userGroupId Id of the user or group (required)
-     * @param group Says whether the userGroupId is a group or not (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Permission is removed successfully from the script </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete permissions for the script. The application, database, or script name may be incorrect, or the user or group ID may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void scriptsRemoveScriptPermission(String applicationName, String databaseName, String scriptName, String userGroupId, Boolean group) throws ApiException {
-        scriptsRemoveScriptPermissionWithHttpInfo(applicationName, databaseName, scriptName, userGroupId, group);
-    }
-
-    /**
-     * Remove Essbase Script Permissions
-     * Removes permissions from the specified script for the specified user or group. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param userGroupId Id of the user or group (required)
-     * @param group Says whether the userGroupId is a group or not (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Permission is removed successfully from the script </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete permissions for the script. The application, database, or script name may be incorrect, or the user or group ID may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> scriptsRemoveScriptPermissionWithHttpInfo(String applicationName, String databaseName, String scriptName, String userGroupId, Boolean group) throws ApiException {
-        okhttp3.Call localVarCall = scriptsRemoveScriptPermissionValidateBeforeCall(applicationName, databaseName, scriptName, userGroupId, group, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Remove Essbase Script Permissions (asynchronously)
-     * Removes permissions from the specified script for the specified user or group. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param scriptName Script name (required)
-     * @param userGroupId Id of the user or group (required)
-     * @param group Says whether the userGroupId is a group or not (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Permission is removed successfully from the script </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete permissions for the script. The application, database, or script name may be incorrect, or the user or group ID may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsRemoveScriptPermissionAsync(String applicationName, String databaseName, String scriptName, String userGroupId, Boolean group, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = scriptsRemoveScriptPermissionValidateBeforeCall(applicationName, databaseName, scriptName, userGroupId, group, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for scriptsRenameScript
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Script rename details (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is renamed successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to rename the script. The application, database, or script name may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsRenameScriptCall(String applicationName, String databaseName, ScriptCopy body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/scriptops/rename"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call scriptsRenameScriptValidateBeforeCall(String applicationName, String databaseName, ScriptCopy body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling scriptsRenameScript(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling scriptsRenameScript(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling scriptsRenameScript(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = scriptsRenameScriptCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Rename Essbase Script
-     * Renames the script in the specified application and database and returns the created script. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Script rename details (required)
-     * @return Script
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is renamed successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to rename the script. The application, database, or script name may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Script scriptsRenameScript(String applicationName, String databaseName, ScriptCopy body) throws ApiException {
-        ApiResponse<Script> localVarResp = scriptsRenameScriptWithHttpInfo(applicationName, databaseName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Rename Essbase Script
-     * Renames the script in the specified application and database and returns the created script. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Script rename details (required)
-     * @return ApiResponse&lt;Script&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is renamed successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to rename the script. The application, database, or script name may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Script> scriptsRenameScriptWithHttpInfo(String applicationName, String databaseName, ScriptCopy body) throws ApiException {
-        okhttp3.Call localVarCall = scriptsRenameScriptValidateBeforeCall(applicationName, databaseName, body, null);
-        Type localVarReturnType = new TypeToken<Script>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Rename Essbase Script (asynchronously)
-     * Renames the script in the specified application and database and returns the created script. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body Script rename details (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is renamed successfully. Has the script details and the links to get/edit/delete the script and to get the script content </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to rename the script. The application, database, or script name may be incorrect, or the specified script name may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsRenameScriptAsync(String applicationName, String databaseName, ScriptCopy body, final ApiCallback<Script> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = scriptsRenameScriptValidateBeforeCall(applicationName, databaseName, body, _callback);
-        Type localVarReturnType = new TypeToken<Script>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for scriptsValidateScript
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Script details.&lt;/p&gt; (required)
-     * @param file File (optional, default to calc)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is validated successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to validate the script. The application or database name may be incorrect, or the contents may be incomplete for the specified script name.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsValidateScriptCall(String applicationName, String databaseName, Script body, String file, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/scripts/scriptops/validate"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (file != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("file", file));
-        }
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call scriptsValidateScriptValidateBeforeCall(String applicationName, String databaseName, Script body, String file, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling scriptsValidateScript(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling scriptsValidateScript(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling scriptsValidateScript(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = scriptsValidateScriptCall(applicationName, databaseName, body, file, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Validate Essbase Script
-     * Validates the specified script. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Script details.&lt;/p&gt; (required)
-     * @param file File (optional, default to calc)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is validated successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to validate the script. The application or database name may be incorrect, or the contents may be incomplete for the specified script name.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void scriptsValidateScript(String applicationName, String databaseName, Script body, String file) throws ApiException {
-        scriptsValidateScriptWithHttpInfo(applicationName, databaseName, body, file);
-    }
-
-    /**
-     * Validate Essbase Script
-     * Validates the specified script. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Script details.&lt;/p&gt; (required)
-     * @param file File (optional, default to calc)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is validated successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to validate the script. The application or database name may be incorrect, or the contents may be incomplete for the specified script name.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> scriptsValidateScriptWithHttpInfo(String applicationName, String databaseName, Script body, String file) throws ApiException {
-        okhttp3.Call localVarCall = scriptsValidateScriptValidateBeforeCall(applicationName, databaseName, body, file, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Validate Essbase Script (asynchronously)
-     * Validates the specified script. Applicable only for calculation scripts.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Script details.&lt;/p&gt; (required)
-     * @param file File (optional, default to calc)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Script is validated successfully. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to validate the script. The application or database name may be incorrect, or the contents may be incomplete for the specified script name.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call scriptsValidateScriptAsync(String applicationName, String databaseName, Script body, String file, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = scriptsValidateScriptValidateBeforeCall(applicationName, databaseName, body, file, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
 }

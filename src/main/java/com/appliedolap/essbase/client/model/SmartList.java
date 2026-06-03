@@ -13,185 +13,209 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * SmartList
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  SmartList.JSON_PROPERTY_INCREMENTAL_NUMBER,
+  SmartList.JSON_PROPERTY_START_NUMBER,
+  SmartList.JSON_PROPERTY_MISSING_NAME,
+  SmartList.JSON_PROPERTY_NAME,
+  SmartList.JSON_PROPERTY_OUT_OF_RANGE_NAME,
+  SmartList.JSON_PROPERTY_REMOVE_UNSPECIFIED
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class SmartList {
-  public static final String SERIALIZED_NAME_INCREMENTAL_NUMBER = "incrementalNumber";
-  @SerializedName(SERIALIZED_NAME_INCREMENTAL_NUMBER)
+  public static final String JSON_PROPERTY_INCREMENTAL_NUMBER = "incrementalNumber";
+  @jakarta.annotation.Nullable
   private Integer incrementalNumber;
 
-  public static final String SERIALIZED_NAME_START_NUMBER = "startNumber";
-  @SerializedName(SERIALIZED_NAME_START_NUMBER)
+  public static final String JSON_PROPERTY_START_NUMBER = "startNumber";
+  @jakarta.annotation.Nullable
   private Integer startNumber;
 
-  public static final String SERIALIZED_NAME_MISSING_NAME = "missingName";
-  @SerializedName(SERIALIZED_NAME_MISSING_NAME)
+  public static final String JSON_PROPERTY_MISSING_NAME = "missingName";
+  @jakarta.annotation.Nullable
   private String missingName;
 
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
-  public static final String SERIALIZED_NAME_OUT_OF_RANGE_NAME = "outOfRangeName";
-  @SerializedName(SERIALIZED_NAME_OUT_OF_RANGE_NAME)
+  public static final String JSON_PROPERTY_OUT_OF_RANGE_NAME = "outOfRangeName";
+  @jakarta.annotation.Nullable
   private String outOfRangeName;
 
-  public static final String SERIALIZED_NAME_REMOVE_UNSPECIFIED = "removeUnspecified";
-  @SerializedName(SERIALIZED_NAME_REMOVE_UNSPECIFIED)
+  public static final String JSON_PROPERTY_REMOVE_UNSPECIFIED = "removeUnspecified";
+  @jakarta.annotation.Nullable
   private Integer removeUnspecified;
 
+  public SmartList() { 
+  }
 
-  public SmartList incrementalNumber(Integer incrementalNumber) {
-    
+  public SmartList incrementalNumber(@jakarta.annotation.Nullable Integer incrementalNumber) {
     this.incrementalNumber = incrementalNumber;
     return this;
   }
 
-   /**
+  /**
    * Get incrementalNumber
    * @return incrementalNumber
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INCREMENTAL_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getIncrementalNumber() {
     return incrementalNumber;
   }
 
 
-  public void setIncrementalNumber(Integer incrementalNumber) {
+  @JsonProperty(JSON_PROPERTY_INCREMENTAL_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIncrementalNumber(@jakarta.annotation.Nullable Integer incrementalNumber) {
     this.incrementalNumber = incrementalNumber;
   }
 
 
-  public SmartList startNumber(Integer startNumber) {
-    
+  public SmartList startNumber(@jakarta.annotation.Nullable Integer startNumber) {
     this.startNumber = startNumber;
     return this;
   }
 
-   /**
+  /**
    * Get startNumber
    * @return startNumber
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_START_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getStartNumber() {
     return startNumber;
   }
 
 
-  public void setStartNumber(Integer startNumber) {
+  @JsonProperty(JSON_PROPERTY_START_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStartNumber(@jakarta.annotation.Nullable Integer startNumber) {
     this.startNumber = startNumber;
   }
 
 
-  public SmartList missingName(String missingName) {
-    
+  public SmartList missingName(@jakarta.annotation.Nullable String missingName) {
     this.missingName = missingName;
     return this;
   }
 
-   /**
+  /**
    * Get missingName
    * @return missingName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MISSING_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getMissingName() {
     return missingName;
   }
 
 
-  public void setMissingName(String missingName) {
+  @JsonProperty(JSON_PROPERTY_MISSING_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMissingName(@jakarta.annotation.Nullable String missingName) {
     this.missingName = missingName;
   }
 
 
-  public SmartList name(String name) {
-    
+  public SmartList name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
-  public SmartList outOfRangeName(String outOfRangeName) {
-    
+  public SmartList outOfRangeName(@jakarta.annotation.Nullable String outOfRangeName) {
     this.outOfRangeName = outOfRangeName;
     return this;
   }
 
-   /**
+  /**
    * Get outOfRangeName
    * @return outOfRangeName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OUT_OF_RANGE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getOutOfRangeName() {
     return outOfRangeName;
   }
 
 
-  public void setOutOfRangeName(String outOfRangeName) {
+  @JsonProperty(JSON_PROPERTY_OUT_OF_RANGE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOutOfRangeName(@jakarta.annotation.Nullable String outOfRangeName) {
     this.outOfRangeName = outOfRangeName;
   }
 
 
-  public SmartList removeUnspecified(Integer removeUnspecified) {
-    
+  public SmartList removeUnspecified(@jakarta.annotation.Nullable Integer removeUnspecified) {
     this.removeUnspecified = removeUnspecified;
     return this;
   }
 
-   /**
+  /**
    * Get removeUnspecified
    * @return removeUnspecified
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REMOVE_UNSPECIFIED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getRemoveUnspecified() {
     return removeUnspecified;
   }
 
 
-  public void setRemoveUnspecified(Integer removeUnspecified) {
+  @JsonProperty(JSON_PROPERTY_REMOVE_UNSPECIFIED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRemoveUnspecified(@jakarta.annotation.Nullable Integer removeUnspecified) {
     this.removeUnspecified = removeUnspecified;
   }
 
 
+  /**
+   * Return true if this SmartList object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -239,5 +263,69 @@ public class SmartList {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `incrementalNumber` to the URL query string
+    if (getIncrementalNumber() != null) {
+      joiner.add(String.format("%sincrementalNumber%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIncrementalNumber()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `startNumber` to the URL query string
+    if (getStartNumber() != null) {
+      joiner.add(String.format("%sstartNumber%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStartNumber()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `missingName` to the URL query string
+    if (getMissingName() != null) {
+      joiner.add(String.format("%smissingName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMissingName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `outOfRangeName` to the URL query string
+    if (getOutOfRangeName() != null) {
+      joiner.add(String.format("%soutOfRangeName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getOutOfRangeName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `removeUnspecified` to the URL query string
+    if (getRemoveUnspecified() != null) {
+      joiner.add(String.format("%sremoveUnspecified%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRemoveUnspecified()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

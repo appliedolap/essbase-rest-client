@@ -13,36 +13,46 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ScenarioEditBean
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ScenarioEditBean.JSON_PROPERTY_DUE_DATE,
+  ScenarioEditBean.JSON_PROPERTY_PRIORITY,
+  ScenarioEditBean.JSON_PROPERTY_OWNER,
+  ScenarioEditBean.JSON_PROPERTY_DESCRIPTION
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ScenarioEditBean {
-  public static final String SERIALIZED_NAME_DUE_DATE = "dueDate";
-  @SerializedName(SERIALIZED_NAME_DUE_DATE)
+  public static final String JSON_PROPERTY_DUE_DATE = "dueDate";
+  @jakarta.annotation.Nullable
   private Long dueDate;
 
   /**
    * Gets or Sets priority
    */
-  @JsonAdapter(PriorityEnum.Adapter.class)
   public enum PriorityEnum {
-    LOW("LOW"),
+    LOW(String.valueOf("LOW")),
     
-    MEDIUM("MEDIUM"),
+    MEDIUM(String.valueOf("MEDIUM")),
     
-    HIGH("HIGH");
+    HIGH(String.valueOf("HIGH"));
 
     private String value;
 
@@ -50,6 +60,7 @@ public class ScenarioEditBean {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -59,6 +70,7 @@ public class ScenarioEditBean {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static PriorityEnum fromValue(String value) {
       for (PriorityEnum b : PriorityEnum.values()) {
         if (b.value.equals(value)) {
@@ -67,126 +79,122 @@ public class ScenarioEditBean {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<PriorityEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final PriorityEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public PriorityEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return PriorityEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_PRIORITY = "priority";
-  @SerializedName(SERIALIZED_NAME_PRIORITY)
+  public static final String JSON_PROPERTY_PRIORITY = "priority";
+  @jakarta.annotation.Nullable
   private PriorityEnum priority;
 
-  public static final String SERIALIZED_NAME_OWNER = "owner";
-  @SerializedName(SERIALIZED_NAME_OWNER)
+  public static final String JSON_PROPERTY_OWNER = "owner";
+  @jakarta.annotation.Nullable
   private String owner;
 
-  public static final String SERIALIZED_NAME_DESCRIPTION = "description";
-  @SerializedName(SERIALIZED_NAME_DESCRIPTION)
+  public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  @jakarta.annotation.Nullable
   private String description;
 
+  public ScenarioEditBean() { 
+  }
 
-  public ScenarioEditBean dueDate(Long dueDate) {
-    
+  public ScenarioEditBean dueDate(@jakarta.annotation.Nullable Long dueDate) {
     this.dueDate = dueDate;
     return this;
   }
 
-   /**
+  /**
    * Get dueDate
    * @return dueDate
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DUE_DATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getDueDate() {
     return dueDate;
   }
 
 
-  public void setDueDate(Long dueDate) {
+  @JsonProperty(JSON_PROPERTY_DUE_DATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDueDate(@jakarta.annotation.Nullable Long dueDate) {
     this.dueDate = dueDate;
   }
 
 
-  public ScenarioEditBean priority(PriorityEnum priority) {
-    
+  public ScenarioEditBean priority(@jakarta.annotation.Nullable PriorityEnum priority) {
     this.priority = priority;
     return this;
   }
 
-   /**
+  /**
    * Get priority
    * @return priority
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PRIORITY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public PriorityEnum getPriority() {
     return priority;
   }
 
 
-  public void setPriority(PriorityEnum priority) {
+  @JsonProperty(JSON_PROPERTY_PRIORITY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPriority(@jakarta.annotation.Nullable PriorityEnum priority) {
     this.priority = priority;
   }
 
 
-  public ScenarioEditBean owner(String owner) {
-    
+  public ScenarioEditBean owner(@jakarta.annotation.Nullable String owner) {
     this.owner = owner;
     return this;
   }
 
-   /**
+  /**
    * Get owner
    * @return owner
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OWNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getOwner() {
     return owner;
   }
 
 
-  public void setOwner(String owner) {
+  @JsonProperty(JSON_PROPERTY_OWNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOwner(@jakarta.annotation.Nullable String owner) {
     this.owner = owner;
   }
 
 
-  public ScenarioEditBean description(String description) {
-    
+  public ScenarioEditBean description(@jakarta.annotation.Nullable String description) {
     this.description = description;
     return this;
   }
 
-   /**
+  /**
    * Get description
    * @return description
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDescription() {
     return description;
   }
 
 
-  public void setDescription(String description) {
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDescription(@jakarta.annotation.Nullable String description) {
     this.description = description;
   }
 
 
+  /**
+   * Return true if this ScenarioEditBean object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -230,5 +238,59 @@ public class ScenarioEditBean {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `dueDate` to the URL query string
+    if (getDueDate() != null) {
+      joiner.add(String.format("%sdueDate%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDueDate()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `priority` to the URL query string
+    if (getPriority() != null) {
+      joiner.add(String.format("%spriority%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPriority()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `owner` to the URL query string
+    if (getOwner() != null) {
+      joiner.add(String.format("%sowner%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getOwner()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `description` to the URL query string
+    if (getDescription() != null) {
+      joiner.add(String.format("%sdescription%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDescription()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

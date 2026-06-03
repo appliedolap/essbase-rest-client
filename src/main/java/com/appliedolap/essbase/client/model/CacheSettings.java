@@ -13,266 +13,296 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * CacheSettings
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  CacheSettings.JSON_PROPERTY_CACHE_MEMORY_LOCKING,
+  CacheSettings.JSON_PROPERTY_INDEX_CACHE_SETTING,
+  CacheSettings.JSON_PROPERTY_INDEX_CACHE_CURRENT_VALUE,
+  CacheSettings.JSON_PROPERTY_DATA_FILE_CACHE_SETTING,
+  CacheSettings.JSON_PROPERTY_DATA_FILE_CACHE_CURRENT_VALUE,
+  CacheSettings.JSON_PROPERTY_DATA_CACHE_SETTING,
+  CacheSettings.JSON_PROPERTY_DATA_CACHE_CURRENT_VALUE,
+  CacheSettings.JSON_PROPERTY_INDEX_PAGE_SETTING,
+  CacheSettings.JSON_PROPERTY_INDEX_PAGE_CURRENT_VALUE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class CacheSettings {
-  public static final String SERIALIZED_NAME_CACHE_MEMORY_LOCKING = "cacheMemoryLocking";
-  @SerializedName(SERIALIZED_NAME_CACHE_MEMORY_LOCKING)
+  public static final String JSON_PROPERTY_CACHE_MEMORY_LOCKING = "cacheMemoryLocking";
+  @jakarta.annotation.Nullable
   private Boolean cacheMemoryLocking;
 
-  public static final String SERIALIZED_NAME_INDEX_CACHE_SETTING = "indexCacheSetting";
-  @SerializedName(SERIALIZED_NAME_INDEX_CACHE_SETTING)
+  public static final String JSON_PROPERTY_INDEX_CACHE_SETTING = "indexCacheSetting";
+  @jakarta.annotation.Nullable
   private Long indexCacheSetting;
 
-  public static final String SERIALIZED_NAME_INDEX_CACHE_CURRENT_VALUE = "indexCacheCurrentValue";
-  @SerializedName(SERIALIZED_NAME_INDEX_CACHE_CURRENT_VALUE)
+  public static final String JSON_PROPERTY_INDEX_CACHE_CURRENT_VALUE = "indexCacheCurrentValue";
+  @jakarta.annotation.Nullable
   private Long indexCacheCurrentValue;
 
-  public static final String SERIALIZED_NAME_DATA_FILE_CACHE_SETTING = "dataFileCacheSetting";
-  @SerializedName(SERIALIZED_NAME_DATA_FILE_CACHE_SETTING)
+  public static final String JSON_PROPERTY_DATA_FILE_CACHE_SETTING = "dataFileCacheSetting";
+  @jakarta.annotation.Nullable
   private Long dataFileCacheSetting;
 
-  public static final String SERIALIZED_NAME_DATA_FILE_CACHE_CURRENT_VALUE = "dataFileCacheCurrentValue";
-  @SerializedName(SERIALIZED_NAME_DATA_FILE_CACHE_CURRENT_VALUE)
+  public static final String JSON_PROPERTY_DATA_FILE_CACHE_CURRENT_VALUE = "dataFileCacheCurrentValue";
+  @jakarta.annotation.Nullable
   private Long dataFileCacheCurrentValue;
 
-  public static final String SERIALIZED_NAME_DATA_CACHE_SETTING = "dataCacheSetting";
-  @SerializedName(SERIALIZED_NAME_DATA_CACHE_SETTING)
+  public static final String JSON_PROPERTY_DATA_CACHE_SETTING = "dataCacheSetting";
+  @jakarta.annotation.Nullable
   private Long dataCacheSetting;
 
-  public static final String SERIALIZED_NAME_DATA_CACHE_CURRENT_VALUE = "dataCacheCurrentValue";
-  @SerializedName(SERIALIZED_NAME_DATA_CACHE_CURRENT_VALUE)
+  public static final String JSON_PROPERTY_DATA_CACHE_CURRENT_VALUE = "dataCacheCurrentValue";
+  @jakarta.annotation.Nullable
   private Long dataCacheCurrentValue;
 
-  public static final String SERIALIZED_NAME_INDEX_PAGE_SETTING = "indexPageSetting";
-  @SerializedName(SERIALIZED_NAME_INDEX_PAGE_SETTING)
+  public static final String JSON_PROPERTY_INDEX_PAGE_SETTING = "indexPageSetting";
+  @jakarta.annotation.Nullable
   private Integer indexPageSetting;
 
-  public static final String SERIALIZED_NAME_INDEX_PAGE_CURRENT_VALUE = "indexPageCurrentValue";
-  @SerializedName(SERIALIZED_NAME_INDEX_PAGE_CURRENT_VALUE)
+  public static final String JSON_PROPERTY_INDEX_PAGE_CURRENT_VALUE = "indexPageCurrentValue";
+  @jakarta.annotation.Nullable
   private Integer indexPageCurrentValue;
 
+  public CacheSettings() { 
+  }
 
-  public CacheSettings cacheMemoryLocking(Boolean cacheMemoryLocking) {
-    
+  public CacheSettings cacheMemoryLocking(@jakarta.annotation.Nullable Boolean cacheMemoryLocking) {
     this.cacheMemoryLocking = cacheMemoryLocking;
     return this;
   }
 
-   /**
+  /**
    * Get cacheMemoryLocking
    * @return cacheMemoryLocking
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CACHE_MEMORY_LOCKING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getCacheMemoryLocking() {
     return cacheMemoryLocking;
   }
 
 
-  public void setCacheMemoryLocking(Boolean cacheMemoryLocking) {
+  @JsonProperty(JSON_PROPERTY_CACHE_MEMORY_LOCKING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCacheMemoryLocking(@jakarta.annotation.Nullable Boolean cacheMemoryLocking) {
     this.cacheMemoryLocking = cacheMemoryLocking;
   }
 
 
-  public CacheSettings indexCacheSetting(Long indexCacheSetting) {
-    
+  public CacheSettings indexCacheSetting(@jakarta.annotation.Nullable Long indexCacheSetting) {
     this.indexCacheSetting = indexCacheSetting;
     return this;
   }
 
-   /**
+  /**
    * Get indexCacheSetting
    * @return indexCacheSetting
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INDEX_CACHE_SETTING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getIndexCacheSetting() {
     return indexCacheSetting;
   }
 
 
-  public void setIndexCacheSetting(Long indexCacheSetting) {
+  @JsonProperty(JSON_PROPERTY_INDEX_CACHE_SETTING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIndexCacheSetting(@jakarta.annotation.Nullable Long indexCacheSetting) {
     this.indexCacheSetting = indexCacheSetting;
   }
 
 
-  public CacheSettings indexCacheCurrentValue(Long indexCacheCurrentValue) {
-    
+  public CacheSettings indexCacheCurrentValue(@jakarta.annotation.Nullable Long indexCacheCurrentValue) {
     this.indexCacheCurrentValue = indexCacheCurrentValue;
     return this;
   }
 
-   /**
+  /**
    * Get indexCacheCurrentValue
    * @return indexCacheCurrentValue
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INDEX_CACHE_CURRENT_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getIndexCacheCurrentValue() {
     return indexCacheCurrentValue;
   }
 
 
-  public void setIndexCacheCurrentValue(Long indexCacheCurrentValue) {
+  @JsonProperty(JSON_PROPERTY_INDEX_CACHE_CURRENT_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIndexCacheCurrentValue(@jakarta.annotation.Nullable Long indexCacheCurrentValue) {
     this.indexCacheCurrentValue = indexCacheCurrentValue;
   }
 
 
-  public CacheSettings dataFileCacheSetting(Long dataFileCacheSetting) {
-    
+  public CacheSettings dataFileCacheSetting(@jakarta.annotation.Nullable Long dataFileCacheSetting) {
     this.dataFileCacheSetting = dataFileCacheSetting;
     return this;
   }
 
-   /**
+  /**
    * Get dataFileCacheSetting
    * @return dataFileCacheSetting
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_FILE_CACHE_SETTING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getDataFileCacheSetting() {
     return dataFileCacheSetting;
   }
 
 
-  public void setDataFileCacheSetting(Long dataFileCacheSetting) {
+  @JsonProperty(JSON_PROPERTY_DATA_FILE_CACHE_SETTING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataFileCacheSetting(@jakarta.annotation.Nullable Long dataFileCacheSetting) {
     this.dataFileCacheSetting = dataFileCacheSetting;
   }
 
 
-  public CacheSettings dataFileCacheCurrentValue(Long dataFileCacheCurrentValue) {
-    
+  public CacheSettings dataFileCacheCurrentValue(@jakarta.annotation.Nullable Long dataFileCacheCurrentValue) {
     this.dataFileCacheCurrentValue = dataFileCacheCurrentValue;
     return this;
   }
 
-   /**
+  /**
    * Get dataFileCacheCurrentValue
    * @return dataFileCacheCurrentValue
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_FILE_CACHE_CURRENT_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getDataFileCacheCurrentValue() {
     return dataFileCacheCurrentValue;
   }
 
 
-  public void setDataFileCacheCurrentValue(Long dataFileCacheCurrentValue) {
+  @JsonProperty(JSON_PROPERTY_DATA_FILE_CACHE_CURRENT_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataFileCacheCurrentValue(@jakarta.annotation.Nullable Long dataFileCacheCurrentValue) {
     this.dataFileCacheCurrentValue = dataFileCacheCurrentValue;
   }
 
 
-  public CacheSettings dataCacheSetting(Long dataCacheSetting) {
-    
+  public CacheSettings dataCacheSetting(@jakarta.annotation.Nullable Long dataCacheSetting) {
     this.dataCacheSetting = dataCacheSetting;
     return this;
   }
 
-   /**
+  /**
    * Get dataCacheSetting
    * @return dataCacheSetting
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_CACHE_SETTING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getDataCacheSetting() {
     return dataCacheSetting;
   }
 
 
-  public void setDataCacheSetting(Long dataCacheSetting) {
+  @JsonProperty(JSON_PROPERTY_DATA_CACHE_SETTING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataCacheSetting(@jakarta.annotation.Nullable Long dataCacheSetting) {
     this.dataCacheSetting = dataCacheSetting;
   }
 
 
-  public CacheSettings dataCacheCurrentValue(Long dataCacheCurrentValue) {
-    
+  public CacheSettings dataCacheCurrentValue(@jakarta.annotation.Nullable Long dataCacheCurrentValue) {
     this.dataCacheCurrentValue = dataCacheCurrentValue;
     return this;
   }
 
-   /**
+  /**
    * Get dataCacheCurrentValue
    * @return dataCacheCurrentValue
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_CACHE_CURRENT_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getDataCacheCurrentValue() {
     return dataCacheCurrentValue;
   }
 
 
-  public void setDataCacheCurrentValue(Long dataCacheCurrentValue) {
+  @JsonProperty(JSON_PROPERTY_DATA_CACHE_CURRENT_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataCacheCurrentValue(@jakarta.annotation.Nullable Long dataCacheCurrentValue) {
     this.dataCacheCurrentValue = dataCacheCurrentValue;
   }
 
 
-  public CacheSettings indexPageSetting(Integer indexPageSetting) {
-    
+  public CacheSettings indexPageSetting(@jakarta.annotation.Nullable Integer indexPageSetting) {
     this.indexPageSetting = indexPageSetting;
     return this;
   }
 
-   /**
+  /**
    * Get indexPageSetting
    * @return indexPageSetting
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INDEX_PAGE_SETTING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getIndexPageSetting() {
     return indexPageSetting;
   }
 
 
-  public void setIndexPageSetting(Integer indexPageSetting) {
+  @JsonProperty(JSON_PROPERTY_INDEX_PAGE_SETTING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIndexPageSetting(@jakarta.annotation.Nullable Integer indexPageSetting) {
     this.indexPageSetting = indexPageSetting;
   }
 
 
-  public CacheSettings indexPageCurrentValue(Integer indexPageCurrentValue) {
-    
+  public CacheSettings indexPageCurrentValue(@jakarta.annotation.Nullable Integer indexPageCurrentValue) {
     this.indexPageCurrentValue = indexPageCurrentValue;
     return this;
   }
 
-   /**
+  /**
    * Get indexPageCurrentValue
    * @return indexPageCurrentValue
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INDEX_PAGE_CURRENT_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getIndexPageCurrentValue() {
     return indexPageCurrentValue;
   }
 
 
-  public void setIndexPageCurrentValue(Integer indexPageCurrentValue) {
+  @JsonProperty(JSON_PROPERTY_INDEX_PAGE_CURRENT_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIndexPageCurrentValue(@jakarta.annotation.Nullable Integer indexPageCurrentValue) {
     this.indexPageCurrentValue = indexPageCurrentValue;
   }
 
 
+  /**
+   * Return true if this CacheSettings object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -326,5 +356,84 @@ public class CacheSettings {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `cacheMemoryLocking` to the URL query string
+    if (getCacheMemoryLocking() != null) {
+      joiner.add(String.format("%scacheMemoryLocking%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCacheMemoryLocking()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `indexCacheSetting` to the URL query string
+    if (getIndexCacheSetting() != null) {
+      joiner.add(String.format("%sindexCacheSetting%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIndexCacheSetting()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `indexCacheCurrentValue` to the URL query string
+    if (getIndexCacheCurrentValue() != null) {
+      joiner.add(String.format("%sindexCacheCurrentValue%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIndexCacheCurrentValue()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dataFileCacheSetting` to the URL query string
+    if (getDataFileCacheSetting() != null) {
+      joiner.add(String.format("%sdataFileCacheSetting%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataFileCacheSetting()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dataFileCacheCurrentValue` to the URL query string
+    if (getDataFileCacheCurrentValue() != null) {
+      joiner.add(String.format("%sdataFileCacheCurrentValue%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataFileCacheCurrentValue()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dataCacheSetting` to the URL query string
+    if (getDataCacheSetting() != null) {
+      joiner.add(String.format("%sdataCacheSetting%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataCacheSetting()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dataCacheCurrentValue` to the URL query string
+    if (getDataCacheCurrentValue() != null) {
+      joiner.add(String.format("%sdataCacheCurrentValue%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataCacheCurrentValue()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `indexPageSetting` to the URL query string
+    if (getIndexPageSetting() != null) {
+      joiner.add(String.format("%sindexPageSetting%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIndexPageSetting()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `indexPageCurrentValue` to the URL query string
+    if (getIndexPageCurrentValue() != null) {
+      joiner.add(String.format("%sindexPageCurrentValue%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIndexPageCurrentValue()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

@@ -10,775 +10,563 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.LocationAliasBean;
 import com.appliedolap.essbase.client.model.LocationAliasList;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class LocationAliasesApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public LocationAliasesApi() {
-        this(Configuration.getDefaultApiClient());
+  public LocationAliasesApi() {
+    this(new ApiClient());
+  }
+
+  public LocationAliasesApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public LocationAliasesApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Create location alias
+   * Creates new location alias in the given application and database
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @param body Location alias details (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void locationAliasesCreate(String applicationName, String databaseName, LocationAliasBean body) throws ApiException {
+    locationAliasesCreateWithHttpInfo(applicationName, databaseName, body);
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for locationAliasesCreate
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param body Location alias details (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Location alias created successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create location alias </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locationAliasesCreateCall(String applicationName, String databaseName, LocationAliasBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locationaliases"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Create location alias
+   * Creates new location alias in the given application and database
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @param body Location alias details (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> locationAliasesCreateWithHttpInfo(String applicationName, String databaseName, LocationAliasBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = locationAliasesCreateRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("locationAliasesCreate", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call locationAliasesCreateValidateBeforeCall(String applicationName, String databaseName, LocationAliasBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling locationAliasesCreate(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling locationAliasesCreate(Async)");
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder locationAliasesCreateRequestBuilder(String applicationName, String databaseName, LocationAliasBean body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling locationAliasesCreate");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling locationAliasesCreate");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling locationAliasesCreate");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locationaliases"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Deletes location alias
+   * Deletes the location alias with the given name from the application and database
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @param aliasName Location alias name (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void locationAliasesDelete(String applicationName, String databaseName, String aliasName) throws ApiException {
+    locationAliasesDeleteWithHttpInfo(applicationName, databaseName, aliasName);
+  }
+
+  /**
+   * Deletes location alias
+   * Deletes the location alias with the given name from the application and database
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @param aliasName Location alias name (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> locationAliasesDeleteWithHttpInfo(String applicationName, String databaseName, String aliasName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = locationAliasesDeleteRequestBuilder(applicationName, databaseName, aliasName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("locationAliasesDelete", localVarResponse);
         }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling locationAliasesCreate(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = locationAliasesCreateCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder locationAliasesDeleteRequestBuilder(String applicationName, String databaseName, String aliasName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling locationAliasesDelete");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling locationAliasesDelete");
+    }
+    // verify the required parameter 'aliasName' is set
+    if (aliasName == null) {
+      throw new ApiException(400, "Missing the required parameter 'aliasName' when calling locationAliasesDelete");
     }
 
-    /**
-     * Create location alias
-     * Creates new location alias in the given application and database
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param body Location alias details (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Location alias created successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create location alias </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public void locationAliasesCreate(String applicationName, String databaseName, LocationAliasBean body) throws ApiException {
-        locationAliasesCreateWithHttpInfo(applicationName, databaseName, body);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locationaliases/{aliasName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{aliasName}", ApiClient.urlEncode(aliasName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Create location alias
-     * Creates new location alias in the given application and database
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param body Location alias details (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Location alias created successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create location alias </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> locationAliasesCreateWithHttpInfo(String applicationName, String databaseName, LocationAliasBean body) throws ApiException {
-        okhttp3.Call localVarCall = locationAliasesCreateValidateBeforeCall(applicationName, databaseName, body, null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Create location alias (asynchronously)
-     * Creates new location alias in the given application and database
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param body Location alias details (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Location alias created successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create location alias </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locationAliasesCreateAsync(String applicationName, String databaseName, LocationAliasBean body, final ApiCallback<Void> _callback) throws ApiException {
+  /**
+   * Get location alias details
+   * Returns the details of the given location alias name
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @param aliasName Location alias name (required)
+   * @return LocationAliasBean
+   * @throws ApiException if fails to make API call
+   */
+  public LocationAliasBean locationAliasesGetLocationAlias(String applicationName, String databaseName, String aliasName) throws ApiException {
+    ApiResponse<LocationAliasBean> localVarResponse = locationAliasesGetLocationAliasWithHttpInfo(applicationName, databaseName, aliasName);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = locationAliasesCreateValidateBeforeCall(applicationName, databaseName, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for locationAliasesDelete
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param aliasName Location alias name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Deleted location alias successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to delete location alias </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locationAliasesDeleteCall(String applicationName, String databaseName, String aliasName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locationaliases/{aliasName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "aliasName" + "\\}", localVarApiClient.escapeString(aliasName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Get location alias details
+   * Returns the details of the given location alias name
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @param aliasName Location alias name (required)
+   * @return ApiResponse&lt;LocationAliasBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<LocationAliasBean> locationAliasesGetLocationAliasWithHttpInfo(String applicationName, String databaseName, String aliasName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = locationAliasesGetLocationAliasRequestBuilder(applicationName, databaseName, aliasName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("locationAliasesGetLocationAlias", localVarResponse);
         }
+        return new ApiResponse<LocationAliasBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<LocationAliasBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder locationAliasesGetLocationAliasRequestBuilder(String applicationName, String databaseName, String aliasName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling locationAliasesGetLocationAlias");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling locationAliasesGetLocationAlias");
+    }
+    // verify the required parameter 'aliasName' is set
+    if (aliasName == null) {
+      throw new ApiException(400, "Missing the required parameter 'aliasName' when calling locationAliasesGetLocationAlias");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call locationAliasesDeleteValidateBeforeCall(String applicationName, String databaseName, String aliasName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling locationAliasesDelete(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling locationAliasesDelete(Async)");
-        }
-        
-        // verify the required parameter 'aliasName' is set
-        if (aliasName == null) {
-            throw new ApiException("Missing the required parameter 'aliasName' when calling locationAliasesDelete(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = locationAliasesDeleteCall(applicationName, databaseName, aliasName, _callback);
-        return localVarCall;
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locationaliases/{aliasName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{aliasName}", ApiClient.urlEncode(aliasName.toString()));
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get location alias details
+   * Get location alias details
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @param offset Number of items to skip before starting to collect the result set (optional)
+   * @param limit Number of location aliases to be returned (optional)
+   * @param serverName Location alias target server name (optional)
+   * @param applicationName2 Location alias target application name (optional)
+   * @param databaseName2 Location alias target database name (optional)
+   * @return LocationAliasList
+   * @throws ApiException if fails to make API call
+   */
+  public LocationAliasList locationAliasesGetLocationAliases(String applicationName, String databaseName, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2) throws ApiException {
+    ApiResponse<LocationAliasList> localVarResponse = locationAliasesGetLocationAliasesWithHttpInfo(applicationName, databaseName, offset, limit, serverName, applicationName2, databaseName2);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get location alias details
+   * Get location alias details
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @param offset Number of items to skip before starting to collect the result set (optional)
+   * @param limit Number of location aliases to be returned (optional)
+   * @param serverName Location alias target server name (optional)
+   * @param applicationName2 Location alias target application name (optional)
+   * @param databaseName2 Location alias target database name (optional)
+   * @return ApiResponse&lt;LocationAliasList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<LocationAliasList> locationAliasesGetLocationAliasesWithHttpInfo(String applicationName, String databaseName, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = locationAliasesGetLocationAliasesRequestBuilder(applicationName, databaseName, offset, limit, serverName, applicationName2, databaseName2);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("locationAliasesGetLocationAliases", localVarResponse);
+        }
+        return new ApiResponse<LocationAliasList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<LocationAliasList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder locationAliasesGetLocationAliasesRequestBuilder(String applicationName, String databaseName, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling locationAliasesGetLocationAliases");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling locationAliasesGetLocationAliases");
     }
 
-    /**
-     * Deletes location alias
-     * Deletes the location alias with the given name from the application and database
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param aliasName Location alias name (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Deleted location alias successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to delete location alias </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public void locationAliasesDelete(String applicationName, String databaseName, String aliasName) throws ApiException {
-        locationAliasesDeleteWithHttpInfo(applicationName, databaseName, aliasName);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locationaliases"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "offset";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("offset", offset));
+    localVarQueryParameterBaseName = "limit";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("limit", limit));
+    localVarQueryParameterBaseName = "serverName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("serverName", serverName));
+    localVarQueryParameterBaseName = "applicationName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("applicationName", applicationName2));
+    localVarQueryParameterBaseName = "databaseName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("databaseName", databaseName2));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Deletes location alias
-     * Deletes the location alias with the given name from the application and database
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param aliasName Location alias name (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Deleted location alias successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to delete location alias </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> locationAliasesDeleteWithHttpInfo(String applicationName, String databaseName, String aliasName) throws ApiException {
-        okhttp3.Call localVarCall = locationAliasesDeleteValidateBeforeCall(applicationName, databaseName, aliasName, null);
-        return localVarApiClient.execute(localVarCall);
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Deletes location alias (asynchronously)
-     * Deletes the location alias with the given name from the application and database
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param aliasName Location alias name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Deleted location alias successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to delete location alias </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locationAliasesDeleteAsync(String applicationName, String databaseName, String aliasName, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = locationAliasesDeleteValidateBeforeCall(applicationName, databaseName, aliasName, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for locationAliasesGetLocationAlias
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param aliasName Location alias name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns location alias details successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get location alias details </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locationAliasesGetLocationAliasCall(String applicationName, String databaseName, String aliasName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locationaliases/{aliasName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "aliasName" + "\\}", localVarApiClient.escapeString(aliasName.toString()));
+  /**
+   * Update location alias
+   * Updates location alias with new application and database. Not suupported when location alias is defined across essbase instances
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @param aliasName Location alias name (required)
+   * @param body Location alias details (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void locationAliasesUpdate(String applicationName, String databaseName, String aliasName, LocationAliasBean body) throws ApiException {
+    locationAliasesUpdateWithHttpInfo(applicationName, databaseName, aliasName, body);
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Update location alias
+   * Updates location alias with new application and database. Not suupported when location alias is defined across essbase instances
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @param aliasName Location alias name (required)
+   * @param body Location alias details (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> locationAliasesUpdateWithHttpInfo(String applicationName, String databaseName, String aliasName, LocationAliasBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = locationAliasesUpdateRequestBuilder(applicationName, databaseName, aliasName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("locationAliasesUpdate", localVarResponse);
         }
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder locationAliasesUpdateRequestBuilder(String applicationName, String databaseName, String aliasName, LocationAliasBean body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling locationAliasesUpdate");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling locationAliasesUpdate");
+    }
+    // verify the required parameter 'aliasName' is set
+    if (aliasName == null) {
+      throw new ApiException(400, "Missing the required parameter 'aliasName' when calling locationAliasesUpdate");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling locationAliasesUpdate");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call locationAliasesGetLocationAliasValidateBeforeCall(String applicationName, String databaseName, String aliasName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling locationAliasesGetLocationAlias(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling locationAliasesGetLocationAlias(Async)");
-        }
-        
-        // verify the required parameter 'aliasName' is set
-        if (aliasName == null) {
-            throw new ApiException("Missing the required parameter 'aliasName' when calling locationAliasesGetLocationAlias(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = locationAliasesGetLocationAliasCall(applicationName, databaseName, aliasName, _callback);
-        return localVarCall;
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locationaliases/{aliasName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{aliasName}", ApiClient.urlEncode(aliasName.toString()));
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PATCH", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Get location alias details
-     * Returns the details of the given location alias name
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param aliasName Location alias name (required)
-     * @return LocationAliasBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns location alias details successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get location alias details </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public LocationAliasBean locationAliasesGetLocationAlias(String applicationName, String databaseName, String aliasName) throws ApiException {
-        ApiResponse<LocationAliasBean> localVarResp = locationAliasesGetLocationAliasWithHttpInfo(applicationName, databaseName, aliasName);
-        return localVarResp.getData();
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get location alias details
-     * Returns the details of the given location alias name
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param aliasName Location alias name (required)
-     * @return ApiResponse&lt;LocationAliasBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns location alias details successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get location alias details </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<LocationAliasBean> locationAliasesGetLocationAliasWithHttpInfo(String applicationName, String databaseName, String aliasName) throws ApiException {
-        okhttp3.Call localVarCall = locationAliasesGetLocationAliasValidateBeforeCall(applicationName, databaseName, aliasName, null);
-        Type localVarReturnType = new TypeToken<LocationAliasBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Get location alias details (asynchronously)
-     * Returns the details of the given location alias name
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param aliasName Location alias name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns location alias details successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get location alias details </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locationAliasesGetLocationAliasAsync(String applicationName, String databaseName, String aliasName, final ApiCallback<LocationAliasBean> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = locationAliasesGetLocationAliasValidateBeforeCall(applicationName, databaseName, aliasName, _callback);
-        Type localVarReturnType = new TypeToken<LocationAliasBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for locationAliasesGetLocationAliases
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param offset Number of items to skip before starting to collect the result set (optional)
-     * @param limit Number of location aliases to be returned (optional)
-     * @param serverName Location alias target server name (optional)
-     * @param applicationName2 Location alias target application name (optional)
-     * @param databaseName2 Location alias target database name (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns location alias details successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get location alias details </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locationAliasesGetLocationAliasesCall(String applicationName, String databaseName, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locationaliases"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (offset != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("offset", offset));
-        }
-
-        if (limit != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
-        }
-
-        if (serverName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("serverName", serverName));
-        }
-
-        if (applicationName2 != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("applicationName", applicationName2));
-        }
-
-        if (databaseName2 != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("databaseName", databaseName2));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call locationAliasesGetLocationAliasesValidateBeforeCall(String applicationName, String databaseName, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling locationAliasesGetLocationAliases(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling locationAliasesGetLocationAliases(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = locationAliasesGetLocationAliasesCall(applicationName, databaseName, offset, limit, serverName, applicationName2, databaseName2, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get location alias details
-     * Get location alias details
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param offset Number of items to skip before starting to collect the result set (optional)
-     * @param limit Number of location aliases to be returned (optional)
-     * @param serverName Location alias target server name (optional)
-     * @param applicationName2 Location alias target application name (optional)
-     * @param databaseName2 Location alias target database name (optional)
-     * @return LocationAliasList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns location alias details successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get location alias details </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public LocationAliasList locationAliasesGetLocationAliases(String applicationName, String databaseName, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2) throws ApiException {
-        ApiResponse<LocationAliasList> localVarResp = locationAliasesGetLocationAliasesWithHttpInfo(applicationName, databaseName, offset, limit, serverName, applicationName2, databaseName2);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get location alias details
-     * Get location alias details
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param offset Number of items to skip before starting to collect the result set (optional)
-     * @param limit Number of location aliases to be returned (optional)
-     * @param serverName Location alias target server name (optional)
-     * @param applicationName2 Location alias target application name (optional)
-     * @param databaseName2 Location alias target database name (optional)
-     * @return ApiResponse&lt;LocationAliasList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns location alias details successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get location alias details </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<LocationAliasList> locationAliasesGetLocationAliasesWithHttpInfo(String applicationName, String databaseName, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2) throws ApiException {
-        okhttp3.Call localVarCall = locationAliasesGetLocationAliasesValidateBeforeCall(applicationName, databaseName, offset, limit, serverName, applicationName2, databaseName2, null);
-        Type localVarReturnType = new TypeToken<LocationAliasList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get location alias details (asynchronously)
-     * Get location alias details
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param offset Number of items to skip before starting to collect the result set (optional)
-     * @param limit Number of location aliases to be returned (optional)
-     * @param serverName Location alias target server name (optional)
-     * @param applicationName2 Location alias target application name (optional)
-     * @param databaseName2 Location alias target database name (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns location alias details successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get location alias details </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locationAliasesGetLocationAliasesAsync(String applicationName, String databaseName, Integer offset, Integer limit, String serverName, String applicationName2, String databaseName2, final ApiCallback<LocationAliasList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = locationAliasesGetLocationAliasesValidateBeforeCall(applicationName, databaseName, offset, limit, serverName, applicationName2, databaseName2, _callback);
-        Type localVarReturnType = new TypeToken<LocationAliasList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for locationAliasesUpdate
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param aliasName Location alias name (required)
-     * @param body Location alias details (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Updated location alias successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to update location alias </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locationAliasesUpdateCall(String applicationName, String databaseName, String aliasName, LocationAliasBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/locationaliases/{aliasName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "aliasName" + "\\}", localVarApiClient.escapeString(aliasName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PATCH", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call locationAliasesUpdateValidateBeforeCall(String applicationName, String databaseName, String aliasName, LocationAliasBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling locationAliasesUpdate(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling locationAliasesUpdate(Async)");
-        }
-        
-        // verify the required parameter 'aliasName' is set
-        if (aliasName == null) {
-            throw new ApiException("Missing the required parameter 'aliasName' when calling locationAliasesUpdate(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling locationAliasesUpdate(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = locationAliasesUpdateCall(applicationName, databaseName, aliasName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Update location alias
-     * Updates location alias with new application and database. Not suupported when location alias is defined across essbase instances
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param aliasName Location alias name (required)
-     * @param body Location alias details (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Updated location alias successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to update location alias </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public void locationAliasesUpdate(String applicationName, String databaseName, String aliasName, LocationAliasBean body) throws ApiException {
-        locationAliasesUpdateWithHttpInfo(applicationName, databaseName, aliasName, body);
-    }
-
-    /**
-     * Update location alias
-     * Updates location alias with new application and database. Not suupported when location alias is defined across essbase instances
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param aliasName Location alias name (required)
-     * @param body Location alias details (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Updated location alias successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to update location alias </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> locationAliasesUpdateWithHttpInfo(String applicationName, String databaseName, String aliasName, LocationAliasBean body) throws ApiException {
-        okhttp3.Call localVarCall = locationAliasesUpdateValidateBeforeCall(applicationName, databaseName, aliasName, body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Update location alias (asynchronously)
-     * Updates location alias with new application and database. Not suupported when location alias is defined across essbase instances
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param aliasName Location alias name (required)
-     * @param body Location alias details (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> Updated location alias successfully </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to update location alias </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal server error </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call locationAliasesUpdateAsync(String applicationName, String databaseName, String aliasName, LocationAliasBean body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = locationAliasesUpdateValidateBeforeCall(applicationName, databaseName, aliasName, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
 }

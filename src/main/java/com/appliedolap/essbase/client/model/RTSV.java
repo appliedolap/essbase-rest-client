@@ -13,54 +13,68 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * RTSV
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  RTSV.JSON_PROPERTY_NAME,
+  RTSV.JSON_PROPERTY_DESCRIPTION,
+  RTSV.JSON_PROPERTY_ALLOW_MISSING,
+  RTSV.JSON_PROPERTY_DIMENSION,
+  RTSV.JSON_PROPERTY_SINGLE_CHOICE,
+  RTSV.JSON_PROPERTY_TYPE,
+  RTSV.JSON_PROPERTY_VALUE,
+  RTSV.JSON_PROPERTY_LIMIT
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class RTSV {
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
-  public static final String SERIALIZED_NAME_DESCRIPTION = "description";
-  @SerializedName(SERIALIZED_NAME_DESCRIPTION)
+  public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  @jakarta.annotation.Nullable
   private String description;
 
-  public static final String SERIALIZED_NAME_ALLOW_MISSING = "allowMissing";
-  @SerializedName(SERIALIZED_NAME_ALLOW_MISSING)
+  public static final String JSON_PROPERTY_ALLOW_MISSING = "allowMissing";
+  @jakarta.annotation.Nullable
   private Boolean allowMissing;
 
-  public static final String SERIALIZED_NAME_DIMENSION = "dimension";
-  @SerializedName(SERIALIZED_NAME_DIMENSION)
+  public static final String JSON_PROPERTY_DIMENSION = "dimension";
+  @jakarta.annotation.Nullable
   private String dimension;
 
-  public static final String SERIALIZED_NAME_SINGLE_CHOICE = "singleChoice";
-  @SerializedName(SERIALIZED_NAME_SINGLE_CHOICE)
+  public static final String JSON_PROPERTY_SINGLE_CHOICE = "singleChoice";
+  @jakarta.annotation.Nullable
   private Boolean singleChoice;
 
   /**
    * Gets or Sets type
    */
-  @JsonAdapter(TypeEnum.Adapter.class)
   public enum TypeEnum {
-    STRING("STRING"),
+    STRING(String.valueOf("STRING")),
     
-    NUMBER("NUMBER"),
+    NUMBER(String.valueOf("NUMBER")),
     
-    DATE("DATE"),
+    DATE(String.valueOf("DATE")),
     
-    MEMBER("MEMBER");
+    MEMBER(String.valueOf("MEMBER"));
 
     private String value;
 
@@ -68,6 +82,7 @@ public class RTSV {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -77,6 +92,7 @@ public class RTSV {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static TypeEnum fromValue(String value) {
       for (TypeEnum b : TypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -85,218 +101,218 @@ public class RTSV {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<TypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final TypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public TypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return TypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nullable
   private TypeEnum type;
 
-  public static final String SERIALIZED_NAME_VALUE = "value";
-  @SerializedName(SERIALIZED_NAME_VALUE)
+  public static final String JSON_PROPERTY_VALUE = "value";
+  @jakarta.annotation.Nullable
   private Object value;
 
-  public static final String SERIALIZED_NAME_LIMIT = "limit";
-  @SerializedName(SERIALIZED_NAME_LIMIT)
+  public static final String JSON_PROPERTY_LIMIT = "limit";
+  @jakarta.annotation.Nullable
   private String limit;
 
+  public RTSV() { 
+  }
 
-  public RTSV name(String name) {
-    
+  public RTSV name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
-  public RTSV description(String description) {
-    
+  public RTSV description(@jakarta.annotation.Nullable String description) {
     this.description = description;
     return this;
   }
 
-   /**
+  /**
    * Get description
    * @return description
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDescription() {
     return description;
   }
 
 
-  public void setDescription(String description) {
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDescription(@jakarta.annotation.Nullable String description) {
     this.description = description;
   }
 
 
-  public RTSV allowMissing(Boolean allowMissing) {
-    
+  public RTSV allowMissing(@jakarta.annotation.Nullable Boolean allowMissing) {
     this.allowMissing = allowMissing;
     return this;
   }
 
-   /**
+  /**
    * Get allowMissing
    * @return allowMissing
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALLOW_MISSING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAllowMissing() {
     return allowMissing;
   }
 
 
-  public void setAllowMissing(Boolean allowMissing) {
+  @JsonProperty(JSON_PROPERTY_ALLOW_MISSING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAllowMissing(@jakarta.annotation.Nullable Boolean allowMissing) {
     this.allowMissing = allowMissing;
   }
 
 
-  public RTSV dimension(String dimension) {
-    
+  public RTSV dimension(@jakarta.annotation.Nullable String dimension) {
     this.dimension = dimension;
     return this;
   }
 
-   /**
+  /**
    * Get dimension
    * @return dimension
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDimension() {
     return dimension;
   }
 
 
-  public void setDimension(String dimension) {
+  @JsonProperty(JSON_PROPERTY_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimension(@jakarta.annotation.Nullable String dimension) {
     this.dimension = dimension;
   }
 
 
-  public RTSV singleChoice(Boolean singleChoice) {
-    
+  public RTSV singleChoice(@jakarta.annotation.Nullable Boolean singleChoice) {
     this.singleChoice = singleChoice;
     return this;
   }
 
-   /**
+  /**
    * Get singleChoice
    * @return singleChoice
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SINGLE_CHOICE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getSingleChoice() {
     return singleChoice;
   }
 
 
-  public void setSingleChoice(Boolean singleChoice) {
+  @JsonProperty(JSON_PROPERTY_SINGLE_CHOICE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSingleChoice(@jakarta.annotation.Nullable Boolean singleChoice) {
     this.singleChoice = singleChoice;
   }
 
 
-  public RTSV type(TypeEnum type) {
-    
+  public RTSV type(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public TypeEnum getType() {
     return type;
   }
 
 
-  public void setType(TypeEnum type) {
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setType(@jakarta.annotation.Nullable TypeEnum type) {
     this.type = type;
   }
 
 
-  public RTSV value(Object value) {
-    
+  public RTSV value(@jakarta.annotation.Nullable Object value) {
     this.value = value;
     return this;
   }
 
-   /**
+  /**
    * Get value
    * @return value
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Object getValue() {
     return value;
   }
 
 
-  public void setValue(Object value) {
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setValue(@jakarta.annotation.Nullable Object value) {
     this.value = value;
   }
 
 
-  public RTSV limit(String limit) {
-    
+  public RTSV limit(@jakarta.annotation.Nullable String limit) {
     this.limit = limit;
     return this;
   }
 
-   /**
+  /**
    * Get limit
    * @return limit
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LIMIT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getLimit() {
     return limit;
   }
 
 
-  public void setLimit(String limit) {
+  @JsonProperty(JSON_PROPERTY_LIMIT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLimit(@jakarta.annotation.Nullable String limit) {
     this.limit = limit;
   }
 
 
+  /**
+   * Return true if this RTSV object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -348,5 +364,79 @@ public class RTSV {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `description` to the URL query string
+    if (getDescription() != null) {
+      joiner.add(String.format("%sdescription%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDescription()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `allowMissing` to the URL query string
+    if (getAllowMissing() != null) {
+      joiner.add(String.format("%sallowMissing%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAllowMissing()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dimension` to the URL query string
+    if (getDimension() != null) {
+      joiner.add(String.format("%sdimension%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDimension()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `singleChoice` to the URL query string
+    if (getSingleChoice() != null) {
+      joiner.add(String.format("%ssingleChoice%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSingleChoice()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `value` to the URL query string
+    if (getValue() != null) {
+      joiner.add(String.format("%svalue%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getValue()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `limit` to the URL query string
+    if (getLimit() != null) {
+      joiner.add(String.format("%slimit%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLimit()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

@@ -13,40 +13,51 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * DataLoadOptions
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  DataLoadOptions.JSON_PROPERTY_CLEAR_COMBINATIONS,
+  DataLoadOptions.JSON_PROPERTY_OPTION,
+  DataLoadOptions.JSON_PROPERTY_REMOVE_ALL,
+  DataLoadOptions.JSON_PROPERTY_SIGN_FLIP_DIMENSION,
+  DataLoadOptions.JSON_PROPERTY_SIGN_FLIP_U_D_A
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class DataLoadOptions {
-  public static final String SERIALIZED_NAME_CLEAR_COMBINATIONS = "clearCombinations";
-  @SerializedName(SERIALIZED_NAME_CLEAR_COMBINATIONS)
-  private List<String> clearCombinations = null;
+  public static final String JSON_PROPERTY_CLEAR_COMBINATIONS = "clearCombinations";
+  @jakarta.annotation.Nullable
+  private List<String> clearCombinations = new ArrayList<>();
 
   /**
    * Gets or Sets option
    */
-  @JsonAdapter(OptionEnum.Adapter.class)
   public enum OptionEnum {
-    NONE("NONE"),
+    NONE(String.valueOf("NONE")),
     
-    OVERWRITE("OVERWRITE"),
+    OVERWRITE(String.valueOf("OVERWRITE")),
     
-    ADD("ADD"),
+    ADD(String.valueOf("ADD")),
     
-    SUBTRACT("SUBTRACT");
+    SUBTRACT(String.valueOf("SUBTRACT"));
 
     private String value;
 
@@ -54,6 +65,7 @@ public class DataLoadOptions {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -63,6 +75,7 @@ public class DataLoadOptions {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static OptionEnum fromValue(String value) {
       for (OptionEnum b : OptionEnum.values()) {
         if (b.value.equals(value)) {
@@ -71,161 +84,158 @@ public class DataLoadOptions {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<OptionEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final OptionEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public OptionEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return OptionEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_OPTION = "option";
-  @SerializedName(SERIALIZED_NAME_OPTION)
+  public static final String JSON_PROPERTY_OPTION = "option";
+  @jakarta.annotation.Nullable
   private OptionEnum option;
 
-  public static final String SERIALIZED_NAME_REMOVE_ALL = "removeAll";
-  @SerializedName(SERIALIZED_NAME_REMOVE_ALL)
+  public static final String JSON_PROPERTY_REMOVE_ALL = "removeAll";
+  @jakarta.annotation.Nullable
   private Integer removeAll;
 
-  public static final String SERIALIZED_NAME_SIGN_FLIP_DIMENSION = "signFlipDimension";
-  @SerializedName(SERIALIZED_NAME_SIGN_FLIP_DIMENSION)
+  public static final String JSON_PROPERTY_SIGN_FLIP_DIMENSION = "signFlipDimension";
+  @jakarta.annotation.Nullable
   private String signFlipDimension;
 
-  public static final String SERIALIZED_NAME_SIGN_FLIP_U_D_A = "signFlipUDA";
-  @SerializedName(SERIALIZED_NAME_SIGN_FLIP_U_D_A)
+  public static final String JSON_PROPERTY_SIGN_FLIP_U_D_A = "signFlipUDA";
+  @jakarta.annotation.Nullable
   private String signFlipUDA;
 
+  public DataLoadOptions() { 
+  }
 
-  public DataLoadOptions clearCombinations(List<String> clearCombinations) {
-    
+  public DataLoadOptions clearCombinations(@jakarta.annotation.Nullable List<String> clearCombinations) {
     this.clearCombinations = clearCombinations;
     return this;
   }
 
   public DataLoadOptions addClearCombinationsItem(String clearCombinationsItem) {
     if (this.clearCombinations == null) {
-      this.clearCombinations = new ArrayList<String>();
+      this.clearCombinations = new ArrayList<>();
     }
     this.clearCombinations.add(clearCombinationsItem);
     return this;
   }
 
-   /**
+  /**
    * Get clearCombinations
    * @return clearCombinations
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CLEAR_COMBINATIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getClearCombinations() {
     return clearCombinations;
   }
 
 
-  public void setClearCombinations(List<String> clearCombinations) {
+  @JsonProperty(JSON_PROPERTY_CLEAR_COMBINATIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setClearCombinations(@jakarta.annotation.Nullable List<String> clearCombinations) {
     this.clearCombinations = clearCombinations;
   }
 
 
-  public DataLoadOptions option(OptionEnum option) {
-    
+  public DataLoadOptions option(@jakarta.annotation.Nullable OptionEnum option) {
     this.option = option;
     return this;
   }
 
-   /**
+  /**
    * Get option
    * @return option
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public OptionEnum getOption() {
     return option;
   }
 
 
-  public void setOption(OptionEnum option) {
+  @JsonProperty(JSON_PROPERTY_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOption(@jakarta.annotation.Nullable OptionEnum option) {
     this.option = option;
   }
 
 
-  public DataLoadOptions removeAll(Integer removeAll) {
-    
+  public DataLoadOptions removeAll(@jakarta.annotation.Nullable Integer removeAll) {
     this.removeAll = removeAll;
     return this;
   }
 
-   /**
+  /**
    * Get removeAll
    * @return removeAll
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REMOVE_ALL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getRemoveAll() {
     return removeAll;
   }
 
 
-  public void setRemoveAll(Integer removeAll) {
+  @JsonProperty(JSON_PROPERTY_REMOVE_ALL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRemoveAll(@jakarta.annotation.Nullable Integer removeAll) {
     this.removeAll = removeAll;
   }
 
 
-  public DataLoadOptions signFlipDimension(String signFlipDimension) {
-    
+  public DataLoadOptions signFlipDimension(@jakarta.annotation.Nullable String signFlipDimension) {
     this.signFlipDimension = signFlipDimension;
     return this;
   }
 
-   /**
+  /**
    * Get signFlipDimension
    * @return signFlipDimension
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SIGN_FLIP_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getSignFlipDimension() {
     return signFlipDimension;
   }
 
 
-  public void setSignFlipDimension(String signFlipDimension) {
+  @JsonProperty(JSON_PROPERTY_SIGN_FLIP_DIMENSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSignFlipDimension(@jakarta.annotation.Nullable String signFlipDimension) {
     this.signFlipDimension = signFlipDimension;
   }
 
 
-  public DataLoadOptions signFlipUDA(String signFlipUDA) {
-    
+  public DataLoadOptions signFlipUDA(@jakarta.annotation.Nullable String signFlipUDA) {
     this.signFlipUDA = signFlipUDA;
     return this;
   }
 
-   /**
+  /**
    * Get signFlipUDA
    * @return signFlipUDA
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SIGN_FLIP_U_D_A)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getSignFlipUDA() {
     return signFlipUDA;
   }
 
 
-  public void setSignFlipUDA(String signFlipUDA) {
+  @JsonProperty(JSON_PROPERTY_SIGN_FLIP_U_D_A)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSignFlipUDA(@jakarta.annotation.Nullable String signFlipUDA) {
     this.signFlipUDA = signFlipUDA;
   }
 
 
+  /**
+   * Return true if this DataLoadOptions object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -271,5 +281,68 @@ public class DataLoadOptions {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `clearCombinations` to the URL query string
+    if (getClearCombinations() != null) {
+      for (int i = 0; i < getClearCombinations().size(); i++) {
+        joiner.add(String.format("%sclearCombinations%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getClearCombinations().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `option` to the URL query string
+    if (getOption() != null) {
+      joiner.add(String.format("%soption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `removeAll` to the URL query string
+    if (getRemoveAll() != null) {
+      joiner.add(String.format("%sremoveAll%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRemoveAll()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `signFlipDimension` to the URL query string
+    if (getSignFlipDimension() != null) {
+      joiner.add(String.format("%ssignFlipDimension%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSignFlipDimension()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `signFlipUDA` to the URL query string
+    if (getSignFlipUDA() != null) {
+      joiner.add(String.format("%ssignFlipUDA%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSignFlipUDA()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

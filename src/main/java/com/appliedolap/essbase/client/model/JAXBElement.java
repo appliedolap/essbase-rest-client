@@ -13,159 +13,181 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.QName;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * JAXBElement
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  JAXBElement.JSON_PROPERTY_NAME,
+  JAXBElement.JSON_PROPERTY_VALUE,
+  JAXBElement.JSON_PROPERTY_NIL,
+  JAXBElement.JSON_PROPERTY_GLOBAL_SCOPE,
+  JAXBElement.JSON_PROPERTY_TYPE_SUBSTITUTED
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class JAXBElement {
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private QName name;
 
-  public static final String SERIALIZED_NAME_VALUE = "value";
-  @SerializedName(SERIALIZED_NAME_VALUE)
+  public static final String JSON_PROPERTY_VALUE = "value";
+  @jakarta.annotation.Nullable
   private Object value;
 
-  public static final String SERIALIZED_NAME_NIL = "nil";
-  @SerializedName(SERIALIZED_NAME_NIL)
+  public static final String JSON_PROPERTY_NIL = "nil";
+  @jakarta.annotation.Nullable
   private Boolean nil;
 
-  public static final String SERIALIZED_NAME_GLOBAL_SCOPE = "globalScope";
-  @SerializedName(SERIALIZED_NAME_GLOBAL_SCOPE)
+  public static final String JSON_PROPERTY_GLOBAL_SCOPE = "globalScope";
+  @jakarta.annotation.Nullable
   private Boolean globalScope;
 
-  public static final String SERIALIZED_NAME_TYPE_SUBSTITUTED = "typeSubstituted";
-  @SerializedName(SERIALIZED_NAME_TYPE_SUBSTITUTED)
+  public static final String JSON_PROPERTY_TYPE_SUBSTITUTED = "typeSubstituted";
+  @jakarta.annotation.Nullable
   private Boolean typeSubstituted;
 
+  public JAXBElement() { 
+  }
 
-  public JAXBElement name(QName name) {
-    
+  public JAXBElement name(@jakarta.annotation.Nullable QName name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public QName getName() {
     return name;
   }
 
 
-  public void setName(QName name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable QName name) {
     this.name = name;
   }
 
 
-  public JAXBElement value(Object value) {
-    
+  public JAXBElement value(@jakarta.annotation.Nullable Object value) {
     this.value = value;
     return this;
   }
 
-   /**
+  /**
    * Get value
    * @return value
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Object getValue() {
     return value;
   }
 
 
-  public void setValue(Object value) {
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setValue(@jakarta.annotation.Nullable Object value) {
     this.value = value;
   }
 
 
-  public JAXBElement nil(Boolean nil) {
-    
+  public JAXBElement nil(@jakarta.annotation.Nullable Boolean nil) {
     this.nil = nil;
     return this;
   }
 
-   /**
+  /**
    * Get nil
    * @return nil
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NIL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getNil() {
     return nil;
   }
 
 
-  public void setNil(Boolean nil) {
+  @JsonProperty(JSON_PROPERTY_NIL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNil(@jakarta.annotation.Nullable Boolean nil) {
     this.nil = nil;
   }
 
 
-  public JAXBElement globalScope(Boolean globalScope) {
-    
+  public JAXBElement globalScope(@jakarta.annotation.Nullable Boolean globalScope) {
     this.globalScope = globalScope;
     return this;
   }
 
-   /**
+  /**
    * Get globalScope
    * @return globalScope
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GLOBAL_SCOPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getGlobalScope() {
     return globalScope;
   }
 
 
-  public void setGlobalScope(Boolean globalScope) {
+  @JsonProperty(JSON_PROPERTY_GLOBAL_SCOPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGlobalScope(@jakarta.annotation.Nullable Boolean globalScope) {
     this.globalScope = globalScope;
   }
 
 
-  public JAXBElement typeSubstituted(Boolean typeSubstituted) {
-    
+  public JAXBElement typeSubstituted(@jakarta.annotation.Nullable Boolean typeSubstituted) {
     this.typeSubstituted = typeSubstituted;
     return this;
   }
 
-   /**
+  /**
    * Get typeSubstituted
    * @return typeSubstituted
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE_SUBSTITUTED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getTypeSubstituted() {
     return typeSubstituted;
   }
 
 
-  public void setTypeSubstituted(Boolean typeSubstituted) {
+  @JsonProperty(JSON_PROPERTY_TYPE_SUBSTITUTED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTypeSubstituted(@jakarta.annotation.Nullable Boolean typeSubstituted) {
     this.typeSubstituted = typeSubstituted;
   }
 
 
+  /**
+   * Return true if this JAXBElement object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -211,5 +233,64 @@ public class JAXBElement {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(getName().toUrlQueryString(prefix + "name" + suffix));
+    }
+
+    // add `value` to the URL query string
+    if (getValue() != null) {
+      joiner.add(String.format("%svalue%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getValue()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `nil` to the URL query string
+    if (getNil() != null) {
+      joiner.add(String.format("%snil%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getNil()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `globalScope` to the URL query string
+    if (getGlobalScope() != null) {
+      joiner.add(String.format("%sglobalScope%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getGlobalScope()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `typeSubstituted` to the URL query string
+    if (getTypeSubstituted() != null) {
+      joiner.add(String.format("%stypeSubstituted%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTypeSubstituted()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

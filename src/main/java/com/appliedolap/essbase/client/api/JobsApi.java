@@ -10,692 +10,478 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.JobRecordBean;
 import com.appliedolap.essbase.client.model.JobRecordPaginatedResultWrapper;
 import com.appliedolap.essbase.client.model.JobStatisticsBean;
 import com.appliedolap.essbase.client.model.JobsInputBean;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class JobsApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public JobsApi() {
-        this(Configuration.getDefaultApiClient());
+  public JobsApi() {
+    this(new ApiClient());
+  }
+
+  public JobsApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public JobsApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Rerun Job
+   * Rerun the job and returns the job information with new job ID currently executing
+   * @param id Job ID (required)
+   * @return JobRecordBean
+   * @throws ApiException if fails to make API call
+   */
+  public JobRecordBean jobsExecuteByJobId(Long id) throws ApiException {
+    ApiResponse<JobRecordBean> localVarResponse = jobsExecuteByJobIdWithHttpInfo(id);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for jobsExecuteByJobId
-     * @param id Job ID (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns the information for newly created Job ID </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception. Job ID is incorrect or invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call jobsExecuteByJobIdCall(Long id, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/jobs/{id}"
-            .replaceAll("\\{" + "id" + "\\}", localVarApiClient.escapeString(id.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Rerun Job
+   * Rerun the job and returns the job information with new job ID currently executing
+   * @param id Job ID (required)
+   * @return ApiResponse&lt;JobRecordBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<JobRecordBean> jobsExecuteByJobIdWithHttpInfo(Long id) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = jobsExecuteByJobIdRequestBuilder(id);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("jobsExecuteByJobId", localVarResponse);
         }
+        return new ApiResponse<JobRecordBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<JobRecordBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder jobsExecuteByJobIdRequestBuilder(Long id) throws ApiException {
+    // verify the required parameter 'id' is set
+    if (id == null) {
+      throw new ApiException(400, "Missing the required parameter 'id' when calling jobsExecuteByJobId");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call jobsExecuteByJobIdValidateBeforeCall(Long id, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling jobsExecuteByJobId(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/jobs/{id}"
+        .replace("{id}", ApiClient.urlEncode(id.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Execute Job
+   * &lt;p&gt;Execute the job and return the record containing job information, such as job ID, status, inputs, and output information for the current job.&lt;/p&gt;
+   * @param body parameter provided as json string in the request body (required)
+   * @return JobRecordBean
+   * @throws ApiException if fails to make API call
+   */
+  public JobRecordBean jobsExecuteJob(JobsInputBean body) throws ApiException {
+    ApiResponse<JobRecordBean> localVarResponse = jobsExecuteJobWithHttpInfo(body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Execute Job
+   * &lt;p&gt;Execute the job and return the record containing job information, such as job ID, status, inputs, and output information for the current job.&lt;/p&gt;
+   * @param body parameter provided as json string in the request body (required)
+   * @return ApiResponse&lt;JobRecordBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<JobRecordBean> jobsExecuteJobWithHttpInfo(JobsInputBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = jobsExecuteJobRequestBuilder(body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("jobsExecuteJob", localVarResponse);
         }
-        
+        return new ApiResponse<JobRecordBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<JobRecordBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = jobsExecuteByJobIdCall(id, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder jobsExecuteJobRequestBuilder(JobsInputBean body) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling jobsExecuteJob");
     }
 
-    /**
-     * Rerun Job
-     * Rerun the job and returns the job information with new job ID currently executing
-     * @param id Job ID (required)
-     * @return JobRecordBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns the information for newly created Job ID </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception. Job ID is incorrect or invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public JobRecordBean jobsExecuteByJobId(Long id) throws ApiException {
-        ApiResponse<JobRecordBean> localVarResp = jobsExecuteByJobIdWithHttpInfo(id);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/jobs";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Rerun Job
-     * Rerun the job and returns the job information with new job ID currently executing
-     * @param id Job ID (required)
-     * @return ApiResponse&lt;JobRecordBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns the information for newly created Job ID </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception. Job ID is incorrect or invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<JobRecordBean> jobsExecuteByJobIdWithHttpInfo(Long id) throws ApiException {
-        okhttp3.Call localVarCall = jobsExecuteByJobIdValidateBeforeCall(id, null);
-        Type localVarReturnType = new TypeToken<JobRecordBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Rerun Job (asynchronously)
-     * Rerun the job and returns the job information with new job ID currently executing
-     * @param id Job ID (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns the information for newly created Job ID </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception. Job ID is incorrect or invalid.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call jobsExecuteByJobIdAsync(Long id, final ApiCallback<JobRecordBean> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = jobsExecuteByJobIdValidateBeforeCall(id, _callback);
-        Type localVarReturnType = new TypeToken<JobRecordBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for jobsExecuteJob
-     * @param body parameter provided as json string in the request body (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Request for job exceution submitted successfully and job started successfully. Returns job information in response. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> 1. Application does not exits. If the &#39;application&#39; parameter value is wrong.&lt;p&gt;2. Database does not exist. If &#39;db&#39; parameter value is wrong.&lt;/p&gt;&lt;p&gt;3. NULL argument (3) passed to ESSAPI function EssGetObjectInfo&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call jobsExecuteJobCall(JobsInputBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/jobs";
+  /**
+   * Get Job List
+   * Returns the list of jobs for the query parameters provided. Informations like job status, job type, job input info, job output info are returned
+   * @param keyword keyword to filter job records on ID, Script, database or user (optional)
+   * @param fullAppName application name for which job records to retrieved (optional)
+   * @param orderBy Order By (optional, default to job_ID:desc)
+   * @param offset &lt;p&gt;Number of jobs to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of jobs to fetch. Default is 20.&lt;/p&gt; (optional, default to 50)
+   * @param systemjobs &lt;p&gt;Include backup jobs in jobs records.&lt;/p&gt; (optional, default to false)
+   * @return JobRecordPaginatedResultWrapper
+   * @throws ApiException if fails to make API call
+   */
+  public JobRecordPaginatedResultWrapper jobsGetAllJobRecords(String keyword, String fullAppName, String orderBy, Long offset, Long limit, Boolean systemjobs) throws ApiException {
+    ApiResponse<JobRecordPaginatedResultWrapper> localVarResponse = jobsGetAllJobRecordsWithHttpInfo(keyword, fullAppName, orderBy, offset, limit, systemjobs);
+    return localVarResponse.getData();
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Get Job List
+   * Returns the list of jobs for the query parameters provided. Informations like job status, job type, job input info, job output info are returned
+   * @param keyword keyword to filter job records on ID, Script, database or user (optional)
+   * @param fullAppName application name for which job records to retrieved (optional)
+   * @param orderBy Order By (optional, default to job_ID:desc)
+   * @param offset &lt;p&gt;Number of jobs to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of jobs to fetch. Default is 20.&lt;/p&gt; (optional, default to 50)
+   * @param systemjobs &lt;p&gt;Include backup jobs in jobs records.&lt;/p&gt; (optional, default to false)
+   * @return ApiResponse&lt;JobRecordPaginatedResultWrapper&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<JobRecordPaginatedResultWrapper> jobsGetAllJobRecordsWithHttpInfo(String keyword, String fullAppName, String orderBy, Long offset, Long limit, Boolean systemjobs) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = jobsGetAllJobRecordsRequestBuilder(keyword, fullAppName, orderBy, offset, limit, systemjobs);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("jobsGetAllJobRecords", localVarResponse);
         }
+        return new ApiResponse<JobRecordPaginatedResultWrapper>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<JobRecordPaginatedResultWrapper>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
+  private HttpRequest.Builder jobsGetAllJobRecordsRequestBuilder(String keyword, String fullAppName, String orderBy, Long offset, Long limit, Boolean systemjobs) throws ApiException {
 
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/jobs";
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "keyword";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("keyword", keyword));
+    localVarQueryParameterBaseName = "fullAppName";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("fullAppName", fullAppName));
+    localVarQueryParameterBaseName = "orderBy";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("orderBy", orderBy));
+    localVarQueryParameterBaseName = "offset";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("offset", offset));
+    localVarQueryParameterBaseName = "limit";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("limit", limit));
+    localVarQueryParameterBaseName = "systemjobs";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("systemjobs", systemjobs));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call jobsExecuteJobValidateBeforeCall(JobsInputBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling jobsExecuteJob(Async)");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Job
+   * Returns the job information for job ID passed. Informations like job status, job type, job input info, job output info are returned
+   * @param id Job ID (required)
+   * @return JobRecordBean
+   * @throws ApiException if fails to make API call
+   */
+  public JobRecordBean jobsGetJobInfo(String id) throws ApiException {
+    ApiResponse<JobRecordBean> localVarResponse = jobsGetJobInfoWithHttpInfo(id);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Job
+   * Returns the job information for job ID passed. Informations like job status, job type, job input info, job output info are returned
+   * @param id Job ID (required)
+   * @return ApiResponse&lt;JobRecordBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<JobRecordBean> jobsGetJobInfoWithHttpInfo(String id) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = jobsGetJobInfoRequestBuilder(id);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("jobsGetJobInfo", localVarResponse);
         }
-        
+        return new ApiResponse<JobRecordBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<JobRecordBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = jobsExecuteJobCall(body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder jobsGetJobInfoRequestBuilder(String id) throws ApiException {
+    // verify the required parameter 'id' is set
+    if (id == null) {
+      throw new ApiException(400, "Missing the required parameter 'id' when calling jobsGetJobInfo");
     }
 
-    /**
-     * Execute Job
-     * &lt;p&gt;Execute the job and return the record containing job information, such as job ID, status, inputs, and output information for the current job.&lt;/p&gt;
-     * @param body parameter provided as json string in the request body (required)
-     * @return JobRecordBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Request for job exceution submitted successfully and job started successfully. Returns job information in response. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> 1. Application does not exits. If the &#39;application&#39; parameter value is wrong.&lt;p&gt;2. Database does not exist. If &#39;db&#39; parameter value is wrong.&lt;/p&gt;&lt;p&gt;3. NULL argument (3) passed to ESSAPI function EssGetObjectInfo&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public JobRecordBean jobsExecuteJob(JobsInputBean body) throws ApiException {
-        ApiResponse<JobRecordBean> localVarResp = jobsExecuteJobWithHttpInfo(body);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/jobs/{id}"
+        .replace("{id}", ApiClient.urlEncode(id.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Execute Job
-     * &lt;p&gt;Execute the job and return the record containing job information, such as job ID, status, inputs, and output information for the current job.&lt;/p&gt;
-     * @param body parameter provided as json string in the request body (required)
-     * @return ApiResponse&lt;JobRecordBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Request for job exceution submitted successfully and job started successfully. Returns job information in response. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> 1. Application does not exits. If the &#39;application&#39; parameter value is wrong.&lt;p&gt;2. Database does not exist. If &#39;db&#39; parameter value is wrong.&lt;/p&gt;&lt;p&gt;3. NULL argument (3) passed to ESSAPI function EssGetObjectInfo&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<JobRecordBean> jobsExecuteJobWithHttpInfo(JobsInputBean body) throws ApiException {
-        okhttp3.Call localVarCall = jobsExecuteJobValidateBeforeCall(body, null);
-        Type localVarReturnType = new TypeToken<JobRecordBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Execute Job (asynchronously)
-     * &lt;p&gt;Execute the job and return the record containing job information, such as job ID, status, inputs, and output information for the current job.&lt;/p&gt;
-     * @param body parameter provided as json string in the request body (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Request for job exceution submitted successfully and job started successfully. Returns job information in response. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> 1. Application does not exits. If the &#39;application&#39; parameter value is wrong.&lt;p&gt;2. Database does not exist. If &#39;db&#39; parameter value is wrong.&lt;/p&gt;&lt;p&gt;3. NULL argument (3) passed to ESSAPI function EssGetObjectInfo&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call jobsExecuteJobAsync(JobsInputBean body, final ApiCallback<JobRecordBean> _callback) throws ApiException {
+  /**
+   * Get Job Statistics
+   * Returns the jobs statistics with the userid (logged in). Informations like below &lt;p&gt;1. no of error jobs.&lt;/p&gt;&lt;p&gt;2. no of successful jobs.&lt;/p&gt;&lt;p&gt;3. no of jobs with warnings.&lt;/p&gt;&lt;p&gt;4. no of running jobs&lt;/p&gt;
+   * @param userId User Id of the logged in user (required)
+   * @return JobStatisticsBean
+   * @throws ApiException if fails to make API call
+   */
+  public JobStatisticsBean jobsGetJobStatistics(String userId) throws ApiException {
+    ApiResponse<JobStatisticsBean> localVarResponse = jobsGetJobStatisticsWithHttpInfo(userId);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = jobsExecuteJobValidateBeforeCall(body, _callback);
-        Type localVarReturnType = new TypeToken<JobRecordBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for jobsGetAllJobRecords
-     * @param keyword keyword to filter job records on ID, Script, database or user (optional)
-     * @param fullAppName application name for which job records to retrieved (optional)
-     * @param orderBy Order By (optional, default to job_ID:desc)
-     * @param offset &lt;p&gt;Number of jobs to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of jobs to fetch. Default is 20.&lt;/p&gt; (optional, default to 50)
-     * @param systemjobs &lt;p&gt;Include backup jobs in jobs records.&lt;/p&gt; (optional, default to false)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Returns the job records for specified query parameter provided. If no query parameter is specified, returns a list of all the jobs.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call jobsGetAllJobRecordsCall(String keyword, String fullAppName, String orderBy, Long offset, Long limit, Boolean systemjobs, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/jobs";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (keyword != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("keyword", keyword));
+  /**
+   * Get Job Statistics
+   * Returns the jobs statistics with the userid (logged in). Informations like below &lt;p&gt;1. no of error jobs.&lt;/p&gt;&lt;p&gt;2. no of successful jobs.&lt;/p&gt;&lt;p&gt;3. no of jobs with warnings.&lt;/p&gt;&lt;p&gt;4. no of running jobs&lt;/p&gt;
+   * @param userId User Id of the logged in user (required)
+   * @return ApiResponse&lt;JobStatisticsBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<JobStatisticsBean> jobsGetJobStatisticsWithHttpInfo(String userId) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = jobsGetJobStatisticsRequestBuilder(userId);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("jobsGetJobStatistics", localVarResponse);
         }
+        return new ApiResponse<JobStatisticsBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<JobStatisticsBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        if (fullAppName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("fullAppName", fullAppName));
-        }
-
-        if (orderBy != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("orderBy", orderBy));
-        }
-
-        if (offset != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("offset", offset));
-        }
-
-        if (limit != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
-        }
-
-        if (systemjobs != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("systemjobs", systemjobs));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder jobsGetJobStatisticsRequestBuilder(String userId) throws ApiException {
+    // verify the required parameter 'userId' is set
+    if (userId == null) {
+      throw new ApiException(400, "Missing the required parameter 'userId' when calling jobsGetJobStatistics");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call jobsGetAllJobRecordsValidateBeforeCall(String keyword, String fullAppName, String orderBy, Long offset, Long limit, Boolean systemjobs, final ApiCallback _callback) throws ApiException {
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = jobsGetAllJobRecordsCall(keyword, fullAppName, orderBy, offset, limit, systemjobs, _callback);
-        return localVarCall;
+    String localVarPath = "/jobs/statistics/{userId}"
+        .replace("{userId}", ApiClient.urlEncode(userId.toString()));
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Job List
-     * Returns the list of jobs for the query parameters provided. Informations like job status, job type, job input info, job output info are returned
-     * @param keyword keyword to filter job records on ID, Script, database or user (optional)
-     * @param fullAppName application name for which job records to retrieved (optional)
-     * @param orderBy Order By (optional, default to job_ID:desc)
-     * @param offset &lt;p&gt;Number of jobs to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of jobs to fetch. Default is 20.&lt;/p&gt; (optional, default to 50)
-     * @param systemjobs &lt;p&gt;Include backup jobs in jobs records.&lt;/p&gt; (optional, default to false)
-     * @return JobRecordPaginatedResultWrapper
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Returns the job records for specified query parameter provided. If no query parameter is specified, returns a list of all the jobs.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public JobRecordPaginatedResultWrapper jobsGetAllJobRecords(String keyword, String fullAppName, String orderBy, Long offset, Long limit, Boolean systemjobs) throws ApiException {
-        ApiResponse<JobRecordPaginatedResultWrapper> localVarResp = jobsGetAllJobRecordsWithHttpInfo(keyword, fullAppName, orderBy, offset, limit, systemjobs);
-        return localVarResp.getData();
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Get Job List
-     * Returns the list of jobs for the query parameters provided. Informations like job status, job type, job input info, job output info are returned
-     * @param keyword keyword to filter job records on ID, Script, database or user (optional)
-     * @param fullAppName application name for which job records to retrieved (optional)
-     * @param orderBy Order By (optional, default to job_ID:desc)
-     * @param offset &lt;p&gt;Number of jobs to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of jobs to fetch. Default is 20.&lt;/p&gt; (optional, default to 50)
-     * @param systemjobs &lt;p&gt;Include backup jobs in jobs records.&lt;/p&gt; (optional, default to false)
-     * @return ApiResponse&lt;JobRecordPaginatedResultWrapper&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Returns the job records for specified query parameter provided. If no query parameter is specified, returns a list of all the jobs.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<JobRecordPaginatedResultWrapper> jobsGetAllJobRecordsWithHttpInfo(String keyword, String fullAppName, String orderBy, Long offset, Long limit, Boolean systemjobs) throws ApiException {
-        okhttp3.Call localVarCall = jobsGetAllJobRecordsValidateBeforeCall(keyword, fullAppName, orderBy, offset, limit, systemjobs, null);
-        Type localVarReturnType = new TypeToken<JobRecordPaginatedResultWrapper>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Job List (asynchronously)
-     * Returns the list of jobs for the query parameters provided. Informations like job status, job type, job input info, job output info are returned
-     * @param keyword keyword to filter job records on ID, Script, database or user (optional)
-     * @param fullAppName application name for which job records to retrieved (optional)
-     * @param orderBy Order By (optional, default to job_ID:desc)
-     * @param offset &lt;p&gt;Number of jobs to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of jobs to fetch. Default is 20.&lt;/p&gt; (optional, default to 50)
-     * @param systemjobs &lt;p&gt;Include backup jobs in jobs records.&lt;/p&gt; (optional, default to false)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;Returns the job records for specified query parameter provided. If no query parameter is specified, returns a list of all the jobs.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call jobsGetAllJobRecordsAsync(String keyword, String fullAppName, String orderBy, Long offset, Long limit, Boolean systemjobs, final ApiCallback<JobRecordPaginatedResultWrapper> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = jobsGetAllJobRecordsValidateBeforeCall(keyword, fullAppName, orderBy, offset, limit, systemjobs, _callback);
-        Type localVarReturnType = new TypeToken<JobRecordPaginatedResultWrapper>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for jobsGetJobInfo
-     * @param id Job ID (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns complete job information for the job id specified. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call jobsGetJobInfoCall(String id, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/jobs/{id}"
-            .replaceAll("\\{" + "id" + "\\}", localVarApiClient.escapeString(id.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call jobsGetJobInfoValidateBeforeCall(String id, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling jobsGetJobInfo(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = jobsGetJobInfoCall(id, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Job
-     * Returns the job information for job ID passed. Informations like job status, job type, job input info, job output info are returned
-     * @param id Job ID (required)
-     * @return JobRecordBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns complete job information for the job id specified. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public JobRecordBean jobsGetJobInfo(String id) throws ApiException {
-        ApiResponse<JobRecordBean> localVarResp = jobsGetJobInfoWithHttpInfo(id);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Job
-     * Returns the job information for job ID passed. Informations like job status, job type, job input info, job output info are returned
-     * @param id Job ID (required)
-     * @return ApiResponse&lt;JobRecordBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns complete job information for the job id specified. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<JobRecordBean> jobsGetJobInfoWithHttpInfo(String id) throws ApiException {
-        okhttp3.Call localVarCall = jobsGetJobInfoValidateBeforeCall(id, null);
-        Type localVarReturnType = new TypeToken<JobRecordBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Job (asynchronously)
-     * Returns the job information for job ID passed. Informations like job status, job type, job input info, job output info are returned
-     * @param id Job ID (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns complete job information for the job id specified. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> &lt;p&gt;&lt;strong&gt;Service Unavailable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Naming exception or server exception.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call jobsGetJobInfoAsync(String id, final ApiCallback<JobRecordBean> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = jobsGetJobInfoValidateBeforeCall(id, _callback);
-        Type localVarReturnType = new TypeToken<JobRecordBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for jobsGetJobStatistics
-     * @param userId User Id of the logged in user (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns jobs statistics. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> Naming Exception or Server Exception </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call jobsGetJobStatisticsCall(String userId, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/jobs/statistics/{userId}"
-            .replaceAll("\\{" + "userId" + "\\}", localVarApiClient.escapeString(userId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call jobsGetJobStatisticsValidateBeforeCall(String userId, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'userId' is set
-        if (userId == null) {
-            throw new ApiException("Missing the required parameter 'userId' when calling jobsGetJobStatistics(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = jobsGetJobStatisticsCall(userId, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Job Statistics
-     * Returns the jobs statistics with the userid (logged in). Informations like below &lt;p&gt;1. no of error jobs.&lt;/p&gt;&lt;p&gt;2. no of successful jobs.&lt;/p&gt;&lt;p&gt;3. no of jobs with warnings.&lt;/p&gt;&lt;p&gt;4. no of running jobs&lt;/p&gt;
-     * @param userId User Id of the logged in user (required)
-     * @return JobStatisticsBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns jobs statistics. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> Naming Exception or Server Exception </td><td>  -  </td></tr>
-     </table>
-     */
-    public JobStatisticsBean jobsGetJobStatistics(String userId) throws ApiException {
-        ApiResponse<JobStatisticsBean> localVarResp = jobsGetJobStatisticsWithHttpInfo(userId);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Job Statistics
-     * Returns the jobs statistics with the userid (logged in). Informations like below &lt;p&gt;1. no of error jobs.&lt;/p&gt;&lt;p&gt;2. no of successful jobs.&lt;/p&gt;&lt;p&gt;3. no of jobs with warnings.&lt;/p&gt;&lt;p&gt;4. no of running jobs&lt;/p&gt;
-     * @param userId User Id of the logged in user (required)
-     * @return ApiResponse&lt;JobStatisticsBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns jobs statistics. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> Naming Exception or Server Exception </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<JobStatisticsBean> jobsGetJobStatisticsWithHttpInfo(String userId) throws ApiException {
-        okhttp3.Call localVarCall = jobsGetJobStatisticsValidateBeforeCall(userId, null);
-        Type localVarReturnType = new TypeToken<JobStatisticsBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Job Statistics (asynchronously)
-     * Returns the jobs statistics with the userid (logged in). Informations like below &lt;p&gt;1. no of error jobs.&lt;/p&gt;&lt;p&gt;2. no of successful jobs.&lt;/p&gt;&lt;p&gt;3. no of jobs with warnings.&lt;/p&gt;&lt;p&gt;4. no of running jobs&lt;/p&gt;
-     * @param userId User Id of the logged in user (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns jobs statistics. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 503 </td><td> Naming Exception or Server Exception </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call jobsGetJobStatisticsAsync(String userId, final ApiCallback<JobStatisticsBean> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = jobsGetJobStatisticsValidateBeforeCall(userId, _callback);
-        Type localVarReturnType = new TypeToken<JobStatisticsBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

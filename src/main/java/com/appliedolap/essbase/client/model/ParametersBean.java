@@ -13,1725 +13,1861 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.CompactDesignation;
 import com.appliedolap.essbase.client.model.RTSV;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ParametersBean
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ParametersBean.JSON_PROPERTY_RULE,
+  ParametersBean.JSON_PROPERTY_FILE,
+  ParametersBean.JSON_PROPERTY_ABORT_ON_ERROR,
+  ParametersBean.JSON_PROPERTY_RESTRUCTURE_OPTION,
+  ParametersBean.JSON_PROPERTY_FORCE_DIM_BUILD,
+  ParametersBean.JSON_PROPERTY_SCRIPT,
+  ParametersBean.JSON_PROPERTY_OPTION,
+  ParametersBean.JSON_PROPERTY_LOADDATA,
+  ParametersBean.JSON_PROPERTY_USE_CONNECTION,
+  ParametersBean.JSON_PROPERTY_CONNECTION,
+  ParametersBean.JSON_PROPERTY_USER,
+  ParametersBean.JSON_PROPERTY_PASSWORD,
+  ParametersBean.JSON_PROPERTY_CALC,
+  ParametersBean.JSON_PROPERTY_BUILD_METHOD,
+  ParametersBean.JSON_PROPERTY_DATA,
+  ParametersBean.JSON_PROPERTY_ZIP_FILE_NAME,
+  ParametersBean.JSON_PROPERTY_SKIPDATA,
+  ParametersBean.JSON_PROPERTY_THREADS,
+  ParametersBean.JSON_PROPERTY_OVERWRITE,
+  ParametersBean.JSON_PROPERTY_LCM_IMPORT_FROM_STORAGE,
+  ParametersBean.JSON_PROPERTY_ANALYZE_FILE_NAME,
+  ParametersBean.JSON_PROPERTY_ANALYZE_SHEET_NAME,
+  ParametersBean.JSON_PROPERTY_DELETE_EXCEL_ON_SUCCESS,
+  ParametersBean.JSON_PROPERTY_CATALOG_EXCEL_PATH,
+  ParametersBean.JSON_PROPERTY_IMPORT_EXCEL_FILE_NAME,
+  ParametersBean.JSON_PROPERTY_RECREATE_APPLICATION,
+  ParametersBean.JSON_PROPERTY_CREATE_FILES,
+  ParametersBean.JSON_PROPERTY_EXECUTE_SCRIPT,
+  ParametersBean.JSON_PROPERTY_BUILD_OPTION,
+  ParametersBean.JSON_PROPERTY_COPY_TO_STORAGE,
+  ParametersBean.JSON_PROPERTY_FILESYSTEMCOPY,
+  ParametersBean.JSON_PROPERTY_DATA_LEVEL,
+  ParametersBean.JSON_PROPERTY_COLUMN_FORMAT,
+  ParametersBean.JSON_PROPERTY_TARGET_APPLICATION_NAME,
+  ParametersBean.JSON_PROPERTY_PARTIAL_DATA_EXPRESSION,
+  ParametersBean.JSON_PROPERTY_INCLUDE_SERVER_LEVEL,
+  ParametersBean.JSON_PROPERTY_ENABLE_SANDBOXING,
+  ParametersBean.JSON_PROPERTY_DB_TYPE,
+  ParametersBean.JSON_PROPERTY_DIM_DESIGNATION_MODE,
+  ParametersBean.JSON_PROPERTY_UNSTRUCTURED_ANALYSIS,
+  ParametersBean.JSON_PROPERTY_RATIO_TO_STOP,
+  ParametersBean.JSON_PROPERTY_BASED_ON_QUERY_DATA,
+  ParametersBean.JSON_PROPERTY_ENABLE_ALTERNATE_ROLLUPS,
+  ParametersBean.JSON_PROPERTY_COMPRESS,
+  ParametersBean.JSON_PROPERTY_GENERATE_ARTIFACT_LIST,
+  ParametersBean.JSON_PROPERTY_ARTIFACT_LIST,
+  ParametersBean.JSON_PROPERTY_VERBOSE,
+  ParametersBean.JSON_PROPERTY_DISASTER_RECOVERY,
+  ParametersBean.JSON_PROPERTY_FORCE,
+  ParametersBean.JSON_PROPERTY_BACKUP_TYPE,
+  ParametersBean.JSON_PROPERTY_APP_ID,
+  ParametersBean.JSON_PROPERTY_TIMESTAMP,
+  ParametersBean.JSON_PROPERTY_MAX_PARALLEL,
+  ParametersBean.JSON_PROPERTY_SELECTED_DIMENSIONS,
+  ParametersBean.JSON_PROPERTY_RTSV,
+  ParametersBean.JSON_PROPERTY_BUFFER_ID,
+  ParametersBean.JSON_PROPERTY_BUFFER_IDS,
+  ParametersBean.JSON_PROPERTY_COMMIT_OPTION,
+  ParametersBean.JSON_PROPERTY_ACTION_TYPE,
+  ParametersBean.JSON_PROPERTY_TERM_OPTION,
+  ParametersBean.JSON_PROPERTY_DISCOVER_DIMENSION_TABLES,
+  ParametersBean.JSON_PROPERTY_EXPORT_DYNAMIC_BLOCKS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ParametersBean {
-  public static final String SERIALIZED_NAME_RULE = "rule";
-  @SerializedName(SERIALIZED_NAME_RULE)
+  public static final String JSON_PROPERTY_RULE = "rule";
+  @jakarta.annotation.Nullable
   private String rule;
 
-  public static final String SERIALIZED_NAME_FILE = "file";
-  @SerializedName(SERIALIZED_NAME_FILE)
-  private String file;
+  public static final String JSON_PROPERTY_FILE = "file";
+  @jakarta.annotation.Nullable
+  private String _file;
 
-  public static final String SERIALIZED_NAME_ABORT_ON_ERROR = "abortOnError";
-  @SerializedName(SERIALIZED_NAME_ABORT_ON_ERROR)
+  public static final String JSON_PROPERTY_ABORT_ON_ERROR = "abortOnError";
+  @jakarta.annotation.Nullable
   private String abortOnError;
 
-  public static final String SERIALIZED_NAME_RESTRUCTURE_OPTION = "restructureOption";
-  @SerializedName(SERIALIZED_NAME_RESTRUCTURE_OPTION)
+  public static final String JSON_PROPERTY_RESTRUCTURE_OPTION = "restructureOption";
+  @jakarta.annotation.Nullable
   private String restructureOption;
 
-  public static final String SERIALIZED_NAME_FORCE_DIM_BUILD = "forceDimBuild";
-  @SerializedName(SERIALIZED_NAME_FORCE_DIM_BUILD)
+  public static final String JSON_PROPERTY_FORCE_DIM_BUILD = "forceDimBuild";
+  @jakarta.annotation.Nullable
   private String forceDimBuild;
 
-  public static final String SERIALIZED_NAME_SCRIPT = "script";
-  @SerializedName(SERIALIZED_NAME_SCRIPT)
+  public static final String JSON_PROPERTY_SCRIPT = "script";
+  @jakarta.annotation.Nullable
   private String script;
 
-  public static final String SERIALIZED_NAME_OPTION = "option";
-  @SerializedName(SERIALIZED_NAME_OPTION)
+  public static final String JSON_PROPERTY_OPTION = "option";
+  @jakarta.annotation.Nullable
   private String option;
 
-  public static final String SERIALIZED_NAME_LOADDATA = "loaddata";
-  @SerializedName(SERIALIZED_NAME_LOADDATA)
+  public static final String JSON_PROPERTY_LOADDATA = "loaddata";
+  @jakarta.annotation.Nullable
   private String loaddata;
 
-  public static final String SERIALIZED_NAME_USE_CONNECTION = "useConnection";
-  @SerializedName(SERIALIZED_NAME_USE_CONNECTION)
+  public static final String JSON_PROPERTY_USE_CONNECTION = "useConnection";
+  @jakarta.annotation.Nullable
   private String useConnection;
 
-  public static final String SERIALIZED_NAME_CONNECTION = "connection";
-  @SerializedName(SERIALIZED_NAME_CONNECTION)
+  public static final String JSON_PROPERTY_CONNECTION = "connection";
+  @jakarta.annotation.Nullable
   private String connection;
 
-  public static final String SERIALIZED_NAME_USER = "user";
-  @SerializedName(SERIALIZED_NAME_USER)
+  public static final String JSON_PROPERTY_USER = "user";
+  @jakarta.annotation.Nullable
   private String user;
 
-  public static final String SERIALIZED_NAME_PASSWORD = "password";
-  @SerializedName(SERIALIZED_NAME_PASSWORD)
+  public static final String JSON_PROPERTY_PASSWORD = "password";
+  @jakarta.annotation.Nullable
   private String password;
 
-  public static final String SERIALIZED_NAME_CALC = "calc";
-  @SerializedName(SERIALIZED_NAME_CALC)
+  public static final String JSON_PROPERTY_CALC = "calc";
+  @jakarta.annotation.Nullable
   private String calc;
 
-  public static final String SERIALIZED_NAME_BUILD_METHOD = "buildMethod";
-  @SerializedName(SERIALIZED_NAME_BUILD_METHOD)
+  public static final String JSON_PROPERTY_BUILD_METHOD = "buildMethod";
+  @jakarta.annotation.Nullable
   private String buildMethod;
 
-  public static final String SERIALIZED_NAME_DATA = "data";
-  @SerializedName(SERIALIZED_NAME_DATA)
+  public static final String JSON_PROPERTY_DATA = "data";
+  @jakarta.annotation.Nullable
   private String data;
 
-  public static final String SERIALIZED_NAME_ZIP_FILE_NAME = "zipFileName";
-  @SerializedName(SERIALIZED_NAME_ZIP_FILE_NAME)
+  public static final String JSON_PROPERTY_ZIP_FILE_NAME = "zipFileName";
+  @jakarta.annotation.Nullable
   private String zipFileName;
 
-  public static final String SERIALIZED_NAME_SKIPDATA = "skipdata";
-  @SerializedName(SERIALIZED_NAME_SKIPDATA)
+  public static final String JSON_PROPERTY_SKIPDATA = "skipdata";
+  @jakarta.annotation.Nullable
   private String skipdata;
 
-  public static final String SERIALIZED_NAME_THREADS = "threads";
-  @SerializedName(SERIALIZED_NAME_THREADS)
+  public static final String JSON_PROPERTY_THREADS = "threads";
+  @jakarta.annotation.Nullable
   private String threads;
 
-  public static final String SERIALIZED_NAME_OVERWRITE = "overwrite";
-  @SerializedName(SERIALIZED_NAME_OVERWRITE)
+  public static final String JSON_PROPERTY_OVERWRITE = "overwrite";
+  @jakarta.annotation.Nullable
   private String overwrite;
 
-  public static final String SERIALIZED_NAME_LCM_IMPORT_FROM_STORAGE = "lcmImportFromStorage";
-  @SerializedName(SERIALIZED_NAME_LCM_IMPORT_FROM_STORAGE)
+  public static final String JSON_PROPERTY_LCM_IMPORT_FROM_STORAGE = "lcmImportFromStorage";
+  @jakarta.annotation.Nullable
   private String lcmImportFromStorage;
 
-  public static final String SERIALIZED_NAME_ANALYZE_FILE_NAME = "analyzeFileName";
-  @SerializedName(SERIALIZED_NAME_ANALYZE_FILE_NAME)
+  public static final String JSON_PROPERTY_ANALYZE_FILE_NAME = "analyzeFileName";
+  @jakarta.annotation.Nullable
   private String analyzeFileName;
 
-  public static final String SERIALIZED_NAME_ANALYZE_SHEET_NAME = "analyzeSheetName";
-  @SerializedName(SERIALIZED_NAME_ANALYZE_SHEET_NAME)
+  public static final String JSON_PROPERTY_ANALYZE_SHEET_NAME = "analyzeSheetName";
+  @jakarta.annotation.Nullable
   private String analyzeSheetName;
 
-  public static final String SERIALIZED_NAME_DELETE_EXCEL_ON_SUCCESS = "deleteExcelOnSuccess";
-  @SerializedName(SERIALIZED_NAME_DELETE_EXCEL_ON_SUCCESS)
+  public static final String JSON_PROPERTY_DELETE_EXCEL_ON_SUCCESS = "deleteExcelOnSuccess";
+  @jakarta.annotation.Nullable
   private String deleteExcelOnSuccess;
 
-  public static final String SERIALIZED_NAME_CATALOG_EXCEL_PATH = "catalogExcelPath";
-  @SerializedName(SERIALIZED_NAME_CATALOG_EXCEL_PATH)
+  public static final String JSON_PROPERTY_CATALOG_EXCEL_PATH = "catalogExcelPath";
+  @jakarta.annotation.Nullable
   private String catalogExcelPath;
 
-  public static final String SERIALIZED_NAME_IMPORT_EXCEL_FILE_NAME = "importExcelFileName";
-  @SerializedName(SERIALIZED_NAME_IMPORT_EXCEL_FILE_NAME)
+  public static final String JSON_PROPERTY_IMPORT_EXCEL_FILE_NAME = "importExcelFileName";
+  @jakarta.annotation.Nullable
   private String importExcelFileName;
 
-  public static final String SERIALIZED_NAME_RECREATE_APPLICATION = "recreateApplication";
-  @SerializedName(SERIALIZED_NAME_RECREATE_APPLICATION)
+  public static final String JSON_PROPERTY_RECREATE_APPLICATION = "recreateApplication";
+  @jakarta.annotation.Nullable
   private String recreateApplication;
 
-  public static final String SERIALIZED_NAME_CREATE_FILES = "createFiles";
-  @SerializedName(SERIALIZED_NAME_CREATE_FILES)
+  public static final String JSON_PROPERTY_CREATE_FILES = "createFiles";
+  @jakarta.annotation.Nullable
   private String createFiles;
 
-  public static final String SERIALIZED_NAME_EXECUTE_SCRIPT = "executeScript";
-  @SerializedName(SERIALIZED_NAME_EXECUTE_SCRIPT)
+  public static final String JSON_PROPERTY_EXECUTE_SCRIPT = "executeScript";
+  @jakarta.annotation.Nullable
   private String executeScript;
 
-  public static final String SERIALIZED_NAME_BUILD_OPTION = "buildOption";
-  @SerializedName(SERIALIZED_NAME_BUILD_OPTION)
+  public static final String JSON_PROPERTY_BUILD_OPTION = "buildOption";
+  @jakarta.annotation.Nullable
   private String buildOption;
 
-  public static final String SERIALIZED_NAME_COPY_TO_STORAGE = "copyToStorage";
-  @SerializedName(SERIALIZED_NAME_COPY_TO_STORAGE)
+  public static final String JSON_PROPERTY_COPY_TO_STORAGE = "copyToStorage";
+  @jakarta.annotation.Nullable
   private String copyToStorage;
 
-  public static final String SERIALIZED_NAME_FILESYSTEMCOPY = "filesystemcopy";
-  @SerializedName(SERIALIZED_NAME_FILESYSTEMCOPY)
+  public static final String JSON_PROPERTY_FILESYSTEMCOPY = "filesystemcopy";
+  @jakarta.annotation.Nullable
   private String filesystemcopy;
 
-  public static final String SERIALIZED_NAME_DATA_LEVEL = "dataLevel";
-  @SerializedName(SERIALIZED_NAME_DATA_LEVEL)
+  public static final String JSON_PROPERTY_DATA_LEVEL = "dataLevel";
+  @jakarta.annotation.Nullable
   private String dataLevel;
 
-  public static final String SERIALIZED_NAME_COLUMN_FORMAT = "columnFormat";
-  @SerializedName(SERIALIZED_NAME_COLUMN_FORMAT)
+  public static final String JSON_PROPERTY_COLUMN_FORMAT = "columnFormat";
+  @jakarta.annotation.Nullable
   private String columnFormat;
 
-  public static final String SERIALIZED_NAME_TARGET_APPLICATION_NAME = "targetApplicationName";
-  @SerializedName(SERIALIZED_NAME_TARGET_APPLICATION_NAME)
+  public static final String JSON_PROPERTY_TARGET_APPLICATION_NAME = "targetApplicationName";
+  @jakarta.annotation.Nullable
   private String targetApplicationName;
 
-  public static final String SERIALIZED_NAME_PARTIAL_DATA_EXPRESSION = "partialDataExpression";
-  @SerializedName(SERIALIZED_NAME_PARTIAL_DATA_EXPRESSION)
+  public static final String JSON_PROPERTY_PARTIAL_DATA_EXPRESSION = "partialDataExpression";
+  @jakarta.annotation.Nullable
   private String partialDataExpression;
 
-  public static final String SERIALIZED_NAME_INCLUDE_SERVER_LEVEL = "includeServerLevel";
-  @SerializedName(SERIALIZED_NAME_INCLUDE_SERVER_LEVEL)
+  public static final String JSON_PROPERTY_INCLUDE_SERVER_LEVEL = "includeServerLevel";
+  @jakarta.annotation.Nullable
   private String includeServerLevel;
 
-  public static final String SERIALIZED_NAME_ENABLE_SANDBOXING = "enableSandboxing";
-  @SerializedName(SERIALIZED_NAME_ENABLE_SANDBOXING)
+  public static final String JSON_PROPERTY_ENABLE_SANDBOXING = "enableSandboxing";
+  @jakarta.annotation.Nullable
   private String enableSandboxing;
 
-  public static final String SERIALIZED_NAME_DB_TYPE = "dbType";
-  @SerializedName(SERIALIZED_NAME_DB_TYPE)
+  public static final String JSON_PROPERTY_DB_TYPE = "dbType";
+  @jakarta.annotation.Nullable
   private String dbType;
 
-  public static final String SERIALIZED_NAME_DIM_DESIGNATION_MODE = "dimDesignationMode";
-  @SerializedName(SERIALIZED_NAME_DIM_DESIGNATION_MODE)
+  public static final String JSON_PROPERTY_DIM_DESIGNATION_MODE = "dimDesignationMode";
+  @jakarta.annotation.Nullable
   private String dimDesignationMode;
 
-  public static final String SERIALIZED_NAME_UNSTRUCTURED_ANALYSIS = "unstructuredAnalysis";
-  @SerializedName(SERIALIZED_NAME_UNSTRUCTURED_ANALYSIS)
+  public static final String JSON_PROPERTY_UNSTRUCTURED_ANALYSIS = "unstructuredAnalysis";
+  @jakarta.annotation.Nullable
   private CompactDesignation unstructuredAnalysis;
 
-  public static final String SERIALIZED_NAME_RATIO_TO_STOP = "ratioToStop";
-  @SerializedName(SERIALIZED_NAME_RATIO_TO_STOP)
+  public static final String JSON_PROPERTY_RATIO_TO_STOP = "ratioToStop";
+  @jakarta.annotation.Nullable
   private String ratioToStop;
 
-  public static final String SERIALIZED_NAME_BASED_ON_QUERY_DATA = "basedOnQueryData";
-  @SerializedName(SERIALIZED_NAME_BASED_ON_QUERY_DATA)
+  public static final String JSON_PROPERTY_BASED_ON_QUERY_DATA = "basedOnQueryData";
+  @jakarta.annotation.Nullable
   private String basedOnQueryData;
 
-  public static final String SERIALIZED_NAME_ENABLE_ALTERNATE_ROLLUPS = "enableAlternateRollups";
-  @SerializedName(SERIALIZED_NAME_ENABLE_ALTERNATE_ROLLUPS)
+  public static final String JSON_PROPERTY_ENABLE_ALTERNATE_ROLLUPS = "enableAlternateRollups";
+  @jakarta.annotation.Nullable
   private String enableAlternateRollups;
 
-  public static final String SERIALIZED_NAME_COMPRESS = "compress";
-  @SerializedName(SERIALIZED_NAME_COMPRESS)
+  public static final String JSON_PROPERTY_COMPRESS = "compress";
+  @jakarta.annotation.Nullable
   private String compress;
 
-  public static final String SERIALIZED_NAME_GENERATE_ARTIFACT_LIST = "generateArtifactList";
-  @SerializedName(SERIALIZED_NAME_GENERATE_ARTIFACT_LIST)
+  public static final String JSON_PROPERTY_GENERATE_ARTIFACT_LIST = "generateArtifactList";
+  @jakarta.annotation.Nullable
   private String generateArtifactList;
 
-  public static final String SERIALIZED_NAME_ARTIFACT_LIST = "artifactList";
-  @SerializedName(SERIALIZED_NAME_ARTIFACT_LIST)
+  public static final String JSON_PROPERTY_ARTIFACT_LIST = "artifactList";
+  @jakarta.annotation.Nullable
   private String artifactList;
 
-  public static final String SERIALIZED_NAME_VERBOSE = "verbose";
-  @SerializedName(SERIALIZED_NAME_VERBOSE)
+  public static final String JSON_PROPERTY_VERBOSE = "verbose";
+  @jakarta.annotation.Nullable
   private String verbose;
 
-  public static final String SERIALIZED_NAME_DISASTER_RECOVERY = "disasterRecovery";
-  @SerializedName(SERIALIZED_NAME_DISASTER_RECOVERY)
+  public static final String JSON_PROPERTY_DISASTER_RECOVERY = "disasterRecovery";
+  @jakarta.annotation.Nullable
   private String disasterRecovery;
 
-  public static final String SERIALIZED_NAME_FORCE = "force";
-  @SerializedName(SERIALIZED_NAME_FORCE)
+  public static final String JSON_PROPERTY_FORCE = "force";
+  @jakarta.annotation.Nullable
   private String force;
 
-  public static final String SERIALIZED_NAME_BACKUP_TYPE = "backupType";
-  @SerializedName(SERIALIZED_NAME_BACKUP_TYPE)
+  public static final String JSON_PROPERTY_BACKUP_TYPE = "backupType";
+  @jakarta.annotation.Nullable
   private String backupType;
 
-  public static final String SERIALIZED_NAME_APP_ID = "appId";
-  @SerializedName(SERIALIZED_NAME_APP_ID)
+  public static final String JSON_PROPERTY_APP_ID = "appId";
+  @jakarta.annotation.Nullable
   private String appId;
 
-  public static final String SERIALIZED_NAME_TIMESTAMP = "timestamp";
-  @SerializedName(SERIALIZED_NAME_TIMESTAMP)
+  public static final String JSON_PROPERTY_TIMESTAMP = "timestamp";
+  @jakarta.annotation.Nullable
   private String timestamp;
 
-  public static final String SERIALIZED_NAME_MAX_PARALLEL = "maxParallel";
-  @SerializedName(SERIALIZED_NAME_MAX_PARALLEL)
+  public static final String JSON_PROPERTY_MAX_PARALLEL = "maxParallel";
+  @jakarta.annotation.Nullable
   private String maxParallel;
 
-  public static final String SERIALIZED_NAME_SELECTED_DIMENSIONS = "selectedDimensions";
-  @SerializedName(SERIALIZED_NAME_SELECTED_DIMENSIONS)
-  private List<String> selectedDimensions = null;
+  public static final String JSON_PROPERTY_SELECTED_DIMENSIONS = "selectedDimensions";
+  @jakarta.annotation.Nullable
+  private List<String> selectedDimensions = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_RTSV = "rtsv";
-  @SerializedName(SERIALIZED_NAME_RTSV)
-  private List<RTSV> rtsv = null;
+  public static final String JSON_PROPERTY_RTSV = "rtsv";
+  @jakarta.annotation.Nullable
+  private List<RTSV> rtsv = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_BUFFER_ID = "bufferId";
-  @SerializedName(SERIALIZED_NAME_BUFFER_ID)
+  public static final String JSON_PROPERTY_BUFFER_ID = "bufferId";
+  @jakarta.annotation.Nullable
   private Integer bufferId;
 
-  public static final String SERIALIZED_NAME_BUFFER_IDS = "bufferIds";
-  @SerializedName(SERIALIZED_NAME_BUFFER_IDS)
-  private List<Integer> bufferIds = null;
+  public static final String JSON_PROPERTY_BUFFER_IDS = "bufferIds";
+  @jakarta.annotation.Nullable
+  private List<Integer> bufferIds = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_COMMIT_OPTION = "commitOption";
-  @SerializedName(SERIALIZED_NAME_COMMIT_OPTION)
+  public static final String JSON_PROPERTY_COMMIT_OPTION = "commitOption";
+  @jakarta.annotation.Nullable
   private String commitOption;
 
-  public static final String SERIALIZED_NAME_ACTION_TYPE = "actionType";
-  @SerializedName(SERIALIZED_NAME_ACTION_TYPE)
+  public static final String JSON_PROPERTY_ACTION_TYPE = "actionType";
+  @jakarta.annotation.Nullable
   private String actionType;
 
-  public static final String SERIALIZED_NAME_TERM_OPTION = "termOption";
-  @SerializedName(SERIALIZED_NAME_TERM_OPTION)
+  public static final String JSON_PROPERTY_TERM_OPTION = "termOption";
+  @jakarta.annotation.Nullable
   private String termOption;
 
-  public static final String SERIALIZED_NAME_DISCOVER_DIMENSION_TABLES = "discoverDimensionTables";
-  @SerializedName(SERIALIZED_NAME_DISCOVER_DIMENSION_TABLES)
+  public static final String JSON_PROPERTY_DISCOVER_DIMENSION_TABLES = "discoverDimensionTables";
+  @jakarta.annotation.Nullable
   private String discoverDimensionTables;
 
-  public static final String SERIALIZED_NAME_EXPORT_DYNAMIC_BLOCKS = "exportDynamicBlocks";
-  @SerializedName(SERIALIZED_NAME_EXPORT_DYNAMIC_BLOCKS)
+  public static final String JSON_PROPERTY_EXPORT_DYNAMIC_BLOCKS = "exportDynamicBlocks";
+  @jakarta.annotation.Nullable
   private String exportDynamicBlocks;
 
+  public ParametersBean() { 
+  }
 
-  public ParametersBean rule(String rule) {
-    
+  public ParametersBean rule(@jakarta.annotation.Nullable String rule) {
     this.rule = rule;
     return this;
   }
 
-   /**
+  /**
    * Get rule
    * @return rule
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RULE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getRule() {
     return rule;
   }
 
 
-  public void setRule(String rule) {
+  @JsonProperty(JSON_PROPERTY_RULE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRule(@jakarta.annotation.Nullable String rule) {
     this.rule = rule;
   }
 
 
-  public ParametersBean file(String file) {
-    
-    this.file = file;
+  public ParametersBean _file(@jakarta.annotation.Nullable String _file) {
+    this._file = _file;
     return this;
   }
 
-   /**
-   * Get file
-   * @return file
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+  /**
+   * Get _file
+   * @return _file
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FILE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getFile() {
-    return file;
+    return _file;
   }
 
 
-  public void setFile(String file) {
-    this.file = file;
+  @JsonProperty(JSON_PROPERTY_FILE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFile(@jakarta.annotation.Nullable String _file) {
+    this._file = _file;
   }
 
 
-  public ParametersBean abortOnError(String abortOnError) {
-    
+  public ParametersBean abortOnError(@jakarta.annotation.Nullable String abortOnError) {
     this.abortOnError = abortOnError;
     return this;
   }
 
-   /**
+  /**
    * Get abortOnError
    * @return abortOnError
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ABORT_ON_ERROR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getAbortOnError() {
     return abortOnError;
   }
 
 
-  public void setAbortOnError(String abortOnError) {
+  @JsonProperty(JSON_PROPERTY_ABORT_ON_ERROR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAbortOnError(@jakarta.annotation.Nullable String abortOnError) {
     this.abortOnError = abortOnError;
   }
 
 
-  public ParametersBean restructureOption(String restructureOption) {
-    
+  public ParametersBean restructureOption(@jakarta.annotation.Nullable String restructureOption) {
     this.restructureOption = restructureOption;
     return this;
   }
 
-   /**
+  /**
    * Get restructureOption
    * @return restructureOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RESTRUCTURE_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getRestructureOption() {
     return restructureOption;
   }
 
 
-  public void setRestructureOption(String restructureOption) {
+  @JsonProperty(JSON_PROPERTY_RESTRUCTURE_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRestructureOption(@jakarta.annotation.Nullable String restructureOption) {
     this.restructureOption = restructureOption;
   }
 
 
-  public ParametersBean forceDimBuild(String forceDimBuild) {
-    
+  public ParametersBean forceDimBuild(@jakarta.annotation.Nullable String forceDimBuild) {
     this.forceDimBuild = forceDimBuild;
     return this;
   }
 
-   /**
+  /**
    * Get forceDimBuild
    * @return forceDimBuild
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FORCE_DIM_BUILD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getForceDimBuild() {
     return forceDimBuild;
   }
 
 
-  public void setForceDimBuild(String forceDimBuild) {
+  @JsonProperty(JSON_PROPERTY_FORCE_DIM_BUILD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setForceDimBuild(@jakarta.annotation.Nullable String forceDimBuild) {
     this.forceDimBuild = forceDimBuild;
   }
 
 
-  public ParametersBean script(String script) {
-    
+  public ParametersBean script(@jakarta.annotation.Nullable String script) {
     this.script = script;
     return this;
   }
 
-   /**
+  /**
    * Get script
    * @return script
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SCRIPT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getScript() {
     return script;
   }
 
 
-  public void setScript(String script) {
+  @JsonProperty(JSON_PROPERTY_SCRIPT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setScript(@jakarta.annotation.Nullable String script) {
     this.script = script;
   }
 
 
-  public ParametersBean option(String option) {
-    
+  public ParametersBean option(@jakarta.annotation.Nullable String option) {
     this.option = option;
     return this;
   }
 
-   /**
+  /**
    * Get option
    * @return option
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getOption() {
     return option;
   }
 
 
-  public void setOption(String option) {
+  @JsonProperty(JSON_PROPERTY_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOption(@jakarta.annotation.Nullable String option) {
     this.option = option;
   }
 
 
-  public ParametersBean loaddata(String loaddata) {
-    
+  public ParametersBean loaddata(@jakarta.annotation.Nullable String loaddata) {
     this.loaddata = loaddata;
     return this;
   }
 
-   /**
+  /**
    * Get loaddata
    * @return loaddata
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LOADDATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getLoaddata() {
     return loaddata;
   }
 
 
-  public void setLoaddata(String loaddata) {
+  @JsonProperty(JSON_PROPERTY_LOADDATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLoaddata(@jakarta.annotation.Nullable String loaddata) {
     this.loaddata = loaddata;
   }
 
 
-  public ParametersBean useConnection(String useConnection) {
-    
+  public ParametersBean useConnection(@jakarta.annotation.Nullable String useConnection) {
     this.useConnection = useConnection;
     return this;
   }
 
-   /**
+  /**
    * Get useConnection
    * @return useConnection
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USE_CONNECTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getUseConnection() {
     return useConnection;
   }
 
 
-  public void setUseConnection(String useConnection) {
+  @JsonProperty(JSON_PROPERTY_USE_CONNECTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUseConnection(@jakarta.annotation.Nullable String useConnection) {
     this.useConnection = useConnection;
   }
 
 
-  public ParametersBean connection(String connection) {
-    
+  public ParametersBean connection(@jakarta.annotation.Nullable String connection) {
     this.connection = connection;
     return this;
   }
 
-   /**
+  /**
    * Get connection
    * @return connection
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CONNECTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getConnection() {
     return connection;
   }
 
 
-  public void setConnection(String connection) {
+  @JsonProperty(JSON_PROPERTY_CONNECTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setConnection(@jakarta.annotation.Nullable String connection) {
     this.connection = connection;
   }
 
 
-  public ParametersBean user(String user) {
-    
+  public ParametersBean user(@jakarta.annotation.Nullable String user) {
     this.user = user;
     return this;
   }
 
-   /**
+  /**
    * Get user
    * @return user
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getUser() {
     return user;
   }
 
 
-  public void setUser(String user) {
+  @JsonProperty(JSON_PROPERTY_USER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUser(@jakarta.annotation.Nullable String user) {
     this.user = user;
   }
 
 
-  public ParametersBean password(String password) {
-    
+  public ParametersBean password(@jakarta.annotation.Nullable String password) {
     this.password = password;
     return this;
   }
 
-   /**
+  /**
    * Get password
    * @return password
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PASSWORD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getPassword() {
     return password;
   }
 
 
-  public void setPassword(String password) {
+  @JsonProperty(JSON_PROPERTY_PASSWORD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPassword(@jakarta.annotation.Nullable String password) {
     this.password = password;
   }
 
 
-  public ParametersBean calc(String calc) {
-    
+  public ParametersBean calc(@jakarta.annotation.Nullable String calc) {
     this.calc = calc;
     return this;
   }
 
-   /**
+  /**
    * Get calc
    * @return calc
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CALC)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getCalc() {
     return calc;
   }
 
 
-  public void setCalc(String calc) {
+  @JsonProperty(JSON_PROPERTY_CALC)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCalc(@jakarta.annotation.Nullable String calc) {
     this.calc = calc;
   }
 
 
-  public ParametersBean buildMethod(String buildMethod) {
-    
+  public ParametersBean buildMethod(@jakarta.annotation.Nullable String buildMethod) {
     this.buildMethod = buildMethod;
     return this;
   }
 
-   /**
+  /**
    * Get buildMethod
    * @return buildMethod
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BUILD_METHOD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getBuildMethod() {
     return buildMethod;
   }
 
 
-  public void setBuildMethod(String buildMethod) {
+  @JsonProperty(JSON_PROPERTY_BUILD_METHOD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBuildMethod(@jakarta.annotation.Nullable String buildMethod) {
     this.buildMethod = buildMethod;
   }
 
 
-  public ParametersBean data(String data) {
-    
+  public ParametersBean data(@jakarta.annotation.Nullable String data) {
     this.data = data;
     return this;
   }
 
-   /**
+  /**
    * Get data
    * @return data
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getData() {
     return data;
   }
 
 
-  public void setData(String data) {
+  @JsonProperty(JSON_PROPERTY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setData(@jakarta.annotation.Nullable String data) {
     this.data = data;
   }
 
 
-  public ParametersBean zipFileName(String zipFileName) {
-    
+  public ParametersBean zipFileName(@jakarta.annotation.Nullable String zipFileName) {
     this.zipFileName = zipFileName;
     return this;
   }
 
-   /**
+  /**
    * Get zipFileName
    * @return zipFileName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ZIP_FILE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getZipFileName() {
     return zipFileName;
   }
 
 
-  public void setZipFileName(String zipFileName) {
+  @JsonProperty(JSON_PROPERTY_ZIP_FILE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setZipFileName(@jakarta.annotation.Nullable String zipFileName) {
     this.zipFileName = zipFileName;
   }
 
 
-  public ParametersBean skipdata(String skipdata) {
-    
+  public ParametersBean skipdata(@jakarta.annotation.Nullable String skipdata) {
     this.skipdata = skipdata;
     return this;
   }
 
-   /**
+  /**
    * Get skipdata
    * @return skipdata
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SKIPDATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getSkipdata() {
     return skipdata;
   }
 
 
-  public void setSkipdata(String skipdata) {
+  @JsonProperty(JSON_PROPERTY_SKIPDATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSkipdata(@jakarta.annotation.Nullable String skipdata) {
     this.skipdata = skipdata;
   }
 
 
-  public ParametersBean threads(String threads) {
-    
+  public ParametersBean threads(@jakarta.annotation.Nullable String threads) {
     this.threads = threads;
     return this;
   }
 
-   /**
+  /**
    * Get threads
    * @return threads
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_THREADS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getThreads() {
     return threads;
   }
 
 
-  public void setThreads(String threads) {
+  @JsonProperty(JSON_PROPERTY_THREADS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setThreads(@jakarta.annotation.Nullable String threads) {
     this.threads = threads;
   }
 
 
-  public ParametersBean overwrite(String overwrite) {
-    
+  public ParametersBean overwrite(@jakarta.annotation.Nullable String overwrite) {
     this.overwrite = overwrite;
     return this;
   }
 
-   /**
+  /**
    * Get overwrite
    * @return overwrite
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OVERWRITE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getOverwrite() {
     return overwrite;
   }
 
 
-  public void setOverwrite(String overwrite) {
+  @JsonProperty(JSON_PROPERTY_OVERWRITE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOverwrite(@jakarta.annotation.Nullable String overwrite) {
     this.overwrite = overwrite;
   }
 
 
-  public ParametersBean lcmImportFromStorage(String lcmImportFromStorage) {
-    
+  public ParametersBean lcmImportFromStorage(@jakarta.annotation.Nullable String lcmImportFromStorage) {
     this.lcmImportFromStorage = lcmImportFromStorage;
     return this;
   }
 
-   /**
+  /**
    * Get lcmImportFromStorage
    * @return lcmImportFromStorage
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LCM_IMPORT_FROM_STORAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getLcmImportFromStorage() {
     return lcmImportFromStorage;
   }
 
 
-  public void setLcmImportFromStorage(String lcmImportFromStorage) {
+  @JsonProperty(JSON_PROPERTY_LCM_IMPORT_FROM_STORAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLcmImportFromStorage(@jakarta.annotation.Nullable String lcmImportFromStorage) {
     this.lcmImportFromStorage = lcmImportFromStorage;
   }
 
 
-  public ParametersBean analyzeFileName(String analyzeFileName) {
-    
+  public ParametersBean analyzeFileName(@jakarta.annotation.Nullable String analyzeFileName) {
     this.analyzeFileName = analyzeFileName;
     return this;
   }
 
-   /**
+  /**
    * Get analyzeFileName
    * @return analyzeFileName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ANALYZE_FILE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getAnalyzeFileName() {
     return analyzeFileName;
   }
 
 
-  public void setAnalyzeFileName(String analyzeFileName) {
+  @JsonProperty(JSON_PROPERTY_ANALYZE_FILE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAnalyzeFileName(@jakarta.annotation.Nullable String analyzeFileName) {
     this.analyzeFileName = analyzeFileName;
   }
 
 
-  public ParametersBean analyzeSheetName(String analyzeSheetName) {
-    
+  public ParametersBean analyzeSheetName(@jakarta.annotation.Nullable String analyzeSheetName) {
     this.analyzeSheetName = analyzeSheetName;
     return this;
   }
 
-   /**
+  /**
    * Get analyzeSheetName
    * @return analyzeSheetName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ANALYZE_SHEET_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getAnalyzeSheetName() {
     return analyzeSheetName;
   }
 
 
-  public void setAnalyzeSheetName(String analyzeSheetName) {
+  @JsonProperty(JSON_PROPERTY_ANALYZE_SHEET_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAnalyzeSheetName(@jakarta.annotation.Nullable String analyzeSheetName) {
     this.analyzeSheetName = analyzeSheetName;
   }
 
 
-  public ParametersBean deleteExcelOnSuccess(String deleteExcelOnSuccess) {
-    
+  public ParametersBean deleteExcelOnSuccess(@jakarta.annotation.Nullable String deleteExcelOnSuccess) {
     this.deleteExcelOnSuccess = deleteExcelOnSuccess;
     return this;
   }
 
-   /**
+  /**
    * Get deleteExcelOnSuccess
    * @return deleteExcelOnSuccess
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DELETE_EXCEL_ON_SUCCESS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDeleteExcelOnSuccess() {
     return deleteExcelOnSuccess;
   }
 
 
-  public void setDeleteExcelOnSuccess(String deleteExcelOnSuccess) {
+  @JsonProperty(JSON_PROPERTY_DELETE_EXCEL_ON_SUCCESS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDeleteExcelOnSuccess(@jakarta.annotation.Nullable String deleteExcelOnSuccess) {
     this.deleteExcelOnSuccess = deleteExcelOnSuccess;
   }
 
 
-  public ParametersBean catalogExcelPath(String catalogExcelPath) {
-    
+  public ParametersBean catalogExcelPath(@jakarta.annotation.Nullable String catalogExcelPath) {
     this.catalogExcelPath = catalogExcelPath;
     return this;
   }
 
-   /**
+  /**
    * Get catalogExcelPath
    * @return catalogExcelPath
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CATALOG_EXCEL_PATH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getCatalogExcelPath() {
     return catalogExcelPath;
   }
 
 
-  public void setCatalogExcelPath(String catalogExcelPath) {
+  @JsonProperty(JSON_PROPERTY_CATALOG_EXCEL_PATH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCatalogExcelPath(@jakarta.annotation.Nullable String catalogExcelPath) {
     this.catalogExcelPath = catalogExcelPath;
   }
 
 
-  public ParametersBean importExcelFileName(String importExcelFileName) {
-    
+  public ParametersBean importExcelFileName(@jakarta.annotation.Nullable String importExcelFileName) {
     this.importExcelFileName = importExcelFileName;
     return this;
   }
 
-   /**
+  /**
    * Get importExcelFileName
    * @return importExcelFileName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_IMPORT_EXCEL_FILE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getImportExcelFileName() {
     return importExcelFileName;
   }
 
 
-  public void setImportExcelFileName(String importExcelFileName) {
+  @JsonProperty(JSON_PROPERTY_IMPORT_EXCEL_FILE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setImportExcelFileName(@jakarta.annotation.Nullable String importExcelFileName) {
     this.importExcelFileName = importExcelFileName;
   }
 
 
-  public ParametersBean recreateApplication(String recreateApplication) {
-    
+  public ParametersBean recreateApplication(@jakarta.annotation.Nullable String recreateApplication) {
     this.recreateApplication = recreateApplication;
     return this;
   }
 
-   /**
+  /**
    * Get recreateApplication
    * @return recreateApplication
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RECREATE_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getRecreateApplication() {
     return recreateApplication;
   }
 
 
-  public void setRecreateApplication(String recreateApplication) {
+  @JsonProperty(JSON_PROPERTY_RECREATE_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRecreateApplication(@jakarta.annotation.Nullable String recreateApplication) {
     this.recreateApplication = recreateApplication;
   }
 
 
-  public ParametersBean createFiles(String createFiles) {
-    
+  public ParametersBean createFiles(@jakarta.annotation.Nullable String createFiles) {
     this.createFiles = createFiles;
     return this;
   }
 
-   /**
+  /**
    * Get createFiles
    * @return createFiles
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CREATE_FILES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getCreateFiles() {
     return createFiles;
   }
 
 
-  public void setCreateFiles(String createFiles) {
+  @JsonProperty(JSON_PROPERTY_CREATE_FILES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCreateFiles(@jakarta.annotation.Nullable String createFiles) {
     this.createFiles = createFiles;
   }
 
 
-  public ParametersBean executeScript(String executeScript) {
-    
+  public ParametersBean executeScript(@jakarta.annotation.Nullable String executeScript) {
     this.executeScript = executeScript;
     return this;
   }
 
-   /**
+  /**
    * Get executeScript
    * @return executeScript
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EXECUTE_SCRIPT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getExecuteScript() {
     return executeScript;
   }
 
 
-  public void setExecuteScript(String executeScript) {
+  @JsonProperty(JSON_PROPERTY_EXECUTE_SCRIPT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setExecuteScript(@jakarta.annotation.Nullable String executeScript) {
     this.executeScript = executeScript;
   }
 
 
-  public ParametersBean buildOption(String buildOption) {
-    
+  public ParametersBean buildOption(@jakarta.annotation.Nullable String buildOption) {
     this.buildOption = buildOption;
     return this;
   }
 
-   /**
+  /**
    * Get buildOption
    * @return buildOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BUILD_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getBuildOption() {
     return buildOption;
   }
 
 
-  public void setBuildOption(String buildOption) {
+  @JsonProperty(JSON_PROPERTY_BUILD_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBuildOption(@jakarta.annotation.Nullable String buildOption) {
     this.buildOption = buildOption;
   }
 
 
-  public ParametersBean copyToStorage(String copyToStorage) {
-    
+  public ParametersBean copyToStorage(@jakarta.annotation.Nullable String copyToStorage) {
     this.copyToStorage = copyToStorage;
     return this;
   }
 
-   /**
+  /**
    * Get copyToStorage
    * @return copyToStorage
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COPY_TO_STORAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getCopyToStorage() {
     return copyToStorage;
   }
 
 
-  public void setCopyToStorage(String copyToStorage) {
+  @JsonProperty(JSON_PROPERTY_COPY_TO_STORAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCopyToStorage(@jakarta.annotation.Nullable String copyToStorage) {
     this.copyToStorage = copyToStorage;
   }
 
 
-  public ParametersBean filesystemcopy(String filesystemcopy) {
-    
+  public ParametersBean filesystemcopy(@jakarta.annotation.Nullable String filesystemcopy) {
     this.filesystemcopy = filesystemcopy;
     return this;
   }
 
-   /**
+  /**
    * Get filesystemcopy
    * @return filesystemcopy
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FILESYSTEMCOPY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getFilesystemcopy() {
     return filesystemcopy;
   }
 
 
-  public void setFilesystemcopy(String filesystemcopy) {
+  @JsonProperty(JSON_PROPERTY_FILESYSTEMCOPY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFilesystemcopy(@jakarta.annotation.Nullable String filesystemcopy) {
     this.filesystemcopy = filesystemcopy;
   }
 
 
-  public ParametersBean dataLevel(String dataLevel) {
-    
+  public ParametersBean dataLevel(@jakarta.annotation.Nullable String dataLevel) {
     this.dataLevel = dataLevel;
     return this;
   }
 
-   /**
+  /**
    * Get dataLevel
    * @return dataLevel
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_LEVEL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDataLevel() {
     return dataLevel;
   }
 
 
-  public void setDataLevel(String dataLevel) {
+  @JsonProperty(JSON_PROPERTY_DATA_LEVEL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataLevel(@jakarta.annotation.Nullable String dataLevel) {
     this.dataLevel = dataLevel;
   }
 
 
-  public ParametersBean columnFormat(String columnFormat) {
-    
+  public ParametersBean columnFormat(@jakarta.annotation.Nullable String columnFormat) {
     this.columnFormat = columnFormat;
     return this;
   }
 
-   /**
+  /**
    * Get columnFormat
    * @return columnFormat
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COLUMN_FORMAT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getColumnFormat() {
     return columnFormat;
   }
 
 
-  public void setColumnFormat(String columnFormat) {
+  @JsonProperty(JSON_PROPERTY_COLUMN_FORMAT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setColumnFormat(@jakarta.annotation.Nullable String columnFormat) {
     this.columnFormat = columnFormat;
   }
 
 
-  public ParametersBean targetApplicationName(String targetApplicationName) {
-    
+  public ParametersBean targetApplicationName(@jakarta.annotation.Nullable String targetApplicationName) {
     this.targetApplicationName = targetApplicationName;
     return this;
   }
 
-   /**
+  /**
    * Get targetApplicationName
    * @return targetApplicationName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TARGET_APPLICATION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getTargetApplicationName() {
     return targetApplicationName;
   }
 
 
-  public void setTargetApplicationName(String targetApplicationName) {
+  @JsonProperty(JSON_PROPERTY_TARGET_APPLICATION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTargetApplicationName(@jakarta.annotation.Nullable String targetApplicationName) {
     this.targetApplicationName = targetApplicationName;
   }
 
 
-  public ParametersBean partialDataExpression(String partialDataExpression) {
-    
+  public ParametersBean partialDataExpression(@jakarta.annotation.Nullable String partialDataExpression) {
     this.partialDataExpression = partialDataExpression;
     return this;
   }
 
-   /**
+  /**
    * Get partialDataExpression
    * @return partialDataExpression
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PARTIAL_DATA_EXPRESSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getPartialDataExpression() {
     return partialDataExpression;
   }
 
 
-  public void setPartialDataExpression(String partialDataExpression) {
+  @JsonProperty(JSON_PROPERTY_PARTIAL_DATA_EXPRESSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPartialDataExpression(@jakarta.annotation.Nullable String partialDataExpression) {
     this.partialDataExpression = partialDataExpression;
   }
 
 
-  public ParametersBean includeServerLevel(String includeServerLevel) {
-    
+  public ParametersBean includeServerLevel(@jakarta.annotation.Nullable String includeServerLevel) {
     this.includeServerLevel = includeServerLevel;
     return this;
   }
 
-   /**
+  /**
    * Get includeServerLevel
    * @return includeServerLevel
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INCLUDE_SERVER_LEVEL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getIncludeServerLevel() {
     return includeServerLevel;
   }
 
 
-  public void setIncludeServerLevel(String includeServerLevel) {
+  @JsonProperty(JSON_PROPERTY_INCLUDE_SERVER_LEVEL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIncludeServerLevel(@jakarta.annotation.Nullable String includeServerLevel) {
     this.includeServerLevel = includeServerLevel;
   }
 
 
-  public ParametersBean enableSandboxing(String enableSandboxing) {
-    
+  public ParametersBean enableSandboxing(@jakarta.annotation.Nullable String enableSandboxing) {
     this.enableSandboxing = enableSandboxing;
     return this;
   }
 
-   /**
+  /**
    * Get enableSandboxing
    * @return enableSandboxing
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ENABLE_SANDBOXING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getEnableSandboxing() {
     return enableSandboxing;
   }
 
 
-  public void setEnableSandboxing(String enableSandboxing) {
+  @JsonProperty(JSON_PROPERTY_ENABLE_SANDBOXING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEnableSandboxing(@jakarta.annotation.Nullable String enableSandboxing) {
     this.enableSandboxing = enableSandboxing;
   }
 
 
-  public ParametersBean dbType(String dbType) {
-    
+  public ParametersBean dbType(@jakarta.annotation.Nullable String dbType) {
     this.dbType = dbType;
     return this;
   }
 
-   /**
+  /**
    * Get dbType
    * @return dbType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DB_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDbType() {
     return dbType;
   }
 
 
-  public void setDbType(String dbType) {
+  @JsonProperty(JSON_PROPERTY_DB_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDbType(@jakarta.annotation.Nullable String dbType) {
     this.dbType = dbType;
   }
 
 
-  public ParametersBean dimDesignationMode(String dimDesignationMode) {
-    
+  public ParametersBean dimDesignationMode(@jakarta.annotation.Nullable String dimDesignationMode) {
     this.dimDesignationMode = dimDesignationMode;
     return this;
   }
 
-   /**
+  /**
    * Get dimDesignationMode
    * @return dimDesignationMode
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIM_DESIGNATION_MODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDimDesignationMode() {
     return dimDesignationMode;
   }
 
 
-  public void setDimDesignationMode(String dimDesignationMode) {
+  @JsonProperty(JSON_PROPERTY_DIM_DESIGNATION_MODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimDesignationMode(@jakarta.annotation.Nullable String dimDesignationMode) {
     this.dimDesignationMode = dimDesignationMode;
   }
 
 
-  public ParametersBean unstructuredAnalysis(CompactDesignation unstructuredAnalysis) {
-    
+  public ParametersBean unstructuredAnalysis(@jakarta.annotation.Nullable CompactDesignation unstructuredAnalysis) {
     this.unstructuredAnalysis = unstructuredAnalysis;
     return this;
   }
 
-   /**
+  /**
    * Get unstructuredAnalysis
    * @return unstructuredAnalysis
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UNSTRUCTURED_ANALYSIS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public CompactDesignation getUnstructuredAnalysis() {
     return unstructuredAnalysis;
   }
 
 
-  public void setUnstructuredAnalysis(CompactDesignation unstructuredAnalysis) {
+  @JsonProperty(JSON_PROPERTY_UNSTRUCTURED_ANALYSIS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUnstructuredAnalysis(@jakarta.annotation.Nullable CompactDesignation unstructuredAnalysis) {
     this.unstructuredAnalysis = unstructuredAnalysis;
   }
 
 
-  public ParametersBean ratioToStop(String ratioToStop) {
-    
+  public ParametersBean ratioToStop(@jakarta.annotation.Nullable String ratioToStop) {
     this.ratioToStop = ratioToStop;
     return this;
   }
 
-   /**
+  /**
    * Get ratioToStop
    * @return ratioToStop
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RATIO_TO_STOP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getRatioToStop() {
     return ratioToStop;
   }
 
 
-  public void setRatioToStop(String ratioToStop) {
+  @JsonProperty(JSON_PROPERTY_RATIO_TO_STOP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRatioToStop(@jakarta.annotation.Nullable String ratioToStop) {
     this.ratioToStop = ratioToStop;
   }
 
 
-  public ParametersBean basedOnQueryData(String basedOnQueryData) {
-    
+  public ParametersBean basedOnQueryData(@jakarta.annotation.Nullable String basedOnQueryData) {
     this.basedOnQueryData = basedOnQueryData;
     return this;
   }
 
-   /**
+  /**
    * Get basedOnQueryData
    * @return basedOnQueryData
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BASED_ON_QUERY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getBasedOnQueryData() {
     return basedOnQueryData;
   }
 
 
-  public void setBasedOnQueryData(String basedOnQueryData) {
+  @JsonProperty(JSON_PROPERTY_BASED_ON_QUERY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBasedOnQueryData(@jakarta.annotation.Nullable String basedOnQueryData) {
     this.basedOnQueryData = basedOnQueryData;
   }
 
 
-  public ParametersBean enableAlternateRollups(String enableAlternateRollups) {
-    
+  public ParametersBean enableAlternateRollups(@jakarta.annotation.Nullable String enableAlternateRollups) {
     this.enableAlternateRollups = enableAlternateRollups;
     return this;
   }
 
-   /**
+  /**
    * Get enableAlternateRollups
    * @return enableAlternateRollups
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ENABLE_ALTERNATE_ROLLUPS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getEnableAlternateRollups() {
     return enableAlternateRollups;
   }
 
 
-  public void setEnableAlternateRollups(String enableAlternateRollups) {
+  @JsonProperty(JSON_PROPERTY_ENABLE_ALTERNATE_ROLLUPS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEnableAlternateRollups(@jakarta.annotation.Nullable String enableAlternateRollups) {
     this.enableAlternateRollups = enableAlternateRollups;
   }
 
 
-  public ParametersBean compress(String compress) {
-    
+  public ParametersBean compress(@jakarta.annotation.Nullable String compress) {
     this.compress = compress;
     return this;
   }
 
-   /**
+  /**
    * Get compress
    * @return compress
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COMPRESS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getCompress() {
     return compress;
   }
 
 
-  public void setCompress(String compress) {
+  @JsonProperty(JSON_PROPERTY_COMPRESS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCompress(@jakarta.annotation.Nullable String compress) {
     this.compress = compress;
   }
 
 
-  public ParametersBean generateArtifactList(String generateArtifactList) {
-    
+  public ParametersBean generateArtifactList(@jakarta.annotation.Nullable String generateArtifactList) {
     this.generateArtifactList = generateArtifactList;
     return this;
   }
 
-   /**
+  /**
    * Get generateArtifactList
    * @return generateArtifactList
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GENERATE_ARTIFACT_LIST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getGenerateArtifactList() {
     return generateArtifactList;
   }
 
 
-  public void setGenerateArtifactList(String generateArtifactList) {
+  @JsonProperty(JSON_PROPERTY_GENERATE_ARTIFACT_LIST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGenerateArtifactList(@jakarta.annotation.Nullable String generateArtifactList) {
     this.generateArtifactList = generateArtifactList;
   }
 
 
-  public ParametersBean artifactList(String artifactList) {
-    
+  public ParametersBean artifactList(@jakarta.annotation.Nullable String artifactList) {
     this.artifactList = artifactList;
     return this;
   }
 
-   /**
+  /**
    * Get artifactList
    * @return artifactList
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ARTIFACT_LIST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getArtifactList() {
     return artifactList;
   }
 
 
-  public void setArtifactList(String artifactList) {
+  @JsonProperty(JSON_PROPERTY_ARTIFACT_LIST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setArtifactList(@jakarta.annotation.Nullable String artifactList) {
     this.artifactList = artifactList;
   }
 
 
-  public ParametersBean verbose(String verbose) {
-    
+  public ParametersBean verbose(@jakarta.annotation.Nullable String verbose) {
     this.verbose = verbose;
     return this;
   }
 
-   /**
+  /**
    * Get verbose
    * @return verbose
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VERBOSE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getVerbose() {
     return verbose;
   }
 
 
-  public void setVerbose(String verbose) {
+  @JsonProperty(JSON_PROPERTY_VERBOSE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVerbose(@jakarta.annotation.Nullable String verbose) {
     this.verbose = verbose;
   }
 
 
-  public ParametersBean disasterRecovery(String disasterRecovery) {
-    
+  public ParametersBean disasterRecovery(@jakarta.annotation.Nullable String disasterRecovery) {
     this.disasterRecovery = disasterRecovery;
     return this;
   }
 
-   /**
+  /**
    * Get disasterRecovery
    * @return disasterRecovery
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DISASTER_RECOVERY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDisasterRecovery() {
     return disasterRecovery;
   }
 
 
-  public void setDisasterRecovery(String disasterRecovery) {
+  @JsonProperty(JSON_PROPERTY_DISASTER_RECOVERY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDisasterRecovery(@jakarta.annotation.Nullable String disasterRecovery) {
     this.disasterRecovery = disasterRecovery;
   }
 
 
-  public ParametersBean force(String force) {
-    
+  public ParametersBean force(@jakarta.annotation.Nullable String force) {
     this.force = force;
     return this;
   }
 
-   /**
+  /**
    * Get force
    * @return force
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FORCE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getForce() {
     return force;
   }
 
 
-  public void setForce(String force) {
+  @JsonProperty(JSON_PROPERTY_FORCE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setForce(@jakarta.annotation.Nullable String force) {
     this.force = force;
   }
 
 
-  public ParametersBean backupType(String backupType) {
-    
+  public ParametersBean backupType(@jakarta.annotation.Nullable String backupType) {
     this.backupType = backupType;
     return this;
   }
 
-   /**
+  /**
    * Get backupType
    * @return backupType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BACKUP_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getBackupType() {
     return backupType;
   }
 
 
-  public void setBackupType(String backupType) {
+  @JsonProperty(JSON_PROPERTY_BACKUP_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBackupType(@jakarta.annotation.Nullable String backupType) {
     this.backupType = backupType;
   }
 
 
-  public ParametersBean appId(String appId) {
-    
+  public ParametersBean appId(@jakarta.annotation.Nullable String appId) {
     this.appId = appId;
     return this;
   }
 
-   /**
+  /**
    * Get appId
    * @return appId
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APP_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getAppId() {
     return appId;
   }
 
 
-  public void setAppId(String appId) {
+  @JsonProperty(JSON_PROPERTY_APP_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAppId(@jakarta.annotation.Nullable String appId) {
     this.appId = appId;
   }
 
 
-  public ParametersBean timestamp(String timestamp) {
-    
+  public ParametersBean timestamp(@jakarta.annotation.Nullable String timestamp) {
     this.timestamp = timestamp;
     return this;
   }
 
-   /**
+  /**
    * Get timestamp
    * @return timestamp
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getTimestamp() {
     return timestamp;
   }
 
 
-  public void setTimestamp(String timestamp) {
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTimestamp(@jakarta.annotation.Nullable String timestamp) {
     this.timestamp = timestamp;
   }
 
 
-  public ParametersBean maxParallel(String maxParallel) {
-    
+  public ParametersBean maxParallel(@jakarta.annotation.Nullable String maxParallel) {
     this.maxParallel = maxParallel;
     return this;
   }
 
-   /**
+  /**
    * Get maxParallel
    * @return maxParallel
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MAX_PARALLEL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getMaxParallel() {
     return maxParallel;
   }
 
 
-  public void setMaxParallel(String maxParallel) {
+  @JsonProperty(JSON_PROPERTY_MAX_PARALLEL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMaxParallel(@jakarta.annotation.Nullable String maxParallel) {
     this.maxParallel = maxParallel;
   }
 
 
-  public ParametersBean selectedDimensions(List<String> selectedDimensions) {
-    
+  public ParametersBean selectedDimensions(@jakarta.annotation.Nullable List<String> selectedDimensions) {
     this.selectedDimensions = selectedDimensions;
     return this;
   }
 
   public ParametersBean addSelectedDimensionsItem(String selectedDimensionsItem) {
     if (this.selectedDimensions == null) {
-      this.selectedDimensions = new ArrayList<String>();
+      this.selectedDimensions = new ArrayList<>();
     }
     this.selectedDimensions.add(selectedDimensionsItem);
     return this;
   }
 
-   /**
+  /**
    * Get selectedDimensions
    * @return selectedDimensions
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SELECTED_DIMENSIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<String> getSelectedDimensions() {
     return selectedDimensions;
   }
 
 
-  public void setSelectedDimensions(List<String> selectedDimensions) {
+  @JsonProperty(JSON_PROPERTY_SELECTED_DIMENSIONS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSelectedDimensions(@jakarta.annotation.Nullable List<String> selectedDimensions) {
     this.selectedDimensions = selectedDimensions;
   }
 
 
-  public ParametersBean rtsv(List<RTSV> rtsv) {
-    
+  public ParametersBean rtsv(@jakarta.annotation.Nullable List<RTSV> rtsv) {
     this.rtsv = rtsv;
     return this;
   }
 
   public ParametersBean addRtsvItem(RTSV rtsvItem) {
     if (this.rtsv == null) {
-      this.rtsv = new ArrayList<RTSV>();
+      this.rtsv = new ArrayList<>();
     }
     this.rtsv.add(rtsvItem);
     return this;
   }
 
-   /**
+  /**
    * Get rtsv
    * @return rtsv
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RTSV)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<RTSV> getRtsv() {
     return rtsv;
   }
 
 
-  public void setRtsv(List<RTSV> rtsv) {
+  @JsonProperty(JSON_PROPERTY_RTSV)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRtsv(@jakarta.annotation.Nullable List<RTSV> rtsv) {
     this.rtsv = rtsv;
   }
 
 
-  public ParametersBean bufferId(Integer bufferId) {
-    
+  public ParametersBean bufferId(@jakarta.annotation.Nullable Integer bufferId) {
     this.bufferId = bufferId;
     return this;
   }
 
-   /**
+  /**
    * Get bufferId
    * @return bufferId
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BUFFER_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getBufferId() {
     return bufferId;
   }
 
 
-  public void setBufferId(Integer bufferId) {
+  @JsonProperty(JSON_PROPERTY_BUFFER_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBufferId(@jakarta.annotation.Nullable Integer bufferId) {
     this.bufferId = bufferId;
   }
 
 
-  public ParametersBean bufferIds(List<Integer> bufferIds) {
-    
+  public ParametersBean bufferIds(@jakarta.annotation.Nullable List<Integer> bufferIds) {
     this.bufferIds = bufferIds;
     return this;
   }
 
   public ParametersBean addBufferIdsItem(Integer bufferIdsItem) {
     if (this.bufferIds == null) {
-      this.bufferIds = new ArrayList<Integer>();
+      this.bufferIds = new ArrayList<>();
     }
     this.bufferIds.add(bufferIdsItem);
     return this;
   }
 
-   /**
+  /**
    * Get bufferIds
    * @return bufferIds
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BUFFER_IDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Integer> getBufferIds() {
     return bufferIds;
   }
 
 
-  public void setBufferIds(List<Integer> bufferIds) {
+  @JsonProperty(JSON_PROPERTY_BUFFER_IDS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBufferIds(@jakarta.annotation.Nullable List<Integer> bufferIds) {
     this.bufferIds = bufferIds;
   }
 
 
-  public ParametersBean commitOption(String commitOption) {
-    
+  public ParametersBean commitOption(@jakarta.annotation.Nullable String commitOption) {
     this.commitOption = commitOption;
     return this;
   }
 
-   /**
+  /**
    * Get commitOption
    * @return commitOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COMMIT_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getCommitOption() {
     return commitOption;
   }
 
 
-  public void setCommitOption(String commitOption) {
+  @JsonProperty(JSON_PROPERTY_COMMIT_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCommitOption(@jakarta.annotation.Nullable String commitOption) {
     this.commitOption = commitOption;
   }
 
 
-  public ParametersBean actionType(String actionType) {
-    
+  public ParametersBean actionType(@jakarta.annotation.Nullable String actionType) {
     this.actionType = actionType;
     return this;
   }
 
-   /**
+  /**
    * Get actionType
    * @return actionType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ACTION_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getActionType() {
     return actionType;
   }
 
 
-  public void setActionType(String actionType) {
+  @JsonProperty(JSON_PROPERTY_ACTION_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setActionType(@jakarta.annotation.Nullable String actionType) {
     this.actionType = actionType;
   }
 
 
-  public ParametersBean termOption(String termOption) {
-    
+  public ParametersBean termOption(@jakarta.annotation.Nullable String termOption) {
     this.termOption = termOption;
     return this;
   }
 
-   /**
+  /**
    * Get termOption
    * @return termOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TERM_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getTermOption() {
     return termOption;
   }
 
 
-  public void setTermOption(String termOption) {
+  @JsonProperty(JSON_PROPERTY_TERM_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTermOption(@jakarta.annotation.Nullable String termOption) {
     this.termOption = termOption;
   }
 
 
-  public ParametersBean discoverDimensionTables(String discoverDimensionTables) {
-    
+  public ParametersBean discoverDimensionTables(@jakarta.annotation.Nullable String discoverDimensionTables) {
     this.discoverDimensionTables = discoverDimensionTables;
     return this;
   }
 
-   /**
+  /**
    * Get discoverDimensionTables
    * @return discoverDimensionTables
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DISCOVER_DIMENSION_TABLES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDiscoverDimensionTables() {
     return discoverDimensionTables;
   }
 
 
-  public void setDiscoverDimensionTables(String discoverDimensionTables) {
+  @JsonProperty(JSON_PROPERTY_DISCOVER_DIMENSION_TABLES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDiscoverDimensionTables(@jakarta.annotation.Nullable String discoverDimensionTables) {
     this.discoverDimensionTables = discoverDimensionTables;
   }
 
 
-  public ParametersBean exportDynamicBlocks(String exportDynamicBlocks) {
-    
+  public ParametersBean exportDynamicBlocks(@jakarta.annotation.Nullable String exportDynamicBlocks) {
     this.exportDynamicBlocks = exportDynamicBlocks;
     return this;
   }
 
-   /**
+  /**
    * Get exportDynamicBlocks
    * @return exportDynamicBlocks
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EXPORT_DYNAMIC_BLOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getExportDynamicBlocks() {
     return exportDynamicBlocks;
   }
 
 
-  public void setExportDynamicBlocks(String exportDynamicBlocks) {
+  @JsonProperty(JSON_PROPERTY_EXPORT_DYNAMIC_BLOCKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setExportDynamicBlocks(@jakarta.annotation.Nullable String exportDynamicBlocks) {
     this.exportDynamicBlocks = exportDynamicBlocks;
   }
 
 
+  /**
+   * Return true if this ParametersBean object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -1742,7 +1878,7 @@ public class ParametersBean {
     }
     ParametersBean parametersBean = (ParametersBean) o;
     return Objects.equals(this.rule, parametersBean.rule) &&
-        Objects.equals(this.file, parametersBean.file) &&
+        Objects.equals(this._file, parametersBean._file) &&
         Objects.equals(this.abortOnError, parametersBean.abortOnError) &&
         Objects.equals(this.restructureOption, parametersBean.restructureOption) &&
         Objects.equals(this.forceDimBuild, parametersBean.forceDimBuild) &&
@@ -1807,7 +1943,7 @@ public class ParametersBean {
 
   @Override
   public int hashCode() {
-    return Objects.hash(rule, file, abortOnError, restructureOption, forceDimBuild, script, option, loaddata, useConnection, connection, user, password, calc, buildMethod, data, zipFileName, skipdata, threads, overwrite, lcmImportFromStorage, analyzeFileName, analyzeSheetName, deleteExcelOnSuccess, catalogExcelPath, importExcelFileName, recreateApplication, createFiles, executeScript, buildOption, copyToStorage, filesystemcopy, dataLevel, columnFormat, targetApplicationName, partialDataExpression, includeServerLevel, enableSandboxing, dbType, dimDesignationMode, unstructuredAnalysis, ratioToStop, basedOnQueryData, enableAlternateRollups, compress, generateArtifactList, artifactList, verbose, disasterRecovery, force, backupType, appId, timestamp, maxParallel, selectedDimensions, rtsv, bufferId, bufferIds, commitOption, actionType, termOption, discoverDimensionTables, exportDynamicBlocks);
+    return Objects.hash(rule, _file, abortOnError, restructureOption, forceDimBuild, script, option, loaddata, useConnection, connection, user, password, calc, buildMethod, data, zipFileName, skipdata, threads, overwrite, lcmImportFromStorage, analyzeFileName, analyzeSheetName, deleteExcelOnSuccess, catalogExcelPath, importExcelFileName, recreateApplication, createFiles, executeScript, buildOption, copyToStorage, filesystemcopy, dataLevel, columnFormat, targetApplicationName, partialDataExpression, includeServerLevel, enableSandboxing, dbType, dimDesignationMode, unstructuredAnalysis, ratioToStop, basedOnQueryData, enableAlternateRollups, compress, generateArtifactList, artifactList, verbose, disasterRecovery, force, backupType, appId, timestamp, maxParallel, selectedDimensions, rtsv, bufferId, bufferIds, commitOption, actionType, termOption, discoverDimensionTables, exportDynamicBlocks);
   }
 
   @Override
@@ -1815,7 +1951,7 @@ public class ParametersBean {
     StringBuilder sb = new StringBuilder();
     sb.append("class ParametersBean {\n");
     sb.append("    rule: ").append(toIndentedString(rule)).append("\n");
-    sb.append("    file: ").append(toIndentedString(file)).append("\n");
+    sb.append("    _file: ").append(toIndentedString(_file)).append("\n");
     sb.append("    abortOnError: ").append(toIndentedString(abortOnError)).append("\n");
     sb.append("    restructureOption: ").append(toIndentedString(restructureOption)).append("\n");
     sb.append("    forceDimBuild: ").append(toIndentedString(forceDimBuild)).append("\n");
@@ -1891,5 +2027,362 @@ public class ParametersBean {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `rule` to the URL query string
+    if (getRule() != null) {
+      joiner.add(String.format("%srule%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRule()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `file` to the URL query string
+    if (getFile() != null) {
+      joiner.add(String.format("%sfile%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFile()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `abortOnError` to the URL query string
+    if (getAbortOnError() != null) {
+      joiner.add(String.format("%sabortOnError%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAbortOnError()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `restructureOption` to the URL query string
+    if (getRestructureOption() != null) {
+      joiner.add(String.format("%srestructureOption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRestructureOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `forceDimBuild` to the URL query string
+    if (getForceDimBuild() != null) {
+      joiner.add(String.format("%sforceDimBuild%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getForceDimBuild()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `script` to the URL query string
+    if (getScript() != null) {
+      joiner.add(String.format("%sscript%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getScript()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `option` to the URL query string
+    if (getOption() != null) {
+      joiner.add(String.format("%soption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `loaddata` to the URL query string
+    if (getLoaddata() != null) {
+      joiner.add(String.format("%sloaddata%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLoaddata()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `useConnection` to the URL query string
+    if (getUseConnection() != null) {
+      joiner.add(String.format("%suseConnection%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUseConnection()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `connection` to the URL query string
+    if (getConnection() != null) {
+      joiner.add(String.format("%sconnection%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getConnection()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `user` to the URL query string
+    if (getUser() != null) {
+      joiner.add(String.format("%suser%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUser()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `password` to the URL query string
+    if (getPassword() != null) {
+      joiner.add(String.format("%spassword%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPassword()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `calc` to the URL query string
+    if (getCalc() != null) {
+      joiner.add(String.format("%scalc%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCalc()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `buildMethod` to the URL query string
+    if (getBuildMethod() != null) {
+      joiner.add(String.format("%sbuildMethod%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getBuildMethod()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `data` to the URL query string
+    if (getData() != null) {
+      joiner.add(String.format("%sdata%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getData()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `zipFileName` to the URL query string
+    if (getZipFileName() != null) {
+      joiner.add(String.format("%szipFileName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getZipFileName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `skipdata` to the URL query string
+    if (getSkipdata() != null) {
+      joiner.add(String.format("%sskipdata%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSkipdata()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `threads` to the URL query string
+    if (getThreads() != null) {
+      joiner.add(String.format("%sthreads%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getThreads()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `overwrite` to the URL query string
+    if (getOverwrite() != null) {
+      joiner.add(String.format("%soverwrite%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getOverwrite()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `lcmImportFromStorage` to the URL query string
+    if (getLcmImportFromStorage() != null) {
+      joiner.add(String.format("%slcmImportFromStorage%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLcmImportFromStorage()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `analyzeFileName` to the URL query string
+    if (getAnalyzeFileName() != null) {
+      joiner.add(String.format("%sanalyzeFileName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAnalyzeFileName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `analyzeSheetName` to the URL query string
+    if (getAnalyzeSheetName() != null) {
+      joiner.add(String.format("%sanalyzeSheetName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAnalyzeSheetName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `deleteExcelOnSuccess` to the URL query string
+    if (getDeleteExcelOnSuccess() != null) {
+      joiner.add(String.format("%sdeleteExcelOnSuccess%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDeleteExcelOnSuccess()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `catalogExcelPath` to the URL query string
+    if (getCatalogExcelPath() != null) {
+      joiner.add(String.format("%scatalogExcelPath%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCatalogExcelPath()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `importExcelFileName` to the URL query string
+    if (getImportExcelFileName() != null) {
+      joiner.add(String.format("%simportExcelFileName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getImportExcelFileName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `recreateApplication` to the URL query string
+    if (getRecreateApplication() != null) {
+      joiner.add(String.format("%srecreateApplication%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRecreateApplication()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `createFiles` to the URL query string
+    if (getCreateFiles() != null) {
+      joiner.add(String.format("%screateFiles%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCreateFiles()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `executeScript` to the URL query string
+    if (getExecuteScript() != null) {
+      joiner.add(String.format("%sexecuteScript%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getExecuteScript()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `buildOption` to the URL query string
+    if (getBuildOption() != null) {
+      joiner.add(String.format("%sbuildOption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getBuildOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `copyToStorage` to the URL query string
+    if (getCopyToStorage() != null) {
+      joiner.add(String.format("%scopyToStorage%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCopyToStorage()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `filesystemcopy` to the URL query string
+    if (getFilesystemcopy() != null) {
+      joiner.add(String.format("%sfilesystemcopy%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFilesystemcopy()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dataLevel` to the URL query string
+    if (getDataLevel() != null) {
+      joiner.add(String.format("%sdataLevel%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataLevel()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `columnFormat` to the URL query string
+    if (getColumnFormat() != null) {
+      joiner.add(String.format("%scolumnFormat%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getColumnFormat()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `targetApplicationName` to the URL query string
+    if (getTargetApplicationName() != null) {
+      joiner.add(String.format("%stargetApplicationName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTargetApplicationName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `partialDataExpression` to the URL query string
+    if (getPartialDataExpression() != null) {
+      joiner.add(String.format("%spartialDataExpression%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPartialDataExpression()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `includeServerLevel` to the URL query string
+    if (getIncludeServerLevel() != null) {
+      joiner.add(String.format("%sincludeServerLevel%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIncludeServerLevel()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `enableSandboxing` to the URL query string
+    if (getEnableSandboxing() != null) {
+      joiner.add(String.format("%senableSandboxing%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getEnableSandboxing()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dbType` to the URL query string
+    if (getDbType() != null) {
+      joiner.add(String.format("%sdbType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDbType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dimDesignationMode` to the URL query string
+    if (getDimDesignationMode() != null) {
+      joiner.add(String.format("%sdimDesignationMode%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDimDesignationMode()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `unstructuredAnalysis` to the URL query string
+    if (getUnstructuredAnalysis() != null) {
+      joiner.add(getUnstructuredAnalysis().toUrlQueryString(prefix + "unstructuredAnalysis" + suffix));
+    }
+
+    // add `ratioToStop` to the URL query string
+    if (getRatioToStop() != null) {
+      joiner.add(String.format("%sratioToStop%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRatioToStop()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `basedOnQueryData` to the URL query string
+    if (getBasedOnQueryData() != null) {
+      joiner.add(String.format("%sbasedOnQueryData%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getBasedOnQueryData()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `enableAlternateRollups` to the URL query string
+    if (getEnableAlternateRollups() != null) {
+      joiner.add(String.format("%senableAlternateRollups%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getEnableAlternateRollups()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `compress` to the URL query string
+    if (getCompress() != null) {
+      joiner.add(String.format("%scompress%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCompress()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `generateArtifactList` to the URL query string
+    if (getGenerateArtifactList() != null) {
+      joiner.add(String.format("%sgenerateArtifactList%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getGenerateArtifactList()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `artifactList` to the URL query string
+    if (getArtifactList() != null) {
+      joiner.add(String.format("%sartifactList%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getArtifactList()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `verbose` to the URL query string
+    if (getVerbose() != null) {
+      joiner.add(String.format("%sverbose%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getVerbose()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `disasterRecovery` to the URL query string
+    if (getDisasterRecovery() != null) {
+      joiner.add(String.format("%sdisasterRecovery%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDisasterRecovery()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `force` to the URL query string
+    if (getForce() != null) {
+      joiner.add(String.format("%sforce%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getForce()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `backupType` to the URL query string
+    if (getBackupType() != null) {
+      joiner.add(String.format("%sbackupType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getBackupType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `appId` to the URL query string
+    if (getAppId() != null) {
+      joiner.add(String.format("%sappId%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAppId()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `timestamp` to the URL query string
+    if (getTimestamp() != null) {
+      joiner.add(String.format("%stimestamp%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTimestamp()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `maxParallel` to the URL query string
+    if (getMaxParallel() != null) {
+      joiner.add(String.format("%smaxParallel%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMaxParallel()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `selectedDimensions` to the URL query string
+    if (getSelectedDimensions() != null) {
+      for (int i = 0; i < getSelectedDimensions().size(); i++) {
+        joiner.add(String.format("%sselectedDimensions%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getSelectedDimensions().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `rtsv` to the URL query string
+    if (getRtsv() != null) {
+      for (int i = 0; i < getRtsv().size(); i++) {
+        if (getRtsv().get(i) != null) {
+          joiner.add(getRtsv().get(i).toUrlQueryString(String.format("%srtsv%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `bufferId` to the URL query string
+    if (getBufferId() != null) {
+      joiner.add(String.format("%sbufferId%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getBufferId()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `bufferIds` to the URL query string
+    if (getBufferIds() != null) {
+      for (int i = 0; i < getBufferIds().size(); i++) {
+        joiner.add(String.format("%sbufferIds%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getBufferIds().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `commitOption` to the URL query string
+    if (getCommitOption() != null) {
+      joiner.add(String.format("%scommitOption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCommitOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `actionType` to the URL query string
+    if (getActionType() != null) {
+      joiner.add(String.format("%sactionType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getActionType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `termOption` to the URL query string
+    if (getTermOption() != null) {
+      joiner.add(String.format("%stermOption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTermOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `discoverDimensionTables` to the URL query string
+    if (getDiscoverDimensionTables() != null) {
+      joiner.add(String.format("%sdiscoverDimensionTables%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDiscoverDimensionTables()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `exportDynamicBlocks` to the URL query string
+    if (getExportDynamicBlocks() != null) {
+      joiner.add(String.format("%sexportDynamicBlocks%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getExportDynamicBlocks()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

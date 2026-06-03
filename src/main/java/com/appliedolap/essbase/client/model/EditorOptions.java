@@ -13,86 +13,108 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * EditorOptions
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  EditorOptions.JSON_PROPERTY_APPLICATION,
+  EditorOptions.JSON_PROPERTY_DATABASE,
+  EditorOptions.JSON_PROPERTY_SERVER,
+  EditorOptions.JSON_PROPERTY_OBJECT,
+  EditorOptions.JSON_PROPERTY_DATA_FILE,
+  EditorOptions.JSON_PROPERTY_DATA_FILE_APPLICATION,
+  EditorOptions.JSON_PROPERTY_DATA_FILE_DATABASE,
+  EditorOptions.JSON_PROPERTY_DATA_FILE_SERVER,
+  EditorOptions.JSON_PROPERTY_START_RECORD,
+  EditorOptions.JSON_PROPERTY_VIEW_COUNT,
+  EditorOptions.JSON_PROPERTY_VIEW_GRID_LINES,
+  EditorOptions.JSON_PROPERTY_VIEW_IGNORED,
+  EditorOptions.JSON_PROPERTY_VIEW_RAW_DATA,
+  EditorOptions.JSON_PROPERTY_VIEW_TOOLBAR,
+  EditorOptions.JSON_PROPERTY_VIEW_MODE,
+  EditorOptions.JSON_PROPERTY_DATA_FILE_TYPE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class EditorOptions {
-  public static final String SERIALIZED_NAME_APPLICATION = "application";
-  @SerializedName(SERIALIZED_NAME_APPLICATION)
+  public static final String JSON_PROPERTY_APPLICATION = "application";
+  @jakarta.annotation.Nullable
   private String application;
 
-  public static final String SERIALIZED_NAME_DATABASE = "database";
-  @SerializedName(SERIALIZED_NAME_DATABASE)
+  public static final String JSON_PROPERTY_DATABASE = "database";
+  @jakarta.annotation.Nullable
   private String database;
 
-  public static final String SERIALIZED_NAME_SERVER = "server";
-  @SerializedName(SERIALIZED_NAME_SERVER)
+  public static final String JSON_PROPERTY_SERVER = "server";
+  @jakarta.annotation.Nullable
   private String server;
 
-  public static final String SERIALIZED_NAME_OBJECT = "object";
-  @SerializedName(SERIALIZED_NAME_OBJECT)
+  public static final String JSON_PROPERTY_OBJECT = "object";
+  @jakarta.annotation.Nullable
   private String _object;
 
-  public static final String SERIALIZED_NAME_DATA_FILE = "dataFile";
-  @SerializedName(SERIALIZED_NAME_DATA_FILE)
+  public static final String JSON_PROPERTY_DATA_FILE = "dataFile";
+  @jakarta.annotation.Nullable
   private String dataFile;
 
-  public static final String SERIALIZED_NAME_DATA_FILE_APPLICATION = "dataFileApplication";
-  @SerializedName(SERIALIZED_NAME_DATA_FILE_APPLICATION)
+  public static final String JSON_PROPERTY_DATA_FILE_APPLICATION = "dataFileApplication";
+  @jakarta.annotation.Nullable
   private String dataFileApplication;
 
-  public static final String SERIALIZED_NAME_DATA_FILE_DATABASE = "dataFileDatabase";
-  @SerializedName(SERIALIZED_NAME_DATA_FILE_DATABASE)
+  public static final String JSON_PROPERTY_DATA_FILE_DATABASE = "dataFileDatabase";
+  @jakarta.annotation.Nullable
   private String dataFileDatabase;
 
-  public static final String SERIALIZED_NAME_DATA_FILE_SERVER = "dataFileServer";
-  @SerializedName(SERIALIZED_NAME_DATA_FILE_SERVER)
+  public static final String JSON_PROPERTY_DATA_FILE_SERVER = "dataFileServer";
+  @jakarta.annotation.Nullable
   private String dataFileServer;
 
-  public static final String SERIALIZED_NAME_START_RECORD = "startRecord";
-  @SerializedName(SERIALIZED_NAME_START_RECORD)
+  public static final String JSON_PROPERTY_START_RECORD = "startRecord";
+  @jakarta.annotation.Nullable
   private Integer startRecord;
 
-  public static final String SERIALIZED_NAME_VIEW_COUNT = "viewCount";
-  @SerializedName(SERIALIZED_NAME_VIEW_COUNT)
+  public static final String JSON_PROPERTY_VIEW_COUNT = "viewCount";
+  @jakarta.annotation.Nullable
   private Integer viewCount;
 
-  public static final String SERIALIZED_NAME_VIEW_GRID_LINES = "viewGridLines";
-  @SerializedName(SERIALIZED_NAME_VIEW_GRID_LINES)
+  public static final String JSON_PROPERTY_VIEW_GRID_LINES = "viewGridLines";
+  @jakarta.annotation.Nullable
   private Boolean viewGridLines;
 
-  public static final String SERIALIZED_NAME_VIEW_IGNORED = "viewIgnored";
-  @SerializedName(SERIALIZED_NAME_VIEW_IGNORED)
+  public static final String JSON_PROPERTY_VIEW_IGNORED = "viewIgnored";
+  @jakarta.annotation.Nullable
   private Boolean viewIgnored;
 
-  public static final String SERIALIZED_NAME_VIEW_RAW_DATA = "viewRawData";
-  @SerializedName(SERIALIZED_NAME_VIEW_RAW_DATA)
+  public static final String JSON_PROPERTY_VIEW_RAW_DATA = "viewRawData";
+  @jakarta.annotation.Nullable
   private Boolean viewRawData;
 
-  public static final String SERIALIZED_NAME_VIEW_TOOLBAR = "viewToolbar";
-  @SerializedName(SERIALIZED_NAME_VIEW_TOOLBAR)
+  public static final String JSON_PROPERTY_VIEW_TOOLBAR = "viewToolbar";
+  @jakarta.annotation.Nullable
   private Boolean viewToolbar;
 
   /**
    * Gets or Sets viewMode
    */
-  @JsonAdapter(ViewModeEnum.Adapter.class)
   public enum ViewModeEnum {
-    DIMBUILD("DIMBUILD"),
+    DIMBUILD(String.valueOf("DIMBUILD")),
     
-    DATALOAD("DATALOAD");
+    DATALOAD(String.valueOf("DATALOAD"));
 
     private String value;
 
@@ -100,6 +122,7 @@ public class EditorOptions {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -109,6 +132,7 @@ public class EditorOptions {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static ViewModeEnum fromValue(String value) {
       for (ViewModeEnum b : ViewModeEnum.values()) {
         if (b.value.equals(value)) {
@@ -117,41 +141,27 @@ public class EditorOptions {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<ViewModeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final ViewModeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public ViewModeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return ViewModeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_VIEW_MODE = "viewMode";
-  @SerializedName(SERIALIZED_NAME_VIEW_MODE)
+  public static final String JSON_PROPERTY_VIEW_MODE = "viewMode";
+  @jakarta.annotation.Nullable
   private ViewModeEnum viewMode;
 
   /**
    * Gets or Sets dataFileType
    */
-  @JsonAdapter(DataFileTypeEnum.Adapter.class)
   public enum DataFileTypeEnum {
-    NONE("NONE"),
+    NONE(String.valueOf("NONE")),
     
-    EXCEL("EXCEL"),
+    EXCEL(String.valueOf("EXCEL")),
     
-    LOTUS2("LOTUS2"),
+    LOTUS2(String.valueOf("LOTUS2")),
     
-    LOTUS3("LOTUS3"),
+    LOTUS3(String.valueOf("LOTUS3")),
     
-    LOTUS4("LOTUS4"),
+    LOTUS4(String.valueOf("LOTUS4")),
     
-    TEXT("TEXT");
+    TEXT(String.valueOf("TEXT"));
 
     private String value;
 
@@ -159,6 +169,7 @@ public class EditorOptions {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -168,6 +179,7 @@ public class EditorOptions {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static DataFileTypeEnum fromValue(String value) {
       for (DataFileTypeEnum b : DataFileTypeEnum.values()) {
         if (b.value.equals(value)) {
@@ -176,394 +188,402 @@ public class EditorOptions {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<DataFileTypeEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final DataFileTypeEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public DataFileTypeEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return DataFileTypeEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_DATA_FILE_TYPE = "dataFileType";
-  @SerializedName(SERIALIZED_NAME_DATA_FILE_TYPE)
+  public static final String JSON_PROPERTY_DATA_FILE_TYPE = "dataFileType";
+  @jakarta.annotation.Nullable
   private DataFileTypeEnum dataFileType;
 
+  public EditorOptions() { 
+  }
 
-  public EditorOptions application(String application) {
-    
+  public EditorOptions application(@jakarta.annotation.Nullable String application) {
     this.application = application;
     return this;
   }
 
-   /**
+  /**
    * Get application
    * @return application
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getApplication() {
     return application;
   }
 
 
-  public void setApplication(String application) {
+  @JsonProperty(JSON_PROPERTY_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApplication(@jakarta.annotation.Nullable String application) {
     this.application = application;
   }
 
 
-  public EditorOptions database(String database) {
-    
+  public EditorOptions database(@jakarta.annotation.Nullable String database) {
     this.database = database;
     return this;
   }
 
-   /**
+  /**
    * Get database
    * @return database
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDatabase() {
     return database;
   }
 
 
-  public void setDatabase(String database) {
+  @JsonProperty(JSON_PROPERTY_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatabase(@jakarta.annotation.Nullable String database) {
     this.database = database;
   }
 
 
-  public EditorOptions server(String server) {
-    
+  public EditorOptions server(@jakarta.annotation.Nullable String server) {
     this.server = server;
     return this;
   }
 
-   /**
+  /**
    * Get server
    * @return server
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SERVER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getServer() {
     return server;
   }
 
 
-  public void setServer(String server) {
+  @JsonProperty(JSON_PROPERTY_SERVER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setServer(@jakarta.annotation.Nullable String server) {
     this.server = server;
   }
 
 
-  public EditorOptions _object(String _object) {
-    
+  public EditorOptions _object(@jakarta.annotation.Nullable String _object) {
     this._object = _object;
     return this;
   }
 
-   /**
+  /**
    * Get _object
    * @return _object
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OBJECT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getObject() {
     return _object;
   }
 
 
-  public void setObject(String _object) {
+  @JsonProperty(JSON_PROPERTY_OBJECT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setObject(@jakarta.annotation.Nullable String _object) {
     this._object = _object;
   }
 
 
-  public EditorOptions dataFile(String dataFile) {
-    
+  public EditorOptions dataFile(@jakarta.annotation.Nullable String dataFile) {
     this.dataFile = dataFile;
     return this;
   }
 
-   /**
+  /**
    * Get dataFile
    * @return dataFile
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_FILE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDataFile() {
     return dataFile;
   }
 
 
-  public void setDataFile(String dataFile) {
+  @JsonProperty(JSON_PROPERTY_DATA_FILE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataFile(@jakarta.annotation.Nullable String dataFile) {
     this.dataFile = dataFile;
   }
 
 
-  public EditorOptions dataFileApplication(String dataFileApplication) {
-    
+  public EditorOptions dataFileApplication(@jakarta.annotation.Nullable String dataFileApplication) {
     this.dataFileApplication = dataFileApplication;
     return this;
   }
 
-   /**
+  /**
    * Get dataFileApplication
    * @return dataFileApplication
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_FILE_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDataFileApplication() {
     return dataFileApplication;
   }
 
 
-  public void setDataFileApplication(String dataFileApplication) {
+  @JsonProperty(JSON_PROPERTY_DATA_FILE_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataFileApplication(@jakarta.annotation.Nullable String dataFileApplication) {
     this.dataFileApplication = dataFileApplication;
   }
 
 
-  public EditorOptions dataFileDatabase(String dataFileDatabase) {
-    
+  public EditorOptions dataFileDatabase(@jakarta.annotation.Nullable String dataFileDatabase) {
     this.dataFileDatabase = dataFileDatabase;
     return this;
   }
 
-   /**
+  /**
    * Get dataFileDatabase
    * @return dataFileDatabase
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_FILE_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDataFileDatabase() {
     return dataFileDatabase;
   }
 
 
-  public void setDataFileDatabase(String dataFileDatabase) {
+  @JsonProperty(JSON_PROPERTY_DATA_FILE_DATABASE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataFileDatabase(@jakarta.annotation.Nullable String dataFileDatabase) {
     this.dataFileDatabase = dataFileDatabase;
   }
 
 
-  public EditorOptions dataFileServer(String dataFileServer) {
-    
+  public EditorOptions dataFileServer(@jakarta.annotation.Nullable String dataFileServer) {
     this.dataFileServer = dataFileServer;
     return this;
   }
 
-   /**
+  /**
    * Get dataFileServer
    * @return dataFileServer
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_FILE_SERVER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDataFileServer() {
     return dataFileServer;
   }
 
 
-  public void setDataFileServer(String dataFileServer) {
+  @JsonProperty(JSON_PROPERTY_DATA_FILE_SERVER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataFileServer(@jakarta.annotation.Nullable String dataFileServer) {
     this.dataFileServer = dataFileServer;
   }
 
 
-  public EditorOptions startRecord(Integer startRecord) {
-    
+  public EditorOptions startRecord(@jakarta.annotation.Nullable Integer startRecord) {
     this.startRecord = startRecord;
     return this;
   }
 
-   /**
+  /**
    * Get startRecord
    * @return startRecord
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_START_RECORD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getStartRecord() {
     return startRecord;
   }
 
 
-  public void setStartRecord(Integer startRecord) {
+  @JsonProperty(JSON_PROPERTY_START_RECORD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStartRecord(@jakarta.annotation.Nullable Integer startRecord) {
     this.startRecord = startRecord;
   }
 
 
-  public EditorOptions viewCount(Integer viewCount) {
-    
+  public EditorOptions viewCount(@jakarta.annotation.Nullable Integer viewCount) {
     this.viewCount = viewCount;
     return this;
   }
 
-   /**
+  /**
    * Get viewCount
    * @return viewCount
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VIEW_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getViewCount() {
     return viewCount;
   }
 
 
-  public void setViewCount(Integer viewCount) {
+  @JsonProperty(JSON_PROPERTY_VIEW_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setViewCount(@jakarta.annotation.Nullable Integer viewCount) {
     this.viewCount = viewCount;
   }
 
 
-  public EditorOptions viewGridLines(Boolean viewGridLines) {
-    
+  public EditorOptions viewGridLines(@jakarta.annotation.Nullable Boolean viewGridLines) {
     this.viewGridLines = viewGridLines;
     return this;
   }
 
-   /**
+  /**
    * Get viewGridLines
    * @return viewGridLines
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VIEW_GRID_LINES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getViewGridLines() {
     return viewGridLines;
   }
 
 
-  public void setViewGridLines(Boolean viewGridLines) {
+  @JsonProperty(JSON_PROPERTY_VIEW_GRID_LINES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setViewGridLines(@jakarta.annotation.Nullable Boolean viewGridLines) {
     this.viewGridLines = viewGridLines;
   }
 
 
-  public EditorOptions viewIgnored(Boolean viewIgnored) {
-    
+  public EditorOptions viewIgnored(@jakarta.annotation.Nullable Boolean viewIgnored) {
     this.viewIgnored = viewIgnored;
     return this;
   }
 
-   /**
+  /**
    * Get viewIgnored
    * @return viewIgnored
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VIEW_IGNORED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getViewIgnored() {
     return viewIgnored;
   }
 
 
-  public void setViewIgnored(Boolean viewIgnored) {
+  @JsonProperty(JSON_PROPERTY_VIEW_IGNORED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setViewIgnored(@jakarta.annotation.Nullable Boolean viewIgnored) {
     this.viewIgnored = viewIgnored;
   }
 
 
-  public EditorOptions viewRawData(Boolean viewRawData) {
-    
+  public EditorOptions viewRawData(@jakarta.annotation.Nullable Boolean viewRawData) {
     this.viewRawData = viewRawData;
     return this;
   }
 
-   /**
+  /**
    * Get viewRawData
    * @return viewRawData
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VIEW_RAW_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getViewRawData() {
     return viewRawData;
   }
 
 
-  public void setViewRawData(Boolean viewRawData) {
+  @JsonProperty(JSON_PROPERTY_VIEW_RAW_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setViewRawData(@jakarta.annotation.Nullable Boolean viewRawData) {
     this.viewRawData = viewRawData;
   }
 
 
-  public EditorOptions viewToolbar(Boolean viewToolbar) {
-    
+  public EditorOptions viewToolbar(@jakarta.annotation.Nullable Boolean viewToolbar) {
     this.viewToolbar = viewToolbar;
     return this;
   }
 
-   /**
+  /**
    * Get viewToolbar
    * @return viewToolbar
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VIEW_TOOLBAR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getViewToolbar() {
     return viewToolbar;
   }
 
 
-  public void setViewToolbar(Boolean viewToolbar) {
+  @JsonProperty(JSON_PROPERTY_VIEW_TOOLBAR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setViewToolbar(@jakarta.annotation.Nullable Boolean viewToolbar) {
     this.viewToolbar = viewToolbar;
   }
 
 
-  public EditorOptions viewMode(ViewModeEnum viewMode) {
-    
+  public EditorOptions viewMode(@jakarta.annotation.Nullable ViewModeEnum viewMode) {
     this.viewMode = viewMode;
     return this;
   }
 
-   /**
+  /**
    * Get viewMode
    * @return viewMode
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VIEW_MODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public ViewModeEnum getViewMode() {
     return viewMode;
   }
 
 
-  public void setViewMode(ViewModeEnum viewMode) {
+  @JsonProperty(JSON_PROPERTY_VIEW_MODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setViewMode(@jakarta.annotation.Nullable ViewModeEnum viewMode) {
     this.viewMode = viewMode;
   }
 
 
-  public EditorOptions dataFileType(DataFileTypeEnum dataFileType) {
-    
+  public EditorOptions dataFileType(@jakarta.annotation.Nullable DataFileTypeEnum dataFileType) {
     this.dataFileType = dataFileType;
     return this;
   }
 
-   /**
+  /**
    * Get dataFileType
    * @return dataFileType
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA_FILE_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public DataFileTypeEnum getDataFileType() {
     return dataFileType;
   }
 
 
-  public void setDataFileType(DataFileTypeEnum dataFileType) {
+  @JsonProperty(JSON_PROPERTY_DATA_FILE_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataFileType(@jakarta.annotation.Nullable DataFileTypeEnum dataFileType) {
     this.dataFileType = dataFileType;
   }
 
 
+  /**
+   * Return true if this EditorOptions object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -631,5 +651,119 @@ public class EditorOptions {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `application` to the URL query string
+    if (getApplication() != null) {
+      joiner.add(String.format("%sapplication%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getApplication()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `database` to the URL query string
+    if (getDatabase() != null) {
+      joiner.add(String.format("%sdatabase%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDatabase()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `server` to the URL query string
+    if (getServer() != null) {
+      joiner.add(String.format("%sserver%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getServer()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `object` to the URL query string
+    if (getObject() != null) {
+      joiner.add(String.format("%sobject%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getObject()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dataFile` to the URL query string
+    if (getDataFile() != null) {
+      joiner.add(String.format("%sdataFile%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataFile()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dataFileApplication` to the URL query string
+    if (getDataFileApplication() != null) {
+      joiner.add(String.format("%sdataFileApplication%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataFileApplication()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dataFileDatabase` to the URL query string
+    if (getDataFileDatabase() != null) {
+      joiner.add(String.format("%sdataFileDatabase%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataFileDatabase()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dataFileServer` to the URL query string
+    if (getDataFileServer() != null) {
+      joiner.add(String.format("%sdataFileServer%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataFileServer()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `startRecord` to the URL query string
+    if (getStartRecord() != null) {
+      joiner.add(String.format("%sstartRecord%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStartRecord()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `viewCount` to the URL query string
+    if (getViewCount() != null) {
+      joiner.add(String.format("%sviewCount%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getViewCount()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `viewGridLines` to the URL query string
+    if (getViewGridLines() != null) {
+      joiner.add(String.format("%sviewGridLines%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getViewGridLines()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `viewIgnored` to the URL query string
+    if (getViewIgnored() != null) {
+      joiner.add(String.format("%sviewIgnored%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getViewIgnored()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `viewRawData` to the URL query string
+    if (getViewRawData() != null) {
+      joiner.add(String.format("%sviewRawData%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getViewRawData()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `viewToolbar` to the URL query string
+    if (getViewToolbar() != null) {
+      joiner.add(String.format("%sviewToolbar%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getViewToolbar()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `viewMode` to the URL query string
+    if (getViewMode() != null) {
+      joiner.add(String.format("%sviewMode%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getViewMode()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dataFileType` to the URL query string
+    if (getDataFileType() != null) {
+      joiner.add(String.format("%sdataFileType%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataFileType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

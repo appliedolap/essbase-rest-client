@@ -10,440 +10,339 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.DataLoadBuffer;
 import com.appliedolap.essbase.client.model.LoadBuffersList;
 import com.appliedolap.essbase.client.model.MergeSilceOption;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class AsoLoadBuffersApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public AsoLoadBuffersApi() {
-        this(Configuration.getDefaultApiClient());
+  public AsoLoadBuffersApi() {
+    this(new ApiClient());
+  }
+
+  public AsoLoadBuffersApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public AsoLoadBuffersApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Create buffer
+   * &lt;p&gt;Creates ASO load buffer with specified options.&lt;/p&gt;
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @param body  (optional)
+   * @throws ApiException if fails to make API call
+   */
+  public void aSOLoadBuffersCreateBuffer(String applicationName, String databaseName, DataLoadBuffer body) throws ApiException {
+    aSOLoadBuffersCreateBufferWithHttpInfo(applicationName, databaseName, body);
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for aSOLoadBuffersCreateBuffer
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param body  (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Load buffer created successfully.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create load buffer. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call aSOLoadBuffersCreateBufferCall(String applicationName, String databaseName, DataLoadBuffer body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/asodataload/buffers"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Create buffer
+   * &lt;p&gt;Creates ASO load buffer with specified options.&lt;/p&gt;
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @param body  (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> aSOLoadBuffersCreateBufferWithHttpInfo(String applicationName, String databaseName, DataLoadBuffer body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = aSOLoadBuffersCreateBufferRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("aSOLoadBuffersCreateBuffer", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call aSOLoadBuffersCreateBufferValidateBeforeCall(String applicationName, String databaseName, DataLoadBuffer body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling aSOLoadBuffersCreateBuffer(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling aSOLoadBuffersCreateBuffer(Async)");
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder aSOLoadBuffersCreateBufferRequestBuilder(String applicationName, String databaseName, DataLoadBuffer body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling aSOLoadBuffersCreateBuffer");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling aSOLoadBuffersCreateBuffer");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/asodataload/buffers"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * List Buffers
+   * &lt;p&gt;Lists existing load buffers. This would return an error when called on a BSO database.&lt;/p&gt;
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @return LoadBuffersList
+   * @throws ApiException if fails to make API call
+   */
+  public LoadBuffersList aSOLoadBuffersListBuffers(String applicationName, String databaseName) throws ApiException {
+    ApiResponse<LoadBuffersList> localVarResponse = aSOLoadBuffersListBuffersWithHttpInfo(applicationName, databaseName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * List Buffers
+   * &lt;p&gt;Lists existing load buffers. This would return an error when called on a BSO database.&lt;/p&gt;
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @return ApiResponse&lt;LoadBuffersList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<LoadBuffersList> aSOLoadBuffersListBuffersWithHttpInfo(String applicationName, String databaseName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = aSOLoadBuffersListBuffersRequestBuilder(applicationName, databaseName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("aSOLoadBuffersListBuffers", localVarResponse);
         }
-        
+        return new ApiResponse<LoadBuffersList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<LoadBuffersList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = aSOLoadBuffersCreateBufferCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder aSOLoadBuffersListBuffersRequestBuilder(String applicationName, String databaseName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling aSOLoadBuffersListBuffers");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling aSOLoadBuffersListBuffers");
     }
 
-    /**
-     * Create buffer
-     * &lt;p&gt;Creates ASO load buffer with specified options.&lt;/p&gt;
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param body  (optional)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Load buffer created successfully.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create load buffer. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void aSOLoadBuffersCreateBuffer(String applicationName, String databaseName, DataLoadBuffer body) throws ApiException {
-        aSOLoadBuffersCreateBufferWithHttpInfo(applicationName, databaseName, body);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/asodataload/buffers"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Create buffer
-     * &lt;p&gt;Creates ASO load buffer with specified options.&lt;/p&gt;
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param body  (optional)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Load buffer created successfully.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create load buffer. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> aSOLoadBuffersCreateBufferWithHttpInfo(String applicationName, String databaseName, DataLoadBuffer body) throws ApiException {
-        okhttp3.Call localVarCall = aSOLoadBuffersCreateBufferValidateBeforeCall(applicationName, databaseName, body, null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Create buffer (asynchronously)
-     * &lt;p&gt;Creates ASO load buffer with specified options.&lt;/p&gt;
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param body  (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Load buffer created successfully.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to create load buffer. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call aSOLoadBuffersCreateBufferAsync(String applicationName, String databaseName, DataLoadBuffer body, final ApiCallback<Void> _callback) throws ApiException {
+  /**
+   *  Merges ASO database data.
+   * &lt;p&gt;Merges ASO database data. Merges incremental slices with the main slice.&lt;/p&gt;
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @param body  (optional)
+   * @throws ApiException if fails to make API call
+   */
+  public void aSOLoadBuffersMerge(String applicationName, String databaseName, MergeSilceOption body) throws ApiException {
+    aSOLoadBuffersMergeWithHttpInfo(applicationName, databaseName, body);
+  }
 
-        okhttp3.Call localVarCall = aSOLoadBuffersCreateBufferValidateBeforeCall(applicationName, databaseName, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for aSOLoadBuffersListBuffers
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns load buffers list.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get load buffers. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call aSOLoadBuffersListBuffersCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/asodataload/buffers"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   *  Merges ASO database data.
+   * &lt;p&gt;Merges ASO database data. Merges incremental slices with the main slice.&lt;/p&gt;
+   * @param applicationName Application name (required)
+   * @param databaseName Database name (required)
+   * @param body  (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> aSOLoadBuffersMergeWithHttpInfo(String applicationName, String databaseName, MergeSilceOption body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = aSOLoadBuffersMergeRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("aSOLoadBuffersMerge", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call aSOLoadBuffersListBuffersValidateBeforeCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling aSOLoadBuffersListBuffers(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling aSOLoadBuffersListBuffers(Async)");
-        }
-        
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = aSOLoadBuffersListBuffersCall(applicationName, databaseName, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder aSOLoadBuffersMergeRequestBuilder(String applicationName, String databaseName, MergeSilceOption body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling aSOLoadBuffersMerge");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling aSOLoadBuffersMerge");
     }
 
-    /**
-     * List Buffers
-     * &lt;p&gt;Lists existing load buffers. This would return an error when called on a BSO database.&lt;/p&gt;
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @return LoadBuffersList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns load buffers list.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get load buffers. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public LoadBuffersList aSOLoadBuffersListBuffers(String applicationName, String databaseName) throws ApiException {
-        ApiResponse<LoadBuffersList> localVarResp = aSOLoadBuffersListBuffersWithHttpInfo(applicationName, databaseName);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/asodataload/actions/merge"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * List Buffers
-     * &lt;p&gt;Lists existing load buffers. This would return an error when called on a BSO database.&lt;/p&gt;
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @return ApiResponse&lt;LoadBuffersList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns load buffers list.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get load buffers. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<LoadBuffersList> aSOLoadBuffersListBuffersWithHttpInfo(String applicationName, String databaseName) throws ApiException {
-        okhttp3.Call localVarCall = aSOLoadBuffersListBuffersValidateBeforeCall(applicationName, databaseName, null);
-        Type localVarReturnType = new TypeToken<LoadBuffersList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * List Buffers (asynchronously)
-     * &lt;p&gt;Lists existing load buffers. This would return an error when called on a BSO database.&lt;/p&gt;
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Returns load buffers list.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to get load buffers. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call aSOLoadBuffersListBuffersAsync(String applicationName, String databaseName, final ApiCallback<LoadBuffersList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = aSOLoadBuffersListBuffersValidateBeforeCall(applicationName, databaseName, _callback);
-        Type localVarReturnType = new TypeToken<LoadBuffersList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for aSOLoadBuffersMerge
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param body  (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Data merged created successfully.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to merge data. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call aSOLoadBuffersMergeCall(String applicationName, String databaseName, MergeSilceOption body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/asodataload/actions/merge"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call aSOLoadBuffersMergeValidateBeforeCall(String applicationName, String databaseName, MergeSilceOption body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling aSOLoadBuffersMerge(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling aSOLoadBuffersMerge(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = aSOLoadBuffersMergeCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     *  Merges ASO database data.
-     * &lt;p&gt;Merges ASO database data. Merges incremental slices with the main slice.&lt;/p&gt;
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param body  (optional)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Data merged created successfully.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to merge data. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void aSOLoadBuffersMerge(String applicationName, String databaseName, MergeSilceOption body) throws ApiException {
-        aSOLoadBuffersMergeWithHttpInfo(applicationName, databaseName, body);
-    }
-
-    /**
-     *  Merges ASO database data.
-     * &lt;p&gt;Merges ASO database data. Merges incremental slices with the main slice.&lt;/p&gt;
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param body  (optional)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Data merged created successfully.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to merge data. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> aSOLoadBuffersMergeWithHttpInfo(String applicationName, String databaseName, MergeSilceOption body) throws ApiException {
-        okhttp3.Call localVarCall = aSOLoadBuffersMergeValidateBeforeCall(applicationName, databaseName, body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     *  Merges ASO database data. (asynchronously)
-     * &lt;p&gt;Merges ASO database data. Merges incremental slices with the main slice.&lt;/p&gt;
-     * @param applicationName Application name (required)
-     * @param databaseName Database name (required)
-     * @param body  (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Data merged created successfully.  </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Failed to merge data. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call aSOLoadBuffersMergeAsync(String applicationName, String databaseName, MergeSilceOption body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = aSOLoadBuffersMergeValidateBeforeCall(applicationName, databaseName, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
 }

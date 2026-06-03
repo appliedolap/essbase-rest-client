@@ -13,177 +13,199 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.Data;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * Slice
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  Slice.JSON_PROPERTY_ROWS,
+  Slice.JSON_PROPERTY_COLUMNS,
+  Slice.JSON_PROPERTY_DIRTY_TEXTS,
+  Slice.JSON_PROPERTY_DIRTY_CELLS,
+  Slice.JSON_PROPERTY_DATA
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class Slice {
-  public static final String SERIALIZED_NAME_ROWS = "rows";
-  @SerializedName(SERIALIZED_NAME_ROWS)
+  public static final String JSON_PROPERTY_ROWS = "rows";
+  @jakarta.annotation.Nullable
   private Integer rows;
 
-  public static final String SERIALIZED_NAME_COLUMNS = "columns";
-  @SerializedName(SERIALIZED_NAME_COLUMNS)
+  public static final String JSON_PROPERTY_COLUMNS = "columns";
+  @jakarta.annotation.Nullable
   private Integer columns;
 
-  public static final String SERIALIZED_NAME_DIRTY_TEXTS = "dirtyTexts";
-  @SerializedName(SERIALIZED_NAME_DIRTY_TEXTS)
-  private List<Integer> dirtyTexts = null;
+  public static final String JSON_PROPERTY_DIRTY_TEXTS = "dirtyTexts";
+  @jakarta.annotation.Nullable
+  private List<Integer> dirtyTexts = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_DIRTY_CELLS = "dirtyCells";
-  @SerializedName(SERIALIZED_NAME_DIRTY_CELLS)
-  private List<Integer> dirtyCells = null;
+  public static final String JSON_PROPERTY_DIRTY_CELLS = "dirtyCells";
+  @jakarta.annotation.Nullable
+  private List<Integer> dirtyCells = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_DATA = "data";
-  @SerializedName(SERIALIZED_NAME_DATA)
+  public static final String JSON_PROPERTY_DATA = "data";
+  @jakarta.annotation.Nullable
   private Data data;
 
+  public Slice() { 
+  }
 
-  public Slice rows(Integer rows) {
-    
+  public Slice rows(@jakarta.annotation.Nullable Integer rows) {
     this.rows = rows;
     return this;
   }
 
-   /**
+  /**
    * Get rows
    * @return rows
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ROWS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getRows() {
     return rows;
   }
 
 
-  public void setRows(Integer rows) {
+  @JsonProperty(JSON_PROPERTY_ROWS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRows(@jakarta.annotation.Nullable Integer rows) {
     this.rows = rows;
   }
 
 
-  public Slice columns(Integer columns) {
-    
+  public Slice columns(@jakarta.annotation.Nullable Integer columns) {
     this.columns = columns;
     return this;
   }
 
-   /**
+  /**
    * Get columns
    * @return columns
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getColumns() {
     return columns;
   }
 
 
-  public void setColumns(Integer columns) {
+  @JsonProperty(JSON_PROPERTY_COLUMNS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setColumns(@jakarta.annotation.Nullable Integer columns) {
     this.columns = columns;
   }
 
 
-  public Slice dirtyTexts(List<Integer> dirtyTexts) {
-    
+  public Slice dirtyTexts(@jakarta.annotation.Nullable List<Integer> dirtyTexts) {
     this.dirtyTexts = dirtyTexts;
     return this;
   }
 
   public Slice addDirtyTextsItem(Integer dirtyTextsItem) {
     if (this.dirtyTexts == null) {
-      this.dirtyTexts = new ArrayList<Integer>();
+      this.dirtyTexts = new ArrayList<>();
     }
     this.dirtyTexts.add(dirtyTextsItem);
     return this;
   }
 
-   /**
+  /**
    * Get dirtyTexts
    * @return dirtyTexts
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIRTY_TEXTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Integer> getDirtyTexts() {
     return dirtyTexts;
   }
 
 
-  public void setDirtyTexts(List<Integer> dirtyTexts) {
+  @JsonProperty(JSON_PROPERTY_DIRTY_TEXTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDirtyTexts(@jakarta.annotation.Nullable List<Integer> dirtyTexts) {
     this.dirtyTexts = dirtyTexts;
   }
 
 
-  public Slice dirtyCells(List<Integer> dirtyCells) {
-    
+  public Slice dirtyCells(@jakarta.annotation.Nullable List<Integer> dirtyCells) {
     this.dirtyCells = dirtyCells;
     return this;
   }
 
   public Slice addDirtyCellsItem(Integer dirtyCellsItem) {
     if (this.dirtyCells == null) {
-      this.dirtyCells = new ArrayList<Integer>();
+      this.dirtyCells = new ArrayList<>();
     }
     this.dirtyCells.add(dirtyCellsItem);
     return this;
   }
 
-   /**
+  /**
    * Get dirtyCells
    * @return dirtyCells
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIRTY_CELLS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Integer> getDirtyCells() {
     return dirtyCells;
   }
 
 
-  public void setDirtyCells(List<Integer> dirtyCells) {
+  @JsonProperty(JSON_PROPERTY_DIRTY_CELLS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDirtyCells(@jakarta.annotation.Nullable List<Integer> dirtyCells) {
     this.dirtyCells = dirtyCells;
   }
 
 
-  public Slice data(Data data) {
-    
+  public Slice data(@jakarta.annotation.Nullable Data data) {
     this.data = data;
     return this;
   }
 
-   /**
+  /**
    * Get data
    * @return data
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Data getData() {
     return data;
   }
 
 
-  public void setData(Data data) {
+  @JsonProperty(JSON_PROPERTY_DATA)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setData(@jakarta.annotation.Nullable Data data) {
     this.data = data;
   }
 
 
+  /**
+   * Return true if this Slice object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -229,5 +251,72 @@ public class Slice {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `rows` to the URL query string
+    if (getRows() != null) {
+      joiner.add(String.format("%srows%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getRows()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `columns` to the URL query string
+    if (getColumns() != null) {
+      joiner.add(String.format("%scolumns%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getColumns()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dirtyTexts` to the URL query string
+    if (getDirtyTexts() != null) {
+      for (int i = 0; i < getDirtyTexts().size(); i++) {
+        joiner.add(String.format("%sdirtyTexts%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getDirtyTexts().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `dirtyCells` to the URL query string
+    if (getDirtyCells() != null) {
+      for (int i = 0; i < getDirtyCells().size(); i++) {
+        joiner.add(String.format("%sdirtyCells%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+            URLEncoder.encode(ApiClient.valueToString(getDirtyCells().get(i)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    // add `data` to the URL query string
+    if (getData() != null) {
+      joiner.add(getData().toUrlQueryString(prefix + "data" + suffix));
+    }
+
+    return joiner.toString();
+  }
 }
 

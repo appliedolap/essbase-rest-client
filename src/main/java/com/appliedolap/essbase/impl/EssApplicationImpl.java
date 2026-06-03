@@ -1,13 +1,13 @@
 package com.appliedolap.essbase.impl;
 
 import com.appliedolap.essbase.*;
+import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.*;
-import com.appliedolap.essbase.util.GenericApiCallback;
 import com.appliedolap.essbase.util.GenericDownload;
+import com.appliedolap.essbase.util.NativeHttp;
 import com.appliedolap.essbase.util.Utils;
 import com.appliedolap.essbase.util.WrapperUtil;
-import okhttp3.Call;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -195,8 +195,9 @@ public class EssApplicationImpl extends AbstractEssObject implements EssApplicat
     @Override
     public void downloadLatestLog(OutputStream outputStream) {
         try {
-            Call call = api.getApplicationLogsApi().applicationLogsDownloadLatestLogFileCall(getName(), new GenericApiCallback());
-            outputStream.write(GenericDownload.downloadBytes(call.execute()));
+            String path = "/applications/" + ApiClient.urlEncode(getName()) + "/logs/latest";
+            outputStream.write(GenericDownload.downloadBytes(NativeHttp.send(
+                    api.getClient(), NativeHttp.request(api.getClient(), path).GET(), "applicationLogsDownloadLatestLogFile")));
         } catch (ApiException | IOException a) {
             throw new EssApiException(a);
         }
@@ -205,8 +206,9 @@ public class EssApplicationImpl extends AbstractEssObject implements EssApplicat
     @Override
     public void downloadAllLogsAsZip(OutputStream outputStream) {
         try {
-            Call call = api.getApplicationLogsApi().applicationLogsDownloadAllLogFilesCall(getName(), new GenericApiCallback());
-            outputStream.write(GenericDownload.downloadBytes(call.execute()));
+            String path = "/applications/" + ApiClient.urlEncode(getName()) + "/logs/all";
+            outputStream.write(GenericDownload.downloadBytes(NativeHttp.send(
+                    api.getClient(), NativeHttp.request(api.getClient(), path).GET(), "applicationLogsDownloadAllLogFiles")));
         } catch (ApiException | IOException a) {
             throw new EssApiException(a);
         }

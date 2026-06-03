@@ -13,42 +13,55 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * MeasureOptions
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  MeasureOptions.JSON_PROPERTY_CURRENCY_CATEGORY,
+  MeasureOptions.JSON_PROPERTY_CURRENCY_NAME,
+  MeasureOptions.JSON_PROPERTY_CURRENCY_CONVERSION,
+  MeasureOptions.JSON_PROPERTY_SKIP,
+  MeasureOptions.JSON_PROPERTY_TIME_BALANCE_OPTION,
+  MeasureOptions.JSON_PROPERTY_VARIANCE_REPORTING,
+  MeasureOptions.JSON_PROPERTY_TWO_PASS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class MeasureOptions {
-  public static final String SERIALIZED_NAME_CURRENCY_CATEGORY = "currencyCategory";
-  @SerializedName(SERIALIZED_NAME_CURRENCY_CATEGORY)
+  public static final String JSON_PROPERTY_CURRENCY_CATEGORY = "currencyCategory";
+  @jakarta.annotation.Nullable
   private String currencyCategory;
 
-  public static final String SERIALIZED_NAME_CURRENCY_NAME = "currencyName";
-  @SerializedName(SERIALIZED_NAME_CURRENCY_NAME)
+  public static final String JSON_PROPERTY_CURRENCY_NAME = "currencyName";
+  @jakarta.annotation.Nullable
   private String currencyName;
 
   /**
    * Gets or Sets currencyConversion
    */
-  @JsonAdapter(CurrencyConversionEnum.Adapter.class)
   public enum CurrencyConversionEnum {
-    EXISTING("EXISTING"),
+    EXISTING(String.valueOf("EXISTING")),
     
-    NONE("NONE"),
+    NONE(String.valueOf("NONE")),
     
-    CATEGORY("CATEGORY"),
+    CATEGORY(String.valueOf("CATEGORY")),
     
-    NO_CONVERSION("NO_CONVERSION");
+    NO_CONVERSION(String.valueOf("NO_CONVERSION"));
 
     private String value;
 
@@ -56,6 +69,7 @@ public class MeasureOptions {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -65,6 +79,7 @@ public class MeasureOptions {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static CurrencyConversionEnum fromValue(String value) {
       for (CurrencyConversionEnum b : CurrencyConversionEnum.values()) {
         if (b.value.equals(value)) {
@@ -73,39 +88,25 @@ public class MeasureOptions {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<CurrencyConversionEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final CurrencyConversionEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public CurrencyConversionEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return CurrencyConversionEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_CURRENCY_CONVERSION = "currencyConversion";
-  @SerializedName(SERIALIZED_NAME_CURRENCY_CONVERSION)
+  public static final String JSON_PROPERTY_CURRENCY_CONVERSION = "currencyConversion";
+  @jakarta.annotation.Nullable
   private CurrencyConversionEnum currencyConversion;
 
   /**
    * Gets or Sets skip
    */
-  @JsonAdapter(SkipEnum.Adapter.class)
   public enum SkipEnum {
-    NONE("NONE"),
+    NONE(String.valueOf("NONE")),
     
-    NA("NA"),
+    NA(String.valueOf("NA")),
     
-    MISSING("MISSING"),
+    MISSING(String.valueOf("MISSING")),
     
-    ZERO("ZERO"),
+    ZERO(String.valueOf("ZERO")),
     
-    MISSING_ZERO("MISSING_ZERO");
+    MISSING_ZERO(String.valueOf("MISSING_ZERO"));
 
     private String value;
 
@@ -113,6 +114,7 @@ public class MeasureOptions {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -122,6 +124,7 @@ public class MeasureOptions {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static SkipEnum fromValue(String value) {
       for (SkipEnum b : SkipEnum.values()) {
         if (b.value.equals(value)) {
@@ -130,39 +133,25 @@ public class MeasureOptions {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<SkipEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final SkipEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public SkipEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return SkipEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_SKIP = "skip";
-  @SerializedName(SERIALIZED_NAME_SKIP)
+  public static final String JSON_PROPERTY_SKIP = "skip";
+  @jakarta.annotation.Nullable
   private SkipEnum skip;
 
   /**
    * Gets or Sets timeBalanceOption
    */
-  @JsonAdapter(TimeBalanceOptionEnum.Adapter.class)
   public enum TimeBalanceOptionEnum {
-    EXISTING("EXISTING"),
+    EXISTING(String.valueOf("EXISTING")),
     
-    NONE("NONE"),
+    NONE(String.valueOf("NONE")),
     
-    FIRST("FIRST"),
+    FIRST(String.valueOf("FIRST")),
     
-    LAST("LAST"),
+    LAST(String.valueOf("LAST")),
     
-    AVERAGE("AVERAGE");
+    AVERAGE(String.valueOf("AVERAGE"));
 
     private String value;
 
@@ -170,6 +159,7 @@ public class MeasureOptions {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -179,6 +169,7 @@ public class MeasureOptions {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static TimeBalanceOptionEnum fromValue(String value) {
       for (TimeBalanceOptionEnum b : TimeBalanceOptionEnum.values()) {
         if (b.value.equals(value)) {
@@ -187,35 +178,21 @@ public class MeasureOptions {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<TimeBalanceOptionEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final TimeBalanceOptionEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public TimeBalanceOptionEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return TimeBalanceOptionEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_TIME_BALANCE_OPTION = "timeBalanceOption";
-  @SerializedName(SERIALIZED_NAME_TIME_BALANCE_OPTION)
+  public static final String JSON_PROPERTY_TIME_BALANCE_OPTION = "timeBalanceOption";
+  @jakarta.annotation.Nullable
   private TimeBalanceOptionEnum timeBalanceOption;
 
   /**
    * Gets or Sets varianceReporting
    */
-  @JsonAdapter(VarianceReportingEnum.Adapter.class)
   public enum VarianceReportingEnum {
-    EXISTING("EXISTING"),
+    EXISTING(String.valueOf("EXISTING")),
     
-    NON_EXPENSE("NON_EXPENSE"),
+    NON_EXPENSE(String.valueOf("NON_EXPENSE")),
     
-    EXPENSE("EXPENSE");
+    EXPENSE(String.valueOf("EXPENSE"));
 
     private String value;
 
@@ -223,6 +200,7 @@ public class MeasureOptions {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -232,6 +210,7 @@ public class MeasureOptions {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static VarianceReportingEnum fromValue(String value) {
       for (VarianceReportingEnum b : VarianceReportingEnum.values()) {
         if (b.value.equals(value)) {
@@ -240,191 +219,190 @@ public class MeasureOptions {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<VarianceReportingEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final VarianceReportingEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public VarianceReportingEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return VarianceReportingEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_VARIANCE_REPORTING = "varianceReporting";
-  @SerializedName(SERIALIZED_NAME_VARIANCE_REPORTING)
+  public static final String JSON_PROPERTY_VARIANCE_REPORTING = "varianceReporting";
+  @jakarta.annotation.Nullable
   private VarianceReportingEnum varianceReporting;
 
-  public static final String SERIALIZED_NAME_TWO_PASS = "twoPass";
-  @SerializedName(SERIALIZED_NAME_TWO_PASS)
+  public static final String JSON_PROPERTY_TWO_PASS = "twoPass";
+  @jakarta.annotation.Nullable
   private Boolean twoPass;
 
+  public MeasureOptions() { 
+  }
 
-  public MeasureOptions currencyCategory(String currencyCategory) {
-    
+  public MeasureOptions currencyCategory(@jakarta.annotation.Nullable String currencyCategory) {
     this.currencyCategory = currencyCategory;
     return this;
   }
 
-   /**
+  /**
    * Get currencyCategory
    * @return currencyCategory
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CURRENCY_CATEGORY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getCurrencyCategory() {
     return currencyCategory;
   }
 
 
-  public void setCurrencyCategory(String currencyCategory) {
+  @JsonProperty(JSON_PROPERTY_CURRENCY_CATEGORY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCurrencyCategory(@jakarta.annotation.Nullable String currencyCategory) {
     this.currencyCategory = currencyCategory;
   }
 
 
-  public MeasureOptions currencyName(String currencyName) {
-    
+  public MeasureOptions currencyName(@jakarta.annotation.Nullable String currencyName) {
     this.currencyName = currencyName;
     return this;
   }
 
-   /**
+  /**
    * Get currencyName
    * @return currencyName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CURRENCY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getCurrencyName() {
     return currencyName;
   }
 
 
-  public void setCurrencyName(String currencyName) {
+  @JsonProperty(JSON_PROPERTY_CURRENCY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCurrencyName(@jakarta.annotation.Nullable String currencyName) {
     this.currencyName = currencyName;
   }
 
 
-  public MeasureOptions currencyConversion(CurrencyConversionEnum currencyConversion) {
-    
+  public MeasureOptions currencyConversion(@jakarta.annotation.Nullable CurrencyConversionEnum currencyConversion) {
     this.currencyConversion = currencyConversion;
     return this;
   }
 
-   /**
+  /**
    * Get currencyConversion
    * @return currencyConversion
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CURRENCY_CONVERSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public CurrencyConversionEnum getCurrencyConversion() {
     return currencyConversion;
   }
 
 
-  public void setCurrencyConversion(CurrencyConversionEnum currencyConversion) {
+  @JsonProperty(JSON_PROPERTY_CURRENCY_CONVERSION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCurrencyConversion(@jakarta.annotation.Nullable CurrencyConversionEnum currencyConversion) {
     this.currencyConversion = currencyConversion;
   }
 
 
-  public MeasureOptions skip(SkipEnum skip) {
-    
+  public MeasureOptions skip(@jakarta.annotation.Nullable SkipEnum skip) {
     this.skip = skip;
     return this;
   }
 
-   /**
+  /**
    * Get skip
    * @return skip
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SKIP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public SkipEnum getSkip() {
     return skip;
   }
 
 
-  public void setSkip(SkipEnum skip) {
+  @JsonProperty(JSON_PROPERTY_SKIP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSkip(@jakarta.annotation.Nullable SkipEnum skip) {
     this.skip = skip;
   }
 
 
-  public MeasureOptions timeBalanceOption(TimeBalanceOptionEnum timeBalanceOption) {
-    
+  public MeasureOptions timeBalanceOption(@jakarta.annotation.Nullable TimeBalanceOptionEnum timeBalanceOption) {
     this.timeBalanceOption = timeBalanceOption;
     return this;
   }
 
-   /**
+  /**
    * Get timeBalanceOption
    * @return timeBalanceOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TIME_BALANCE_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public TimeBalanceOptionEnum getTimeBalanceOption() {
     return timeBalanceOption;
   }
 
 
-  public void setTimeBalanceOption(TimeBalanceOptionEnum timeBalanceOption) {
+  @JsonProperty(JSON_PROPERTY_TIME_BALANCE_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTimeBalanceOption(@jakarta.annotation.Nullable TimeBalanceOptionEnum timeBalanceOption) {
     this.timeBalanceOption = timeBalanceOption;
   }
 
 
-  public MeasureOptions varianceReporting(VarianceReportingEnum varianceReporting) {
-    
+  public MeasureOptions varianceReporting(@jakarta.annotation.Nullable VarianceReportingEnum varianceReporting) {
     this.varianceReporting = varianceReporting;
     return this;
   }
 
-   /**
+  /**
    * Get varianceReporting
    * @return varianceReporting
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VARIANCE_REPORTING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public VarianceReportingEnum getVarianceReporting() {
     return varianceReporting;
   }
 
 
-  public void setVarianceReporting(VarianceReportingEnum varianceReporting) {
+  @JsonProperty(JSON_PROPERTY_VARIANCE_REPORTING)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVarianceReporting(@jakarta.annotation.Nullable VarianceReportingEnum varianceReporting) {
     this.varianceReporting = varianceReporting;
   }
 
 
-  public MeasureOptions twoPass(Boolean twoPass) {
-    
+  public MeasureOptions twoPass(@jakarta.annotation.Nullable Boolean twoPass) {
     this.twoPass = twoPass;
     return this;
   }
 
-   /**
+  /**
    * Get twoPass
    * @return twoPass
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TWO_PASS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getTwoPass() {
     return twoPass;
   }
 
 
-  public void setTwoPass(Boolean twoPass) {
+  @JsonProperty(JSON_PROPERTY_TWO_PASS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTwoPass(@jakarta.annotation.Nullable Boolean twoPass) {
     this.twoPass = twoPass;
   }
 
 
+  /**
+   * Return true if this MeasureOptions object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -474,5 +452,74 @@ public class MeasureOptions {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `currencyCategory` to the URL query string
+    if (getCurrencyCategory() != null) {
+      joiner.add(String.format("%scurrencyCategory%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCurrencyCategory()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `currencyName` to the URL query string
+    if (getCurrencyName() != null) {
+      joiner.add(String.format("%scurrencyName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCurrencyName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `currencyConversion` to the URL query string
+    if (getCurrencyConversion() != null) {
+      joiner.add(String.format("%scurrencyConversion%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getCurrencyConversion()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `skip` to the URL query string
+    if (getSkip() != null) {
+      joiner.add(String.format("%sskip%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getSkip()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `timeBalanceOption` to the URL query string
+    if (getTimeBalanceOption() != null) {
+      joiner.add(String.format("%stimeBalanceOption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTimeBalanceOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `varianceReporting` to the URL query string
+    if (getVarianceReporting() != null) {
+      joiner.add(String.format("%svarianceReporting%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getVarianceReporting()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `twoPass` to the URL query string
+    if (getTwoPass() != null) {
+      joiner.add(String.format("%stwoPass%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getTwoPass()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

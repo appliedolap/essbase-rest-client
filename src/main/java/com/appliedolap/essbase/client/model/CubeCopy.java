@@ -13,76 +13,94 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.To;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * CubeCopy
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  CubeCopy.JSON_PROPERTY_FROM,
+  CubeCopy.JSON_PROPERTY_TO
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class CubeCopy {
-  public static final String SERIALIZED_NAME_FROM = "from";
-  @SerializedName(SERIALIZED_NAME_FROM)
+  public static final String JSON_PROPERTY_FROM = "from";
+  @jakarta.annotation.Nonnull
   private String from;
 
-  public static final String SERIALIZED_NAME_TO = "to";
-  @SerializedName(SERIALIZED_NAME_TO)
+  public static final String JSON_PROPERTY_TO = "to";
+  @jakarta.annotation.Nonnull
   private To to;
 
+  public CubeCopy() { 
+  }
 
-  public CubeCopy from(String from) {
-    
+  public CubeCopy from(@jakarta.annotation.Nonnull String from) {
     this.from = from;
     return this;
   }
 
-   /**
+  /**
    * Get from
    * @return from
-  **/
-  @ApiModelProperty(required = true, value = "")
-
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FROM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public String getFrom() {
     return from;
   }
 
 
-  public void setFrom(String from) {
+  @JsonProperty(JSON_PROPERTY_FROM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFrom(@jakarta.annotation.Nonnull String from) {
     this.from = from;
   }
 
 
-  public CubeCopy to(To to) {
-    
+  public CubeCopy to(@jakarta.annotation.Nonnull To to) {
     this.to = to;
     return this;
   }
 
-   /**
+  /**
    * Get to
    * @return to
-  **/
-  @ApiModelProperty(required = true, value = "")
-
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TO)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public To getTo() {
     return to;
   }
 
 
-  public void setTo(To to) {
+  @JsonProperty(JSON_PROPERTY_TO)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setTo(@jakarta.annotation.Nonnull To to) {
     this.to = to;
   }
 
 
+  /**
+   * Return true if this CubeCopy object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -122,5 +140,49 @@ public class CubeCopy {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `from` to the URL query string
+    if (getFrom() != null) {
+      joiner.add(String.format("%sfrom%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getFrom()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `to` to the URL query string
+    if (getTo() != null) {
+      joiner.add(getTo().toUrlQueryString(prefix + "to" + suffix));
+    }
+
+    return joiner.toString();
+  }
 }
 

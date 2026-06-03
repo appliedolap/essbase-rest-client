@@ -10,983 +10,733 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.Datasource;
 import com.appliedolap.essbase.client.model.DatasourceQueryInfo;
 import com.appliedolap.essbase.client.model.DatasourcesList;
 import com.appliedolap.essbase.client.model.ResultBean;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class GlobalDataSourcesApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public GlobalDataSourcesApi() {
-        this(Configuration.getDefaultApiClient());
+  public GlobalDataSourcesApi() {
+    this(new ApiClient());
+  }
+
+  public GlobalDataSourcesApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public GlobalDataSourcesApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Create Global Data Source
+   * &lt;p&gt;Creates a global-level data source based on specified inputs. &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;connection&lt;/code&gt;, and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of data source.&lt;/p&gt;
+   * @param body &lt;p&gt;Data source details.&lt;/p&gt; (optional)
+   * @throws ApiException if fails to make API call
+   */
+  public void globalDatasourcesCreateDatasource(Datasource body) throws ApiException {
+    globalDatasourcesCreateDatasourceWithHttpInfo(body);
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for globalDatasourcesCreateDatasource
-     * @param body &lt;p&gt;Data source details.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesCreateDatasourceCall(Datasource body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/datasources";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Create Global Data Source
+   * &lt;p&gt;Creates a global-level data source based on specified inputs. &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;connection&lt;/code&gt;, and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of data source.&lt;/p&gt;
+   * @param body &lt;p&gt;Data source details.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> globalDatasourcesCreateDatasourceWithHttpInfo(Datasource body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalDatasourcesCreateDatasourceRequestBuilder(body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalDatasourcesCreateDatasource", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalDatasourcesCreateDatasourceValidateBeforeCall(Datasource body, final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = globalDatasourcesCreateDatasourceCall(body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Create Global Data Source
-     * &lt;p&gt;Creates a global-level data source based on specified inputs. &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;connection&lt;/code&gt;, and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of data source.&lt;/p&gt;
-     * @param body &lt;p&gt;Data source details.&lt;/p&gt; (optional)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void globalDatasourcesCreateDatasource(Datasource body) throws ApiException {
-        globalDatasourcesCreateDatasourceWithHttpInfo(body);
-    }
-
-    /**
-     * Create Global Data Source
-     * &lt;p&gt;Creates a global-level data source based on specified inputs. &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;connection&lt;/code&gt;, and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of data source.&lt;/p&gt;
-     * @param body &lt;p&gt;Data source details.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> globalDatasourcesCreateDatasourceWithHttpInfo(Datasource body) throws ApiException {
-        okhttp3.Call localVarCall = globalDatasourcesCreateDatasourceValidateBeforeCall(body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Create Global Data Source (asynchronously)
-     * &lt;p&gt;Creates a global-level data source based on specified inputs. &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;connection&lt;/code&gt;, and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of data source.&lt;/p&gt;
-     * @param body &lt;p&gt;Data source details.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesCreateDatasourceAsync(Datasource body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = globalDatasourcesCreateDatasourceValidateBeforeCall(body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for globalDatasourcesDeleteDatasource
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesDeleteDatasourceCall(String datasourceName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/datasources/{datasourceName}"
-            .replaceAll("\\{" + "datasourceName" + "\\}", localVarApiClient.escapeString(datasourceName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalDatasourcesDeleteDatasourceValidateBeforeCall(String datasourceName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'datasourceName' is set
-        if (datasourceName == null) {
-            throw new ApiException("Missing the required parameter 'datasourceName' when calling globalDatasourcesDeleteDatasource(Async)");
+  private HttpRequest.Builder globalDatasourcesCreateDatasourceRequestBuilder(Datasource body) throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/datasources";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Delete Global Data Source
+   * &lt;p&gt;Deletes the named global-level data source.&lt;/p&gt;
+   * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void globalDatasourcesDeleteDatasource(String datasourceName) throws ApiException {
+    globalDatasourcesDeleteDatasourceWithHttpInfo(datasourceName);
+  }
+
+  /**
+   * Delete Global Data Source
+   * &lt;p&gt;Deletes the named global-level data source.&lt;/p&gt;
+   * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> globalDatasourcesDeleteDatasourceWithHttpInfo(String datasourceName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalDatasourcesDeleteDatasourceRequestBuilder(datasourceName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalDatasourcesDeleteDatasource", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = globalDatasourcesDeleteDatasourceCall(datasourceName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Delete Global Data Source
-     * &lt;p&gt;Deletes the named global-level data source.&lt;/p&gt;
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void globalDatasourcesDeleteDatasource(String datasourceName) throws ApiException {
-        globalDatasourcesDeleteDatasourceWithHttpInfo(datasourceName);
-    }
-
-    /**
-     * Delete Global Data Source
-     * &lt;p&gt;Deletes the named global-level data source.&lt;/p&gt;
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> globalDatasourcesDeleteDatasourceWithHttpInfo(String datasourceName) throws ApiException {
-        okhttp3.Call localVarCall = globalDatasourcesDeleteDatasourceValidateBeforeCall(datasourceName, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Delete Global Data Source (asynchronously)
-     * &lt;p&gt;Deletes the named global-level data source.&lt;/p&gt;
-     * @param datasourceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesDeleteDatasourceAsync(String datasourceName, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = globalDatasourcesDeleteDatasourceValidateBeforeCall(datasourceName, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for globalDatasourcesGetData
-     * @param streamId &lt;p&gt;Stream id.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Results fetched successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to stream results.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesGetDataCall(String streamId, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/datasources/query/data/{streamId}"
-            .replaceAll("\\{" + "streamId" + "\\}", localVarApiClient.escapeString(streamId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder globalDatasourcesDeleteDatasourceRequestBuilder(String datasourceName) throws ApiException {
+    // verify the required parameter 'datasourceName' is set
+    if (datasourceName == null) {
+      throw new ApiException(400, "Missing the required parameter 'datasourceName' when calling globalDatasourcesDeleteDatasource");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalDatasourcesGetDataValidateBeforeCall(String streamId, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'streamId' is set
-        if (streamId == null) {
-            throw new ApiException("Missing the required parameter 'streamId' when calling globalDatasourcesGetData(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/datasources/{datasourceName}"
+        .replace("{datasourceName}", ApiClient.urlEncode(datasourceName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Streamed Data Source Results
+   * &lt;p&gt;Returns results from a global-level data source associated with the specified stream id.&lt;/p&gt;
+   * @param streamId &lt;p&gt;Stream id.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void globalDatasourcesGetData(String streamId) throws ApiException {
+    globalDatasourcesGetDataWithHttpInfo(streamId);
+  }
+
+  /**
+   * Get Streamed Data Source Results
+   * &lt;p&gt;Returns results from a global-level data source associated with the specified stream id.&lt;/p&gt;
+   * @param streamId &lt;p&gt;Stream id.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> globalDatasourcesGetDataWithHttpInfo(String streamId) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalDatasourcesGetDataRequestBuilder(streamId);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalDatasourcesGetData", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = globalDatasourcesGetDataCall(streamId, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Streamed Data Source Results
-     * &lt;p&gt;Returns results from a global-level data source associated with the specified stream id.&lt;/p&gt;
-     * @param streamId &lt;p&gt;Stream id.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Results fetched successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to stream results.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void globalDatasourcesGetData(String streamId) throws ApiException {
-        globalDatasourcesGetDataWithHttpInfo(streamId);
-    }
-
-    /**
-     * Get Streamed Data Source Results
-     * &lt;p&gt;Returns results from a global-level data source associated with the specified stream id.&lt;/p&gt;
-     * @param streamId &lt;p&gt;Stream id.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Results fetched successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to stream results.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> globalDatasourcesGetDataWithHttpInfo(String streamId) throws ApiException {
-        okhttp3.Call localVarCall = globalDatasourcesGetDataValidateBeforeCall(streamId, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Get Streamed Data Source Results (asynchronously)
-     * &lt;p&gt;Returns results from a global-level data source associated with the specified stream id.&lt;/p&gt;
-     * @param streamId &lt;p&gt;Stream id.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Results fetched successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to stream results.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesGetDataAsync(String streamId, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = globalDatasourcesGetDataValidateBeforeCall(streamId, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for globalDatasourcesGetDataStream
-     * @param includeHeaders &lt;p&gt;Include headers.&lt;/p&gt; (optional, default to false)
-     * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Results fetched successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to stream results.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesGetDataStreamCall(Boolean includeHeaders, DatasourceQueryInfo body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/datasources/query/stream";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (includeHeaders != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("includeHeaders", includeHeaders));
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  private HttpRequest.Builder globalDatasourcesGetDataRequestBuilder(String streamId) throws ApiException {
+    // verify the required parameter 'streamId' is set
+    if (streamId == null) {
+      throw new ApiException(400, "Missing the required parameter 'streamId' when calling globalDatasourcesGetData");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/datasources/query/data/{streamId}"
+        .replace("{streamId}", ApiClient.urlEncode(streamId.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Streamed Data Source Results
+   * &lt;p&gt;Returns results in stream from a global-level data source.&lt;/p&gt;
+   * @param includeHeaders &lt;p&gt;Include headers.&lt;/p&gt; (optional, default to false)
+   * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
+   * @throws ApiException if fails to make API call
+   */
+  public void globalDatasourcesGetDataStream(Boolean includeHeaders, DatasourceQueryInfo body) throws ApiException {
+    globalDatasourcesGetDataStreamWithHttpInfo(includeHeaders, body);
+  }
+
+  /**
+   * Get Streamed Data Source Results
+   * &lt;p&gt;Returns results in stream from a global-level data source.&lt;/p&gt;
+   * @param includeHeaders &lt;p&gt;Include headers.&lt;/p&gt; (optional, default to false)
+   * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> globalDatasourcesGetDataStreamWithHttpInfo(Boolean includeHeaders, DatasourceQueryInfo body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalDatasourcesGetDataStreamRequestBuilder(includeHeaders, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalDatasourcesGetDataStream", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            "application/json"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalDatasourcesGetDataStreamValidateBeforeCall(Boolean includeHeaders, DatasourceQueryInfo body, final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = globalDatasourcesGetDataStreamCall(includeHeaders, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Streamed Data Source Results
-     * &lt;p&gt;Returns results in stream from a global-level data source.&lt;/p&gt;
-     * @param includeHeaders &lt;p&gt;Include headers.&lt;/p&gt; (optional, default to false)
-     * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Results fetched successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to stream results.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void globalDatasourcesGetDataStream(Boolean includeHeaders, DatasourceQueryInfo body) throws ApiException {
-        globalDatasourcesGetDataStreamWithHttpInfo(includeHeaders, body);
-    }
-
-    /**
-     * Get Streamed Data Source Results
-     * &lt;p&gt;Returns results in stream from a global-level data source.&lt;/p&gt;
-     * @param includeHeaders &lt;p&gt;Include headers.&lt;/p&gt; (optional, default to false)
-     * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Results fetched successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to stream results.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> globalDatasourcesGetDataStreamWithHttpInfo(Boolean includeHeaders, DatasourceQueryInfo body) throws ApiException {
-        okhttp3.Call localVarCall = globalDatasourcesGetDataStreamValidateBeforeCall(includeHeaders, body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Get Streamed Data Source Results (asynchronously)
-     * &lt;p&gt;Returns results in stream from a global-level data source.&lt;/p&gt;
-     * @param includeHeaders &lt;p&gt;Include headers.&lt;/p&gt; (optional, default to false)
-     * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Results fetched successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to stream results.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesGetDataStreamAsync(Boolean includeHeaders, DatasourceQueryInfo body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = globalDatasourcesGetDataStreamValidateBeforeCall(includeHeaders, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for globalDatasourcesGetDatasourceDetails
-     * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data source details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesGetDatasourceDetailsCall(String datasouceName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/datasources/{datasouceName}"
-            .replaceAll("\\{" + "datasouceName" + "\\}", localVarApiClient.escapeString(datasouceName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
+  private HttpRequest.Builder globalDatasourcesGetDataStreamRequestBuilder(Boolean includeHeaders, DatasourceQueryInfo body) throws ApiException {
 
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/datasources/query/stream";
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "includeHeaders";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("includeHeaders", includeHeaders));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalDatasourcesGetDatasourceDetailsValidateBeforeCall(String datasouceName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'datasouceName' is set
-        if (datasouceName == null) {
-            throw new ApiException("Missing the required parameter 'datasouceName' when calling globalDatasourcesGetDatasourceDetails(Async)");
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Global Data Source
+   * &lt;p&gt;Returns details about the specified global data source.&lt;/p&gt;
+   * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
+   * @return Datasource
+   * @throws ApiException if fails to make API call
+   */
+  public Datasource globalDatasourcesGetDatasourceDetails(String datasouceName) throws ApiException {
+    ApiResponse<Datasource> localVarResponse = globalDatasourcesGetDatasourceDetailsWithHttpInfo(datasouceName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Global Data Source
+   * &lt;p&gt;Returns details about the specified global data source.&lt;/p&gt;
+   * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Datasource&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Datasource> globalDatasourcesGetDatasourceDetailsWithHttpInfo(String datasouceName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalDatasourcesGetDatasourceDetailsRequestBuilder(datasouceName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalDatasourcesGetDatasourceDetails", localVarResponse);
         }
-        
+        return new ApiResponse<Datasource>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Datasource>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = globalDatasourcesGetDatasourceDetailsCall(datasouceName, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder globalDatasourcesGetDatasourceDetailsRequestBuilder(String datasouceName) throws ApiException {
+    // verify the required parameter 'datasouceName' is set
+    if (datasouceName == null) {
+      throw new ApiException(400, "Missing the required parameter 'datasouceName' when calling globalDatasourcesGetDatasourceDetails");
     }
 
-    /**
-     * Get Global Data Source
-     * &lt;p&gt;Returns details about the specified global data source.&lt;/p&gt;
-     * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @return Datasource
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data source details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Datasource globalDatasourcesGetDatasourceDetails(String datasouceName) throws ApiException {
-        ApiResponse<Datasource> localVarResp = globalDatasourcesGetDatasourceDetailsWithHttpInfo(datasouceName);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/datasources/{datasouceName}"
+        .replace("{datasouceName}", ApiClient.urlEncode(datasouceName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Global Data Source
-     * &lt;p&gt;Returns details about the specified global data source.&lt;/p&gt;
-     * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Datasource&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data source details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Datasource> globalDatasourcesGetDatasourceDetailsWithHttpInfo(String datasouceName) throws ApiException {
-        okhttp3.Call localVarCall = globalDatasourcesGetDatasourceDetailsValidateBeforeCall(datasouceName, null);
-        Type localVarReturnType = new TypeToken<Datasource>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Get Global Data Source (asynchronously)
-     * &lt;p&gt;Returns details about the specified global data source.&lt;/p&gt;
-     * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data source details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesGetDatasourceDetailsAsync(String datasouceName, final ApiCallback<Datasource> _callback) throws ApiException {
+  /**
+   * Get Global Data Sources
+   * &lt;p&gt;Returns a list of global-level data sources, including details such as name, description, connection, and type.&lt;/p&gt;
+   * @param offset &lt;p&gt;Number of data sources to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of data sources to return. Default is 50.&lt;/p&gt; (optional, default to 50)
+   * @return DatasourcesList
+   * @throws ApiException if fails to make API call
+   */
+  public DatasourcesList globalDatasourcesGetDatasources(Integer offset, Integer limit) throws ApiException {
+    ApiResponse<DatasourcesList> localVarResponse = globalDatasourcesGetDatasourcesWithHttpInfo(offset, limit);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = globalDatasourcesGetDatasourceDetailsValidateBeforeCall(datasouceName, _callback);
-        Type localVarReturnType = new TypeToken<Datasource>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for globalDatasourcesGetDatasources
-     * @param offset &lt;p&gt;Number of data sources to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of data sources to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of data sources returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data sources.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesGetDatasourcesCall(Integer offset, Integer limit, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/datasources";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (offset != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("offset", offset));
+  /**
+   * Get Global Data Sources
+   * &lt;p&gt;Returns a list of global-level data sources, including details such as name, description, connection, and type.&lt;/p&gt;
+   * @param offset &lt;p&gt;Number of data sources to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of data sources to return. Default is 50.&lt;/p&gt; (optional, default to 50)
+   * @return ApiResponse&lt;DatasourcesList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<DatasourcesList> globalDatasourcesGetDatasourcesWithHttpInfo(Integer offset, Integer limit) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalDatasourcesGetDatasourcesRequestBuilder(offset, limit);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalDatasourcesGetDatasources", localVarResponse);
         }
+        return new ApiResponse<DatasourcesList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<DatasourcesList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        if (limit != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+  private HttpRequest.Builder globalDatasourcesGetDatasourcesRequestBuilder(Integer offset, Integer limit) throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/datasources";
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "offset";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("offset", offset));
+    localVarQueryParameterBaseName = "limit";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("limit", limit));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Stream Data Source Results
+   * &lt;p&gt;Returns column headers of the data source, and a link to fetch the streamed results in CSV (comma-separated) or TSV (tab-separated) formats.&lt;/p&gt;
+   * @param pageSize &lt;p&gt;Number of records to return. If not passed, all records are returned.&lt;/p&gt; (optional, default to -1)
+   * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
+   * @return ResultBean
+   * @throws ApiException if fails to make API call
+   */
+  public ResultBean globalDatasourcesGetResults(Integer pageSize, DatasourceQueryInfo body) throws ApiException {
+    ApiResponse<ResultBean> localVarResponse = globalDatasourcesGetResultsWithHttpInfo(pageSize, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Stream Data Source Results
+   * &lt;p&gt;Returns column headers of the data source, and a link to fetch the streamed results in CSV (comma-separated) or TSV (tab-separated) formats.&lt;/p&gt;
+   * @param pageSize &lt;p&gt;Number of records to return. If not passed, all records are returned.&lt;/p&gt; (optional, default to -1)
+   * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;ResultBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ResultBean> globalDatasourcesGetResultsWithHttpInfo(Integer pageSize, DatasourceQueryInfo body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalDatasourcesGetResultsRequestBuilder(pageSize, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalDatasourcesGetResults", localVarResponse);
         }
+        return new ApiResponse<ResultBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ResultBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  private HttpRequest.Builder globalDatasourcesGetResultsRequestBuilder(Integer pageSize, DatasourceQueryInfo body) throws ApiException {
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/datasources/query";
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "pageSize";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("pageSize", pageSize));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Update Global Data Source
+   * &lt;p&gt;Update the named global-level data source. If the update is successful, returns details about the updated data source. &lt;code&gt;type&lt;/code&gt; and &lt;code&gt;connection&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of the data source.&lt;/p&gt;
+   * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Updated data source details.&lt;/p&gt; (optional)
+   * @return Datasource
+   * @throws ApiException if fails to make API call
+   */
+  public Datasource globalDatasourcesUpdateDatasource(String datasouceName, Datasource body) throws ApiException {
+    ApiResponse<Datasource> localVarResponse = globalDatasourcesUpdateDatasourceWithHttpInfo(datasouceName, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Update Global Data Source
+   * &lt;p&gt;Update the named global-level data source. If the update is successful, returns details about the updated data source. &lt;code&gt;type&lt;/code&gt; and &lt;code&gt;connection&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of the data source.&lt;/p&gt;
+   * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Updated data source details.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;Datasource&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Datasource> globalDatasourcesUpdateDatasourceWithHttpInfo(String datasouceName, Datasource body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = globalDatasourcesUpdateDatasourceRequestBuilder(datasouceName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("globalDatasourcesUpdateDatasource", localVarResponse);
         }
+        return new ApiResponse<Datasource>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Datasource>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder globalDatasourcesUpdateDatasourceRequestBuilder(String datasouceName, Datasource body) throws ApiException {
+    // verify the required parameter 'datasouceName' is set
+    if (datasouceName == null) {
+      throw new ApiException(400, "Missing the required parameter 'datasouceName' when calling globalDatasourcesUpdateDatasource");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalDatasourcesGetDatasourcesValidateBeforeCall(Integer offset, Integer limit, final ApiCallback _callback) throws ApiException {
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = globalDatasourcesGetDatasourcesCall(offset, limit, _callback);
-        return localVarCall;
+    String localVarPath = "/datasources/{datasouceName}"
+        .replace("{datasouceName}", ApiClient.urlEncode(datasouceName.toString()));
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Get Global Data Sources
-     * &lt;p&gt;Returns a list of global-level data sources, including details such as name, description, connection, and type.&lt;/p&gt;
-     * @param offset &lt;p&gt;Number of data sources to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of data sources to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @return DatasourcesList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of data sources returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data sources.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public DatasourcesList globalDatasourcesGetDatasources(Integer offset, Integer limit) throws ApiException {
-        ApiResponse<DatasourcesList> localVarResp = globalDatasourcesGetDatasourcesWithHttpInfo(offset, limit);
-        return localVarResp.getData();
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Global Data Sources
-     * &lt;p&gt;Returns a list of global-level data sources, including details such as name, description, connection, and type.&lt;/p&gt;
-     * @param offset &lt;p&gt;Number of data sources to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of data sources to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @return ApiResponse&lt;DatasourcesList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of data sources returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data sources.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<DatasourcesList> globalDatasourcesGetDatasourcesWithHttpInfo(Integer offset, Integer limit) throws ApiException {
-        okhttp3.Call localVarCall = globalDatasourcesGetDatasourcesValidateBeforeCall(offset, limit, null);
-        Type localVarReturnType = new TypeToken<DatasourcesList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Get Global Data Sources (asynchronously)
-     * &lt;p&gt;Returns a list of global-level data sources, including details such as name, description, connection, and type.&lt;/p&gt;
-     * @param offset &lt;p&gt;Number of data sources to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of data sources to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of data sources returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get data sources.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesGetDatasourcesAsync(Integer offset, Integer limit, final ApiCallback<DatasourcesList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = globalDatasourcesGetDatasourcesValidateBeforeCall(offset, limit, _callback);
-        Type localVarReturnType = new TypeToken<DatasourcesList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for globalDatasourcesGetResults
-     * @param pageSize &lt;p&gt;Number of records to return. If not passed, all records are returned.&lt;/p&gt; (optional, default to -1)
-     * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Streaming information returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get streaming information.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesGetResultsCall(Integer pageSize, DatasourceQueryInfo body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/datasources/query";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (pageSize != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("pageSize", pageSize));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalDatasourcesGetResultsValidateBeforeCall(Integer pageSize, DatasourceQueryInfo body, final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = globalDatasourcesGetResultsCall(pageSize, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Stream Data Source Results
-     * &lt;p&gt;Returns column headers of the data source, and a link to fetch the streamed results in CSV (comma-separated) or TSV (tab-separated) formats.&lt;/p&gt;
-     * @param pageSize &lt;p&gt;Number of records to return. If not passed, all records are returned.&lt;/p&gt; (optional, default to -1)
-     * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
-     * @return ResultBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Streaming information returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get streaming information.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ResultBean globalDatasourcesGetResults(Integer pageSize, DatasourceQueryInfo body) throws ApiException {
-        ApiResponse<ResultBean> localVarResp = globalDatasourcesGetResultsWithHttpInfo(pageSize, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Stream Data Source Results
-     * &lt;p&gt;Returns column headers of the data source, and a link to fetch the streamed results in CSV (comma-separated) or TSV (tab-separated) formats.&lt;/p&gt;
-     * @param pageSize &lt;p&gt;Number of records to return. If not passed, all records are returned.&lt;/p&gt; (optional, default to -1)
-     * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;ResultBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Streaming information returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get streaming information.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ResultBean> globalDatasourcesGetResultsWithHttpInfo(Integer pageSize, DatasourceQueryInfo body) throws ApiException {
-        okhttp3.Call localVarCall = globalDatasourcesGetResultsValidateBeforeCall(pageSize, body, null);
-        Type localVarReturnType = new TypeToken<ResultBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Stream Data Source Results (asynchronously)
-     * &lt;p&gt;Returns column headers of the data source, and a link to fetch the streamed results in CSV (comma-separated) or TSV (tab-separated) formats.&lt;/p&gt;
-     * @param pageSize &lt;p&gt;Number of records to return. If not passed, all records are returned.&lt;/p&gt; (optional, default to -1)
-     * @param body &lt;p&gt;Query information.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Streaming information returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get streaming information.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesGetResultsAsync(Integer pageSize, DatasourceQueryInfo body, final ApiCallback<ResultBean> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = globalDatasourcesGetResultsValidateBeforeCall(pageSize, body, _callback);
-        Type localVarReturnType = new TypeToken<ResultBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for globalDatasourcesUpdateDatasource
-     * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Updated data source details.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update the data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesUpdateDatasourceCall(String datasouceName, Datasource body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/datasources/{datasouceName}"
-            .replaceAll("\\{" + "datasouceName" + "\\}", localVarApiClient.escapeString(datasouceName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call globalDatasourcesUpdateDatasourceValidateBeforeCall(String datasouceName, Datasource body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'datasouceName' is set
-        if (datasouceName == null) {
-            throw new ApiException("Missing the required parameter 'datasouceName' when calling globalDatasourcesUpdateDatasource(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = globalDatasourcesUpdateDatasourceCall(datasouceName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Update Global Data Source
-     * &lt;p&gt;Update the named global-level data source. If the update is successful, returns details about the updated data source. &lt;code&gt;type&lt;/code&gt; and &lt;code&gt;connection&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of the data source.&lt;/p&gt;
-     * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Updated data source details.&lt;/p&gt; (optional)
-     * @return Datasource
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update the data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Datasource globalDatasourcesUpdateDatasource(String datasouceName, Datasource body) throws ApiException {
-        ApiResponse<Datasource> localVarResp = globalDatasourcesUpdateDatasourceWithHttpInfo(datasouceName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Update Global Data Source
-     * &lt;p&gt;Update the named global-level data source. If the update is successful, returns details about the updated data source. &lt;code&gt;type&lt;/code&gt; and &lt;code&gt;connection&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of the data source.&lt;/p&gt;
-     * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Updated data source details.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;Datasource&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update the data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Datasource> globalDatasourcesUpdateDatasourceWithHttpInfo(String datasouceName, Datasource body) throws ApiException {
-        okhttp3.Call localVarCall = globalDatasourcesUpdateDatasourceValidateBeforeCall(datasouceName, body, null);
-        Type localVarReturnType = new TypeToken<Datasource>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Update Global Data Source (asynchronously)
-     * &lt;p&gt;Update the named global-level data source. If the update is successful, returns details about the updated data source. &lt;code&gt;type&lt;/code&gt; and &lt;code&gt;connection&lt;/code&gt; are required inputs for all types of data sources. Other required inputs differ based on the type of the data source.&lt;/p&gt;
-     * @param datasouceName &lt;p&gt;Data source name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Updated data source details.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Data source was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update the data source.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call globalDatasourcesUpdateDatasourceAsync(String datasouceName, Datasource body, final ApiCallback<Datasource> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = globalDatasourcesUpdateDatasourceValidateBeforeCall(datasouceName, body, _callback);
-        Type localVarReturnType = new TypeToken<Datasource>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

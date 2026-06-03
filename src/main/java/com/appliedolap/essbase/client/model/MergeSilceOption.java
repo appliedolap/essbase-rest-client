@@ -13,30 +13,37 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * MergeSilceOption
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  MergeSilceOption.JSON_PROPERTY_MERGE_OPTION
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class MergeSilceOption {
   /**
    * Gets or Sets mergeOption
    */
-  @JsonAdapter(MergeOptionEnum.Adapter.class)
   public enum MergeOptionEnum {
-    ALL("ALL"),
+    ALL(String.valueOf("ALL")),
     
-    INCREMENTAL("INCREMENTAL");
+    INCREMENTAL(String.valueOf("INCREMENTAL"));
 
     private String value;
 
@@ -44,6 +51,7 @@ public class MergeSilceOption {
       this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
       return value;
     }
@@ -53,6 +61,7 @@ public class MergeSilceOption {
       return String.valueOf(value);
     }
 
+    @JsonCreator
     public static MergeOptionEnum fromValue(String value) {
       for (MergeOptionEnum b : MergeOptionEnum.values()) {
         if (b.value.equals(value)) {
@@ -61,49 +70,42 @@ public class MergeSilceOption {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
-
-    public static class Adapter extends TypeAdapter<MergeOptionEnum> {
-      @Override
-      public void write(final JsonWriter jsonWriter, final MergeOptionEnum enumeration) throws IOException {
-        jsonWriter.value(enumeration.getValue());
-      }
-
-      @Override
-      public MergeOptionEnum read(final JsonReader jsonReader) throws IOException {
-        String value =  jsonReader.nextString();
-        return MergeOptionEnum.fromValue(value);
-      }
-    }
   }
 
-  public static final String SERIALIZED_NAME_MERGE_OPTION = "mergeOption";
-  @SerializedName(SERIALIZED_NAME_MERGE_OPTION)
+  public static final String JSON_PROPERTY_MERGE_OPTION = "mergeOption";
+  @jakarta.annotation.Nullable
   private MergeOptionEnum mergeOption;
 
+  public MergeSilceOption() { 
+  }
 
-  public MergeSilceOption mergeOption(MergeOptionEnum mergeOption) {
-    
+  public MergeSilceOption mergeOption(@jakarta.annotation.Nullable MergeOptionEnum mergeOption) {
     this.mergeOption = mergeOption;
     return this;
   }
 
-   /**
+  /**
    * Get mergeOption
    * @return mergeOption
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MERGE_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public MergeOptionEnum getMergeOption() {
     return mergeOption;
   }
 
 
-  public void setMergeOption(MergeOptionEnum mergeOption) {
+  @JsonProperty(JSON_PROPERTY_MERGE_OPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMergeOption(@jakarta.annotation.Nullable MergeOptionEnum mergeOption) {
     this.mergeOption = mergeOption;
   }
 
 
+  /**
+   * Return true if this MergeSilceOption object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -141,5 +143,44 @@ public class MergeSilceOption {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `mergeOption` to the URL query string
+    if (getMergeOption() != null) {
+      joiner.add(String.format("%smergeOption%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMergeOption()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

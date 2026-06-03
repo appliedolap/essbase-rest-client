@@ -13,185 +13,209 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * FileProperties
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  FileProperties.JSON_PROPERTY_DELIMITER,
+  FileProperties.JSON_PROPERTY_WIDTH,
+  FileProperties.JSON_PROPERTY_DATALOAD_RECORD_NUMBER,
+  FileProperties.JSON_PROPERTY_DIMENSION_BUILD_RECORD_NUMBER,
+  FileProperties.JSON_PROPERTY_HEADER_RECORD_NUMBER,
+  FileProperties.JSON_PROPERTY_LINE_SKIP_COUNT
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class FileProperties {
-  public static final String SERIALIZED_NAME_DELIMITER = "delimiter";
-  @SerializedName(SERIALIZED_NAME_DELIMITER)
+  public static final String JSON_PROPERTY_DELIMITER = "delimiter";
+  @jakarta.annotation.Nullable
   private String delimiter;
 
-  public static final String SERIALIZED_NAME_WIDTH = "width";
-  @SerializedName(SERIALIZED_NAME_WIDTH)
+  public static final String JSON_PROPERTY_WIDTH = "width";
+  @jakarta.annotation.Nullable
   private Integer width;
 
-  public static final String SERIALIZED_NAME_DATALOAD_RECORD_NUMBER = "dataloadRecordNumber";
-  @SerializedName(SERIALIZED_NAME_DATALOAD_RECORD_NUMBER)
+  public static final String JSON_PROPERTY_DATALOAD_RECORD_NUMBER = "dataloadRecordNumber";
+  @jakarta.annotation.Nullable
   private Integer dataloadRecordNumber;
 
-  public static final String SERIALIZED_NAME_DIMENSION_BUILD_RECORD_NUMBER = "dimensionBuildRecordNumber";
-  @SerializedName(SERIALIZED_NAME_DIMENSION_BUILD_RECORD_NUMBER)
+  public static final String JSON_PROPERTY_DIMENSION_BUILD_RECORD_NUMBER = "dimensionBuildRecordNumber";
+  @jakarta.annotation.Nullable
   private Integer dimensionBuildRecordNumber;
 
-  public static final String SERIALIZED_NAME_HEADER_RECORD_NUMBER = "headerRecordNumber";
-  @SerializedName(SERIALIZED_NAME_HEADER_RECORD_NUMBER)
+  public static final String JSON_PROPERTY_HEADER_RECORD_NUMBER = "headerRecordNumber";
+  @jakarta.annotation.Nullable
   private Integer headerRecordNumber;
 
-  public static final String SERIALIZED_NAME_LINE_SKIP_COUNT = "lineSkipCount";
-  @SerializedName(SERIALIZED_NAME_LINE_SKIP_COUNT)
+  public static final String JSON_PROPERTY_LINE_SKIP_COUNT = "lineSkipCount";
+  @jakarta.annotation.Nullable
   private Integer lineSkipCount;
 
+  public FileProperties() { 
+  }
 
-  public FileProperties delimiter(String delimiter) {
-    
+  public FileProperties delimiter(@jakarta.annotation.Nullable String delimiter) {
     this.delimiter = delimiter;
     return this;
   }
 
-   /**
+  /**
    * Get delimiter
    * @return delimiter
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DELIMITER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDelimiter() {
     return delimiter;
   }
 
 
-  public void setDelimiter(String delimiter) {
+  @JsonProperty(JSON_PROPERTY_DELIMITER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDelimiter(@jakarta.annotation.Nullable String delimiter) {
     this.delimiter = delimiter;
   }
 
 
-  public FileProperties width(Integer width) {
-    
+  public FileProperties width(@jakarta.annotation.Nullable Integer width) {
     this.width = width;
     return this;
   }
 
-   /**
+  /**
    * Get width
    * @return width
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_WIDTH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getWidth() {
     return width;
   }
 
 
-  public void setWidth(Integer width) {
+  @JsonProperty(JSON_PROPERTY_WIDTH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWidth(@jakarta.annotation.Nullable Integer width) {
     this.width = width;
   }
 
 
-  public FileProperties dataloadRecordNumber(Integer dataloadRecordNumber) {
-    
+  public FileProperties dataloadRecordNumber(@jakarta.annotation.Nullable Integer dataloadRecordNumber) {
     this.dataloadRecordNumber = dataloadRecordNumber;
     return this;
   }
 
-   /**
+  /**
    * Get dataloadRecordNumber
    * @return dataloadRecordNumber
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATALOAD_RECORD_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getDataloadRecordNumber() {
     return dataloadRecordNumber;
   }
 
 
-  public void setDataloadRecordNumber(Integer dataloadRecordNumber) {
+  @JsonProperty(JSON_PROPERTY_DATALOAD_RECORD_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDataloadRecordNumber(@jakarta.annotation.Nullable Integer dataloadRecordNumber) {
     this.dataloadRecordNumber = dataloadRecordNumber;
   }
 
 
-  public FileProperties dimensionBuildRecordNumber(Integer dimensionBuildRecordNumber) {
-    
+  public FileProperties dimensionBuildRecordNumber(@jakarta.annotation.Nullable Integer dimensionBuildRecordNumber) {
     this.dimensionBuildRecordNumber = dimensionBuildRecordNumber;
     return this;
   }
 
-   /**
+  /**
    * Get dimensionBuildRecordNumber
    * @return dimensionBuildRecordNumber
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DIMENSION_BUILD_RECORD_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getDimensionBuildRecordNumber() {
     return dimensionBuildRecordNumber;
   }
 
 
-  public void setDimensionBuildRecordNumber(Integer dimensionBuildRecordNumber) {
+  @JsonProperty(JSON_PROPERTY_DIMENSION_BUILD_RECORD_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDimensionBuildRecordNumber(@jakarta.annotation.Nullable Integer dimensionBuildRecordNumber) {
     this.dimensionBuildRecordNumber = dimensionBuildRecordNumber;
   }
 
 
-  public FileProperties headerRecordNumber(Integer headerRecordNumber) {
-    
+  public FileProperties headerRecordNumber(@jakarta.annotation.Nullable Integer headerRecordNumber) {
     this.headerRecordNumber = headerRecordNumber;
     return this;
   }
 
-   /**
+  /**
    * Get headerRecordNumber
    * @return headerRecordNumber
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HEADER_RECORD_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getHeaderRecordNumber() {
     return headerRecordNumber;
   }
 
 
-  public void setHeaderRecordNumber(Integer headerRecordNumber) {
+  @JsonProperty(JSON_PROPERTY_HEADER_RECORD_NUMBER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHeaderRecordNumber(@jakarta.annotation.Nullable Integer headerRecordNumber) {
     this.headerRecordNumber = headerRecordNumber;
   }
 
 
-  public FileProperties lineSkipCount(Integer lineSkipCount) {
-    
+  public FileProperties lineSkipCount(@jakarta.annotation.Nullable Integer lineSkipCount) {
     this.lineSkipCount = lineSkipCount;
     return this;
   }
 
-   /**
+  /**
    * Get lineSkipCount
    * @return lineSkipCount
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINE_SKIP_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Integer getLineSkipCount() {
     return lineSkipCount;
   }
 
 
-  public void setLineSkipCount(Integer lineSkipCount) {
+  @JsonProperty(JSON_PROPERTY_LINE_SKIP_COUNT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLineSkipCount(@jakarta.annotation.Nullable Integer lineSkipCount) {
     this.lineSkipCount = lineSkipCount;
   }
 
 
+  /**
+   * Return true if this FileProperties object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -239,5 +263,69 @@ public class FileProperties {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `delimiter` to the URL query string
+    if (getDelimiter() != null) {
+      joiner.add(String.format("%sdelimiter%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDelimiter()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `width` to the URL query string
+    if (getWidth() != null) {
+      joiner.add(String.format("%swidth%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getWidth()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dataloadRecordNumber` to the URL query string
+    if (getDataloadRecordNumber() != null) {
+      joiner.add(String.format("%sdataloadRecordNumber%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDataloadRecordNumber()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `dimensionBuildRecordNumber` to the URL query string
+    if (getDimensionBuildRecordNumber() != null) {
+      joiner.add(String.format("%sdimensionBuildRecordNumber%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDimensionBuildRecordNumber()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `headerRecordNumber` to the URL query string
+    if (getHeaderRecordNumber() != null) {
+      joiner.add(String.format("%sheaderRecordNumber%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getHeaderRecordNumber()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `lineSkipCount` to the URL query string
+    if (getLineSkipCount() != null) {
+      joiner.add(String.format("%slineSkipCount%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLineSkipCount()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

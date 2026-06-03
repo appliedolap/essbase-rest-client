@@ -10,1063 +10,782 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.Connection;
 import com.appliedolap.essbase.client.model.ConnectionsList;
 import com.appliedolap.essbase.client.model.WalletLocation;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ApplicationConnectionsApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public ApplicationConnectionsApi() {
-        this(Configuration.getDefaultApiClient());
+  public ApplicationConnectionsApi() {
+    this(new ApiClient());
+  }
+
+  public ApplicationConnectionsApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public ApplicationConnectionsApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Create Application Connection
+   * &lt;p&gt;Creates an application-level connection based on specified inputs. &lt;code&gt;name&lt;/code&gt; and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of connections. Other required inputs differ based on the type of the connection.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationConnectionsCreateConnection(String applicationName, Connection body) throws ApiException {
+    applicationConnectionsCreateConnectionWithHttpInfo(applicationName, body);
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for applicationConnectionsCreateConnection
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsCreateConnectionCall(String applicationName, Connection body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/connections"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Create Application Connection
+   * &lt;p&gt;Creates an application-level connection based on specified inputs. &lt;code&gt;name&lt;/code&gt; and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of connections. Other required inputs differ based on the type of the connection.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationConnectionsCreateConnectionWithHttpInfo(String applicationName, Connection body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationConnectionsCreateConnectionRequestBuilder(applicationName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationConnectionsCreateConnection", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationConnectionsCreateConnectionValidateBeforeCall(String applicationName, Connection body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationConnectionsCreateConnection(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling applicationConnectionsCreateConnection(Async)");
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationConnectionsCreateConnectionRequestBuilder(String applicationName, Connection body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationConnectionsCreateConnection");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling applicationConnectionsCreateConnection");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/connections"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Delete Application Connection
+   * &lt;p&gt;Delete a saved application connection by name.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationConnectionsDeleteConnection(String applicationName, String connectionName) throws ApiException {
+    applicationConnectionsDeleteConnectionWithHttpInfo(applicationName, connectionName);
+  }
+
+  /**
+   * Delete Application Connection
+   * &lt;p&gt;Delete a saved application connection by name.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationConnectionsDeleteConnectionWithHttpInfo(String applicationName, String connectionName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationConnectionsDeleteConnectionRequestBuilder(applicationName, connectionName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationConnectionsDeleteConnection", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = applicationConnectionsCreateConnectionCall(applicationName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Create Application Connection
-     * &lt;p&gt;Creates an application-level connection based on specified inputs. &lt;code&gt;name&lt;/code&gt; and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of connections. Other required inputs differ based on the type of the connection.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationConnectionsCreateConnection(String applicationName, Connection body) throws ApiException {
-        applicationConnectionsCreateConnectionWithHttpInfo(applicationName, body);
-    }
-
-    /**
-     * Create Application Connection
-     * &lt;p&gt;Creates an application-level connection based on specified inputs. &lt;code&gt;name&lt;/code&gt; and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of connections. Other required inputs differ based on the type of the connection.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationConnectionsCreateConnectionWithHttpInfo(String applicationName, Connection body) throws ApiException {
-        okhttp3.Call localVarCall = applicationConnectionsCreateConnectionValidateBeforeCall(applicationName, body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Create Application Connection (asynchronously)
-     * &lt;p&gt;Creates an application-level connection based on specified inputs. &lt;code&gt;name&lt;/code&gt; and &lt;code&gt;type&lt;/code&gt; are required inputs for all types of connections. Other required inputs differ based on the type of the connection.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to create connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsCreateConnectionAsync(String applicationName, Connection body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationConnectionsCreateConnectionValidateBeforeCall(applicationName, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationConnectionsDeleteConnection
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsDeleteConnectionCall(String applicationName, String connectionName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/connections/{connectionName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "connectionName" + "\\}", localVarApiClient.escapeString(connectionName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder applicationConnectionsDeleteConnectionRequestBuilder(String applicationName, String connectionName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationConnectionsDeleteConnection");
+    }
+    // verify the required parameter 'connectionName' is set
+    if (connectionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'connectionName' when calling applicationConnectionsDeleteConnection");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationConnectionsDeleteConnectionValidateBeforeCall(String applicationName, String connectionName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationConnectionsDeleteConnection(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/connections/{connectionName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{connectionName}", ApiClient.urlEncode(connectionName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Application Connection
+   * &lt;p&gt;Returns details about the specified application-level connection.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @param password &lt;p&gt;If set to true, the encrypted password is returned in the result.&lt;/p&gt; (optional)
+   * @return Connection
+   * @throws ApiException if fails to make API call
+   */
+  public Connection applicationConnectionsGetConnectionDetails(String applicationName, String connectionName, Boolean password) throws ApiException {
+    ApiResponse<Connection> localVarResponse = applicationConnectionsGetConnectionDetailsWithHttpInfo(applicationName, connectionName, password);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Application Connection
+   * &lt;p&gt;Returns details about the specified application-level connection.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @param password &lt;p&gt;If set to true, the encrypted password is returned in the result.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;Connection&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Connection> applicationConnectionsGetConnectionDetailsWithHttpInfo(String applicationName, String connectionName, Boolean password) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationConnectionsGetConnectionDetailsRequestBuilder(applicationName, connectionName, password);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationConnectionsGetConnectionDetails", localVarResponse);
         }
-        
-        // verify the required parameter 'connectionName' is set
-        if (connectionName == null) {
-            throw new ApiException("Missing the required parameter 'connectionName' when calling applicationConnectionsDeleteConnection(Async)");
+        return new ApiResponse<Connection>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Connection>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder applicationConnectionsGetConnectionDetailsRequestBuilder(String applicationName, String connectionName, Boolean password) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationConnectionsGetConnectionDetails");
+    }
+    // verify the required parameter 'connectionName' is set
+    if (connectionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'connectionName' when calling applicationConnectionsGetConnectionDetails");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/connections/{connectionName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{connectionName}", ApiClient.urlEncode(connectionName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "password";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("password", password));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * List Application Connections
+   * &lt;p&gt;Returns a list of connections for the application, including details such as name, description, and type.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param offset &lt;p&gt;Number of connections to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of connections to return. Default is 50.&lt;/p&gt; (optional, default to 50)
+   * @return ConnectionsList
+   * @throws ApiException if fails to make API call
+   */
+  public ConnectionsList applicationConnectionsGetConnections(String applicationName, Integer offset, Integer limit) throws ApiException {
+    ApiResponse<ConnectionsList> localVarResponse = applicationConnectionsGetConnectionsWithHttpInfo(applicationName, offset, limit);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * List Application Connections
+   * &lt;p&gt;Returns a list of connections for the application, including details such as name, description, and type.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param offset &lt;p&gt;Number of connections to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
+   * @param limit &lt;p&gt;Maximum number of connections to return. Default is 50.&lt;/p&gt; (optional, default to 50)
+   * @return ApiResponse&lt;ConnectionsList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ConnectionsList> applicationConnectionsGetConnectionsWithHttpInfo(String applicationName, Integer offset, Integer limit) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationConnectionsGetConnectionsRequestBuilder(applicationName, offset, limit);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationConnectionsGetConnections", localVarResponse);
         }
-        
+        return new ApiResponse<ConnectionsList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ConnectionsList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = applicationConnectionsDeleteConnectionCall(applicationName, connectionName, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder applicationConnectionsGetConnectionsRequestBuilder(String applicationName, Integer offset, Integer limit) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationConnectionsGetConnections");
     }
 
-    /**
-     * Delete Application Connection
-     * &lt;p&gt;Delete a saved application connection by name.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationConnectionsDeleteConnection(String applicationName, String connectionName) throws ApiException {
-        applicationConnectionsDeleteConnectionWithHttpInfo(applicationName, connectionName);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/connections"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "offset";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("offset", offset));
+    localVarQueryParameterBaseName = "limit";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("limit", limit));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Delete Application Connection
-     * &lt;p&gt;Delete a saved application connection by name.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationConnectionsDeleteConnectionWithHttpInfo(String applicationName, String connectionName) throws ApiException {
-        okhttp3.Call localVarCall = applicationConnectionsDeleteConnectionValidateBeforeCall(applicationName, connectionName, null);
-        return localVarApiClient.execute(localVarCall);
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Delete Application Connection (asynchronously)
-     * &lt;p&gt;Delete a saved application connection by name.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsDeleteConnectionAsync(String applicationName, String connectionName, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationConnectionsDeleteConnectionValidateBeforeCall(applicationName, connectionName, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for applicationConnectionsGetConnectionDetails
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param password &lt;p&gt;If set to true, the encrypted password is returned in the result.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get connection details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsGetConnectionDetailsCall(String applicationName, String connectionName, Boolean password, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/connections/{connectionName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "connectionName" + "\\}", localVarApiClient.escapeString(connectionName.toString()));
+  /**
+   * Test New Application Connection
+   * &lt;p&gt;Tests a new or updated application connection, using specified inputs, without saving it.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationConnectionsTestConnection(String applicationName, Connection body) throws ApiException {
+    applicationConnectionsTestConnectionWithHttpInfo(applicationName, body);
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (password != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("password", password));
+  /**
+   * Test New Application Connection
+   * &lt;p&gt;Tests a new or updated application connection, using specified inputs, without saving it.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationConnectionsTestConnectionWithHttpInfo(String applicationName, Connection body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationConnectionsTestConnectionRequestBuilder(applicationName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationConnectionsTestConnection", localVarResponse);
         }
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder applicationConnectionsTestConnectionRequestBuilder(String applicationName, Connection body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationConnectionsTestConnection");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling applicationConnectionsTestConnection");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationConnectionsGetConnectionDetailsValidateBeforeCall(String applicationName, String connectionName, Boolean password, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationConnectionsGetConnectionDetails(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/connections/actions/test"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Test Saved Application Connection
+   * &lt;p&gt;Tests the saved application-level connection with the specified name.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param connectionName &lt;p&gt;Saved connection name.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void applicationConnectionsTestConnectionExisting(String applicationName, String connectionName) throws ApiException {
+    applicationConnectionsTestConnectionExistingWithHttpInfo(applicationName, connectionName);
+  }
+
+  /**
+   * Test Saved Application Connection
+   * &lt;p&gt;Tests the saved application-level connection with the specified name.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param connectionName &lt;p&gt;Saved connection name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> applicationConnectionsTestConnectionExistingWithHttpInfo(String applicationName, String connectionName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationConnectionsTestConnectionExistingRequestBuilder(applicationName, connectionName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationConnectionsTestConnectionExisting", localVarResponse);
         }
-        
-        // verify the required parameter 'connectionName' is set
-        if (connectionName == null) {
-            throw new ApiException("Missing the required parameter 'connectionName' when calling applicationConnectionsGetConnectionDetails(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = applicationConnectionsGetConnectionDetailsCall(applicationName, connectionName, password, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder applicationConnectionsTestConnectionExistingRequestBuilder(String applicationName, String connectionName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationConnectionsTestConnectionExisting");
+    }
+    // verify the required parameter 'connectionName' is set
+    if (connectionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'connectionName' when calling applicationConnectionsTestConnectionExisting");
     }
 
-    /**
-     * Get Application Connection
-     * &lt;p&gt;Returns details about the specified application-level connection.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param password &lt;p&gt;If set to true, the encrypted password is returned in the result.&lt;/p&gt; (optional)
-     * @return Connection
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get connection details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Connection applicationConnectionsGetConnectionDetails(String applicationName, String connectionName, Boolean password) throws ApiException {
-        ApiResponse<Connection> localVarResp = applicationConnectionsGetConnectionDetailsWithHttpInfo(applicationName, connectionName, password);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/connections/{connectionName}/actions/test"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{connectionName}", ApiClient.urlEncode(connectionName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Application Connection
-     * &lt;p&gt;Returns details about the specified application-level connection.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param password &lt;p&gt;If set to true, the encrypted password is returned in the result.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;Connection&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get connection details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Connection> applicationConnectionsGetConnectionDetailsWithHttpInfo(String applicationName, String connectionName, Boolean password) throws ApiException {
-        okhttp3.Call localVarCall = applicationConnectionsGetConnectionDetailsValidateBeforeCall(applicationName, connectionName, password, null);
-        Type localVarReturnType = new TypeToken<Connection>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Get Application Connection (asynchronously)
-     * &lt;p&gt;Returns details about the specified application-level connection.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param password &lt;p&gt;If set to true, the encrypted password is returned in the result.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection details returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to get connection details.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsGetConnectionDetailsAsync(String applicationName, String connectionName, Boolean password, final ApiCallback<Connection> _callback) throws ApiException {
+  /**
+   * Update Application Connection
+   * &lt;p&gt;Update the named application connection. If successful, returns details of the updated connection. &lt;code&gt;type&lt;/code&gt; is a required input for all connections. Other required inputs differ, depending on the type of the connection.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
+   * @return Connection
+   * @throws ApiException if fails to make API call
+   */
+  public Connection applicationConnectionsUpdateConnection(String applicationName, String connectionName, Connection body) throws ApiException {
+    ApiResponse<Connection> localVarResponse = applicationConnectionsUpdateConnectionWithHttpInfo(applicationName, connectionName, body);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = applicationConnectionsGetConnectionDetailsValidateBeforeCall(applicationName, connectionName, password, _callback);
-        Type localVarReturnType = new TypeToken<Connection>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationConnectionsGetConnections
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of connections to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of connections to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of connections returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to list connections.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsGetConnectionsCall(String applicationName, Integer offset, Integer limit, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/connections"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (offset != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("offset", offset));
+  /**
+   * Update Application Connection
+   * &lt;p&gt;Update the named application connection. If successful, returns details of the updated connection. &lt;code&gt;type&lt;/code&gt; is a required input for all connections. Other required inputs differ, depending on the type of the connection.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Connection&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Connection> applicationConnectionsUpdateConnectionWithHttpInfo(String applicationName, String connectionName, Connection body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationConnectionsUpdateConnectionRequestBuilder(applicationName, connectionName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationConnectionsUpdateConnection", localVarResponse);
         }
+        return new ApiResponse<Connection>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Connection>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        if (limit != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+  private HttpRequest.Builder applicationConnectionsUpdateConnectionRequestBuilder(String applicationName, String connectionName, Connection body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationConnectionsUpdateConnection");
+    }
+    // verify the required parameter 'connectionName' is set
+    if (connectionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'connectionName' when calling applicationConnectionsUpdateConnection");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling applicationConnectionsUpdateConnection");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/connections/{connectionName}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{connectionName}", ApiClient.urlEncode(connectionName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Upload a connection wallet file
+   * Upload a connection wallet file.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @return WalletLocation
+   * @throws ApiException if fails to make API call
+   */
+  public WalletLocation applicationConnectionsWallets(String applicationName, String connectionName) throws ApiException {
+    ApiResponse<WalletLocation> localVarResponse = applicationConnectionsWalletsWithHttpInfo(applicationName, connectionName);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Upload a connection wallet file
+   * Upload a connection wallet file.
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;WalletLocation&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<WalletLocation> applicationConnectionsWalletsWithHttpInfo(String applicationName, String connectionName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = applicationConnectionsWalletsRequestBuilder(applicationName, connectionName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("applicationConnectionsWallets", localVarResponse);
         }
+        return new ApiResponse<WalletLocation>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<WalletLocation>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder applicationConnectionsWalletsRequestBuilder(String applicationName, String connectionName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling applicationConnectionsWallets");
+    }
+    // verify the required parameter 'connectionName' is set
+    if (connectionName == null) {
+      throw new ApiException(400, "Missing the required parameter 'connectionName' when calling applicationConnectionsWallets");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationConnectionsGetConnectionsValidateBeforeCall(String applicationName, Integer offset, Integer limit, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationConnectionsGetConnections(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = applicationConnectionsGetConnectionsCall(applicationName, offset, limit, _callback);
-        return localVarCall;
+    String localVarPath = "/applications/{applicationName}/connections/{connectionName}/wallet"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{connectionName}", ApiClient.urlEncode(connectionName.toString()));
 
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * List Application Connections
-     * &lt;p&gt;Returns a list of connections for the application, including details such as name, description, and type.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of connections to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of connections to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @return ConnectionsList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of connections returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to list connections.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ConnectionsList applicationConnectionsGetConnections(String applicationName, Integer offset, Integer limit) throws ApiException {
-        ApiResponse<ConnectionsList> localVarResp = applicationConnectionsGetConnectionsWithHttpInfo(applicationName, offset, limit);
-        return localVarResp.getData();
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * List Application Connections
-     * &lt;p&gt;Returns a list of connections for the application, including details such as name, description, and type.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of connections to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of connections to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @return ApiResponse&lt;ConnectionsList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of connections returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to list connections.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ConnectionsList> applicationConnectionsGetConnectionsWithHttpInfo(String applicationName, Integer offset, Integer limit) throws ApiException {
-        okhttp3.Call localVarCall = applicationConnectionsGetConnectionsValidateBeforeCall(applicationName, offset, limit, null);
-        Type localVarReturnType = new TypeToken<ConnectionsList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List Application Connections (asynchronously)
-     * &lt;p&gt;Returns a list of connections for the application, including details such as name, description, and type.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param offset &lt;p&gt;Number of connections to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
-     * @param limit &lt;p&gt;Maximum number of connections to return. Default is 50.&lt;/p&gt; (optional, default to 50)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;List of connections returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to list connections.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsGetConnectionsAsync(String applicationName, Integer offset, Integer limit, final ApiCallback<ConnectionsList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationConnectionsGetConnectionsValidateBeforeCall(applicationName, offset, limit, _callback);
-        Type localVarReturnType = new TypeToken<ConnectionsList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationConnectionsTestConnection
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsTestConnectionCall(String applicationName, Connection body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/connections/actions/test"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationConnectionsTestConnectionValidateBeforeCall(String applicationName, Connection body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationConnectionsTestConnection(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling applicationConnectionsTestConnection(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationConnectionsTestConnectionCall(applicationName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Test New Application Connection
-     * &lt;p&gt;Tests a new or updated application connection, using specified inputs, without saving it.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationConnectionsTestConnection(String applicationName, Connection body) throws ApiException {
-        applicationConnectionsTestConnectionWithHttpInfo(applicationName, body);
-    }
-
-    /**
-     * Test New Application Connection
-     * &lt;p&gt;Tests a new or updated application connection, using specified inputs, without saving it.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationConnectionsTestConnectionWithHttpInfo(String applicationName, Connection body) throws ApiException {
-        okhttp3.Call localVarCall = applicationConnectionsTestConnectionValidateBeforeCall(applicationName, body, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Test New Application Connection (asynchronously)
-     * &lt;p&gt;Tests a new or updated application connection, using specified inputs, without saving it.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsTestConnectionAsync(String applicationName, Connection body, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationConnectionsTestConnectionValidateBeforeCall(applicationName, body, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationConnectionsTestConnectionExisting
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Saved connection name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsTestConnectionExistingCall(String applicationName, String connectionName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/connections/{connectionName}/actions/test"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "connectionName" + "\\}", localVarApiClient.escapeString(connectionName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationConnectionsTestConnectionExistingValidateBeforeCall(String applicationName, String connectionName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationConnectionsTestConnectionExisting(Async)");
-        }
-        
-        // verify the required parameter 'connectionName' is set
-        if (connectionName == null) {
-            throw new ApiException("Missing the required parameter 'connectionName' when calling applicationConnectionsTestConnectionExisting(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationConnectionsTestConnectionExistingCall(applicationName, connectionName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Test Saved Application Connection
-     * &lt;p&gt;Tests the saved application-level connection with the specified name.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Saved connection name.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void applicationConnectionsTestConnectionExisting(String applicationName, String connectionName) throws ApiException {
-        applicationConnectionsTestConnectionExistingWithHttpInfo(applicationName, connectionName);
-    }
-
-    /**
-     * Test Saved Application Connection
-     * &lt;p&gt;Tests the saved application-level connection with the specified name.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Saved connection name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> applicationConnectionsTestConnectionExistingWithHttpInfo(String applicationName, String connectionName) throws ApiException {
-        okhttp3.Call localVarCall = applicationConnectionsTestConnectionExistingValidateBeforeCall(applicationName, connectionName, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Test Saved Application Connection (asynchronously)
-     * &lt;p&gt;Tests the saved application-level connection with the specified name.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Saved connection name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The connection tested successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Error occurred while testing connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsTestConnectionExistingAsync(String applicationName, String connectionName, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationConnectionsTestConnectionExistingValidateBeforeCall(applicationName, connectionName, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationConnectionsUpdateConnection
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsUpdateConnectionCall(String applicationName, String connectionName, Connection body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/connections/{connectionName}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "connectionName" + "\\}", localVarApiClient.escapeString(connectionName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationConnectionsUpdateConnectionValidateBeforeCall(String applicationName, String connectionName, Connection body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationConnectionsUpdateConnection(Async)");
-        }
-        
-        // verify the required parameter 'connectionName' is set
-        if (connectionName == null) {
-            throw new ApiException("Missing the required parameter 'connectionName' when calling applicationConnectionsUpdateConnection(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling applicationConnectionsUpdateConnection(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationConnectionsUpdateConnectionCall(applicationName, connectionName, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Update Application Connection
-     * &lt;p&gt;Update the named application connection. If successful, returns details of the updated connection. &lt;code&gt;type&lt;/code&gt; is a required input for all connections. Other required inputs differ, depending on the type of the connection.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @return Connection
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public Connection applicationConnectionsUpdateConnection(String applicationName, String connectionName, Connection body) throws ApiException {
-        ApiResponse<Connection> localVarResp = applicationConnectionsUpdateConnectionWithHttpInfo(applicationName, connectionName, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Update Application Connection
-     * &lt;p&gt;Update the named application connection. If successful, returns details of the updated connection. &lt;code&gt;type&lt;/code&gt; is a required input for all connections. Other required inputs differ, depending on the type of the connection.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Connection&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Connection> applicationConnectionsUpdateConnectionWithHttpInfo(String applicationName, String connectionName, Connection body) throws ApiException {
-        okhttp3.Call localVarCall = applicationConnectionsUpdateConnectionValidateBeforeCall(applicationName, connectionName, body, null);
-        Type localVarReturnType = new TypeToken<Connection>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Update Application Connection (asynchronously)
-     * &lt;p&gt;Update the named application connection. If successful, returns details of the updated connection. &lt;code&gt;type&lt;/code&gt; is a required input for all connections. Other required inputs differ, depending on the type of the connection.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Connection details.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Connection updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to update connection.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsUpdateConnectionAsync(String applicationName, String connectionName, Connection body, final ApiCallback<Connection> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationConnectionsUpdateConnectionValidateBeforeCall(applicationName, connectionName, body, _callback);
-        Type localVarReturnType = new TypeToken<Connection>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for applicationConnectionsWallets
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Return the wallet file location in catalog.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Unable to process wallet file.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsWalletsCall(String applicationName, String connectionName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/connections/{connectionName}/wallet"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "connectionName" + "\\}", localVarApiClient.escapeString(connectionName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call applicationConnectionsWalletsValidateBeforeCall(String applicationName, String connectionName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling applicationConnectionsWallets(Async)");
-        }
-        
-        // verify the required parameter 'connectionName' is set
-        if (connectionName == null) {
-            throw new ApiException("Missing the required parameter 'connectionName' when calling applicationConnectionsWallets(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = applicationConnectionsWalletsCall(applicationName, connectionName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Upload a connection wallet file
-     * Upload a connection wallet file.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @return WalletLocation
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Return the wallet file location in catalog.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Unable to process wallet file.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public WalletLocation applicationConnectionsWallets(String applicationName, String connectionName) throws ApiException {
-        ApiResponse<WalletLocation> localVarResp = applicationConnectionsWalletsWithHttpInfo(applicationName, connectionName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Upload a connection wallet file
-     * Upload a connection wallet file.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;WalletLocation&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Return the wallet file location in catalog.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Unable to process wallet file.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<WalletLocation> applicationConnectionsWalletsWithHttpInfo(String applicationName, String connectionName) throws ApiException {
-        okhttp3.Call localVarCall = applicationConnectionsWalletsValidateBeforeCall(applicationName, connectionName, null);
-        Type localVarReturnType = new TypeToken<WalletLocation>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Upload a connection wallet file (asynchronously)
-     * Upload a connection wallet file.
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param connectionName &lt;p&gt;Connection name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Return the wallet file location in catalog.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Unable to process wallet file.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call applicationConnectionsWalletsAsync(String applicationName, String connectionName, final ApiCallback<WalletLocation> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = applicationConnectionsWalletsValidateBeforeCall(applicationName, connectionName, _callback);
-        Type localVarReturnType = new TypeToken<WalletLocation>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

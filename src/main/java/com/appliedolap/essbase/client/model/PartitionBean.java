@@ -13,350 +13,384 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.AreaBean;
 import com.appliedolap.essbase.client.model.ConnectionInfoBean;
 import com.appliedolap.essbase.client.model.Link;
 import com.appliedolap.essbase.client.model.MemberMappingBean;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * PartitionBean
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  PartitionBean.JSON_PROPERTY_ID,
+  PartitionBean.JSON_PROPERTY_TYPE,
+  PartitionBean.JSON_PROPERTY_UPDATABLE,
+  PartitionBean.JSON_PROPERTY_IS_NEW,
+  PartitionBean.JSON_PROPERTY_LOCKED,
+  PartitionBean.JSON_PROPERTY_SOURCE_INFO,
+  PartitionBean.JSON_PROPERTY_TARGET_INFO,
+  PartitionBean.JSON_PROPERTY_AREAS,
+  PartitionBean.JSON_PROPERTY_MAPPINGS,
+  PartitionBean.JSON_PROPERTY_ERROR_MESSAGE,
+  PartitionBean.JSON_PROPERTY_LINKS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class PartitionBean {
-  public static final String SERIALIZED_NAME_ID = "id";
-  @SerializedName(SERIALIZED_NAME_ID)
+  public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nullable
   private String id;
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
+  public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nullable
   private String type;
 
-  public static final String SERIALIZED_NAME_UPDATABLE = "updatable";
-  @SerializedName(SERIALIZED_NAME_UPDATABLE)
+  public static final String JSON_PROPERTY_UPDATABLE = "updatable";
+  @jakarta.annotation.Nullable
   private Boolean updatable;
 
-  public static final String SERIALIZED_NAME_IS_NEW = "isNew";
-  @SerializedName(SERIALIZED_NAME_IS_NEW)
+  public static final String JSON_PROPERTY_IS_NEW = "isNew";
+  @jakarta.annotation.Nullable
   private Boolean isNew;
 
-  public static final String SERIALIZED_NAME_LOCKED = "locked";
-  @SerializedName(SERIALIZED_NAME_LOCKED)
+  public static final String JSON_PROPERTY_LOCKED = "locked";
+  @jakarta.annotation.Nullable
   private Boolean locked;
 
-  public static final String SERIALIZED_NAME_SOURCE_INFO = "sourceInfo";
-  @SerializedName(SERIALIZED_NAME_SOURCE_INFO)
+  public static final String JSON_PROPERTY_SOURCE_INFO = "sourceInfo";
+  @jakarta.annotation.Nullable
   private ConnectionInfoBean sourceInfo;
 
-  public static final String SERIALIZED_NAME_TARGET_INFO = "targetInfo";
-  @SerializedName(SERIALIZED_NAME_TARGET_INFO)
+  public static final String JSON_PROPERTY_TARGET_INFO = "targetInfo";
+  @jakarta.annotation.Nullable
   private ConnectionInfoBean targetInfo;
 
-  public static final String SERIALIZED_NAME_AREAS = "areas";
-  @SerializedName(SERIALIZED_NAME_AREAS)
-  private List<AreaBean> areas = null;
+  public static final String JSON_PROPERTY_AREAS = "areas";
+  @jakarta.annotation.Nullable
+  private List<AreaBean> areas = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_MAPPINGS = "mappings";
-  @SerializedName(SERIALIZED_NAME_MAPPINGS)
-  private List<MemberMappingBean> mappings = null;
+  public static final String JSON_PROPERTY_MAPPINGS = "mappings";
+  @jakarta.annotation.Nullable
+  private List<MemberMappingBean> mappings = new ArrayList<>();
 
-  public static final String SERIALIZED_NAME_ERROR_MESSAGE = "errorMessage";
-  @SerializedName(SERIALIZED_NAME_ERROR_MESSAGE)
+  public static final String JSON_PROPERTY_ERROR_MESSAGE = "errorMessage";
+  @jakarta.annotation.Nullable
   private String errorMessage;
 
-  public static final String SERIALIZED_NAME_LINKS = "links";
-  @SerializedName(SERIALIZED_NAME_LINKS)
-  private List<Link> links = null;
+  public static final String JSON_PROPERTY_LINKS = "links";
+  @jakarta.annotation.Nullable
+  private List<Link> links = new ArrayList<>();
 
+  public PartitionBean() { 
+  }
 
-  public PartitionBean id(String id) {
-    
+  public PartitionBean id(@jakarta.annotation.Nullable String id) {
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getId() {
     return id;
   }
 
 
-  public void setId(String id) {
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setId(@jakarta.annotation.Nullable String id) {
     this.id = id;
   }
 
 
-  public PartitionBean type(String type) {
-    
+  public PartitionBean type(@jakarta.annotation.Nullable String type) {
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getType() {
     return type;
   }
 
 
-  public void setType(String type) {
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setType(@jakarta.annotation.Nullable String type) {
     this.type = type;
   }
 
 
-  public PartitionBean updatable(Boolean updatable) {
-    
+  public PartitionBean updatable(@jakarta.annotation.Nullable Boolean updatable) {
     this.updatable = updatable;
     return this;
   }
 
-   /**
+  /**
    * Get updatable
    * @return updatable
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UPDATABLE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getUpdatable() {
     return updatable;
   }
 
 
-  public void setUpdatable(Boolean updatable) {
+  @JsonProperty(JSON_PROPERTY_UPDATABLE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUpdatable(@jakarta.annotation.Nullable Boolean updatable) {
     this.updatable = updatable;
   }
 
 
-  public PartitionBean isNew(Boolean isNew) {
-    
+  public PartitionBean isNew(@jakarta.annotation.Nullable Boolean isNew) {
     this.isNew = isNew;
     return this;
   }
 
-   /**
+  /**
    * Get isNew
    * @return isNew
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_IS_NEW)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getIsNew() {
     return isNew;
   }
 
 
-  public void setIsNew(Boolean isNew) {
+  @JsonProperty(JSON_PROPERTY_IS_NEW)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIsNew(@jakarta.annotation.Nullable Boolean isNew) {
     this.isNew = isNew;
   }
 
 
-  public PartitionBean locked(Boolean locked) {
-    
+  public PartitionBean locked(@jakarta.annotation.Nullable Boolean locked) {
     this.locked = locked;
     return this;
   }
 
-   /**
+  /**
    * Get locked
    * @return locked
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LOCKED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getLocked() {
     return locked;
   }
 
 
-  public void setLocked(Boolean locked) {
+  @JsonProperty(JSON_PROPERTY_LOCKED)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLocked(@jakarta.annotation.Nullable Boolean locked) {
     this.locked = locked;
   }
 
 
-  public PartitionBean sourceInfo(ConnectionInfoBean sourceInfo) {
-    
+  public PartitionBean sourceInfo(@jakarta.annotation.Nullable ConnectionInfoBean sourceInfo) {
     this.sourceInfo = sourceInfo;
     return this;
   }
 
-   /**
+  /**
    * Get sourceInfo
    * @return sourceInfo
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SOURCE_INFO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public ConnectionInfoBean getSourceInfo() {
     return sourceInfo;
   }
 
 
-  public void setSourceInfo(ConnectionInfoBean sourceInfo) {
+  @JsonProperty(JSON_PROPERTY_SOURCE_INFO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSourceInfo(@jakarta.annotation.Nullable ConnectionInfoBean sourceInfo) {
     this.sourceInfo = sourceInfo;
   }
 
 
-  public PartitionBean targetInfo(ConnectionInfoBean targetInfo) {
-    
+  public PartitionBean targetInfo(@jakarta.annotation.Nullable ConnectionInfoBean targetInfo) {
     this.targetInfo = targetInfo;
     return this;
   }
 
-   /**
+  /**
    * Get targetInfo
    * @return targetInfo
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TARGET_INFO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public ConnectionInfoBean getTargetInfo() {
     return targetInfo;
   }
 
 
-  public void setTargetInfo(ConnectionInfoBean targetInfo) {
+  @JsonProperty(JSON_PROPERTY_TARGET_INFO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTargetInfo(@jakarta.annotation.Nullable ConnectionInfoBean targetInfo) {
     this.targetInfo = targetInfo;
   }
 
 
-  public PartitionBean areas(List<AreaBean> areas) {
-    
+  public PartitionBean areas(@jakarta.annotation.Nullable List<AreaBean> areas) {
     this.areas = areas;
     return this;
   }
 
   public PartitionBean addAreasItem(AreaBean areasItem) {
     if (this.areas == null) {
-      this.areas = new ArrayList<AreaBean>();
+      this.areas = new ArrayList<>();
     }
     this.areas.add(areasItem);
     return this;
   }
 
-   /**
+  /**
    * Get areas
    * @return areas
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_AREAS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<AreaBean> getAreas() {
     return areas;
   }
 
 
-  public void setAreas(List<AreaBean> areas) {
+  @JsonProperty(JSON_PROPERTY_AREAS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAreas(@jakarta.annotation.Nullable List<AreaBean> areas) {
     this.areas = areas;
   }
 
 
-  public PartitionBean mappings(List<MemberMappingBean> mappings) {
-    
+  public PartitionBean mappings(@jakarta.annotation.Nullable List<MemberMappingBean> mappings) {
     this.mappings = mappings;
     return this;
   }
 
   public PartitionBean addMappingsItem(MemberMappingBean mappingsItem) {
     if (this.mappings == null) {
-      this.mappings = new ArrayList<MemberMappingBean>();
+      this.mappings = new ArrayList<>();
     }
     this.mappings.add(mappingsItem);
     return this;
   }
 
-   /**
+  /**
    * Get mappings
    * @return mappings
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MAPPINGS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<MemberMappingBean> getMappings() {
     return mappings;
   }
 
 
-  public void setMappings(List<MemberMappingBean> mappings) {
+  @JsonProperty(JSON_PROPERTY_MAPPINGS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMappings(@jakarta.annotation.Nullable List<MemberMappingBean> mappings) {
     this.mappings = mappings;
   }
 
 
-  public PartitionBean errorMessage(String errorMessage) {
-    
+  public PartitionBean errorMessage(@jakarta.annotation.Nullable String errorMessage) {
     this.errorMessage = errorMessage;
     return this;
   }
 
-   /**
+  /**
    * Get errorMessage
    * @return errorMessage
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ERROR_MESSAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getErrorMessage() {
     return errorMessage;
   }
 
 
-  public void setErrorMessage(String errorMessage) {
+  @JsonProperty(JSON_PROPERTY_ERROR_MESSAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setErrorMessage(@jakarta.annotation.Nullable String errorMessage) {
     this.errorMessage = errorMessage;
   }
 
 
-  public PartitionBean links(List<Link> links) {
-    
+  public PartitionBean links(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
     return this;
   }
 
   public PartitionBean addLinksItem(Link linksItem) {
     if (this.links == null) {
-      this.links = new ArrayList<Link>();
+      this.links = new ArrayList<>();
     }
     this.links.add(linksItem);
     return this;
   }
 
-   /**
+  /**
    * Get links
    * @return links
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<Link> getLinks() {
     return links;
   }
 
 
-  public void setLinks(List<Link> links) {
+  @JsonProperty(JSON_PROPERTY_LINKS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable List<Link> links) {
     this.links = links;
   }
 
 
+  /**
+   * Return true if this PartitionBean object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -414,5 +448,109 @@ public class PartitionBean {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `id` to the URL query string
+    if (getId() != null) {
+      joiner.add(String.format("%sid%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getId()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `type` to the URL query string
+    if (getType() != null) {
+      joiner.add(String.format("%stype%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getType()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `updatable` to the URL query string
+    if (getUpdatable() != null) {
+      joiner.add(String.format("%supdatable%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUpdatable()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `isNew` to the URL query string
+    if (getIsNew() != null) {
+      joiner.add(String.format("%sisNew%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getIsNew()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `locked` to the URL query string
+    if (getLocked() != null) {
+      joiner.add(String.format("%slocked%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getLocked()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `sourceInfo` to the URL query string
+    if (getSourceInfo() != null) {
+      joiner.add(getSourceInfo().toUrlQueryString(prefix + "sourceInfo" + suffix));
+    }
+
+    // add `targetInfo` to the URL query string
+    if (getTargetInfo() != null) {
+      joiner.add(getTargetInfo().toUrlQueryString(prefix + "targetInfo" + suffix));
+    }
+
+    // add `areas` to the URL query string
+    if (getAreas() != null) {
+      for (int i = 0; i < getAreas().size(); i++) {
+        if (getAreas().get(i) != null) {
+          joiner.add(getAreas().get(i).toUrlQueryString(String.format("%sareas%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `mappings` to the URL query string
+    if (getMappings() != null) {
+      for (int i = 0; i < getMappings().size(); i++) {
+        if (getMappings().get(i) != null) {
+          joiner.add(getMappings().get(i).toUrlQueryString(String.format("%smappings%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    // add `errorMessage` to the URL query string
+    if (getErrorMessage() != null) {
+      joiner.add(String.format("%serrorMessage%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getErrorMessage()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `links` to the URL query string
+    if (getLinks() != null) {
+      for (int i = 0; i < getLinks().size(); i++) {
+        if (getLinks().get(i) != null) {
+          joiner.add(getLinks().get(i).toUrlQueryString(String.format("%slinks%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

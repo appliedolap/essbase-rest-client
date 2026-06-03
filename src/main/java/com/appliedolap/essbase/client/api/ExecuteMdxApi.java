@@ -10,338 +10,284 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.MDXInput;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ExecuteMdxApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public ExecuteMdxApi() {
-        this(Configuration.getDefaultApiClient());
+  public ExecuteMdxApi() {
+    this(new ApiClient());
+  }
+
+  public ExecuteMdxApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public ExecuteMdxApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Gets the mdx response in various formats.
+   * Gets the mdx response in various formats like JSON,HTML,EXCEL and CSV
+   * @param application Application Name (required)
+   * @param database Cube Name (required)
+   * @param format Result Format (optional, default to JSON)
+   * @param body Query and Preferences (optional)
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object mDXExecuteMDX(String application, String database, String format, MDXInput body) throws ApiException {
+    ApiResponse<Object> localVarResponse = mDXExecuteMDXWithHttpInfo(application, database, format, body);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for mDXExecuteMDX
-     * @param application Application Name (required)
-     * @param database Cube Name (required)
-     * @param format Result Format (optional, default to JSON)
-     * @param body Query and Preferences (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Mostly OK. As this is streaming api, it may fail with 200 as well. Check for errorMessage tag in the response for any errros </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Bad Request. Failed to get the data in required format. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal Server Error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call mDXExecuteMDXCall(String application, String database, String format, MDXInput body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{application}/databases/{database}/mdx"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "database" + "\\}", localVarApiClient.escapeString(database.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (format != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("format", format));
+  /**
+   * Gets the mdx response in various formats.
+   * Gets the mdx response in various formats like JSON,HTML,EXCEL and CSV
+   * @param application Application Name (required)
+   * @param database Cube Name (required)
+   * @param format Result Format (optional, default to JSON)
+   * @param body Query and Preferences (optional)
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> mDXExecuteMDXWithHttpInfo(String application, String database, String format, MDXInput body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = mDXExecuteMDXRequestBuilder(application, database, format, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("mDXExecuteMDX", localVarResponse);
         }
+        return new ApiResponse<Object>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Object>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarAccepts = {
-            "application/octet-stream", "text/html"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  private HttpRequest.Builder mDXExecuteMDXRequestBuilder(String application, String database, String format, MDXInput body) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling mDXExecuteMDX");
+    }
+    // verify the required parameter 'database' is set
+    if (database == null) {
+      throw new ApiException(400, "Missing the required parameter 'database' when calling mDXExecuteMDX");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{application}/databases/{database}/mdx"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{database}", ApiClient.urlEncode(database.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "format";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("format", format));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+    }
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/octet-stream, text/html");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Gets the named mdx result in various formats.
+   * GGets the named mdx result in various formats. like JSON,HTML,EXCEL and CSV
+   * @param application Application Name (required)
+   * @param database Cube Name (required)
+   * @param name Name (required)
+   * @param format Result Format (optional, default to JSON)
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object mDXExecutenq(String application, String database, String name, String format) throws ApiException {
+    ApiResponse<Object> localVarResponse = mDXExecutenqWithHttpInfo(application, database, name, format);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Gets the named mdx result in various formats.
+   * GGets the named mdx result in various formats. like JSON,HTML,EXCEL and CSV
+   * @param application Application Name (required)
+   * @param database Cube Name (required)
+   * @param name Name (required)
+   * @param format Result Format (optional, default to JSON)
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> mDXExecutenqWithHttpInfo(String application, String database, String name, String format) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = mDXExecutenqRequestBuilder(application, database, name, format);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("mDXExecutenq", localVarResponse);
         }
+        return new ApiResponse<Object>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Object>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder mDXExecutenqRequestBuilder(String application, String database, String name, String format) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling mDXExecutenq");
+    }
+    // verify the required parameter 'database' is set
+    if (database == null) {
+      throw new ApiException(400, "Missing the required parameter 'database' when calling mDXExecutenq");
+    }
+    // verify the required parameter 'name' is set
+    if (name == null) {
+      throw new ApiException(400, "Missing the required parameter 'name' when calling mDXExecutenq");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call mDXExecuteMDXValidateBeforeCall(String application, String database, String format, MDXInput body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling mDXExecuteMDX(Async)");
-        }
-        
-        // verify the required parameter 'database' is set
-        if (database == null) {
-            throw new ApiException("Missing the required parameter 'database' when calling mDXExecuteMDX(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = mDXExecuteMDXCall(application, database, format, body, _callback);
-        return localVarCall;
+    String localVarPath = "/applications/{application}/databases/{database}/mdx/{name}"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{database}", ApiClient.urlEncode(database.toString()))
+        .replace("{name}", ApiClient.urlEncode(name.toString()));
 
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "format";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("format", format));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Gets the mdx response in various formats.
-     * Gets the mdx response in various formats like JSON,HTML,EXCEL and CSV
-     * @param application Application Name (required)
-     * @param database Cube Name (required)
-     * @param format Result Format (optional, default to JSON)
-     * @param body Query and Preferences (optional)
-     * @return Object
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Mostly OK. As this is streaming api, it may fail with 200 as well. Check for errorMessage tag in the response for any errros </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Bad Request. Failed to get the data in required format. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal Server Error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public Object mDXExecuteMDX(String application, String database, String format, MDXInput body) throws ApiException {
-        ApiResponse<Object> localVarResp = mDXExecuteMDXWithHttpInfo(application, database, format, body);
-        return localVarResp.getData();
+    localVarRequestBuilder.header("Accept", "application/octet-stream");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Gets the mdx response in various formats.
-     * Gets the mdx response in various formats like JSON,HTML,EXCEL and CSV
-     * @param application Application Name (required)
-     * @param database Cube Name (required)
-     * @param format Result Format (optional, default to JSON)
-     * @param body Query and Preferences (optional)
-     * @return ApiResponse&lt;Object&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Mostly OK. As this is streaming api, it may fail with 200 as well. Check for errorMessage tag in the response for any errros </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Bad Request. Failed to get the data in required format. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal Server Error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Object> mDXExecuteMDXWithHttpInfo(String application, String database, String format, MDXInput body) throws ApiException {
-        okhttp3.Call localVarCall = mDXExecuteMDXValidateBeforeCall(application, database, format, body, null);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Gets the mdx response in various formats. (asynchronously)
-     * Gets the mdx response in various formats like JSON,HTML,EXCEL and CSV
-     * @param application Application Name (required)
-     * @param database Cube Name (required)
-     * @param format Result Format (optional, default to JSON)
-     * @param body Query and Preferences (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Mostly OK. As this is streaming api, it may fail with 200 as well. Check for errorMessage tag in the response for any errros </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Bad Request. Failed to get the data in required format. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal Server Error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call mDXExecuteMDXAsync(String application, String database, String format, MDXInput body, final ApiCallback<Object> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = mDXExecuteMDXValidateBeforeCall(application, database, format, body, _callback);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for mDXExecutenq
-     * @param application Application Name (required)
-     * @param database Cube Name (required)
-     * @param name Name (required)
-     * @param format Result Format (optional, default to JSON)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Mostly OK. As this is streaming api, it may fail with 200 as well. Check for errorMessage tag in the response for any errros </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Bad Request. Failed to get the data in required format. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal Server Error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call mDXExecutenqCall(String application, String database, String name, String format, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{application}/databases/{database}/mdx/{name}"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "database" + "\\}", localVarApiClient.escapeString(database.toString()))
-            .replaceAll("\\{" + "name" + "\\}", localVarApiClient.escapeString(name.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (format != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("format", format));
-        }
-
-        final String[] localVarAccepts = {
-            "application/octet-stream"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call mDXExecutenqValidateBeforeCall(String application, String database, String name, String format, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling mDXExecutenq(Async)");
-        }
-        
-        // verify the required parameter 'database' is set
-        if (database == null) {
-            throw new ApiException("Missing the required parameter 'database' when calling mDXExecutenq(Async)");
-        }
-        
-        // verify the required parameter 'name' is set
-        if (name == null) {
-            throw new ApiException("Missing the required parameter 'name' when calling mDXExecutenq(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = mDXExecutenqCall(application, database, name, format, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Gets the named mdx result in various formats.
-     * GGets the named mdx result in various formats. like JSON,HTML,EXCEL and CSV
-     * @param application Application Name (required)
-     * @param database Cube Name (required)
-     * @param name Name (required)
-     * @param format Result Format (optional, default to JSON)
-     * @return Object
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Mostly OK. As this is streaming api, it may fail with 200 as well. Check for errorMessage tag in the response for any errros </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Bad Request. Failed to get the data in required format. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal Server Error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public Object mDXExecutenq(String application, String database, String name, String format) throws ApiException {
-        ApiResponse<Object> localVarResp = mDXExecutenqWithHttpInfo(application, database, name, format);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Gets the named mdx result in various formats.
-     * GGets the named mdx result in various formats. like JSON,HTML,EXCEL and CSV
-     * @param application Application Name (required)
-     * @param database Cube Name (required)
-     * @param name Name (required)
-     * @param format Result Format (optional, default to JSON)
-     * @return ApiResponse&lt;Object&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Mostly OK. As this is streaming api, it may fail with 200 as well. Check for errorMessage tag in the response for any errros </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Bad Request. Failed to get the data in required format. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal Server Error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Object> mDXExecutenqWithHttpInfo(String application, String database, String name, String format) throws ApiException {
-        okhttp3.Call localVarCall = mDXExecutenqValidateBeforeCall(application, database, name, format, null);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Gets the named mdx result in various formats. (asynchronously)
-     * GGets the named mdx result in various formats. like JSON,HTML,EXCEL and CSV
-     * @param application Application Name (required)
-     * @param database Cube Name (required)
-     * @param name Name (required)
-     * @param format Result Format (optional, default to JSON)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Mostly OK. As this is streaming api, it may fail with 200 as well. Check for errorMessage tag in the response for any errros </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Bad Request. Failed to get the data in required format. </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> Internal Server Error. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call mDXExecutenqAsync(String application, String database, String name, String format, final ApiCallback<Object> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = mDXExecutenqValidateBeforeCall(application, database, name, format, _callback);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

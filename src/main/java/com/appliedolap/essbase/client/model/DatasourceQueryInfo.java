@@ -13,115 +13,132 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * DatasourceQueryInfo
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  DatasourceQueryInfo.JSON_PROPERTY_QUERY,
+  DatasourceQueryInfo.JSON_PROPERTY_DELIMITER,
+  DatasourceQueryInfo.JSON_PROPERTY_PARAMS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class DatasourceQueryInfo {
-  public static final String SERIALIZED_NAME_QUERY = "query";
-  @SerializedName(SERIALIZED_NAME_QUERY)
+  public static final String JSON_PROPERTY_QUERY = "query";
+  @jakarta.annotation.Nullable
   private String query;
 
-  public static final String SERIALIZED_NAME_DELIMITER = "delimiter";
-  @SerializedName(SERIALIZED_NAME_DELIMITER)
+  public static final String JSON_PROPERTY_DELIMITER = "delimiter";
+  @jakarta.annotation.Nullable
   private String delimiter;
 
-  public static final String SERIALIZED_NAME_PARAMS = "params";
-  @SerializedName(SERIALIZED_NAME_PARAMS)
-  private Map<String, Object> params = null;
+  public static final String JSON_PROPERTY_PARAMS = "params";
+  @jakarta.annotation.Nullable
+  private Map<String, Object> params = new HashMap<>();
 
+  public DatasourceQueryInfo() { 
+  }
 
-  public DatasourceQueryInfo query(String query) {
-    
+  public DatasourceQueryInfo query(@jakarta.annotation.Nullable String query) {
     this.query = query;
     return this;
   }
 
-   /**
+  /**
    * Get query
    * @return query
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_QUERY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getQuery() {
     return query;
   }
 
 
-  public void setQuery(String query) {
+  @JsonProperty(JSON_PROPERTY_QUERY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setQuery(@jakarta.annotation.Nullable String query) {
     this.query = query;
   }
 
 
-  public DatasourceQueryInfo delimiter(String delimiter) {
-    
+  public DatasourceQueryInfo delimiter(@jakarta.annotation.Nullable String delimiter) {
     this.delimiter = delimiter;
     return this;
   }
 
-   /**
+  /**
    * Get delimiter
    * @return delimiter
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DELIMITER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDelimiter() {
     return delimiter;
   }
 
 
-  public void setDelimiter(String delimiter) {
+  @JsonProperty(JSON_PROPERTY_DELIMITER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDelimiter(@jakarta.annotation.Nullable String delimiter) {
     this.delimiter = delimiter;
   }
 
 
-  public DatasourceQueryInfo params(Map<String, Object> params) {
-    
+  public DatasourceQueryInfo params(@jakarta.annotation.Nullable Map<String, Object> params) {
     this.params = params;
     return this;
   }
 
   public DatasourceQueryInfo putParamsItem(String key, Object paramsItem) {
     if (this.params == null) {
-      this.params = new HashMap<String, Object>();
+      this.params = new HashMap<>();
     }
     this.params.put(key, paramsItem);
     return this;
   }
 
-   /**
+  /**
    * Get params
    * @return params
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PARAMS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Map<String, Object> getParams() {
     return params;
   }
 
 
-  public void setParams(Map<String, Object> params) {
+  @JsonProperty(JSON_PROPERTY_PARAMS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setParams(@jakarta.annotation.Nullable Map<String, Object> params) {
     this.params = params;
   }
 
 
+  /**
+   * Return true if this DatasourceQueryInfo object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -163,5 +180,58 @@ public class DatasourceQueryInfo {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `query` to the URL query string
+    if (getQuery() != null) {
+      joiner.add(String.format("%squery%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getQuery()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `delimiter` to the URL query string
+    if (getDelimiter() != null) {
+      joiner.add(String.format("%sdelimiter%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDelimiter()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `params` to the URL query string
+    if (getParams() != null) {
+      for (String _key : getParams().keySet()) {
+        joiner.add(String.format("%sparams%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, _key, containerSuffix),
+            getParams().get(_key), URLEncoder.encode(ApiClient.valueToString(getParams().get(_key)), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      }
+    }
+
+    return joiner.toString();
+  }
 }
 

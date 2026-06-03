@@ -13,403 +13,443 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.EsbToColMap;
 import com.appliedolap.essbase.client.model.EssToDsMapDTO;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ConnectionInfoBean
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ConnectionInfoBean.JSON_PROPERTY_CONNECTION_NAME,
+  ConnectionInfoBean.JSON_PROPERTY_SERVER_NAME,
+  ConnectionInfoBean.JSON_PROPERTY_USER_NAME,
+  ConnectionInfoBean.JSON_PROPERTY_PASSWORD,
+  ConnectionInfoBean.JSON_PROPERTY_DESCRIPTION,
+  ConnectionInfoBean.JSON_PROPERTY_APPLICATION_NAME,
+  ConnectionInfoBean.JSON_PROPERTY_DATABASE_NAME,
+  ConnectionInfoBean.JSON_PROPERTY_DATASOURCE_NAME,
+  ConnectionInfoBean.JSON_PROPERTY_MEASURES_DIMENSION_NAME,
+  ConnectionInfoBean.JSON_PROPERTY_ESSBASE_TO_COLUMN_MAP,
+  ConnectionInfoBean.JSON_PROPERTY_ESSBASE_TO_DATA_SOURCE_MAP,
+  ConnectionInfoBean.JSON_PROPERTY_ALTER_CREDENTIALS,
+  ConnectionInfoBean.JSON_PROPERTY_APPLICATION_LEVEL_CONNECTION,
+  ConnectionInfoBean.JSON_PROPERTY_APPLICATION_LEVEL_DATASOURCE
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ConnectionInfoBean {
-  public static final String SERIALIZED_NAME_CONNECTION_NAME = "connectionName";
-  @SerializedName(SERIALIZED_NAME_CONNECTION_NAME)
+  public static final String JSON_PROPERTY_CONNECTION_NAME = "connectionName";
+  @jakarta.annotation.Nullable
   private String connectionName;
 
-  public static final String SERIALIZED_NAME_SERVER_NAME = "serverName";
-  @SerializedName(SERIALIZED_NAME_SERVER_NAME)
+  public static final String JSON_PROPERTY_SERVER_NAME = "serverName";
+  @jakarta.annotation.Nullable
   private String serverName;
 
-  public static final String SERIALIZED_NAME_USER_NAME = "userName";
-  @SerializedName(SERIALIZED_NAME_USER_NAME)
+  public static final String JSON_PROPERTY_USER_NAME = "userName";
+  @jakarta.annotation.Nullable
   private String userName;
 
-  public static final String SERIALIZED_NAME_PASSWORD = "password";
-  @SerializedName(SERIALIZED_NAME_PASSWORD)
+  public static final String JSON_PROPERTY_PASSWORD = "password";
+  @jakarta.annotation.Nullable
   private String password;
 
-  public static final String SERIALIZED_NAME_DESCRIPTION = "description";
-  @SerializedName(SERIALIZED_NAME_DESCRIPTION)
+  public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  @jakarta.annotation.Nullable
   private String description;
 
-  public static final String SERIALIZED_NAME_APPLICATION_NAME = "applicationName";
-  @SerializedName(SERIALIZED_NAME_APPLICATION_NAME)
+  public static final String JSON_PROPERTY_APPLICATION_NAME = "applicationName";
+  @jakarta.annotation.Nullable
   private String applicationName;
 
-  public static final String SERIALIZED_NAME_DATABASE_NAME = "databaseName";
-  @SerializedName(SERIALIZED_NAME_DATABASE_NAME)
+  public static final String JSON_PROPERTY_DATABASE_NAME = "databaseName";
+  @jakarta.annotation.Nullable
   private String databaseName;
 
-  public static final String SERIALIZED_NAME_DATASOURCE_NAME = "datasourceName";
-  @SerializedName(SERIALIZED_NAME_DATASOURCE_NAME)
+  public static final String JSON_PROPERTY_DATASOURCE_NAME = "datasourceName";
+  @jakarta.annotation.Nullable
   private String datasourceName;
 
-  public static final String SERIALIZED_NAME_MEASURES_DIMENSION_NAME = "measuresDimensionName";
-  @SerializedName(SERIALIZED_NAME_MEASURES_DIMENSION_NAME)
+  public static final String JSON_PROPERTY_MEASURES_DIMENSION_NAME = "measuresDimensionName";
+  @jakarta.annotation.Nullable
   private String measuresDimensionName;
 
-  public static final String SERIALIZED_NAME_ESSBASE_TO_COLUMN_MAP = "essbaseToColumnMap";
-  @SerializedName(SERIALIZED_NAME_ESSBASE_TO_COLUMN_MAP)
+  public static final String JSON_PROPERTY_ESSBASE_TO_COLUMN_MAP = "essbaseToColumnMap";
+  @jakarta.annotation.Nullable
   private EsbToColMap essbaseToColumnMap;
 
-  public static final String SERIALIZED_NAME_ESSBASE_TO_DATA_SOURCE_MAP = "essbaseToDataSourceMap";
-  @SerializedName(SERIALIZED_NAME_ESSBASE_TO_DATA_SOURCE_MAP)
+  public static final String JSON_PROPERTY_ESSBASE_TO_DATA_SOURCE_MAP = "essbaseToDataSourceMap";
+  @jakarta.annotation.Nullable
   private EssToDsMapDTO essbaseToDataSourceMap;
 
-  public static final String SERIALIZED_NAME_ALTER_CREDENTIALS = "alterCredentials";
-  @SerializedName(SERIALIZED_NAME_ALTER_CREDENTIALS)
+  public static final String JSON_PROPERTY_ALTER_CREDENTIALS = "alterCredentials";
+  @jakarta.annotation.Nullable
   private Boolean alterCredentials;
 
-  public static final String SERIALIZED_NAME_APPLICATION_LEVEL_CONNECTION = "applicationLevelConnection";
-  @SerializedName(SERIALIZED_NAME_APPLICATION_LEVEL_CONNECTION)
+  public static final String JSON_PROPERTY_APPLICATION_LEVEL_CONNECTION = "applicationLevelConnection";
+  @jakarta.annotation.Nullable
   private Boolean applicationLevelConnection;
 
-  public static final String SERIALIZED_NAME_APPLICATION_LEVEL_DATASOURCE = "applicationLevelDatasource";
-  @SerializedName(SERIALIZED_NAME_APPLICATION_LEVEL_DATASOURCE)
+  public static final String JSON_PROPERTY_APPLICATION_LEVEL_DATASOURCE = "applicationLevelDatasource";
+  @jakarta.annotation.Nullable
   private Boolean applicationLevelDatasource;
 
+  public ConnectionInfoBean() { 
+  }
 
-  public ConnectionInfoBean connectionName(String connectionName) {
-    
+  public ConnectionInfoBean connectionName(@jakarta.annotation.Nullable String connectionName) {
     this.connectionName = connectionName;
     return this;
   }
 
-   /**
+  /**
    * Get connectionName
    * @return connectionName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CONNECTION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getConnectionName() {
     return connectionName;
   }
 
 
-  public void setConnectionName(String connectionName) {
+  @JsonProperty(JSON_PROPERTY_CONNECTION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setConnectionName(@jakarta.annotation.Nullable String connectionName) {
     this.connectionName = connectionName;
   }
 
 
-  public ConnectionInfoBean serverName(String serverName) {
-    
+  public ConnectionInfoBean serverName(@jakarta.annotation.Nullable String serverName) {
     this.serverName = serverName;
     return this;
   }
 
-   /**
+  /**
    * Get serverName
    * @return serverName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SERVER_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getServerName() {
     return serverName;
   }
 
 
-  public void setServerName(String serverName) {
+  @JsonProperty(JSON_PROPERTY_SERVER_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setServerName(@jakarta.annotation.Nullable String serverName) {
     this.serverName = serverName;
   }
 
 
-  public ConnectionInfoBean userName(String userName) {
-    
+  public ConnectionInfoBean userName(@jakarta.annotation.Nullable String userName) {
     this.userName = userName;
     return this;
   }
 
-   /**
+  /**
    * Get userName
    * @return userName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getUserName() {
     return userName;
   }
 
 
-  public void setUserName(String userName) {
+  @JsonProperty(JSON_PROPERTY_USER_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUserName(@jakarta.annotation.Nullable String userName) {
     this.userName = userName;
   }
 
 
-  public ConnectionInfoBean password(String password) {
-    
+  public ConnectionInfoBean password(@jakarta.annotation.Nullable String password) {
     this.password = password;
     return this;
   }
 
-   /**
+  /**
    * Get password
    * @return password
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PASSWORD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getPassword() {
     return password;
   }
 
 
-  public void setPassword(String password) {
+  @JsonProperty(JSON_PROPERTY_PASSWORD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPassword(@jakarta.annotation.Nullable String password) {
     this.password = password;
   }
 
 
-  public ConnectionInfoBean description(String description) {
-    
+  public ConnectionInfoBean description(@jakarta.annotation.Nullable String description) {
     this.description = description;
     return this;
   }
 
-   /**
+  /**
    * Get description
    * @return description
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDescription() {
     return description;
   }
 
 
-  public void setDescription(String description) {
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDescription(@jakarta.annotation.Nullable String description) {
     this.description = description;
   }
 
 
-  public ConnectionInfoBean applicationName(String applicationName) {
-    
+  public ConnectionInfoBean applicationName(@jakarta.annotation.Nullable String applicationName) {
     this.applicationName = applicationName;
     return this;
   }
 
-   /**
+  /**
    * Get applicationName
    * @return applicationName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPLICATION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getApplicationName() {
     return applicationName;
   }
 
 
-  public void setApplicationName(String applicationName) {
+  @JsonProperty(JSON_PROPERTY_APPLICATION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApplicationName(@jakarta.annotation.Nullable String applicationName) {
     this.applicationName = applicationName;
   }
 
 
-  public ConnectionInfoBean databaseName(String databaseName) {
-    
+  public ConnectionInfoBean databaseName(@jakarta.annotation.Nullable String databaseName) {
     this.databaseName = databaseName;
     return this;
   }
 
-   /**
+  /**
    * Get databaseName
    * @return databaseName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATABASE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDatabaseName() {
     return databaseName;
   }
 
 
-  public void setDatabaseName(String databaseName) {
+  @JsonProperty(JSON_PROPERTY_DATABASE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatabaseName(@jakarta.annotation.Nullable String databaseName) {
     this.databaseName = databaseName;
   }
 
 
-  public ConnectionInfoBean datasourceName(String datasourceName) {
-    
+  public ConnectionInfoBean datasourceName(@jakarta.annotation.Nullable String datasourceName) {
     this.datasourceName = datasourceName;
     return this;
   }
 
-   /**
+  /**
    * Get datasourceName
    * @return datasourceName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DATASOURCE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDatasourceName() {
     return datasourceName;
   }
 
 
-  public void setDatasourceName(String datasourceName) {
+  @JsonProperty(JSON_PROPERTY_DATASOURCE_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDatasourceName(@jakarta.annotation.Nullable String datasourceName) {
     this.datasourceName = datasourceName;
   }
 
 
-  public ConnectionInfoBean measuresDimensionName(String measuresDimensionName) {
-    
+  public ConnectionInfoBean measuresDimensionName(@jakarta.annotation.Nullable String measuresDimensionName) {
     this.measuresDimensionName = measuresDimensionName;
     return this;
   }
 
-   /**
+  /**
    * Get measuresDimensionName
    * @return measuresDimensionName
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MEASURES_DIMENSION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getMeasuresDimensionName() {
     return measuresDimensionName;
   }
 
 
-  public void setMeasuresDimensionName(String measuresDimensionName) {
+  @JsonProperty(JSON_PROPERTY_MEASURES_DIMENSION_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMeasuresDimensionName(@jakarta.annotation.Nullable String measuresDimensionName) {
     this.measuresDimensionName = measuresDimensionName;
   }
 
 
-  public ConnectionInfoBean essbaseToColumnMap(EsbToColMap essbaseToColumnMap) {
-    
+  public ConnectionInfoBean essbaseToColumnMap(@jakarta.annotation.Nullable EsbToColMap essbaseToColumnMap) {
     this.essbaseToColumnMap = essbaseToColumnMap;
     return this;
   }
 
-   /**
+  /**
    * Get essbaseToColumnMap
    * @return essbaseToColumnMap
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ESSBASE_TO_COLUMN_MAP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public EsbToColMap getEssbaseToColumnMap() {
     return essbaseToColumnMap;
   }
 
 
-  public void setEssbaseToColumnMap(EsbToColMap essbaseToColumnMap) {
+  @JsonProperty(JSON_PROPERTY_ESSBASE_TO_COLUMN_MAP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEssbaseToColumnMap(@jakarta.annotation.Nullable EsbToColMap essbaseToColumnMap) {
     this.essbaseToColumnMap = essbaseToColumnMap;
   }
 
 
-  public ConnectionInfoBean essbaseToDataSourceMap(EssToDsMapDTO essbaseToDataSourceMap) {
-    
+  public ConnectionInfoBean essbaseToDataSourceMap(@jakarta.annotation.Nullable EssToDsMapDTO essbaseToDataSourceMap) {
     this.essbaseToDataSourceMap = essbaseToDataSourceMap;
     return this;
   }
 
-   /**
+  /**
    * Get essbaseToDataSourceMap
    * @return essbaseToDataSourceMap
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ESSBASE_TO_DATA_SOURCE_MAP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public EssToDsMapDTO getEssbaseToDataSourceMap() {
     return essbaseToDataSourceMap;
   }
 
 
-  public void setEssbaseToDataSourceMap(EssToDsMapDTO essbaseToDataSourceMap) {
+  @JsonProperty(JSON_PROPERTY_ESSBASE_TO_DATA_SOURCE_MAP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEssbaseToDataSourceMap(@jakarta.annotation.Nullable EssToDsMapDTO essbaseToDataSourceMap) {
     this.essbaseToDataSourceMap = essbaseToDataSourceMap;
   }
 
 
-  public ConnectionInfoBean alterCredentials(Boolean alterCredentials) {
-    
+  public ConnectionInfoBean alterCredentials(@jakarta.annotation.Nullable Boolean alterCredentials) {
     this.alterCredentials = alterCredentials;
     return this;
   }
 
-   /**
+  /**
    * Get alterCredentials
    * @return alterCredentials
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALTER_CREDENTIALS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAlterCredentials() {
     return alterCredentials;
   }
 
 
-  public void setAlterCredentials(Boolean alterCredentials) {
+  @JsonProperty(JSON_PROPERTY_ALTER_CREDENTIALS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAlterCredentials(@jakarta.annotation.Nullable Boolean alterCredentials) {
     this.alterCredentials = alterCredentials;
   }
 
 
-  public ConnectionInfoBean applicationLevelConnection(Boolean applicationLevelConnection) {
-    
+  public ConnectionInfoBean applicationLevelConnection(@jakarta.annotation.Nullable Boolean applicationLevelConnection) {
     this.applicationLevelConnection = applicationLevelConnection;
     return this;
   }
 
-   /**
+  /**
    * Get applicationLevelConnection
    * @return applicationLevelConnection
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPLICATION_LEVEL_CONNECTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getApplicationLevelConnection() {
     return applicationLevelConnection;
   }
 
 
-  public void setApplicationLevelConnection(Boolean applicationLevelConnection) {
+  @JsonProperty(JSON_PROPERTY_APPLICATION_LEVEL_CONNECTION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApplicationLevelConnection(@jakarta.annotation.Nullable Boolean applicationLevelConnection) {
     this.applicationLevelConnection = applicationLevelConnection;
   }
 
 
-  public ConnectionInfoBean applicationLevelDatasource(Boolean applicationLevelDatasource) {
-    
+  public ConnectionInfoBean applicationLevelDatasource(@jakarta.annotation.Nullable Boolean applicationLevelDatasource) {
     this.applicationLevelDatasource = applicationLevelDatasource;
     return this;
   }
 
-   /**
+  /**
    * Get applicationLevelDatasource
    * @return applicationLevelDatasource
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_APPLICATION_LEVEL_DATASOURCE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getApplicationLevelDatasource() {
     return applicationLevelDatasource;
   }
 
 
-  public void setApplicationLevelDatasource(Boolean applicationLevelDatasource) {
+  @JsonProperty(JSON_PROPERTY_APPLICATION_LEVEL_DATASOURCE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setApplicationLevelDatasource(@jakarta.annotation.Nullable Boolean applicationLevelDatasource) {
     this.applicationLevelDatasource = applicationLevelDatasource;
   }
 
 
+  /**
+   * Return true if this ConnectionInfoBean object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -473,5 +513,109 @@ public class ConnectionInfoBean {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `connectionName` to the URL query string
+    if (getConnectionName() != null) {
+      joiner.add(String.format("%sconnectionName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getConnectionName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `serverName` to the URL query string
+    if (getServerName() != null) {
+      joiner.add(String.format("%sserverName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getServerName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `userName` to the URL query string
+    if (getUserName() != null) {
+      joiner.add(String.format("%suserName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getUserName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `password` to the URL query string
+    if (getPassword() != null) {
+      joiner.add(String.format("%spassword%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getPassword()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `description` to the URL query string
+    if (getDescription() != null) {
+      joiner.add(String.format("%sdescription%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDescription()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `applicationName` to the URL query string
+    if (getApplicationName() != null) {
+      joiner.add(String.format("%sapplicationName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getApplicationName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `databaseName` to the URL query string
+    if (getDatabaseName() != null) {
+      joiner.add(String.format("%sdatabaseName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDatabaseName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `datasourceName` to the URL query string
+    if (getDatasourceName() != null) {
+      joiner.add(String.format("%sdatasourceName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getDatasourceName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `measuresDimensionName` to the URL query string
+    if (getMeasuresDimensionName() != null) {
+      joiner.add(String.format("%smeasuresDimensionName%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getMeasuresDimensionName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `essbaseToColumnMap` to the URL query string
+    if (getEssbaseToColumnMap() != null) {
+      joiner.add(getEssbaseToColumnMap().toUrlQueryString(prefix + "essbaseToColumnMap" + suffix));
+    }
+
+    // add `essbaseToDataSourceMap` to the URL query string
+    if (getEssbaseToDataSourceMap() != null) {
+      joiner.add(getEssbaseToDataSourceMap().toUrlQueryString(prefix + "essbaseToDataSourceMap" + suffix));
+    }
+
+    // add `alterCredentials` to the URL query string
+    if (getAlterCredentials() != null) {
+      joiner.add(String.format("%salterCredentials%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAlterCredentials()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `applicationLevelConnection` to the URL query string
+    if (getApplicationLevelConnection() != null) {
+      joiner.add(String.format("%sapplicationLevelConnection%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getApplicationLevelConnection()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `applicationLevelDatasource` to the URL query string
+    if (getApplicationLevelDatasource() != null) {
+      joiner.add(String.format("%sapplicationLevelDatasource%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getApplicationLevelDatasource()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 

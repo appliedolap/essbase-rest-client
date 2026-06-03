@@ -10,575 +10,450 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
 
-import com.google.gson.reflect.TypeToken;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 
-
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class AuditTrailApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public AuditTrailApi() {
-        this(Configuration.getDefaultApiClient());
+  public AuditTrailApi() {
+    this(new ApiClient());
+  }
+
+  public AuditTrailApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public AuditTrailApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Get Audit Data
+   * &lt;p&gt;Returns audit trail data in CSV string format if &lt;code&gt;Accept&#x3D;&#39;text/csv&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;text/plain&#39;&lt;/code&gt;. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, returns audit data as a CSV stream to download. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt;, returns the audit data list in JSON format.&lt;p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return String
+   * @throws ApiException if fails to make API call
+   */
+  public String auditTrailGetDataAudit(String application, String database) throws ApiException {
+    ApiResponse<String> localVarResponse = auditTrailGetDataAuditWithHttpInfo(application, database);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for auditTrailGetDataAudit
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit trail data returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to return audit data.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call auditTrailGetDataAuditCall(String application, String database, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{application}/databases/{database}/audittrail/data"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "database" + "\\}", localVarApiClient.escapeString(database.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "text/plain", "text/csv"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Get Audit Data
+   * &lt;p&gt;Returns audit trail data in CSV string format if &lt;code&gt;Accept&#x3D;&#39;text/csv&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;text/plain&#39;&lt;/code&gt;. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, returns audit data as a CSV stream to download. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt;, returns the audit data list in JSON format.&lt;p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;String&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<String> auditTrailGetDataAuditWithHttpInfo(String application, String database) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = auditTrailGetDataAuditRequestBuilder(application, database);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("auditTrailGetDataAudit", localVarResponse);
         }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call auditTrailGetDataAuditValidateBeforeCall(String application, String database, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling auditTrailGetDataAudit(Async)");
+        // for plain text response
+        if (localVarResponse.headers().map().containsKey("Content-Type") &&
+                "text/plain".equalsIgnoreCase(localVarResponse.headers().map().get("Content-Type").get(0).split(";")[0].trim())) {
+          java.util.Scanner s = new java.util.Scanner(localVarResponse.body()).useDelimiter("\\A");
+          String responseBodyText = s.hasNext() ? s.next() : "";
+          return new ApiResponse<String>(
+                  localVarResponse.statusCode(),
+                  localVarResponse.headers().map(),
+                  responseBodyText
+          );
+        } else {
+            throw new RuntimeException("Error! The response Content-Type is supposed to be `text/plain` but it's not: " + localVarResponse);
         }
-        
-        // verify the required parameter 'database' is set
-        if (database == null) {
-            throw new ApiException("Missing the required parameter 'database' when calling auditTrailGetDataAudit(Async)");
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder auditTrailGetDataAuditRequestBuilder(String application, String database) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling auditTrailGetDataAudit");
+    }
+    // verify the required parameter 'database' is set
+    if (database == null) {
+      throw new ApiException(400, "Missing the required parameter 'database' when calling auditTrailGetDataAudit");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{application}/databases/{database}/audittrail/data"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{database}", ApiClient.urlEncode(database.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "text/plain, text/csv");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Audit Metadata
+   * &lt;p&gt;Returns audit metadata in CSV string format if &lt;code&gt;Accept&#x3D;&#39;text/csv&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;text/plain&#39;&lt;/code&gt;. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, returns audit metadata as a CSV stream to download. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt;, returns the audit metadata list in JSON format.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return String
+   * @throws ApiException if fails to make API call
+   */
+  public String auditTrailGetMetadataAudit(String application, String database) throws ApiException {
+    ApiResponse<String> localVarResponse = auditTrailGetMetadataAuditWithHttpInfo(application, database);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Audit Metadata
+   * &lt;p&gt;Returns audit metadata in CSV string format if &lt;code&gt;Accept&#x3D;&#39;text/csv&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;text/plain&#39;&lt;/code&gt;. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, returns audit metadata as a CSV stream to download. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt;, returns the audit metadata list in JSON format.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;String&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<String> auditTrailGetMetadataAuditWithHttpInfo(String application, String database) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = auditTrailGetMetadataAuditRequestBuilder(application, database);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("auditTrailGetMetadataAudit", localVarResponse);
         }
-        
-
-        okhttp3.Call localVarCall = auditTrailGetDataAuditCall(application, database, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Audit Data
-     * &lt;p&gt;Returns audit trail data in CSV string format if &lt;code&gt;Accept&#x3D;&#39;text/csv&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;text/plain&#39;&lt;/code&gt;. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, returns audit data as a CSV stream to download. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt;, returns the audit data list in JSON format.&lt;p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return String
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit trail data returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to return audit data.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public String auditTrailGetDataAudit(String application, String database) throws ApiException {
-        ApiResponse<String> localVarResp = auditTrailGetDataAuditWithHttpInfo(application, database);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Audit Data
-     * &lt;p&gt;Returns audit trail data in CSV string format if &lt;code&gt;Accept&#x3D;&#39;text/csv&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;text/plain&#39;&lt;/code&gt;. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, returns audit data as a CSV stream to download. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt;, returns the audit data list in JSON format.&lt;p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;String&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit trail data returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to return audit data.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<String> auditTrailGetDataAuditWithHttpInfo(String application, String database) throws ApiException {
-        okhttp3.Call localVarCall = auditTrailGetDataAuditValidateBeforeCall(application, database, null);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Audit Data (asynchronously)
-     * &lt;p&gt;Returns audit trail data in CSV string format if &lt;code&gt;Accept&#x3D;&#39;text/csv&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;text/plain&#39;&lt;/code&gt;. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, returns audit data as a CSV stream to download. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt;, returns the audit data list in JSON format.&lt;p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit trail data returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to return audit data.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call auditTrailGetDataAuditAsync(String application, String database, final ApiCallback<String> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = auditTrailGetDataAuditValidateBeforeCall(application, database, _callback);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for auditTrailGetMetadataAudit
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit trail metadata returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to return audit metadata.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call auditTrailGetMetadataAuditCall(String application, String database, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{application}/databases/{database}/audittrail/metadata"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "database" + "\\}", localVarApiClient.escapeString(database.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "text/plain", "text/csv"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        // for plain text response
+        if (localVarResponse.headers().map().containsKey("Content-Type") &&
+                "text/plain".equalsIgnoreCase(localVarResponse.headers().map().get("Content-Type").get(0).split(";")[0].trim())) {
+          java.util.Scanner s = new java.util.Scanner(localVarResponse.body()).useDelimiter("\\A");
+          String responseBodyText = s.hasNext() ? s.next() : "";
+          return new ApiResponse<String>(
+                  localVarResponse.statusCode(),
+                  localVarResponse.headers().map(),
+                  responseBodyText
+          );
+        } else {
+            throw new RuntimeException("Error! The response Content-Type is supposed to be `text/plain` but it's not: " + localVarResponse);
         }
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder auditTrailGetMetadataAuditRequestBuilder(String application, String database) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling auditTrailGetMetadataAudit");
+    }
+    // verify the required parameter 'database' is set
+    if (database == null) {
+      throw new ApiException(400, "Missing the required parameter 'database' when calling auditTrailGetMetadataAudit");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call auditTrailGetMetadataAuditValidateBeforeCall(String application, String database, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling auditTrailGetMetadataAudit(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{application}/databases/{database}/audittrail/metadata"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{database}", ApiClient.urlEncode(database.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "text/plain, text/csv");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Delete Audit Data
+   * &lt;p&gt;Deletes audit trail data older than the specified time.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param olderthan &lt;p&gt;Time in milliseconds.&lt;/p&gt; (optional)
+   * @throws ApiException if fails to make API call
+   */
+  public void auditTrailPurge(String application, String database, Long olderthan) throws ApiException {
+    auditTrailPurgeWithHttpInfo(application, database, olderthan);
+  }
+
+  /**
+   * Delete Audit Data
+   * &lt;p&gt;Deletes audit trail data older than the specified time.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param olderthan &lt;p&gt;Time in milliseconds.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> auditTrailPurgeWithHttpInfo(String application, String database, Long olderthan) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = auditTrailPurgeRequestBuilder(application, database, olderthan);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("auditTrailPurge", localVarResponse);
         }
-        
-        // verify the required parameter 'database' is set
-        if (database == null) {
-            throw new ApiException("Missing the required parameter 'database' when calling auditTrailGetMetadataAudit(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = auditTrailGetMetadataAuditCall(application, database, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder auditTrailPurgeRequestBuilder(String application, String database, Long olderthan) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling auditTrailPurge");
+    }
+    // verify the required parameter 'database' is set
+    if (database == null) {
+      throw new ApiException(400, "Missing the required parameter 'database' when calling auditTrailPurge");
     }
 
-    /**
-     * Get Audit Metadata
-     * &lt;p&gt;Returns audit metadata in CSV string format if &lt;code&gt;Accept&#x3D;&#39;text/csv&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;text/plain&#39;&lt;/code&gt;. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, returns audit metadata as a CSV stream to download. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt;, returns the audit metadata list in JSON format.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return String
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit trail metadata returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to return audit metadata.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public String auditTrailGetMetadataAudit(String application, String database) throws ApiException {
-        ApiResponse<String> localVarResp = auditTrailGetMetadataAuditWithHttpInfo(application, database);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{application}/databases/{database}/audittrail/data"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{database}", ApiClient.urlEncode(database.toString()));
+
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "olderthan";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("olderthan", olderthan));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Get Audit Metadata
-     * &lt;p&gt;Returns audit metadata in CSV string format if &lt;code&gt;Accept&#x3D;&#39;text/csv&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;text/plain&#39;&lt;/code&gt;. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, returns audit metadata as a CSV stream to download. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt;, returns the audit metadata list in JSON format.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;String&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit trail metadata returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to return audit metadata.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<String> auditTrailGetMetadataAuditWithHttpInfo(String application, String database) throws ApiException {
-        okhttp3.Call localVarCall = auditTrailGetMetadataAuditValidateBeforeCall(application, database, null);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Get Audit Metadata (asynchronously)
-     * &lt;p&gt;Returns audit metadata in CSV string format if &lt;code&gt;Accept&#x3D;&#39;text/csv&#39;&lt;/code&gt; or &lt;code&gt;Accept&#x3D;&#39;text/plain&#39;&lt;/code&gt;. If &lt;code&gt;Accept&#x3D;&#39;application/octet-stream&#39;&lt;/code&gt;, returns audit metadata as a CSV stream to download. If &lt;code&gt;Accept&#x3D;&#39;application/json&#39;&lt;/code&gt;, returns the audit metadata list in JSON format.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit trail metadata returned successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to return audit metadata.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call auditTrailGetMetadataAuditAsync(String application, String database, final ApiCallback<String> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = auditTrailGetMetadataAuditValidateBeforeCall(application, database, _callback);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for auditTrailPurge
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param olderthan &lt;p&gt;Time in milliseconds.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit data deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete audit data.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call auditTrailPurgeCall(String application, String database, Long olderthan, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{application}/databases/{database}/audittrail/data"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "database" + "\\}", localVarApiClient.escapeString(database.toString()));
+  /**
+   * Delete Audit Metadata
+   * &lt;p&gt;Deletes audit trail metadata older than the specified time.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param olderthan &lt;p&gt;Time in milliseconds.&lt;/p&gt; (optional)
+   * @throws ApiException if fails to make API call
+   */
+  public void auditTrailPurgeMetadataAudit(String application, String database, Long olderthan) throws ApiException {
+    auditTrailPurgeMetadataAuditWithHttpInfo(application, database, olderthan);
+  }
 
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (olderthan != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("olderthan", olderthan));
+  /**
+   * Delete Audit Metadata
+   * &lt;p&gt;Deletes audit trail metadata older than the specified time.&lt;/p&gt;
+   * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param olderthan &lt;p&gt;Time in milliseconds.&lt;/p&gt; (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> auditTrailPurgeMetadataAuditWithHttpInfo(String application, String database, Long olderthan) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = auditTrailPurgeMetadataAuditRequestBuilder(application, database, olderthan);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("auditTrailPurgeMetadataAudit", localVarResponse);
         }
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder auditTrailPurgeMetadataAuditRequestBuilder(String application, String database, Long olderthan) throws ApiException {
+    // verify the required parameter 'application' is set
+    if (application == null) {
+      throw new ApiException(400, "Missing the required parameter 'application' when calling auditTrailPurgeMetadataAudit");
+    }
+    // verify the required parameter 'database' is set
+    if (database == null) {
+      throw new ApiException(400, "Missing the required parameter 'database' when calling auditTrailPurgeMetadataAudit");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call auditTrailPurgeValidateBeforeCall(String application, String database, Long olderthan, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling auditTrailPurge(Async)");
-        }
-        
-        // verify the required parameter 'database' is set
-        if (database == null) {
-            throw new ApiException("Missing the required parameter 'database' when calling auditTrailPurge(Async)");
-        }
-        
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-        okhttp3.Call localVarCall = auditTrailPurgeCall(application, database, olderthan, _callback);
-        return localVarCall;
+    String localVarPath = "/applications/{application}/databases/{database}/audittrail/metadata"
+        .replace("{application}", ApiClient.urlEncode(application.toString()))
+        .replace("{database}", ApiClient.urlEncode(database.toString()));
 
+    List<Pair> localVarQueryParams = new ArrayList<>();
+    StringJoiner localVarQueryStringJoiner = new StringJoiner("&");
+    String localVarQueryParameterBaseName;
+    localVarQueryParameterBaseName = "olderthan";
+    localVarQueryParams.addAll(ApiClient.parameterToPairs("olderthan", olderthan));
+
+    if (!localVarQueryParams.isEmpty() || localVarQueryStringJoiner.length() != 0) {
+      StringJoiner queryJoiner = new StringJoiner("&");
+      localVarQueryParams.forEach(p -> queryJoiner.add(p.getName() + '=' + p.getValue()));
+      if (localVarQueryStringJoiner.length() != 0) {
+        queryJoiner.add(localVarQueryStringJoiner.toString());
+      }
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath + '?' + queryJoiner.toString()));
+    } else {
+      localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
     }
 
-    /**
-     * Delete Audit Data
-     * &lt;p&gt;Deletes audit trail data older than the specified time.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param olderthan &lt;p&gt;Time in milliseconds.&lt;/p&gt; (optional)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit data deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete audit data.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void auditTrailPurge(String application, String database, Long olderthan) throws ApiException {
-        auditTrailPurgeWithHttpInfo(application, database, olderthan);
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Delete Audit Data
-     * &lt;p&gt;Deletes audit trail data older than the specified time.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param olderthan &lt;p&gt;Time in milliseconds.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit data deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete audit data.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> auditTrailPurgeWithHttpInfo(String application, String database, Long olderthan) throws ApiException {
-        okhttp3.Call localVarCall = auditTrailPurgeValidateBeforeCall(application, database, olderthan, null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Delete Audit Data (asynchronously)
-     * &lt;p&gt;Deletes audit trail data older than the specified time.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param olderthan &lt;p&gt;Time in milliseconds.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit data deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete audit data.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call auditTrailPurgeAsync(String application, String database, Long olderthan, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = auditTrailPurgeValidateBeforeCall(application, database, olderthan, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for auditTrailPurgeMetadataAudit
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param olderthan &lt;p&gt;Time in milliseconds.&lt;/p&gt; (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit metadata deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete audit metadata.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call auditTrailPurgeMetadataAuditCall(String application, String database, Long olderthan, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{application}/databases/{database}/audittrail/metadata"
-            .replaceAll("\\{" + "application" + "\\}", localVarApiClient.escapeString(application.toString()))
-            .replaceAll("\\{" + "database" + "\\}", localVarApiClient.escapeString(database.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (olderthan != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("olderthan", olderthan));
-        }
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call auditTrailPurgeMetadataAuditValidateBeforeCall(String application, String database, Long olderthan, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'application' is set
-        if (application == null) {
-            throw new ApiException("Missing the required parameter 'application' when calling auditTrailPurgeMetadataAudit(Async)");
-        }
-        
-        // verify the required parameter 'database' is set
-        if (database == null) {
-            throw new ApiException("Missing the required parameter 'database' when calling auditTrailPurgeMetadataAudit(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = auditTrailPurgeMetadataAuditCall(application, database, olderthan, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Delete Audit Metadata
-     * &lt;p&gt;Deletes audit trail metadata older than the specified time.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param olderthan &lt;p&gt;Time in milliseconds.&lt;/p&gt; (optional)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit metadata deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete audit metadata.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void auditTrailPurgeMetadataAudit(String application, String database, Long olderthan) throws ApiException {
-        auditTrailPurgeMetadataAuditWithHttpInfo(application, database, olderthan);
-    }
-
-    /**
-     * Delete Audit Metadata
-     * &lt;p&gt;Deletes audit trail metadata older than the specified time.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param olderthan &lt;p&gt;Time in milliseconds.&lt;/p&gt; (optional)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit metadata deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete audit metadata.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> auditTrailPurgeMetadataAuditWithHttpInfo(String application, String database, Long olderthan) throws ApiException {
-        okhttp3.Call localVarCall = auditTrailPurgeMetadataAuditValidateBeforeCall(application, database, olderthan, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Delete Audit Metadata (asynchronously)
-     * &lt;p&gt;Deletes audit trail metadata older than the specified time.&lt;/p&gt;
-     * @param application &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param database &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param olderthan &lt;p&gt;Time in milliseconds.&lt;/p&gt; (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Audit metadata deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Failed to delete audit metadata.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call auditTrailPurgeMetadataAuditAsync(String application, String database, Long olderthan, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = auditTrailPurgeMetadataAuditValidateBeforeCall(application, database, olderthan, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
 }

@@ -13,133 +13,153 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import com.appliedolap.essbase.client.model.DatabaseProvisionReportItemList;
 import com.appliedolap.essbase.client.model.ProvisionReportItemList;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * ApplicationProvisionReportItem
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  ApplicationProvisionReportItem.JSON_PROPERTY_NAME,
+  ApplicationProvisionReportItem.JSON_PROPERTY_ROLES,
+  ApplicationProvisionReportItem.JSON_PROPERTY_FILTERS,
+  ApplicationProvisionReportItem.JSON_PROPERTY_SCRIPTS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ApplicationProvisionReportItem {
-  public static final String SERIALIZED_NAME_NAME = "name";
-  @SerializedName(SERIALIZED_NAME_NAME)
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
   private String name;
 
-  public static final String SERIALIZED_NAME_ROLES = "roles";
-  @SerializedName(SERIALIZED_NAME_ROLES)
+  public static final String JSON_PROPERTY_ROLES = "roles";
+  @jakarta.annotation.Nullable
   private ProvisionReportItemList roles;
 
-  public static final String SERIALIZED_NAME_FILTERS = "filters";
-  @SerializedName(SERIALIZED_NAME_FILTERS)
+  public static final String JSON_PROPERTY_FILTERS = "filters";
+  @jakarta.annotation.Nullable
   private DatabaseProvisionReportItemList filters;
 
-  public static final String SERIALIZED_NAME_SCRIPTS = "scripts";
-  @SerializedName(SERIALIZED_NAME_SCRIPTS)
+  public static final String JSON_PROPERTY_SCRIPTS = "scripts";
+  @jakarta.annotation.Nullable
   private DatabaseProvisionReportItemList scripts;
 
+  public ApplicationProvisionReportItem() { 
+  }
 
-  public ApplicationProvisionReportItem name(String name) {
-    
+  public ApplicationProvisionReportItem name(@jakarta.annotation.Nullable String name) {
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getName() {
     return name;
   }
 
 
-  public void setName(String name) {
+  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable String name) {
     this.name = name;
   }
 
 
-  public ApplicationProvisionReportItem roles(ProvisionReportItemList roles) {
-    
+  public ApplicationProvisionReportItem roles(@jakarta.annotation.Nullable ProvisionReportItemList roles) {
     this.roles = roles;
     return this;
   }
 
-   /**
+  /**
    * Get roles
    * @return roles
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ROLES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public ProvisionReportItemList getRoles() {
     return roles;
   }
 
 
-  public void setRoles(ProvisionReportItemList roles) {
+  @JsonProperty(JSON_PROPERTY_ROLES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRoles(@jakarta.annotation.Nullable ProvisionReportItemList roles) {
     this.roles = roles;
   }
 
 
-  public ApplicationProvisionReportItem filters(DatabaseProvisionReportItemList filters) {
-    
+  public ApplicationProvisionReportItem filters(@jakarta.annotation.Nullable DatabaseProvisionReportItemList filters) {
     this.filters = filters;
     return this;
   }
 
-   /**
+  /**
    * Get filters
    * @return filters
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FILTERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public DatabaseProvisionReportItemList getFilters() {
     return filters;
   }
 
 
-  public void setFilters(DatabaseProvisionReportItemList filters) {
+  @JsonProperty(JSON_PROPERTY_FILTERS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFilters(@jakarta.annotation.Nullable DatabaseProvisionReportItemList filters) {
     this.filters = filters;
   }
 
 
-  public ApplicationProvisionReportItem scripts(DatabaseProvisionReportItemList scripts) {
-    
+  public ApplicationProvisionReportItem scripts(@jakarta.annotation.Nullable DatabaseProvisionReportItemList scripts) {
     this.scripts = scripts;
     return this;
   }
 
-   /**
+  /**
    * Get scripts
    * @return scripts
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SCRIPTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public DatabaseProvisionReportItemList getScripts() {
     return scripts;
   }
 
 
-  public void setScripts(DatabaseProvisionReportItemList scripts) {
+  @JsonProperty(JSON_PROPERTY_SCRIPTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setScripts(@jakarta.annotation.Nullable DatabaseProvisionReportItemList scripts) {
     this.scripts = scripts;
   }
 
 
+  /**
+   * Return true if this ApplicationProvisionReportItem object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -183,5 +203,59 @@ public class ApplicationProvisionReportItem {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `name` to the URL query string
+    if (getName() != null) {
+      joiner.add(String.format("%sname%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getName()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `roles` to the URL query string
+    if (getRoles() != null) {
+      joiner.add(getRoles().toUrlQueryString(prefix + "roles" + suffix));
+    }
+
+    // add `filters` to the URL query string
+    if (getFilters() != null) {
+      joiner.add(getFilters().toUrlQueryString(prefix + "filters" + suffix));
+    }
+
+    // add `scripts` to the URL query string
+    if (getScripts() != null) {
+      joiner.add(getScripts().toUrlQueryString(prefix + "scripts" + suffix));
+    }
+
+    return joiner.toString();
+  }
 }
 

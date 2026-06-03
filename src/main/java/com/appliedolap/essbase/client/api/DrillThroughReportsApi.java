@@ -10,751 +10,524 @@
  * Do not edit the class manually.
  */
 
-
 package com.appliedolap.essbase.client.api;
 
-import com.appliedolap.essbase.client.ApiCallback;
 import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.ApiResponse;
-import com.appliedolap.essbase.client.Configuration;
 import com.appliedolap.essbase.client.Pair;
-import com.appliedolap.essbase.client.ProgressRequestBody;
-import com.appliedolap.essbase.client.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
 
 import com.appliedolap.essbase.client.model.DrillthroughBean;
 import com.appliedolap.essbase.client.model.ReportList;
 
-import java.lang.reflect.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.http.HttpRequest;
+import java.nio.channels.Channels;
+import java.nio.channels.Pipe;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class DrillThroughReportsApi {
-    private ApiClient localVarApiClient;
+  private final HttpClient memberVarHttpClient;
+  private final ObjectMapper memberVarObjectMapper;
+  private final String memberVarBaseUri;
+  private final Consumer<HttpRequest.Builder> memberVarInterceptor;
+  private final Duration memberVarReadTimeout;
+  private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
+  private final Consumer<HttpResponse<String>> memberVarAsyncResponseInterceptor;
 
-    public DrillThroughReportsApi() {
-        this(Configuration.getDefaultApiClient());
+  public DrillThroughReportsApi() {
+    this(new ApiClient());
+  }
+
+  public DrillThroughReportsApi(ApiClient apiClient) {
+    memberVarHttpClient = apiClient.getHttpClient();
+    memberVarObjectMapper = apiClient.getObjectMapper();
+    memberVarBaseUri = apiClient.getBaseUri();
+    memberVarInterceptor = apiClient.getRequestInterceptor();
+    memberVarReadTimeout = apiClient.getReadTimeout();
+    memberVarResponseInterceptor = apiClient.getResponseInterceptor();
+    memberVarAsyncResponseInterceptor = apiClient.getAsyncResponseInterceptor();
+  }
+
+  protected ApiException getApiException(String operationId, HttpResponse<InputStream> response) throws IOException {
+    String body = response.body() == null ? null : new String(response.body().readAllBytes());
+    String message = formatExceptionMessage(operationId, response.statusCode(), body);
+    return new ApiException(response.statusCode(), message, response.headers(), body);
+  }
+
+  private String formatExceptionMessage(String operationId, int statusCode, String body) {
+    if (body == null || body.isEmpty()) {
+      body = "[no body]";
     }
+    return operationId + " call failed with: " + statusCode + " - " + body;
+  }
 
-    public DrillThroughReportsApi(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
+  /**
+   * Create Drill Through Report
+   * &lt;p&gt;Creates a drill through report in the specified application and database, and returns details about the report.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Drill through report details.&lt;/p&gt; (required)
+   * @return DrillthroughBean
+   * @throws ApiException if fails to make API call
+   */
+  public DrillthroughBean drillThroughReportsCreate(String applicationName, String databaseName, DrillthroughBean body) throws ApiException {
+    ApiResponse<DrillthroughBean> localVarResponse = drillThroughReportsCreateWithHttpInfo(applicationName, databaseName, body);
+    return localVarResponse.getData();
+  }
 
-    public ApiClient getApiClient() {
-        return localVarApiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.localVarApiClient = apiClient;
-    }
-
-    /**
-     * Build call for drillThroughReportsCreate
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Drill through report details.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the drill through report. The application or database name may be incorrect, or the report may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call drillThroughReportsCreateCall(String applicationName, String databaseName, DrillthroughBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/reports"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Create Drill Through Report
+   * &lt;p&gt;Creates a drill through report in the specified application and database, and returns details about the report.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Drill through report details.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;DrillthroughBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<DrillthroughBean> drillThroughReportsCreateWithHttpInfo(String applicationName, String databaseName, DrillthroughBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = drillThroughReportsCreateRequestBuilder(applicationName, databaseName, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("drillThroughReportsCreate", localVarResponse);
         }
+        return new ApiResponse<DrillthroughBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<DrillthroughBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder drillThroughReportsCreateRequestBuilder(String applicationName, String databaseName, DrillthroughBean body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling drillThroughReportsCreate");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling drillThroughReportsCreate");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling drillThroughReportsCreate");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call drillThroughReportsCreateValidateBeforeCall(String applicationName, String databaseName, DrillthroughBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling drillThroughReportsCreate(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/reports"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Delete Drill Through Report
+   * &lt;p&gt;Deletes the specified drill through report from the specified application and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void drillThroughReportsDelete(String applicationName, String databaseName, String name) throws ApiException {
+    drillThroughReportsDeleteWithHttpInfo(applicationName, databaseName, name);
+  }
+
+  /**
+   * Delete Drill Through Report
+   * &lt;p&gt;Deletes the specified drill through report from the specified application and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Void> drillThroughReportsDeleteWithHttpInfo(String applicationName, String databaseName, String name) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = drillThroughReportsDeleteRequestBuilder(applicationName, databaseName, name);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("drillThroughReportsDelete", localVarResponse);
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling drillThroughReportsCreate(Async)");
+        return new ApiResponse<Void>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          null
+        );
+      } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
         }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling drillThroughReportsCreate(Async)");
+        localVarResponse.body().close();
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder drillThroughReportsDeleteRequestBuilder(String applicationName, String databaseName, String name) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling drillThroughReportsDelete");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling drillThroughReportsDelete");
+    }
+    // verify the required parameter 'name' is set
+    if (name == null) {
+      throw new ApiException(400, "Missing the required parameter 'name' when calling drillThroughReportsDelete");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/reports/{name}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{name}", ApiClient.urlEncode(name.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    localVarRequestBuilder.method("DELETE", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Get Drill Through Report
+   * &lt;p&gt;Returns the specified drill through report from the specified application and database.&lt;p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
+   * @return DrillthroughBean
+   * @throws ApiException if fails to make API call
+   */
+  public DrillthroughBean drillThroughReportsGetReport(String applicationName, String databaseName, String name) throws ApiException {
+    ApiResponse<DrillthroughBean> localVarResponse = drillThroughReportsGetReportWithHttpInfo(applicationName, databaseName, name);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Get Drill Through Report
+   * &lt;p&gt;Returns the specified drill through report from the specified application and database.&lt;p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;DrillthroughBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<DrillthroughBean> drillThroughReportsGetReportWithHttpInfo(String applicationName, String databaseName, String name) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = drillThroughReportsGetReportRequestBuilder(applicationName, databaseName, name);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("drillThroughReportsGetReport", localVarResponse);
         }
-        
+        return new ApiResponse<DrillthroughBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<DrillthroughBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = drillThroughReportsCreateCall(applicationName, databaseName, body, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder drillThroughReportsGetReportRequestBuilder(String applicationName, String databaseName, String name) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling drillThroughReportsGetReport");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling drillThroughReportsGetReport");
+    }
+    // verify the required parameter 'name' is set
+    if (name == null) {
+      throw new ApiException(400, "Missing the required parameter 'name' when calling drillThroughReportsGetReport");
     }
 
-    /**
-     * Create Drill Through Report
-     * &lt;p&gt;Creates a drill through report in the specified application and database, and returns details about the report.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Drill through report details.&lt;/p&gt; (required)
-     * @return DrillthroughBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the drill through report. The application or database name may be incorrect, or the report may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public DrillthroughBean drillThroughReportsCreate(String applicationName, String databaseName, DrillthroughBean body) throws ApiException {
-        ApiResponse<DrillthroughBean> localVarResp = drillThroughReportsCreateWithHttpInfo(applicationName, databaseName, body);
-        return localVarResp.getData();
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/reports/{name}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{name}", ApiClient.urlEncode(name.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Create Drill Through Report
-     * &lt;p&gt;Creates a drill through report in the specified application and database, and returns details about the report.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Drill through report details.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;DrillthroughBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the drill through report. The application or database name may be incorrect, or the report may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<DrillthroughBean> drillThroughReportsCreateWithHttpInfo(String applicationName, String databaseName, DrillthroughBean body) throws ApiException {
-        okhttp3.Call localVarCall = drillThroughReportsCreateValidateBeforeCall(applicationName, databaseName, body, null);
-        Type localVarReturnType = new TypeToken<DrillthroughBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
+    return localVarRequestBuilder;
+  }
 
-    /**
-     * Create Drill Through Report (asynchronously)
-     * &lt;p&gt;Creates a drill through report in the specified application and database, and returns details about the report.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Drill through report details.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was created successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to create the drill through report. The application or database name may be incorrect, or the report may already exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call drillThroughReportsCreateAsync(String applicationName, String databaseName, DrillthroughBean body, final ApiCallback<DrillthroughBean> _callback) throws ApiException {
+  /**
+   * Get Drill Through Reports
+   * &lt;p&gt;Returns all the drill through reports from the specified application and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return ReportList
+   * @throws ApiException if fails to make API call
+   */
+  public ReportList drillThroughReportsGetReports(String applicationName, String databaseName) throws ApiException {
+    ApiResponse<ReportList> localVarResponse = drillThroughReportsGetReportsWithHttpInfo(applicationName, databaseName);
+    return localVarResponse.getData();
+  }
 
-        okhttp3.Call localVarCall = drillThroughReportsCreateValidateBeforeCall(applicationName, databaseName, body, _callback);
-        Type localVarReturnType = new TypeToken<DrillthroughBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for drillThroughReportsDelete
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the drill through report. The report name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call drillThroughReportsDeleteCall(String applicationName, String databaseName, String name, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/reports/{name}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "name" + "\\}", localVarApiClient.escapeString(name.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
+  /**
+   * Get Drill Through Reports
+   * &lt;p&gt;Returns all the drill through reports from the specified application and database.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;ReportList&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ReportList> drillThroughReportsGetReportsWithHttpInfo(String applicationName, String databaseName) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = drillThroughReportsGetReportsRequestBuilder(applicationName, databaseName);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("drillThroughReportsGetReports", localVarResponse);
         }
+        return new ApiResponse<ReportList>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ReportList>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+  private HttpRequest.Builder drillThroughReportsGetReportsRequestBuilder(String applicationName, String databaseName) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling drillThroughReportsGetReports");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling drillThroughReportsGetReports");
     }
 
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call drillThroughReportsDeleteValidateBeforeCall(String applicationName, String databaseName, String name, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling drillThroughReportsDelete(Async)");
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/reports"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+  /**
+   * Update Drill Through Reoprt
+   * &lt;p&gt;Updates the drill through report in the specified application and database, and returns details of the updated report.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Drill through report details.&lt;/p&gt; (required)
+   * @return DrillthroughBean
+   * @throws ApiException if fails to make API call
+   */
+  public DrillthroughBean drillThroughReportsUpdateReport(String applicationName, String databaseName, String name, DrillthroughBean body) throws ApiException {
+    ApiResponse<DrillthroughBean> localVarResponse = drillThroughReportsUpdateReportWithHttpInfo(applicationName, databaseName, name, body);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * Update Drill Through Reoprt
+   * &lt;p&gt;Updates the drill through report in the specified application and database, and returns details of the updated report.&lt;/p&gt;
+   * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
+   * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
+   * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
+   * @param body &lt;p&gt;Drill through report details.&lt;/p&gt; (required)
+   * @return ApiResponse&lt;DrillthroughBean&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<DrillthroughBean> drillThroughReportsUpdateReportWithHttpInfo(String applicationName, String databaseName, String name, DrillthroughBean body) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = drillThroughReportsUpdateReportRequestBuilder(applicationName, databaseName, name, body);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("drillThroughReportsUpdateReport", localVarResponse);
         }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling drillThroughReportsDelete(Async)");
-        }
-        
-        // verify the required parameter 'name' is set
-        if (name == null) {
-            throw new ApiException("Missing the required parameter 'name' when calling drillThroughReportsDelete(Async)");
-        }
-        
+        return new ApiResponse<DrillthroughBean>(
+          localVarResponse.statusCode(),
+          localVarResponse.headers().map(),
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<DrillthroughBean>() {}) // closes the InputStream
+        );
+      } finally {
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
 
-        okhttp3.Call localVarCall = drillThroughReportsDeleteCall(applicationName, databaseName, name, _callback);
-        return localVarCall;
-
+  private HttpRequest.Builder drillThroughReportsUpdateReportRequestBuilder(String applicationName, String databaseName, String name, DrillthroughBean body) throws ApiException {
+    // verify the required parameter 'applicationName' is set
+    if (applicationName == null) {
+      throw new ApiException(400, "Missing the required parameter 'applicationName' when calling drillThroughReportsUpdateReport");
+    }
+    // verify the required parameter 'databaseName' is set
+    if (databaseName == null) {
+      throw new ApiException(400, "Missing the required parameter 'databaseName' when calling drillThroughReportsUpdateReport");
+    }
+    // verify the required parameter 'name' is set
+    if (name == null) {
+      throw new ApiException(400, "Missing the required parameter 'name' when calling drillThroughReportsUpdateReport");
+    }
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling drillThroughReportsUpdateReport");
     }
 
-    /**
-     * Delete Drill Through Report
-     * &lt;p&gt;Deletes the specified drill through report from the specified application and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the drill through report. The report name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public void drillThroughReportsDelete(String applicationName, String databaseName, String name) throws ApiException {
-        drillThroughReportsDeleteWithHttpInfo(applicationName, databaseName, name);
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/applications/{applicationName}/databases/{databaseName}/reports/{name}"
+        .replace("{applicationName}", ApiClient.urlEncode(applicationName.toString()))
+        .replace("{databaseName}", ApiClient.urlEncode(databaseName.toString()))
+        .replace("{name}", ApiClient.urlEncode(name.toString()));
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("PUT", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
     }
-
-    /**
-     * Delete Drill Through Report
-     * &lt;p&gt;Deletes the specified drill through report from the specified application and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the drill through report. The report name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> drillThroughReportsDeleteWithHttpInfo(String applicationName, String databaseName, String name) throws ApiException {
-        okhttp3.Call localVarCall = drillThroughReportsDeleteValidateBeforeCall(applicationName, databaseName, name, null);
-        return localVarApiClient.execute(localVarCall);
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
-
-    /**
-     * Delete Drill Through Report (asynchronously)
-     * &lt;p&gt;Deletes the specified drill through report from the specified application and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 204 </td><td> &lt;p&gt;&lt;strong&gt;No Content&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was deleted successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to delete the drill through report. The report name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call drillThroughReportsDeleteAsync(String applicationName, String databaseName, String name, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = drillThroughReportsDeleteValidateBeforeCall(applicationName, databaseName, name, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
     }
-    /**
-     * Build call for drillThroughReportsGetReport
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was retrieved successfully. Returns the links to get, edit, or delete the report.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the report. The application name, database name, or report name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call drillThroughReportsGetReportCall(String applicationName, String databaseName, String name, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
+    return localVarRequestBuilder;
+  }
 
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/reports/{name}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "name" + "\\}", localVarApiClient.escapeString(name.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call drillThroughReportsGetReportValidateBeforeCall(String applicationName, String databaseName, String name, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling drillThroughReportsGetReport(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling drillThroughReportsGetReport(Async)");
-        }
-        
-        // verify the required parameter 'name' is set
-        if (name == null) {
-            throw new ApiException("Missing the required parameter 'name' when calling drillThroughReportsGetReport(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = drillThroughReportsGetReportCall(applicationName, databaseName, name, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Drill Through Report
-     * &lt;p&gt;Returns the specified drill through report from the specified application and database.&lt;p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
-     * @return DrillthroughBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was retrieved successfully. Returns the links to get, edit, or delete the report.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the report. The application name, database name, or report name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public DrillthroughBean drillThroughReportsGetReport(String applicationName, String databaseName, String name) throws ApiException {
-        ApiResponse<DrillthroughBean> localVarResp = drillThroughReportsGetReportWithHttpInfo(applicationName, databaseName, name);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Drill Through Report
-     * &lt;p&gt;Returns the specified drill through report from the specified application and database.&lt;p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;DrillthroughBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was retrieved successfully. Returns the links to get, edit, or delete the report.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the report. The application name, database name, or report name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<DrillthroughBean> drillThroughReportsGetReportWithHttpInfo(String applicationName, String databaseName, String name) throws ApiException {
-        okhttp3.Call localVarCall = drillThroughReportsGetReportValidateBeforeCall(applicationName, databaseName, name, null);
-        Type localVarReturnType = new TypeToken<DrillthroughBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Drill Through Report (asynchronously)
-     * &lt;p&gt;Returns the specified drill through report from the specified application and database.&lt;p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was retrieved successfully. Returns the links to get, edit, or delete the report.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the report. The application name, database name, or report name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call drillThroughReportsGetReportAsync(String applicationName, String databaseName, String name, final ApiCallback<DrillthroughBean> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = drillThroughReportsGetReportValidateBeforeCall(applicationName, databaseName, name, _callback);
-        Type localVarReturnType = new TypeToken<DrillthroughBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for drillThroughReportsGetReports
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through reports were retrieved successfully. Returns the links to get, edit, or delete the reports.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the drill through reports. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call drillThroughReportsGetReportsCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/reports"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call drillThroughReportsGetReportsValidateBeforeCall(String applicationName, String databaseName, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling drillThroughReportsGetReports(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling drillThroughReportsGetReports(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = drillThroughReportsGetReportsCall(applicationName, databaseName, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Get Drill Through Reports
-     * &lt;p&gt;Returns all the drill through reports from the specified application and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return ReportList
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through reports were retrieved successfully. Returns the links to get, edit, or delete the reports.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the drill through reports. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ReportList drillThroughReportsGetReports(String applicationName, String databaseName) throws ApiException {
-        ApiResponse<ReportList> localVarResp = drillThroughReportsGetReportsWithHttpInfo(applicationName, databaseName);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Get Drill Through Reports
-     * &lt;p&gt;Returns all the drill through reports from the specified application and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;ReportList&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through reports were retrieved successfully. Returns the links to get, edit, or delete the reports.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the drill through reports. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ReportList> drillThroughReportsGetReportsWithHttpInfo(String applicationName, String databaseName) throws ApiException {
-        okhttp3.Call localVarCall = drillThroughReportsGetReportsValidateBeforeCall(applicationName, databaseName, null);
-        Type localVarReturnType = new TypeToken<ReportList>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Get Drill Through Reports (asynchronously)
-     * &lt;p&gt;Returns all the drill through reports from the specified application and database.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through reports were retrieved successfully. Returns the links to get, edit, or delete the reports.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to get the drill through reports. The application or database name may be incorrect.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call drillThroughReportsGetReportsAsync(String applicationName, String databaseName, final ApiCallback<ReportList> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = drillThroughReportsGetReportsValidateBeforeCall(applicationName, databaseName, _callback);
-        Type localVarReturnType = new TypeToken<ReportList>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for drillThroughReportsUpdateReport
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Drill through report details.&lt;/p&gt; (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the report. The application name, database name, or report name may be incorrect, or the specified report name may not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call drillThroughReportsUpdateReportCall(String applicationName, String databaseName, String name, DrillthroughBean body, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = body;
-
-        // create path and map variables
-        String localVarPath = "/applications/{applicationName}/databases/{databaseName}/reports/{name}"
-            .replaceAll("\\{" + "applicationName" + "\\}", localVarApiClient.escapeString(applicationName.toString()))
-            .replaceAll("\\{" + "databaseName" + "\\}", localVarApiClient.escapeString(databaseName.toString()))
-            .replaceAll("\\{" + "name" + "\\}", localVarApiClient.escapeString(name.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "application/xml"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json", "application/xml"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "basicAuth" };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call drillThroughReportsUpdateReportValidateBeforeCall(String applicationName, String databaseName, String name, DrillthroughBean body, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'applicationName' is set
-        if (applicationName == null) {
-            throw new ApiException("Missing the required parameter 'applicationName' when calling drillThroughReportsUpdateReport(Async)");
-        }
-        
-        // verify the required parameter 'databaseName' is set
-        if (databaseName == null) {
-            throw new ApiException("Missing the required parameter 'databaseName' when calling drillThroughReportsUpdateReport(Async)");
-        }
-        
-        // verify the required parameter 'name' is set
-        if (name == null) {
-            throw new ApiException("Missing the required parameter 'name' when calling drillThroughReportsUpdateReport(Async)");
-        }
-        
-        // verify the required parameter 'body' is set
-        if (body == null) {
-            throw new ApiException("Missing the required parameter 'body' when calling drillThroughReportsUpdateReport(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = drillThroughReportsUpdateReportCall(applicationName, databaseName, name, body, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Update Drill Through Reoprt
-     * &lt;p&gt;Updates the drill through report in the specified application and database, and returns details of the updated report.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Drill through report details.&lt;/p&gt; (required)
-     * @return DrillthroughBean
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the report. The application name, database name, or report name may be incorrect, or the specified report name may not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public DrillthroughBean drillThroughReportsUpdateReport(String applicationName, String databaseName, String name, DrillthroughBean body) throws ApiException {
-        ApiResponse<DrillthroughBean> localVarResp = drillThroughReportsUpdateReportWithHttpInfo(applicationName, databaseName, name, body);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Update Drill Through Reoprt
-     * &lt;p&gt;Updates the drill through report in the specified application and database, and returns details of the updated report.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Drill through report details.&lt;/p&gt; (required)
-     * @return ApiResponse&lt;DrillthroughBean&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the report. The application name, database name, or report name may be incorrect, or the specified report name may not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<DrillthroughBean> drillThroughReportsUpdateReportWithHttpInfo(String applicationName, String databaseName, String name, DrillthroughBean body) throws ApiException {
-        okhttp3.Call localVarCall = drillThroughReportsUpdateReportValidateBeforeCall(applicationName, databaseName, name, body, null);
-        Type localVarReturnType = new TypeToken<DrillthroughBean>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Update Drill Through Reoprt (asynchronously)
-     * &lt;p&gt;Updates the drill through report in the specified application and database, and returns details of the updated report.&lt;/p&gt;
-     * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
-     * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-     * @param name &lt;p&gt;Drill through report name.&lt;/p&gt; (required)
-     * @param body &lt;p&gt;Drill through report details.&lt;/p&gt; (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> &lt;p&gt;&lt;strong&gt;OK&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The drill through report was updated successfully.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> &lt;p&gt;&lt;strong&gt;Bad Request&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Failed to update the report. The application name, database name, or report name may be incorrect, or the specified report name may not exist.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 415 </td><td> &lt;p&gt;&lt;strong&gt;Not Acceptable&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The media type isn&#39;t supported or wasn&#39;t specified.&lt;/p&gt; </td><td>  -  </td></tr>
-        <tr><td> 500 </td><td> &lt;p&gt;Internal Server Error.&lt;/p&gt; </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call drillThroughReportsUpdateReportAsync(String applicationName, String databaseName, String name, DrillthroughBean body, final ApiCallback<DrillthroughBean> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = drillThroughReportsUpdateReportValidateBeforeCall(applicationName, databaseName, name, body, _callback);
-        Type localVarReturnType = new TypeToken<DrillthroughBean>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
 }

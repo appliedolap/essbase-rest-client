@@ -13,77 +13,93 @@
 
 package com.appliedolap.essbase.client.model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+import com.appliedolap.essbase.client.ApiClient;
 /**
  * AppStartupSettings
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-12-01T18:22:09.429372-05:00[America/Indiana/Indianapolis]")
+@JsonPropertyOrder({
+  AppStartupSettings.JSON_PROPERTY_ALLOW_USERS_TO_START_APPLICATION,
+  AppStartupSettings.JSON_PROPERTY_START_APPLICATION_WHEN_SERVER_STARTS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class AppStartupSettings {
-  public static final String SERIALIZED_NAME_ALLOW_USERS_TO_START_APPLICATION = "allowUsersToStartApplication";
-  @SerializedName(SERIALIZED_NAME_ALLOW_USERS_TO_START_APPLICATION)
+  public static final String JSON_PROPERTY_ALLOW_USERS_TO_START_APPLICATION = "allowUsersToStartApplication";
+  @jakarta.annotation.Nullable
   private Boolean allowUsersToStartApplication;
 
-  public static final String SERIALIZED_NAME_START_APPLICATION_WHEN_SERVER_STARTS = "startApplicationWhenServerStarts";
-  @SerializedName(SERIALIZED_NAME_START_APPLICATION_WHEN_SERVER_STARTS)
+  public static final String JSON_PROPERTY_START_APPLICATION_WHEN_SERVER_STARTS = "startApplicationWhenServerStarts";
+  @jakarta.annotation.Nullable
   private Boolean startApplicationWhenServerStarts;
 
+  public AppStartupSettings() { 
+  }
 
-  public AppStartupSettings allowUsersToStartApplication(Boolean allowUsersToStartApplication) {
-    
+  public AppStartupSettings allowUsersToStartApplication(@jakarta.annotation.Nullable Boolean allowUsersToStartApplication) {
     this.allowUsersToStartApplication = allowUsersToStartApplication;
     return this;
   }
 
-   /**
+  /**
    * Get allowUsersToStartApplication
    * @return allowUsersToStartApplication
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALLOW_USERS_TO_START_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getAllowUsersToStartApplication() {
     return allowUsersToStartApplication;
   }
 
 
-  public void setAllowUsersToStartApplication(Boolean allowUsersToStartApplication) {
+  @JsonProperty(JSON_PROPERTY_ALLOW_USERS_TO_START_APPLICATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAllowUsersToStartApplication(@jakarta.annotation.Nullable Boolean allowUsersToStartApplication) {
     this.allowUsersToStartApplication = allowUsersToStartApplication;
   }
 
 
-  public AppStartupSettings startApplicationWhenServerStarts(Boolean startApplicationWhenServerStarts) {
-    
+  public AppStartupSettings startApplicationWhenServerStarts(@jakarta.annotation.Nullable Boolean startApplicationWhenServerStarts) {
     this.startApplicationWhenServerStarts = startApplicationWhenServerStarts;
     return this;
   }
 
-   /**
+  /**
    * Get startApplicationWhenServerStarts
    * @return startApplicationWhenServerStarts
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_START_APPLICATION_WHEN_SERVER_STARTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Boolean getStartApplicationWhenServerStarts() {
     return startApplicationWhenServerStarts;
   }
 
 
-  public void setStartApplicationWhenServerStarts(Boolean startApplicationWhenServerStarts) {
+  @JsonProperty(JSON_PROPERTY_START_APPLICATION_WHEN_SERVER_STARTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStartApplicationWhenServerStarts(@jakarta.annotation.Nullable Boolean startApplicationWhenServerStarts) {
     this.startApplicationWhenServerStarts = startApplicationWhenServerStarts;
   }
 
 
+  /**
+   * Return true if this AppStartupSettings object is equal to o.
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -123,5 +139,49 @@ public class AppStartupSettings {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @return URL query string
+   */
+  public String toUrlQueryString() {
+    return toUrlQueryString(null);
+  }
+
+  /**
+   * Convert the instance into URL query string.
+   *
+   * @param prefix prefix of the query string
+   * @return URL query string
+   */
+  public String toUrlQueryString(String prefix) {
+    String suffix = "";
+    String containerSuffix = "";
+    String containerPrefix = "";
+    if (prefix == null) {
+      // style=form, explode=true, e.g. /pet?name=cat&type=manx
+      prefix = "";
+    } else {
+      // deepObject style e.g. /pet?id[name]=cat&id[type]=manx
+      prefix = prefix + "[";
+      suffix = "]";
+      containerSuffix = "]";
+      containerPrefix = "[";
+    }
+
+    StringJoiner joiner = new StringJoiner("&");
+
+    // add `allowUsersToStartApplication` to the URL query string
+    if (getAllowUsersToStartApplication() != null) {
+      joiner.add(String.format("%sallowUsersToStartApplication%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getAllowUsersToStartApplication()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    // add `startApplicationWhenServerStarts` to the URL query string
+    if (getStartApplicationWhenServerStarts() != null) {
+      joiner.add(String.format("%sstartApplicationWhenServerStarts%s=%s", prefix, suffix, URLEncoder.encode(ApiClient.valueToString(getStartApplicationWhenServerStarts()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
+    return joiner.toString();
+  }
 }
 
