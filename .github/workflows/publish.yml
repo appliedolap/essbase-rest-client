@@ -14,7 +14,7 @@ jobs:
           java-version: '17'
           cache: 'maven'
           check-latest: false
-          server-id: ossrh
+          server-id: central
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.PRIVATE_SIGNING_KEY }}
