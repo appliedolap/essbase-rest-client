@@ -1,30 +1,87 @@
-name: Publish essbase-rest-client to maven central
+name: Publish essbase-rest-client to Maven Central
+
+run-name: Publish ${{ github.ref_name }} to Maven Central by @${{ github.actor }}
 
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: maven-central-publish
+  cancel-in-progress: false
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  validate:
+    name: Validate release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    outputs:
+      version: ${{ steps.release.outputs.version }}
     steps:
-      - uses: actions/checkout@v3.3.0
-      - uses: actions/setup-java@v3.11.0
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Java
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version-file: '.java-version'
           cache: 'maven'
-          check-latest: false
+          cache-dependency-path: 'pom.xml'
+
+      - name: Validate release request
+        id: release
+        run: |
+          set -euo pipefail
+
+          if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
+            echo "Publishing is restricted to the main branch; selected ref is $GITHUB_REF." >&2
+            exit 1
+          fi
+
+          actual_version="$(mvn -B -ntp help:evaluate -Dexpression=project.version -q -DforceStdout)"
+
+          if [[ "$actual_version" == *-SNAPSHOT ]]; then
+            echo "Snapshot versions cannot be published by this release workflow." >&2
+            exit 1
+          fi
+
+          echo "version=$actual_version" >> "$GITHUB_OUTPUT"
+
+      - name: Build release artifacts
+        run: mvn -B -ntp -DskipTests -Dgpg.skip=true verify
+
+  publish:
+    name: Publish release
+    needs: validate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Java and publishing credentials
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: 'temurin'
+          java-version-file: '.java-version'
+          cache: 'maven'
+          cache-dependency-path: 'pom.xml'
           server-id: central
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.PRIVATE_SIGNING_KEY }}
           gpg-passphrase: SIGN_KEY_PASS
-      - name: Build ${{ github.ref_name }}
-        run: |
-          mvn -B deploy '-Djava.net.preferIPv4Stack=true' '-Dhttps.protocols=TLSv1.2' '-Dmaven.test.skip=true'
+
+      - name: Publish version ${{ needs.validate.outputs.version }}
+        run: mvn -B -ntp -DskipTests deploy
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
-          SIGN_KEY: ${{ secrets.PRIVATE_SIGNING_KEY }}
-          SIGN_KEY_ID: ${{ secrets.PRIVATE_SIGNING_KEY_ID }}
           SIGN_KEY_PASS: ${{ secrets.PRIVATE_SIGNING_KEY_PASSPHRASE }}
