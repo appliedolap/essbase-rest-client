@@ -5,13 +5,16 @@ import com.appliedolap.essbase.EssCube;
 import com.appliedolap.essbase.EssMember;
 import com.appliedolap.essbase.EssObject;
 import com.appliedolap.essbase.exceptions.NoSuchEssbaseObjectException;
+import com.appliedolap.essbase.testing.ReadOnlyIntegrationTest;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertThrows;
 
-public class EssCubeImplTest {
+@Category(ReadOnlyIntegrationTest.class)
+public class EssCubeImplIT {
 
     @Test
     public void getMember() {

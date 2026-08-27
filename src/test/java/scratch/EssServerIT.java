@@ -4,7 +4,10 @@ import com.appliedolap.essbase.EssCube;
 import com.appliedolap.essbase.EssFile;
 import com.appliedolap.essbase.EssJob;
 import com.appliedolap.essbase.EssOutline;
+import com.appliedolap.essbase.testing.DestructiveIntegrationTest;
+import com.appliedolap.essbase.testing.ReadOnlyIntegrationTest;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,11 +18,13 @@ public class EssServerIT extends AbstractEssbaseServerTest {
     private static final Logger logger = LoggerFactory.getLogger(EssServerIT.class);
 
     @Test
+    @Category(ReadOnlyIntegrationTest.class)
     public void getFile() {
         EssFile sampleBasic = server.getFile("gallery/Applications/Demo Samples/Block Storage", "Sample_Basic.xlsx");
     }
 
     @Test
+    @Category(DestructiveIntegrationTest.class)
     public void createApplicationFromWorkbook() {
         EssFile sampleBasic = server.getFile("gallery/Applications/Demo Samples/Block Storage", "Sample_Basic.xlsx");
         EssJob job = server.createApplicationFromWorkbook("Sample", "Basic", sampleBasic);
@@ -27,6 +32,7 @@ public class EssServerIT extends AbstractEssbaseServerTest {
     }
 
     @Test
+    @Category(DestructiveIntegrationTest.class)
     public void createApplicationFromWorkbookWithWait() throws InterruptedException {
         EssFile sampleBasic = server.getFile("gallery/Applications/Demo Samples/Block Storage", "Sample_Basic.xlsx");
         EssJob job = server.createApplicationFromWorkbook("Sample", "Basic", sampleBasic);
@@ -38,6 +44,7 @@ public class EssServerIT extends AbstractEssbaseServerTest {
     }
 
     @Test
+    @Category(ReadOnlyIntegrationTest.class)
     public void outline() {
         EssCube cube = server.getApplication("Sample").getCube("Basic");
         EssOutline outline = cube.getOutline();

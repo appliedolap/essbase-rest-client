@@ -1,9 +1,12 @@
 package scratch;
 
 import com.appliedolap.essbase.EssDataSource;
+import com.appliedolap.essbase.testing.ReadOnlyIntegrationTest;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
-public class DataSourceTest extends AbstractEssbaseServerTest {
+@Category(ReadOnlyIntegrationTest.class)
+public class DataSourceIT extends AbstractEssbaseServerTest {
 
     @Test
     public void dataSources() {

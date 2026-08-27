@@ -195,6 +195,81 @@
                 </plugins>
             </build>
         </profile>
+
+        <!-- Live-Essbase integration tests, categorized by com.appliedolap.essbase.testing.*
+             marker interfaces (see AbstractEssbaseServerTest and ConnectionUtils, which both read
+             connection details from ~/essbase-test.properties). Neither profile runs by default -
+             these need a real, reachable Essbase 21+ server. -->
+        <profile>
+            <id>integration-read-only</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>3.5.4</version>
+                        <configuration>
+                            <groups>com.appliedolap.essbase.testing.ReadOnlyIntegrationTest</groups>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>integration-destructive</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>3.6.3</version>
+                        <executions>
+                            <execution>
+                                <id>require-destructive-test-acknowledgement</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireProperty>
+                                            <property>allowDestructiveEssbaseTests</property>
+                                            <message>Destructive live Essbase tests require an explicit -DallowDestructiveEssbaseTests=true acknowledgement.</message>
+                                            <regex>true</regex>
+                                            <regexMessage>Destructive live Essbase tests require -DallowDestructiveEssbaseTests=true.</regexMessage>
+                                        </requireProperty>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>3.5.4</version>
+                        <configuration>
+                            <groups>com.appliedolap.essbase.testing.DestructiveIntegrationTest</groups>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
 </project>
