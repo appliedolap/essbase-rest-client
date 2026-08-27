@@ -92,7 +92,7 @@ public class EssDimensionImpl extends AbstractEssObject implements EssDimension 
         }
     }
 
-    /**
+    /*
      * update the level with the specified level number and EssLevel body
      * @return updated EssLevel.
     public EssLevel updateLevel(Integer levelNumber, EssLevel level) {

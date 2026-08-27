@@ -218,7 +218,9 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
             MemberBean memberBean = api.getOutlineViewerApi().outlineGetMemberInfo(getApplicationName(), cube.getName(), memberName, null);
             return new EssMemberImpl(api, this, memberBean);
         } catch (ApiException apiException) {
-            throw new EssApiException(apiException);
+            // unfortunately, the Essbase REST API just throws a 400 exception (as opposed to something more specific)
+            // when you have an invalid member name (or cube or application, but we're assuming that those are okay)
+            throw new NoSuchEssbaseObjectException(memberName, Type.MEMBER);
         }
     }
 
