@@ -53,6 +53,12 @@ public class ApiContext {
 
     private final ApplicationLogsApi logsApi;
 
+    private final GridApi gridApi;
+
+    private final LayoutsApi layoutsApi;
+
+    private final UserSessionApi userSessionApi;
+
     public ApiContext(ApiClient client) {
         this.client = client;
         this.applicationsApi = new ApplicationsApi(client);
@@ -76,6 +82,9 @@ public class ApiContext {
         this.globalDataSourcesApi = new GlobalDataSourcesApi(client);
         this.locksApi = new LocksApi(client);
         this.logsApi = new ApplicationLogsApi(client);
+        this.gridApi = new GridApi(client);
+        this.layoutsApi = new LayoutsApi(client);
+        this.userSessionApi = new UserSessionApi(client);
     }
 
     public ApplicationsApi applicationsApi() {
@@ -168,6 +177,18 @@ public class ApiContext {
 
     public ApplicationLogsApi getApplicationLogsApi() {
         return logsApi;
+    }
+
+    public GridApi getGridApi() {
+        return gridApi;
+    }
+
+    public LayoutsApi getLayoutsApi() {
+        return layoutsApi;
+    }
+
+    public UserSessionApi getUserSessionApi() {
+        return userSessionApi;
     }
 
 }

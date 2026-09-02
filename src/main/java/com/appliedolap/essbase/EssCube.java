@@ -156,6 +156,38 @@ public interface EssCube extends EssObject {
 
     EssGrid executeMdx(String query);
 
+    /**
+     * Opens a live, ad hoc grid view on this cube using its default layout - the REST analog of the
+     * Java API's {@code IEssCube.openCubeView}.
+     *
+     * @return a navigable cube view
+     */
+    EssCubeView openCubeView();
+
+    /**
+     * Opens a live, ad hoc grid view on this cube using a specific saved layout by name, rather than
+     * whatever is currently saved as "Default".
+     *
+     * @param layoutName the name of the saved layout to open
+     * @return a navigable cube view
+     */
+    EssCubeView openCubeView(String layoutName);
+
+    /**
+     * Resets {@link #openCubeView()}'s "default grid" back to the true stateless default (the first
+     * grid you'd see in an ad hoc analysis, before any grid operations).
+     *
+     * <p>Despite its Swagger documentation, "Get Default Grid" is not actually stateless: every grid
+     * operation (zoom, pivot, etc.) is silently persisted server-side into a hidden, per-user layout
+     * named {@code Session_Layout_<username>} - hidden meaning it never appears in
+     * {@code GET .../layouts}, even though both "Get Default Grid" and "Execute Layout Grid" read from
+     * it. Deleting that layout by its exact name is the only way found so far to restore the
+     * documented stateless behavior. The delete call itself is not idempotent (it 400s with "No
+     * layout exists..." if there's nothing to delete), but this method treats that specific case as
+     * success, since the desired end state - no session layout - already holds.
+     */
+    void resetDefaultView();
+
     enum MdxOutputType {
 
         JSON, HTML, XLSX, CSV;

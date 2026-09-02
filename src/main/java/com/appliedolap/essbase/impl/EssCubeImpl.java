@@ -373,6 +373,39 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
         }
     }
 
+    @Override
+    public EssCubeView openCubeView() {
+        try {
+            Grid grid = api.getGridApi().gridGetDefault(getApplicationName(), getName());
+            return new EssCubeViewImpl(api, getApplicationName(), getName(), grid);
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    @Override
+    public EssCubeView openCubeView(String layoutName) {
+        try {
+            Grid grid = api.getGridApi().gridExecuteLayout(getApplicationName(), getName(), layoutName, null);
+            return new EssCubeViewImpl(api, getApplicationName(), getName(), grid);
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    @Override
+    public void resetDefaultView() {
+        try {
+            String username = api.getUserSessionApi().userSessionGetSession(false).getId();
+            api.getLayoutsApi().deleteLayout(getApplicationName(), getName(), "Session_Layout_" + username, null);
+        } catch (ApiException e) {
+            EssApiException wrapped = new EssApiException(e);
+            if (wrapped.getMessage() == null || !wrapped.getMessage().contains("No layout exists")) {
+                throw wrapped;
+            }
+        }
+    }
+
     public static class ExcelExportOptions {
 
         private boolean columnFormat;
