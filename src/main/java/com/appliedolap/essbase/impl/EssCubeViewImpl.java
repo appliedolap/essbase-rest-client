@@ -5,6 +5,7 @@ import com.appliedolap.essbase.EssApiException;
 import com.appliedolap.essbase.EssCubeView;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.Grid;
+import com.appliedolap.essbase.client.model.GridDimension;
 import com.appliedolap.essbase.client.model.GridOperation;
 import com.appliedolap.essbase.client.model.GridRange;
 import com.appliedolap.essbase.client.model.Slice;
@@ -96,7 +97,49 @@ public class EssCubeViewImpl implements EssCubeView {
 
     @Override
     public void zoomIn(int row, int col) {
-        execute(GridOperation.ActionEnum.ZOOMIN, row, col);
+        // "coordinates" silently mistargets a *different* dimension - not an error, just wrong -
+        // when the clicked cell belongs to a dimension already genuinely placed on an axis (e.g.
+        // "Year" sitting at its own row/column, as opposed to a POV placeholder dimension shown as a
+        // header but not yet on any axis). Confirmed live: zooming in on "Year" via "coordinates"
+        // expanded "Market" (a POV dimension) instead. "ranges" targets the on-axis case correctly,
+        // but errors for a POV placeholder cell - so which field to use depends on which kind of cell
+        // this is, per the grid's own dimension bookkeeping (see onAxisDimension). This is a
+        // mechanical fact about which wire field the server's zoomin implementation reads for a given
+        // kind of cell, not a guess at what range would produce a particular result.
+        if (onAxisDimension(row, col)) {
+            GridOperation operation = new GridOperation().grid(grid).action(GridOperation.ActionEnum.ZOOMIN);
+            operation.setRanges(Arrays.asList(Arrays.asList(row, col, row, col)));
+            execute(operation);
+        } else {
+            execute(GridOperation.ActionEnum.ZOOMIN, row, col);
+        }
+    }
+
+    // True if the given position is a real member cell (wire type "0", not a blank filler) under a
+    // dimension already placed on the row or column axis (its "pov" is empty, and its row or column
+    // matches) rather than sitting as a POV placeholder (non-empty "pov", row -1 and column -1). The
+    // type "0" check matters: a dimension's column/row can match a *different*, unrelated blank
+    // filler cell elsewhere in the header area (e.g. column 0 also being blank at row 1, above where
+    // "Year" actually sits at row 2) - without it, that unrelated cell would be misclassified too.
+    // See zoomIn.
+    private boolean onAxisDimension(int row, int col) {
+        CellLocation location = locate(row, col);
+        if (location == null || !"0".equals(location.range().getTypes().get(location.offset()))) {
+            return false;
+        }
+        for (GridDimension dimension : grid.getDimensions()) {
+            boolean isPov = dimension.getPov() != null && !dimension.getPov().isEmpty();
+            if (isPov) {
+                continue;
+            }
+            if (dimension.getColumn() != null && dimension.getColumn() == col) {
+                return true;
+            }
+            if (dimension.getRow() != null && dimension.getRow() == row) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

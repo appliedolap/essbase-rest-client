@@ -9,13 +9,30 @@ import java.util.List;
  *
  * <p>This class describes actions and cells to the Essbase REST API and renders back whatever grid
  * the engine returns - it does not model what a given action "should" do to the grid, or compute a
- * request shaped to produce some intended result. The one exception is mechanical, not semantic:
- * {@link #zoomOut} and {@link #keepOnly} are sent as a "ranges" request (a single-cell range at the
- * given position) rather than "coordinates" like the other operations, because the server silently
- * no-ops "coordinates" for those two actions (200 OK, grid unchanged) - "ranges" is simply the only
- * field that reaches their implementation at all, not a different way of describing the same click.
- * Beyond that field substitution, no attempt is made to reverse, expand, or otherwise infer "the
- * range that will produce a particular outcome" - whatever the server does with the literal
+ * request shaped to produce some intended result. The exceptions are all mechanical, not semantic -
+ * cases where the wire format itself has more than one field capable of naming a cell, and only one
+ * of them actually reaches the engine's implementation for a given kind of cell or action:
+ *
+ * <ul>
+ * <li>{@link #zoomOut} and {@link #keepOnly} are sent as a "ranges" request (a single-cell range at
+ * the given position) rather than "coordinates" like the other operations, because the server
+ * silently no-ops "coordinates" for those two actions (200 OK, grid unchanged) - "ranges" is simply
+ * the only field that reaches their implementation at all.
+ * <li>{@link #zoomIn} normally uses "coordinates", but switches to "ranges" when the target cell is
+ * already a real member position under a dimension genuinely placed on an axis (as opposed to a POV
+ * placeholder dimension shown as a header but not yet on any axis) - see {@code onAxisDimension} in
+ * the implementation. Confirmed live: "coordinates" does not do a literal (row, col) grid lookup for
+ * an on-axis cell at all - it addresses POV placeholder dimensions by column, order-insensitively
+ * (coordinates {@code [0,1]}, {@code [1,0]}, {@code [0,2]}, and {@code [2,0]} all landed on whichever
+ * POV dimension's column matched the nonzero value, never on the literal cell), so an on-axis cell
+ * whose row or column happens to coincide with a POV dimension's column gets silently routed to that
+ * *unrelated* POV dimension instead - not an error, just the wrong dimension. E.g. zooming in on
+ * "Year" (on the row axis at column 0) previously expanded "Market" (the POV dimension whose header
+ * happens to sit at column 0's row) instead of Year.
+ * </ul>
+ *
+ * Beyond those field-selection adjustments, no attempt is made to reverse, expand, or otherwise infer
+ * "the range that will produce a particular outcome" - whatever the server does with the literal
  * single-cell description is authoritative. In practice this means, for instance, that
  * {@link #zoomOut} reliably collapses a cleanly-targeted dimension back to its total, but on a member
  * row that the engine doesn't accept for that request shape (or once more than one dimension is
@@ -41,6 +58,10 @@ public interface EssCubeView extends EssGrid {
 
     /**
      * Zooms in on the member at the given position, using the server's default zoom-in preference.
+     * See the class-level javadoc: this picks whichever wire field ("coordinates" or "ranges")
+     * actually addresses this specific cell correctly, depending on whether it's already a real
+     * on-axis member or still a POV placeholder - not a computed guess at outcome, but a description
+     * of the same literal click either way.
      *
      * @param row the row of the member to zoom in on
      * @param col the column of the member to zoom in on

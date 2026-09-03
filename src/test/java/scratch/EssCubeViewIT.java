@@ -97,6 +97,41 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
         logGrid(view);
     }
 
+    // Reproduces a real bug: zooming in on "Year" (already on the row axis at (2, 0) in the pristine
+    // grid) via "coordinates" silently expanded "Market" (a POV dimension) instead - not an error,
+    // just the wrong dimension. "coordinates" turns out not to do a literal (row, col) grid lookup at
+    // all for members already on an axis; it's addressing POV placeholder dimensions by column,
+    // order-insensitively (confirmed: coordinates [0,1], [1,0], [0,2], and [2,0] all landed on a POV
+    // dimension keyed off whichever value wasn't 0, never on "Year"). zoomIn now detects this case
+    // (see onAxisDimension) and uses "ranges" instead, which does address the literal cell.
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void zoomInOnAnAlreadyOnAxisDimension() {
+        EssCubeView view = sampleBasic().openCubeView();
+        logger.info("Before zoom in:");
+        logGrid(view);
+        assertEquals("Year", view.getCell(2, 0));
+
+        view.zoomIn(2, 0);
+        logger.info("After zoom in on Year:");
+        logGrid(view);
+        assertEquals("     Qtr1", view.getCell(2, 0));
+        assertEquals("     Qtr2", view.getCell(3, 0));
+        assertEquals("     Qtr3", view.getCell(4, 0));
+        assertEquals("     Qtr4", view.getCell(5, 0));
+        assertEquals("Year", view.getCell(6, 0));
+
+        // The same bug recurs one level deeper: zooming into "Qtr1" (now itself on-axis, at the
+        // same column Year occupied) also silently mistargeted a POV dimension via "coordinates".
+        view.zoomIn(2, 0);
+        logger.info("After zoom in on Qtr1:");
+        logGrid(view);
+        assertEquals("          Jan", view.getCell(2, 0));
+        assertEquals("          Feb", view.getCell(3, 0));
+        assertEquals("          Mar", view.getCell(4, 0));
+        assertEquals("     Qtr1", view.getCell(5, 0));
+    }
+
     @Test
     @Category(DestructiveIntegrationTest.class)
     public void zoomInThenZoomOut() {
