@@ -7,24 +7,25 @@ import java.util.List;
  * Every operation re-executes the view against the server and replaces the grid held by this view
  * with the server's response.
  *
+ * <p>This class describes actions and cells to the Essbase REST API and renders back whatever grid
+ * the engine returns - it does not model what a given action "should" do to the grid, or compute a
+ * request shaped to produce some intended result. The one exception is mechanical, not semantic:
+ * {@link #zoomOut} and {@link #keepOnly} are sent as a "ranges" request (a single-cell range at the
+ * given position) rather than "coordinates" like the other operations, because the server silently
+ * no-ops "coordinates" for those two actions (200 OK, grid unchanged) - "ranges" is simply the only
+ * field that reaches their implementation at all, not a different way of describing the same click.
+ * Beyond that field substitution, no attempt is made to reverse, expand, or otherwise infer "the
+ * range that will produce a particular outcome" - whatever the server does with the literal
+ * single-cell description is authoritative. In practice this means, for instance, that
+ * {@link #zoomOut} reliably collapses a cleanly-targeted dimension back to its total, but on a member
+ * row that the engine doesn't accept for that request shape (or once more than one dimension is
+ * zoomed in at once), it may do less than you'd expect, more than you'd expect, or return an
+ * engine-level error - that's the engine's answer to the given description, not a bug in this layer.
+ *
  * <p>{@link #getCell(int, int)}, {@link #getCellType(int, int)}, {@link #setMembers}, {@link #zoomIn},
  * {@link #zoomOut}, {@link #keepOnly}, and {@link #refresh} are verified against a live server (see
- * {@code EssCubeViewIT}) - the grid content is asserted to actually change, not just that the call
- * doesn't throw. Note that {@link #zoomOut} and {@link #keepOnly} are sent as a "ranges" request
- * (not "coordinates" like the other operations): the server silently no-ops "coordinates" for these
- * two actions, returning 200 with an unchanged grid rather than an error. {@link #zoomOut} targets
- * the clicked column's *entire* contiguous span of member rows (not just the clicked row or that
- * dimension's total row), which is what makes it work regardless of which row within the dimension
- * was clicked - a single-row range only ever lined up when it was exactly the total row, failing with
- * "cannot be interpreted" for any other (very natural) click on a leaf member.
- *
- * <p><b>Known limitation:</b> once more than one dimension is zoomed in at once ("nested" - e.g.
- * Product and Market both expanded onto the row axis), {@link #zoomOut} is not reliably selective: it
- * may collapse more than the single dimension you targeted (sometimes all of them at once), and which
- * dimension(s) actually collapse is sensitive to the exact row range in ways that don't reduce to a
- * simple rule found so far - a one-row difference between two otherwise-equivalent ranges flipped
- * which dimension(s) collapsed. See the ignored
- * {@code zoomOutOnlyCollapsesTheTargetedNestedDimension} test in {@code EssCubeViewIT}.
+ * {@code EssCubeViewIT}) in at least their most direct case - the grid content is asserted to actually
+ * change, not just that the call doesn't throw.
  *
  * <p>{@link #removeOnly}, {@link #pivot}, and {@link #pivotToPov(int, int)} are not verified: their
  * request wire shape appears correct (the server returns engine-level errors specific to the given
@@ -47,7 +48,9 @@ public interface EssCubeView extends EssGrid {
     void zoomIn(int row, int col);
 
     /**
-     * Zooms out from the member at the given position.
+     * Zooms out from the member at the given position. See the class-level javadoc: this describes
+     * the click as-is and returns whatever the server does with it, rather than computing a request
+     * shaped to force a particular collapse.
      *
      * @param row the row of the member to zoom out from
      * @param col the column of the member to zoom out from
@@ -55,7 +58,9 @@ public interface EssCubeView extends EssGrid {
     void zoomOut(int row, int col);
 
     /**
-     * Keeps only the member at the given position, removing the rest of its level/siblings.
+     * Keeps only the member at the given position. See the class-level javadoc: this describes the
+     * click as-is and returns whatever the server does with it, rather than computing a request
+     * shaped to force a particular outcome.
      *
      * @param row the row of the member to keep
      * @param col the column of the member to keep

@@ -101,45 +101,7 @@ public class EssCubeViewImpl implements EssCubeView {
 
     @Override
     public void zoomOut(int row, int col) {
-        // A range covering only the clicked row is fragile: it only lines up with a valid target when
-        // it happens to be that dimension's own total row, so clicking any *leaf* member row (a very
-        // natural thing to do - real Smart View lets you zoom out from any expanded member) fails
-        // with "cannot be interpreted". Targeting this column's full contiguous span of real member
-        // rows instead (see memberRowSpan) works no matter which row within it was clicked - confirmed
-        // against a single zoomed dimension both at its total row and at a leaf row.
-        //
-        // With more than one dimension zoomed in at once ("nested" - e.g. Product AND Market both
-        // expanded onto the row axis), zoom out stops being reliably selective: which dimension(s)
-        // actually collapse is sensitive to the exact row range in ways that don't reduce to a simple
-        // rule found so far (a one-row difference in an otherwise-equivalent range flipped whether
-        // Market, Product, or both collapsed). Nested zoom-out may collapse more than the dimension
-        // you targeted. AdhocGridWindow's reset-to-default action is the reliable way to recover from
-        // a confusing nested zoom state.
-        int[] span = memberRowSpan(col);
-        GridOperation operation = new GridOperation().grid(grid).action(GridOperation.ActionEnum.ZOOMOUT);
-        operation.setRanges(Arrays.asList(Arrays.asList(span[1], col, span[0], col)));
-        execute(operation);
-    }
-
-    // Returns {firstRow, lastRow}: the full contiguous span of real member rows (wire type "0") in
-    // the given column, skipping the blank/POV header rows (type "7") above it. See zoomOut.
-    private int[] memberRowSpan(int col) {
-        int first = -1;
-        int last = -1;
-        for (int row = 0; row < grid.getSlice().getRows(); row++) {
-            CellLocation location = locate(row, col);
-            String type = location == null ? null : location.range().getTypes().get(location.offset());
-            if ("0".equals(type)) {
-                if (first == -1) {
-                    first = row;
-                }
-                last = row;
-            }
-        }
-        if (first == -1) {
-            throw new IllegalArgumentException("No member rows found in column " + col);
-        }
-        return new int[] { first, last };
+        executeRange(GridOperation.ActionEnum.ZOOMOUT, row, col);
     }
 
     @Override
@@ -175,15 +137,16 @@ public class EssCubeViewImpl implements EssCubeView {
         execute(operation);
     }
 
-    // keepOnly is silently ignored by the server when sent via "coordinates" (200 OK, grid
-    // unchanged) - it requires "ranges" instead. Empirically the server also expects a *reversed*
-    // single-cell range (end row one less than the start row) to target exactly one row; a normal
-    // [row,row] range keeps one extra row beyond the target. Only verified against a single zoomed
-    // dimension so far - unlike zoomOut, keepOnly on a nested (multi-dimension-zoomed) grid hasn't
-    // been rigorously checked and may have the same "collapses more than intended" issue.
+    // zoomOut/keepOnly are silently ignored by the server when sent via "coordinates" (200 OK, grid
+    // unchanged) - that field is simply wired to other actions, not a matter of how we phrase the
+    // request, so "ranges" is the only way to invoke these two at all. Beyond that one substitution,
+    // this describes the click as literally as the wire format allows - a single-cell range - and
+    // does not try to compute, reverse, or otherwise infer "the range that will produce some intended
+    // result". Whatever grid the server returns for that description is authoritative; this library
+    // doesn't model or second-guess what a given action *should* do to the grid.
     private void executeRange(GridOperation.ActionEnum action, int row, int col) {
         GridOperation operation = new GridOperation().grid(grid).action(action);
-        operation.setRanges(Arrays.asList(Arrays.asList(row, col, row - 1, col)));
+        operation.setRanges(Arrays.asList(Arrays.asList(row, col, row, col)));
         execute(operation);
     }
 
