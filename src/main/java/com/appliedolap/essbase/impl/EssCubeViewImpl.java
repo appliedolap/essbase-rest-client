@@ -101,12 +101,12 @@ public class EssCubeViewImpl implements EssCubeView {
 
     @Override
     public void zoomOut(int row, int col) {
-        execute(GridOperation.ActionEnum.ZOOMOUT, row, col);
+        executeRange(GridOperation.ActionEnum.ZOOMOUT, row, col);
     }
 
     @Override
     public void keepOnly(int row, int col) {
-        execute(GridOperation.ActionEnum.KEEPONLY, row, col);
+        executeRange(GridOperation.ActionEnum.KEEPONLY, row, col);
     }
 
     @Override
@@ -134,6 +134,16 @@ public class EssCubeViewImpl implements EssCubeView {
     private void execute(GridOperation.ActionEnum action, int row, int col) {
         GridOperation operation = new GridOperation().grid(grid).action(action);
         operation.setCoordinates(Arrays.asList(row, col));
+        execute(operation);
+    }
+
+    // zoomOut/keepOnly are silently ignored by the server when sent via "coordinates" (200 OK, grid
+    // unchanged) - they require "ranges" instead. Empirically the server also expects a *reversed*
+    // single-cell range (end row one less than the start row) to target exactly one row; a normal
+    // [row,row] range keeps/collapses one extra row beyond the target.
+    private void executeRange(GridOperation.ActionEnum action, int row, int col) {
+        GridOperation operation = new GridOperation().grid(grid).action(action);
+        operation.setRanges(Arrays.asList(Arrays.asList(row, col, row - 1, col)));
         execute(operation);
     }
 

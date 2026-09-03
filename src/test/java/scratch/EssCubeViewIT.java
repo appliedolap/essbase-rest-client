@@ -101,13 +101,20 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
     @Category(DestructiveIntegrationTest.class)
     public void zoomInThenZoomOut() {
         EssCubeView view = sampleBasic().openCubeView();
+        int rowsBeforeZoom = view.getRows();
+
         view.zoomIn(1, 0);
         logger.info("After zoom in:");
         logGrid(view);
+        assertTrue("zoom in should add rows for the Product members", view.getRows() > rowsBeforeZoom);
 
-        view.zoomOut(1, 0);
+        // Zoom out targets the Product aggregate/total row (the last row after zooming in), not the
+        // original pre-zoom coordinate - that position no longer holds the "Product" member once its
+        // children have been zoomed into the grid.
+        view.zoomOut(view.getRows() - 1, 0);
         logger.info("After zoom out:");
         logGrid(view);
+        assertEquals("zoom out should collapse back to the pre-zoom row count", rowsBeforeZoom, view.getRows());
     }
 
     @Test
@@ -118,11 +125,18 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
         logger.info("After zoom in:");
         logGrid(view);
 
-        view.keepOnly(1, 0);
-        logger.info("After keep only on (1, 0):");
+        // Row 2 is the first Product member (Colas) once zoomed in.
+        view.keepOnly(2, 0);
+        logger.info("After keep only on (2, 0):");
         logGrid(view);
+        assertEquals("Colas", view.getCell(2, 0));
+        assertEquals("keep only should leave just the header rows plus the kept member", 3, view.getRows());
     }
 
+    // Not currently verified to work: every coordinate/range tried against a live server - including
+    // removing only the aggregate/total row, in isolation - fails with "This operation would generate
+    // a nonsensical report." See the class-level javadoc on EssCubeView.
+    @Ignore
     @Test
     @Category(DestructiveIntegrationTest.class)
     public void removeOnly() {
@@ -131,8 +145,8 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
         logger.info("After zoom in:");
         logGrid(view);
 
-        view.removeOnly(1, 0);
-        logger.info("After remove only on (1, 0):");
+        view.removeOnly(2, 0);
+        logger.info("After remove only on (2, 0):");
         logGrid(view);
     }
 

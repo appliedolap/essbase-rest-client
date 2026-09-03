@@ -7,15 +7,22 @@ import java.util.List;
  * Every operation re-executes the view against the server and replaces the grid held by this view
  * with the server's response.
  *
- * <p>{@link #getCell(int, int)}, {@link #getCellType(int, int)}, {@link #setMembers}, and the
- * navigation operations ({@link #zoomIn}, {@link #zoomOut}, {@link #keepOnly}, {@link #removeOnly},
- * {@link #refresh}) are verified against a live server (see {@code EssCubeViewIT}). {@link #pivot}
- * and {@link #pivotToPov(int, int)} are not: their request wire shape appears correct (the server
- * returns engine-level errors specific to the given coordinates, rather than a malformed-request
- * 400), but no verified-valid pair of coordinates has been found yet - see the ignored pivot tests
- * in {@code EssCubeViewIT}. Setting a *data* cell's value is not implemented at all yet - the same
- * dirty-cell/submit mechanism {@link #setMembers} uses was tried against data positions too, but
- * unlike member positions, the write never stuck even against a confirmed leaf-level intersection.
+ * <p>{@link #getCell(int, int)}, {@link #getCellType(int, int)}, {@link #setMembers}, {@link #zoomIn},
+ * {@link #zoomOut}, {@link #keepOnly}, and {@link #refresh} are verified against a live server (see
+ * {@code EssCubeViewIT}) - the grid content is asserted to actually change, not just that the call
+ * doesn't throw. Note that {@link #zoomOut} and {@link #keepOnly} are sent as a "ranges" request
+ * (not "coordinates" like the other operations): the server silently no-ops "coordinates" for these
+ * two actions, returning 200 with an unchanged grid rather than an error.
+ *
+ * <p>{@link #removeOnly}, {@link #pivot}, and {@link #pivotToPov(int, int)} are not verified: their
+ * request wire shape appears correct (the server returns engine-level errors specific to the given
+ * coordinates/ranges, rather than a malformed-request 400), but no verified-valid pair of
+ * coordinates has been found yet - see the ignored tests in {@code EssCubeViewIT}. For removeOnly,
+ * every coordinate/range tried (including removing only the aggregate/total row, in isolation)
+ * fails with "This operation would generate a nonsensical report." Setting a *data* cell's value is
+ * not implemented at all yet - the same dirty-cell/submit mechanism {@link #setMembers} uses was
+ * tried against data positions too, but unlike member positions, the write never stuck even against
+ * a confirmed leaf-level intersection.
  */
 public interface EssCubeView extends EssGrid {
 
@@ -36,7 +43,7 @@ public interface EssCubeView extends EssGrid {
     void zoomOut(int row, int col);
 
     /**
-     * Keeps only the member at the given position (and its siblings, if applicable), removing the rest.
+     * Keeps only the member at the given position, removing the rest of its level/siblings.
      *
      * @param row the row of the member to keep
      * @param col the column of the member to keep
@@ -45,6 +52,9 @@ public interface EssCubeView extends EssGrid {
 
     /**
      * Removes the member at the given position, keeping the rest.
+     *
+     * <p><b>Not currently verified to work</b> - every coordinate/range tried against a live server
+     * returns "This operation would generate a nonsensical report." See the class-level javadoc.
      *
      * @param row the row of the member to remove
      * @param col the column of the member to remove
