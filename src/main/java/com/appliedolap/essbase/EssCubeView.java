@@ -1,17 +1,21 @@
 package com.appliedolap.essbase;
 
+import java.util.List;
+
 /**
  * A live, navigable ad hoc grid on a cube - the REST analog of the Java API's {@code IEssCubeView}.
  * Every operation re-executes the view against the server and replaces the grid held by this view
  * with the server's response.
  *
- * <p>{@link #getCell(int, int)}, {@link #getCellType(int, int)}, and the navigation operations
- * ({@link #zoomIn}, {@link #zoomOut}, {@link #keepOnly}, {@link #removeOnly}, {@link #refresh}) are
- * verified against a live server (see {@code EssCubeViewIT}). {@link #pivot} and
- * {@link #pivotToPov(int, int)} are not: their request wire shape appears correct (the server returns
- * engine-level errors specific to the given coordinates, rather than a malformed-request 400), but no
- * verified-valid pair of coordinates has been found yet - see the ignored pivot tests in
- * {@code EssCubeViewIT}. Setting a cell's value is not implemented at all yet.
+ * <p>{@link #getCell(int, int)}, {@link #getCellType(int, int)}, {@link #setMembers}, and the
+ * navigation operations ({@link #zoomIn}, {@link #zoomOut}, {@link #keepOnly}, {@link #removeOnly},
+ * {@link #refresh}) are verified against a live server (see {@code EssCubeViewIT}). {@link #pivot}
+ * and {@link #pivotToPov(int, int)} are not: their request wire shape appears correct (the server
+ * returns engine-level errors specific to the given coordinates, rather than a malformed-request
+ * 400), but no verified-valid pair of coordinates has been found yet - see the ignored pivot tests
+ * in {@code EssCubeViewIT}. Setting a *data* cell's value is not implemented at all yet - the same
+ * dirty-cell/submit mechanism {@link #setMembers} uses was tried against data positions too, but
+ * unlike member positions, the write never stuck even against a confirmed leaf-level intersection.
  */
 public interface EssCubeView extends EssGrid {
 
@@ -97,5 +101,27 @@ public interface EssCubeView extends EssGrid {
      * @return the cell's type
      */
     CellType getCellType(int row, int col);
+
+    /**
+     * A member to place at a specific grid position, replacing whichever member currently occupies
+     * that spot on its row or column axis tier.
+     *
+     * @param row        the row to place the member at
+     * @param col        the column to place the member at
+     * @param memberName the member to place there
+     */
+    record MemberPlacement(int row, int col, String memberName) {
+    }
+
+    /**
+     * Replaces the members at the given positions, in one request. Verified live against a real
+     * server: this retargets an existing member-position on an existing axis tier to a different
+     * member (e.g. changing which Product shows in a given row) - it does not grow the grid to add
+     * rows or columns beyond what's already there, and the given member name must be valid for that
+     * position's dimension.
+     *
+     * @param placements the members to place, and where
+     */
+    void setMembers(List<MemberPlacement> placements);
 
 }

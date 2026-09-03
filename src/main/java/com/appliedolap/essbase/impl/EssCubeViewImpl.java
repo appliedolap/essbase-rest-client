@@ -9,7 +9,9 @@ import com.appliedolap.essbase.client.model.GridOperation;
 import com.appliedolap.essbase.client.model.GridRange;
 import com.appliedolap.essbase.client.model.Slice;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class EssCubeViewImpl implements EssCubeView {
 
@@ -65,14 +67,31 @@ public class EssCubeViewImpl implements EssCubeView {
         for (GridRange range : slice.getData().getRanges()) {
             int rangeSize = range.getEnd() - range.getStart() + 1;
             if (flatIndex < consumed + rangeSize) {
-                return new CellLocation(range, flatIndex - consumed);
+                return new CellLocation(range, flatIndex - consumed, flatIndex);
             }
             consumed += rangeSize;
         }
         return null;
     }
 
-    private record CellLocation(GridRange range, int offset) {
+    private record CellLocation(GridRange range, int offset, int flatIndex) {
+    }
+
+    @Override
+    public void setMembers(List<MemberPlacement> placements) {
+        List<Integer> dirty = new ArrayList<>();
+        for (MemberPlacement placement : placements) {
+            CellLocation location = locate(placement.row(), placement.col());
+            if (location == null) {
+                throw new IllegalArgumentException(
+                        "No such grid position: (" + placement.row() + ", " + placement.col() + ")");
+            }
+            location.range().getValues().set(location.offset(), placement.memberName());
+            dirty.add(location.flatIndex());
+        }
+        grid.getSlice().setDirtyCells(dirty);
+        grid.getSlice().setDirtyTexts(dirty);
+        execute(new GridOperation().grid(grid).action(GridOperation.ActionEnum.SUBMIT));
     }
 
     @Override

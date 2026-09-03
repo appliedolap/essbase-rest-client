@@ -4,6 +4,9 @@ import com.appliedolap.essbase.EssApiException;
 import com.appliedolap.essbase.EssCube;
 import com.appliedolap.essbase.EssCubeView;
 import com.appliedolap.essbase.testing.DestructiveIntegrationTest;
+
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -131,6 +134,24 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
         view.removeOnly(1, 0);
         logger.info("After remove only on (1, 0):");
         logGrid(view);
+    }
+
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void setMembersReplacesProductRows() {
+        EssCubeView view = sampleBasic().openCubeView();
+        view.zoomIn(1, 0);
+        logger.info("Before setMembers:");
+        logGrid(view);
+
+        view.setMembers(List.of(
+                new EssCubeView.MemberPlacement(2, 0, "Root Beer"),
+                new EssCubeView.MemberPlacement(3, 0, "Diet Drinks")));
+        logger.info("After setMembers:");
+        logGrid(view);
+
+        assertEquals("Root Beer", view.getCell(2, 0).trim());
+        assertEquals("Diet Drinks", view.getCell(3, 0).trim());
     }
 
     @Test
