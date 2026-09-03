@@ -119,6 +119,58 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
 
     @Test
     @Category(DestructiveIntegrationTest.class)
+    public void zoomOutFromALeafRowNotJustTheTotalRow() {
+        EssCubeView view = sampleBasic().openCubeView();
+        int rowsBeforeZoom = view.getRows();
+
+        view.zoomIn(1, 0);
+        logger.info("After zoom in:");
+        logGrid(view);
+
+        // Row 2 is a *leaf* Product member (Colas), not the aggregate/total row - a range covering
+        // only the clicked row used to fail here ("cannot be interpreted") because it only lined up
+        // with a valid target when it happened to be the total row. Real Smart View lets you zoom out
+        // by clicking any expanded member, not just the total, so this needs to work too.
+        view.zoomOut(2, 0);
+        logger.info("After zoom out from a leaf row:");
+        logGrid(view);
+        assertEquals("zoom out should collapse back to the pre-zoom row count", rowsBeforeZoom, view.getRows());
+    }
+
+    // Once more than one dimension is zoomed in at once ("nested" - e.g. Product AND Market both
+    // expanded onto the row axis), zoom out stops being reliably selective. Every range tried ended
+    // up collapsing MORE than the single targeted dimension (sometimes both at once), and which
+    // dimension(s) actually collapsed was sensitive to the exact row range in ways that didn't reduce
+    // to a simple rule - a one-row difference between two otherwise-equivalent ranges flipped whether
+    // Market, Product, or both collapsed. Not safe to rely on for a nested grid.
+    @Ignore
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void zoomOutOnlyCollapsesTheTargetedNestedDimension() {
+        EssCubeView view = sampleBasic().openCubeView();
+        view.zoomIn(1, 0);
+        logger.info("After zoom in on Product:");
+        logGrid(view);
+        int rowsAfterProductZoom = view.getRows();
+
+        // Product's zoom reflowed the columns - Market's header is now one column further right
+        // (col 2) than it was in the pristine grid, same as Year shifting from col 0 to col 1.
+        view.zoomIn(0, 2);
+        logger.info("After zoom in on Market too (nested):");
+        logGrid(view);
+        assertTrue("zooming in on Market too should multiply out the rows", view.getRows() > rowsAfterProductZoom);
+
+        // Collapse Market back out while Product stays zoomed in.
+        view.zoomOut(view.getRows() - 1, 0);
+        logger.info("After zooming out Market only:");
+        logGrid(view);
+        assertEquals("zooming out Market should return to exactly the Product-only row count",
+                rowsAfterProductZoom, view.getRows());
+        assertEquals("Colas", view.getCell(2, 0));
+    }
+
+    @Test
+    @Category(DestructiveIntegrationTest.class)
     public void keepOnly() {
         EssCubeView view = sampleBasic().openCubeView();
         view.zoomIn(1, 0);

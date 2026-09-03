@@ -12,7 +12,19 @@ import java.util.List;
  * {@code EssCubeViewIT}) - the grid content is asserted to actually change, not just that the call
  * doesn't throw. Note that {@link #zoomOut} and {@link #keepOnly} are sent as a "ranges" request
  * (not "coordinates" like the other operations): the server silently no-ops "coordinates" for these
- * two actions, returning 200 with an unchanged grid rather than an error.
+ * two actions, returning 200 with an unchanged grid rather than an error. {@link #zoomOut} targets
+ * the clicked column's *entire* contiguous span of member rows (not just the clicked row or that
+ * dimension's total row), which is what makes it work regardless of which row within the dimension
+ * was clicked - a single-row range only ever lined up when it was exactly the total row, failing with
+ * "cannot be interpreted" for any other (very natural) click on a leaf member.
+ *
+ * <p><b>Known limitation:</b> once more than one dimension is zoomed in at once ("nested" - e.g.
+ * Product and Market both expanded onto the row axis), {@link #zoomOut} is not reliably selective: it
+ * may collapse more than the single dimension you targeted (sometimes all of them at once), and which
+ * dimension(s) actually collapse is sensitive to the exact row range in ways that don't reduce to a
+ * simple rule found so far - a one-row difference between two otherwise-equivalent ranges flipped
+ * which dimension(s) collapsed. See the ignored
+ * {@code zoomOutOnlyCollapsesTheTargetedNestedDimension} test in {@code EssCubeViewIT}.
  *
  * <p>{@link #removeOnly}, {@link #pivot}, and {@link #pivotToPov(int, int)} are not verified: their
  * request wire shape appears correct (the server returns engine-level errors specific to the given
