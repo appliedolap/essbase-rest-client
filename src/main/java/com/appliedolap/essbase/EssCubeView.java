@@ -18,17 +18,17 @@ import java.util.List;
  * the given position) rather than "coordinates" like the other operations, because the server
  * silently no-ops "coordinates" for those two actions (200 OK, grid unchanged) - "ranges" is simply
  * the only field that reaches their implementation at all.
- * <li>{@link #zoomIn} normally uses "coordinates", but switches to "ranges" when the target cell is
- * already a real member position under a dimension genuinely placed on an axis (as opposed to a POV
- * placeholder dimension shown as a header but not yet on any axis) - see {@code onAxisDimension} in
- * the implementation. Confirmed live: "coordinates" does not do a literal (row, col) grid lookup for
- * an on-axis cell at all - it addresses POV placeholder dimensions by column, order-insensitively
+ * <li>{@link #zoomIn} tries "ranges" first and falls back to "coordinates" only if the server
+ * rejects that shape outright (an engine-level error, not a 200). This isn't a guess based on
+ * inspecting the cell: "coordinates" turns out not to do a literal (row, col) grid lookup at all for
+ * a cell already on a real axis (as opposed to a POV placeholder dimension shown as a header but not
+ * yet on any axis) - it addresses POV placeholder dimensions by column, order-insensitively
  * (coordinates {@code [0,1]}, {@code [1,0]}, {@code [0,2]}, and {@code [2,0]} all landed on whichever
- * POV dimension's column matched the nonzero value, never on the literal cell), so an on-axis cell
- * whose row or column happens to coincide with a POV dimension's column gets silently routed to that
- * *unrelated* POV dimension instead - not an error, just the wrong dimension. E.g. zooming in on
- * "Year" (on the row axis at column 0) previously expanded "Market" (the POV dimension whose header
- * happens to sit at column 0's row) instead of Year.
+ * POV dimension's column matched the nonzero value, never on the literal on-axis cell). Confirmed
+ * live: zooming in on "Year" (on the row axis at column 0) via "coordinates" silently expanded
+ * "Market" (an unrelated POV dimension) instead - not an error, just the wrong dimension, which is
+ * exactly why trying "ranges" first and reacting to an actual rejection is the only sound way to
+ * pick between the two: "coordinates" can't be trusted to fail loudly when it's wrong.
  * </ul>
  *
  * Beyond those field-selection adjustments, no attempt is made to reverse, expand, or otherwise infer
@@ -58,10 +58,9 @@ public interface EssCubeView extends EssGrid {
 
     /**
      * Zooms in on the member at the given position, using the server's default zoom-in preference.
-     * See the class-level javadoc: this picks whichever wire field ("coordinates" or "ranges")
-     * actually addresses this specific cell correctly, depending on whether it's already a real
-     * on-axis member or still a POV placeholder - not a computed guess at outcome, but a description
-     * of the same literal click either way.
+     * See the class-level javadoc: this tries "ranges" first and only falls back to "coordinates" if
+     * the server itself rejects that shape - not a guess based on inspecting the cell, but a reaction
+     * to what the server says about the same literal click either way.
      *
      * @param row the row of the member to zoom in on
      * @param col the column of the member to zoom in on

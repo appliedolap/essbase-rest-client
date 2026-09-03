@@ -73,7 +73,7 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
     @Category(DestructiveIntegrationTest.class)
     public void cellTypeDistinguishesDataFromMembers() {
         EssCubeView view = sampleBasic().openCubeView();
-        view.zoomIn(1, 0);
+        view.zoomIn(0, 1);
         logGrid(view);
 
         // rows 2+ are the zoomed-in Product members: col0=member, col1="Year" member, col2=data, col3=blank
@@ -92,8 +92,8 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
         logger.info("Before zoom in:");
         logGrid(view);
 
-        view.zoomIn(1, 0);
-        logger.info("After zoom in on (1, 0):");
+        view.zoomIn(0, 1);
+        logger.info("After zoom in on (0, 1):");
         logGrid(view);
     }
 
@@ -102,8 +102,9 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
     // just the wrong dimension. "coordinates" turns out not to do a literal (row, col) grid lookup at
     // all for members already on an axis; it's addressing POV placeholder dimensions by column,
     // order-insensitively (confirmed: coordinates [0,1], [1,0], [0,2], and [2,0] all landed on a POV
-    // dimension keyed off whichever value wasn't 0, never on "Year"). zoomIn now detects this case
-    // (see onAxisDimension) and uses "ranges" instead, which does address the literal cell.
+    // dimension keyed off whichever value wasn't 0, never on "Year"). zoomIn now tries "ranges" first
+    // (which does address the literal cell) and only falls back to "coordinates" if the server itself
+    // rejects that shape - see EssCubeViewImpl.zoomIn.
     @Test
     @Category(DestructiveIntegrationTest.class)
     public void zoomInOnAnAlreadyOnAxisDimension() {
@@ -138,7 +139,7 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
         EssCubeView view = sampleBasic().openCubeView();
         int rowsBeforeZoom = view.getRows();
 
-        view.zoomIn(1, 0);
+        view.zoomIn(0, 1);
         logger.info("After zoom in:");
         logGrid(view);
         assertTrue("zoom in should add rows for the Product members", view.getRows() > rowsBeforeZoom);
@@ -156,7 +157,7 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
     @Category(DestructiveIntegrationTest.class)
     public void keepOnly() {
         EssCubeView view = sampleBasic().openCubeView();
-        view.zoomIn(1, 0);
+        view.zoomIn(0, 1);
         logger.info("After zoom in:");
         logGrid(view);
 
@@ -179,7 +180,7 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
     @Category(DestructiveIntegrationTest.class)
     public void removeOnly() {
         EssCubeView view = sampleBasic().openCubeView();
-        view.zoomIn(1, 0);
+        view.zoomIn(0, 1);
         logger.info("After zoom in:");
         logGrid(view);
 
@@ -192,7 +193,7 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
     @Category(DestructiveIntegrationTest.class)
     public void setMembersReplacesProductRows() {
         EssCubeView view = sampleBasic().openCubeView();
-        view.zoomIn(1, 0);
+        view.zoomIn(0, 1);
         logger.info("Before setMembers:");
         logGrid(view);
 
@@ -223,7 +224,7 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
     @Category(DestructiveIntegrationTest.class)
     public void pivotColumnForColumn() {
         EssCubeView view = sampleBasic().openCubeView();
-        view.zoomIn(1, 0);
+        view.zoomIn(0, 1);
         logger.info("Before pivot:");
         logGrid(view);
 
@@ -238,7 +239,7 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
     @Category(DestructiveIntegrationTest.class)
     public void pivotAxisToAxis() {
         EssCubeView view = sampleBasic().openCubeView();
-        view.zoomIn(1, 0);
+        view.zoomIn(0, 1);
         logger.info("Before pivot:");
         logGrid(view);
 
@@ -256,7 +257,7 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
     @Category(DestructiveIntegrationTest.class)
     public void pivotToPov() {
         EssCubeView view = sampleBasic().openCubeView();
-        view.zoomIn(1, 0);
+        view.zoomIn(0, 1);
         logger.info("Before pivot to POV:");
         logGrid(view);
 
