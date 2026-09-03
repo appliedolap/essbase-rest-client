@@ -4,10 +4,14 @@ import com.appliedolap.essbase.ApiContext;
 import com.appliedolap.essbase.EssApiException;
 import com.appliedolap.essbase.EssCubeView;
 import com.appliedolap.essbase.client.ApiException;
+import com.appliedolap.essbase.client.model.ColumnSuppression;
 import com.appliedolap.essbase.client.model.Grid;
 import com.appliedolap.essbase.client.model.GridOperation;
 import com.appliedolap.essbase.client.model.GridRange;
+import com.appliedolap.essbase.client.model.Preferences;
+import com.appliedolap.essbase.client.model.RowSuppression;
 import com.appliedolap.essbase.client.model.Slice;
+import com.appliedolap.essbase.client.model.ZoomIn;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -171,6 +175,100 @@ public class EssCubeViewImpl implements EssCubeView {
         } catch (ApiException e) {
             throw new EssApiException(e);
         }
+    }
+
+    @Override
+    public GridPreferences getPreferences() {
+        Preferences wire;
+        try {
+            wire = api.getGridPreferencesApi().gridPreferencesGet();
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+        RowSuppression rowSuppression = wire.getRowSupression();
+        return new GridPreferences(
+                toIndentation(wire.getIndentation()),
+                rowSuppression != null && Boolean.TRUE.equals(rowSuppression.getMissing()),
+                rowSuppression != null && Boolean.TRUE.equals(rowSuppression.getZero()),
+                rowSuppression != null && Boolean.TRUE.equals(rowSuppression.getUnderScore()),
+                Boolean.TRUE.equals(wire.getRepeatMemberLabels()),
+                toZoomInPreference(wire.getZoomIn()),
+                Boolean.TRUE.equals(wire.getIncludeSelection()),
+                Boolean.TRUE.equals(wire.getWithinSelectedGroup()),
+                Boolean.TRUE.equals(wire.getRemoveUnSelectedGroup()));
+    }
+
+    @Override
+    public void setPreferences(GridPreferences preferences) {
+        Preferences wire;
+        try {
+            // The set endpoint replaces the whole preferences resource, so start from the current
+            // values rather than a blank one - fields this type doesn't model (missingText,
+            // formulaRetention, maxRows, ...) would otherwise get silently reset to defaults.
+            wire = api.getGridPreferencesApi().gridPreferencesGet();
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+        wire.setIndentation(fromIndentation(preferences.indentation()));
+        wire.setRowSupression(new RowSuppression()
+                .missing(preferences.suppressMissingRows())
+                .zero(preferences.suppressZeroRows())
+                .underScore(preferences.suppressUnderscoreRows()));
+        wire.setColumnSupression(new ColumnSuppression()
+                .missing(preferences.suppressMissingRows())
+                .zero(preferences.suppressZeroRows())
+                .underScore(preferences.suppressUnderscoreRows()));
+        wire.setRepeatMemberLabels(preferences.repeatMemberLabels());
+        wire.setZoomIn(fromZoomInPreference(preferences.zoomInPreference()));
+        wire.setIncludeSelection(preferences.includeSelection());
+        wire.setWithinSelectedGroup(preferences.withinSelectedGroup());
+        wire.setRemoveUnSelectedGroup(preferences.removeUnselectedGroup());
+        try {
+            api.getGridPreferencesApi().gridPreferencesSet(wire);
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    private static Indentation toIndentation(Preferences.IndentationEnum wire) {
+        if (wire == null) {
+            return Indentation.SUBITEMS;
+        }
+        return switch (wire) {
+            case NONE -> Indentation.NONE;
+            case TOTALS -> Indentation.TOTALS;
+            default -> Indentation.SUBITEMS;
+        };
+    }
+
+    private static Preferences.IndentationEnum fromIndentation(Indentation indentation) {
+        return switch (indentation) {
+            case NONE -> Preferences.IndentationEnum.NONE;
+            case TOTALS -> Preferences.IndentationEnum.TOTALS;
+            case SUBITEMS -> Preferences.IndentationEnum.SUBITEMS;
+        };
+    }
+
+    // Only "mode" distinguishes NEXT_LEVEL/ALL_LEVELS/BOTTOM_LEVEL; "ancestor" (top/bottom) has no
+    // confirmed effect and is always sent as TOP. See EssCubeView.ZoomInPreference.
+    private static ZoomInPreference toZoomInPreference(ZoomIn wire) {
+        if (wire == null || wire.getMode() == null) {
+            return ZoomInPreference.NEXT_LEVEL;
+        }
+        return switch (wire.getMode()) {
+            case DESCENDENTS -> ZoomInPreference.ALL_LEVELS;
+            case BASE -> ZoomInPreference.BOTTOM_LEVEL;
+            default -> ZoomInPreference.NEXT_LEVEL;
+        };
+    }
+
+    private static ZoomIn fromZoomInPreference(ZoomInPreference preference) {
+        ZoomIn.ModeEnum mode = switch (preference) {
+            case NEXT_LEVEL -> ZoomIn.ModeEnum.CHILDREN;
+            case ALL_LEVELS -> ZoomIn.ModeEnum.DESCENDENTS;
+            case BOTTOM_LEVEL -> ZoomIn.ModeEnum.BASE;
+        };
+        return new ZoomIn().ancestor(ZoomIn.AncestorEnum.TOP).mode(mode);
     }
 
 }

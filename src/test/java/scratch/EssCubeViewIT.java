@@ -215,6 +215,66 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
         logGrid(view);
     }
 
+    // Preferences are stored server-side per login session (wire resource "/preferences/grid", no
+    // app/db/cube in its path) - not reset by resetDefaultView(), and they'd otherwise leak into
+    // whichever test runs next. Restore a known-default set after every test in this class.
+    @org.junit.After
+    public void restoreDefaultPreferences() {
+        sampleBasic().openCubeView().setPreferences(new EssCubeView.GridPreferences(
+                EssCubeView.Indentation.SUBITEMS, false, false, false, true,
+                EssCubeView.ZoomInPreference.NEXT_LEVEL, true, false, false));
+    }
+
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void preferencesIndentationAffectsRetrieve() {
+        EssCubeView view = sampleBasic().openCubeView();
+        view.setPreferences(new EssCubeView.GridPreferences(
+                EssCubeView.Indentation.NONE, false, false, false, true,
+                EssCubeView.ZoomInPreference.NEXT_LEVEL, true, false, false));
+        assertEquals(EssCubeView.Indentation.NONE, view.getPreferences().indentation());
+
+        view.zoomIn(0, 1);
+        logger.info("After zoom in with indentation=NONE:");
+        logGrid(view);
+        assertEquals("Colas", view.getCell(2, 0));
+    }
+
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void preferencesZoomInPreferenceAffectsRetrieve() {
+        EssCubeView view = sampleBasic().openCubeView();
+        view.setPreferences(new EssCubeView.GridPreferences(
+                EssCubeView.Indentation.SUBITEMS, false, false, false, true,
+                EssCubeView.ZoomInPreference.ALL_LEVELS, true, false, false));
+        assertEquals(EssCubeView.ZoomInPreference.ALL_LEVELS, view.getPreferences().zoomInPreference());
+
+        // With a plain zoomIn (no explicit member set) and ALL_LEVELS in effect, Product should pull
+        // in every descendant level, not just its direct children - so Colas's own children (e.g.
+        // "Cola") should already be present without a second zoom.
+        view.zoomIn(0, 1);
+        logger.info("After zoom in with zoomInPreference=ALL_LEVELS:");
+        logGrid(view);
+        assertTrue("expected more than just Product's direct children", view.getRows() > 8);
+    }
+
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void preferencesRepeatMemberLabelsAffectsRetrieve() {
+        EssCubeView view = sampleBasic().openCubeView();
+        view.setPreferences(new EssCubeView.GridPreferences(
+                EssCubeView.Indentation.SUBITEMS, false, false, false, false,
+                EssCubeView.ZoomInPreference.NEXT_LEVEL, true, false, false));
+        assertEquals(false, view.getPreferences().repeatMemberLabels());
+
+        view.zoomIn(0, 1);
+        view.zoomIn(0, 2);
+        logger.info("After nested zoom with repeatMemberLabels=false:");
+        logGrid(view);
+        assertEquals("     East", view.getCell(2, 0));
+        assertEquals("", view.getCell(3, 0));
+    }
+
     // Both of these passed (with no engine error) before resetDefaultView() was wired into @Before -
     // but that was against a contaminated, previously-mutated starting grid, not the true pristine
     // baseline. Against the real clean baseline, both now fail with "Cannot pivot last column."

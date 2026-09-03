@@ -171,4 +171,78 @@ public interface EssCubeView extends EssGrid {
      */
     void setMembers(List<MemberPlacement> placements);
 
+    /**
+     * How indented member rows/columns are, mirroring the classic ad hoc "Indentation" setting.
+     * Verified live: changing this changes the leading-space indentation on subsequent retrieves.
+     */
+    enum Indentation {
+        NONE, SUBITEMS, TOTALS
+    }
+
+    /**
+     * The server's zoom-in behavior when a plain {@link #zoomIn} is used (no explicit member set).
+     * Mirrors a subset of the classic ad hoc "Zoom In" preference - the REST wire format
+     * ({@code ancestor}/{@code mode} on the preferences resource) only expresses these three; it has
+     * no equivalent of the classic API's Sibling Level, Same Level, Same Generation, or Formulas
+     * options. Verified live: {@code ALL_LEVELS} pulls in every descendant level (not just direct
+     * children) on a subsequent zoom, and the effect is visible immediately on the next zoom-in.
+     */
+    enum ZoomInPreference {
+        NEXT_LEVEL, ALL_LEVELS, BOTTOM_LEVEL
+    }
+
+    /**
+     * Ad hoc display/navigation preferences, mirroring the classic "Essbase Options" dialog to the
+     * extent the REST wire format supports. These are stored server-side per login session (the wire
+     * resource is {@code /preferences/grid}, with no application/database/cube in its path) - they
+     * apply to every subsequent grid operation for this connection, not just this one view, and they
+     * persist until changed again or the session ends.
+     *
+     * <p>Verified live against a real server: {@link #indentation}, {@link #zoomInPreference}, and
+     * {@link #repeatMemberLabels} each visibly change the next retrieve/zoom's output. {@link
+     * #suppressMissingRows}, {@link #suppressZeroRows}, {@link #suppressUnderscoreRows}, {@link
+     * #includeSelection}, {@link #withinSelectedGroup}, and {@link #removeUnselectedGroup} are wired
+     * through (the wire fields exist and accept the value) but not yet confirmed to have a visible
+     * effect - suppression in particular needs a grid with genuine missing/zero data cells to test
+     * against, not just member structure, and wasn't confirmed either way.
+     *
+     * @param indentation            member row/column indentation style
+     * @param suppressMissingRows    whether to suppress rows whose data cells are all #Missing
+     * @param suppressZeroRows       whether to suppress rows whose data cells are all zero
+     * @param suppressUnderscoreRows whether to suppress rows whose member name starts with "_"
+     * @param repeatMemberLabels     whether a member label repeats down every row of its group, or
+     *                               only appears once at the top of the group
+     * @param zoomInPreference       the server's default zoom-in depth for a plain {@link #zoomIn}
+     * @param includeSelection       whether zooming in keeps the zoomed-on member alongside its new
+     *                               children, rather than replacing it with just the children
+     * @param withinSelectedGroup    whether a zoom stays scoped to the selected group rather than
+     *                               applying to every member at that level
+     * @param removeUnselectedGroup  whether zooming in removes sibling groups that weren't selected
+     */
+    record GridPreferences(
+            Indentation indentation,
+            boolean suppressMissingRows,
+            boolean suppressZeroRows,
+            boolean suppressUnderscoreRows,
+            boolean repeatMemberLabels,
+            ZoomInPreference zoomInPreference,
+            boolean includeSelection,
+            boolean withinSelectedGroup,
+            boolean removeUnselectedGroup) {
+    }
+
+    /**
+     * Reads the current session's ad hoc display/navigation preferences.
+     */
+    GridPreferences getPreferences();
+
+    /**
+     * Replaces the current session's ad hoc display/navigation preferences. See {@link
+     * GridPreferences}: this takes effect for every subsequent grid operation on this connection, not
+     * just this view, and persists until changed again.
+     *
+     * @param preferences the preferences to apply
+     */
+    void setPreferences(GridPreferences preferences);
+
 }
