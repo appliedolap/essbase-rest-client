@@ -5,7 +5,9 @@ import com.appliedolap.essbase.impl.BearerTokenAuthentication;
 import com.appliedolap.essbase.impl.SessionAuthentication;
 import com.appliedolap.essbase.impl.SessionCookieAuthentication;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * How a client proves who it is to Essbase.
@@ -45,6 +47,26 @@ public interface EssAuthentication {
      * @param setCookieHeaders every {@code Set-Cookie} header value on the response, possibly empty
      */
     default void observeSetCookies(List<String> setCookieHeaders) {
+    }
+
+    /**
+     * Told that the session this was using has been ended server-side, so that any session state held here
+     * is discarded rather than being presented again after it has stopped being valid.
+     * <p>
+     * What that leaves behind depends on the strategy. One holding a username and password falls back to
+     * them and will establish a fresh session on the next call; one that only ever had a session has
+     * nothing to fall back to, and subsequent calls will be rejected - correctly, because signing off is
+     * exactly what the caller asked for.
+     */
+    default void sessionEnded() {
+    }
+
+    /**
+     * When the current session expires, if that is known. Essbase reports it in a {@code sessionExpiry}
+     * cookie alongside the session itself, so it is only ever known for a session this library established.
+     */
+    default Optional<Instant> sessionExpiry() {
+        return Optional.empty();
     }
 
     /**

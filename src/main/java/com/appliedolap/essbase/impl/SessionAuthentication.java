@@ -5,7 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.HttpCookie;
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Username and password until the server hands back a session, then the session from then on.
@@ -25,6 +27,8 @@ public class SessionAuthentication implements EssAuthentication {
     private volatile String sessionId;
 
     private volatile String weblogicAuthCookie;
+
+    private volatile Instant sessionExpiry;
 
     public SessionAuthentication(String username, String password) {
         this.basic = new BasicAuthentication(username, password);
@@ -63,8 +67,11 @@ public class SessionAuthentication implements EssAuthentication {
     private void accept(String name, String value) {
         if (SessionCookies.SESSION_EXPIRY.equals(name)) {
             try {
-                long sessionExpiry = Long.parseLong(value);
-                logger.debug("Session expire is in: {}s", (sessionExpiry - System.currentTimeMillis()) / 1000.0f);
+                // Kept, not merely logged: a caller that knows when its session dies can renew or warn
+                // ahead of time instead of finding out through a surprise 401 mid-operation.
+                sessionExpiry = Instant.ofEpochMilli(Long.parseLong(value));
+                logger.debug("Session expires in {}s",
+                        (sessionExpiry.toEpochMilli() - System.currentTimeMillis()) / 1000.0f);
             } catch (NumberFormatException e) {
                 logger.debug("Could not parse sessionExpiry='{}'", value);
             }
@@ -79,6 +86,29 @@ public class SessionAuthentication implements EssAuthentication {
             weblogicAuthCookie = value;
             logger.debug("Have WL session");
         }
+    }
+
+    @Override
+    public Optional<Instant> sessionExpiry() {
+        // Gated on there being a session. Essbase sends sessionExpiry on responses before one exists -
+        // observed arriving 43 hours in the past on the very first exchange - and reporting that as "your
+        // session expired two days ago" to a caller that has no session at all is worse than saying
+        // nothing. Once a session is established the value tracks it correctly, sliding forward as the
+        // server extends it on use.
+        return sessionId == null ? Optional.empty() : Optional.ofNullable(sessionExpiry);
+    }
+
+    /**
+     * Forgets the session, falling back to the username and password. The next request authenticates with
+     * them and the server issues a fresh session, so signing off and carrying on works rather than leaving
+     * the client wedged presenting a session the server has already discarded.
+     */
+    @Override
+    public void sessionEnded() {
+        sessionId = null;
+        weblogicAuthCookie = null;
+        sessionExpiry = null;
+        logger.debug("Session ended; will re-authenticate on the next request");
     }
 
     /** The session this has established, or null if it is still authenticating with a password. */

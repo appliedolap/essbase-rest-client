@@ -5,7 +5,9 @@ import com.appliedolap.essbase.impl.EssDataSourceImpl;
 import com.appliedolap.essbase.impl.EssServerImpl;
 
 import java.io.OutputStream;
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.Map;
 
 public interface EssServer {
@@ -56,6 +58,26 @@ public interface EssServer {
     EssFile getFile(String path, String filename);
 
     List<EssSession> getSessions();
+
+    /**
+     * Ends this client's own session on the server.
+     * <p>
+     * Distinct from {@link #killSessions(boolean)}, which ends other people's. This is signing off: the
+     * session this client established stops being valid, and the server stops holding it.
+     * <p>
+     * What happens next depends on how this connection authenticates. With a username and password, the
+     * next call simply authenticates again and gets a fresh session. With a session supplied from outside -
+     * a federated sign-in, say - there is nothing to fall back to and subsequent calls will be rejected,
+     * which is precisely what signing off means in that case.
+     */
+    void signOff();
+
+    /**
+     * When this client's session expires, if the server has said. Empty when there is no session, or when
+     * the session was supplied from outside rather than established here - the expiry is reported alongside
+     * the session, so only the client that established it hears about it.
+     */
+    Optional<Instant> getSessionExpiry();
 
     /**
      * Kill all sessions on the server.

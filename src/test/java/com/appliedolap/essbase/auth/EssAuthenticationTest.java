@@ -4,6 +4,7 @@ import com.appliedolap.essbase.EssAuthentication;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.List;
 
@@ -118,6 +119,77 @@ public class EssAuthenticationTest {
         captured.observeSetCookies(List.of(setCookie("JSESSIONID", "abc123"), WL_COOKIE));
         EssAuthentication supplied = EssAuthentication.sessionCookie("abc123", "wl789");
         assertEquals(captured.cookieHeader(), supplied.cookieHeader());
+    }
+
+    /**
+     * After signing off, a password-backed strategy must go back to the password rather than keep
+     * presenting a session the server has discarded - otherwise sign off then carry on wedges the client.
+     */
+    @Test
+    public void sessionFallsBackToThePasswordAfterSigningOff() {
+        EssAuthentication auth = EssAuthentication.session("admin", "welcome1");
+        auth.observeSetCookies(List.of(setCookie("JSESSIONID", "abc123"), WL_COOKIE));
+        assertEquals("Session Session", auth.authorizationHeader());
+
+        auth.sessionEnded();
+
+        assertTrue("must re-authenticate with the password", auth.authorizationHeader().startsWith("Basic "));
+        assertNull("the dead session must not be presented again", auth.cookieHeader());
+        assertTrue(auth.sessionExpiry().isEmpty());
+    }
+
+    /** Having signed off, it can establish a new session as if from scratch. */
+    @Test
+    public void sessionCanEstablishAFreshSessionAfterSigningOff() {
+        EssAuthentication auth = EssAuthentication.session("admin", "welcome1");
+        auth.observeSetCookies(List.of(setCookie("JSESSIONID", "first")));
+        auth.sessionEnded();
+        auth.observeSetCookies(List.of(setCookie("JSESSIONID", "second")));
+        assertTrue(auth.cookieHeader(), auth.cookieHeader().contains("JSESSIONID=second"));
+    }
+
+    /**
+     * Essbase sends sessionExpiry before any session exists - observed 43 hours in the past on the first
+     * exchange against a live 21.7 server. Reporting that would tell a caller with no session that its
+     * session expired two days ago.
+     */
+    @Test
+    public void sessionReportsNoExpiryWhileThereIsNoSession() {
+        EssAuthentication auth = EssAuthentication.session("admin", "welcome1");
+        long inThePast = System.currentTimeMillis() - 157_842_000L;
+        auth.observeSetCookies(List.of(setCookie("sessionExpiry", Long.toString(inThePast))));
+        assertTrue("no session, so no expiry to report", auth.sessionExpiry().isEmpty());
+    }
+
+    @Test
+    public void sessionRemembersWhenItExpires() {
+        EssAuthentication auth = EssAuthentication.session("admin", "welcome1");
+        assertTrue("nothing known before a session exists", auth.sessionExpiry().isEmpty());
+        long expiry = System.currentTimeMillis() + 600_000;
+        auth.observeSetCookies(List.of(setCookie("sessionExpiry", Long.toString(expiry)),
+                setCookie("JSESSIONID", "abc123")));
+        assertEquals(Instant.ofEpochMilli(expiry), auth.sessionExpiry().orElseThrow());
+    }
+
+    /** A malformed expiry must not prevent the session itself being picked up. */
+    @Test
+    public void sessionIgnoresAnUnparseableExpiry() {
+        EssAuthentication auth = EssAuthentication.session("admin", "welcome1");
+        auth.observeSetCookies(List.of(setCookie("sessionExpiry", "not-a-number"),
+                setCookie("JSESSIONID", "abc123")));
+        assertTrue(auth.sessionExpiry().isEmpty());
+        assertEquals("Session Session", auth.authorizationHeader());
+    }
+
+    /**
+     * A supplied session has nothing to fall back to, so signing off leaves it unable to authenticate.
+     * That is correct: signing off is what the caller asked for, and inventing a fallback would be wrong.
+     */
+    @Test
+    public void aSuppliedSessionHasNoFallbackAfterSigningOff() {
+        EssAuthentication auth = EssAuthentication.sessionCookie("abc123", "wl789");
+        auth.sessionEnded();
+        assertNull(auth.authorizationHeader());
     }
 
     @Test

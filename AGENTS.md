@@ -33,6 +33,15 @@ library - an on-premises 21.7 instance rejects them outright. Test before relyin
 When adding a strategy, put the header-shaping logic where `EssAuthenticationTest` can reach it
 without a server. That suite is the only offline test coverage in this project.
 
+`EssServer.signOff()` ends this client's own session (`DELETE /session`) - not to be confused with
+`killSessions`, which ends other people's. It always tells the strategy the session is over, even
+if the call failed, because a session that could not be signed off should not keep being presented.
+A password-backed strategy then re-authenticates on the next call; a supplied session has nothing
+to fall back on, which is the correct outcome.
+
+`EssServer.getSessionExpiry()` reports when the session dies, and is empty while there is no
+session - Essbase sends a `sessionExpiry` cookie even before one exists, dated in the past.
+
 ## Regenerating the client
 
 1. `process.sh` massages the raw OpenAPI spec (`formatted.json`) into `src/main/resources/processed.json`,

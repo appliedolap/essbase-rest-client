@@ -11,6 +11,8 @@ public class ApiContext {
 
     private final ApiClient client;
 
+    private final EssAuthentication authentication;
+
     private final ApplicationsApi applicationsApi;
 
     private final ApplicationConfigurationApi applicationConfigurationApi;
@@ -62,7 +64,16 @@ public class ApiContext {
     private final UserSessionApi userSessionApi;
 
     public ApiContext(ApiClient client) {
+        this(client, null);
+    }
+
+    /**
+     * @param authentication the strategy the client authenticates with, so that operations which change
+     *                       the session's validity - signing off, above all - can tell it. May be null.
+     */
+    public ApiContext(ApiClient client, EssAuthentication authentication) {
         this.client = client;
+        this.authentication = authentication;
         this.applicationsApi = new ApplicationsApi(client);
         this.applicationConfigurationApi = new ApplicationConfigurationApi(client);
         this.aboutEssbaseApi = new AboutEssbaseApi(client);
@@ -96,6 +107,11 @@ public class ApiContext {
 
     public ApiClient getClient() {
         return client;
+    }
+
+    /** The authentication strategy in use, or null when the context was built without one. */
+    public EssAuthentication getAuthentication() {
+        return authentication;
     }
 
     public ApplicationConfigurationApi getApplicationConfigurationApi() {

@@ -15,9 +15,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -67,20 +69,40 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     }
 
     private static ApiContext createApiContext(String server, String username, String password, boolean stateless) {
-        ApiClientFactory clientFactory = new ApiClientFactory(server + DEFAULT_REST_API_PATH, username, password, stateless);
-        ApiClient client = clientFactory.create();
-        return new ApiContext(client);
+        return createApiContext(server, stateless
+                ? EssAuthentication.basic(username, password)
+                : EssAuthentication.session(username, password));
     }
 
     private static ApiContext createApiContext(String server, EssAuthentication authentication) {
         ApiClientFactory clientFactory = new ApiClientFactory(server + DEFAULT_REST_API_PATH, authentication);
-        return new ApiContext(clientFactory.create());
+        return new ApiContext(clientFactory.create(), authentication);
     }
 
     private static ApiContext createApiContext(EssServerConnectionDetailsImpl connectionDetails) {
-        ApiClientFactory clientFactory = new ApiClientFactory(connectionDetails.getServer() + DEFAULT_REST_API_PATH, connectionDetails.getUsername(), connectionDetails.getPassword(), connectionDetails.isStateless());
-        ApiClient client = clientFactory.create();
-        return new ApiContext(client);
+        return createApiContext(connectionDetails.getServer(), connectionDetails.getUsername(),
+                connectionDetails.getPassword(), connectionDetails.isStateless());
+    }
+
+    @Override
+    public void signOff() {
+        try {
+            api.getUserSessionApi().userSessionSignoff();
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        } finally {
+            // In the finally, not the try: if the sign-off call failed because the session was already
+            // gone - expired, or killed from elsewhere - then continuing to present it is certainly wrong,
+            // and re-authenticating is the right recovery either way.
+            if (api.getAuthentication() != null) {
+                api.getAuthentication().sessionEnded();
+            }
+        }
+    }
+
+    @Override
+    public Optional<Instant> getSessionExpiry() {
+        return api.getAuthentication() == null ? Optional.empty() : api.getAuthentication().sessionExpiry();
     }
 
     @Override
