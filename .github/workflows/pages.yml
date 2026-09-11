@@ -1,0 +1,90 @@
+name: Publish documentation to GitHub Pages
+
+# Deploys two things to one site:
+#   /          the API version history and client coverage, from spec/generate.py
+#   /api/      the Javadoc for the public API (the generated client is excluded
+#              by maven-javadoc-plugin's configuration in pom.xml)
+#
+# Pages must be enabled for the repository with "GitHub Actions" as the source
+# (Settings -> Pages -> Build and deployment) before the first run can deploy.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "spec/**"
+      - "src/main/java/**"
+      - "pom.xml"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version-file: ".java-version"
+          cache: maven
+          cache-dependency-path: "pom.xml"
+
+      - name: Build the version history and coverage pages
+        run: python3 spec/generate.py --site _site
+
+      - name: Fail if the committed reports are stale
+        run: |
+          set -euo pipefail
+          # generate.py rewrites spec/diffs/ as a side effect of building the
+          # site. If that produces a diff, someone changed a spec or the client
+          # without regenerating, and the Markdown in the repository is lying.
+          if ! git diff --quiet -- spec/diffs; then
+            echo "::error::spec/diffs/ is out of date. Run 'python3 spec/generate.py' and commit the result."
+            git diff --stat -- spec/diffs
+            exit 1
+          fi
+
+      - name: Build the Javadoc
+        run: mvn --batch-mode --no-transfer-progress javadoc:javadoc
+
+      - name: Place the Javadoc under /api
+        run: |
+          set -euo pipefail
+          mkdir -p _site/api
+          cp -R target/reports/apidocs/. _site/api/
+
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy to Pages
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
