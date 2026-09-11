@@ -27,3 +27,7 @@ temp.json
 essbase-rest-client.iml
 
 *.secrets
+__pycache__/
+
+# Generated documentation site (built by spec/generate.py --site)
+_site/

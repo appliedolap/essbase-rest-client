@@ -40,6 +40,20 @@ Although not extensively tested, as this is a normal Java library you should be 
 
 The Essbase REST API Swagger/OpenAPI definition document is used as the basis of the auto-generated classes in this library, although a series of changes are applied to it in order to 'fix' things that the OpenAPI generator would otherwise struggle with. These adjustments can be found in the `process.sh` script. Generally these changes are to fix return types that would otherwise not deserialize properly. Once the document has been processed/fixed, the Open API code generator is run. The code is generated into the `/target` folder and then a part of it is copied in to the source tree for this library.
 
+## API Version History and Coverage
+
+The `spec/` folder archives the Essbase REST API specification as shipped with each release, along
+with generated reports built from them:
+
+- [spec/diffs/README.md](spec/diffs/README.md) lists every endpoint added, by version - a quick way
+  to find out whether an endpoint you want exists on the Essbase version you are targeting.
+- [spec/diffs/coverage.md](spec/diffs/coverage.md) lists every endpoint in the newest archived
+  specification and whether this library reaches it yet. If you are looking for somewhere to
+  contribute, the endpoints marked "generated, not exposed" are the cheapest: the generated method
+  already exists and only needs an `Ess*` wrapper.
+
+Both are also published to GitHub Pages alongside the Javadoc.
+
 ## License
 
 Licensed under the Apache License version 2.

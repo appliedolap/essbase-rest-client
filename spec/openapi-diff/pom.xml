@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Not a module of the client - it exists only so Maven can resolve the
+  openapi-diff CLI and its transitive dependencies for run.sh. Nothing here is
+  built, published, or shipped.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.appliedolap.essbase</groupId>
+    <artifactId>openapi-diff-runner</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openapitools.openapidiff</groupId>
+            <artifactId>openapi-diff-cli</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+    </dependencies>
+</project>

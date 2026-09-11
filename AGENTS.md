@@ -70,6 +70,28 @@ Other known 26.1 differences: `GET /session` answers 500 (so don't depend on it 
 3. Review the diff - the generator's output is deterministic but a spec change can still ripple
    into unrelated-looking model classes.
 
+`formatted.json` is an old capture - older than any release in `spec/versions/` - so the generated
+`client.*` layer describes an API behind the current one. Before concluding an endpoint does not
+exist, check `spec/diffs/README.md`, which lists every endpoint added by version.
+
+## Spec archive
+
+`spec/` holds the OpenAPI spec as shipped with each Essbase release plus generated reports of what
+changed between them and how much of the newest one this client reaches - see `spec/README.md`.
+`python3 spec/generate.py` regenerates every report from whatever is in `spec/versions/`; run it
+after adding a version *or after changing what the client wraps*, and commit the result. The Pages
+workflow regenerates and fails the build if `spec/diffs/` comes out different from what was
+committed, so a stale report breaks CI rather than sitting there misleading people.
+
+Reports deliberately ignore description and summary text, so anything they list is a real change to
+the shape of the API. `spec/diffs/coverage.md` is the one to read before adding a method: it marks
+each endpoint as exposed, generated-but-not-exposed, or absent from the generated client entirely.
+
+Coverage is derived by reading the generated `client/api/*.java` sources, not from a hand-kept list,
+so it stays honest on its own - but it only sees calls through the generated client plus
+`NativeHttp` call sites with a literal path. Don't add a list to maintain; if the measurement needs
+to get smarter, make `spec/essbase_spec.py` smarter.
+
 ## Tests
 
 Every test that touches a live server extends `scratch.AbstractEssbaseServerTest` (or calls
