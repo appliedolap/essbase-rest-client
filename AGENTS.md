@@ -14,6 +14,25 @@
   (their implementations, one `Ess*Impl` per interface). Client code should program against the
   interfaces.
 
+## Authentication
+
+How a client proves who it is lives behind `EssAuthentication`, not inside `ApiClientFactory`. Four
+strategies ship: `basic` (credentials on every request), `session` (credentials until the server
+issues a session, then the session - the default), `sessionCookie` (an existing session, no
+password anywhere), and `bearerToken`.
+
+`sessionCookie` is the one with a reason to exist beyond tidiness. Essbase accepts its session
+cookies on their own, with no `Authorization` header at all - verified against 21.7 by
+`SessionCookieAuthenticationIT`. That is what makes a deployment behind an external identity
+provider reachable: a federated user has no password this API can check, so the only way to act as
+one is to present a session established elsewhere.
+
+Whether a given server accepts a *bearer* token is a property of that deployment, not of this
+library - an on-premises 21.7 instance rejects them outright. Test before relying on it.
+
+When adding a strategy, put the header-shaping logic where `EssAuthenticationTest` can reach it
+without a server. That suite is the only offline test coverage in this project.
+
 ## Regenerating the client
 
 1. `process.sh` massages the raw OpenAPI spec (`formatted.json`) into `src/main/resources/processed.json`,
@@ -29,7 +48,9 @@
 Every test that touches a live server extends `scratch.AbstractEssbaseServerTest` (or calls
 `com.appliedolap.essbase.ConnectionUtils.server()` directly), which reads connection details from
 `~/essbase-test.properties` (`essbase.endpoint`, `essbase.username`, `essbase.password`). There is
-no mocked/offline test path today - `mvn test` runs 0 tests by design.
+no mocked/offline test path today for anything that talks to a server. The exception is
+`com.appliedolap.essbase.auth.EssAuthenticationTest`, which covers header construction and needs
+no server, so `mvn test` does now run (and CI can run) that much.
 
 - Tag every live test method with `@Category(com.appliedolap.essbase.testing.ReadOnlyIntegrationTest.class)`
   if it only reads server state, or `@Category(...DestructiveIntegrationTest.class)` if it

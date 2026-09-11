@@ -48,6 +48,19 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
         this.server = server;
     }
 
+    /**
+     * Connects using the given authentication strategy, which need not be a username and password - see
+     * {@link com.appliedolap.essbase.EssAuthentication}. The way in for a session established elsewhere,
+     * such as by a user signing in through an external identity provider.
+     *
+     * @param server the server REST API path
+     * @param authentication how to authenticate
+     */
+    public EssServerImpl(String server, EssAuthentication authentication) {
+        super(createApiContext(server, authentication));
+        this.server = server;
+    }
+
     public EssServerImpl(EssServerConnectionDetailsImpl connectionDetails) {
         super(createApiContext(connectionDetails.getServer(), connectionDetails.getUsername(), connectionDetails.getPassword(), connectionDetails.isStateless()));
         this.server = connectionDetails.getServer();
@@ -57,6 +70,11 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
         ApiClientFactory clientFactory = new ApiClientFactory(server + DEFAULT_REST_API_PATH, username, password, stateless);
         ApiClient client = clientFactory.create();
         return new ApiContext(client);
+    }
+
+    private static ApiContext createApiContext(String server, EssAuthentication authentication) {
+        ApiClientFactory clientFactory = new ApiClientFactory(server + DEFAULT_REST_API_PATH, authentication);
+        return new ApiContext(clientFactory.create());
     }
 
     private static ApiContext createApiContext(EssServerConnectionDetailsImpl connectionDetails) {

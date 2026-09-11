@@ -13,20 +13,18 @@ import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.net.Authenticator;
 import java.net.CookieHandler;
-import java.net.HttpCookie;
 import java.net.ProxySelector;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.time.Duration;
-import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -37,35 +35,33 @@ public class ApiClientFactory {
 
     private static final Logger logger = LoggerFactory.getLogger(ApiClientFactory.class);
 
-    private static final String JSESSION = "JSESSIONID";
-
-    private static final String WL_JSESSION = "_WL_AUTHCOOKIE_JSESSIONID";
-
     private static final String LINKS_PARAM = "links=none";
 
     private final String path;
 
-    private final String username;
-
-    private final String password;
-
-    private final boolean stateless;
-
-    private volatile boolean hasAuthenticated;
-
-    private volatile String sessionId;
-
-    private volatile String wlSessionId;
+    private final EssAuthentication authentication;
 
     public ApiClientFactory(String path, String username, String password) {
         this(path, username, password, false);
     }
 
+    /**
+     * @param stateless true to send the username and password on every request rather than establishing a
+     *                  session - equivalent to {@link EssAuthentication#basic}
+     */
     public ApiClientFactory(String path, String username, String password, boolean stateless) {
+        this(path, stateless
+                ? EssAuthentication.basic(username, password)
+                : EssAuthentication.session(username, password));
+    }
+
+    /**
+     * Builds clients that authenticate however the given strategy says to, which need not involve a
+     * username and password at all - see {@link EssAuthentication}.
+     */
+    public ApiClientFactory(String path, EssAuthentication authentication) {
         this.path = path;
-        this.username = username;
-        this.password = password;
-        this.stateless = stateless;
+        this.authentication = Objects.requireNonNull(authentication, "authentication");
     }
 
     public ApiClient create() {
@@ -100,11 +96,15 @@ public class ApiClientFactory {
 
     private void installRequestInterceptor(ApiClient client) {
         client.setRequestInterceptor(builder -> {
-            if (stateless || !hasAuthenticated) {
-                builder.header("Authorization", "Basic " + basicCredentials());
-            } else {
-                builder.header("Authorization", "Session Session");
-                builder.header("Cookie", buildSessionCookie());
+            // Both headers are optional. A cookie-borne session sends no Authorization at all, and a
+            // password-only strategy sends no Cookie - so neither is unconditional any more.
+            String authorization = authentication.authorizationHeader();
+            if (authorization != null) {
+                builder.header("Authorization", authorization);
+            }
+            String cookie = authentication.cookieHeader();
+            if (cookie != null) {
+                builder.header("Cookie", cookie);
             }
         });
     }
@@ -121,77 +121,27 @@ public class ApiClientFactory {
                 logger.info("[essbase-network] {} {} -> {}",
                         response.request().method(), response.uri(), response.statusCode());
             }
-            if (stateless) {
-                return;
-            }
-            List<String> setCookieHeaders = response.headers().allValues("Set-Cookie");
-            for (String header : setCookieHeaders) {
-                List<HttpCookie> cookies;
-                try {
-                    cookies = HttpCookie.parse(header);
-                } catch (IllegalArgumentException e) {
-                    logger.debug("Skipping unparseable Set-Cookie header '{}': {}", header, e.getMessage());
-                    continue;
-                }
-                for (HttpCookie cookie : cookies) {
-                    String name = cookie.getName();
-                    String value = cookie.getValue();
-                    if ("sessionExpiry".equals(name)) {
-                        try {
-                            long sessionExpiry = Long.parseLong(value);
-                            logger.debug("Session expire is in: {}s",
-                                    ((sessionExpiry - System.currentTimeMillis()) / 1000.0f));
-                        } catch (NumberFormatException nfe) {
-                            logger.debug("Could not parse sessionExpiry='{}'", value);
-                        }
-                    } else if (JSESSION.equals(name)) {
-                        if (!hasAuthenticated) {
-                            sessionId = value;
-                            logger.debug("Setting session ID: {}", sessionId);
-                            hasAuthenticated = true;
-                        }
-                    } else if (WL_JSESSION.equals(name)) {
-                        wlSessionId = value;
-                        logger.debug("Have WL session: {}", value);
-                    }
-                }
-            }
+            // Whether any of this matters is the strategy's business: a password-only one ignores it, a
+            // session-establishing one picks its session up out of it.
+            authentication.observeSetCookies(response.headers().allValues("Set-Cookie"));
         });
-    }
-
-    private String basicCredentials() {
-        String auth = username + ":" + password;
-        return Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
-    }
-
-    private String buildSessionCookie() {
-        StringBuilder sb = new StringBuilder("$Version=1;").append(JSESSION).append('=').append(sessionId);
-        if (wlSessionId != null) {
-            sb.append(",$Version=1;").append(WL_JSESSION).append('=').append(wlSessionId);
-        }
-        return sb.toString();
     }
 
     /**
      * Returns the current Authorization header value, matching what the request interceptor would
-     * apply. Useful for download-bypass code that constructs raw {@link HttpRequest}s.
+     * apply, or null when the current strategy sends none. Useful for download-bypass code that
+     * constructs raw {@link HttpRequest}s.
      */
     public String currentAuthorizationHeader() {
-        if (stateless || !hasAuthenticated) {
-            return "Basic " + basicCredentials();
-        }
-        return "Session Session";
+        return authentication.authorizationHeader();
     }
 
     /**
-     * Returns the current Cookie header value (or {@code null} when not yet authenticated / in
-     * stateless mode). Pairs with {@link #currentAuthorizationHeader()} for download bypass paths.
+     * Returns the current Cookie header value, or null when the current strategy sends none. Pairs with
+     * {@link #currentAuthorizationHeader()} for download bypass paths.
      */
     public String currentCookieHeader() {
-        if (stateless || !hasAuthenticated) {
-            return null;
-        }
-        return buildSessionCookie();
+        return authentication.cookieHeader();
     }
 
     /**
