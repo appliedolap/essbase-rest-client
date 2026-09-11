@@ -4,7 +4,6 @@ import com.appliedolap.essbase.EssAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.HttpCookie;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -55,30 +54,16 @@ public class SessionAuthentication implements EssAuthentication {
 
     @Override
     public void observeSetCookies(List<String> setCookieHeaders) {
-        for (String header : setCookieHeaders) {
-            List<HttpCookie> cookies;
-            try {
-                cookies = HttpCookie.parse(header);
-            } catch (IllegalArgumentException e) {
-                logger.debug("Skipping unparseable Set-Cookie header '{}': {}", header, e.getMessage());
-                continue;
-            }
-            for (HttpCookie cookie : cookies) {
-                accept(cookie.getName(), cookie.getValue());
-            }
-        }
+        SessionCookies.forEachCookie(setCookieHeaders, this::accept);
     }
 
     private void accept(String name, String value) {
         if (SessionCookies.SESSION_EXPIRY.equals(name)) {
-            try {
-                // Kept, not merely logged: a caller that knows when its session dies can renew or warn
-                // ahead of time instead of finding out through a surprise 401 mid-operation.
-                sessionExpiry = Instant.ofEpochMilli(Long.parseLong(value));
-                logger.debug("Session expires in {}s",
-                        (sessionExpiry.toEpochMilli() - System.currentTimeMillis()) / 1000.0f);
-            } catch (NumberFormatException e) {
-                logger.debug("Could not parse sessionExpiry='{}'", value);
+            // Kept, not merely logged: a caller that knows when its session dies can renew or warn ahead
+            // of time instead of finding out through a surprise 401 mid-operation.
+            Instant parsed = SessionCookies.parseExpiry(value);
+            if (parsed != null) {
+                sessionExpiry = parsed;
             }
         } else if (SessionCookies.JSESSION.equals(name)) {
             // Only the first one. Essbase re-issues JSESSIONID on later responses, and adopting a newer

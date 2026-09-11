@@ -39,8 +39,13 @@ if the call failed, because a session that could not be signed off should not ke
 A password-backed strategy then re-authenticates on the next call; a supplied session has nothing
 to fall back on, which is the correct outcome.
 
-`EssServer.getSessionExpiry()` reports when the session dies, and is empty while there is no
-session - Essbase sends a `sessionExpiry` cookie even before one exists, dated in the past.
+`EssServer.getSessionExpiry()` reports when the session dies, for a session this library
+established *and* for one supplied to it - the server reports the deadline on every response, so a
+`sessionCookie` strategy learns it as requests go by. It is empty while there is no session:
+Essbase sends a `sessionExpiry` cookie even before one exists, dated in the past.
+
+The deadline is an idle timeout, not an absolute one - measured against 26.1, every response resets
+it to a full hour - so a session in use stays alive and only a quiet one lapses.
 
 ## Regenerating the client
 

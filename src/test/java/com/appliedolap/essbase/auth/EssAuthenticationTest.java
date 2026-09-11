@@ -183,13 +183,51 @@ public class EssAuthenticationTest {
 
     /**
      * A supplied session has nothing to fall back to, so signing off leaves it unable to authenticate.
-     * That is correct: signing off is what the caller asked for, and inventing a fallback would be wrong.
+     * That is correct - signing off is what the caller asked for - but it must also stop sending the dead
+     * session, so the server answers "no credentials" rather than "these credentials are rejected".
      */
     @Test
     public void aSuppliedSessionHasNoFallbackAfterSigningOff() {
         EssAuthentication auth = EssAuthentication.sessionCookie("abc123", "wl789");
+        assertNotNull("presents the session beforehand", auth.cookieHeader());
         auth.sessionEnded();
         assertNull(auth.authorizationHeader());
+        assertNull("the dead session must not keep being presented", auth.cookieHeader());
+        assertTrue(auth.sessionExpiry().isEmpty());
+    }
+
+    /**
+     * A supplied session arrives with no expiry attached, but the server reports one on every response, so
+     * it can be learned as requests go by. This matters more here than for a password-backed session: that
+     * one re-authenticates silently when it dies, whereas a supplied session simply starts failing.
+     */
+    @Test
+    public void aSuppliedSessionLearnsItsExpiryFromResponses() {
+        EssAuthentication auth = EssAuthentication.sessionCookie("abc123", "wl789");
+        assertTrue("nothing known until the server says", auth.sessionExpiry().isEmpty());
+
+        long expiry = System.currentTimeMillis() + 3_600_000;
+        auth.observeSetCookies(List.of(setCookie("sessionExpiry", Long.toString(expiry))));
+        assertEquals(Instant.ofEpochMilli(expiry), auth.sessionExpiry().orElseThrow());
+    }
+
+    /** Essbase renews the expiry on every response, so the latest one wins - it is an idle timeout. */
+    @Test
+    public void aSuppliedSessionTracksTheRenewedExpiry() {
+        EssAuthentication auth = EssAuthentication.sessionCookie("abc123", "wl789");
+        long first = System.currentTimeMillis() + 600_000;
+        long renewed = System.currentTimeMillis() + 3_600_000;
+        auth.observeSetCookies(List.of(setCookie("sessionExpiry", Long.toString(first))));
+        auth.observeSetCookies(List.of(setCookie("sessionExpiry", Long.toString(renewed))));
+        assertEquals(Instant.ofEpochMilli(renewed), auth.sessionExpiry().orElseThrow());
+    }
+
+    @Test
+    public void aSuppliedSessionIgnoresAnUnparseableExpiry() {
+        EssAuthentication auth = EssAuthentication.sessionCookie("abc123", "wl789");
+        auth.observeSetCookies(List.of(setCookie("sessionExpiry", "not-a-number")));
+        assertTrue(auth.sessionExpiry().isEmpty());
+        assertNotNull("the session itself is unaffected", auth.cookieHeader());
     }
 
     /**
