@@ -60,6 +60,16 @@ public interface EssServer {
     List<EssSession> getSessions();
 
     /**
+     * How this connection authenticates, so that code outside the generated client can present the same
+     * identity - a download bypass, or a local proxy standing in front of the server's own web pages.
+     * <p>
+     * Returns the live strategy rather than a snapshot: ask it for headers at the moment of the request,
+     * because a session-based strategy's answer changes once a session is established, and again once it
+     * is signed off.
+     */
+    EssAuthentication getAuthentication();
+
+    /**
      * Ends this client's own session on the server.
      * <p>
      * Distinct from {@link #killSessions(boolean)}, which ends other people's. This is signing off: the

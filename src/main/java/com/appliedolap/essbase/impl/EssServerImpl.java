@@ -85,6 +85,11 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     }
 
     @Override
+    public EssAuthentication getAuthentication() {
+        return api.getAuthentication();
+    }
+
+    @Override
     public void signOff() {
         try {
             api.getUserSessionApi().userSessionSignoff();
