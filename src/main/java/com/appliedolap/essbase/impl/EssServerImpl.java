@@ -16,6 +16,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.net.URI;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.LinkedHashMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -82,6 +87,34 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     private static ApiContext createApiContext(EssServerConnectionDetailsImpl connectionDetails) {
         return createApiContext(connectionDetails.getServer(), connectionDetails.getUsername(),
                 connectionDetails.getPassword(), connectionDetails.isStateless());
+    }
+
+    @Override
+    public Map<String, Object> getInstanceDetails() {
+        ApiClient client = api.getClient();
+        try {
+            HttpRequest.Builder request = HttpRequest
+                    .newBuilder(URI.create(client.getBaseUri() + "/about/instance"))
+                    .header("Accept", "application/json")
+                    .GET();
+            // The client's own interceptor, so this authenticates exactly as every generated call does -
+            // including with a session or a supplied cookie, not just a password.
+            client.getRequestInterceptor().accept(request);
+
+            HttpResponse<String> response = client.getHttpClient()
+                    .send(request.build(), HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() / 100 != 2) {
+                throw new EssApiException("Couldn't read the instance details (HTTP "
+                        + response.statusCode() + ")");
+            }
+            return client.getObjectMapper().readValue(response.body(),
+                    new TypeReference<LinkedHashMap<String, Object>>() { });
+        } catch (IOException e) {
+            throw new EssApiException(e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new EssApiException(e);
+        }
     }
 
     @Override

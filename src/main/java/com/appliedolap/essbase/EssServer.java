@@ -60,6 +60,26 @@ public interface EssServer {
     List<EssSession> getSessions();
 
     /**
+     * Everything the server reports about this deployment, exactly as it reports it.
+     * <p>
+     * Deliberately untyped, unlike {@link #getAboutInstance()}. This endpoint is a bag of capability flags
+     * describing one deployment, and which flags exist varies by version: 21.7 answers with
+     * {@code idcs} and {@code provisioningSupported}, while 26.1 answers with ten fields including a split
+     * of that one into service- and application-role provisioning, several AI feature flags, and a logout
+     * URL. A generated model pins the field names at whatever the spec said when it was generated and
+     * silently discards the rest, so against a newer server the typed view goes empty precisely when the
+     * server has more to say. A map cannot go out of date that way.
+     * <p>
+     * Values are left as the server sent them - booleans stay booleans - so a caller can test a flag as
+     * well as display it. {@code idcs} is the interesting one: it says the deployment authenticates
+     * through Oracle's identity service, which is what makes a username and password useless for a
+     * federated user.
+     *
+     * @return the fields the server returned, in the order it returned them
+     */
+    Map<String, Object> getInstanceDetails();
+
+    /**
      * How this connection authenticates, so that code outside the generated client can present the same
      * identity - a download bypass, or a local proxy standing in front of the server's own web pages.
      * <p>

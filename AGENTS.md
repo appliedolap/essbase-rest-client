@@ -47,6 +47,19 @@ Essbase sends a `sessionExpiry` cookie even before one exists, dated in the past
 The deadline is an idle timeout, not an absolute one - measured against 26.1, every response resets
 it to a full hour - so a session in use stays alive and only a quiet one lapses.
 
+## Version drift
+
+The generated client is pinned to whatever the spec said when it was generated, and Essbase's own
+shape moves. Where an endpoint returns a bag of deployment-specific flags rather than a fixed
+record, prefer an untyped accessor: `EssServer.getInstanceDetails()` returns `/about/instance` as a
+map for exactly this reason. The typed `getAboutInstance()` names three fields; 21.7 returns two of
+them and 26.1 returns ten fields of which *none* are those three, so the typed view goes empty
+precisely when the server has more to say.
+
+Other known 26.1 differences: `GET /session` answers 500 (so don't depend on it - see
+`resetDefaultView`), `DELETE /session` answers 204 rather than 200, and the spec moved to OpenAPI
+3.0.1 at `/rest/v1/openapi.json` with 348 paths against 21.7's 240.
+
 ## Regenerating the client
 
 1. `process.sh` massages the raw OpenAPI spec (`formatted.json`) into `src/main/resources/processed.json`,
