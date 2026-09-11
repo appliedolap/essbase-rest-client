@@ -44,6 +44,9 @@ jobs:
           cache: maven
           cache-dependency-path: "pom.xml"
 
+      - name: Check the spec analysis
+        run: python3 spec/selftest.py
+
       - name: Build the version history and coverage pages
         run: python3 spec/generate.py --site _site
 

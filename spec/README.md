@@ -11,11 +11,12 @@ now?" - is the question this client has to answer every time it grows a method.
 
 | Path | What it is |
 | --- | --- |
-| `versions/essbase-<version>-swagger.json` | The specification as shipped, one per Essbase release |
+| `versions/essbase-<version>-swagger.json` (or `-openapi.json`) | The specification as shipped, one per Essbase release |
 | `diffs/README.md` | Index: what changed at each step, and every endpoint added, by version |
 | `diffs/<old>-to-<new>.md` | The full report for one step |
 | `diffs/coverage.md` | Every endpoint in the newest spec, and whether this client reaches it |
 | `essbase_spec.py` | The analysis: loading, comparing, measuring coverage |
+| `selftest.py` | Checks on the analysis itself, chiefly Swagger 2.0 / OpenAPI 3 symmetry |
 | `generate.py` | The rendering: Markdown into `diffs/`, and the Pages site |
 | `openapi-diff/` | Optional wrapper around the openapi-diff CLI, for HTML reports and backward-compatibility verdicts |
 
@@ -74,10 +75,29 @@ the spec this client was built from.
        python3 spec/generate.py
 
 `generate.py` discovers whatever is in `versions/`, sorts by version number, and
-diffs each adjacent pair, so no list of versions needs maintaining. Swagger 2.0
-and OpenAPI 3.x are both understood, which matters from 26.1 on - request bodies
-and `components/schemas` are normalised onto the 2.0 shape so a mixed archive
-still compares cleanly.
+diffs each adjacent pair, so no list of versions needs maintaining. Name the file
+`-openapi.json` instead of `-swagger.json` when the server served OpenAPI 3, as
+26.1 does; either spelling is picked up.
+
+## Crossing the Swagger 2.0 / OpenAPI 3 boundary
+
+Essbase served Swagger 2.0 through 21.7 and OpenAPI 3.0.1 from 26.1, so one step
+in the archive changes format. Both are understood, and the difference is
+normalised away rather than reported:
+
+- a request body is compared as one entry whatever the spec calls it - Swagger
+  2.0 gives it a parameter name, OpenAPI 3 does not;
+- media types are compared separately from schemas, since 2.0 carries one schema
+  per operation while 3.x carries one per media type; and
+- `consumes`/`produces` are compared only where both specs record them. A
+  response with no body carries no media type in OpenAPI 3 but is still covered
+  by an operation's `produces` in 2.0, so treating the absence as "none" rather
+  than "unrecorded" would flag a change on every such endpoint.
+
+Getting this wrong is not subtle and not hypothetical: before it was fixed, a
+spec compared against its own OpenAPI 3 form reported 336 of its 344 endpoints
+as changed. `spec/selftest.py` asserts that comparison now reports nothing, for
+every archived spec, and CI runs it.
 
 ## Regenerating the reports
 
@@ -88,6 +108,9 @@ It rewrites every file under `diffs/`, so the reports and the specs stay in
 step and a stale report shows up as an unexpected diff. CI enforces this: the
 Pages workflow regenerates and fails if `diffs/` comes out different from what
 was committed.
+
+`python3 spec/selftest.py` checks the analysis itself, and needs nothing either.
+CI runs it before generating anything.
 
 Description and summary text are deliberately ignored. Oracle rewords
 documentation constantly, and a report that lists those changes buries the ones

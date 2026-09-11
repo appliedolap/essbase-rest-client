@@ -23,7 +23,11 @@ VERSIONS_DIR = SPEC_DIR / "versions"
 REPO_ROOT = SPEC_DIR.parent
 JAVA_ROOT = REPO_ROOT / "src" / "main" / "java" / "com" / "appliedolap" / "essbase"
 
-VERSION_FILE = re.compile(r"^essbase-(?P<version>\d+(?:\.\d+)*)-swagger\.json$")
+# Either spelling of the suffix: Essbase served Swagger 2.0 through 21.7 and
+# OpenAPI 3.0.1 from 26.1, and the filename should say which it is.
+VERSION_FILE = re.compile(
+    r"^essbase-(?P<version>\d+(?:\.\d+)*)-(?:swagger|openapi)\.json$"
+)
 METHODS = ("get", "put", "post", "delete", "patch", "head", "options")
 
 Endpoint = tuple[str, str]  # (METHOD, path)
@@ -99,28 +103,48 @@ def type_signature(node: dict | None) -> str:
     return signature
 
 
+def _schema_signatures(content: dict | None) -> str:
+    """One signature for an OpenAPI 3 `content` map.
+
+    Media types are deliberately left out and the distinct schemas deduplicated,
+    because Swagger 2.0 carries a single schema for the whole operation whatever
+    its `consumes`/`produces` say. Keeping the media type here would make every
+    body and every response look changed across the 2.0-to-3.0 boundary; the
+    media types are compared separately, by `consumes_of` and `produces_of`.
+    """
+    signatures = sorted({type_signature(media) for media in (content or {}).values()})
+    return " | ".join(signatures) if signatures else "(no content)"
+
+
 def parameters_of(operation: dict) -> dict[tuple[str, str], str]:
     """Map (location, name) to a type signature, including the request body.
 
-    OpenAPI 3 request bodies are folded in as synthetic `body` parameters so a
-    Swagger 2.0 spec and an OpenAPI 3 one compare on the same terms.
+    The body is keyed as `("body", "")` from either spec version - a Swagger 2.0
+    body parameter has a name, an OpenAPI 3 request body does not, so neither
+    name can be the key without inventing a difference that is not there.
     """
     result = {}
     for parameter in operation.get("parameters") or []:
         if not isinstance(parameter, dict) or "name" not in parameter:
+            continue
+        if parameter.get("in") == "body":  # Swagger 2.0 body; handled below
+            signature = type_signature(parameter)
+            if parameter.get("required"):
+                signature += " (required)"
+            result[("body", "")] = signature
             continue
         key = (parameter.get("in", "?"), parameter["name"])
         signature = type_signature(parameter)
         if parameter.get("required"):
             signature += " (required)"
         result[key] = signature
-    body = operation.get("requestBody")
+
+    body = operation.get("requestBody")  # OpenAPI 3
     if isinstance(body, dict):
-        for media_type, media in (body.get("content") or {}).items():
-            signature = type_signature(media)
-            if body.get("required"):
-                signature += " (required)"
-            result[("body", media_type)] = signature
+        signature = _schema_signatures(body.get("content"))
+        if body.get("required"):
+            signature += " (required)"
+        result[("body", "")] = signature
     return result
 
 
@@ -131,16 +155,42 @@ def responses_of(operation: dict) -> dict[str, str]:
         if not isinstance(response, dict):
             continue
         if "content" in response:  # OpenAPI 3
-            parts = [
-                f"{media_type}: {type_signature(media)}"
-                for media_type, media in sorted((response["content"] or {}).items())
-            ]
-            result[str(code)] = "; ".join(parts) if parts else "(no content)"
+            result[str(code)] = _schema_signatures(response["content"])
         elif "schema" in response:
             result[str(code)] = type_signature(response["schema"])
         else:
             result[str(code)] = "(no content)"
     return result
+
+
+# `None` from these means "this spec does not say", which is different from "no
+# media types". Swagger 2.0 declares `produces` on an operation even when every
+# response is empty; OpenAPI 3 records media types only on a response that has a
+# body, so a 204-only operation genuinely carries none. Treating the second as an
+# empty list would report a media-type change on every such endpoint across the
+# 2.0-to-3.0 boundary - 119 of them between 21.5 and its OpenAPI 3 form - none of
+# which is a change to the API. Unknown on either side means no comparison.
+
+
+def consumes_of(operation: dict) -> list[str] | None:
+    """Request media types, from `consumes` (2.0) or the request body (3.x)."""
+    if "consumes" in operation:
+        return sorted(operation.get("consumes") or [])
+    body = operation.get("requestBody")
+    if isinstance(body, dict) and body.get("content"):
+        return sorted(body["content"])
+    return None
+
+
+def produces_of(operation: dict) -> list[str] | None:
+    """Response media types, from `produces` (2.0) or the responses (3.x)."""
+    if "produces" in operation:
+        return sorted(operation.get("produces") or [])
+    media_types = set()
+    for response in (operation.get("responses") or {}).values():
+        if isinstance(response, dict):
+            media_types.update(response.get("content") or {})
+    return sorted(media_types) or None
 
 
 def properties_of(schema: dict) -> dict[str, str]:
@@ -216,9 +266,10 @@ def diff_operations(old_spec: dict, new_spec: dict) -> dict:
         for code in sorted(r_changed):
             notes.append(f"response `{code}`: {old_responses[code]} -> {new_responses[code]}")
 
-        for field in ("consumes", "produces"):
-            old_value = sorted(old_op.get(field) or [])
-            new_value = sorted(new_op.get(field) or [])
+        for field, reader in (("consumes", consumes_of), ("produces", produces_of)):
+            old_value, new_value = reader(old_op), reader(new_op)
+            if old_value is None or new_value is None:
+                continue  # one side does not record it; see the note above
             if old_value != new_value:
                 notes.append(
                     f"`{field}`: {', '.join(old_value) or '(none)'} -> "
