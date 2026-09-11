@@ -74,6 +74,12 @@ Other known 26.1 differences: `GET /session` answers 500 (so don't depend on it 
 `client.*` layer describes an API behind the current one. Before concluding an endpoint does not
 exist, check `spec/diffs/README.md`, which lists every endpoint added by version.
 
+How far behind is now measured: of 26.1's 494 endpoints, 177 have no generated method at all, and
+seven generated methods call endpoints 26.1 has removed. A regeneration is the one change that
+fixes both, and 26.1's spec is OpenAPI 3.0.1 rather than Swagger 2.0, so expect `process.sh`'s jq
+patches to need reworking - they address `.definitions` and `.paths[].<verb>.responses.<code>.schema`,
+which in OpenAPI 3 are `.components.schemas` and `...responses.<code>.content."<media>".schema`.
+
 ## Spec archive
 
 `spec/` holds the OpenAPI spec as shipped with each Essbase release plus generated reports of what

@@ -1,7 +1,8 @@
 # Essbase REST API specifications
 
-An archive of the OpenAPI (Swagger 2.0) specification Oracle ships with each
-Essbase release, and generated reports showing what changed between them.
+An archive of the OpenAPI specification Oracle ships with each Essbase release -
+Swagger 2.0 through 21.7, OpenAPI 3.0.1 from 26.1 - and generated reports
+showing what changed between them.
 
 This lives here rather than alongside a product that consumes the API because
 the question it answers - "when did this endpoint appear, and what shape is it
@@ -31,6 +32,7 @@ also published to GitHub Pages - see "The published site" below.
 | 21.1 | 337 | 232 | `464033c2571a0b488ff4ffc9353f53f4eb35ec5f24e227502989b70145345667` |
 | 21.4 | 343 | 238 | `1b72596764725465f93b39db6e0d63f28f500736aee7b8b20799453c67c15100` |
 | 21.5 | 344 | 240 | `5f4230883dd46bad168a34f9e28e2bb8c71da14a7454b0913c288479c37a7d2b` |
+| 26.1 | 494 | 256 | `7c975012769b0710428faff5eed98b2261e3f72fec522e86b530c456cdeaa844` |
 
 "Endpoints" counts path/method pairs, so one path with a `GET` and a `DELETE`
 counts twice; `paths` counts in the specs themselves are lower.
@@ -40,9 +42,14 @@ future version shows up as a readable git diff. Key order and content are
 untouched - the checksums above are of the original bytes, before reformatting,
 which is why they will not match `shasum` run on the files here.
 
-Every spec declares `info.version` as `1.0` and an empty `info.title`, so a file
-carries no usable record of which Essbase release it came from. The filename is
-the only version marker; keep it accurate.
+The Swagger 2.0 files declare `info.version` as `1.0` with an empty `info.title`,
+and 26.1 declares `V1` with the title "Essbase REST API" - neither records which
+Essbase release it came from. The filename is the only version marker; keep it
+accurate.
+
+21.7 is not archived yet. When it is added, `generate.py` will split the current
+21.5-to-26.1 step into 21.5-to-21.7 and 21.7-to-26.1 on its own, and the format
+crossing will move to the second of those.
 
 ## Relationship to the generated client
 
@@ -58,6 +65,11 @@ API older than any version in `versions/`. That is worth knowing before
 concluding that an endpoint is missing from Essbase when it is only missing from
 the spec this client was built from.
 
+Against 26.1 the gap is wide: 177 of its 494 endpoints have no generated method
+at all, and seven generated methods point at endpoints 26.1 no longer has.
+Regenerating from a current spec closes both at once, and is the single
+highest-leverage change available to this library. `diffs/coverage.md` has the lists.
+
 ## Adding a version
 
 1. Fetch the specification from a server of that version. The path has moved
@@ -66,7 +78,8 @@ the spec this client was built from.
    interface links to its own REST API documentation, and the JSON behind that
    page is what to save.
 2. Record its SHA-256 (`shasum -a 256 <file>`) for the table above.
-3. Save it as `versions/essbase-<version>-swagger.json`, pretty-printed:
+3. Save it as `versions/essbase-<version>-swagger.json`, or `-openapi.json` if
+   the server served OpenAPI 3, pretty-printed:
 
        python3 -c "import json,sys; d=json.load(open(sys.argv[1])); json.dump(d, open(sys.argv[2],'w'), indent=2)" raw.json spec/versions/essbase-21.7-swagger.json
 

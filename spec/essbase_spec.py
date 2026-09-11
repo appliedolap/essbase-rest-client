@@ -83,9 +83,15 @@ def operations_of(spec: dict) -> dict[Endpoint, dict]:
 
 
 def type_signature(node: dict | None) -> str:
-    """A short, comparable description of a schema or typed parameter."""
+    """A short, comparable description of a schema or typed parameter.
+
+    `(untyped)` is a real answer, not a failure to parse: 26.1 answers
+    `GET /preferences` with a `default` response whose media types carry an empty
+    schema, where 21.5 answered `200` with a `Preference`. Saying so plainly beats
+    printing a question mark at someone.
+    """
     if not isinstance(node, dict):
-        return "?"
+        return "(absent)"
     if "$ref" in node:
         return node["$ref"].rsplit("/", 1)[-1]
     if "schema" in node:
@@ -94,7 +100,7 @@ def type_signature(node: dict | None) -> str:
     if kind == "array":
         return f"array[{type_signature(node.get('items'))}]"
     if kind is None:
-        return "object" if "properties" in node else "?"
+        return "object" if "properties" in node else "(untyped)"
     fmt = node.get("format")
     signature = f"{kind}({fmt})" if fmt else kind
     enum = node.get("enum")
