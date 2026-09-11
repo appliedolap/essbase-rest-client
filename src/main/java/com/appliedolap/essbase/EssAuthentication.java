@@ -50,6 +50,18 @@ public interface EssAuthentication {
     }
 
     /**
+     * The user being authenticated as, where this strategy knows it.
+     * <p>
+     * Empty for a strategy that only carries a session or a token: those identify a user to the server
+     * without the client necessarily knowing who it is. A caller that needs the name regardless has to ask
+     * the server - but should prefer this, because asking is a round trip and, on Essbase 26.1,
+     * {@code GET /session} answers 500.
+     */
+    default Optional<String> username() {
+        return Optional.empty();
+    }
+
+    /**
      * Told that the session this was using has been ended server-side, so that any session state held here
      * is discarded rather than being presented again after it has stopped being valid.
      * <p>

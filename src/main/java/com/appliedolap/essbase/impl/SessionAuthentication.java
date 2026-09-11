@@ -35,6 +35,11 @@ public class SessionAuthentication implements EssAuthentication {
     }
 
     @Override
+    public Optional<String> username() {
+        return basic.username();
+    }
+
+    @Override
     public String authorizationHeader() {
         // "Session Session" is what this library has always sent once authenticated. Measured against
         // Essbase 21.7, the cookies alone are sufficient and this header is ignored - but it is harmless,

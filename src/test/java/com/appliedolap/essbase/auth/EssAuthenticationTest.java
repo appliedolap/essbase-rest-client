@@ -192,6 +192,23 @@ public class EssAuthenticationTest {
         assertNull(auth.authorizationHeader());
     }
 
+    /**
+     * Strategies that know the user must say so. resetDefaultView() asks for this rather than calling
+     * GET /session, which answers 500 on Essbase 26.1 and took every fresh ad hoc grid down with it.
+     */
+    @Test
+    public void passwordStrategiesKnowTheUsername() {
+        assertEquals("admin", EssAuthentication.basic("admin", "welcome1").username().orElseThrow());
+        assertEquals("admin", EssAuthentication.session("admin", "welcome1").username().orElseThrow());
+    }
+
+    /** A session or a token identifies a user to the server without naming one here. */
+    @Test
+    public void sessionAndTokenStrategiesDoNotKnowTheUsername() {
+        assertTrue(EssAuthentication.sessionCookie("abc123", "wl789").username().isEmpty());
+        assertTrue(EssAuthentication.bearerToken("abc.def.ghi").username().isEmpty());
+    }
+
     @Test
     public void bearerTokenSendsTheToken() {
         EssAuthentication auth = EssAuthentication.bearerToken("abc.def.ghi");

@@ -393,10 +393,22 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
         }
     }
 
+    /**
+     * The layout to delete is named after the current user, so this needs to know who that is.
+     * <p>
+     * It asks the authentication strategy first and only falls back to {@code GET /session} when the
+     * strategy doesn't know - which is a strategy carrying a session or token rather than a name. That
+     * ordering is not just to save a round trip: {@code GET /session} answers 500 on Essbase 26.1, so
+     * asking it first made this method, and therefore every fresh ad hoc grid, fail outright there.
+     */
     @Override
     public void resetDefaultView() {
         try {
-            String username = api.getUserSessionApi().userSessionGetSession(false).getId();
+            String username = api.getAuthentication() == null ? null
+                    : api.getAuthentication().username().orElse(null);
+            if (username == null) {
+                username = api.getUserSessionApi().userSessionGetSession(false).getId();
+            }
             api.getLayoutsApi().deleteLayout(getApplicationName(), getName(), "Session_Layout_" + username, null);
         } catch (ApiException e) {
             EssApiException wrapped = new EssApiException(e);
