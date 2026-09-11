@@ -4,6 +4,16 @@ The Essbase REST Java Client is an open source Java library created by [Applied 
 
 This library is a very functional but does not implement everything available in the Essbase REST API. Contributions and pull requests are welcome. We will be filling in methods as they are needed.
 
+## Documentation
+
+**[developer.dodecasoftware.com/essbase-rest-client](https://developer.dodecasoftware.com/essbase-rest-client/)**
+
+| | |
+| --- | --- |
+| [Javadoc](https://developer.dodecasoftware.com/essbase-rest-client/api/) | The public API |
+| [What's new by version](https://developer.dodecasoftware.com/essbase-rest-client/) | Every endpoint Oracle added to the Essbase REST API, by release |
+| [Coverage](https://developer.dodecasoftware.com/essbase-rest-client/coverage.html) | Every endpoint in the newest spec, and whether this library reaches it |
+
 ## Versus Essbase Java API
 
 The Essbase Java API has been the gold standard for connectivity and interaction with Essbase over the years. There are a few reasons you may want to use this library. This library provides access to some functionality that is _only_ in the REST API, is less sensitive to version changes (sometimes the Essbase Java JARs would receive binary incompatible changes), and it may be easier to access your Essbase server using its normal HTTPS port instead of the APS port.
@@ -42,17 +52,22 @@ The Essbase REST API Swagger/OpenAPI definition document is used as the basis of
 
 ## API Version History and Coverage
 
-The `spec/` folder archives the Essbase REST API specification as shipped with each release, along
-with generated reports built from them:
+The `spec/` folder archives the Essbase REST API specification as shipped with each release - 21.1,
+21.4, 21.5, 21.7 and 26.1 - along with generated reports built from them. Each report is published
+on the documentation site above and also committed here, so it can be read either way:
 
-- [spec/diffs/README.md](spec/diffs/README.md) lists every endpoint added, by version - a quick way
-  to find out whether an endpoint you want exists on the Essbase version you are targeting.
-- [spec/diffs/coverage.md](spec/diffs/coverage.md) lists every endpoint in the newest archived
-  specification and whether this library reaches it yet. If you are looking for somewhere to
-  contribute, the endpoints marked "generated, not exposed" are the cheapest: the generated method
-  already exists and only needs an `Ess*` wrapper.
+| Report | On the site | In this repository |
+| --- | --- | --- |
+| Every endpoint added, by version | [What's new](https://developer.dodecasoftware.com/essbase-rest-client/) | [spec/diffs/README.md](spec/diffs/README.md) |
+| What this library reaches, and what it does not | [Coverage](https://developer.dodecasoftware.com/essbase-rest-client/coverage.html) | [spec/diffs/coverage.md](spec/diffs/coverage.md) |
+| One version step in full | e.g. [21.7 to 26.1](https://developer.dodecasoftware.com/essbase-rest-client/21.7-to-26.1.html) | [spec/diffs/21.7-to-26.1.md](spec/diffs/21.7-to-26.1.md) |
 
-Both are also published to GitHub Pages alongside the Javadoc.
+The version history is a quick way to find out whether an endpoint you want exists on the Essbase
+version you are targeting. The coverage report is the place to look if you want to contribute: the
+endpoints marked "generated, not exposed" are the cheapest to add, because the generated method
+already exists and only an `Ess*` wrapper is missing.
+
+See [spec/README.md](spec/README.md) for how the archive works and how to add a version.
 
 ## License
 

@@ -159,8 +159,16 @@ one exists.
 
 ## The published site
 
-`.github/workflows/pages.yml` deploys the same content to GitHub Pages on every
-push to `main` that touches `spec/`, `src/main/java/`, or `pom.xml`:
+**https://developer.dodecasoftware.com/essbase-rest-client/**
+
+That host is not configured here: the custom domain belongs to the organisation
+site (`appliedolap/appliedolap.github.io` carries the `CNAME`), and project
+sites inherit it, which is why this repository's own Pages `cname` is empty and
+why the URL carries the repository name as a path. `appliedolap.github.io/essbase-rest-client/`
+redirects there.
+
+`.github/workflows/pages.yml` deploys the following on every push to `main` that
+touches `spec/`, `src/main/java/`, or `pom.xml`:
 
 | Path | What |
 | --- | --- |
@@ -173,8 +181,14 @@ Build it locally with:
 
     python3 spec/generate.py --site _site
 
-Pages has to be enabled for the repository with "GitHub Actions" as the source
-(Settings, then Pages) before the first deployment can succeed.
+Pages is enabled for this repository with "GitHub Actions" as the source, so
+Jekyll is not involved and there is no branch to deploy from. Do not add one of
+GitHub's starter Pages workflows alongside this one; two of them contend over
+the same deployment.
+
+HTTPS serves correctly but "Enforce HTTPS" is off on both this repository and
+the organisation site, so `appliedolap.github.io/essbase-rest-client/` redirects
+to the `http` form of the custom domain. Prefer the `https` URL when linking.
 
 ## Backward-compatibility verdicts and HTML
 
