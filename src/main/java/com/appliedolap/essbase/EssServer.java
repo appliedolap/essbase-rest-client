@@ -60,6 +60,19 @@ public interface EssServer {
     List<EssSession> getSessions();
 
     /**
+     * The server's own OpenAPI/Swagger definition of its REST API.
+     * <p>
+     * Where it lives depends on the release, which is the reason this exists rather than callers building
+     * the URL themselves: 21.7 serves a Swagger 2.0 document at {@code /rest/v1/swagger.json} and answers
+     * 404 for {@code openapi.json}, while 26.1 serves an OpenAPI 3.0.1 document at
+     * {@code /rest/v1/openapi.json} and answers 404 for {@code swagger.json}. Asking for the wrong one is
+     * not a soft failure - it is a 404 - so the candidates are tried in turn.
+     *
+     * @throws EssApiException if no known location answered
+     */
+    EssApiSpec getApiSpec();
+
+    /**
      * Everything the server reports about this deployment, exactly as it reports it.
      * <p>
      * Deliberately untyped, unlike {@link #getAboutInstance()}. This endpoint is a bag of capability flags

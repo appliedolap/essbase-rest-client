@@ -17,6 +17,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -89,26 +90,68 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
                 connectionDetails.getPassword(), connectionDetails.isStateless());
     }
 
+    /**
+     * Newest first, on the reasoning that a server serving both should be described by its more current
+     * document, and that new deployments are the likelier case over time.
+     */
+    private static final List<String> API_SPEC_PATHS = List.of("/openapi.json", "/swagger.json");
+
+    @Override
+    public EssApiSpec getApiSpec() {
+        EssApiException lastFailure = null;
+        for (String path : API_SPEC_PATHS) {
+            try {
+                String json = getRaw(path);
+                JsonNode parsed = api.getClient().getObjectMapper().readTree(json);
+                // The document says which specification it follows, so there is no need to infer it from
+                // the path it happened to be served at.
+                if (parsed.hasNonNull("openapi")) {
+                    return new EssApiSpec("openapi", parsed.get("openapi").asText(), json);
+                }
+                if (parsed.hasNonNull("swagger")) {
+                    return new EssApiSpec("swagger", parsed.get("swagger").asText(), json);
+                }
+                throw new EssApiException("The document at " + path + " is not an API definition");
+            } catch (EssApiException e) {
+                lastFailure = e;
+            } catch (IOException e) {
+                lastFailure = new EssApiException(e);
+            }
+        }
+        throw lastFailure != null ? lastFailure
+                : new EssApiException("This server does not serve an API definition anywhere known");
+    }
+
     @Override
     public Map<String, Object> getInstanceDetails() {
+        try {
+            return api.getClient().getObjectMapper().readValue(getRaw("/about/instance"),
+                    new TypeReference<LinkedHashMap<String, Object>>() { });
+        } catch (IOException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    /**
+     * GETs a path below the REST base URL and returns the body, for the handful of things the generated
+     * client cannot usefully express - a document whose shape varies by release, or one wanted verbatim.
+     * <p>
+     * Uses the client's own interceptor, so it authenticates exactly as every generated call does,
+     * including with a session or a supplied cookie rather than only a password.
+     */
+    private String getRaw(String path) {
         ApiClient client = api.getClient();
         try {
-            HttpRequest.Builder request = HttpRequest
-                    .newBuilder(URI.create(client.getBaseUri() + "/about/instance"))
+            HttpRequest.Builder request = HttpRequest.newBuilder(URI.create(client.getBaseUri() + path))
                     .header("Accept", "application/json")
                     .GET();
-            // The client's own interceptor, so this authenticates exactly as every generated call does -
-            // including with a session or a supplied cookie, not just a password.
             client.getRequestInterceptor().accept(request);
-
             HttpResponse<String> response = client.getHttpClient()
                     .send(request.build(), HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() / 100 != 2) {
-                throw new EssApiException("Couldn't read the instance details (HTTP "
-                        + response.statusCode() + ")");
+                throw new EssApiException("GET " + path + " answered HTTP " + response.statusCode());
             }
-            return client.getObjectMapper().readValue(response.body(),
-                    new TypeReference<LinkedHashMap<String, Object>>() { });
+            return response.body();
         } catch (IOException e) {
             throw new EssApiException(e);
         } catch (InterruptedException e) {
