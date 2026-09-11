@@ -50,11 +50,11 @@ current specification (see `AGENTS.md`), then write the wrapper.
 - `POST` `/applications/actions/shadowCopy` - Create Shadow Application _(added 21.1 or earlier)_
 - `DELETE` `/applications/actions/shadowDelete/{shadowAppName}` - Delete Shadow Application _(added 21.1 or earlier)_
 - `POST` `/applications/actions/shadowPromote` - Promote Shadow Application _(added 21.1 or earlier)_
-- `GET` `/applications/partitions/supportedfederatedtypes` - Get Supported Partition Types _(added 26.1)_
+- `GET` `/applications/partitions/supportedfederatedtypes` - Get Supported Partition Types _(added 21.7)_
 - `DELETE` `/applications/{applicationName}/databases/{databaseName}/asodataload/buffers` - Destroy Dataload Buffer _(added 21.4)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/currencySettings` - Get Currency Settings _(added 21.1 or earlier)_
 - `POST` `/applications/{applicationName}/databases/{databaseName}/currencySettings` - Set Currency Settings _(added 21.1 or earlier)_
-- `POST` `/applications/{applicationName}/databases/{databaseName}/dtreports/list` - List Drill Through Reports For Given Cell Intersections _(added 26.1)_
+- `POST` `/applications/{applicationName}/databases/{databaseName}/dtreports/list` - List Drill Through Reports For Given Cell Intersections _(added 21.7)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/executeReport` - Execute Report Script _(added 21.1 or earlier)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/partitions/supportedfederatedtypes` - Get Supported Partition Types _(added 21.1 or earlier)_
 - `POST` `/applications/{applicationName}/databases/{databaseName}/reports/{name}` - Execute Drill Through Report _(added 21.4)_
@@ -62,9 +62,9 @@ current specification (see `AGENTS.md`), then write the wrapper.
 - `POST` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/scriptops/validate` - Validate Calc Script _(added 26.1)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/settings/compressioninfo` - Get ASO Compression Info _(added 21.5)_
 - `GET` `/applications/{applicationName}/datasources/{datasourceName}` - Get Application Datasource _(added 26.1)_
-- `POST` `/applications/{applicationName}/decrypt` - Decrypt Application _(added 26.1)_
-- `POST` `/applications/{applicationName}/encrypt` - Encrypt Application _(added 26.1)_
-- `GET` `/applications/{applicationName}/encryptionconfig` - Get Encryption Info _(added 26.1)_
+- `POST` `/applications/{applicationName}/decrypt` - Decrypt Application _(added 21.7)_
+- `POST` `/applications/{applicationName}/encrypt` - Encrypt Application _(added 21.7)_
+- `GET` `/applications/{applicationName}/encryptionconfig` - Get Encryption Info _(added 21.7)_
 - `PUT` `/applications/{application}/databases/{database}/queries/rename` - Rename MDX report. _(added 26.1)_
 - `GET` `/backup/application/{applicationId}` - getApplicationBackups _(added 26.1)_
 - `GET` `/backup/applications` - getApplications _(added 26.1)_
@@ -79,10 +79,10 @@ current specification (see `AGENTS.md`), then write the wrapper.
 - `POST` `/backup/stop` - stopBackup _(added 26.1)_
 - `GET` `/backup/system` - getSystemBackups _(added 26.1)_
 - `GET` `/catalog_old/{fileName}` - getFileContent _(added 26.1)_
-- `DELETE` `/centralizedurl` - Delete Essbase server from Centralized URL _(added 26.1)_
-- `GET` `/centralizedurl` - Get Essbase Server list _(added 26.1)_
-- `POST` `/centralizedurl` - Add Essbase server to Centralized URL List _(added 26.1)_
-- `PUT` `/centralizedurl` - Update Essbase URL of Centralized URL List _(added 26.1)_
+- `DELETE` `/centralizedurl` - Delete Essbase server from Centralized URL _(added 21.7)_
+- `GET` `/centralizedurl` - Get Essbase Server list _(added 21.7)_
+- `POST` `/centralizedurl` - Add Essbase server to Centralized URL List _(added 21.7)_
+- `PUT` `/centralizedurl` - Update Essbase URL of Centralized URL List _(added 21.7)_
 - `GET` `/cfg` - Get Essbase Configuration. _(added 26.1)_
 - `GET` `/cloudstorage/config` - Get object storage configuration _(added 26.1)_
 - `PUT` `/cloudstorage/config` - Create or update object storage configuration _(added 26.1)_
@@ -119,7 +119,7 @@ current specification (see `AGENTS.md`), then write the wrapper.
 - `POST` `/federatedoverdatasource/writeback` - writeback _(added 26.1)_
 - `POST` `/federatedsample` - report_1 _(added 26.1)_
 - `DELETE` `/files/abort/{path}` - Abort Multipart File Upload _(added 21.4)_
-- `POST` `/files/actions/extractJob` - Extract Zip File Using a Job _(added 26.1)_
+- `POST` `/files/actions/extractJob` - Extract Zip File Using a Job _(added 21.7)_
 - `GET` `/files/getDatabasesFromLCMZip` - Get database names from LCM zip file _(added 26.1)_
 - `GET` `/files/getobjectstoreuri` - getObjectStoreURI _(added 26.1)_
 - `POST` `/files/upload-commit/{path}` - Commit Multipart File Upload _(added 21.4)_
@@ -179,13 +179,13 @@ current specification (see `AGENTS.md`), then write the wrapper.
 - `GET` `/outline/{app}/{cube}/qedit/shared` - getSharedMembers_1 _(added 26.1)_
 - `GET` `/outline/{app}/{cube}/qedit/validate` - validate_2 _(added 26.1)_
 - `GET` `/outline/{app}/{cube}/qedit/{memberUniqueName}` - getMemberInfo_1 _(added 26.1)_
-- `DELETE` `/rocluster` - Delete ReadOnly Cluster _(added 26.1)_
-- `GET` `/rocluster` - Get ReadOnly Cluster List _(added 26.1)_
-- `POST` `/rocluster` - Create ReadOnly Cluster _(added 26.1)_
-- `PUT` `/rocluster` - Update ReadOnly Cluster _(added 26.1)_
-- `POST` `/rocluster/changestatus` - ReadOnly Cluster Change Status _(added 26.1)_
-- `GET` `/rocluster/findByName` - Find ReadOnly Cluster By Name _(added 26.1)_
-- `GET` `/rocluster/{svrName}/appcubelist` - Get App Cube List _(added 26.1)_
+- `DELETE` `/rocluster` - Delete ReadOnly Cluster _(added 21.7)_
+- `GET` `/rocluster` - Get ReadOnly Cluster List _(added 21.7)_
+- `POST` `/rocluster` - Create ReadOnly Cluster _(added 21.7)_
+- `PUT` `/rocluster` - Update ReadOnly Cluster _(added 21.7)_
+- `POST` `/rocluster/changestatus` - ReadOnly Cluster Change Status _(added 21.7)_
+- `GET` `/rocluster/findByName` - Find ReadOnly Cluster By Name _(added 21.7)_
+- `GET` `/rocluster/{svrName}/appcubelist` - Get App Cube List _(added 21.7)_
 - `POST` `/security/syncwithidp` - syncWithIDP _(added 26.1)_
 - `POST` `/service/actions/start` - start _(added 26.1)_
 - `POST` `/service/actions/stop` - stop _(added 26.1)_

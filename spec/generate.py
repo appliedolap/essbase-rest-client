@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import re
 import sys
 from pathlib import Path
 
@@ -652,6 +653,23 @@ def render_coverage_html(coverage: dict, links) -> str:
 
 # --------------------------------------------------------------------------
 
+STEP_FILE = re.compile(r"^\d+(?:\.\d+)*-to-\d+(?:\.\d+)*$")
+
+
+def prune_orphans(directory: Path, suffix: str, diffs: list[dict]) -> list[Path]:
+    """Delete per-step reports in `directory` that no longer name a real step.
+
+    Only files whose stem looks like `<version>-to-<version>` are considered, so
+    nothing else in the directory is ever at risk.
+    """
+    current = {f"{diff['old']}-to-{diff['new']}" for diff in diffs}
+    removed = []
+    for path in sorted(directory.glob(f"*{suffix}")):
+        if STEP_FILE.match(path.stem) and path.stem not in current:
+            path.unlink()
+            removed.append(path)
+    return removed
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -680,6 +698,13 @@ def main() -> int:
         report = DIFFS_DIR / f"{diff['old']}-to-{diff['new']}.md"
         report.write_text(render_pair_markdown(diff))
         written.append(report)
+
+    # Inserting a version re-pairs the chain, so a report named for a step that
+    # no longer exists has to go. Left behind it would read as current while
+    # describing a comparison nothing makes any more - and because the file is
+    # committed and simply never rewritten, the staleness check in CI would not
+    # notice. Adding 21.7 orphaned 21.5-to-26.1.md exactly this way.
+    removed = prune_orphans(DIFFS_DIR, ".md", diffs)
     (DIFFS_DIR / "README.md").write_text(render_index_markdown(specs, diffs))
     written.append(DIFFS_DIR / "README.md")
     (DIFFS_DIR / "coverage.md").write_text(render_coverage_markdown(coverage))
@@ -696,6 +721,7 @@ def main() -> int:
             target = site / f"{diff['old']}-to-{diff['new']}.html"
             target.write_text(render_pair_html(diff, links))
             written.append(target)
+        removed += prune_orphans(site, ".html", diffs)
         # A no-op for the workflow as it stands: deploy-pages serves the uploaded
         # artifact verbatim and never runs Jekyll. It is here as insurance, in case
         # the repository is ever switched back to deploying from a branch, where
@@ -703,11 +729,16 @@ def main() -> int:
         (site / ".nojekyll").write_text("")
         written.append(site / ".nojekyll")
 
-    for path in written:
+    def show(verb: str, path: Path) -> None:
         try:
-            print(f"wrote {path.relative_to(SPEC_DIR.parent)}")
+            print(f"{verb} {path.relative_to(SPEC_DIR.parent)}")
         except ValueError:
-            print(f"wrote {path}")
+            print(f"{verb} {path}")
+
+    for path in written:
+        show("wrote", path)
+    for path in removed:
+        show("removed stale", path)
     return 0
 
 

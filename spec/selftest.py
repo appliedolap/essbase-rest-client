@@ -145,6 +145,41 @@ def _report(label: str, operations: dict, models: dict) -> bool:
     return False
 
 
+def _check_pruning() -> bool:
+    """`prune_orphans` deletes files, so pin down exactly what it will touch.
+
+    The hazard is not failing to delete an orphan; it is deleting `README.md`,
+    `coverage.md`, or anything else that does not name a version step.
+    """
+    import generate
+    import tempfile
+
+    diffs = [{"old": "21.5", "new": "21.7"}, {"old": "21.7", "new": "26.1"}]
+    keep = ["README.md", "coverage.md", "21.5-to-21.7.md", "21.7-to-26.1.md", "notes-to-self.md"]
+    orphans = ["21.5-to-26.1.md", "21.1-to-21.5.md"]
+
+    with tempfile.TemporaryDirectory() as raw:
+        directory = Path(raw)
+        for name in keep + orphans:
+            (directory / name).write_text("x")
+        removed = {path.name for path in generate.prune_orphans(directory, ".md", diffs)}
+        survivors = {path.name for path in directory.glob("*.md")}
+
+    problems = []
+    if removed != set(orphans):
+        problems.append(f"removed {sorted(removed)}, expected {sorted(orphans)}")
+    if survivors != set(keep):
+        problems.append(f"kept {sorted(survivors)}, expected {sorted(keep)}")
+
+    if problems:
+        print("  FAIL  prune_orphans")
+        for problem in problems:
+            print(f"        {problem}")
+        return False
+    print(f"  ok    removed {len(orphans)} orphans, kept {len(keep)} others")
+    return True
+
+
 def main() -> int:
     specs = spec.load_specs()
     if not specs:
@@ -172,6 +207,9 @@ def main() -> int:
             spec.diff_operations(document, converted),
             spec.diff_models(document, converted),
         )
+
+    print("Pruning removes orphaned step reports and nothing else:")
+    passed &= _check_pruning()
 
     print("Coverage accounts for every endpoint exactly once:")
     coverage = spec.build_coverage(specs)

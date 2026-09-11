@@ -32,6 +32,7 @@ also published to GitHub Pages - see "The published site" below.
 | 21.1 | 337 | 232 | `464033c2571a0b488ff4ffc9353f53f4eb35ec5f24e227502989b70145345667` |
 | 21.4 | 343 | 238 | `1b72596764725465f93b39db6e0d63f28f500736aee7b8b20799453c67c15100` |
 | 21.5 | 344 | 240 | `5f4230883dd46bad168a34f9e28e2bb8c71da14a7454b0913c288479c37a7d2b` |
+| 21.7 | 361 | 246 | `2b1db62052effd85ec2be160dfb6576bd6b2436c1a6b80bbc39cb0e54fa64ea7` |
 | 26.1 | 494 | 256 | `7c975012769b0710428faff5eed98b2261e3f72fec522e86b530c456cdeaa844` |
 
 "Endpoints" counts path/method pairs, so one path with a `GET` and a `DELETE`
@@ -47,9 +48,12 @@ and 26.1 declares `V1` with the title "Essbase REST API" - neither records which
 Essbase release it came from. The filename is the only version marker; keep it
 accurate.
 
-21.7 is not archived yet. When it is added, `generate.py` will split the current
-21.5-to-26.1 step into 21.5-to-21.7 and 21.7-to-26.1 on its own, and the format
-crossing will move to the second of those.
+Adding a version re-pairs the chain, and `generate.py` deletes the reports for
+steps that no longer exist as part of regenerating - adding 21.7 replaced the
+21.5-to-26.1 report with 21.5-to-21.7 and 21.7-to-26.1. Without that the old
+report would sit there looking current while describing a comparison nothing
+makes any more, and because it is committed and simply never rewritten, the
+staleness check in CI would not have caught it.
 
 ## Relationship to the generated client
 
@@ -94,8 +98,8 @@ diffs each adjacent pair, so no list of versions needs maintaining. Name the fil
 
 ## Crossing the Swagger 2.0 / OpenAPI 3 boundary
 
-Essbase served Swagger 2.0 through 21.7 and OpenAPI 3.0.1 from 26.1, so one step
-in the archive changes format. Both are understood, and the difference is
+Essbase served Swagger 2.0 through 21.7 and OpenAPI 3.0.1 from 26.1, so the
+21.7-to-26.1 step changes format. Both are understood, and the difference is
 normalised away rather than reported:
 
 - a request body is compared as one entry whatever the spec calls it - Swagger

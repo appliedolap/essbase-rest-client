@@ -11,7 +11,8 @@ of everything the newest API offers, what does this client already reach?
 | --- | --- | --- | --- |
 | 21.1 to 21.4 | 9 added, 3 removed, 10 changed | 8 added, 2 removed, 8 changed | [21.1-to-21.4.md](21.1-to-21.4.md) |
 | 21.4 to 21.5 | 1 added, 0 removed, 4 changed | 2 added, 0 removed, 2 changed | [21.4-to-21.5.md](21.4-to-21.5.md) |
-| 21.5 to 26.1 | 156 added, 6 removed, 33 changed | 26 added, 10 removed, 17 changed | [21.5-to-26.1.md](21.5-to-26.1.md) |
+| 21.5 to 21.7 | 17 added, 0 removed, 7 changed | 6 added, 0 removed, 3 changed | [21.5-to-21.7.md](21.5-to-21.7.md) |
+| 21.7 to 26.1 | 139 added, 6 removed, 34 changed | 20 added, 10 removed, 19 changed | [21.7-to-26.1.md](21.7-to-26.1.md) |
 
 ## Endpoints added, by version
 
@@ -31,6 +32,26 @@ of everything the newest API offers, what does this client already reach?
 
 - `GET` `/applications/{applicationName}/databases/{databaseName}/settings/compressioninfo` - Get Compression Settings
 
+### 21.7
+
+- `DELETE` `/centralizedurl` - Delete Essbase server from Centralized URL
+- `DELETE` `/rocluster` - Delete ReadOnly Cluster
+- `GET` `/applications/partitions/supportedfederatedtypes` - Get Supported Partition Types
+- `GET` `/applications/{applicationName}/encryptionconfig` - Application Encryption supported methods
+- `GET` `/centralizedurl` - Get Essbase Server list
+- `GET` `/rocluster` - Get ReadOnly Cluster List
+- `GET` `/rocluster/findByName` - Find ReadOnly Cluster By Name
+- `GET` `/rocluster/{svrName}/appcubelist` - Get App Cube List
+- `POST` `/applications/{applicationName}/databases/{databaseName}/dtreports/list` - List Drill Through Reports For Given Cell Intersections
+- `POST` `/applications/{applicationName}/decrypt` - Application Encryption
+- `POST` `/applications/{applicationName}/encrypt` - Application Encryption
+- `POST` `/centralizedurl` - Add Essbase server to Centralized URL List
+- `POST` `/files/actions/extractJob` - Extract Zip File Using a Job
+- `POST` `/rocluster` - Create ReadOnly Cluster
+- `POST` `/rocluster/changestatus` - ReadOnly Cluster Change Status
+- `PUT` `/centralizedurl` - Update Essbase URL of Centralized URL List
+- `PUT` `/rocluster` - Update ReadOnly Cluster
+
 ### 26.1
 
 - `DELETE` `/ai/aiconnection/{aiConnectionName}/chat/profile/{profileName}` - Drop OCI chat profile
@@ -40,11 +61,9 @@ of everything the newest API offers, what does this client already reach?
 - `DELETE` `/ai/applications/{applicationName}/databases/{databaseName}/conversationHistory` - Delete conversation history
 - `DELETE` `/ai/dbconnection/{dbConnectionName}/chat/credential/{credentialName}` - Drop OCI chat credential
 - `DELETE` `/ai/dbconnection/{dbConnectionName}/vector/credential/{credentialName}` - Drop OCI vector credential
-- `DELETE` `/centralizedurl` - Delete Essbase server from Centralized URL
 - `DELETE` `/federatedoverdatasource/mapping` - deleteMapping
 - `DELETE` `/outline/{app}/{cube}/edit` - deleteMember
 - `DELETE` `/outline/{app}/{cube}/qedit` - deleteMember_1
-- `DELETE` `/rocluster` - Delete ReadOnly Cluster
 - `GET` `/ai/aiconnection/{aiConnectionName}/vectorindex/{vectorIndexName}/narrate/{profileName}` - AI Narrate
 - `GET` `/ai/applications/{applicationName}/databases/{databaseName}/calculation/conversation` - List all calculation specific Conversations IDs
 - `GET` `/ai/applications/{applicationName}/databases/{databaseName}/calculation/conversation/{conversationId}` - Get all calculation specific conversations.
@@ -53,9 +72,7 @@ of everything the newest API offers, what does this client already reach?
 - `GET` `/ai/connection` - Get AI connection
 - `GET` `/ai/vectorindex` - Get vector index
 - `GET` `/amw` - read
-- `GET` `/applications/partitions/supportedfederatedtypes` - Get Supported Partition Types
 - `GET` `/applications/{applicationName}/datasources/{datasourceName}` - Get Application Datasource
-- `GET` `/applications/{applicationName}/encryptionconfig` - Get Encryption Info
 - `GET` `/backup/application/{applicationId}` - getApplicationBackups
 - `GET` `/backup/applications` - getApplications
 - `GET` `/backup/info` - getBackupInfo
@@ -65,7 +82,6 @@ of everything the newest API offers, what does this client already reach?
 - `GET` `/backup/settings/validation` - getSettingsValidator
 - `GET` `/backup/system` - getSystemBackups
 - `GET` `/catalog_old/{fileName}` - getFileContent
-- `GET` `/centralizedurl` - Get Essbase Server list
 - `GET` `/cfg` - Get Essbase Configuration.
 - `GET` `/cloudstorage/config` - Get object storage configuration
 - `GET` `/connections/{connection}/getdependentconnections` - List dependamt connection names
@@ -114,9 +130,6 @@ of everything the newest API offers, what does this client already reach?
 - `GET` `/outline/{app}/{cube}/qedit/shared` - getSharedMembers_1
 - `GET` `/outline/{app}/{cube}/qedit/validate` - validate_2
 - `GET` `/outline/{app}/{cube}/qedit/{memberUniqueName}` - getMemberInfo_1
-- `GET` `/rocluster` - Get ReadOnly Cluster List
-- `GET` `/rocluster/findByName` - Find ReadOnly Cluster By Name
-- `GET` `/rocluster/{svrName}/appcubelist` - Get App Cube List
 - `GET` `/service/status` - getStatus
 - `GET` `/version` - getVersion
 - `PATCH` `/outline/{app}/{cube}/edit` - updateMember
@@ -134,14 +147,10 @@ of everything the newest API offers, what does this client already reach?
 - `POST` `/ai/applications/{applicationName}/job/vectorize/databases/{databaseName}` - Vectorize outline job
 - `POST` `/ai/dbconnection/{dbConnectionName}/chat/credential/signingkey/{credentialName}` - Create OCI chat credential using singing key
 - `POST` `/ai/dbconnection/{dbConnectionName}/vector/credential/{credentialName}` - Create OCI vector credential
-- `POST` `/applications/{applicationName}/databases/{databaseName}/dtreports/list` - List Drill Through Reports For Given Cell Intersections
 - `POST` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/scriptops/validate` - Validate Calc Script
-- `POST` `/applications/{applicationName}/decrypt` - Decrypt Application
-- `POST` `/applications/{applicationName}/encrypt` - Encrypt Application
 - `POST` `/backup/applications` - backupApplications
 - `POST` `/backup/start` - startBackup
 - `POST` `/backup/stop` - stopBackup
-- `POST` `/centralizedurl` - Add Essbase server to Centralized URL List
 - `POST` `/cloudstorage/config/test` - Verify object storage configuration
 - `POST` `/ess-mcp` - doPost
 - `POST` `/ess-mcp/call` - callTool
@@ -154,7 +163,6 @@ of everything the newest API offers, what does this client already reach?
 - `POST` `/federatedoverdatasource/saveformulas/cache` - cacheFormulas
 - `POST` `/federatedoverdatasource/writeback` - writeback
 - `POST` `/federatedsample` - report_1
-- `POST` `/files/actions/extractJob` - Extract Zip File Using a Job
 - `POST` `/outline/{app}/{cube}/edit` - outlineAction
 - `POST` `/outline/{app}/{cube}/edit/copy` - copyMembers
 - `POST` `/outline/{app}/{cube}/edit/currencyDatabase` - createCurrencyDB
@@ -168,8 +176,6 @@ of everything the newest API offers, what does this client already reach?
 - `POST` `/outline/{app}/{cube}/qedit/direct` - outlineEdit_1
 - `POST` `/outline/{app}/{cube}/qedit/members` - getMembers_2
 - `POST` `/outline/{app}/{cube}/qedit/motf` - setMOTF_1
-- `POST` `/rocluster` - Create ReadOnly Cluster
-- `POST` `/rocluster/changestatus` - ReadOnly Cluster Change Status
 - `POST` `/security/syncwithidp` - syncWithIDP
 - `POST` `/service/actions/start` - start
 - `POST` `/service/actions/stop` - stop
@@ -178,7 +184,6 @@ of everything the newest API offers, what does this client already reach?
 - `PUT` `/applications/{applicationName}/datasources/{datasourceName}` - Update Application Datasource
 - `PUT` `/applications/{application}/databases/{database}/queries/rename` - Rename MDX report.
 - `PUT` `/backup/settings` - saveSettings
-- `PUT` `/centralizedurl` - Update Essbase URL of Centralized URL List
 - `PUT` `/cloudstorage/config` - Create or update object storage configuration
 - `PUT` `/datasources/{datasourceName}` - Update Global Datasource
 - `PUT` `/federatedoverdatasource/mapping` - createMappingLegacy
@@ -188,6 +193,5 @@ of everything the newest API offers, what does this client already reach?
 - `PUT` `/odbc` - write_1
 - `PUT` `/outline/{app}/{cube}/edit` - save
 - `PUT` `/outline/{app}/{cube}/qedit` - save_1
-- `PUT` `/rocluster` - Update ReadOnly Cluster
 
 Endpoints present as of 21.1, the oldest spec archived here, are not listed - there is nothing earlier to compare them against.
