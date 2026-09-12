@@ -180,6 +180,53 @@ def _check_pruning() -> bool:
     return True
 
 
+def _check_csharp(specs: list[tuple[str, dict]]) -> bool:
+    """The endpoints read out of EssSharp must be exactly one archived spec's.
+
+    A generated client is a faithful image of the specification it came from, so
+    the set of paths read back out of it should match one of the archived specs
+    exactly - no more, no fewer. That makes this a real test of the reader
+    rather than of EssSharp: the first version of the C# regex could not match a
+    nested return type, so `Get<List<SessionAttributes>>("/sessions")` and every
+    other collection-returning endpoint went missing, and the totals still
+    looked plausible. An exact-match check catches that; a count does not.
+
+    Skipped, not failed, when there is no EssSharp checkout - it lives in
+    another repository and CI here has no reason to have one.
+    """
+    root = spec.find_esssharp()
+    if root is None:
+        print("  skip  no EssSharp checkout")
+        return True
+
+    generated = {
+        (method, spec.normalise_path(path))
+        for method, path in spec.csharp_generated_endpoints(root)
+    }
+    for version, document in specs:
+        archived = {
+            (method, spec.normalise_path(path))
+            for method, path in spec.operations_of(document).keys()
+        }
+        if generated == archived:
+            print(f"  ok    matches {version} exactly, {len(generated)} endpoints")
+            return True
+
+    closest, overlap = None, -1
+    for version, document in specs:
+        archived = {
+            (method, spec.normalise_path(path))
+            for method, path in spec.operations_of(document).keys()
+        }
+        if len(generated & archived) > overlap:
+            closest, overlap = version, len(generated & archived)
+    print(
+        f"  FAIL  {len(generated)} endpoints match no archived spec exactly; "
+        f"closest is {closest} with {overlap} in common"
+    )
+    return False
+
+
 def main() -> int:
     specs = spec.load_specs()
     if not specs:
@@ -220,6 +267,9 @@ def main() -> int:
     else:
         print(f"  FAIL  {total} entries but {counted} classified")
         passed = False
+
+    print("The C# client reads back as exactly one archived specification:")
+    passed &= _check_csharp(specs)
 
     print("PASS" if passed else "FAIL")
     return 0 if passed else 1

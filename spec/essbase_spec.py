@@ -506,3 +506,247 @@ def build_coverage(specs: list[tuple[str, dict]], java_root: Path = JAVA_ROOT) -
             for state in ("wrapped", "generated", "not_generated")
         },
     }
+
+
+# --------------------------------------------------------------------------
+# The C# client
+# --------------------------------------------------------------------------
+#
+# EssSharp is the sibling C# client (https://github.com/appliedolap/EssSharp).
+# It wraps the same REST API the same way this one does - a generated client
+# under a hand-written Ess*/IEss* layer - so the same measurement applies, and
+# comparing the two answers a question neither repository can answer alone:
+# where has one client gone that the other has not?
+#
+# It lives in a different repository, so everything here is optional. With no
+# EssSharp checkout to read, the cross-language report is skipped rather than
+# emptied - see generate.py.
+
+ESSSHARP_ENV = "ESSSHARP_ROOT"
+
+# The generated C# names its own operation next to the request it builds:
+#
+#     localVarRequestOptions.Operation = "GridApi.GridExecuteGridOperation";
+#     ...
+#     var localVarResponse = this.Client.Post<Grid>("/applications/{app}/...
+#
+# which is a firmer attribution than the Java side can manage - there the
+# method name has to be read off the enclosing request builder.
+CS_OPERATION = re.compile(r'localVarRequestOptions\.Operation = "(\w+)\.(\w+)"')
+# The type argument is matched as "anything up to the opening paren" rather
+# than "anything but a closing angle bracket": return types nest, and
+# Get<List<SessionAttributes>>("/sessions") does not match the simpler form -
+# which silently loses every endpoint returning a collection.
+CS_CLIENT_CALL = re.compile(
+    r'this\.(?:Asynchronous)?Client\.(\w+?)(?:Async)?<[^(]*>\(\s*"([^"]+)"'
+)
+
+# Directories under src/EssSharp that the generator owns. Everything else in
+# the project, plus all of EssSharp.Abstractions, is hand-written.
+CS_GENERATED_DIRS = ("Api", "Model", "Client")
+
+
+def find_esssharp(explicit: str | Path | None = None) -> Path | None:
+    """Locate an EssSharp checkout, or return None if there is not one.
+
+    Explicit path first, then $ESSSHARP_ROOT, then a sibling of this
+    repository - the usual arrangement when both are checked out together.
+    """
+    candidates = []
+    if explicit:
+        candidates.append(Path(explicit))
+    import os
+
+    if os.environ.get(ESSSHARP_ENV):
+        candidates.append(Path(os.environ[ESSSHARP_ENV]))
+    candidates.append(REPO_ROOT.parent / "EssSharp")
+
+    for candidate in candidates:
+        candidate = candidate.expanduser()
+        if (candidate / "src" / "EssSharp" / "Api").is_dir():
+            return candidate.resolve()
+    return None
+
+
+def csharp_generated_endpoints(esssharp_root: Path) -> dict[Endpoint, list[str]]:
+    """Map (METHOD, path) to the generated C# methods that call it."""
+    api_dir = esssharp_root / "src" / "EssSharp" / "Api"
+    result: dict[Endpoint, list[str]] = {}
+    for source in sorted(api_dir.glob("*.cs")):
+        text = source.read_text(encoding="utf-8-sig")
+        operations = list(CS_OPERATION.finditer(text))
+        for index, operation in enumerate(operations):
+            end = (
+                operations[index + 1].start()
+                if index + 1 < len(operations)
+                else len(text)
+            )
+            call = CS_CLIENT_CALL.search(text[operation.start() : end])
+            if call:
+                key = (call.group(1).upper(), call.group(2))
+                name = f"{operation.group(1)}.{operation.group(2)}"
+                if name not in result.setdefault(key, []):
+                    result[key].append(name)
+    return result
+
+
+def csharp_sources(esssharp_root: Path) -> dict[str, str]:
+    """Every hand-written C# source, keyed by path relative to EssSharp."""
+    sources = {}
+    for project in ("EssSharp", "EssSharp.Abstractions"):
+        root = esssharp_root / "src" / project
+        if not root.is_dir():
+            continue
+        for source in sorted(root.rglob("*.cs")):
+            parts = source.relative_to(root).parts
+            if parts[0] in CS_GENERATED_DIRS or "obj" in parts or "bin" in parts:
+                continue
+            sources[str(source.relative_to(esssharp_root))] = source.read_text(
+                encoding="utf-8-sig"
+            )
+    return sources
+
+
+def csharp_coverage(esssharp_root: Path, known: set[str]) -> dict:
+    """What the C# client reaches, in the same three states as the Java side.
+
+    `known` is the set of normalised paths the newest spec defines; a literal
+    that names none of them is unattributed rather than counted.
+    """
+    generated = csharp_generated_endpoints(esssharp_root)
+    sources = csharp_sources(esssharp_root)
+    hand_written = "\n".join(sources.values())
+
+    # A generated method is always invoked on an api object, so `.Name(` finds
+    # every real call. Both spellings count: the hand-written layer offers a
+    # synchronous and an asynchronous form of nearly everything, and the
+    # asynchronous one calls NameAsync.
+    called = set()
+    for names in generated.values():
+        for name in names:
+            method = name.split(".", 1)[1]
+            if re.search(rf"\.{re.escape(method)}(?:Async)?\s*\(", hand_written):
+                called.add(method)
+
+    # Partial classes under Extensions/ hand-write a few requests that the
+    # generator did not produce - EssSharp's counterpart to NativeHttp on the
+    # Java side. Only literals naming a real endpoint count.
+    direct: set[str] = set()
+    unattributed = 0
+    for text in sources.values():
+        for call in CS_CLIENT_CALL.finditer(text):
+            path = normalise_path(call.group(2))
+            if path in known:
+                direct.add(path)
+            else:
+                unattributed += 1
+
+    return {
+        "generated": generated,
+        "called": called,
+        "direct": direct,
+        "unattributed": unattributed,
+    }
+
+
+def build_cross_coverage(
+    specs: list[tuple[str, dict]],
+    java_root: Path = JAVA_ROOT,
+    esssharp_root: Path | None = None,
+) -> dict | None:
+    """Both clients against the newest spec, endpoint by endpoint.
+
+    Returns None when there is no EssSharp checkout to read, which is the
+    normal case for a clone of this repository on its own.
+    """
+    if esssharp_root is None:
+        esssharp_root = find_esssharp()
+    if esssharp_root is None:
+        return None
+
+    newest_version, newest_spec = specs[-1]
+    operations = operations_of(newest_spec)
+    seen = first_seen(specs)
+    oldest_version = specs[0][0]
+    known = {normalise_path(path) for _, path in operations}
+
+    java = build_coverage(specs, java_root)
+    java_state = {(entry["method"], entry["path"]): entry for entry in java["entries"]}
+
+    csharp = csharp_coverage(esssharp_root, known)
+    cs_generated = csharp["generated"]
+    cs_by_normalised = {
+        normalise_path(path): (method, path) for method, path in cs_generated
+    }
+
+    entries = []
+    for key in sorted(operations, key=lambda item: (item[1], item[0])):
+        method, path = key
+        operation = operations[key]
+
+        match = cs_generated.get(key)
+        if match is None:
+            fallback = cs_by_normalised.get(normalise_path(path))
+            if fallback and fallback[0] == method:
+                match = cs_generated[fallback]
+
+        reached_directly = normalise_path(path) in csharp["direct"]
+        if match:
+            wrapped = reached_directly or any(
+                name.split(".", 1)[1] in csharp["called"] for name in match
+            )
+            cs_state = "wrapped" if wrapped else "generated"
+        elif reached_directly:
+            match = []
+            cs_state = "wrapped"
+        else:
+            match = []
+            cs_state = "not_generated"
+
+        java_entry = java_state[key]
+        added = seen.get(key, newest_version)
+        entries.append(
+            {
+                "method": method,
+                "path": path,
+                "summary": describe(operation),
+                "tag": tag_of(operation),
+                "java": java_entry["state"],
+                "csharp": cs_state,
+                "csharp_methods": match,
+                "added": (
+                    f"{oldest_version} or earlier" if added == oldest_version else added
+                ),
+            }
+        )
+
+    # Endpoints the newest spec no longer defines but the C# client still calls.
+    cs_stale = sorted(
+        {
+            (method, path)
+            for method, path in cs_generated
+            if normalise_path(path) not in known
+        },
+        key=lambda item: (item[1], item[0]),
+    )
+
+    pairs: dict[tuple[str, str], int] = {}
+    for entry in entries:
+        pairs[(entry["java"], entry["csharp"])] = (
+            pairs.get((entry["java"], entry["csharp"]), 0) + 1
+        )
+
+    return {
+        "version": newest_version,
+        "oldest": oldest_version,
+        "esssharp_root": str(esssharp_root),
+        "entries": entries,
+        "pairs": pairs,
+        "csharp_stale": [(m, p, cs_generated[(m, p)]) for m, p in cs_stale],
+        "csharp_unattributed": csharp["unattributed"],
+        "java_counts": java["counts"],
+        "csharp_counts": {
+            state: sum(1 for entry in entries if entry["csharp"] == state)
+            for state in ("wrapped", "generated", "not_generated")
+        },
+    }

@@ -16,6 +16,7 @@ now?" - is the question this client has to answer every time it grows a method.
 | `diffs/README.md` | Index: what changed at each step, and every endpoint added, by version |
 | `diffs/<old>-to-<new>.md` | The full report for one step |
 | `diffs/coverage.md` | Every endpoint in the newest spec, and whether this client reaches it |
+| `diffs/cross-language.md` | The same endpoints measured against both this client and EssSharp |
 | `essbase_spec.py` | The analysis: loading, comparing, measuring coverage |
 | `selftest.py` | Checks on the analysis itself, chiefly Swagger 2.0 / OpenAPI 3 symmetry |
 | `generate.py` | The rendering: Markdown into `diffs/`, and the Pages site |
@@ -137,7 +138,8 @@ Python 3 standard library only; no network access, no Maven, no other tools.
 It rewrites every file under `diffs/`, so the reports and the specs stay in
 step and a stale report shows up as an unexpected diff. CI enforces this: the
 Pages workflow regenerates and fails if `diffs/` comes out different from what
-was committed.
+was committed. The one exception is `cross-language.md`, which needs an
+EssSharp checkout and is left untouched without one - see "The C# client".
 
 `python3 spec/selftest.py` checks the analysis itself, and needs nothing either.
 CI runs it before generating anything.
@@ -169,6 +171,35 @@ only count when the call site passes a literal path; the ones that assemble a
 path from pieces at runtime cannot be attributed, so the exposed count is a
 floor. And coverage says nothing about whether a wrapper is *good* - only that
 one exists.
+
+## The C# client
+
+[EssSharp](https://github.com/appliedolap/EssSharp) is the sibling client for
+the same API, built the same way: a generated client under a hand-written
+`Ess*`/`IEss*` layer. That shared shape means the coverage measurement works on
+it unchanged, and [diffs/cross-language.md](diffs/cross-language.md) reports
+both at once - which answers the question neither client's own report can, of
+where one has gone that the other has not.
+
+As measured against 26.1: this client exposes 63 endpoints and EssSharp 101, of
+which 52 overlap. EssSharp's generated client is a strict superset of this
+one's, because it generates from 21.8 while this one still generates from a
+spec older than 21.1 - so 66 endpoints are already reachable in C# that need a
+regeneration here before they can be wrapped at all.
+
+EssSharp lives in another repository, so the report is optional. `generate.py`
+looks for a checkout in `--esssharp DIR`, then `$ESSSHARP_ROOT`, then a sibling
+`../EssSharp`. Finding none it leaves `cross-language.md` exactly as committed
+rather than deleting it or writing it empty: a clone of this repository on its
+own must not produce a spurious diff, which the staleness check in CI would
+read as a failure.
+
+`selftest.py` checks the C# reader by requiring the endpoints it finds to match
+one archived specification *exactly*, neither more nor fewer. That is a test of
+the reader, not of EssSharp, and it earns its place: the first version of the
+regex could not match a nested return type, so `Get<List<SessionAttributes>>`
+and every other collection-returning endpoint went missing while the totals
+still looked reasonable. Matching a spec exactly catches that; counting does not.
 
 ## The published site
 
