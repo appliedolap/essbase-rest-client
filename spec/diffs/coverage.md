@@ -17,14 +17,14 @@ hand-written layer calls, so it measures the code rather than a kept list.
 These need a spec refresh before they can be wrapped: regenerate from a
 current specification (see `AGENTS.md`), then write the wrapper.
 
-- `DELETE` `/ai/aiconnection/{aiConnectionName}/chat/profile/{profileName}` - Drop OCI chat profile _(added 26.1)_
-- `POST` `/ai/aiconnection/{aiConnectionName}/chat/profile/{profileName}` - Create OCI chat profile _(added 26.1)_
-- `DELETE` `/ai/aiconnection/{aiConnectionName}/job/vectorindex` - Create a job to drop the vector index _(added 26.1)_
-- `POST` `/ai/aiconnection/{aiConnectionName}/job/vectorindex` - Create a job to build vector index _(added 26.1)_
-- `GET` `/ai/aiconnection/{aiConnectionName}/vectorindex/{vectorIndexName}/narrate/{profileName}` - AI Narrate _(added 26.1)_
-- `POST` `/ai/applications/{applicationName}/chat/passThrough` - AI pass through _(added 26.1)_
-- `DELETE` `/ai/applications/{applicationName}/connection` - Dissociate AI connection _(added 26.1)_
-- `POST` `/ai/applications/{applicationName}/connection/{connectionName}` - Associate AI connection _(added 26.1)_
+- `DELETE` `/ai/aiconnection/{aiConnectionName}/chat/profile/{profileName}` - Drop OCI chat profile _(added 21.8)_
+- `POST` `/ai/aiconnection/{aiConnectionName}/chat/profile/{profileName}` - Create OCI chat profile _(added 21.8)_
+- `DELETE` `/ai/aiconnection/{aiConnectionName}/job/vectorindex` - Create a job to drop the vector index _(added 21.8)_
+- `POST` `/ai/aiconnection/{aiConnectionName}/job/vectorindex` - Create a job to build vector index _(added 21.8)_
+- `GET` `/ai/aiconnection/{aiConnectionName}/vectorindex/{vectorIndexName}/narrate/{profileName}` - AI Narrate _(added 21.8)_
+- `POST` `/ai/applications/{applicationName}/chat/passThrough` - AI pass through _(added 21.8)_
+- `DELETE` `/ai/applications/{applicationName}/connection` - Dissociate AI connection _(added 21.8)_
+- `POST` `/ai/applications/{applicationName}/connection/{connectionName}` - Associate AI connection _(added 21.8)_
 - `GET` `/ai/applications/{applicationName}/databases/{databaseName}/calculation/conversation` - List all calculation specific Conversations IDs _(added 26.1)_
 - `DELETE` `/ai/applications/{applicationName}/databases/{databaseName}/calculation/conversation/{conversationId}` - Drop a conversation. _(added 26.1)_
 - `GET` `/ai/applications/{applicationName}/databases/{databaseName}/calculation/conversation/{conversationId}` - Get all calculation specific conversations. _(added 26.1)_
@@ -32,25 +32,25 @@ current specification (see `AGENTS.md`), then write the wrapper.
 - `GET` `/ai/applications/{applicationName}/databases/{databaseName}/conversation` - List conversations _(added 26.1)_
 - `DELETE` `/ai/applications/{applicationName}/databases/{databaseName}/conversationHistory` - Delete conversation history _(added 26.1)_
 - `GET` `/ai/applications/{applicationName}/databases/{databaseName}/conversationHistory` - Get conversation history _(added 26.1)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/listSampleQueries` - List Sample Queries _(added 26.1)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/mdxgenerator` - MDX Generator _(added 26.1)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/nnearestneighboursearch` - N-Nearest Neighbour Search _(added 26.1)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/semanticsearch` - Semantic Search _(added 26.1)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/vectorizationDate` - Vectorization Date _(added 26.1)_
-- `POST` `/ai/applications/{applicationName}/job/vectorize/databases/{databaseName}` - Vectorize outline job _(added 26.1)_
-- `GET` `/ai/connection` - Get AI connection _(added 26.1)_
-- `POST` `/ai/dbconnection/{dbConnectionName}/chat/credential/signingkey/{credentialName}` - Create OCI chat credential using singing key _(added 26.1)_
-- `DELETE` `/ai/dbconnection/{dbConnectionName}/chat/credential/{credentialName}` - Drop OCI chat credential _(added 26.1)_
-- `DELETE` `/ai/dbconnection/{dbConnectionName}/vector/credential/{credentialName}` - Drop OCI vector credential _(added 26.1)_
-- `POST` `/ai/dbconnection/{dbConnectionName}/vector/credential/{credentialName}` - Create OCI vector credential _(added 26.1)_
-- `GET` `/ai/vectorindex` - Get vector index _(added 26.1)_
+- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/listSampleQueries` - List Sample Queries _(added 21.8)_
+- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/mdxgenerator` - MDX Generator _(added 21.8)_
+- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/nnearestneighboursearch` - N-Nearest Neighbour Search _(added 21.8)_
+- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/semanticsearch` - Semantic Search _(added 21.8)_
+- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/vectorizationDate` - Vectorization Date _(added 21.8)_
+- `POST` `/ai/applications/{applicationName}/job/vectorize/databases/{databaseName}` - Vectorize outline job _(added 21.8)_
+- `GET` `/ai/connection` - Get AI connection _(added 21.8)_
+- `POST` `/ai/dbconnection/{dbConnectionName}/chat/credential/signingkey/{credentialName}` - Create OCI chat credential using singing key _(added 21.8)_
+- `DELETE` `/ai/dbconnection/{dbConnectionName}/chat/credential/{credentialName}` - Drop OCI chat credential _(added 21.8)_
+- `DELETE` `/ai/dbconnection/{dbConnectionName}/vector/credential/{credentialName}` - Drop OCI vector credential _(added 21.8)_
+- `POST` `/ai/dbconnection/{dbConnectionName}/vector/credential/{credentialName}` - Create OCI vector credential _(added 21.8)_
+- `GET` `/ai/vectorindex` - Get vector index _(added 21.8)_
 - `GET` `/amw` - read _(added 26.1)_
 - `PUT` `/amw` - write _(added 26.1)_
 - `GET` `/applications/actions/name/{appVisiblity}` - List Application Names _(added 21.1 or earlier)_
 - `POST` `/applications/actions/shadowCopy` - Create Shadow Application _(added 21.1 or earlier)_
 - `DELETE` `/applications/actions/shadowDelete/{shadowAppName}` - Delete Shadow Application _(added 21.1 or earlier)_
 - `POST` `/applications/actions/shadowPromote` - Promote Shadow Application _(added 21.1 or earlier)_
-- `GET` `/applications/partitions/supportedfederatedtypes` - Get Supported Partition Types _(added 21.7)_
+- `GET` `/applications/partitions/supportedfederatedtypes` - Get Supported Partition Types _(added 21.6)_
 - `DELETE` `/applications/{applicationName}/databases/{databaseName}/asodataload/buffers` - Destroy Dataload Buffer _(added 21.4)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/currencySettings` - Get Currency Settings _(added 21.1 or earlier)_
 - `POST` `/applications/{applicationName}/databases/{databaseName}/currencySettings` - Set Currency Settings _(added 21.1 or earlier)_
@@ -61,11 +61,11 @@ current specification (see `AGENTS.md`), then write the wrapper.
 - `PUT` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/content` - uploadScriptContent _(added 26.1)_
 - `POST` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/scriptops/validate` - Validate Calc Script _(added 26.1)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/settings/compressioninfo` - Get ASO Compression Info _(added 21.5)_
-- `GET` `/applications/{applicationName}/datasources/{datasourceName}` - Get Application Datasource _(added 26.1)_
-- `POST` `/applications/{applicationName}/decrypt` - Decrypt Application _(added 21.7)_
-- `POST` `/applications/{applicationName}/encrypt` - Encrypt Application _(added 21.7)_
-- `GET` `/applications/{applicationName}/encryptionconfig` - Get Encryption Info _(added 21.7)_
-- `PUT` `/applications/{application}/databases/{database}/queries/rename` - Rename MDX report. _(added 26.1)_
+- `GET` `/applications/{applicationName}/datasources/{datasourceName}` - Get Application Datasource _(added 21.8)_
+- `POST` `/applications/{applicationName}/decrypt` - Decrypt Application _(added 21.6)_
+- `POST` `/applications/{applicationName}/encrypt` - Encrypt Application _(added 21.6)_
+- `GET` `/applications/{applicationName}/encryptionconfig` - Get Encryption Info _(added 21.6)_
+- `PUT` `/applications/{application}/databases/{database}/queries/rename` - Rename MDX report. _(added 21.8)_
 - `GET` `/backup/application/{applicationId}` - getApplicationBackups _(added 26.1)_
 - `GET` `/backup/applications` - getApplications _(added 26.1)_
 - `POST` `/backup/applications` - backupApplications _(added 26.1)_
@@ -79,17 +79,17 @@ current specification (see `AGENTS.md`), then write the wrapper.
 - `POST` `/backup/stop` - stopBackup _(added 26.1)_
 - `GET` `/backup/system` - getSystemBackups _(added 26.1)_
 - `GET` `/catalog_old/{fileName}` - getFileContent _(added 26.1)_
-- `DELETE` `/centralizedurl` - Delete Essbase server from Centralized URL _(added 21.7)_
-- `GET` `/centralizedurl` - Get Essbase Server list _(added 21.7)_
-- `POST` `/centralizedurl` - Add Essbase server to Centralized URL List _(added 21.7)_
-- `PUT` `/centralizedurl` - Update Essbase URL of Centralized URL List _(added 21.7)_
+- `DELETE` `/centralizedurl` - Delete Essbase server from Centralized URL _(added 21.6)_
+- `GET` `/centralizedurl` - Get Essbase Server list _(added 21.6)_
+- `POST` `/centralizedurl` - Add Essbase server to Centralized URL List _(added 21.6)_
+- `PUT` `/centralizedurl` - Update Essbase URL of Centralized URL List _(added 21.6)_
 - `GET` `/cfg` - Get Essbase Configuration. _(added 26.1)_
 - `GET` `/cloudstorage/config` - Get object storage configuration _(added 26.1)_
 - `PUT` `/cloudstorage/config` - Create or update object storage configuration _(added 26.1)_
 - `POST` `/cloudstorage/config/test` - Verify object storage configuration _(added 26.1)_
-- `GET` `/connections/{connection}/getdependentconnections` - List dependamt connection names _(added 26.1)_
+- `GET` `/connections/{connection}/getdependentconnections` - List dependamt connection names _(added 21.8)_
 - `POST` `/datasources/customdelimited/query/stream` - Get Streamed Global Datasource Results _(added 21.4)_
-- `GET` `/datasources/{datasourceName}` - Get Global Datasource _(added 26.1)_
+- `GET` `/datasources/{datasourceName}` - Get Global Datasource _(added 21.8)_
 - `GET` `/ess-mcp` - doGet _(added 26.1)_
 - `POST` `/ess-mcp` - doPost _(added 26.1)_
 - `POST` `/ess-mcp/call` - callTool _(added 26.1)_
@@ -119,16 +119,16 @@ current specification (see `AGENTS.md`), then write the wrapper.
 - `POST` `/federatedoverdatasource/writeback` - writeback _(added 26.1)_
 - `POST` `/federatedsample` - report_1 _(added 26.1)_
 - `DELETE` `/files/abort/{path}` - Abort Multipart File Upload _(added 21.4)_
-- `POST` `/files/actions/extractJob` - Extract Zip File Using a Job _(added 21.7)_
+- `POST` `/files/actions/extractJob` - Extract Zip File Using a Job _(added 21.6)_
 - `GET` `/files/getDatabasesFromLCMZip` - Get database names from LCM zip file _(added 26.1)_
-- `GET` `/files/getobjectstoreuri` - getObjectStoreURI _(added 26.1)_
+- `GET` `/files/getobjectstoreuri` - getObjectStoreURI _(added 21.8)_
 - `POST` `/files/upload-commit/{path}` - Commit Multipart File Upload _(added 21.4)_
 - `POST` `/files/upload-create/{path}` - Create Multipart File Upload _(added 21.4)_
 - `PUT` `/files/upload-part/{path}` - Upload File Part _(added 21.4)_
 - `GET` `/files/uploadconfig` - getUploadConfig _(added 21.4)_
 - `DELETE` `/groups/{id}/members/groups` - Remove Groups From Group _(added 21.1 or earlier)_
 - `DELETE` `/groups/{id}/members/users` - Remove Group Users _(added 21.1 or earlier)_
-- `DELETE` `/jobs/purge` - Delete Jobs _(added 21.4)_
+- `DELETE` `/jobs/purge` - Delete Jobs _(added 21.2)_
 - `GET` `/logs` - Get All Server Types _(added 26.1)_
 - `GET` `/logs/stream` - Return Filtered Logs _(added 26.1)_
 - `GET` `/logs/{serverType}` - Download Logs for Server Type _(added 26.1)_
@@ -160,7 +160,7 @@ current specification (see `AGENTS.md`), then write the wrapper.
 - `GET` `/outline/{app}/{cube}/edit/shared` - getSharedMembers _(added 26.1)_
 - `GET` `/outline/{app}/{cube}/edit/validate` - validate_1 _(added 26.1)_
 - `GET` `/outline/{app}/{cube}/edit/{memberUniqueName}` - getMemberInfo _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/pivotDimension` - Get Pivot dimension _(added 26.1)_
+- `GET` `/outline/{app}/{cube}/pivotDimension` - Get Pivot dimension _(added 21.8)_
 - `DELETE` `/outline/{app}/{cube}/qedit` - deleteMember_1 _(added 26.1)_
 - `GET` `/outline/{app}/{cube}/qedit` - getMembers_3 _(added 26.1)_
 - `PATCH` `/outline/{app}/{cube}/qedit` - updateMember_1 _(added 26.1)_
@@ -179,13 +179,13 @@ current specification (see `AGENTS.md`), then write the wrapper.
 - `GET` `/outline/{app}/{cube}/qedit/shared` - getSharedMembers_1 _(added 26.1)_
 - `GET` `/outline/{app}/{cube}/qedit/validate` - validate_2 _(added 26.1)_
 - `GET` `/outline/{app}/{cube}/qedit/{memberUniqueName}` - getMemberInfo_1 _(added 26.1)_
-- `DELETE` `/rocluster` - Delete ReadOnly Cluster _(added 21.7)_
-- `GET` `/rocluster` - Get ReadOnly Cluster List _(added 21.7)_
-- `POST` `/rocluster` - Create ReadOnly Cluster _(added 21.7)_
-- `PUT` `/rocluster` - Update ReadOnly Cluster _(added 21.7)_
-- `POST` `/rocluster/changestatus` - ReadOnly Cluster Change Status _(added 21.7)_
-- `GET` `/rocluster/findByName` - Find ReadOnly Cluster By Name _(added 21.7)_
-- `GET` `/rocluster/{svrName}/appcubelist` - Get App Cube List _(added 21.7)_
+- `DELETE` `/rocluster` - Delete ReadOnly Cluster _(added 21.6)_
+- `GET` `/rocluster` - Get ReadOnly Cluster List _(added 21.6)_
+- `POST` `/rocluster` - Create ReadOnly Cluster _(added 21.6)_
+- `PUT` `/rocluster` - Update ReadOnly Cluster _(added 21.6)_
+- `POST` `/rocluster/changestatus` - ReadOnly Cluster Change Status _(added 21.6)_
+- `GET` `/rocluster/findByName` - Find ReadOnly Cluster By Name _(added 21.6)_
+- `GET` `/rocluster/{svrName}/appcubelist` - Get App Cube List _(added 21.6)_
 - `POST` `/security/syncwithidp` - syncWithIDP _(added 26.1)_
 - `POST` `/service/actions/start` - start _(added 26.1)_
 - `POST` `/service/actions/stop` - stop _(added 26.1)_
