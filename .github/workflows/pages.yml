@@ -72,9 +72,13 @@ jobs:
           cp -R target/reports/apidocs/. _site/api/
 
       - name: Upload the site
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: _site
+          # generate.py writes a .nojekyll, and this action has excluded
+          # dotfiles by default since v4 - without this the file is dropped
+          # silently and Jekyll processing is no longer suppressed.
+          include-hidden-files: true
 
   deploy:
     name: Deploy to Pages
@@ -90,4 +94,4 @@ jobs:
     steps:
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
