@@ -30,9 +30,13 @@ also published to GitHub Pages - see "The published site" below.
 | Version | Endpoints | Models | SHA-256 of the file as received |
 | --- | ---: | ---: | --- |
 | 21.1 | 337 | 232 | `464033c2571a0b488ff4ffc9353f53f4eb35ec5f24e227502989b70145345667` |
+| 21.2 | 336 | 232 | `7c0be7e425c670e87a3942b881ae35cf0354f52aaaa416c94a57a70da326d88a` † |
+| 21.3 | 335 | 231 | `6f5467f7dbc0f32b93ff35bfa057d1aec699ffd14d507ed08b2968acf9e6d1f5` † |
 | 21.4 | 343 | 238 | `1b72596764725465f93b39db6e0d63f28f500736aee7b8b20799453c67c15100` |
 | 21.5 | 344 | 240 | `5f4230883dd46bad168a34f9e28e2bb8c71da14a7454b0913c288479c37a7d2b` |
+| 21.6 | 360 | 246 | `453ef2eea5c132d5bd5738b4e8c10ebaead74877a956780efcb2074c6711eb38` † |
 | 21.7 | 361 | 246 | `2b1db62052effd85ec2be160dfb6576bd6b2436c1a6b80bbc39cb0e54fa64ea7` |
+| 21.8 | 383 | 250 | `27b08a69be2940c1161ceb0add19dd9e3d9319a9d5507c59ad6e63bc06ee9537` † |
 | 26.1 | 494 | 256 | `7c975012769b0710428faff5eed98b2261e3f72fec522e86b530c456cdeaa844` |
 
 "Endpoints" counts path/method pairs, so one path with a `GET` and a `DELETE`
@@ -42,6 +46,15 @@ The checked-in files are pretty-printed with two-space indentation so that a
 future version shows up as a readable git diff. Key order and content are
 untouched - the checksums above are of the original bytes, before reformatting,
 which is why they will not match `shasum` run on the files here.
+
+† 21.2, 21.3, 21.6 and 21.8 came from the sibling EssSharp repository's own
+archive rather than from a server, so their checksums are of that copy and not
+of the bytes Oracle served: EssSharp stores its specs minified, and the original
+formatting is gone. The content is verified even though the provenance of the
+bytes is a step removed - for all four versions the two archives share, the
+files are identical once key order and whitespace are normalised, so the two
+archives are captures of the same specifications. Replace these rows with a
+server capture if one ever turns up.
 
 The Swagger 2.0 files declare `info.version` as `1.0` with an empty `info.title`,
 and 26.1 declares `V1` with the title "Essbase REST API" - neither records which
