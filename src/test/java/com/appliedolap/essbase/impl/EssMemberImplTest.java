@@ -10,6 +10,8 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -132,6 +134,34 @@ public class EssMemberImplTest {
         attributeRow.put("name", "Attribute Calculations");
         attributeRow.put("dimensionType", "ATTRIBUTECALC");
         assertTrue(EssMemberImpl.propsToMemberBean(attributeRow).getAttribute());
+    }
+
+
+    @Test
+    public void readsTheDimensionTypesTheServerActuallySends() {
+        // Observed across Sample.Basic, plus the absent case that every ordinary dimension shows.
+        assertEquals(EssMember.DimensionType.TIME, EssMember.DimensionType.parse("TIME"));
+        assertEquals(EssMember.DimensionType.ACCOUNTS, EssMember.DimensionType.parse("ACCOUNTS"));
+        assertEquals(EssMember.DimensionType.ATTRIBUTE, EssMember.DimensionType.parse("ATTRIBUTE"));
+        assertEquals(EssMember.DimensionType.ATTRIBUTE_CALC, EssMember.DimensionType.parse("ATTRIBUTECALC"));
+        assertEquals(EssMember.DimensionType.NONE, EssMember.DimensionType.parse(null));
+        assertEquals(EssMember.DimensionType.UNKNOWN, EssMember.DimensionType.parse("SOMETHINGNEW"));
+    }
+
+    @Test
+    public void hasADisplayNameForEveryTypeExceptTheOrdinaryOne() {
+        for (EssMember.DimensionType type : EssMember.DimensionType.values()) {
+            if (type == EssMember.DimensionType.NONE) {
+                assertNull("NONE has nothing to display", type.getLabel());
+            } else {
+                assertNotNull(type + " needs a label", type.getLabel());
+            }
+        }
+        for (EssMember.DataStorage storage : EssMember.DataStorage.values()) {
+            assertNotNull(storage + " needs a label", storage.getLabel());
+        }
+        assertEquals("Dynamic Calc", EssMember.DataStorage.DYNAMIC_CALC.getLabel());
+        assertEquals("Shared Member", EssMember.DataStorage.SHARED.getLabel());
     }
 
 }

@@ -89,6 +89,14 @@ public interface EssMember extends EssObject {
     DimensionStorage getDimensionStorage();
 
     /**
+     * The role this dimension plays, or {@link DimensionType#NONE} for an ordinary one and for any
+     * member below a dimension.
+     *
+     * @return the dimension's type, never null
+     */
+    DimensionType getDimensionType();
+
+    /**
      * Everything the server said about this member, as it said it.
      * <p>
      * The outline viewer returns a different set of fields per member - it omits anything at its
@@ -108,25 +116,40 @@ public interface EssMember extends EssObject {
     enum DataStorage {
 
         /** The default, and what an absent value means. */
-        STORED,
+        STORED("Stored"),
 
         /** Calculated on retrieval and not written to the cube. */
-        DYNAMIC_CALC,
+        DYNAMIC_CALC("Dynamic Calc"),
 
         /** Calculated on retrieval and then written. */
-        DYNAMIC_CALC_AND_STORE,
+        DYNAMIC_CALC_AND_STORE("Dynamic Calc and Store"),
 
         /** A pointer to another member's data rather than data of its own. */
-        SHARED,
+        SHARED("Shared Member"),
 
         /** Carries no data at all; it exists to group the members under it. */
-        LABEL_ONLY,
+        LABEL_ONLY("Label Only"),
 
         /** Stored, and never implicitly shared with a sole child. */
-        NEVER_SHARE,
+        NEVER_SHARE("Never Share"),
 
         /** A storage this version of the client doesn't name; the raw value is in {@link #getProperties()}. */
-        UNKNOWN;
+        UNKNOWN("Unknown");
+
+        private final String label;
+
+        DataStorage(String label) {
+            this.label = label;
+        }
+
+        /**
+         * The storage as Essbase's own tools write it, for a caller putting it on screen.
+         *
+         * @return the display name
+         */
+        public String getLabel() {
+            return label;
+        }
 
         /**
          * Reads the server's spelling, tolerating separators and case.
@@ -154,6 +177,76 @@ public interface EssMember extends EssObject {
                     return LABEL_ONLY;
                 case "NEVERSHARE":
                     return NEVER_SHARE;
+                default:
+                    return UNKNOWN;
+            }
+        }
+
+    }
+
+    /**
+     * The role a dimension plays in the outline. The server names it only on the dimension's own row,
+     * and only when it is something other than ordinary.
+     */
+    enum DimensionType {
+
+        /** An ordinary dimension, and what an absent value means. */
+        NONE(null),
+
+        TIME("Time"),
+
+        ACCOUNTS("Accounts"),
+
+        ATTRIBUTE("Attribute"),
+
+        ATTRIBUTE_CALC("Attribute Calc"),
+
+        COUNTRY("Country"),
+
+        CURRENCY_PARTITION("Currency Partition"),
+
+        /** A type this version of the client doesn't name; the raw value is in {@link #getProperties()}. */
+        UNKNOWN("Unknown");
+
+        private final String label;
+
+        DimensionType(String label) {
+            this.label = label;
+        }
+
+        /**
+         * The type as Essbase's own tools write it, or null for {@link #NONE}, which has nothing to say.
+         *
+         * @return the display name, or null
+         */
+        public String getLabel() {
+            return label;
+        }
+
+        /**
+         * @param text the value from the outline, or null for an absent one
+         * @return the type it names, {@link #NONE} for null, {@link #UNKNOWN} for anything unrecognized
+         */
+        public static DimensionType parse(String text) {
+            if (text == null || text.isBlank()) {
+                return NONE;
+            }
+            switch (text.toUpperCase(Locale.ROOT).replaceAll("[^A-Z]", "")) {
+                case "NONE":
+                    return NONE;
+                case "TIME":
+                    return TIME;
+                case "ACCOUNTS":
+                    return ACCOUNTS;
+                case "ATTRIBUTE":
+                    return ATTRIBUTE;
+                case "ATTRIBUTECALC":
+                case "ATTRIBUTECALCULATIONS":
+                    return ATTRIBUTE_CALC;
+                case "COUNTRY":
+                    return COUNTRY;
+                case "CURRENCYPARTITION":
+                    return CURRENCY_PARTITION;
                 default:
                     return UNKNOWN;
             }
