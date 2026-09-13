@@ -18,6 +18,32 @@ public interface EssCube extends EssObject {
     List<EssScript> getCalcScripts();
 
     /**
+     * The MDX scripts on this cube. Same endpoints as the calc scripts, told apart by a type
+     * parameter - see {@link EssScript.ScriptType}.
+     *
+     * @return the MDX scripts
+     */
+    List<EssScript> getMdxScripts();
+
+    /**
+     * The scripts of one kind on this cube.
+     *
+     * @param scriptType which kind
+     * @return the scripts
+     */
+    List<EssScript> getScripts(EssScript.ScriptType scriptType);
+
+    /**
+     * Creates a script on this cube.
+     *
+     * @param scriptType which kind
+     * @param name       the script name, without an extension
+     * @param content    the script text
+     * @return the script as created
+     */
+    EssScript createScript(EssScript.ScriptType scriptType, String name, String content);
+
+    /**
      * Gets the parent application of this cube.
      *
      * @return the parent application

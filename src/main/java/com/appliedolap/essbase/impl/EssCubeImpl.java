@@ -57,20 +57,49 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
 
     @Override
     public List<EssScript> getCalcScripts() {
+        return getScripts(EssScript.ScriptType.CALC);
+    }
+
+    @Override
+    public List<EssScript> getMdxScripts() {
+        return getScripts(EssScript.ScriptType.MDX);
+    }
+
+    /**
+     * Lists the scripts of one kind.
+     * <p>
+     * Not through the generated client: the type has to travel on every scripts call and the generated
+     * signature makes it optional, which produces the server's least helpful error. See
+     * {@link EssScripts}.
+     */
+    @Override
+    public List<EssScript> getScripts(EssScript.ScriptType scriptType) {
+        String path = NativeHttp.withQuery("/applications/" + ApiClient.urlEncode(getApplicationName())
+                + "/databases/" + ApiClient.urlEncode(getName()) + "/scripts",
+                "file", scriptType.getParameter());
+        String body = EssScripts.send(api, "GET", path, null, "scriptsListScripts");
         try {
-            // specifies calc, apparently same as null
-            ScriptList scriptList = api.getScriptsApi().scriptsListScripts(application.getName(), cube.getName(), "calc");
+            ScriptList list = api.getClient().getObjectMapper().readValue(body, ScriptList.class);
             List<EssScript> scripts = new ArrayList<>();
-            if (scriptList.getItems() != null) {
-                for (Script script : scriptList.getItems()) {
-                    EssScript essScript = new EssScriptImpl(api, this, script);
-                    scripts.add(essScript);
-                }
+            for (Script script : wrap(list.getItems())) {
+                scripts.add(new EssScriptImpl(api, this, script, scriptType));
             }
             return Collections.unmodifiableList(scripts);
-        } catch (ApiException e) {
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new EssApiException(e);
         }
+    }
+
+    @Override
+    public EssScript createScript(EssScript.ScriptType scriptType, String name, String content) {
+        String path = NativeHttp.withQuery("/applications/" + ApiClient.urlEncode(getApplicationName())
+                + "/databases/" + ApiClient.urlEncode(getName()) + "/scripts",
+                "file", scriptType.getParameter());
+        EssScripts.send(api, "POST", path,
+                Map.of("name", name, "content", content == null ? "" : content), "scriptsCreateScript");
+        Script created = new Script();
+        created.setName(name);
+        return new EssScriptImpl(api, this, created, scriptType);
     }
 
     @Override
