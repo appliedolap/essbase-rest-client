@@ -1,6 +1,7 @@
 package com.appliedolap.essbase;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * The generative-AI features a 26.1 server offers over one cube, reached through
@@ -35,6 +36,17 @@ public interface EssCubeAi {
      * @return the diagnosis, never null
      */
     EssAiReadiness getReadiness(EssAiFeature feature);
+
+    /**
+     * Which AI capabilities this server has switched on, in one request.
+     *
+     * <p>Says nothing about whether they are configured - a capability can be switched on and still
+     * have no AI connection behind it, which is the usual state of a fresh server. This is the
+     * inventory; {@link #getReadiness(EssAiFeature)} is the diagnosis.
+     *
+     * @return the enabled capabilities, empty on a server too old to have any
+     */
+    Set<EssAiFeature> getEnabledFeatures();
 
     /**
      * Asks the model to write an MDX query answering a question posed in English, starting a new

@@ -21,9 +21,11 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -189,6 +191,21 @@ public class EssCubeAiImpl implements EssCubeAi {
         return EssAiReadiness.undetermined("Asking about " + applicationName
                 + "'s AI connection answered HTTP " + reply.status,
                 new EssApiException(reply.describe(null)));
+    }
+
+    @Override
+    public Set<EssAiFeature> getEnabledFeatures() {
+        Reply instance = call("GET", "/about/instance", null);
+        if (instance.status / 100 != 2 || !Boolean.TRUE.equals(flag(instance.body, EssAiFeature.ENABLED_FLAG))) {
+            return EnumSet.noneOf(EssAiFeature.class);
+        }
+        Set<EssAiFeature> enabled = EnumSet.noneOf(EssAiFeature.class);
+        for (EssAiFeature feature : EssAiFeature.values()) {
+            if (Boolean.TRUE.equals(flag(instance.body, feature.getFlag()))) {
+                enabled.add(feature);
+            }
+        }
+        return enabled;
     }
 
     @Override

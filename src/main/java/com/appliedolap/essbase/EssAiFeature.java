@@ -11,24 +11,27 @@ package com.appliedolap.essbase;
 public enum EssAiFeature {
 
     /** Writing an MDX query from a question asked in English. */
-    MDX_GENERATOR("aiMdxEnabled"),
+    MDX_GENERATOR("aiMdxEnabled", "MDX generator"),
 
     /** Free-form chat about a cube. */
-    ASK_ESSBASE("aiAskEssbaseEnabled"),
+    ASK_ESSBASE("aiAskEssbaseEnabled", "Ask Essbase"),
 
     /** Writing a calculation script from a description. */
-    CALCULATION("aiCalcEnabled"),
+    CALCULATION("aiCalcEnabled", "Calculation assistant"),
 
     /** Finding members by meaning rather than by name. */
-    SEMANTIC_SEARCH("aiSemanticSearchEnabled");
+    SEMANTIC_SEARCH("aiSemanticSearchEnabled", "Semantic search");
 
     /** The flag for AI as a whole; every capability is off when this is. */
     public static final String ENABLED_FLAG = "aiEnabled";
 
     private final String flag;
 
-    EssAiFeature(String flag) {
+    private final String label;
+
+    EssAiFeature(String flag, String label) {
         this.flag = flag;
+        this.label = label;
     }
 
     /**
@@ -38,6 +41,16 @@ public enum EssAiFeature {
      */
     public String getFlag() {
         return flag;
+    }
+
+    /**
+     * The capability's name as a person would write it, for a caller putting it on screen. Worth
+     * carrying here rather than deriving from the constant name, which would give "Mdx generator".
+     *
+     * @return the display name
+     */
+    public String getLabel() {
+        return label;
     }
 
 }
