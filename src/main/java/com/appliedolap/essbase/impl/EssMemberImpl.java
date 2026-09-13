@@ -123,6 +123,11 @@ public class EssMemberImpl extends AbstractEssObject implements EssMember {
     }
 
     @Override
+    public long getDescendantsCount() {
+        return memberBean.getDescendantsCount() == null ? 0L : memberBean.getDescendantsCount();
+    }
+
+    @Override
     public DimensionType getDimensionType() {
         Object type = properties.get("dimensionType");
         return DimensionType.parse(type == null ? null : type.toString());

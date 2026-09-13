@@ -60,6 +60,17 @@ public interface EssMember extends EssObject {
     int getChildCount();
 
     /**
+     * How many members sit below this one, at every level.
+     *
+     * <p>Reported by the outline with the member itself, so it costs nothing - which makes it the way
+     * to find out how big a walk would be before starting one. Zero for a leaf, and for a member read
+     * from a source that didn't report it.
+     *
+     * @return the descendant count
+     */
+    long getDescendantsCount();
+
+    /**
      * Gets the level-0 descendants of this member. There is currently no REST API to do this in one call, so this
      * method works recursively to fetch children of children and so on until the member has been explored.
      *
