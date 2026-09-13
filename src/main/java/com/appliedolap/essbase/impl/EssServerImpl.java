@@ -132,6 +132,16 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
         }
     }
 
+    @Override
+    public Map<String, Object> getAboutDetails() {
+        try {
+            return api.getClient().getObjectMapper().readValue(getRaw("/about"),
+                    new TypeReference<LinkedHashMap<String, Object>>() { });
+        } catch (IOException e) {
+            throw new EssApiException(e);
+        }
+    }
+
     /**
      * GETs a path below the REST base URL and returns the body, for the handful of things the generated
      * client cannot usefully express - a document whose shape varies by release, or one wanted verbatim.

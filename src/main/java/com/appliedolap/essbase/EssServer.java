@@ -93,6 +93,18 @@ public interface EssServer {
     Map<String, Object> getInstanceDetails();
 
     /**
+     * Everything the server reports about the product, exactly as it reports it.
+     * <p>
+     * Untyped for the same reason {@link #getInstanceDetails()} is: {@link #getAbout()} names four
+     * fields fixed at whatever the spec said when the client was generated, and a 26.1 server answers
+     * with five - it adds {@code listingVersion}, which a typed view drops on the floor without
+     * saying so. The fields here are whatever came back.
+     *
+     * @return the fields the server returned, in the order it returned them
+     */
+    Map<String, Object> getAboutDetails();
+
+    /**
      * How this connection authenticates, so that code outside the generated client can present the same
      * identity - a download bypass, or a local proxy standing in front of the server's own web pages.
      * <p>
