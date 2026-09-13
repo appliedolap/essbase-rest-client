@@ -27,6 +27,16 @@ public interface EssCubeAi {
     EssAiReadiness getReadiness();
 
     /**
+     * The same diagnosis, narrowed to one capability, which is what you usually want: the server
+     * reports a separate on/off flag per capability, so "is AI available here" is a question with no
+     * single answer and asking about the feature you are about to use is strictly better.
+     *
+     * @param feature the capability to ask about, or null for AI in general
+     * @return the diagnosis, never null
+     */
+    EssAiReadiness getReadiness(EssAiFeature feature);
+
+    /**
      * Asks the model to write an MDX query answering a question posed in English, starting a new
      * conversation.
      *

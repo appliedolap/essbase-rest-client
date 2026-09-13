@@ -1,5 +1,6 @@
 package com.appliedolap.essbase.impl;
 
+import com.appliedolap.essbase.EssAiFeature;
 import com.appliedolap.essbase.EssAiReadiness;
 import com.appliedolap.essbase.EssMdxGeneration;
 import org.junit.Test;
@@ -27,6 +28,47 @@ public class EssCubeAiImplTest {
     /** What 26.1 says for a missing AI connection, whichever link in the chain is actually missing. */
     private static final String NO_CONNECTION_JSON =
             "{\n  \"errorMessage\" : \"Unable to get associated AI connection for application [Sample]\"\n}";
+
+    /** 21.7's whole /about/instance - note the absence, not a false, of every ai flag. */
+    private static final String INSTANCE_21_7 = "{\"idcs\":true,\"provisioningSupported\":true}";
+
+    /** 26.1's, with AI on and every capability on. */
+    private static final String INSTANCE_26_1 = "{\"idcs\":true,\"aiMdxEnabled\":true,"
+            + "\"aiAskEssbaseEnabled\":true,\"aiCalcEnabled\":true,\"aiSemanticSearchEnabled\":true,"
+            + "\"aiEnabled\":true}";
+
+    @Test
+    public void readsAServerWithNoAiFlagsAsTooOld() {
+        EssAiReadiness readiness = EssCubeAiImpl.diagnoseFlags(
+                new EssCubeAiImpl.Reply(200, INSTANCE_21_7), EssAiFeature.MDX_GENERATOR);
+
+        assertEquals(EssAiReadiness.State.NOT_SUPPORTED, readiness.getState());
+    }
+
+    @Test
+    public void separatesAiSwitchedOffFromAiAbsent() {
+        EssAiReadiness readiness = EssCubeAiImpl.diagnoseFlags(
+                new EssCubeAiImpl.Reply(200, "{\"aiEnabled\":false,\"aiMdxEnabled\":true}"), null);
+
+        assertEquals(EssAiReadiness.State.DISABLED_ON_SERVER, readiness.getState());
+    }
+
+    @Test
+    public void readsOneCapabilityBeingOffWhileTheRestAreOn() {
+        String mdxOff = INSTANCE_26_1.replace("\"aiMdxEnabled\":true", "\"aiMdxEnabled\":false");
+
+        assertEquals(EssAiReadiness.State.FEATURE_DISABLED, EssCubeAiImpl.diagnoseFlags(
+                new EssCubeAiImpl.Reply(200, mdxOff), EssAiFeature.MDX_GENERATOR).getState());
+        // The same server is still fine for a capability that is switched on.
+        assertNull(EssCubeAiImpl.diagnoseFlags(
+                new EssCubeAiImpl.Reply(200, mdxOff), EssAiFeature.SEMANTIC_SEARCH));
+    }
+
+    @Test
+    public void letsTheConfigurationRungsDecideWhenEveryFlagIsOn() {
+        assertNull(EssCubeAiImpl.diagnoseFlags(
+                new EssCubeAiImpl.Reply(200, INSTANCE_26_1), EssAiFeature.MDX_GENERATOR));
+    }
 
     @Test
     public void readsAServerWithNoAiEndpointsAsTooOld() {

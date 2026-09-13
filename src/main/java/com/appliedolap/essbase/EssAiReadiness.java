@@ -24,10 +24,23 @@ public final class EssAiReadiness {
         READY,
 
         /**
-         * The server has no AI endpoints at all. They arrived in 26.1; 21.7 answers 404 (in XML,
-         * whatever you put in {@code Accept}).
+         * The server has no AI endpoints at all. They arrived in 26.1; a 21.7 server reports no AI
+         * flags in {@code /about/instance} and answers 404 to any {@code /ai} path (in XML, whatever
+         * you put in {@code Accept}).
          */
         NOT_SUPPORTED,
+
+        /**
+         * The server can do AI but has it switched off wholesale - {@code aiEnabled} is false - so no
+         * capability is available whatever else is configured.
+         */
+        DISABLED_ON_SERVER,
+
+        /**
+         * AI is on, but this particular capability is switched off. The flags are per capability, so
+         * a server can offer semantic search and not the MDX generator.
+         */
+        FEATURE_DISABLED,
 
         /**
          * The server supports AI but no AI connection has been configured on it, so there is no

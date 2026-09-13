@@ -1,6 +1,7 @@
 package com.appliedolap.essbase.impl;
 
 import com.appliedolap.essbase.ApiContext;
+import com.appliedolap.essbase.EssAiFeature;
 import com.appliedolap.essbase.EssAiReadiness;
 import com.appliedolap.essbase.EssApiException;
 import com.appliedolap.essbase.EssCube;
@@ -69,11 +70,27 @@ public class EssCubeAiImpl implements EssCubeAi {
 
     @Override
     public EssAiReadiness getReadiness() {
+        return getReadiness(null);
+    }
+
+    @Override
+    public EssAiReadiness getReadiness(EssAiFeature feature) {
+        Reply instance;
+        try {
+            instance = call("GET", "/about/instance", null);
+        } catch (RuntimeException e) {
+            return EssAiReadiness.undetermined("Could not reach the server to ask what it supports", e);
+        }
+        EssAiReadiness switchedOff = diagnoseFlags(instance, feature);
+        if (switchedOff != null) {
+            return switchedOff;
+        }
+
         Reply connections;
         try {
             connections = call("GET", "/ai/connection", null);
         } catch (RuntimeException e) {
-            return EssAiReadiness.undetermined("Could not reach the server to check whether it supports AI", e);
+            return EssAiReadiness.undetermined("Could not reach the server to check its AI connections", e);
         }
         EssAiReadiness serverLevel = diagnoseServer(connections);
         if (serverLevel != null) {
@@ -88,6 +105,45 @@ public class EssCubeAiImpl implements EssCubeAi {
                     + cube.getApplication().getName() + "'s AI connection", e);
         }
         return diagnoseApplication(application, cube.getApplication().getName(), cube.getName());
+    }
+
+    /**
+     * Reads the switched-on-or-off rung out of {@code /about/instance}, or returns null when nothing
+     * there stands in the way and the configuration rungs decide.
+     *
+     * <p>This is the cheapest and most certain rung, and it comes first for both reasons: the flags
+     * say outright whether a capability exists on this server, where the {@code /ai} paths only let
+     * you infer it from a 404. A 21.7 server reports none of these keys at all.
+     */
+    static EssAiReadiness diagnoseFlags(Reply instance, EssAiFeature feature) {
+        if (instance.status / 100 != 2) {
+            return EssAiReadiness.undetermined("Asking the server what it supports answered HTTP "
+                    + instance.status, new EssApiException(instance.describe("GET /about/instance")));
+        }
+        Boolean enabled = flag(instance.body, EssAiFeature.ENABLED_FLAG);
+        if (enabled == null) {
+            return EssAiReadiness.of(EssAiReadiness.State.NOT_SUPPORTED,
+                    "This server reports no AI capabilities at all; they were introduced in Essbase 26.1");
+        }
+        if (!enabled) {
+            return EssAiReadiness.of(EssAiReadiness.State.DISABLED_ON_SERVER,
+                    "AI is switched off on this server, so no application or cube can use it");
+        }
+        if (feature != null && !Boolean.TRUE.equals(flag(instance.body, feature.getFlag()))) {
+            return EssAiReadiness.of(EssAiReadiness.State.FEATURE_DISABLED,
+                    "AI is on for this server but " + feature.getFlag() + " is not, so "
+                            + feature + " is unavailable however the rest is configured");
+        }
+        return null;
+    }
+
+    /**
+     * Reads one boolean out of the instance document, or null when the key isn't there at all -
+     * which is the difference between "off" and "this server has never heard of it".
+     */
+    private static Boolean flag(String body, String name) {
+        Matcher matcher = Pattern.compile("\"" + Pattern.quote(name) + "\"\\s*:\\s*(true|false)").matcher(body);
+        return matcher.find() ? Boolean.valueOf(matcher.group(1)) : null;
     }
 
     /**
