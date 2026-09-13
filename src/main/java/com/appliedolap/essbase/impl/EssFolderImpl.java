@@ -10,9 +10,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -68,16 +71,31 @@ public class EssFolderImpl extends EssFileImpl implements EssFolder {
         }
     }
 
+    /**
+     * Lists this folder's contents.
+     *
+     * <p>Goes through {@link NativeHttp} rather than the generated client, for the same reason
+     * {@link #uploadFile} and {@link #createSubFolder} already do: the generated call puts the whole
+     * path through {@code urlEncode}, which escapes the separators too, so anything below the top
+     * level is asked for as {@code /files/applications%2FSample} and the server answers
+     * {@code Specified path '/applications%2FSample' does not exist}. Every folder but the roots was
+     * unbrowsable.
+     */
     @Override
     public List<EssFile> getFiles() {
+        String path = NativeHttp.withQuery(
+                "/files/" + NativeHttp.encodePathKeepingSlashes(fullPath), "recursive", false);
         try {
-            String pathForFetch = fullPath;
-            if (pathForFetch.startsWith("/")) {
-                pathForFetch = pathForFetch.substring(1);
+            HttpResponse<InputStream> response = NativeHttp.send(api.getClient(),
+                    NativeHttp.request(api.getClient(), path).header("Accept", "application/json").GET(),
+                    "filesListFiles");
+            FileCollectionResponse files;
+            try (InputStream body = response.body()) {
+                files = api.getClient().getObjectMapper().readValue(body, FileCollectionResponse.class);
             }
-            FileCollectionResponse files = api.getFilesApi().filesListFiles(pathForFetch, null, null, null, null, null, null, null, false);
             List<EssFile> childFiles = new ArrayList<>();
-            for (FileBean file : files.getItems()) {
+            List<FileBean> items = files.getItems() == null ? Collections.emptyList() : files.getItems();
+            for (FileBean file : items) {
                 String name = file.getName();
                 boolean isFolder = "folder".equals(file.getType());
                 EssFile essFile;
@@ -89,8 +107,8 @@ public class EssFolderImpl extends EssFileImpl implements EssFolder {
                 childFiles.add(essFile);
             }
             return childFiles;
-        } catch (ApiException e) {
-            throw new RuntimeException(e);
+        } catch (ApiException | IOException e) {
+            throw new EssApiException(e);
         }
     }
 
