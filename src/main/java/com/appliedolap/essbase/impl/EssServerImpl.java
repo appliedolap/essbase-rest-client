@@ -491,6 +491,77 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     /**
      * The about information of this server.
      */
+    @Override
+    public List<String> getServerLogTypes() {
+        ApiClient client = api.getClient();
+        try {
+            HttpRequest.Builder request = HttpRequest.newBuilder(URI.create(client.getBaseUri() + "/logs"))
+                    .header("Accept", "application/json")
+                    .GET();
+            client.getRequestInterceptor().accept(request);
+            HttpResponse<String> response = client.getHttpClient()
+                    .send(request.build(), HttpResponse.BodyHandlers.ofString());
+            // A deployment without server-level logs answers 404 here, which is an answer and not a
+            // failure - see the interface note. Anything else unexpected is treated the same way rather
+            // than stopping a caller who only wanted to know whether to offer the feature.
+            if (response.statusCode() / 100 != 2 || response.body() == null || response.body().isBlank()) {
+                return Collections.emptyList();
+            }
+            JsonNode links = client.getObjectMapper().readTree(response.body());
+            List<String> types = new ArrayList<>();
+            for (JsonNode link : links) {
+                // The application-level equivalent answers with links whose rel names what they fetch;
+                // the server-level one is the same shape a level up, with the type in the path.
+                JsonNode href = link.get("href");
+                if (href == null) {
+                    continue;
+                }
+                String type = serverTypeIn(href.asText());
+                if (type != null && !types.contains(type)) {
+                    types.add(type);
+                }
+            }
+            return Collections.unmodifiableList(types);
+        } catch (IOException e) {
+            return Collections.emptyList();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return Collections.emptyList();
+        }
+    }
+
+    /** Pulls {@code essbase} out of {@code .../logs/essbase/latest}. */
+    private static String serverTypeIn(String href) {
+        int logs = href.indexOf("/logs/");
+        if (logs < 0) {
+            return null;
+        }
+        String rest = href.substring(logs + "/logs/".length());
+        int slash = rest.indexOf('/');
+        String type = slash < 0 ? rest : rest.substring(0, slash);
+        return type.isBlank() ? null : type;
+    }
+
+    @Override
+    public void downloadLatestServerLog(String serverType, OutputStream outputStream) {
+        downloadServerLog(serverType, "latest", outputStream, "serverLogsDownloadLatestLogFile");
+    }
+
+    @Override
+    public void downloadServerLogsAsZip(String serverType, OutputStream outputStream) {
+        downloadServerLog(serverType, "all", outputStream, "serverLogsDownloadAllLogFiles");
+    }
+
+    private void downloadServerLog(String serverType, String which, OutputStream outputStream, String operationId) {
+        String path = "/logs/" + ApiClient.urlEncode(serverType) + "/" + which;
+        try {
+            NativeHttp.copyBodyTo(NativeHttp.send(api.getClient(),
+                    NativeHttp.request(api.getClient(), path).GET(), operationId), outputStream);
+        } catch (ApiException | IOException e) {
+            throw new EssApiException(e);
+        }
+    }
+
     public static class About {
 
         private final com.appliedolap.essbase.client.model.About about;

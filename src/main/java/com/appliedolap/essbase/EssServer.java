@@ -308,4 +308,33 @@ public interface EssServer {
 
     }
 
+
+    /**
+     * The kinds of server log this deployment offers, each a value for the other two methods here.
+     *
+     * <p>Empty rather than an error when the server has no server-level logs at all. They are not
+     * universal: both servers this was developed against answer 404 to every {@code /logs} path while
+     * serving application logs perfectly well, so "this deployment doesn't have them" is an ordinary
+     * answer and not a failure. A caller should ask this before offering the feature.
+     *
+     * @return the server log types, empty if this deployment serves none
+     */
+    List<String> getServerLogTypes();
+
+    /**
+     * Writes the latest server log of the given type to the stream.
+     *
+     * @param serverType one of {@link #getServerLogTypes()}
+     * @param outputStream where to write it
+     */
+    void downloadLatestServerLog(String serverType, OutputStream outputStream);
+
+    /**
+     * Writes every server log of the given type, as a zip, to the stream.
+     *
+     * @param serverType one of {@link #getServerLogTypes()}
+     * @param outputStream where to write it
+     */
+    void downloadServerLogsAsZip(String serverType, OutputStream outputStream);
+
 }

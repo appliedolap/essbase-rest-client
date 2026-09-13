@@ -120,6 +120,17 @@ public interface EssApplication extends EssObject {
     void downloadAllLogsAsZip(OutputStream outputStream);
 
     /**
+     * Reads the latest application log and parses it.
+     *
+     * <p>The whole log, which is a real amount of text - Sample's runs to several thousand entries
+     * after an afternoon's use - so a caller showing it should expect to filter. Use
+     * {@link #downloadLatestLog(OutputStream)} instead to put it on disk without holding it in memory.
+     *
+     * @return the entries, oldest first
+     */
+    List<EssLogEntry> readLatestLog();
+
+    /**
      * An enumeration for the different application states.
      */
     enum Status {

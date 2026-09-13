@@ -204,6 +204,17 @@ public class EssApplicationImpl extends AbstractEssObject implements EssApplicat
     }
 
     @Override
+    public List<EssLogEntry> readLatestLog() {
+        String path = "/applications/" + ApiClient.urlEncode(getName()) + "/logs/latest";
+        try (InputStream body = NativeHttp.send(api.getClient(),
+                NativeHttp.request(api.getClient(), path).GET(), "applicationLogsDownloadLatestLogFile").body()) {
+            return EssLogEntry.parseAll(body);
+        } catch (ApiException | IOException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    @Override
     public void downloadAllLogsAsZip(OutputStream outputStream) {
         try {
             String path = "/applications/" + ApiClient.urlEncode(getName()) + "/logs/all";
