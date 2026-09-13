@@ -25,47 +25,53 @@ public class EssMemberImpl extends AbstractEssObject implements EssMember {
         }
     }
 
-    /*
-    "name" -> "East"
-"dimensionName" -> "Market"
-"numberOfChildren" -> {Double@1772} 5.0
-"levelNumber" -> {Double@1774} 1.0
-"generationNumber" -> {Double@1776} 2.0
-"aliases" -> {LinkedTreeMap@1778}  size = 6
-"uniqueName" -> "East"
-"memberId" -> "id__54"
-"descendantsCount" -> {Double@1784} 5.0
-"links" -> {ArrayList@1786}  size = 4
-"uda" -> {ArrayList@1788}  size = 1
-"parentName" -> "Market"
+    /**
+     * Builds a bean from the outline viewer's untyped rows.
+     *
+     * <p>A row looks like this, from {@code GET /outline/Sample/Basic}:
+     * <pre>
+     * "name": "Year", "uniqueName": "Year", "parentName": null,
+     * "numberOfChildren": 4, "levelNumber": 2, "descendantsCount": 16,
+     * "dimension": true, "dimensionType": "TIME", "dimStorageType": "DENSE",
+     * "dataStorageType": "DYNAMICCALC", "memberSolveOrder": 40, "aliases": { ... }
+     * </pre>
      */
     EssMemberImpl(ApiContext api, EssCube cube, Map<String, Object> memberProps) {
         this(api, cube, propsToMemberBean(memberProps));
     }
 
-    private static MemberBean propsToMemberBean(Map<String, Object> memberProps) {
+    static MemberBean propsToMemberBean(Map<String, Object> memberProps) {
         MemberBean memberBean = new MemberBean();
-        memberBean.setName(memberProps.get("name").toString());
-        memberBean.setLevelNumber(requiredInt(memberProps.get("levelNumber"), 0));
-        memberBean.setNumberOfChildren(requiredInt(memberProps.get("numberOfChildren"), 0));
+        memberBean.setName(Objects.toString(memberProps.get("name"), null));
+        memberBean.setUniqueName(Objects.toString(memberProps.get("uniqueName"), null));
+        memberBean.setParentName(Objects.toString(memberProps.get("parentName"), null));
+        memberBean.setMemberId(Objects.toString(memberProps.get("memberId"), null));
+        memberBean.setDataStorageType(Objects.toString(memberProps.get("dataStorageType"), null));
+        memberBean.setLevelNumber(optionalInt(memberProps.get("levelNumber"), 0));
+        memberBean.setGenerationNumber(optionalInt(memberProps.get("generationNumber"), 0));
+        memberBean.setNumberOfChildren(optionalInt(memberProps.get("numberOfChildren"), 0));
+        memberBean.setMemberSolveOrder(optionalInt(memberProps.get("memberSolveOrder"), 0));
+        memberBean.setDescendantsCount((long) optionalInt(memberProps.get("descendantsCount"), 0));
+        memberBean.setDimension(Boolean.TRUE.equals(memberProps.get("dimension")));
+        // The server names the dimension's role rather than setting a flag per role, so the two flags
+        // the bean carries are derived from it.
+        String dimensionType = Objects.toString(memberProps.get("dimensionType"), "");
+        memberBean.setAttribute("ATTRIBUTE".equalsIgnoreCase(dimensionType));
+        memberBean.setAccount("ACCOUNTS".equalsIgnoreCase(dimensionType));
         return memberBean;
     }
 
-    private static int requiredInt(Object value) {
-        if (value instanceof Double) {
-            Double doubleVal = (Double) value;
-            return doubleVal.intValue();
-        }
-        throw new IllegalArgumentException("Must be given a Double");
-    }
-
-    private static int requiredInt(Object value, int defaultValue) {
-        if (value instanceof Double) {
-            Double doubleVal = (Double) value;
-            return doubleVal.intValue();
-        } else {
-            return defaultValue;
-        }
+    /**
+     * Reads a JSON number out of an untyped row.
+     *
+     * <p>Accepts any {@link Number}, which it has to: this used to test for {@code Double} alone,
+     * which was right when these rows were parsed by Gson - it makes every number a Double - and
+     * silently wrong once the client moved to Jackson, which gives an Integer for a whole number. The
+     * default then applied to every field, so every member reported zero children, every member was
+     * therefore a leaf, and the outline appeared to have no members below its dimensions at all.
+     */
+    static int optionalInt(Object value, int defaultValue) {
+        return value instanceof Number ? ((Number) value).intValue() : defaultValue;
     }
 
     @Override

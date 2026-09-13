@@ -360,6 +360,12 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
     }
 
     @Override
+    public EssApplication.Status getStatus() {
+        return cube.getStatus() == null ? EssApplication.Status.UNKNOWN
+                : EssApplication.Status.parse(cube.getStatus());
+    }
+
+    @Override
     public EssCubeAi getAi() {
         return new EssCubeAiImpl(api, this);
     }

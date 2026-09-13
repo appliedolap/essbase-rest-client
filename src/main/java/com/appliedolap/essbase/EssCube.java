@@ -170,6 +170,17 @@ public interface EssCube extends EssObject {
     EssCubeAi getAi();
 
     /**
+     * Whether this cube is started.
+     *
+     * <p>A cube has a state of its own and does not simply inherit its application's: an application
+     * can be started with a cube inside it stopped, and only a started cube answers queries. Shares
+     * {@link EssApplication.Status} because the server reports both with the same vocabulary.
+     *
+     * @return the cube's status, {@link EssApplication.Status#UNKNOWN} for a state this doesn't name
+     */
+    EssApplication.Status getStatus();
+
+    /**
      * Opens a live, ad hoc grid view on this cube using its default layout - the REST analog of the
      * Java API's {@code IEssCube.openCubeView}.
      *
