@@ -109,8 +109,9 @@ public class EssCubeAiImpl implements EssCubeAi {
         if (connections.body.isBlank()) {
             return EssAiReadiness.of(EssAiReadiness.State.NO_CONNECTION_CONFIGURED,
                     "No AI connection is configured on this server, so there is nothing for an "
-                            + "application to be associated with; one is created under Sources as a global "
-                            + "connection of type AI, carrying OCI Generative AI credentials");
+                            + "application to be associated with; one is created under Sources as a GenAI "
+                            + "connection, which in turn needs an Oracle AI Database connection to hold its "
+                            + "OCI credentials");
         }
         return null;
     }

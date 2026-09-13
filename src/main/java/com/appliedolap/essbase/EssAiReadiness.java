@@ -31,8 +31,10 @@ public final class EssAiReadiness {
 
         /**
          * The server supports AI but no AI connection has been configured on it, so there is no
-         * model for any application to talk to. Fixed once for the whole server, by creating a
-         * global connection of type {@code AI} holding OCI Generative AI credentials.
+         * model for any application to talk to. Fixed once for the whole server, and not cheaply:
+         * a GenAI connection under Sources stands on an Oracle AI Database connection, because it is
+         * the database that holds the OCI credentials and does the vector work - Essbase is a client
+         * of the database's AI features rather than of a model directly.
          *
          * <p>Worth separating from {@link #APPLICATION_NOT_ASSOCIATED} because the web interface
          * does not: it offers to associate an application with a connection and then shows an empty
