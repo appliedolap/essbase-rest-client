@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -94,6 +96,20 @@ public class EssFileImpl extends AbstractEssObject implements EssFile {
                     .GET(), "filesDownloadFiles"));
         } catch (ApiException | IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public File downloadTo(File file) {
+        String path = NativeHttp.withQuery(
+                "/files/" + NativeHttp.encodePathKeepingSlashes(fullPath), "recursive", false);
+        try (OutputStream out = new FileOutputStream(file)) {
+            NativeHttp.copyBodyTo(NativeHttp.send(api.getClient(), NativeHttp.request(api.getClient(), path)
+                    .header("Accept", "application/octet-stream")
+                    .GET(), "filesDownloadFiles"), out);
+            return file;
+        } catch (ApiException | IOException e) {
+            throw new EssApiException(e);
         }
     }
 

@@ -131,9 +131,16 @@ public interface EssCube extends EssObject {
     void lockObject(EssLock unlockedObject);
 
     /**
-     * Exports this cube to an Excel workbook.
+     * Exports this cube to an application workbook, and waits for the export to finish.
+     *
+     * <p>The workbook is written into the server's own file catalogue, not returned - this is an
+     * Essbase job, and jobs leave their output on the server. The returned path is where it landed,
+     * ready to hand to {@link EssServer#getFiles()} or to download.
+     *
+     * @return the catalogue path of the workbook, e.g. {@code /applications/Sample/Basic/Basic.xlsx}
+     * @throws EssApiException if the job fails, carrying the server's reason
      */
-    void exportExcel();
+    String exportExcel();
 
     /**
      * Updates this cube using an Excel workbook. This API is likely to change soon to take an EssFile reference

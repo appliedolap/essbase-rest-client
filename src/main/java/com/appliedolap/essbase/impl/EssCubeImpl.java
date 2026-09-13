@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.appliedolap.essbase.util.Utils.wrap;
@@ -28,6 +29,11 @@ import static com.appliedolap.essbase.util.Utils.wrap;
 public class EssCubeImpl extends AbstractEssObject implements EssCube {
 
     private static final Logger logger = LoggerFactory.getLogger(EssCubeImpl.class);
+
+    /** How long to wait for an export job before giving up on it. */
+    private static final long JOB_TIMEOUT_MILLIS = 120_000;
+
+    private static final long JOB_POLL_MILLIS = 1_500;
 
     private final EssApplication application;
 
@@ -287,26 +293,100 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
         }
     }
 
+    /**
+     * Runs the Excel export job and waits for it.
+     *
+     * <p>{@code buildMethod} is required and has to be {@code GENERATION}, which makes no sense for an
+     * export and is not in any documentation - the job simply fails without it:
+     * <pre>
+     * An argument buildMethod in parameters cannot be null or empty
+     * </pre>
+     * and rejects every other value ({@code LEVEL}, {@code PARENT_CHILD}, ...) with "Invalid value of
+     * build method". The export job evidently shares a parameter validator with dimension build. This
+     * was true on both 21.7 and 26.1, so it has never worked without it.
+     *
+     * <p>Waits rather than returning the job, because the caller wants the workbook and the workbook
+     * does not exist until the job is done. The job is submitted synchronously but runs in the
+     * background: a fresh submit comes back {@code IN_PROGRESS} and turns into a real status a few
+     * seconds later.
+     */
     @Override
-    public void exportExcel() {
+    public String exportExcel() {
         JobsInputBean job = new JobsInputBean();
         job.setApplication(getApplicationName());
         job.setDb(getName());
-        job.setJobtype(EssJobImpl.JobType.EXPORT_EXCEL.getParam());
+        job.setJobtype(EssJob.JobType.EXPORT_EXCEL.getParam());
 
         ParametersBean params = new ParametersBean();
         params.dataLevel("ALL_DATA");
+        // Strings, not booleans: the server rejects real JSON booleans here outright.
         params.columnFormat("false");
         params.compress("false");
+        params.buildMethod("GENERATION");
         job.setParameters(params);
 
         try {
             logger.info("Submitting job for {}.{} for Excel export", getApplicationName(), getName());
-            // TODO: return EssJob
-            JobRecordBean jobRecord = api.getJobsApi().jobsExecuteJob(job);
+            JobRecordBean record = api.getJobsApi().jobsExecuteJob(job);
+            record = awaitCompletion(record);
+            EssJob.Status status = EssJob.Status.fromCode(record.getStatusCode());
+            if (!status.isSuccessful()) {
+                throw new EssApiException("The Excel export failed: " + describeFailure(record));
+            }
+            String path = outputFile(record);
+            if (path == null) {
+                throw new EssApiException("The Excel export reported success but named no file");
+            }
+            logger.info("Exported {}.{} to {}", getApplicationName(), getName(), path);
+            return path;
         } catch (ApiException e) {
-            throw new RuntimeException(e);
+            throw new EssApiException(e);
         }
+    }
+
+    /** Polls until the job stops being in progress, or until it has plainly stalled. */
+    private JobRecordBean awaitCompletion(JobRecordBean record) throws ApiException {
+        long deadline = System.currentTimeMillis() + JOB_TIMEOUT_MILLIS;
+        while (EssJob.Status.fromCode(record.getStatusCode()) == EssJob.Status.IN_PROGRESS) {
+            if (System.currentTimeMillis() > deadline) {
+                throw new EssApiException("The Excel export did not finish within "
+                        + (JOB_TIMEOUT_MILLIS / 1000) + " seconds");
+            }
+            try {
+                Thread.sleep(JOB_POLL_MILLIS);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new EssApiException("Interrupted while waiting for the Excel export");
+            }
+            record = api.getJobsApi().jobsGetJobInfo(String.valueOf(record.getJobID()));
+        }
+        return record;
+    }
+
+    /**
+     * The catalogue path the job wrote, which the server reports as {@code metadataFile} inside
+     * {@code jobOutputInfo} - an untyped map, so this reads it as one.
+     */
+    private static String outputFile(JobRecordBean record) {
+        Object info = record.getJobOutputInfo();
+        if (info instanceof Map) {
+            Object file = ((Map<?, ?>) info).get("metadataFile");
+            if (file != null && !file.toString().isBlank()) {
+                return file.toString();
+            }
+        }
+        return record.getJobfileName();
+    }
+
+    private static String describeFailure(JobRecordBean record) {
+        Object info = record.getJobOutputInfo();
+        if (info instanceof Map) {
+            Object message = ((Map<?, ?>) info).get("errorMessage");
+            if (message != null && !message.toString().isBlank()) {
+                return message.toString();
+            }
+        }
+        return String.valueOf(record.getStatusMessage());
     }
 
     @Override

@@ -258,19 +258,22 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
         }
     }
 
+    /**
+     * Finds a file by the folder holding it and its name.
+     *
+     * <p>Lists through {@link EssFolderImpl}, which is the one listing path that encodes a path
+     * correctly - the generated {@code filesListFiles} escapes the separators, so anything below the
+     * top level came back as "Specified path '/%2Fapplications%2FSample' does not exist". A leading
+     * slash is fine here: catalogue paths are reported with one and the encoder trims it.
+     */
     @Override
     public EssFile getFile(String path, String filename) {
-        try {
-            FileCollectionResponse collectionResponse = api.getFilesApi().filesListFiles(path, null, null, null, null, null, null, null, null);
-            for (FileBean fileBean : collectionResponse.getItems()) {
-                if (fileBean.getName().equals(filename)) {
-                    return new EssFileImpl(api, this, filename, fileBean.getFullPath());
-                }
+        for (EssFile file : new EssFolderImpl(api, this, path, path).getFiles()) {
+            if (file.getName().equals(filename)) {
+                return file;
             }
-            return null;
-        } catch (ApiException e) {
-            throw new RuntimeException("Could not list files", e);
         }
+        return null;
     }
 
     @Override

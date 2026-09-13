@@ -69,6 +69,19 @@ public interface EssFile extends EssObject {
     File downloadToFolder(File folder);
 
     /**
+     * Downloads this file to exactly the given path, whatever it is called on the server.
+     *
+     * <p>Distinct from {@link #downloadToFolder(File)}, which keeps the server's name. Worth having
+     * because the server's name is often not the one a person wants: a cube's exported workbook is
+     * {@code Basic.xlsx} in every application, so five of them in a downloads folder are five files
+     * called Basic.
+     *
+     * @param file where to write, created or overwritten
+     * @return the file written
+     */
+    File downloadTo(File file);
+
+    /**
      * Delete this file.
      */
     void delete();
