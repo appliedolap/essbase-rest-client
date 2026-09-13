@@ -69,6 +69,13 @@ public interface EssApplication extends EssObject {
     List<EssApplicationConfiguration> getConfigurations();
 
     /**
+     * This application's configuration, as something to read and change.
+     *
+     * @return the configuration, never null
+     */
+    EssApplicationConfig configuration();
+
+    /**
      * Get the list of jobs associated with this application. In the Essbase REST API there is no specific endpoint for
      * jobs related to an application, but the general jobs service can take an application name to filter on. So this
      * implementation serves as a convenience method to get the jobs specific to this application.

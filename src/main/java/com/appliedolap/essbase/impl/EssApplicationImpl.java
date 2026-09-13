@@ -128,6 +128,11 @@ public class EssApplicationImpl extends AbstractEssObject implements EssApplicat
     }
 
     @Override
+    public EssApplicationConfig configuration() {
+        return new EssApplicationConfigImpl(api, this);
+    }
+
+    @Override
     public List<EssApplicationConfiguration> getConfigurations() {
         try {
             ApplicationConfigList applicationConfigList = api.getApplicationConfigurationApi().applicationConfigurationGetConfigurations(getName());
