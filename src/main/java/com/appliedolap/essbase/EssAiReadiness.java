@@ -31,8 +31,13 @@ public final class EssAiReadiness {
 
         /**
          * The server supports AI but no AI connection has been configured on it, so there is no
-         * model for any application to talk to. Fixed by an administrator once, for the whole
-         * server.
+         * model for any application to talk to. Fixed once for the whole server, by creating a
+         * global connection of type {@code AI} holding OCI Generative AI credentials.
+         *
+         * <p>Worth separating from {@link #APPLICATION_NOT_ASSOCIATED} because the web interface
+         * does not: it offers to associate an application with a connection and then shows an empty
+         * picker reading "No matches found", which looks like a missing application rather than a
+         * server that has nothing to pick.
          */
         NO_CONNECTION_CONFIGURED,
 

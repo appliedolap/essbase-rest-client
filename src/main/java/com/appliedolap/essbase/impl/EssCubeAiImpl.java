@@ -108,8 +108,9 @@ public class EssCubeAiImpl implements EssCubeAi {
         // rather than a malformed response.
         if (connections.body.isBlank()) {
             return EssAiReadiness.of(EssAiReadiness.State.NO_CONNECTION_CONFIGURED,
-                    "No AI connection is configured on this server, so no application can use AI yet; "
-                            + "an administrator sets one up once for the whole server");
+                    "No AI connection is configured on this server, so there is nothing for an "
+                            + "application to be associated with; one is created under Sources as a global "
+                            + "connection of type AI, carrying OCI Generative AI credentials");
         }
         return null;
     }
