@@ -360,6 +360,11 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
     }
 
     @Override
+    public EssCubeAi getAi() {
+        return new EssCubeAiImpl(api, this);
+    }
+
+    @Override
     public EssGrid executeMdx(String query) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         executeMdx(query, MdxOutputType.JSON, new MdxOptions(), outputStream);

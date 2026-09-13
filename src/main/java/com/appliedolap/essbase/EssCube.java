@@ -157,6 +157,19 @@ public interface EssCube extends EssObject {
     EssGrid executeMdx(String query);
 
     /**
+     * The generative-AI features this cube offers - notably turning a question asked in English into
+     * an MDX query.
+     *
+     * <p>Returns a handle whether or not the server supports or has been set up for any of this;
+     * ask the handle's {@link EssCubeAi#getReadiness()} rather than expecting this to fail or return
+     * null, since "can this cube use AI" is a question with several different answers and several
+     * different people who can fix them.
+     *
+     * @return the cube's AI features, never null
+     */
+    EssCubeAi getAi();
+
+    /**
      * Opens a live, ad hoc grid view on this cube using its default layout - the REST analog of the
      * Java API's {@code IEssCube.openCubeView}.
      *
