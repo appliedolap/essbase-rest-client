@@ -1,6 +1,8 @@
 package com.appliedolap.essbase;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public interface EssMember extends EssObject {
 
@@ -65,5 +67,126 @@ public interface EssMember extends EssObject {
      * children.
      */
     List<EssMember> getLeafDescendants();
+
+
+    /**
+     * How this member's data is held, or {@link DataStorage#STORED} where the server said nothing -
+     * it omits the field entirely for the default rather than naming it, so an absent value is
+     * information and not a gap.
+     *
+     * @return the member's storage, never null
+     */
+    DataStorage getDataStorage();
+
+    /**
+     * Whether this dimension is dense or sparse.
+     *
+     * <p>Only a standard dimension has one. A member below a dimension, and an attribute dimension,
+     * both answer {@link DimensionStorage#UNSPECIFIED}.
+     *
+     * @return the dimension's storage, never null
+     */
+    DimensionStorage getDimensionStorage();
+
+    /**
+     * Everything the server said about this member, as it said it.
+     * <p>
+     * The outline viewer returns a different set of fields per member - it omits anything at its
+     * default, so a stored member with no formula and no UDAs is described in eight fields and an
+     * accounts member with a formula and a time balance in sixteen - which makes an exhaustive model
+     * of it a losing game. The typed accessors cover what is worth modelling; this is how a caller
+     * reaches {@code consolidation}, {@code formula}, {@code twoPassCalc}, {@code uda} and the rest.
+     *
+     * @return the member's fields, or empty for a member not read from the outline viewer
+     */
+    Map<String, Object> getProperties();
+
+    /**
+     * How a member's data is held. The server writes these without separators - {@code DYNAMICCALC},
+     * {@code SHAREDMEMBER} - and omits the field altogether for a plain stored member.
+     */
+    enum DataStorage {
+
+        /** The default, and what an absent value means. */
+        STORED,
+
+        /** Calculated on retrieval and not written to the cube. */
+        DYNAMIC_CALC,
+
+        /** Calculated on retrieval and then written. */
+        DYNAMIC_CALC_AND_STORE,
+
+        /** A pointer to another member's data rather than data of its own. */
+        SHARED,
+
+        /** Carries no data at all; it exists to group the members under it. */
+        LABEL_ONLY,
+
+        /** Stored, and never implicitly shared with a sole child. */
+        NEVER_SHARE,
+
+        /** A storage this version of the client doesn't name; the raw value is in {@link #getProperties()}. */
+        UNKNOWN;
+
+        /**
+         * Reads the server's spelling, tolerating separators and case.
+         *
+         * @param text the value from the outline, or null for an absent one
+         * @return the storage it names, {@link #STORED} for null, {@link #UNKNOWN} for anything unrecognized
+         */
+        public static DataStorage parse(String text) {
+            if (text == null || text.isBlank()) {
+                return STORED;
+            }
+            switch (text.toUpperCase(Locale.ROOT).replaceAll("[^A-Z]", "")) {
+                case "STORED":
+                case "STOREDATA":
+                case "STOREDMEMBER":
+                    return STORED;
+                case "DYNAMICCALC":
+                    return DYNAMIC_CALC;
+                case "DYNAMICCALCANDSTORE":
+                    return DYNAMIC_CALC_AND_STORE;
+                case "SHARED":
+                case "SHAREDMEMBER":
+                    return SHARED;
+                case "LABELONLY":
+                    return LABEL_ONLY;
+                case "NEVERSHARE":
+                    return NEVER_SHARE;
+                default:
+                    return UNKNOWN;
+            }
+        }
+
+    }
+
+    /**
+     * Whether a dimension's blocks are dense or sparse.
+     */
+    enum DimensionStorage {
+
+        DENSE,
+
+        SPARSE,
+
+        /** Not a standard dimension, or not a dimension at all. */
+        UNSPECIFIED;
+
+        public static DimensionStorage parse(String text) {
+            if (text == null) {
+                return UNSPECIFIED;
+            }
+            switch (text.toUpperCase(Locale.ROOT)) {
+                case "DENSE":
+                    return DENSE;
+                case "SPARSE":
+                    return SPARSE;
+                default:
+                    return UNSPECIFIED;
+            }
+        }
+
+    }
 
 }

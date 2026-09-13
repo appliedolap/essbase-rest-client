@@ -1,5 +1,6 @@
 package com.appliedolap.essbase.impl;
 
+import com.appliedolap.essbase.EssMember;
 import com.appliedolap.essbase.client.model.MemberBean;
 import org.junit.Test;
 
@@ -81,6 +82,56 @@ public class EssMemberImplTest {
         // TIME is neither, and a row with no dimensionType at all must not throw.
         assertFalse(EssMemberImpl.propsToMemberBean(yearRow()).getAccount());
         assertFalse(EssMemberImpl.propsToMemberBean(new HashMap<>()).getAttribute());
+    }
+
+
+    @Test
+    public void readsTheStorageSpellingsTheServerActuallySends() {
+        // Observed across Sample.Basic: these three and nothing else. The field is absent entirely for
+        // a plain stored member, which is why null has to mean STORED rather than unknown.
+        assertEquals(EssMember.DataStorage.DYNAMIC_CALC, EssMember.DataStorage.parse("DYNAMICCALC"));
+        assertEquals(EssMember.DataStorage.LABEL_ONLY, EssMember.DataStorage.parse("LABELONLY"));
+        assertEquals(EssMember.DataStorage.SHARED, EssMember.DataStorage.parse("SHAREDMEMBER"));
+        assertEquals(EssMember.DataStorage.STORED, EssMember.DataStorage.parse(null));
+        assertEquals(EssMember.DataStorage.STORED, EssMember.DataStorage.parse(""));
+    }
+
+    @Test
+    public void toleratesSeparatorsAndCaseInAStorageName() {
+        assertEquals(EssMember.DataStorage.DYNAMIC_CALC_AND_STORE,
+                EssMember.DataStorage.parse("Dynamic Calc And Store"));
+        assertEquals(EssMember.DataStorage.NEVER_SHARE, EssMember.DataStorage.parse("never_share"));
+    }
+
+    @Test
+    public void saysUnknownRatherThanGuessingAtAStorageItDoesNotName() {
+        assertEquals(EssMember.DataStorage.UNKNOWN, EssMember.DataStorage.parse("SOMETHINGNEW"));
+    }
+
+    @Test
+    public void readsDenseAndSparseAndNothingElse() {
+        assertEquals(EssMember.DimensionStorage.DENSE, EssMember.DimensionStorage.parse("DENSE"));
+        assertEquals(EssMember.DimensionStorage.SPARSE, EssMember.DimensionStorage.parse("SPARSE"));
+        // An attribute dimension has no dimStorageType at all, and neither does a member below one.
+        assertEquals(EssMember.DimensionStorage.UNSPECIFIED, EssMember.DimensionStorage.parse(null));
+    }
+
+    @Test
+    public void readsTheRolesOffTheMemberAndOffTheDimensionRow() {
+        Map<String, Object> dimensionRow = yearRow();
+        dimensionRow.put("dimensionType", "ACCOUNTS");
+        assertTrue("the dimension row names the role", EssMemberImpl.propsToMemberBean(dimensionRow).getAccount());
+
+        // A member below that dimension carries its own flag instead, with no dimensionType.
+        Map<String, Object> memberRow = new LinkedHashMap<>();
+        memberRow.put("name", "Sales");
+        memberRow.put("account", true);
+        assertTrue("the member row carries its own flag", EssMemberImpl.propsToMemberBean(memberRow).getAccount());
+
+        Map<String, Object> attributeRow = new LinkedHashMap<>();
+        attributeRow.put("name", "Attribute Calculations");
+        attributeRow.put("dimensionType", "ATTRIBUTECALC");
+        assertTrue(EssMemberImpl.propsToMemberBean(attributeRow).getAttribute());
     }
 
 }

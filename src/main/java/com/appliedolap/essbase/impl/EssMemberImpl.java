@@ -16,9 +16,21 @@ public class EssMemberImpl extends AbstractEssObject implements EssMember {
 
     private final MemberBean memberBean;
 
+    /**
+     * The row this member was built from, kept because the outline viewer sends a different set of
+     * fields per member and the bean names a fixed few of them. Empty for a member that came from the
+     * typed member-info call instead.
+     */
+    private final Map<String, Object> properties;
+
     EssMemberImpl(ApiContext api, EssCube cube, MemberBean memberBean) {
+        this(api, cube, memberBean, Collections.emptyMap());
+    }
+
+    private EssMemberImpl(ApiContext api, EssCube cube, MemberBean memberBean, Map<String, Object> properties) {
         super(api);
         this.cube = cube;
+        this.properties = properties;
         this.memberBean = memberBean;
         if (memberBean.getNumberOfChildren() == null) {
             memberBean.setNumberOfChildren(0);
@@ -37,7 +49,7 @@ public class EssMemberImpl extends AbstractEssObject implements EssMember {
      * </pre>
      */
     EssMemberImpl(ApiContext api, EssCube cube, Map<String, Object> memberProps) {
-        this(api, cube, propsToMemberBean(memberProps));
+        this(api, cube, propsToMemberBean(memberProps), Collections.unmodifiableMap(new LinkedHashMap<>(memberProps)));
     }
 
     static MemberBean propsToMemberBean(Map<String, Object> memberProps) {
@@ -53,11 +65,13 @@ public class EssMemberImpl extends AbstractEssObject implements EssMember {
         memberBean.setMemberSolveOrder(optionalInt(memberProps.get("memberSolveOrder"), 0));
         memberBean.setDescendantsCount((long) optionalInt(memberProps.get("descendantsCount"), 0));
         memberBean.setDimension(Boolean.TRUE.equals(memberProps.get("dimension")));
-        // The server names the dimension's role rather than setting a flag per role, so the two flags
-        // the bean carries are derived from it.
+        // Members below a dimension carry their own account/attribute flags; the dimension row carries
+        // a dimensionType naming the role instead, so both are read and either will do.
         String dimensionType = Objects.toString(memberProps.get("dimensionType"), "");
-        memberBean.setAttribute("ATTRIBUTE".equalsIgnoreCase(dimensionType));
-        memberBean.setAccount("ACCOUNTS".equalsIgnoreCase(dimensionType));
+        memberBean.setAttribute(Boolean.TRUE.equals(memberProps.get("attribute"))
+                || dimensionType.toUpperCase(Locale.ROOT).startsWith("ATTRIBUTE"));
+        memberBean.setAccount(Boolean.TRUE.equals(memberProps.get("account"))
+                || "ACCOUNTS".equalsIgnoreCase(dimensionType));
         return memberBean;
     }
 
@@ -95,6 +109,22 @@ public class EssMemberImpl extends AbstractEssObject implements EssMember {
             return memberBean.getLevelNumber();
         }
         throw new IllegalStateException("No level number");
+    }
+
+    @Override
+    public DataStorage getDataStorage() {
+        return DataStorage.parse(memberBean.getDataStorageType());
+    }
+
+    @Override
+    public DimensionStorage getDimensionStorage() {
+        Object storage = properties.get("dimStorageType");
+        return DimensionStorage.parse(storage == null ? null : storage.toString());
+    }
+
+    @Override
+    public Map<String, Object> getProperties() {
+        return properties;
     }
 
     @Override
