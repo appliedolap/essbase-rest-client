@@ -250,6 +250,43 @@ public interface EssServer {
      *
      * @return list of global data sources
      */
+    /**
+     * The global connections defined on this server.
+     *
+     * @return the connections
+     */
+    List<EssConnection> getConnections();
+
+    /**
+     * One connection by name.
+     *
+     * @param name the connection name
+     * @return the connection, or empty if there is none
+     */
+    java.util.Optional<EssConnection> getConnection(String name);
+
+    /**
+     * Creates a connection to a file in the Essbase catalogue.
+     *
+     * <p>The path names a <em>file</em>, not the folder holding it - a file connection stands for one
+     * file, and the data source built on it carries no filename of its own.
+     *
+     * @param name        the connection name
+     * @param catalogPath the file, e.g. {@code /gallery/Technical/Filters/UserDetails.csv}
+     * @param description optional description
+     * @return the connection as created
+     */
+    EssConnection createFileConnection(String name, String catalogPath, String description);
+
+    /**
+     * Tests a connection that hasn't been saved, so a caller can check before committing.
+     *
+     * @param name        the connection name to test under
+     * @param catalogPath the file to point at
+     * @return empty when it connects, otherwise the server's reason
+     */
+    java.util.Optional<String> testFileConnection(String name, String catalogPath);
+
     List<EssDataSource> getDataSources();
 
     /**

@@ -22,6 +22,7 @@ public interface EssObject {
      */
     public enum Type {
         APPLICATION,
+        CONNECTION,
         CUBE,
         DATASOURCE,
         DRILLTHROUGH,

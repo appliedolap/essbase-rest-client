@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashMap;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -474,21 +476,167 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     }
 
     // TODO: get the metadataOnly flag into the OpenAPI call; it exists but is not getting generated. It causes you to get JDBC headers only but with no data
+    /**
+     * Runs a query against a data source and writes the rows out.
+     *
+     * <p>Two calls, and both are load-bearing. {@code POST /datasources/query} does not return data -
+     * it answers with the column list and a link carrying a stream id, and the rows come from a
+     * follow-up GET on that link.
+     *
+     * <p>The stream lives in server-side session state, so the second call has to reach the same
+     * session as the first. Under an authentication strategy that establishes no session - Basic, for
+     * one - every request lands somewhere new and the follow-up answers
+     * {@code Stream id '...' does not exist}. The cookies the first response set are therefore carried
+     * onto the second explicitly, which works whatever the strategy is. Oracle's own curl example
+     * hints at this with a {@code --cookie-jar} that is easy to read as boilerplate.
+     *
+     * <p>Not {@code /datasources/query/stream}, which also exists, and which answers HTTP 200 with
+     * {@code Failed to stream... Failed to execute query.} in the body for every input tried.
+     */
     @Override
-    public void streamDataSource(String query, boolean includeHeaders, String delimiter, Map<String, Object> params, OutputStream outputStream) {
+    public void streamDataSource(String query, boolean includeHeaders, String delimiter,
+                                 Map<String, Object> params, OutputStream outputStream) {
+        DatasourceQueryInfo info = new DatasourceQueryInfo();
+        info.setQuery(query);
+        info.setDelimiter(delimiter);
+        info.setParams(params);
         try {
-            DatasourceQueryInfo datasourceQueryInfo = new DatasourceQueryInfo();
-            datasourceQueryInfo.setQuery(query);
-            datasourceQueryInfo.setDelimiter(delimiter);
-            datasourceQueryInfo.setParams(params);
-            String path = NativeHttp.withQuery("/datasources/query/stream", "includeHeaders", includeHeaders);
-            NativeHttp.copyBodyTo(NativeHttp.send(api.getClient(), NativeHttp.request(api.getClient(), path)
-                    .header("Accept", "application/octet-stream, text/plain, text/csv, application/json")
-                    .header("Content-Type", "application/json")
-                    .POST(NativeHttp.jsonBody(api.getClient(), datasourceQueryInfo)), "globalDatasourcesGetDataStream"), outputStream);
+            HttpResponse<InputStream> opened = NativeHttp.send(api.getClient(),
+                    NativeHttp.request(api.getClient(), "/datasources/query")
+                            .header("Accept", "application/json")
+                            .header("Content-Type", "application/json")
+                            .POST(NativeHttp.jsonBody(api.getClient(), info)),
+                    "globalDatasourcesQuery");
+            String body;
+            try (InputStream in = opened.body()) {
+                body = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            }
+            String streamPath = streamPathIn(body);
+            if (streamPath == null) {
+                throw new EssApiException("The query returned no stream to read: " + body);
+            }
+            HttpRequest.Builder rows = NativeHttp.request(api.getClient(), streamPath)
+                    .header("Accept", "text/csv, application/octet-stream, application/json")
+                    .GET();
+            String cookies = sessionCookiesFrom(opened);
+            if (cookies != null) {
+                rows.header("Cookie", cookies);
+            }
+            NativeHttp.copyBodyTo(NativeHttp.send(api.getClient(), rows, "globalDatasourcesGetDataStream"),
+                    outputStream);
         } catch (ApiException | IOException e) {
             throw new EssApiException(e);
         }
+    }
+
+    /** Pulls the stream link out of the query response and reduces it to a path this client can call. */
+    private String streamPathIn(String body) throws IOException {
+        JsonNode parsed = api.getClient().getObjectMapper().readTree(body);
+        for (JsonNode link : parsed.path("links")) {
+            String href = link.path("href").asText("");
+            int rest = href.indexOf("/datasources/query/data/");
+            if (rest >= 0) {
+                return href.substring(rest);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * The cookies the server set on the query response, joined for a Cookie header. Returns null when
+     * it set none, in which case whatever the auth strategy already sends is all there is.
+     */
+    private static String sessionCookiesFrom(HttpResponse<InputStream> response) {
+        StringBuilder header = new StringBuilder();
+        for (String setCookie : response.headers().allValues("Set-Cookie")) {
+            String pair = setCookie.split(";", 2)[0].trim();
+            if (!pair.isEmpty()) {
+                if (header.length() > 0) {
+                    header.append("; ");
+                }
+                header.append(pair);
+            }
+        }
+        return header.length() == 0 ? null : header.toString();
+    }
+
+    @Override
+    public List<EssConnection> getConnections() {
+        String body = EssConnections.send(api, "GET", "/connections", null, "globalConnectionsGetConnections");
+        try {
+            JsonNode items = api.getClient().getObjectMapper().readTree(body).path("items");
+            List<EssConnection> connections = new ArrayList<>();
+            for (JsonNode item : items) {
+                connections.add(new EssConnectionImpl(api,
+                        api.getClient().getObjectMapper().convertValue(item, LinkedHashMap.class)));
+            }
+            return Collections.unmodifiableList(connections);
+        } catch (IOException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    /**
+     * One connection, with everything the server knows about it.
+     * <p>
+     * Two calls, because neither endpoint answers with the whole object: the list carries
+     * {@code description} but no {@code path}, and fetching one carries {@code path} but no
+     * {@code description}. A caller shouldn't have to know that, so they are merged here.
+     */
+    @Override
+    public Optional<EssConnection> getConnection(String name) {
+        Optional<EssConnection> summary = getConnections().stream()
+                .filter(c -> c.getName().equalsIgnoreCase(name)).findFirst();
+        if (summary.isEmpty()) {
+            return summary;
+        }
+        String body = EssConnections.send(api, "GET", "/connections/" + ApiClient.urlEncode(name), null,
+                "globalConnectionsGetConnectionDetails");
+        try {
+            Map<String, Object> merged = new LinkedHashMap<>(
+                    ((EssConnectionImpl) summary.get()).getProperties());
+            merged.putAll(api.getClient().getObjectMapper()
+                    .convertValue(api.getClient().getObjectMapper().readTree(body), LinkedHashMap.class));
+            return Optional.of(new EssConnectionImpl(api, merged));
+        } catch (IOException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    @Override
+    public EssConnection createFileConnection(String name, String catalogPath, String description) {
+        EssConnections.send(api, "POST", "/connections", fileConnection(name, catalogPath, description),
+                "globalConnectionsCreateConnection");
+        return getConnection(name).orElseThrow(
+                () -> new EssApiException("The server accepted the connection but does not list it: " + name));
+    }
+
+    @Override
+    public Optional<String> testFileConnection(String name, String catalogPath) {
+        try {
+            EssConnections.send(api, "POST", "/connections/actions/test",
+                    fileConnection(name, catalogPath, null), "globalConnectionsTestConnection");
+            return Optional.empty();
+        } catch (EssApiException e) {
+            return Optional.of(e.getMessage());
+        }
+    }
+
+    /**
+     * The body a file connection wants. {@code ociAPIFormat} is declared required on every connection,
+     * including ones that have nothing to do with OCI, so it is sent empty rather than omitted.
+     */
+    private static Map<String, Object> fileConnection(String name, String catalogPath, String description) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("name", name);
+        body.put("type", "FILE");
+        body.put("subtype", "FILE");
+        body.put("path", catalogPath);
+        body.put("ociAPIFormat", "");
+        if (description != null) {
+            body.put("description", description);
+        }
+        return body;
     }
 
     /**
