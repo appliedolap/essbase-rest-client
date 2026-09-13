@@ -31,6 +31,23 @@ public interface EssSession extends EssObject {
     String getConnectionSource();
 
     /**
+     * The application this session is attached to, or null for one that isn't attached to any.
+     *
+     * <p>A session listed under a cube always names one; the server-wide list returns plenty that do
+     * not, because connecting to Essbase and opening a cube are separate things.
+     *
+     * @return the application name, or null
+     */
+    String getApplication();
+
+    /**
+     * The cube this session is attached to, or null.
+     *
+     * @return the database name, or null
+     */
+    String getDatabase();
+
+    /**
      * Kill the session.
      *
      * @param logoff true to also log it off (e.g., it'll disappear from the list of sessions)

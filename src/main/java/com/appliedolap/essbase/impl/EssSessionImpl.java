@@ -46,6 +46,16 @@ public class EssSessionImpl extends AbstractEssObject implements EssSession {
     }
 
     @Override
+    public String getApplication() {
+        return sessionAttributes.getApplication();
+    }
+
+    @Override
+    public String getDatabase() {
+        return sessionAttributes.getDatabase();
+    }
+
+    @Override
     public void kill(boolean logoff) {
         logger.info("Killing session {}, logging off: {}", sessionId, logoff);
         WrapperUtil.wrap(() -> api.getSessionsApi().sessionsDeleteSessionWithId(sessionId, logoff));
