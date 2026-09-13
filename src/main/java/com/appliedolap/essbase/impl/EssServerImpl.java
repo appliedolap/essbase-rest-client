@@ -561,6 +561,12 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     }
 
     @Override
+    public void deleteDataSource(String name) {
+        EssConnections.send(api, "DELETE", "/datasources/" + ApiClient.urlEncode(name), null,
+                "globalDatasourcesDeleteDatasource");
+    }
+
+    @Override
     public List<EssConnection> getConnections() {
         String body = EssConnections.send(api, "GET", "/connections", null, "globalConnectionsGetConnections");
         try {

@@ -287,6 +287,13 @@ public interface EssServer {
      */
     java.util.Optional<String> testFileConnection(String name, String catalogPath);
 
+    /**
+     * Removes a global data source.
+     *
+     * @param name the data source name
+     */
+    void deleteDataSource(String name);
+
     List<EssDataSource> getDataSources();
 
     /**
