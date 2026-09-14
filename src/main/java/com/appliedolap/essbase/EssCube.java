@@ -259,4 +259,16 @@ public interface EssCube extends EssObject {
         NAME, ALIAS, UNIQUE_NAME
     }
 
+    /**
+     * The MDX functions this server understands, in the server's own groups.
+     *
+     * <p>Reference material rather than anything about this cube: the endpoint is cube-scoped, but a
+     * given server answers identically for every cube, and for a stopped application too. Offered
+     * here because this is where the path lives, and on {@link EssServer#getMdxFunctions()} because
+     * that is what it actually describes.
+     *
+     * @return the function groups, in the order the server listed them
+     */
+    List<EssMdxFunctionGroup> getMdxFunctions();
+
 }

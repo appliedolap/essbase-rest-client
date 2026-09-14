@@ -53,6 +53,24 @@ public final class NativeHttp {
         }
     }
 
+    /**
+     * Sends a request and reads the whole response body as a string.
+     *
+     * <p>For the endpoints the generated client either doesn't model or models as a raw string, where
+     * the caller is going to parse the JSON itself.
+     *
+     * @param client the client to send with
+     * @param builder the request
+     * @param operationId what to name the call if it fails
+     * @return the body, empty string if there was none
+     */
+    public static String sendForString(ApiClient client, HttpRequest.Builder builder, String operationId)
+            throws ApiException, IOException {
+        try (InputStream in = send(client, builder, operationId).body()) {
+            return in == null ? "" : new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+        }
+    }
+
     public static void sendAndDiscard(ApiClient client, HttpRequest.Builder builder, String operationId)
             throws ApiException, IOException {
         HttpResponse<InputStream> response = send(client, builder, operationId);

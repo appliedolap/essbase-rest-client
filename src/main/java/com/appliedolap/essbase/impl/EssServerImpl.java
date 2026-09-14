@@ -802,4 +802,19 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
         }
     }
 
+    @Override
+    public List<EssMdxFunctionGroup> getMdxFunctions() {
+        // Any cube will do and the answer is the same, so this takes the first one it finds rather
+        // than looking for a "best" one. A stopped application counts: the endpoint describes the
+        // server's MDX dialect and answers whether or not the cube could be queried.
+        for (EssApplication application : getApplications()) {
+            for (EssCube cube : application.getCubes()) {
+                return EssMdxFunctions.read(api, application.getName(), cube.getName());
+            }
+        }
+        throw new EssApiException("This server has no cube to read the MDX function list through. "
+                + "Essbase offers the list only on a cube-scoped endpoint, even though what it "
+                + "describes is the server.");
+    }
+
 }

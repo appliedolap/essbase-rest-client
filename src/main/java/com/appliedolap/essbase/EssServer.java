@@ -381,4 +381,17 @@ public interface EssServer {
      */
     void downloadServerLogsAsZip(String serverType, OutputStream outputStream);
 
+    /**
+     * The MDX functions this server understands, in the server's own groups.
+     *
+     * <p>A property of the server's MDX dialect, not of any cube - the same server answers
+     * byte-for-byte identically whichever cube is asked. There is no server-level endpoint for it
+     * though, so this finds a cube and asks through that; a stopped application will do, since the
+     * answer does not depend on the data.
+     *
+     * @return the function groups, in the order the server listed them
+     * @throws EssApiException if the server has no cube to ask through
+     */
+    List<EssMdxFunctionGroup> getMdxFunctions();
+
 }

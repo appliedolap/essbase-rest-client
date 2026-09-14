@@ -567,4 +567,9 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
 
     }
 
+    @Override
+    public List<com.appliedolap.essbase.EssMdxFunctionGroup> getMdxFunctions() {
+        return EssMdxFunctions.read(api, getApplicationName(), getName());
+    }
+
 }
