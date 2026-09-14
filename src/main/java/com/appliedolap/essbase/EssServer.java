@@ -394,4 +394,15 @@ public interface EssServer {
      */
     List<EssMdxFunctionGroup> getMdxFunctions();
 
+    /**
+     * The MCP server built into this Essbase, if it has one.
+     *
+     * <p>Points the opposite way from {@link EssCube#getAi()}: this is Essbase offering itself as a
+     * tool provider to somebody else's model, rather than Essbase calling out to one. A server can
+     * have this working while every {@code /ai} endpoint is unconfigured, and usually does.
+     *
+     * @return the MCP server, which answers {@code isAvailable()} false on anything before 26.1
+     */
+    EssMcp getMcp();
+
 }

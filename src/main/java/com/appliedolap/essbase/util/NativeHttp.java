@@ -26,6 +26,35 @@ public final class NativeHttp {
         return HttpRequest.newBuilder(URI.create(joinBaseAndPath(client.getBaseUri(), path)));
     }
 
+    /**
+     * Sends a request and hands back whatever came, status included, instead of throwing on a non-2xx.
+     *
+     * <p>For the calls where an error status is an answer rather than a failure - a 404 from an
+     * endpoint that only exists on newer servers means "this server can't do that", and the body of a
+     * 400 is sometimes the only description of what went wrong. Runs the same interceptors and
+     * timeout as {@link #send}, so a session is still renewed and read back.
+     *
+     * @param client the client to send with
+     * @param builder the request
+     * @return the response, unexamined
+     */
+    public static HttpResponse<InputStream> sendAllowingErrors(ApiClient client, HttpRequest.Builder builder)
+            throws IOException, InterruptedException {
+        Duration readTimeout = client.getReadTimeout();
+        if (readTimeout != null) {
+            builder.timeout(readTimeout);
+        }
+        if (client.getRequestInterceptor() != null) {
+            client.getRequestInterceptor().accept(builder);
+        }
+        HttpResponse<InputStream> response = client.getHttpClient().send(
+                builder.build(), HttpResponse.BodyHandlers.ofInputStream());
+        if (client.getResponseInterceptor() != null) {
+            client.getResponseInterceptor().accept(response);
+        }
+        return response;
+    }
+
     public static HttpResponse<InputStream> send(ApiClient client, HttpRequest.Builder builder, String operationId)
             throws ApiException, IOException {
         try {

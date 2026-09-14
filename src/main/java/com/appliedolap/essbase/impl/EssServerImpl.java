@@ -818,4 +818,9 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
                 + "describes is the server.");
     }
 
+    @Override
+    public EssMcp getMcp() {
+        return new EssMcpImpl(api);
+    }
+
 }
