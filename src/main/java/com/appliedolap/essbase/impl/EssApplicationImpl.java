@@ -166,6 +166,16 @@ public class EssApplicationImpl extends AbstractEssObject implements EssApplicat
     }
 
     @Override
+    public EssApplicationVariable createVariable(String name, String value) {
+        Variable variable = new Variable();
+        variable.setName(name);
+        variable.setValue(value);
+        Variable created = WrapperUtil.doWithWrap(
+                () -> api.getVariablesApi().variablesCreateAppVariable(getName(), variable));
+        return new EssApplicationVariableImpl(api, this, created);
+    }
+
+    @Override
     public List<EssApplicationVariable> getVariables() {
         try {
             VariableList variables = api.getVariablesApi().variablesListAppVariables(getName());

@@ -184,7 +184,7 @@ public interface EssServer {
      *
      * @return the server-wide variables
      */
-    List<EssVariable> getVariables();
+    List<EssServerVariable> getVariables();
 
     /**
      * Creates a new server-wide variable with the given name and value.
@@ -192,7 +192,7 @@ public interface EssServer {
      * @param name  the name of the variable
      * @param value the value of the variable
      */
-    void createVariable(String name, String value);
+    EssServerVariable createVariable(String name, String value);
 
     /**
      * Gets the "about" information for this server.

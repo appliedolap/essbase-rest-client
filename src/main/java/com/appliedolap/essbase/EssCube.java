@@ -67,6 +67,27 @@ public interface EssCube extends EssObject {
     List<EssCubeVariable> getVariables();
 
     /**
+     * Defines a new variable on this cube, shadowing any application or server variable of the same
+     * name for anything running against it.
+     *
+     * @param name the variable name
+     * @param value its value
+     * @return the created variable
+     */
+    EssCubeVariable createVariable(String name, String value);
+
+    /**
+     * Every variable this cube can actually see, with the definition that wins and the ones it hides.
+     *
+     * <p>Three requests, merged here, because the server will not do it: each variable endpoint
+     * reports only its own level, so nothing on the server can tell you which definition of a name a
+     * query against this cube would resolve to. Nearest wins - cube over application over server.
+     *
+     * @return one entry per distinct name, ordered by name
+     */
+    List<EssEffectiveVariable> getEffectiveVariables();
+
+    /**
      * Gets an outline object for this cube.
      *
      * @return an outline object

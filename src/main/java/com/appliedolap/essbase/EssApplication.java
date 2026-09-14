@@ -92,6 +92,18 @@ public interface EssApplication extends EssObject {
     List<EssApplicationVariable> getVariables();
 
     /**
+     * Defines a new variable on this application, visible to its cubes.
+     *
+     * <p>Creation only: the server refuses a name that already exists at this level. Use
+     * {@link EssVariable#setValue(String)} on the existing one to change it.
+     *
+     * @param name the variable name
+     * @param value its value
+     * @return the created variable
+     */
+    EssApplicationVariable createVariable(String name, String value);
+
+    /**
      * Gets the status of this application. Known statuses are simply <code>STOPPED</code> and <code>STARTED</code>;
      * other statuses, if they exist, are not known at this time and will simply get converted to <code>UNKNOWN</code>.
      *

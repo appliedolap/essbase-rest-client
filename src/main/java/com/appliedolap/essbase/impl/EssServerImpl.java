@@ -362,13 +362,12 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     }
 
     @Override
-    public List<EssVariable> getVariables() {
+    public List<EssServerVariable> getVariables() {
         try {
             VariableList variableList = api.getServerVariablesApi().variablesListServerVariables();
-            List<EssVariable> variables = new ArrayList<>();
+            List<EssServerVariable> variables = new ArrayList<>();
             for (Variable variable : wrap(variableList.getItems())) {
-                EssVariable essVariable = new EssVariableImpl(api, variable);
-                variables.add(essVariable);
+                variables.add(new EssServerVariableImpl(api, this, variable));
             }
             return Collections.unmodifiableList(variables);
         } catch (ApiException e) {
@@ -377,11 +376,13 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     }
 
     @Override
-    public void createVariable(String name, String value) {
+    public EssServerVariable createVariable(String name, String value) {
         Variable variable = new Variable();
         variable.setName(name);
         variable.setValue(value);
-        WrapperUtil.wrap(() -> api.getServerVariablesApi().variablesCreateServerVariable(variable));
+        Variable created = WrapperUtil.doWithWrap(
+                () -> api.getServerVariablesApi().variablesCreateServerVariable(variable));
+        return new EssServerVariableImpl(api, this, created);
     }
 
     @Override

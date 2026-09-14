@@ -4,11 +4,14 @@ import com.appliedolap.essbase.ApiContext;
 import com.appliedolap.essbase.EssApplication;
 import com.appliedolap.essbase.EssApplicationVariable;
 import com.appliedolap.essbase.client.model.Variable;
+import com.appliedolap.essbase.util.WrapperUtil;
 
 /**
- * Represents a variable that is associated with a particular application. Seemingly unlike the original Essbase API,
- * these variables are ostensibly applicable for individual child cubes but do not show up as actual variables in the
- * {@link EssCubeImpl#getVariables()} list.
+ * A variable defined on an application.
+ *
+ * <p>Its cubes can see it when they run, but it will not appear in any cube's own variable list -
+ * that endpoint reports only what the cube itself defines. {@code EssCube.getEffectiveVariables()}
+ * is what puts the two together.
  */
 public class EssApplicationVariableImpl extends EssVariableImpl implements EssApplicationVariable {
 
@@ -27,6 +30,18 @@ public class EssApplicationVariableImpl extends EssVariableImpl implements EssAp
     @Override
     public EssApplication getApplication() {
         return application;
+    }
+
+    @Override
+    protected Variable edit(Variable edited) {
+        return WrapperUtil.doWithWrap(() -> api.getVariablesApi()
+                .variablesEditAppVariable(application.getName(), getName(), edited));
+    }
+
+    @Override
+    public void delete() {
+        WrapperUtil.wrap(() -> api.getVariablesApi()
+                .variablesDeleteAppVariable(application.getName(), getName()));
     }
 
 }

@@ -17,7 +17,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -123,6 +126,49 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
             return Collections.unmodifiableList(sessionList);
         } catch (ApiException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public EssCubeVariable createVariable(String name, String value) {
+        Variable variable = new Variable();
+        variable.setName(name);
+        variable.setValue(value);
+        Variable created = WrapperUtil.doWithWrap(() -> api.getVariablesApi()
+                .variablesCreateVariable(application.getName(), cube.getName(), variable));
+        return new EssCubeVariableImpl(api, this, created);
+    }
+
+    @Override
+    public List<com.appliedolap.essbase.EssEffectiveVariable> getEffectiveVariables() {
+        // Widest first, so a nearer definition simply replaces what is already there and the one it
+        // displaced is recorded as shadowed. Doing it the other way would mean checking before each
+        // insert whether something nearer had already claimed the name.
+        Map<String, List<EssVariable>> byName = new LinkedHashMap<>();
+        collect(byName, getApplication().getServer().getVariables());
+        collect(byName, getApplication().getVariables());
+        collect(byName, getVariables());
+
+        List<com.appliedolap.essbase.EssEffectiveVariable> effective = new ArrayList<>();
+        for (List<EssVariable> definitions : byName.values()) {
+            EssVariable winner = definitions.get(definitions.size() - 1);
+            effective.add(new com.appliedolap.essbase.EssEffectiveVariable(winner,
+                    new ArrayList<>(definitions.subList(0, definitions.size() - 1))));
+        }
+        effective.sort(Comparator.comparing(com.appliedolap.essbase.EssEffectiveVariable::getName,
+                String.CASE_INSENSITIVE_ORDER));
+        return Collections.unmodifiableList(effective);
+    }
+
+    /**
+     * Variable names are case insensitive to Essbase, so they are keyed that way here - otherwise
+     * CurMonth on a cube would sit beside curmonth from the server as two unrelated entries rather
+     * than one overriding the other.
+     */
+    private static void collect(Map<String, List<EssVariable>> byName, List<? extends EssVariable> found) {
+        for (EssVariable variable : found) {
+            byName.computeIfAbsent(variable.getName().toLowerCase(Locale.ROOT), key -> new ArrayList<>())
+                    .add(variable);
         }
     }
 
