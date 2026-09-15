@@ -40,7 +40,8 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
 
     private final EssApplication application;
 
-    private final Cube cube;
+    /** Not final: {@link #refreshStatus()} replaces it with what the server currently says. */
+    private Cube cube;
 
     public EssCubeImpl(ApiContext api, EssApplication application, Cube cube) {
         super(api);
@@ -518,6 +519,13 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
     public EssApplication.Status getStatus() {
         return cube.getStatus() == null ? EssApplication.Status.UNKNOWN
                 : EssApplication.Status.parse(cube.getStatus());
+    }
+
+    @Override
+    public EssApplication.Status refreshStatus() {
+        cube = WrapperUtil.doWithWrap(() -> api.getApplicationsApi()
+                .applicationsGetCube(application.getName(), getName()));
+        return getStatus();
     }
 
     @Override

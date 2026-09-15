@@ -28,7 +28,8 @@ public class EssApplicationImpl extends AbstractEssObject implements EssApplicat
 
     private final EssServer server;
 
-    private final Application application;
+    /** Not final: {@link #refreshStatus()} replaces it with what the server currently says. */
+    private Application application;
 
     public EssApplicationImpl(ApiContext api, EssServer server, Application application) {
         super(api);
@@ -193,6 +194,13 @@ public class EssApplicationImpl extends AbstractEssObject implements EssApplicat
     @Override
     public Status getStatus() {
         return Status.parse(application.getStatus());
+    }
+
+    @Override
+    public Status refreshStatus() {
+        application = WrapperUtil.doWithWrap(
+                () -> api.getApplicationsApi().applicationsGetApplication(getName(), null));
+        return getStatus();
     }
 
     @Override

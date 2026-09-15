@@ -115,6 +115,18 @@ public interface EssApplication extends EssObject {
     Status getStatus();
 
     /**
+     * Asks the server for this application's status again, and updates this object with the answer.
+     *
+     * <p>Needed because the status this object was built with is a snapshot, and an application's
+     * status changes as a side effect of ordinary work: reading a cube's dimensions <em>starts the
+     * stopped application that owns it</em>. So anything displaying a status alongside a tree the
+     * user is browsing will go stale simply by being browsed, and has to ask again.
+     *
+     * @return the status as of now
+     */
+    Status refreshStatus();
+
+    /**
      * Stops the application.
      */
     void stop();

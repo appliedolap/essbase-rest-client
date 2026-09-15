@@ -292,4 +292,15 @@ public interface EssCube extends EssObject {
      */
     List<EssMdxFunctionGroup> getMdxFunctions();
 
+    /**
+     * Asks the server for this cube's status again, and updates this object with the answer.
+     *
+     * <p>Same reason as {@link EssApplication#refreshStatus()}: a cube's status is a snapshot, and
+     * browsing into a cube starts the application that owns it, so the snapshot goes stale through
+     * ordinary use.
+     *
+     * @return the status as of now
+     */
+    EssApplication.Status refreshStatus();
+
 }
