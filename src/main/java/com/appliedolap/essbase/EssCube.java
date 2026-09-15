@@ -303,4 +303,19 @@ public interface EssCube extends EssObject {
      */
     EssApplication.Status refreshStatus();
 
+    /**
+     * Starts this cube, and with it the application that owns it - a cube cannot run in a stopped
+     * application, so the server starts both.
+     */
+    void start();
+
+    /**
+     * Stops this cube, leaving its application running.
+     *
+     * <p>Not the mirror of {@link #start()}, and verified against a live server: starting a cube
+     * starts its application, but stopping one leaves the application started with its other cubes
+     * untouched. To stop the application as well, stop the application.
+     */
+    void stop();
+
 }

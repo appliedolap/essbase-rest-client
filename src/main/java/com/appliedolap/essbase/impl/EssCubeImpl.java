@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -624,6 +625,36 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
     @Override
     public List<com.appliedolap.essbase.EssMdxFunctionGroup> getMdxFunctions() {
         return EssMdxFunctions.read(api, getApplicationName(), getName());
+    }
+
+    @Override
+    public void start() {
+        performOperation("start");
+    }
+
+    @Override
+    public void stop() {
+        performOperation("stop");
+    }
+
+    /**
+     * Starts or stops the cube.
+     *
+     * <p>By hand rather than through the generated client, which models the operation only for an
+     * application: {@code applicationsPerformOperation} takes an application name and nothing else.
+     * The action is a query parameter, not a path segment - {@code /databases/Basic/action/start} is
+     * a 404.
+     */
+    private void performOperation(String action) {
+        String path = NativeHttp.withQuery("/applications/" + ApiClient.urlEncode(getApplicationName())
+                + "/databases/" + ApiClient.urlEncode(getName()), "action", action);
+        try {
+            NativeHttp.sendAndDiscard(api.getClient(),
+                    NativeHttp.request(api.getClient(), path).PUT(HttpRequest.BodyPublishers.noBody()),
+                    "databasesPerformOperation");
+        } catch (com.appliedolap.essbase.client.ApiException | java.io.IOException e) {
+            throw new EssApiException(e);
+        }
     }
 
 }
