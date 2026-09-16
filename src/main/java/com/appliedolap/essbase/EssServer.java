@@ -193,6 +193,17 @@ public interface EssServer {
     List<EssUser> getUsers();
 
     /**
+     * Who holds which service-level role - Service Administrator, Power User, User.
+     *
+     * <p>Unlike {@link #getUsers()} and {@link #getGroups()}, this answers on a deployment behind an
+     * external identity provider: the directory lives there, but the role assignments are Essbase's
+     * own. It is the one way to see who can do what on such a server.
+     *
+     * @return the service role assignments
+     */
+    List<EssPermission> getPermissions();
+
+    /**
      * Gets server-scoped variables.
      *
      * @return the server-wide variables

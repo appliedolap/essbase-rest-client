@@ -248,4 +248,32 @@ public class EssApplicationImpl extends AbstractEssObject implements EssApplicat
         }
     }
 
+    @Override
+    public List<EssPermission> getPermissions() {
+        try {
+            return EssPermissions.from(api.getApplicationRoleProvisioningApi()
+                    .applicationRoleProvisioningSearchProvision(getName(), null, null, null, null));
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    /**
+     * Fetched by hand because the endpoint answers with a spreadsheet, not a model. It also answers
+     * 406 to any specific Accept - asking for JSON, CSV or Excel all fail and only {@code *}/{@code *}
+     * succeeds - so the header has to be set deliberately rather than left to the generated client.
+     */
+    @Override
+    public java.io.File downloadProvisionReport(java.io.File file) {
+        String path = "/applications/" + ApiClient.urlEncode(getName()) + "/provisionReport";
+        try (java.io.OutputStream out = new java.io.FileOutputStream(file)) {
+            NativeHttp.copyBodyTo(NativeHttp.send(api.getClient(),
+                    NativeHttp.request(api.getClient(), path).header("Accept", "*/*").GET(),
+                    "applicationsGetProvisionReport"), out);
+            return file;
+        } catch (com.appliedolap.essbase.client.ApiException | java.io.IOException e) {
+            throw new EssApiException(e);
+        }
+    }
+
 }

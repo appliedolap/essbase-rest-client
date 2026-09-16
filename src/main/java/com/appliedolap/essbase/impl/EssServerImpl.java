@@ -347,6 +347,16 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     }
 
     @Override
+    public List<EssPermission> getPermissions() {
+        try {
+            return EssPermissions.from(
+                    api.getServiceRoleProvisioningApi().serviceRoleProvisioningSearchProvision(null, null, null));
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    @Override
     public List<EssUser> getUsers() {
         try {
             Users users = api.getUsersApi().usersSearch(null, -1, "all");

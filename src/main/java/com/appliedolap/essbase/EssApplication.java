@@ -201,4 +201,24 @@ public interface EssApplication extends EssObject {
 
     }
 
+    /**
+     * Who holds which role on this application - Application Manager, Database Manager, Database
+     * Update, Database Access.
+     *
+     * @return the application role assignments, empty where nobody is provisioned on it specifically
+     */
+    List<EssPermission> getPermissions();
+
+    /**
+     * Downloads this application's provisioning report.
+     *
+     * <p>A spreadsheet rather than data: the endpoint answers with an .xlsx attachment, and 406 to
+     * any {@code Accept} that asks for something else - which is why it looks broken until you stop
+     * asking for JSON.
+     *
+     * @param file where to write it
+     * @return the file written
+     */
+    java.io.File downloadProvisionReport(java.io.File file);
+
 }

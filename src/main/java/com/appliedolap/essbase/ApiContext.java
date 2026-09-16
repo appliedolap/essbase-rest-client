@@ -49,6 +49,10 @@ public class ApiContext {
 
     private final UsersApi usersApi;
 
+    private final ServiceRoleProvisioningApi serviceRoleProvisioningApi;
+
+    private final ApplicationRoleProvisioningApi applicationRoleProvisioningApi;
+
     private final ExecuteMdxApi executeMdxApi;
 
     private final GlobalDataSourcesApi globalDataSourcesApi;
@@ -94,6 +98,8 @@ public class ApiContext {
         this.batchOutlineEditingApi = new BatchOutlineEditingApi(client);
         this.groupsApi = new GroupsApi(client);
         this.usersApi = new UsersApi(client);
+        this.serviceRoleProvisioningApi = new ServiceRoleProvisioningApi(client);
+        this.applicationRoleProvisioningApi = new ApplicationRoleProvisioningApi(client);
         this.executeMdxApi = new ExecuteMdxApi(client);
         this.globalDataSourcesApi = new GlobalDataSourcesApi(client);
         this.locksApi = new LocksApi(client);
@@ -191,6 +197,14 @@ public class ApiContext {
 
     public UsersApi getUsersApi() {
         return usersApi;
+    }
+
+    public ServiceRoleProvisioningApi getServiceRoleProvisioningApi() {
+        return serviceRoleProvisioningApi;
+    }
+
+    public ApplicationRoleProvisioningApi getApplicationRoleProvisioningApi() {
+        return applicationRoleProvisioningApi;
     }
 
     public GlobalDataSourcesApi getGlobalDataSourcesApi() {
