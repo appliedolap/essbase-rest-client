@@ -276,4 +276,17 @@ public class EssApplicationImpl extends AbstractEssObject implements EssApplicat
         }
     }
 
+    @Override
+    public List<EssSession> getSessions() {
+        return WrapperUtil.wrapList(
+                () -> api.getSessionsApi().sessionsGetAllActiveSessions(getName(), null, null),
+                attributes -> new EssSessionImpl(api, attributes));
+    }
+
+    @Override
+    public void killSessions(boolean logoff) {
+        WrapperUtil.wrap(() -> api.getSessionsApi()
+                .sessionsDeleteAllActiveSessions(getName(), null, null, logoff));
+    }
+
 }

@@ -285,12 +285,14 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
 
     @Override
     public void killSessions(boolean logoff) {
-        throw new UnsupportedOperationException();
+        WrapperUtil.wrap(() -> api.getSessionsApi()
+                .sessionsDeleteAllActiveSessions(null, null, null, logoff));
     }
 
     @Override
     public void killSessions(String userId, boolean logoff) {
-        throw new UnsupportedOperationException();
+        WrapperUtil.wrap(() -> api.getSessionsApi()
+                .sessionsDeleteAllActiveSessions(null, null, userId, logoff));
     }
 
 //    public EssFile getFile(String fileFullPath) {

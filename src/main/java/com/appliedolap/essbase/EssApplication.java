@@ -221,4 +221,21 @@ public interface EssApplication extends EssObject {
      */
     java.io.File downloadProvisionReport(java.io.File file);
 
+    /**
+     * The sessions currently on this application, across all of its cubes.
+     *
+     * <p>Filtered by the server rather than here - {@code GET /sessions} takes an application - so
+     * this is one request whatever else is running elsewhere.
+     *
+     * @return the sessions
+     */
+    List<EssSession> getSessions();
+
+    /**
+     * Ends every session on this application.
+     *
+     * @param logoff true to disconnect the users as well as ending their requests
+     */
+    void killSessions(boolean logoff);
+
 }

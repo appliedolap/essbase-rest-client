@@ -127,8 +127,17 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
             }
             return Collections.unmodifiableList(sessionList);
         } catch (ApiException e) {
-            throw new RuntimeException(e);
+            // EssApiException, not a bare RuntimeException: everything else throws that, and it is
+            // what ExceptionExplainer knows how to read. This one bypassed it and produced a worse
+            // dialog than its siblings for the same failure.
+            throw new EssApiException(e);
         }
+    }
+
+    @Override
+    public void killSessions(boolean logoff) {
+        WrapperUtil.wrap(() -> api.getSessionsApi()
+                .sessionsDeleteAllActiveSessions(getApplicationName(), getName(), null, logoff));
     }
 
     @Override

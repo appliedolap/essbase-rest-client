@@ -58,6 +58,16 @@ public interface EssCube extends EssObject {
     List<EssSession> getSessions();
 
     /**
+     * Ends every session on this cube, leaving the rest of the application's alone.
+     *
+     * <p>What you want before restructuring: the server takes the application and database as
+     * filters, so this is one call rather than a walk over {@link #getSessions()} killing each.
+     *
+     * @param logoff true to disconnect the users as well as ending their requests
+     */
+    void killSessions(boolean logoff);
+
+    /**
      * Gets the list of variables specific to this cube. The return type is an {@link EssVariableImpl}, however, the
      * actual implementation will be the subclass {@link EssCubeVariableImpl}. The {@link EssVariableImpl#getScope()} method
      * can be used to check the variable type and cast as needed.
