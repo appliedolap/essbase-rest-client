@@ -3,6 +3,7 @@ package com.appliedolap.essbase;
 import com.appliedolap.essbase.impl.EssFolderImpl;
 
 import java.io.File;
+import java.util.List;
 
 public interface EssFile extends EssObject {
 
@@ -86,9 +87,29 @@ public interface EssFile extends EssObject {
      */
     void delete();
 
-    // TODO: move, this shouldn't be in this class
-    @Deprecated
-    void lcmImport();
+    /**
+     * The cubes inside this LCM zip, without importing it.
+     *
+     * <p>The question worth asking before an import: an LCM zip is opaque, and restoring one to find
+     * out what was in it is a poor way to discover it held the wrong application. Only meaningful on
+     * a zip produced by an LCM export.
+     *
+     * @return the cube names in the zip - bare names such as {@code Basic}, without the application
+     */
+    List<String> getDatabasesInLcmZip();
+
+    /**
+     * Restores this LCM zip, as a job.
+     *
+     * <p>Replaces a version that submitted the job, threw the returned record away, and caught its
+     * own failure with {@code printStackTrace} - so an import that never ran looked exactly like one
+     * that worked, and there was nothing to poll either way. The job comes back so a caller can
+     * {@link EssJob#waitForCompletion()} and ask whether it succeeded.
+     *
+     * @param overwrite whether to overwrite what is already there, which the old version always did
+     * @return the submitted job
+     */
+    EssJob lcmImport(boolean overwrite);
 
     /**
      * Copy a file from source to destination.

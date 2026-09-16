@@ -6,6 +6,11 @@ import com.appliedolap.essbase.client.model.JobRecordBean;
 import com.appliedolap.essbase.client.model.JobsInputBean;
 import com.appliedolap.essbase.client.model.ParametersBean;
 import com.appliedolap.essbase.util.GenericDownload;
+import com.appliedolap.essbase.EssJob;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import com.appliedolap.essbase.util.NativeHttp;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -135,19 +140,56 @@ public class EssFileImpl extends AbstractEssObject implements EssFile {
     // TODO: move, this shouldn't be in this class
     @Deprecated
     @Override
-    public void lcmImport() {
+    public EssJob lcmImport(boolean overwrite) {
         JobsInputBean jobsInputBean = new JobsInputBean();
         jobsInputBean.setJobtype("lcmimport");
         ParametersBean parametersBean = new ParametersBean();
         parametersBean.setZipFileName(getName());
-        parametersBean.setOverwrite("true");
+        parametersBean.setOverwrite(String.valueOf(overwrite));
         jobsInputBean.setParameters(parametersBean);
 
+        logger.info("Submitting LCM import job for {}", getName());
         try {
-            logger.info("Submitting LCM import job");
-            JobRecordBean jobRecordBean = api.getJobsApi().jobsExecuteJob(jobsInputBean);
-        } catch (ApiException apiException) {
-            apiException.printStackTrace();
+            return new EssJobImpl(api, server, api.getJobsApi().jobsExecuteJob(jobsInputBean));
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    /**
+     * Answers with a plain string rather than a list - "Sample.Basic" or several comma separated -
+     * so it is split here. Nothing in the specification says which, only {@code type: string}.
+     */
+    @Override
+    public List<String> getDatabasesInLcmZip() {
+        // A leading slash, which getFullPath does not guarantee: the parameter is resolved against the
+        // user's home folder when it has none, so "users/admin/x.zip" is looked for at
+        // "/users/admin/users/admin/x.zip" and reported missing.
+        String absolute = fullPath.startsWith("/") ? fullPath : "/" + fullPath;
+        String path = NativeHttp.withQuery("/files/getDatabasesFromLCMZip", "zipFileName", absolute);
+        try {
+            String body = NativeHttp.sendForString(api.getClient(),
+                    NativeHttp.request(api.getClient(), path).header("Accept", "application/json").GET(),
+                    "filesGetDatabasesFromLCMZip").trim();
+            if (body.isEmpty()) {
+                return Collections.emptyList();
+            }
+            if (body.startsWith("[") || body.startsWith("{")) {
+                List<String> found = new ArrayList<>();
+                for (JsonNode node : api.getClient().getObjectMapper().readTree(body)) {
+                    found.add(node.asText());
+                }
+                return Collections.unmodifiableList(found);
+            }
+            List<String> found = new ArrayList<>();
+            for (String piece : body.replaceAll("^\"|\"$", "").split(",")) {
+                if (!piece.isBlank()) {
+                    found.add(piece.trim());
+                }
+            }
+            return Collections.unmodifiableList(found);
+        } catch (ApiException | IOException e) {
+            throw new EssApiException(e);
         }
     }
 
