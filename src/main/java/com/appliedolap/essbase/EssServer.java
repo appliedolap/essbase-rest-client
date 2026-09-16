@@ -180,6 +180,19 @@ public interface EssServer {
     List<EssGroup> getGroups();
 
     /**
+     * The users this server holds.
+     *
+     * <p>Only meaningful where Essbase owns its own security. A deployment behind an external identity
+     * provider - {@code idcs} in {@link #getInstanceDetails()} - keeps its users in the provider and
+     * answers HTTP 400 "This operation is not supported. Contact administrator" here, the same as it
+     * does for {@link #getGroups()}. Check the flag before asking, rather than treating the refusal as
+     * a failure.
+     *
+     * @return the users, where the server has any to report
+     */
+    List<EssUser> getUsers();
+
+    /**
      * Gets server-scoped variables.
      *
      * @return the server-wide variables

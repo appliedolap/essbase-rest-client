@@ -347,6 +347,20 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     }
 
     @Override
+    public List<EssUser> getUsers() {
+        try {
+            Users users = api.getUsersApi().usersSearch(null, -1, "all");
+            List<EssUser> essUsers = new ArrayList<>();
+            for (UserBean user : wrap(users.getItems())) {
+                essUsers.add(new EssUserImpl(api, this, user));
+            }
+            return Collections.unmodifiableList(essUsers);
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    @Override
     public List<EssGroup> getGroups() {
         try {
             Groups groups = api.getGroupsApi().groupsSearch(null, -1, "all");

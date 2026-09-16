@@ -47,6 +47,8 @@ public class ApiContext {
 
     private final GroupsApi groupsApi;
 
+    private final UsersApi usersApi;
+
     private final ExecuteMdxApi executeMdxApi;
 
     private final GlobalDataSourcesApi globalDataSourcesApi;
@@ -91,6 +93,7 @@ public class ApiContext {
         this.urlsApi = new UrlsApi(client);
         this.batchOutlineEditingApi = new BatchOutlineEditingApi(client);
         this.groupsApi = new GroupsApi(client);
+        this.usersApi = new UsersApi(client);
         this.executeMdxApi = new ExecuteMdxApi(client);
         this.globalDataSourcesApi = new GlobalDataSourcesApi(client);
         this.locksApi = new LocksApi(client);
@@ -184,6 +187,10 @@ public class ApiContext {
 
     public GroupsApi getGroupsApi() {
         return groupsApi;
+    }
+
+    public UsersApi getUsersApi() {
+        return usersApi;
     }
 
     public GlobalDataSourcesApi getGlobalDataSourcesApi() {
