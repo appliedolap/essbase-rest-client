@@ -32,8 +32,9 @@ import java.util.regex.Pattern;
 /**
  * The AI capabilities of one cube, spoken to over the {@code /ai} endpoints a 26.1 server adds.
  *
- * <p>None of this goes through the generated client: the client is generated from a 21.7
- * specification, which has no {@code /ai} paths at all. Calls are made with {@link NativeHttp} so
+ * <p>None of this goes through the generated client. Since the 26.1 regeneration it does have an
+ * {@code AiApi}, with twenty-seven operations - and every one returns {@code void}, because the
+ * specification declares a response schema for none of them. Calls are made with {@link NativeHttp} so
  * they still authenticate the way every generated call does - password, session, or a session
  * established in a browser - rather than needing their own credentials.
  */

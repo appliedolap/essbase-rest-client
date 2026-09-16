@@ -22,9 +22,10 @@ import java.util.Map;
  * logs.
  *
  * <p>Read by hand rather than through the generated client, for two different reasons. The log
- * settings are 26.1 only and absent from the 21.7 specification the client is built from. The
- * maintenance limits are worse: the generated call exists but deserializes into a model of an older
- * shape - coreFileSize, openFiles, webLogicHeapSize - where the server now answers with disk and ram.
+ * settings are described by 26.1 but given no response schema, so the generated call returns nothing.
+ * The maintenance limits are worse: the generated call exists but deserializes into {@code Limits},
+ * still declared in 26.1 with an older shape - coreFileSize, openFiles, webLogicHeapSize - where the
+ * server now answers with disk and ram.
  * Nothing fails. It returns an object with every field null, which is the least useful way for a call
  * to be wrong.
  */

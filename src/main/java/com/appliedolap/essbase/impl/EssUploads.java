@@ -23,8 +23,10 @@ import java.util.Map;
  *
  * <p>The server publishes which it wants, at {@code /files/uploadconfig}: past the part size there
  * is a three-call protocol - register the upload, send each part, commit - and a fourth call to
- * abandon it. None of it is in the generated client, which is built from a 21.7 specification that
- * predates the whole thing.
+ * abandon it. The generated client has all four since the 26.1 regeneration, and still cannot be
+ * used for the middle one: {@code filesUploadPart(path, partNum, uploadId)} takes no body, because
+ * the specification never says a part carries the bytes. A generated upload would faithfully send
+ * nothing.
  *
  * <p>Neither path reads the file into memory. The version this replaced did
  * {@code Files.readAllBytes} before a single-request PUT, which is fine for a rules file and an

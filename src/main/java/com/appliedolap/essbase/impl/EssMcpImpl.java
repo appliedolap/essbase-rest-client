@@ -25,10 +25,10 @@ import java.util.Optional;
 /**
  * Talks to the MCP server Essbase 26.1 serves from inside its own REST API.
  *
- * <p>Not through the generated client, which is built from a 21.7 specification and has never heard
- * of these paths. They are in 26.1's specification, but only as empty stubs - no request body, no
- * parameters, no responses - so generating against it would produce nothing usable either. Hence
- * plain requests and hand-read JSON.
+ * <p>Not through the generated client, even though 26.1 does describe these paths. It describes them
+ * as empty stubs - no request body, no parameters, no responses - and with no tag, so they generate
+ * as {@code DefaultApi.callTool()} and {@code listTools()} returning {@code void}: callable, and
+ * incapable of handing back the answer. Hence plain requests and hand-read JSON.
  */
 public class EssMcpImpl implements EssMcp {
 
