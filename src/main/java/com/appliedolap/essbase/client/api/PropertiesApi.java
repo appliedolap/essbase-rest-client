@@ -242,21 +242,21 @@ public class PropertiesApi {
   /**
    * Get Server Properties
    * &lt;p&gt;Returns the Provider Services configuration properties available at the Essbase Server level to help you manage network timeout parameters.&lt;/p&gt;
-   * @return List&lt;PropertyList&gt;
+   * @return PropertyList
    * @throws ApiException if fails to make API call
    */
-  public List<PropertyList> propertiesGetProperties() throws ApiException {
-    ApiResponse<List<PropertyList>> localVarResponse = propertiesGetPropertiesWithHttpInfo();
+  public PropertyList propertiesGetProperties() throws ApiException {
+    ApiResponse<PropertyList> localVarResponse = propertiesGetPropertiesWithHttpInfo();
     return localVarResponse.getData();
   }
 
   /**
    * Get Server Properties
    * &lt;p&gt;Returns the Provider Services configuration properties available at the Essbase Server level to help you manage network timeout parameters.&lt;/p&gt;
-   * @return ApiResponse&lt;List&lt;PropertyList&gt;&gt;
+   * @return ApiResponse&lt;PropertyList&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<List<PropertyList>> propertiesGetPropertiesWithHttpInfo() throws ApiException {
+  public ApiResponse<PropertyList> propertiesGetPropertiesWithHttpInfo() throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = propertiesGetPropertiesRequestBuilder();
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -269,10 +269,10 @@ public class PropertiesApi {
         if (localVarResponse.statusCode()/ 100 != 2) {
           throw getApiException("propertiesGetProperties", localVarResponse);
         }
-        return new ApiResponse<List<PropertyList>>(
+        return new ApiResponse<PropertyList>(
           localVarResponse.statusCode(),
           localVarResponse.headers().map(),
-          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<List<PropertyList>>() {}) // closes the InputStream
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<PropertyList>() {}) // closes the InputStream
         );
       } finally {
       }

@@ -97,11 +97,11 @@ public class LocksApi {
    * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
    * @param offset &lt;p&gt;Number of items to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
    * @param limit Maximum number of blocks to return. Default is 50. (optional, default to 50)
-   * @return List&lt;LockBlockList&gt;
+   * @return LockBlockList
    * @throws ApiException if fails to make API call
    */
-  public List<LockBlockList> locksGetLockedBlocks(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
-    ApiResponse<List<LockBlockList>> localVarResponse = locksGetLockedBlocksWithHttpInfo(applicationName, databaseName, offset, limit);
+  public LockBlockList locksGetLockedBlocks(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
+    ApiResponse<LockBlockList> localVarResponse = locksGetLockedBlocksWithHttpInfo(applicationName, databaseName, offset, limit);
     return localVarResponse.getData();
   }
 
@@ -112,10 +112,10 @@ public class LocksApi {
    * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
    * @param offset &lt;p&gt;Number of items to omit from the start of the result set.&lt;/p&gt; (optional, default to 0)
    * @param limit Maximum number of blocks to return. Default is 50. (optional, default to 50)
-   * @return ApiResponse&lt;List&lt;LockBlockList&gt;&gt;
+   * @return ApiResponse&lt;LockBlockList&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<List<LockBlockList>> locksGetLockedBlocksWithHttpInfo(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
+  public ApiResponse<LockBlockList> locksGetLockedBlocksWithHttpInfo(String applicationName, String databaseName, Integer offset, Integer limit) throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = locksGetLockedBlocksRequestBuilder(applicationName, databaseName, offset, limit);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -128,10 +128,10 @@ public class LocksApi {
         if (localVarResponse.statusCode()/ 100 != 2) {
           throw getApiException("locksGetLockedBlocks", localVarResponse);
         }
-        return new ApiResponse<List<LockBlockList>>(
+        return new ApiResponse<LockBlockList>(
           localVarResponse.statusCode(),
           localVarResponse.headers().map(),
-          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<List<LockBlockList>>() {}) // closes the InputStream
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<LockBlockList>() {}) // closes the InputStream
         );
       } finally {
       }

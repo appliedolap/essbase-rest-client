@@ -621,11 +621,11 @@ public class ScriptsApi {
    * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
    * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
    * @param scriptName &lt;p&gt;Script name.&lt;/p&gt; (required)
-   * @return List&lt;RTSVList&gt;
+   * @return RTSVList
    * @throws ApiException if fails to make API call
    */
-  public List<RTSVList> scriptsGetRTSVsForScripts(String applicationName, String databaseName, String scriptName) throws ApiException {
-    ApiResponse<List<RTSVList>> localVarResponse = scriptsGetRTSVsForScriptsWithHttpInfo(applicationName, databaseName, scriptName);
+  public RTSVList scriptsGetRTSVsForScripts(String applicationName, String databaseName, String scriptName) throws ApiException {
+    ApiResponse<RTSVList> localVarResponse = scriptsGetRTSVsForScriptsWithHttpInfo(applicationName, databaseName, scriptName);
     return localVarResponse.getData();
   }
 
@@ -635,10 +635,10 @@ public class ScriptsApi {
    * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
    * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
    * @param scriptName &lt;p&gt;Script name.&lt;/p&gt; (required)
-   * @return ApiResponse&lt;List&lt;RTSVList&gt;&gt;
+   * @return ApiResponse&lt;RTSVList&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<List<RTSVList>> scriptsGetRTSVsForScriptsWithHttpInfo(String applicationName, String databaseName, String scriptName) throws ApiException {
+  public ApiResponse<RTSVList> scriptsGetRTSVsForScriptsWithHttpInfo(String applicationName, String databaseName, String scriptName) throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = scriptsGetRTSVsForScriptsRequestBuilder(applicationName, databaseName, scriptName);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -651,10 +651,10 @@ public class ScriptsApi {
         if (localVarResponse.statusCode()/ 100 != 2) {
           throw getApiException("scriptsGetRTSVsForScripts", localVarResponse);
         }
-        return new ApiResponse<List<RTSVList>>(
+        return new ApiResponse<RTSVList>(
           localVarResponse.statusCode(),
           localVarResponse.headers().map(),
-          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<List<RTSVList>>() {}) // closes the InputStream
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<RTSVList>() {}) // closes the InputStream
         );
       } finally {
       }
@@ -919,11 +919,11 @@ public class ScriptsApi {
    * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
    * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
    * @param scriptName &lt;p&gt;Script name.&lt;/p&gt; (required)
-   * @return List&lt;UserGroupProvisionInfoList&gt;
+   * @return UserGroupProvisionInfoList
    * @throws ApiException if fails to make API call
    */
-  public List<UserGroupProvisionInfoList> scriptsGetScriptPermissions(String applicationName, String databaseName, String scriptName) throws ApiException {
-    ApiResponse<List<UserGroupProvisionInfoList>> localVarResponse = scriptsGetScriptPermissionsWithHttpInfo(applicationName, databaseName, scriptName);
+  public UserGroupProvisionInfoList scriptsGetScriptPermissions(String applicationName, String databaseName, String scriptName) throws ApiException {
+    ApiResponse<UserGroupProvisionInfoList> localVarResponse = scriptsGetScriptPermissionsWithHttpInfo(applicationName, databaseName, scriptName);
     return localVarResponse.getData();
   }
 
@@ -933,10 +933,10 @@ public class ScriptsApi {
    * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
    * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
    * @param scriptName &lt;p&gt;Script name.&lt;/p&gt; (required)
-   * @return ApiResponse&lt;List&lt;UserGroupProvisionInfoList&gt;&gt;
+   * @return ApiResponse&lt;UserGroupProvisionInfoList&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<List<UserGroupProvisionInfoList>> scriptsGetScriptPermissionsWithHttpInfo(String applicationName, String databaseName, String scriptName) throws ApiException {
+  public ApiResponse<UserGroupProvisionInfoList> scriptsGetScriptPermissionsWithHttpInfo(String applicationName, String databaseName, String scriptName) throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = scriptsGetScriptPermissionsRequestBuilder(applicationName, databaseName, scriptName);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -949,10 +949,10 @@ public class ScriptsApi {
         if (localVarResponse.statusCode()/ 100 != 2) {
           throw getApiException("scriptsGetScriptPermissions", localVarResponse);
         }
-        return new ApiResponse<List<UserGroupProvisionInfoList>>(
+        return new ApiResponse<UserGroupProvisionInfoList>(
           localVarResponse.statusCode(),
           localVarResponse.headers().map(),
-          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<List<UserGroupProvisionInfoList>>() {}) // closes the InputStream
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<UserGroupProvisionInfoList>() {}) // closes the InputStream
         );
       } finally {
       }

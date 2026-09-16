@@ -2973,18 +2973,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ApplicationConfigList"
-                  }
+                  "$ref": "#/components/schemas/ApplicationConfigList"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ApplicationConfigList"
-                  }
+                  "$ref": "#/components/schemas/ApplicationConfigList"
                 }
               }
             }
@@ -6654,18 +6648,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UserGroupProvisionInfoList"
-                  }
+                  "$ref": "#/components/schemas/UserGroupProvisionInfoList"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UserGroupProvisionInfoList"
-                  }
+                  "$ref": "#/components/schemas/UserGroupProvisionInfoList"
                 }
               }
             }
@@ -6943,18 +6931,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/FilterList"
-                  }
+                  "$ref": "#/components/schemas/FilterList"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/FilterList"
-                  }
+                  "$ref": "#/components/schemas/FilterList"
                 }
               }
             }
@@ -8914,18 +8896,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LockBlockList"
-                  }
+                  "$ref": "#/components/schemas/LockBlockList"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LockBlockList"
-                  }
+                  "$ref": "#/components/schemas/LockBlockList"
                 }
               }
             }
@@ -19164,18 +19140,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PropertyList"
-                  }
+                  "$ref": "#/components/schemas/PropertyList"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PropertyList"
-                  }
+                  "$ref": "#/components/schemas/PropertyList"
                 }
               }
             }
@@ -22612,18 +22582,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UserGroupProvisionInfoList"
-                  }
+                  "$ref": "#/components/schemas/UserGroupProvisionInfoList"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UserGroupProvisionInfoList"
-                  }
+                  "$ref": "#/components/schemas/UserGroupProvisionInfoList"
                 }
               }
             }
@@ -23186,18 +23150,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RTSVList"
-                  }
+                  "$ref": "#/components/schemas/RTSVList"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RTSVList"
-                  }
+                  "$ref": "#/components/schemas/RTSVList"
                 }
               }
             }

@@ -336,11 +336,11 @@ public class ApplicationConfigurationApi {
    * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
    * @param key &lt;p&gt;Filter key to refine the configuration property results.&lt;/p&gt; (optional, default to *)
    * @param configured &lt;p&gt;Specify &lt;code&gt;all&lt;/code&gt; to return all configured properties. Specify &lt;code&gt;true&lt;/code&gt; to return enabled configuration properties. Specify &lt;code&gt;false&lt;/code&gt; to return configuration properties that are turned off.&lt;/p&gt; (optional, default to all)
-   * @return List&lt;ApplicationConfigList&gt;
+   * @return ApplicationConfigList
    * @throws ApiException if fails to make API call
    */
-  public List<ApplicationConfigList> applicationConfigurationGetConfigurationKeys(String applicationName, String key, String configured) throws ApiException {
-    ApiResponse<List<ApplicationConfigList>> localVarResponse = applicationConfigurationGetConfigurationKeysWithHttpInfo(applicationName, key, configured);
+  public ApplicationConfigList applicationConfigurationGetConfigurationKeys(String applicationName, String key, String configured) throws ApiException {
+    ApiResponse<ApplicationConfigList> localVarResponse = applicationConfigurationGetConfigurationKeysWithHttpInfo(applicationName, key, configured);
     return localVarResponse.getData();
   }
 
@@ -350,10 +350,10 @@ public class ApplicationConfigurationApi {
    * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
    * @param key &lt;p&gt;Filter key to refine the configuration property results.&lt;/p&gt; (optional, default to *)
    * @param configured &lt;p&gt;Specify &lt;code&gt;all&lt;/code&gt; to return all configured properties. Specify &lt;code&gt;true&lt;/code&gt; to return enabled configuration properties. Specify &lt;code&gt;false&lt;/code&gt; to return configuration properties that are turned off.&lt;/p&gt; (optional, default to all)
-   * @return ApiResponse&lt;List&lt;ApplicationConfigList&gt;&gt;
+   * @return ApiResponse&lt;ApplicationConfigList&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<List<ApplicationConfigList>> applicationConfigurationGetConfigurationKeysWithHttpInfo(String applicationName, String key, String configured) throws ApiException {
+  public ApiResponse<ApplicationConfigList> applicationConfigurationGetConfigurationKeysWithHttpInfo(String applicationName, String key, String configured) throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = applicationConfigurationGetConfigurationKeysRequestBuilder(applicationName, key, configured);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -366,10 +366,10 @@ public class ApplicationConfigurationApi {
         if (localVarResponse.statusCode()/ 100 != 2) {
           throw getApiException("applicationConfigurationGetConfigurationKeys", localVarResponse);
         }
-        return new ApiResponse<List<ApplicationConfigList>>(
+        return new ApiResponse<ApplicationConfigList>(
           localVarResponse.statusCode(),
           localVarResponse.headers().map(),
-          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<List<ApplicationConfigList>>() {}) // closes the InputStream
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<ApplicationConfigList>() {}) // closes the InputStream
         );
       } finally {
       }

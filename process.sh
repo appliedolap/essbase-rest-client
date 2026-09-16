@@ -157,7 +157,14 @@ for entry in \
     "/applications/{applicationName}/databases/{databaseName}/scripts|get|ScriptList" \
     "/applications/{applicationName}/databases/{databaseName}/variables|get|VariableList" \
     "/applications/{applicationName}/variables|get|VariableList" \
-    "/variables|get|VariableList"
+    "/variables|get|VariableList" \
+    "/applications/{applicationName}/configurationkeys|get|ApplicationConfigList" \
+    "/applications/{applicationName}/databases/{databaseName}/filters|get|FilterList" \
+    "/applications/{applicationName}/databases/{databaseName}/filters/{filterName}/permissions|get|UserGroupProvisionInfoList" \
+    "/applications/{applicationName}/databases/{databaseName}/locks/blocks|get|LockBlockList" \
+    "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/permissions|get|UserGroupProvisionInfoList" \
+    "/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/rtsv|get|RTSVList" \
+    "/properties|get|PropertyList"
 do
     IFS='|' read -r p v model <<< "$entry"
     patch "$p answers one $model, not a list of them" \

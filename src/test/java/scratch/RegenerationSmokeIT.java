@@ -42,6 +42,9 @@ public class RegenerationSmokeIT {
             System.out.println("  " + cube.getName());
         }
         System.out.println("app configurations: " + first.getConfigurations().size());
+        // Through the generated client only since /configurationkeys was typed correctly.
+        System.out.println("app config catalogue: " + first.configuration().keys().size());
+        System.out.println("app config catalogue (CALC*): " + first.configuration().keys("CALC*").size());
         System.out.println("app variables: " + first.getVariables().size());
         System.out.println("app jobs: " + first.getJobs().size());
 

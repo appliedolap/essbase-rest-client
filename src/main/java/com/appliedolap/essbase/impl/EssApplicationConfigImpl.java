@@ -5,15 +5,10 @@ import com.appliedolap.essbase.EssApiException;
 import com.appliedolap.essbase.EssApplication;
 import com.appliedolap.essbase.EssApplicationConfig;
 import com.appliedolap.essbase.EssApplicationConfiguration;
-import com.appliedolap.essbase.client.ApiClient;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.ApplicationConfigEntry;
 import com.appliedolap.essbase.client.model.ApplicationConfigList;
 
-import com.appliedolap.essbase.util.NativeHttp;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -138,26 +133,20 @@ class EssApplicationConfigImpl implements EssApplicationConfig {
 
     /**
      * Fetches the key catalogue.
-     * <p>
-     * Not through the generated client, whose signature for this operation is
-     * {@code List<ApplicationConfigList>} while the server answers with a single
-     * {@code {"items":[...]}} object - so the generated call fails outright:
-     * <pre>
-     * Cannot deserialize value of type `ArrayList&lt;ApplicationConfigList&gt;` from Object value
-     * </pre>
-     * The response is read into the model the body actually matches.
+     *
+     * <p>Through the generated client, which it could not be until the specification was corrected:
+     * this operation was declared as returning {@code List<ApplicationConfigList>} where the server
+     * answers a single {@code {"items":[...]}} object, so the generated call failed outright with
+     * {@code Cannot deserialize value of type `ArrayList<ApplicationConfigList>` from Object value}.
+     * process.sh now types it as the one object it is.
      */
     private List<ApplicationConfigEntry> catalogue(String pattern) {
-        String path = "/applications/" + ApiClient.urlEncode(application.getName()) + "/configurationkeys";
-        if (pattern != null && !pattern.isBlank()) {
-            path = NativeHttp.withQuery(path, "key", pattern);
-        }
-        try (InputStream body = NativeHttp.send(api.getClient(),
-                NativeHttp.request(api.getClient(), path).header("Accept", "application/json").GET(),
-                "applicationConfigurationGetConfigurationKeys").body()) {
-            ApplicationConfigList page = api.getClient().getObjectMapper().readValue(body, ApplicationConfigList.class);
+        String key = pattern == null || pattern.isBlank() ? null : pattern;
+        try {
+            ApplicationConfigList page = api.getApplicationConfigurationApi()
+                    .applicationConfigurationGetConfigurationKeys(application.getName(), key, null);
             return page == null || page.getItems() == null ? Collections.emptyList() : page.getItems();
-        } catch (ApiException | IOException e) {
+        } catch (ApiException e) {
             throw new EssApiException(e);
         }
     }

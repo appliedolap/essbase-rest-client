@@ -657,11 +657,11 @@ public class FiltersApi {
    * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
    * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
    * @param filterName &lt;p&gt;Filter name.&lt;/p&gt; (required)
-   * @return List&lt;UserGroupProvisionInfoList&gt;
+   * @return UserGroupProvisionInfoList
    * @throws ApiException if fails to make API call
    */
-  public List<UserGroupProvisionInfoList> filtersGetFilterPermissions(String applicationName, String databaseName, String filterName) throws ApiException {
-    ApiResponse<List<UserGroupProvisionInfoList>> localVarResponse = filtersGetFilterPermissionsWithHttpInfo(applicationName, databaseName, filterName);
+  public UserGroupProvisionInfoList filtersGetFilterPermissions(String applicationName, String databaseName, String filterName) throws ApiException {
+    ApiResponse<UserGroupProvisionInfoList> localVarResponse = filtersGetFilterPermissionsWithHttpInfo(applicationName, databaseName, filterName);
     return localVarResponse.getData();
   }
 
@@ -671,10 +671,10 @@ public class FiltersApi {
    * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
    * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
    * @param filterName &lt;p&gt;Filter name.&lt;/p&gt; (required)
-   * @return ApiResponse&lt;List&lt;UserGroupProvisionInfoList&gt;&gt;
+   * @return ApiResponse&lt;UserGroupProvisionInfoList&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<List<UserGroupProvisionInfoList>> filtersGetFilterPermissionsWithHttpInfo(String applicationName, String databaseName, String filterName) throws ApiException {
+  public ApiResponse<UserGroupProvisionInfoList> filtersGetFilterPermissionsWithHttpInfo(String applicationName, String databaseName, String filterName) throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = filtersGetFilterPermissionsRequestBuilder(applicationName, databaseName, filterName);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -687,10 +687,10 @@ public class FiltersApi {
         if (localVarResponse.statusCode()/ 100 != 2) {
           throw getApiException("filtersGetFilterPermissions", localVarResponse);
         }
-        return new ApiResponse<List<UserGroupProvisionInfoList>>(
+        return new ApiResponse<UserGroupProvisionInfoList>(
           localVarResponse.statusCode(),
           localVarResponse.headers().map(),
-          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<List<UserGroupProvisionInfoList>>() {}) // closes the InputStream
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<UserGroupProvisionInfoList>() {}) // closes the InputStream
         );
       } finally {
       }
@@ -830,11 +830,11 @@ public class FiltersApi {
    * &lt;p&gt;Returns all the filters from the specified application and database.&lt;/p&gt;
    * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
    * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-   * @return List&lt;FilterList&gt;
+   * @return FilterList
    * @throws ApiException if fails to make API call
    */
-  public List<FilterList> filtersListFilters(String applicationName, String databaseName) throws ApiException {
-    ApiResponse<List<FilterList>> localVarResponse = filtersListFiltersWithHttpInfo(applicationName, databaseName);
+  public FilterList filtersListFilters(String applicationName, String databaseName) throws ApiException {
+    ApiResponse<FilterList> localVarResponse = filtersListFiltersWithHttpInfo(applicationName, databaseName);
     return localVarResponse.getData();
   }
 
@@ -843,10 +843,10 @@ public class FiltersApi {
    * &lt;p&gt;Returns all the filters from the specified application and database.&lt;/p&gt;
    * @param applicationName &lt;p&gt;Application name.&lt;/p&gt; (required)
    * @param databaseName &lt;p&gt;Database name.&lt;/p&gt; (required)
-   * @return ApiResponse&lt;List&lt;FilterList&gt;&gt;
+   * @return ApiResponse&lt;FilterList&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<List<FilterList>> filtersListFiltersWithHttpInfo(String applicationName, String databaseName) throws ApiException {
+  public ApiResponse<FilterList> filtersListFiltersWithHttpInfo(String applicationName, String databaseName) throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = filtersListFiltersRequestBuilder(applicationName, databaseName);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -859,10 +859,10 @@ public class FiltersApi {
         if (localVarResponse.statusCode()/ 100 != 2) {
           throw getApiException("filtersListFilters", localVarResponse);
         }
-        return new ApiResponse<List<FilterList>>(
+        return new ApiResponse<FilterList>(
           localVarResponse.statusCode(),
           localVarResponse.headers().map(),
-          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<List<FilterList>>() {}) // closes the InputStream
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<FilterList>() {}) // closes the InputStream
         );
       } finally {
       }
