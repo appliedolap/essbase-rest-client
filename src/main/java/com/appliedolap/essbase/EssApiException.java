@@ -25,6 +25,20 @@ public class EssApiException extends RuntimeException {
         super(getBestMessage(throwable), throwable);
     }
 
+    /**
+     * For adding context a caller has and the cause does not - which part of an upload failed, say.
+     *
+     * <p>Keeps the cause, deliberately. Anything reading these walks the chain to its root for the
+     * most specific frame, so throwing away the cause to add a sentence would trade the diagnosis for
+     * the commentary.
+     *
+     * @param message what was being attempted
+     * @param throwable what went wrong
+     */
+    public EssApiException(String message, Throwable throwable) {
+        super(message + ": " + getBestMessage(throwable), throwable);
+    }
+
     protected static String getBestMessage(Throwable e) {
         if (e instanceof ApiException) {
             Map<String, String> details = extractMessage(((ApiException) e).getResponseBody());

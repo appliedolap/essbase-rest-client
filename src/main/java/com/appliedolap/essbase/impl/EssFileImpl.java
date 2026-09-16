@@ -114,13 +114,21 @@ public class EssFileImpl extends AbstractEssObject implements EssFile {
     }
 
     @Override
+    /**
+     * Not through the generated client, for the same reason listing a folder isn't: it runs the path
+     * through {@code urlEncode}, which escapes the separators as well, so the server is asked for
+     * {@code /users%2Fadmin%2Freport.txt} and answers that no such path exists. Anything below a root
+     * folder was undeletable, and the error blamed the path rather than the encoding of it.
+     */
     public void delete() {
+        logger.info("Deleting file {}", fullPath);
         try {
-            logger.info("Deleting file {}", fullPath);
-            api.getFilesApi().filesDeleteFile(fullPath);
-        } catch (ApiException apiException) {
-            logger.error("Deletion error: {}", apiException.getResponseBody());
-            throw new EssApiException(apiException);
+            NativeHttp.sendAndDiscard(api.getClient(),
+                    NativeHttp.request(api.getClient(),
+                            "/files/" + NativeHttp.encodePathKeepingSlashes(fullPath)).DELETE(),
+                    "filesDeleteFile");
+        } catch (ApiException | IOException e) {
+            throw new EssApiException(e);
         }
     }
 

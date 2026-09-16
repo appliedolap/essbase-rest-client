@@ -318,6 +318,27 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     }
 
     @Override
+    public EssFolder getSharedPath() {
+        return pathFolder("/files/sharedpath", "filesGetSharedPath");
+    }
+
+    /**
+     * Both path endpoints answer with plain text - "/shared", "/users/admin" - rather than the JSON
+     * string the generated client expects, so both read the body as text and neither goes through it.
+     */
+    private EssFolder pathFolder(String path, String operationId) {
+        try (InputStream body = NativeHttp.send(api.getClient(),
+                NativeHttp.request(api.getClient(), path)
+                        .header("Accept", "application/json, application/xml")
+                        .GET(), operationId).body()) {
+            String folder = new String(body.readAllBytes(), StandardCharsets.UTF_8).trim();
+            return new EssFolderImpl(api, this, folder, folder);
+        } catch (ApiException | IOException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    @Override
     public List<EssUtility> getUtilities() {
         try {
             ResourceList utilities = api.getTemplatesAndUtilitiesApi().resourcesGetUtilities();
@@ -862,6 +883,11 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     @Override
     public void setLogSettings(List<EssLogSetting> settings) {
         EssSettings.setLogSettings(api, settings);
+    }
+
+    @Override
+    public EssUploadConfig getUploadConfig() {
+        return EssUploads.config(api);
     }
 
 }

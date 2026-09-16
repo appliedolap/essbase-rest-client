@@ -58,17 +58,8 @@ public class EssFolderImpl extends EssFileImpl implements EssFolder {
 
     @Override
     public void uploadFile(File file) {
-        try {
-            byte[] bytes = Files.readAllBytes(file.toPath());
-            String path = NativeHttp.withQuery("/files/" + NativeHttp.encodePathKeepingSlashes(fullPath + "/" + file.getName()), "overwrite", true);
-            NativeHttp.sendAndDiscard(api.getClient(), NativeHttp.request(api.getClient(), path)
-                    .header("Accept", "application/json, application/xml")
-                    .header("Content-Type", "application/octet-stream")
-                    .PUT(HttpRequest.BodyPublishers.ofByteArray(bytes)), "filesAddFile");
-            logger.info("Uploaded file {} to {}", file.getName(), fullPath);
-        } catch (IOException | ApiException e) {
-            throw new EssApiException(e);
-        }
+        EssUploads.upload(api, fullPath + "/" + file.getName(), file);
+        logger.info("Uploaded file {} to {}", file.getName(), fullPath);
     }
 
     /**

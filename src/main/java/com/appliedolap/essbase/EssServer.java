@@ -159,6 +159,26 @@ public interface EssServer {
     EssFolder getHomePath();
 
     /**
+     * The shared folder every user can see, {@code /shared}.
+     *
+     * <p>The counterpart to {@link #getHomePath()}, which was here without it.
+     *
+     * @return the shared folder
+     */
+    EssFolder getSharedPath();
+
+    /**
+     * How this server wants large files uploaded - the part size, and how many parts it allows.
+     *
+     * <p>Rarely needed directly: {@link EssFolder#uploadFile} already reads this and sends a file
+     * whichever way the server asks for. Worth having for anything that wants to say in advance what
+     * an upload is going to involve.
+     *
+     * @return the upload configuration
+     */
+    EssUploadConfig getUploadConfig();
+
+    /**
      * Gets the list of utilities on this server.
      *
      * @return the server utilities
