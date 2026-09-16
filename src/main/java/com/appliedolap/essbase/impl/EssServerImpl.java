@@ -847,4 +847,19 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
         return new EssMcpImpl(api);
     }
 
+    @Override
+    public EssMaintenanceLimits getMaintenanceLimits() {
+        return EssSettings.maintenanceLimits(api);
+    }
+
+    @Override
+    public List<EssLogSetting> getLogSettings() {
+        return EssSettings.logSettings(api);
+    }
+
+    @Override
+    public void setLogSettings(List<EssLogSetting> settings) {
+        EssSettings.setLogSettings(api, settings);
+    }
+
 }

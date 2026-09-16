@@ -429,4 +429,32 @@ public interface EssServer {
      */
     EssMcp getMcp();
 
+    /**
+     * What the server reports about the machine it runs on - free disk and memory, and any configured
+     * ceilings. The only window the REST API offers onto the host.
+     *
+     * @return the limits
+     */
+    EssMaintenanceLimits getMaintenanceLimits();
+
+    /**
+     * How each ODL log handler rotates.
+     *
+     * <p>Worth having beside the logs themselves: a handler holding ten megabytes per file and five
+     * hundred in total has silently discarded everything older, and nothing in the log says so.
+     *
+     * @return one entry per handler
+     */
+    List<EssLogSetting> getLogSettings();
+
+    /**
+     * Changes how the log handlers rotate.
+     *
+     * <p>Send every handler, not only the changed one - this replaces the set. Start from
+     * {@link #getLogSettings()} and use {@link EssLogSetting#withSizes} on the one being altered.
+     *
+     * @param settings the full set of handlers
+     */
+    void setLogSettings(List<EssLogSetting> settings);
+
 }
