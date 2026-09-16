@@ -152,7 +152,7 @@ public class EssMemberImpl extends AbstractEssObject implements EssMember {
     public List<EssMember> getChildren() {
         if (getChildCount() > 0) {
             try {
-                RestCollectionResponse response = api.getOutlineViewerApi().outlineGetMembers(cube.getApplication().getName(), cube.getName(), null, null, getName(), null, null, null, 0, 0);
+                RestCollectionResponse response = api.getOutlineViewerApi().outlineGetMembers(cube.getApplication().getName(), cube.getName(), null, null, null, null, getName(), null, null, null, 0, 0);
                 return collectionToMembers(api, cube, response);
             } catch (ApiException apiException) {
                 throw new EssApiException(apiException);

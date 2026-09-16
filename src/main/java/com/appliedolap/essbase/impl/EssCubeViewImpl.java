@@ -171,7 +171,7 @@ public class EssCubeViewImpl implements EssCubeView {
 
     private void execute(GridOperation operation) {
         try {
-            this.grid = api.getGridApi().gridExecute(applicationName, databaseName, operation);
+            this.grid = api.getGridApi().gridExecute(applicationName, databaseName, null, operation);
         } catch (ApiException e) {
             throw new EssApiException(e);
         }

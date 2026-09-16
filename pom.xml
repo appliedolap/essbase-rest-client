@@ -88,6 +88,17 @@
             <artifactId>jakarta.annotation-api</artifactId>
             <version>${jakarta-annotation-version}</version>
         </dependency>
+        <!--
+            Wanted by the generated client, not by us: the nine /outline/.../edit and /qedit
+            operations Essbase 26.1 added take application/x-www-form-urlencoded, and the native
+            library builds those bodies with Apache's UrlEncodedFormEntity. The generator emits the
+            import into every api class, so the whole generated layer fails to compile without it.
+        -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.5.14</version>
+        </dependency>
         <!-- test dependencies -->
         <dependency>
             <groupId>junit</groupId>

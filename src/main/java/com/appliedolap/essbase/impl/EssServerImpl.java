@@ -211,7 +211,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     @Override
     public List<EssApplication> getApplications() {
         try {
-            ApplicationList applicationList = api.getApplicationsApi().applicationsGetApplications(null, null, MAX_APPLICATIONS, null, null, null);
+            ApplicationList applicationList = api.getApplicationsApi().applicationsGetApplications(null, null, MAX_APPLICATIONS, null, null, null, null);
             List<EssApplication> applications = new ArrayList<>();
             for (Application application : wrap(applicationList.getItems())) {
                 applications.add(new EssApplicationImpl(api, this, application));
@@ -229,7 +229,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
             // only one is returned. In the future we could potentially go straight to the /applications/{applicationName}
             // endpoint, but that returns much more information, so doing it this way gives us consistency with the data
             // that is returned from the other method
-            ApplicationList applicationList = api.getApplicationsApi().applicationsGetApplications(applicationName, null, null, null, null, null);
+            ApplicationList applicationList = api.getApplicationsApi().applicationsGetApplications(applicationName, null, null, null, null, null, null);
             if (Utils.isNotEmpty(applicationList.getItems())) {
                 return new EssApplicationImpl(api, this, applicationList.getItems().get(0));
             } else {
@@ -356,7 +356,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     @Override
     public List<EssJob> getJobs() {
         try {
-            JobRecordPaginatedResultWrapper jobs = api.getJobsApi().jobsGetAllJobRecords(null, null, "job_ID:desc", 0L, 50L, false);
+            JobRecordPaginatedResultWrapper jobs = api.getJobsApi().jobsGetAllJobRecords(null, null, null, "job_ID:desc", 0L, 50L, false, null, null, null, null, null);
             List<EssJob> essJobs = new ArrayList<>();
             for (JobRecordBean jobRecordBean : wrap(jobs.getItems())) {
                 EssJob essJob = new EssJobImpl(api, this, jobRecordBean);
@@ -373,7 +373,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     public List<EssPermission> getPermissions() {
         try {
             return EssPermissions.from(
-                    api.getServiceRoleProvisioningApi().serviceRoleProvisioningSearchProvision(null, null, null));
+                    api.getServiceRoleProvisioningApi().serviceRoleProvisioningSearchProvision(null, null, null, null));
         } catch (ApiException e) {
             throw new EssApiException(e);
         }
@@ -411,7 +411,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     @Override
     public List<EssServerVariable> getVariables() {
         try {
-            VariableList variableList = api.getServerVariablesApi().variablesListServerVariables();
+            VariableList variableList = api.getServerVariablesApi().variablesListServerVariables(null, null);
             List<EssServerVariable> variables = new ArrayList<>();
             for (Variable variable : wrap(variableList.getItems())) {
                 variables.add(new EssServerVariableImpl(api, this, variable));
@@ -439,7 +439,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
 
     @Override
     public AboutInstance getAboutInstance() {
-        return WrapperUtil.wrapFunc(() -> api.getAboutEssbaseApi().getInstanceDetails(), AboutInstance::new);
+        return WrapperUtil.wrapFunc(() -> api.getAboutEssbaseApi().aboutGetInstanceDetails(), AboutInstance::new);
     }
 
     @Override
@@ -509,7 +509,7 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     @Override
     public List<EssDataSource> getDataSources() {
         try {
-            return api.getGlobalDataSourcesApi().globalDatasourcesGetDatasources(0, 1000).getItems()
+            return api.getGlobalDatasourcesApi().globalDatasourcesGetDatasources(0, 1000).getItems()
                     .stream()
                     .map(ds -> new EssDataSourceImpl(api, this, ds))
                     .collect(Collectors.toList());

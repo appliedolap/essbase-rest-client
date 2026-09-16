@@ -186,7 +186,7 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
     @Override
     public List<EssCubeVariable> getVariables() {
         try {
-            VariableList variables = api.getVariablesApi().variablesListVariables(application.getName(), cube.getName());
+            VariableList variables = api.getVariablesApi().variablesListVariables(application.getName(), cube.getName(), null);
             List<EssCubeVariable> cubeVariables = new ArrayList<>();
             for (Variable variable : wrap(variables.getItems())) {
                 cubeVariables.add(new EssCubeVariableImpl(api, this, variable));
@@ -267,7 +267,7 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
     @Override
     public List<EssDrillthrough> getDrillthroughs() {
         try {
-            ReportList reportList = api.getDrillThroughReportsApi().drillThroughReportsGetReports(getApplicationName(), getName());
+            ReportList reportList = api.getDrillThroughReportsApi().drillThroughReportsGetReports(getApplicationName(), getName(), null, null);
             List<EssDrillthrough> essDrillthroughs = new ArrayList<>();
             for (ReportBean reportBean : reportList.getItems()) {
                 EssDrillthrough essDrillthrough = new EssDrillthroughImpl(api, this, reportBean);
@@ -307,7 +307,7 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
     @Override
     public EssMember getMember(String memberName) {
         try {
-            MemberBean memberBean = api.getOutlineViewerApi().outlineGetMemberInfo(getApplicationName(), cube.getName(), memberName, null);
+            MemberBean memberBean = api.getOutlineViewerApi().outlineGetMemberInfo(getApplicationName(), cube.getName(), memberName, null, null, null);
             return new EssMemberImpl(api, this, memberBean);
         } catch (ApiException apiException) {
             // unfortunately, the Essbase REST API just throws a 400 exception (as opposed to something more specific)
@@ -560,7 +560,7 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
     @Override
     public EssCubeView openCubeView() {
         try {
-            Grid grid = api.getGridApi().gridGetDefault(getApplicationName(), getName());
+            Grid grid = api.getGridApi().gridGetDefault(getApplicationName(), getName(), null);
             return new EssCubeViewImpl(api, getApplicationName(), getName(), grid);
         } catch (ApiException e) {
             throw new EssApiException(e);
@@ -591,9 +591,9 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
             String username = api.getAuthentication() == null ? null
                     : api.getAuthentication().username().orElse(null);
             if (username == null) {
-                username = api.getUserSessionApi().userSessionGetSession(false).getId();
+                username = api.getUserSessionApi().userSessionGetSession(false, null).getId();
             }
-            api.getLayoutsApi().deleteLayout(getApplicationName(), getName(), "Session_Layout_" + username, null);
+            api.getLayoutsApi().layoutsDeleteLayout(getApplicationName(), getName(), "Session_Layout_" + username, null);
         } catch (ApiException e) {
             EssApiException wrapped = new EssApiException(e);
             if (wrapped.getMessage() == null || !wrapped.getMessage().contains("No layout exists")) {

@@ -53,7 +53,7 @@ public class EssOutlineImpl extends AbstractEssObject implements EssOutline {
     @Override
     public void getMember(String memberName) {
         try {
-            MemberBean memberBean = api.getOutlineViewerApi().outlineGetMemberInfo(cube.getApplication().getName(), cube.getName(), memberName, null);
+            MemberBean memberBean = api.getOutlineViewerApi().outlineGetMemberInfo(cube.getApplication().getName(), cube.getName(), memberName, null, null, null);
             System.out.println();
         } catch (ApiException apiException) {
             apiException.printStackTrace();
@@ -63,7 +63,7 @@ public class EssOutlineImpl extends AbstractEssObject implements EssOutline {
     @Override
     public void getMemberSearch(String memberName) {
         try {
-            RestCollectionResponse restCollectionResponse = api.getOutlineViewerApi().outlineGetMembers(cube.getApplication().getName(), cube.getName(), null, true, memberName, null, null, null, 0, 0);
+            RestCollectionResponse restCollectionResponse = api.getOutlineViewerApi().outlineGetMembers(cube.getApplication().getName(), cube.getName(), null, null, null, true, memberName, null, null, null, 0, 0);
             System.out.println();
         } catch (ApiException apiException) {
             apiException.printStackTrace();
@@ -96,7 +96,7 @@ public class EssOutlineImpl extends AbstractEssObject implements EssOutline {
     @Override
     public List<EssMember> getDimensions() {
         try {
-            RestCollectionResponse dimResponse = api.getOutlineViewerApi().outlineGetMembers(getCube().getApplication().getName(), getCube().getName(), null, null, null, null, null, null, 0, 0);
+            RestCollectionResponse dimResponse = api.getOutlineViewerApi().outlineGetMembers(getCube().getApplication().getName(), getCube().getName(), null, null, null, null, null, null, null, null, 0, 0);
             return EssMemberImpl.collectionToMembers(api, getCube(), dimResponse);
         } catch (ApiException e) {
             throw new RuntimeException(e);

@@ -3,7 +3,7 @@ package com.appliedolap.essbase.impl;
 import com.appliedolap.essbase.*;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.FileBean;
-import com.appliedolap.essbase.client.model.FileCollectionResponse;
+import com.appliedolap.essbase.client.model.CollectionResponse;
 import com.appliedolap.essbase.util.NativeHttp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,9 +80,9 @@ public class EssFolderImpl extends EssFileImpl implements EssFolder {
             HttpResponse<InputStream> response = NativeHttp.send(api.getClient(),
                     NativeHttp.request(api.getClient(), path).header("Accept", "application/json").GET(),
                     "filesListFiles");
-            FileCollectionResponse files;
+            CollectionResponse files;
             try (InputStream body = response.body()) {
-                files = api.getClient().getObjectMapper().readValue(body, FileCollectionResponse.class);
+                files = api.getClient().getObjectMapper().readValue(body, CollectionResponse.class);
             }
             List<EssFile> childFiles = new ArrayList<>();
             List<FileBean> items = files.getItems() == null ? Collections.emptyList() : files.getItems();

@@ -66,7 +66,7 @@ public class EssApplicationImpl extends AbstractEssObject implements EssApplicat
     @Override
     public List<EssCube> getCubes() {
         try {
-            CubeList cubeList = api.applicationsApi().applicationsGetCubes(application.getName(), null, null);
+            CubeList cubeList = api.applicationsApi().applicationsGetCubes(application.getName(), null, null, null);
             List<EssCube> cubes = new ArrayList<>();
             if (cubeList.getItems() != null) {
                 for (Cube cube : cubeList.getItems()) {
@@ -136,7 +136,7 @@ public class EssApplicationImpl extends AbstractEssObject implements EssApplicat
     @Override
     public List<EssApplicationConfiguration> getConfigurations() {
         try {
-            ApplicationConfigList applicationConfigList = api.getApplicationConfigurationApi().applicationConfigurationGetConfigurations(getName());
+            ApplicationConfigList applicationConfigList = api.getApplicationConfigurationApi().applicationConfigurationGetConfigurations(getName(), null);
             List<EssApplicationConfiguration> configurations = new ArrayList<>();
             for (ApplicationConfigEntry entry : wrap(applicationConfigList.getItems())) {
                 EssApplicationConfiguration keyValue = new EssApplicationConfigurationImpl(this, entry.getKey(), entry.getValue());
@@ -152,7 +152,7 @@ public class EssApplicationImpl extends AbstractEssObject implements EssApplicat
     public List<EssJob> getJobs() {
         try {
             logger.info("Fetching list of jobs from application {}", application.getName());
-            JobRecordPaginatedResultWrapper results = api.getJobsApi().jobsGetAllJobRecords(null, application.getName(), null, null, null, null);
+            JobRecordPaginatedResultWrapper results = api.getJobsApi().jobsGetAllJobRecords(null, application.getName(), null, null, null, null, null, null, null, null, null, null);
             List<EssJob> jobs = new ArrayList<>();
             if (results.getItems() != null) {
                 for (JobRecordBean jobRecordBean : results.getItems()) {
@@ -179,7 +179,7 @@ public class EssApplicationImpl extends AbstractEssObject implements EssApplicat
     @Override
     public List<EssApplicationVariable> getVariables() {
         try {
-            VariableList variables = api.getVariablesApi().variablesListAppVariables(getName());
+            VariableList variables = api.getVariablesApi().variablesListAppVariables(getName(), null, null);
             List<EssApplicationVariable> applicationVariables = new ArrayList<>();
             for (Variable variable : wrap(variables.getItems())) {
                 EssApplicationVariable applicationVariable = new EssApplicationVariableImpl(api, this, variable);

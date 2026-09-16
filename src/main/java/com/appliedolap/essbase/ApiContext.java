@@ -55,7 +55,7 @@ public class ApiContext {
 
     private final ExecuteMdxApi executeMdxApi;
 
-    private final GlobalDataSourcesApi globalDataSourcesApi;
+    private final GlobalDatasourcesApi globalDataSourcesApi;
 
     private final LocksApi locksApi;
 
@@ -101,7 +101,7 @@ public class ApiContext {
         this.serviceRoleProvisioningApi = new ServiceRoleProvisioningApi(client);
         this.applicationRoleProvisioningApi = new ApplicationRoleProvisioningApi(client);
         this.executeMdxApi = new ExecuteMdxApi(client);
-        this.globalDataSourcesApi = new GlobalDataSourcesApi(client);
+        this.globalDataSourcesApi = new GlobalDatasourcesApi(client);
         this.locksApi = new LocksApi(client);
         this.logsApi = new ApplicationLogsApi(client);
         this.gridApi = new GridApi(client);
@@ -207,7 +207,7 @@ public class ApiContext {
         return applicationRoleProvisioningApi;
     }
 
-    public GlobalDataSourcesApi getGlobalDataSourcesApi() {
+    public GlobalDatasourcesApi getGlobalDatasourcesApi() {
         return globalDataSourcesApi;
     }
 
