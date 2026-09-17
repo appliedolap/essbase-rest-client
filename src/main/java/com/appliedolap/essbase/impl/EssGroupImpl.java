@@ -21,6 +21,9 @@ public class EssGroupImpl extends AbstractEssObject implements EssGroup {
 
     private GroupBean groupBean;
 
+    /** So a group with a genuinely empty description is not re-fetched on every read. */
+    private boolean fetchedInFull;
+
     public EssGroupImpl(ApiContext api, EssServer server, GroupBean groupBean) {
         super(api);
         this.server = server;
@@ -42,8 +45,23 @@ public class EssGroupImpl extends AbstractEssObject implements EssGroup {
         return server;
     }
 
+    /**
+     * The description, fetching the group in full if the listing did not carry one.
+     *
+     * <p>{@code GET /groups} omits the description - with {@code expand=all} too - while
+     * {@code GET /groups/{id}} returns it. So a group that came from a listing reports null for a
+     * description it actually has, and anything that read that and wrote it back would erase it. That
+     * is not hypothetical: editing the role means sending the description alongside it.
+     *
+     * <p>One extra call, once per group, and only when somebody asks for the field the listing left
+     * out.
+     */
     @Override
     public String getDescription() {
+        if (groupBean.getDescription() == null && !fetchedInFull) {
+            fetchedInFull = true;
+            groupBean = WrapperUtil.doWithWrap(() -> api.getGroupsApi().groupsGet(groupBean.getName()));
+        }
         return groupBean.getDescription();
     }
 
@@ -77,6 +95,8 @@ public class EssGroupImpl extends AbstractEssObject implements EssGroup {
         // Kept, so a subsequent read of this object reflects the change without a round trip.
         groupBean = WrapperUtil.doWithWrap(
                 () -> api.getGroupsApi().groupsEdit(groupBean.getName(), edited));
+        // The edit answers with the whole group, so there is nothing left to fetch.
+        fetchedInFull = true;
     }
 
     @Override

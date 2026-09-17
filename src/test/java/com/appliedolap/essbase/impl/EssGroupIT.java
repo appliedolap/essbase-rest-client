@@ -99,6 +99,26 @@ public class EssGroupIT {
                 "Power User", reread.getRole());
     }
 
+    /**
+     * The listing leaves the description out, so a group taken from it must fetch its own before
+     * reporting one - otherwise an edit that only meant to change the role erases the description it
+     * never saw.
+     */
+    @Test
+    public void aGroupFromTheListingStillKnowsItsDescription() {
+        server.createGroup(GROUP, "described", "User");
+
+        EssGroup fromListing = server.getGroups().stream()
+                .filter(group -> GROUP.equals(group.getName())).findFirst().orElseThrow();
+        assertEquals("described", fromListing.getDescription());
+
+        fromListing.setRole("Power User");
+        EssGroup reread = server.getGroup(GROUP);
+        assertEquals("the description must survive an edit that only changed the role",
+                "described", reread.getDescription());
+        assertEquals("Power User", reread.getRole());
+    }
+
     @Test
     public void groupsHoldGroups() {
         server.createGroup(GROUP, "parent", "User");
