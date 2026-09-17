@@ -94,6 +94,11 @@ public class EssMemberImpl extends AbstractEssObject implements EssMember {
     }
 
     @Override
+    public String getDimensionName() {
+        return memberBean.getDimensionName();
+    }
+
+    @Override
     public Type getType() {
         return Type.MEMBER;
     }

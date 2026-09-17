@@ -14,6 +14,16 @@ public interface EssMember extends EssObject {
     @Override
     String getName();
 
+    /**
+     * The dimension this member belongs to.
+     *
+     * <p>Needed wherever a member has to be expressed as part of a cell rather than on its own - a
+     * drill-through POV is keyed by dimension, and a grid knows only the member names it is painting.
+     *
+     * @return the dimension name
+     */
+    String getDimensionName();
+
     @Override
     Type getType();
 
