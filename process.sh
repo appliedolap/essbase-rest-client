@@ -259,6 +259,26 @@ do
 done
 
 echo
+echo "── Fields the server names differently from the specification ───────────"
+
+# A datasource's columns arrive and depart as "Column", capitalised - the specification calls the
+# property "column" and puts the capitalised spelling in its xml.name, which is only half the story
+# for a JSON API. Sending the lowercase one is not rejected as unknown; the server accepts the
+# request and then fails it with "No column information found for datasource", which points at the
+# columns being absent rather than at their being spelled wrong.
+#
+# Not corrected here: this same model's "delimeter". It is misspelled, and the server does return the
+# correct "delimiter" when read - but the two are not one field. Writing "delimeter" normalises the
+# value ("," becomes "Comma") and produces a datasource that queries; writing "delimiter" stores the
+# character as given and produces one that answers NullPointerException at query time. Fixing the
+# spelling would turn working code into broken code.
+patch "a datasource's columns are Column, capitalised" \
+    '.components.schemas.ColumnsType.properties | has("column")' \
+    '.components.schemas.ColumnsType.properties.Column = .components.schemas.ColumnsType.properties.column
+     | del(.components.schemas.ColumnsType.properties.column)
+     | .components.schemas.ColumnsType.required = ["Column"]'
+
+echo
 echo "── Request bodies ──────────────────────────────────────────────────────"
 
 # Declared */*, which makes the generator send Content-Type: */*, which Essbase rejects.

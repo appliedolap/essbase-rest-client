@@ -122,6 +122,26 @@ public interface EssCube extends EssObject {
     EssDrillthrough createDrillthroughURL(String urlName, String urlLink, List<String> drillRegions);
 
     /**
+     * Creates a drill-through report that reads its detail from a data source.
+     *
+     * <p>The other half of {@link #createDrillthroughURL}: where that one records a URL for a client
+     * to open, this one Essbase can execute itself, returning the rows behind a cell - see
+     * {@link EssDrillthrough#execute(java.util.Map)}.
+     *
+     * <p>The data source must already exist; naming one that does not is refused outright with
+     * {@code No datasource exists with name '...'}.
+     *
+     * @param name the report name
+     * @param dataSourceName the data source holding the detail
+     * @param columns the source columns to return, in order
+     * @param columnMappings which column is filtered by which dimension, keyed by column name
+     * @param drillRegions the regions whose cells may be drilled
+     * @return the created report
+     */
+    EssDrillthrough createDrillthroughDataSource(String name, String dataSourceName, List<String> columns,
+            java.util.Map<String, EssDrillthroughColumnMapping> columnMappings, List<String> drillRegions);
+
+    /**
      * Get list of drill-through reports on the cube.
      *
      * @return the list of cube drill-through reports

@@ -252,6 +252,38 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
     //}
 
     @Override
+    public EssDrillthrough createDrillthroughDataSource(String name, String dataSourceName, List<String> columns,
+            Map<String, EssDrillthroughColumnMapping> columnMappings, List<String> drillRegions) {
+        WrapperUtil.wrap(() -> {
+            DrillthroughBean bean = new DrillthroughBean();
+            bean.setName(name);
+            // Lower case, which is what the server's own validation message asks for; it answers with
+            // DATASOURCE when the report is read back.
+            bean.setType("datasource");
+            bean.setDataSourceName(dataSourceName);
+            bean.setColumns(columns);
+            bean.setDrillableRegions(drillRegions);
+            Map<String, ColumnMappingInfo> infos = new LinkedHashMap<>();
+            if (columnMappings != null) {
+                for (Map.Entry<String, EssDrillthroughColumnMapping> entry : columnMappings.entrySet()) {
+                    EssDrillthroughColumnMapping mapping = entry.getValue();
+                    ColumnMappingInfo info = new ColumnMappingInfo();
+                    info.setDimension(mapping.getDimension());
+                    if (mapping.getMappingType() != null) {
+                        info.setType(ColumnMappingInfo.TypeEnum.fromValue(mapping.getMappingType().name()));
+                    }
+                    info.setGeneration(mapping.getGeneration());
+                    info.setLevel(mapping.getLevel());
+                    info.setGenerationNumber(mapping.getGenerationNumber());
+                    infos.put(entry.getKey(), info);
+                }
+            }
+            bean.setColumnMapping(infos);
+            api.getDrillThroughReportsApi().drillThroughReportsCreate(getApplicationName(), getName(), bean);
+        });
+        return getDrillthrough(name);
+    }
+
     public EssDrillthrough createDrillthroughURL(String urlName, String urlLink, List<String> drillRegions) {
         WrapperUtil.wrap(() -> {
             DrillthroughBean drillthroughBean = new DrillthroughBean();

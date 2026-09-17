@@ -26254,11 +26254,11 @@
       },
       "ColumnsType": {
         "required": [
-          "column"
+          "Column"
         ],
         "type": "object",
         "properties": {
-          "column": {
+          "Column": {
             "type": "array",
             "xml": {
               "name": "Column"

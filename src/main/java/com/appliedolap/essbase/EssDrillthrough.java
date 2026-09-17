@@ -1,6 +1,8 @@
 package com.appliedolap.essbase;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface EssDrillthrough {
 
@@ -95,6 +97,64 @@ public interface EssDrillthrough {
      * Deletes this drill-through report
      */
     void delete();
+
+    /**
+     * The source columns this report returns, for a datasource report.
+     *
+     * @return the column names, or null on a URL report, which has none
+     */
+    List<String> getColumns();
+
+    /**
+     * Sets the source columns this report returns.
+     *
+     * @param columns the column names, in the order they should come back
+     */
+    void setColumns(List<String> columns);
+
+    /**
+     * Which source column is filtered by which cube dimension, keyed by column name.
+     *
+     * <p>This is what makes a datasource report a drill-through rather than a query: the drilled
+     * cell's members become the filter on these columns.
+     *
+     * @return the mappings, empty on a URL report
+     */
+    Map<String, EssDrillthroughColumnMapping> getColumnMappings();
+
+    /**
+     * Sets the column-to-dimension mappings.
+     *
+     * @param columnMappings the mappings, keyed by source column name
+     */
+    void setColumnMappings(Map<String, EssDrillthroughColumnMapping> columnMappings);
+
+    /**
+     * Runs this report for a drilled cell and returns the detail behind it.
+     *
+     * <p>Executed by the server rather than assembled here, which is the difference that matters: the
+     * drillable regions, the column mappings, the runtime parameters and the temporary-table setting
+     * are all honoured, because Essbase is running its own report rather than this code guessing at
+     * what that report means.
+     *
+     * <p>Each dimension carries a set of members rather than one, because a drill can come from a
+     * selected range of cells and not only a single intersection.
+     *
+     * @param pov the drilled cell, as dimension to the members selected in it
+     * @return the detail rows
+     * @throws EssApiException if the report is a URL report, which the server cannot execute - there
+     *         is nothing to run, only a URL for a client to open
+     */
+    EssDrillthroughResult execute(Map<String, Set<String>> pov);
+
+    /**
+     * Runs this report for a drilled cell, resolving member names through an alias table.
+     *
+     * @param pov the drilled cell, as dimension to the members selected in it
+     * @param aliasTable the alias table the member names are expressed in, or null for none
+     * @return the detail rows
+     */
+    EssDrillthroughResult execute(Map<String, Set<String>> pov, String aliasTable);
 
     /**
      * The drill-through report type

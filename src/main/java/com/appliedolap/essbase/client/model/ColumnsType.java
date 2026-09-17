@@ -40,7 +40,7 @@ import com.appliedolap.essbase.client.ApiClient;
 })
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.10.0")
 public class ColumnsType {
-  public static final String JSON_PROPERTY_COLUMN = "column";
+  public static final String JSON_PROPERTY_COLUMN = "Column";
   @jakarta.annotation.Nonnull
   private List<ColumnType> column = new ArrayList<>();
 
@@ -151,11 +151,11 @@ public class ColumnsType {
 
     StringJoiner joiner = new StringJoiner("&");
 
-    // add `column` to the URL query string
+    // add `Column` to the URL query string
     if (getColumn() != null) {
       for (int i = 0; i < getColumn().size(); i++) {
         if (getColumn().get(i) != null) {
-          joiner.add(getColumn().get(i).toUrlQueryString(String.format("%scolumn%s%s", prefix, suffix,
+          joiner.add(getColumn().get(i).toUrlQueryString(String.format("%sColumn%s%s", prefix, suffix,
           "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
         }
       }
