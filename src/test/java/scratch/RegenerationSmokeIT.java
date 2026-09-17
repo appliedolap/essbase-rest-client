@@ -28,10 +28,28 @@ public class RegenerationSmokeIT {
             System.out.println("  " + application.getName());
         }
 
+        // Typing CollectionResponse.items as FileBean broke this: it used to cast each item to a Map,
+        // which compiled fine afterwards and threw ClassCastException at runtime.
+        List<EssFile> roots = server.getFiles();
+        System.out.println("root folders: " + roots.size());
+        for (EssFile root : roots) {
+            System.out.println("  " + root.getName() + " (" + root.getFullPath() + ")");
+        }
+        if (!roots.isEmpty() && roots.get(0) instanceof EssFolder) {
+            System.out.println("children of " + roots.get(0).getName() + ": "
+                    + ((EssFolder) roots.get(0)).getFiles().size());
+        }
+
         System.out.println("server variables: " + server.getVariables().size());
         System.out.println("jobs: " + server.getJobs().size());
         System.out.println("permissions: " + server.getPermissions().size());
 
+        // A freshly built local server has no applications at all, and the calls above are still worth
+        // exercising there - so everything below is skipped rather than failing on an empty list.
+        if (applications.isEmpty()) {
+            System.out.println("no applications on this server; skipping the per-application calls");
+            return;
+        }
         EssApplication first = applications.get(0);
         System.out.println("getApplication(\"" + first.getName() + "\") -> "
                 + server.getApplication(first.getName()).getName());

@@ -245,12 +245,10 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
         try {
             CollectionResponse collectionResponse = api.getFilesApi().filesListRootFolders(null, false);
             List<EssFile> files = new ArrayList<>();
-            for (Object file : wrap(collectionResponse.getItems())) {
-                Map<String, String> fileMap = (Map) file;
-                // name, fullPath, type, permissions (another map), links
-                String name = fileMap.get("name");
-                String fullPath = fileMap.get("fullPath");
-                boolean isFolder = "folder".equals(fileMap.get("type"));
+            for (FileBean file : wrap(collectionResponse.getItems())) {
+                String name = file.getName();
+                String fullPath = file.getFullPath();
+                boolean isFolder = "folder".equals(file.getType());
                 EssFile essFile = isFolder ? new EssFolderImpl(api, this, name, fullPath) : new EssFileImpl(api, this, name, fullPath);
                 files.add(essFile);
             }
