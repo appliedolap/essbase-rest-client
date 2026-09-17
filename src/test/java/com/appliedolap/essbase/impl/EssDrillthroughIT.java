@@ -160,6 +160,18 @@ public class EssDrillthroughIT {
         return pov;
     }
 
+    /** The listing leaves columns out, so a data source taken from it must fetch its own. */
+    @Test
+    public void aDataSourceFromTheListingStillKnowsItsColumns() {
+        Assume.assumeTrue("needs the " + DATA_SOURCE + " fixture", hasDataSource());
+        EssDataSource fromListing = server.getDataSources().stream()
+                .filter(ds -> DATA_SOURCE.equals(ds.getName())).findFirst().orElseThrow();
+        List<EssDataSourceColumn> columns = fromListing.getColumns();
+        assertFalse("the CSV data source has columns", columns.isEmpty());
+        assertTrue("and they are named", columns.stream().allMatch(c -> c.getName() != null));
+        assertEquals("indexes are zero based", Integer.valueOf(0), columns.get(0).getIndex());
+    }
+
     private boolean hasDataSource() {
         return server.getDataSources().stream().anyMatch(ds -> DATA_SOURCE.equals(ds.getName()));
     }
