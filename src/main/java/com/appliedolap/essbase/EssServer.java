@@ -305,6 +305,22 @@ public interface EssServer {
     EssJob createApplicationFromWorkbook(String application, String database, EssFile file);
 
     /**
+     * Builds or updates an application from a workbook, choosing what the import should do.
+     *
+     * <p>Worth choosing rather than accepting: a workbook usually carries data and scripts as well as
+     * an outline, and importing only the outline leaves a cube whose every upper level reads #Missing.
+     * See {@link EssWorkbookImportOptions}, whose defaults load and calculate.
+     *
+     * @param application the application to build
+     * @param database the cube within it
+     * @param file the workbook, in the server's catalogue
+     * @param options what the import should do
+     * @return the submitted job, which runs in the background
+     */
+    EssJob createApplicationFromWorkbook(String application, String database, EssFile file,
+            EssWorkbookImportOptions options);
+
+    /**
      * Returns the list of URLs known to this server. Generally speaking this seems to be the URL for the Jet UI, REST
      * API, XMLA provider, and some others.
      *

@@ -491,21 +491,35 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
 
     @Override
     public EssJob createApplicationFromWorkbook(String application, String database, EssFile file) {
-        logger.info("Submitting job to build/update {}.{} from {}", application, database, file);
+        return createApplicationFromWorkbook(application, database, file,
+                EssWorkbookImportOptions.defaults());
+    }
+
+    /**
+     * <p>Every flag is sent as the string "true" or "false" rather than a JSON boolean, which is not a
+     * style choice - the parameters bean types them as strings and the server rejects real booleans
+     * here. The job echoes back the four it acted on, which is the only way to confirm it read them.
+     */
+    @Override
+    public EssJob createApplicationFromWorkbook(String application, String database, EssFile file,
+            EssWorkbookImportOptions options) {
+        logger.info("Submitting job to build/update {}.{} from {} (data={}, scripts={}, recreate={})",
+                application, database, file, options.isLoadData(), options.isExecuteScripts(),
+                options.isRecreateApplication());
         JobsInputBean job = new JobsInputBean();
         job.setApplication(application);
         job.setDb(database);
         job.setJobtype(EssJobImpl.JobType.IMPORT_EXCEL.getParam());
 
         ParametersBean params = new ParametersBean();
-
-        params.loaddata("false");
-        params.overwrite("true");
-        params.deleteExcelOnSuccess("false");
+        params.loaddata(Boolean.toString(options.isLoadData()));
+        params.executeScript(Boolean.toString(options.isExecuteScripts()));
+        params.createFiles(Boolean.toString(options.isCreateFiles()));
+        params.recreateApplication(Boolean.toString(options.isRecreateApplication()));
+        params.overwrite(Boolean.toString(options.isOverwrite()));
+        params.deleteExcelOnSuccess(Boolean.toString(options.isDeleteWorkbookOnSuccess()));
         params.setCatalogExcelPath(file.getPath());
         params.importExcelFileName(file.getName());
-        params.recreateApplication("true");
-        params.createFiles("true");
         job.setParameters(params);
 
         try {
