@@ -18,6 +18,32 @@ public interface EssCube extends EssObject {
     List<EssScript> getCalcScripts();
 
     /**
+     * Runs the default calculation, aggregating the cube.
+     *
+     * <p>Worth knowing when a freshly built cube looks empty: loading data does not aggregate it.
+     * A data load or an application workbook import writes level 0 and stops there, so every upper
+     * level reads #Missing until something calculates - which is most of what an ad hoc grid shows
+     * when it first opens.
+     *
+     * <p>Blocks until the calculation finishes, because a calculation that has been started and a
+     * cube that has been calculated are different things and the caller almost always means the
+     * second.
+     */
+    void calculate();
+
+    /**
+     * Runs a calculation given as script text rather than a stored script.
+     *
+     * <p>{@link EssScript#execute()} runs one that exists on the cube; this runs one that does not
+     * have to. The two are parameterised differently and neither is guessable - a stored calculation
+     * goes in the job's {@code file} parameter by bare name, while script text goes in {@code script}
+     * with {@code isScriptContent} set.
+     *
+     * @param script the calculation, e.g. {@code CALC ALL;}
+     */
+    void calculate(String script);
+
+    /**
      * The MDX scripts on this cube. Same endpoints as the calc scripts, told apart by a type
      * parameter - see {@link EssScript.ScriptType}.
      *

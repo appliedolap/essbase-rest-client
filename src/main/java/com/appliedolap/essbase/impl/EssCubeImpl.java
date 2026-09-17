@@ -462,6 +462,39 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
         }
     }
 
+    /** CALC ALL is what "the default calculation" means for a block storage cube. */
+    @Override
+    public void calculate() {
+        calculate("CALC ALL;");
+    }
+
+    @Override
+    public void calculate(String script) {
+        JobsInputBean job = new JobsInputBean();
+        job.setApplication(getApplicationName());
+        job.setDb(getName());
+        job.setJobtype(EssJob.JobType.RUN_CALCULATION.getParam());
+
+        ParametersBean params = new ParametersBean();
+        // Script text rather than a stored script's name, which is the difference isScriptContent
+        // makes: without it the server reads the text as a file name and answers "Invalid file name
+        // 'CALC ALL;'. Does not have an extension."
+        params.setScript(script);
+        params.setIsScriptContent(true);
+        job.setParameters(params);
+
+        try {
+            logger.info("Calculating {}.{}", getApplicationName(), getName());
+            JobRecordBean record = awaitCompletion(api.getJobsApi().jobsExecuteJob(job));
+            if (!EssJob.Status.fromCode(record.getStatusCode()).isSuccessful()) {
+                throw new EssApiException("The calculation failed: " + describeFailure(record));
+            }
+            logger.info("Calculated {}.{}", getApplicationName(), getName());
+        } catch (ApiException e) {
+            throw new EssApiException(e);
+        }
+    }
+
     /** Polls until the job stops being in progress, or until it has plainly stalled. */
     private JobRecordBean awaitCompletion(JobRecordBean record) throws ApiException {
         long deadline = System.currentTimeMillis() + JOB_TIMEOUT_MILLIS;
