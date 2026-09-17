@@ -15,6 +15,30 @@ public class ConnectionUtils {
 
     private ConnectionUtils() {}
 
+    /**
+     * The same connection as {@link #server()}, as a raw api context.
+     *
+     * <p>For a test that needs an endpoint the library does not model yet - creating a fixture user,
+     * say. Reach for {@link #server()} for anything the domain model covers.
+     */
+    public static ApiContext api() {
+        Properties properties = load();
+        return new ApiContext(new ApiClientFactory(
+                properties.getProperty("essbase.endpoint") + EssServer.DEFAULT_REST_API_PATH,
+                properties.getProperty("essbase.username"),
+                properties.getProperty("essbase.password")).create());
+    }
+
+    private static Properties load() {
+        Properties properties = new Properties();
+        try (InputStream fis = new FileInputStream(System.getProperty("user.home") + "/" + DEFAULT_PROPERTIES_FILENAME)) {
+            properties.load(fis);
+            return properties;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static EssServer server() {
         System.setProperty(ESSBASE_NETWORK_LOGGING, "true");
 

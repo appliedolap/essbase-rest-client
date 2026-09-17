@@ -239,6 +239,26 @@ patch "a catalogue listing holds files, not untyped objects" \
     '.components.schemas.CollectionResponse.properties.items.items = {"$ref": "#/components/schemas/FileBean"}'
 
 echo
+echo "── Operations whose only answer is a links envelope ─────────────────────"
+
+# Adding or removing a group member is typed as returning a UserBean and returns no such thing: the
+# body is a links envelope and nothing else. That would merely be untidy, except the client appends
+# links=none to every request, which empties the envelope - so the generated method deserializes an
+# empty body into UserBean and throws "No content to map due to end-of-input" on a call the server
+# answered 200. Dropping the response makes them void, which is what they are.
+for entry in \
+    "/groups/{id}/members/users|post" \
+    "/groups/{id}/members/users|delete" \
+    "/groups/{id}/members/groups|post" \
+    "/groups/{id}/members/groups|delete"
+do
+    IFS='|' read -r p v <<< "$entry"
+    patch "$v $p answers nothing once links are suppressed" \
+        "[.paths.\"$p\".$v.responses.\"200\".content[].schema.\"\$ref\"] | any(. != null)" \
+        "del(.paths.\"$p\".$v.responses.\"200\".content)"
+done
+
+echo
 echo "── Request bodies ──────────────────────────────────────────────────────"
 
 # Declared */*, which makes the generator send Content-Type: */*, which Essbase rejects.

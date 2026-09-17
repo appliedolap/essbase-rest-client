@@ -200,6 +200,29 @@ public interface EssServer {
     List<EssGroup> getGroups();
 
     /**
+     * Creates a group.
+     *
+     * <p>Only on a server that owns its own security; a deployment behind an external identity provider
+     * keeps its groups in the provider and refuses this, the same as it refuses {@link #getGroups()}.
+     *
+     * @param name the group name, which is also its id
+     * @param description what the group is for, or null
+     * @param role the service-level role it grants its members - {@code User}, {@code Power User} or
+     *             {@code Service Administrator}. Required: the server rejects a group without one.
+     * @return the group as the server created it
+     */
+    EssGroup createGroup(String name, String description, String role);
+
+    /**
+     * One group by name.
+     *
+     * @param name the group name
+     * @return the group
+     * @throws com.appliedolap.essbase.exceptions.NoSuchEssbaseObjectException if there is no such group
+     */
+    EssGroup getGroup(String name);
+
+    /**
      * The users this server holds.
      *
      * <p>Only meaningful where Essbase owns its own security. A deployment behind an external identity

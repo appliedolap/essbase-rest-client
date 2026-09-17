@@ -173,12 +173,10 @@ public class GroupsApi {
    * &lt;p&gt;Adds multiple group members to a group.&lt;/p&gt; &lt;p&gt;If you are using EPM Shared Services security mode, this operation is not available. Instead, manage users, groups, and permissions in the Shared Services Console.&lt;/p&gt;
    * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
    * @param requestBody &lt;p&gt;Array of group IDs.&lt;/p&gt; (required)
-   * @return UserBean
    * @throws ApiException if fails to make API call
    */
-  public UserBean groupsAddGroupMembersToGroup(String id, List<String> requestBody) throws ApiException {
-    ApiResponse<UserBean> localVarResponse = groupsAddGroupMembersToGroupWithHttpInfo(id, requestBody);
-    return localVarResponse.getData();
+  public void groupsAddGroupMembersToGroup(String id, List<String> requestBody) throws ApiException {
+    groupsAddGroupMembersToGroupWithHttpInfo(id, requestBody);
   }
 
   /**
@@ -186,10 +184,10 @@ public class GroupsApi {
    * &lt;p&gt;Adds multiple group members to a group.&lt;/p&gt; &lt;p&gt;If you are using EPM Shared Services security mode, this operation is not available. Instead, manage users, groups, and permissions in the Shared Services Console.&lt;/p&gt;
    * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
    * @param requestBody &lt;p&gt;Array of group IDs.&lt;/p&gt; (required)
-   * @return ApiResponse&lt;UserBean&gt;
+   * @return ApiResponse&lt;Void&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UserBean> groupsAddGroupMembersToGroupWithHttpInfo(String id, List<String> requestBody) throws ApiException {
+  public ApiResponse<Void> groupsAddGroupMembersToGroupWithHttpInfo(String id, List<String> requestBody) throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = groupsAddGroupMembersToGroupRequestBuilder(id, requestBody);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -202,12 +200,17 @@ public class GroupsApi {
         if (localVarResponse.statusCode()/ 100 != 2) {
           throw getApiException("groupsAddGroupMembersToGroup", localVarResponse);
         }
-        return new ApiResponse<UserBean>(
+        return new ApiResponse<Void>(
           localVarResponse.statusCode(),
           localVarResponse.headers().map(),
-          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<UserBean>() {}) // closes the InputStream
+          null
         );
       } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
       }
     } catch (IOException e) {
       throw new ApiException(e);
@@ -236,7 +239,7 @@ public class GroupsApi {
     localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
 
     localVarRequestBuilder.header("Content-Type", "application/json");
-    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+    localVarRequestBuilder.header("Accept", "application/json");
 
     try {
       byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(requestBody);
@@ -258,12 +261,10 @@ public class GroupsApi {
    * &lt;p&gt;Adds multiple user members to a group.&lt;/p&gt; &lt;p&gt;If you are using EPM Shared Services security mode, this operation is not available. Instead, manage users, groups, and permissions in the Shared Services Console.&lt;/p&gt;
    * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
    * @param requestBody &lt;p&gt;Array of user IDs.&lt;/p&gt; (required)
-   * @return UserBean
    * @throws ApiException if fails to make API call
    */
-  public UserBean groupsAddUserMembersToGroup(String id, List<String> requestBody) throws ApiException {
-    ApiResponse<UserBean> localVarResponse = groupsAddUserMembersToGroupWithHttpInfo(id, requestBody);
-    return localVarResponse.getData();
+  public void groupsAddUserMembersToGroup(String id, List<String> requestBody) throws ApiException {
+    groupsAddUserMembersToGroupWithHttpInfo(id, requestBody);
   }
 
   /**
@@ -271,10 +272,10 @@ public class GroupsApi {
    * &lt;p&gt;Adds multiple user members to a group.&lt;/p&gt; &lt;p&gt;If you are using EPM Shared Services security mode, this operation is not available. Instead, manage users, groups, and permissions in the Shared Services Console.&lt;/p&gt;
    * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
    * @param requestBody &lt;p&gt;Array of user IDs.&lt;/p&gt; (required)
-   * @return ApiResponse&lt;UserBean&gt;
+   * @return ApiResponse&lt;Void&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UserBean> groupsAddUserMembersToGroupWithHttpInfo(String id, List<String> requestBody) throws ApiException {
+  public ApiResponse<Void> groupsAddUserMembersToGroupWithHttpInfo(String id, List<String> requestBody) throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = groupsAddUserMembersToGroupRequestBuilder(id, requestBody);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -287,12 +288,17 @@ public class GroupsApi {
         if (localVarResponse.statusCode()/ 100 != 2) {
           throw getApiException("groupsAddUserMembersToGroup", localVarResponse);
         }
-        return new ApiResponse<UserBean>(
+        return new ApiResponse<Void>(
           localVarResponse.statusCode(),
           localVarResponse.headers().map(),
-          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<UserBean>() {}) // closes the InputStream
+          null
         );
       } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
       }
     } catch (IOException e) {
       throw new ApiException(e);
@@ -321,7 +327,7 @@ public class GroupsApi {
     localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
 
     localVarRequestBuilder.header("Content-Type", "application/json");
-    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+    localVarRequestBuilder.header("Accept", "application/json");
 
     try {
       byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(requestBody);
@@ -796,12 +802,10 @@ public class GroupsApi {
    * &lt;p&gt;Removes multiple group members from a group.&lt;/p&gt; &lt;p&gt;If you are using EPM Shared Services security mode, this operation is not available. Instead, manage users, groups, and permissions in the Shared Services Console.&lt;/p&gt;
    * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
    * @param requestBody &lt;p&gt;Array of group IDs.&lt;/p&gt; (required)
-   * @return UserBean
    * @throws ApiException if fails to make API call
    */
-  public UserBean groupsRemoveGroupMembersFromGroup(String id, List<String> requestBody) throws ApiException {
-    ApiResponse<UserBean> localVarResponse = groupsRemoveGroupMembersFromGroupWithHttpInfo(id, requestBody);
-    return localVarResponse.getData();
+  public void groupsRemoveGroupMembersFromGroup(String id, List<String> requestBody) throws ApiException {
+    groupsRemoveGroupMembersFromGroupWithHttpInfo(id, requestBody);
   }
 
   /**
@@ -809,10 +813,10 @@ public class GroupsApi {
    * &lt;p&gt;Removes multiple group members from a group.&lt;/p&gt; &lt;p&gt;If you are using EPM Shared Services security mode, this operation is not available. Instead, manage users, groups, and permissions in the Shared Services Console.&lt;/p&gt;
    * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
    * @param requestBody &lt;p&gt;Array of group IDs.&lt;/p&gt; (required)
-   * @return ApiResponse&lt;UserBean&gt;
+   * @return ApiResponse&lt;Void&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UserBean> groupsRemoveGroupMembersFromGroupWithHttpInfo(String id, List<String> requestBody) throws ApiException {
+  public ApiResponse<Void> groupsRemoveGroupMembersFromGroupWithHttpInfo(String id, List<String> requestBody) throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = groupsRemoveGroupMembersFromGroupRequestBuilder(id, requestBody);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -825,12 +829,17 @@ public class GroupsApi {
         if (localVarResponse.statusCode()/ 100 != 2) {
           throw getApiException("groupsRemoveGroupMembersFromGroup", localVarResponse);
         }
-        return new ApiResponse<UserBean>(
+        return new ApiResponse<Void>(
           localVarResponse.statusCode(),
           localVarResponse.headers().map(),
-          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<UserBean>() {}) // closes the InputStream
+          null
         );
       } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
       }
     } catch (IOException e) {
       throw new ApiException(e);
@@ -859,7 +868,7 @@ public class GroupsApi {
     localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
 
     localVarRequestBuilder.header("Content-Type", "application/json");
-    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+    localVarRequestBuilder.header("Accept", "application/json");
 
     try {
       byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(requestBody);
@@ -881,12 +890,10 @@ public class GroupsApi {
    * &lt;p&gt;Remove multiple user members from a group.&lt;/p&gt; &lt;p&gt;If you are using EPM Shared Services security mode, this operation is not available. Instead, manage users, groups, and permissions in the Shared Services Console.&lt;/p&gt;
    * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
    * @param requestBody &lt;p&gt;Array of user IDs.&lt;/p&gt; (required)
-   * @return UserBean
    * @throws ApiException if fails to make API call
    */
-  public UserBean groupsRemoveUserMembersFromGroup(String id, List<String> requestBody) throws ApiException {
-    ApiResponse<UserBean> localVarResponse = groupsRemoveUserMembersFromGroupWithHttpInfo(id, requestBody);
-    return localVarResponse.getData();
+  public void groupsRemoveUserMembersFromGroup(String id, List<String> requestBody) throws ApiException {
+    groupsRemoveUserMembersFromGroupWithHttpInfo(id, requestBody);
   }
 
   /**
@@ -894,10 +901,10 @@ public class GroupsApi {
    * &lt;p&gt;Remove multiple user members from a group.&lt;/p&gt; &lt;p&gt;If you are using EPM Shared Services security mode, this operation is not available. Instead, manage users, groups, and permissions in the Shared Services Console.&lt;/p&gt;
    * @param id &lt;p&gt;ID of group.&lt;/p&gt; (required)
    * @param requestBody &lt;p&gt;Array of user IDs.&lt;/p&gt; (required)
-   * @return ApiResponse&lt;UserBean&gt;
+   * @return ApiResponse&lt;Void&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UserBean> groupsRemoveUserMembersFromGroupWithHttpInfo(String id, List<String> requestBody) throws ApiException {
+  public ApiResponse<Void> groupsRemoveUserMembersFromGroupWithHttpInfo(String id, List<String> requestBody) throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = groupsRemoveUserMembersFromGroupRequestBuilder(id, requestBody);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -910,12 +917,17 @@ public class GroupsApi {
         if (localVarResponse.statusCode()/ 100 != 2) {
           throw getApiException("groupsRemoveUserMembersFromGroup", localVarResponse);
         }
-        return new ApiResponse<UserBean>(
+        return new ApiResponse<Void>(
           localVarResponse.statusCode(),
           localVarResponse.headers().map(),
-          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<UserBean>() {}) // closes the InputStream
+          null
         );
       } finally {
+        // Drain the InputStream
+        while (localVarResponse.body().read() != -1) {
+            // Ignore
+        }
+        localVarResponse.body().close();
       }
     } catch (IOException e) {
       throw new ApiException(e);
@@ -944,7 +956,7 @@ public class GroupsApi {
     localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
 
     localVarRequestBuilder.header("Content-Type", "application/json");
-    localVarRequestBuilder.header("Accept", "application/json, application/xml");
+    localVarRequestBuilder.header("Accept", "application/json");
 
     try {
       byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(requestBody);

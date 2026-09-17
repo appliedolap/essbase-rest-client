@@ -407,6 +407,30 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     }
 
     @Override
+    public EssGroup createGroup(String name, String description, String role) {
+        GroupBean group = new GroupBean();
+        group.setName(name);
+        group.setDescription(description);
+        group.setRole(role);
+        GroupBean created = WrapperUtil.doWithWrap(() -> api.getGroupsApi().groupsAdd(group));
+        return new EssGroupImpl(api, this, created);
+    }
+
+    @Override
+    public EssGroup getGroup(String name) {
+        try {
+            return new EssGroupImpl(api, this, api.getGroupsApi().groupsGet(name));
+        } catch (ApiException e) {
+            // The server answers 404 for a group that isn't there, which is a question answered rather
+            // than a call that failed.
+            if (e.getCode() == 404) {
+                throw new NoSuchEssbaseObjectException(name, Type.GROUP);
+            }
+            throw new EssApiException(e);
+        }
+    }
+
+    @Override
     public List<EssServerVariable> getVariables() {
         try {
             VariableList variableList = api.getServerVariablesApi().variablesListServerVariables(null, null);

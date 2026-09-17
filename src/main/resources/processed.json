@@ -7666,19 +7666,7 @@
         },
         "responses": {
           "200": {
-            "description": "<p><strong>OK</strong></p><p>Group updated successfully. Returns link to get group members of a group.</p>",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserBean"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserBean"
-                }
-              }
-            }
+            "description": "<p><strong>OK</strong></p><p>Group updated successfully. Returns link to get group members of a group.</p>"
           },
           "400": {
             "description": "<p><strong>Bad Request</strong></p><p>Logged in user may not have appropriate permissions.</p>"
@@ -7730,19 +7718,7 @@
         },
         "responses": {
           "200": {
-            "description": "<p><strong>OK</strong></p><p>Group updated successfully. Returns link to get group members of a group.</p>",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserBean"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserBean"
-                }
-              }
-            }
+            "description": "<p><strong>OK</strong></p><p>Group updated successfully. Returns link to get group members of a group.</p>"
           },
           "400": {
             "description": "<p><strong>Bad Request</strong></p><p>Logged in user may not have appropriate permissions.</p>"
@@ -7838,19 +7814,7 @@
         },
         "responses": {
           "200": {
-            "description": "<p><strong>OK</strong></p><p>Group updated successfully. Returns link to get user members of a group.</p>",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserBean"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserBean"
-                }
-              }
-            }
+            "description": "<p><strong>OK</strong></p><p>Group updated successfully. Returns link to get user members of a group.</p>"
           },
           "400": {
             "description": "<p><strong>Bad Request</strong></p><p>Logged in user may not have appropriate permissions.</p>"
@@ -7902,19 +7866,7 @@
         },
         "responses": {
           "200": {
-            "description": "<p><strong>OK</strong></p><p>Group updated successfully. Returns link to get user members of a group.</p>",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserBean"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserBean"
-                }
-              }
-            }
+            "description": "<p><strong>OK</strong></p><p>Group updated successfully. Returns link to get user members of a group.</p>"
           },
           "400": {
             "description": "<p><strong>Bad Request</strong></p><p>Logged in user may not have appropriate permissions.</p>"
