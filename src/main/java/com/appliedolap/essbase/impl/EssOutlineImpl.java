@@ -73,12 +73,16 @@ public class EssOutlineImpl extends AbstractEssObject implements EssOutline {
     @Override
     public byte[] downloadXml() {
         return WrapperUtil.doWithWrap(() -> {
-            ExportOptions exportOptions = new ExportOptions();
-            String path = "/outline/" + ApiClient.urlEncode(cube.getApplication().getName())
-                    + "/" + ApiClient.urlEncode(cube.getName()) + "/xml";
-            return GenericDownload.downloadBytes(NativeHttp.send(api.getClient(), NativeHttp.request(api.getClient(), path)
-                    .header("Content-Type", "application/json")
-                    .POST(NativeHttp.jsonBody(api.getClient(), exportOptions)), "outlineGetOutlineXML"));
+            try {
+                ExportOptions exportOptions = new ExportOptions();
+                String path = "/outline/" + ApiClient.urlEncode(cube.getApplication().getName())
+                        + "/" + ApiClient.urlEncode(cube.getName()) + "/xml";
+                return GenericDownload.downloadBytes(NativeHttp.send(api.getClient(), NativeHttp.request(api.getClient(), path)
+                        .header("Content-Type", "application/json")
+                        .POST(NativeHttp.jsonBody(api.getClient(), exportOptions)), "outlineGetOutlineXML"));
+            } finally {
+                releaseActiveCube();
+            }
         });
     }
 
@@ -111,4 +115,31 @@ public class EssOutlineImpl extends AbstractEssObject implements EssOutline {
         //batch.
     }
 
+    /**
+     * Gives up the server-side active cube that exporting the outline claims and does not let go of.
+     *
+     * <p>The export sets this cube active on the session and leaves it that way, so the next export
+     * of any <em>other</em> cube in the same session is refused with "Cannot set active cube X as
+     * already active on cube Y. Clear the active cube and then, retry." - and a refused export does
+     * not clear it either, so one export wedges the session for good.
+     *
+     * <p>There is no endpoint that clears it: nothing in 26.1's spec unsets an active cube, and the
+     * server offers no method on /outline/{app}/{cube} but GET. What does clear it is any other
+     * Outline Viewer call, all of which release the cube when they finish - measured against 26.1,
+     * the XML export is the only one of the seven that leaks. So the export borrows the cheapest of
+     * them, asking for a single dimension purely for the release that follows.
+     *
+     * <p>Failing to release is worth a warning rather than an exception: the export itself succeeded,
+     * and the only casualty is that the next export has to be the one that unwedges the session.
+     */
+    private void releaseActiveCube() {
+        String application = cube.getApplication().getName();
+        try {
+            api.getOutlineViewerApi().outlineGetMembers(application, cube.getName(),
+                    null, null, null, null, null, null, null, null, 0, 1);
+        } catch (ApiException e) {
+            logger.warn("Could not release the active cube after exporting the outline of {}.{}",
+                    application, cube.getName(), e);
+        }
+    }
 }
