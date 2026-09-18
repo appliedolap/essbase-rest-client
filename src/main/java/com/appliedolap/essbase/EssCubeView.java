@@ -54,10 +54,14 @@ import java.util.List;
  * {@code [row, col, row, col]} describes a block of {@code row} by {@code col} cells, which for most
  * positions really is nonsensical. It is ordinary once the range says what it means.
  *
- * <p>{@link #pivot} and {@link #pivotToPov(int, int)} are not verified: their request wire shape
- * appears correct (the server returns engine-level errors specific to the given coordinates, rather
- * than a malformed-request 400), but no verified-valid pair of coordinates has been found yet - see
- * the ignored tests in {@code EssCubeViewIT}. Setting a *data* cell's value is
+ * <p>{@link #pivot} is verified live and documented on the method: it takes a source column and a
+ * destination column, not a pair of cells as the old four-argument form assumed.
+ *
+ * <p>{@link #pivotToPov(int, int)} is still not understood. What is known: one coordinate answers
+ * "Pivot ending point cannot be determined", so it wants two; two coordinates naming a row-axis column
+ * answer "Cannot pivot last column"; two naming a column-side dimension answer "Your pivot operation
+ * cannot be performed on this report". No pair has yet moved a row-axis dimension out to the POV,
+ * which is what the name suggests it is for. Setting a *data* cell's value is
  * not implemented at all yet - the same dirty-cell/submit mechanism {@link #setMembers} uses was
  * tried against data positions too, but unlike member positions, the write never stuck even against
  * a confirmed leaf-level intersection.
@@ -225,14 +229,46 @@ public interface EssCubeView extends EssGrid {
     }
 
     /**
-     * Swaps the positions of the members at the two given coordinates.
+     * Moves a dimension to a different place in the grid - onto the row axis, or elsewhere in the
+     * header.
      *
-     * @param fromRow the row of the first member
-     * @param fromCol the column of the first member
-     * @param toRow   the row of the second member
-     * @param toCol   the column of the second member
+     * <p>Worked out against a live server, because nothing documents it. A grid's dimensions all live
+     * at some column: the row-axis dimensions occupy the leftmost columns, and the ones on the column
+     * side appear as labels in row 0 further right. Pivoting is moving a dimension from one of those
+     * columns to another.
+     *
+     * <pre>
+     *   col        0        1         2      3         4
+     *   row 0                               Scenario  Market     &lt;- column side
+     *   row 1   Product  Measures  Year     105522                  &lt;- row axis
+     *
+     *   pivot(3, 0)  Scenario to the front of the row axis
+     *   pivot(4, 2)  Market between Measures and Year
+     *   pivot(4, 3)  Market ahead of Scenario, still on the column side
+     * </pre>
+     *
+     * <p>The dimension is inserted <em>before</em> whatever occupies {@code toColumn}, so moving a
+     * dimension to the column just after itself does nothing.
+     *
+     * <p>{@code fromColumn} has to name a dimension on the column side. A row-axis column is refused
+     * with "Cannot pivot last column", and so is moving the last remaining column-side dimension onto
+     * the row axis - a grid has to keep something on each axis. A move that would change nothing is
+     * refused with "Your pivot operation has no effect on this report".
+     *
+     * <p>Going the other way - a row-axis dimension out to the POV - is not this call, and is not yet
+     * understood; see {@link #pivotToPov}.
+     *
+     * @param fromColumn the column of the dimension to move
+     * @param toColumn where to put it; the dimension lands before whatever is there
      */
-    void pivot(int fromRow, int fromCol, int toRow, int toCol);
+    void pivot(int fromColumn, int toColumn);
+
+    /**
+     * Moves a dimension to the front of the row axis, which is what a pivot with no destination does.
+     *
+     * @param fromColumn the column of the dimension to move
+     */
+    void pivot(int fromColumn);
 
     /**
      * Pins the member at the given position into the POV, removing its dimension from whichever axis

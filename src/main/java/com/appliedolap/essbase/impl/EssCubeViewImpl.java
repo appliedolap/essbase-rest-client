@@ -184,17 +184,22 @@ public class EssCubeViewImpl implements EssCubeView {
         execute(new GridOperation().grid(grid).action(GridOperation.ActionEnum.REFRESH));
     }
 
-    // "coordinates", not "ranges", and so untouched by the range format the other operations use - this
-    // is two points, a source and a destination, rather than a rectangle. Still unverified, but not
-    // unexamined: against the default Sample.Basic grid, four coordinates answers 200 with a grid whose
-    // every row reads "Market", which is not a pivot anyone asked for; two coordinates - just the source
-    // cell - answers with the row dimension actually replaced, which looks like one. "ranges" in any
-    // shape is refused outright with "Cannot read...". Recorded rather than acted on: what the second
-    // pair is supposed to mean is still a guess, and guessing produced the first grid.
+    // "coordinates", not "ranges" - two numbers, and any beyond the second are ignored (verified: a
+    // pivot with [3, 0, 9, 9] answers identically to [3, 0]). The old four-argument form sent a pair of
+    // cells, which is not what this reads: it takes a source column and a destination column.
     @Override
-    public void pivot(int fromRow, int fromCol, int toRow, int toCol) {
+    public void pivot(int fromColumn, int toColumn) {
         GridOperation operation = new GridOperation().grid(grid).action(GridOperation.ActionEnum.PIVOT);
-        operation.setCoordinates(Arrays.asList(fromRow, fromCol, toRow, toCol));
+        operation.setCoordinates(Arrays.asList(fromColumn, toColumn));
+        execute(operation);
+    }
+
+    // One coordinate is a legitimate request and means the front of the row axis - the server supplies
+    // the destination rather than rejecting the call, and [3] answers identically to [3, 0].
+    @Override
+    public void pivot(int fromColumn) {
+        GridOperation operation = new GridOperation().grid(grid).action(GridOperation.ActionEnum.PIVOT);
+        operation.setCoordinates(Arrays.asList(fromColumn));
         execute(operation);
     }
 

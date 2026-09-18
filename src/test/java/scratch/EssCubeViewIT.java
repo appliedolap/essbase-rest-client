@@ -275,38 +275,93 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
         assertEquals("", view.getCell(3, 0));
     }
 
-    // Both of these passed (with no engine error) before resetDefaultView() was wired into @Before -
-    // but that was against a contaminated, previously-mutated starting grid, not the true pristine
-    // baseline. Against the real clean baseline, both now fail with "Cannot pivot last column."
-    // Still needs a genuinely valid pivot target - same open question as pivotToPov below.
-    @Ignore
+    /**
+     * Pivot moves a dimension from one column of the grid to another.
+     *
+     * <p>The pristine Sample.Basic grid is
+     * <pre>
+     *   col      0        1         2       3
+     *   row 0            Product   Market  Scenario    &lt;- POV
+     *   row 1            Measures                      &lt;- column axis
+     *   row 2   Year     105522                        &lt;- row axis
+     * </pre>
+     * so column 2 is Market, and pivoting it to column 0 puts it at the front of the row axis.
+     */
     @Test
     @Category(DestructiveIntegrationTest.class)
-    public void pivotColumnForColumn() {
+    public void pivotMovesAColumnSideDimensionOntoTheRowAxis() {
         EssCubeView view = sampleBasic().openCubeView();
-        view.zoomIn(0, 1);
-        logger.info("Before pivot:");
+        assertEquals("Market", view.getCell(0, 2).trim());
+        assertEquals("Year", view.getCell(2, 0).trim());
+
+        view.pivot(2, 0);
         logGrid(view);
 
-        // swap the dimension in column 0 (Product) with the one in column 1 (Year)
-        view.pivot(2, 0, 2, 1);
-        logger.info("After pivot:");
-        logGrid(view);
+        assertEquals("Market is now the first row dimension", "Market", view.getCell(2, 0).trim());
+        assertEquals("Year has moved along to make room", "Year", view.getCell(2, 1).trim());
     }
 
-    @Ignore
+    /** One coordinate means the front of the row axis, which is what the two-argument form does with 0. */
     @Test
     @Category(DestructiveIntegrationTest.class)
-    public void pivotAxisToAxis() {
+    public void pivotWithNoDestinationGoesToTheFrontOfTheRowAxis() {
         EssCubeView view = sampleBasic().openCubeView();
-        view.zoomIn(0, 1);
-        logger.info("Before pivot:");
+        view.pivot(2);
+
+        assertEquals("Market", view.getCell(2, 0).trim());
+        assertEquals("Year", view.getCell(2, 1).trim());
+    }
+
+    /** A destination further right keeps the dimension on the column side, just reordered. */
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void pivotCanReorderTheColumnSide() {
+        EssCubeView view = sampleBasic().openCubeView();
+        assertEquals("Market", view.getCell(0, 2).trim());
+        assertEquals("Scenario", view.getCell(0, 3).trim());
+
+        view.pivot(3, 2);
         logGrid(view);
 
-        // move Year (2,1) to where Measures (1,2) is
-        view.pivot(2, 1, 1, 2);
-        logger.info("After pivot:");
+        assertEquals("Scenario has moved ahead of Market", "Scenario", view.getCell(0, 2).trim());
+        assertEquals("Market", view.getCell(0, 3).trim());
+    }
+
+    /**
+     * A grid has to keep a dimension on each side, and the server says so rather than emptying one.
+     * The message names the column rather than the axis, which is worth knowing when reading it.
+     */
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void pivotWillNotEmptyTheColumnSide() {
+        EssCubeView view = sampleBasic().openCubeView();
+        // Pull dimensions onto the rows until the server stops us, rather than assuming how many there
+        // are - Sample.Basic has four on the column side, three in the POV plus Measures on the column
+        // axis, and counting them here would be encoding a fact about the cube into a test about a rule.
+        EssApiException refused = null;
+        for (int attempt = 0; attempt < 10 && refused == null; attempt++) {
+            try {
+                view.pivot(2, 0);
+            } catch (EssApiException e) {
+                refused = e;
+            }
+        }
         logGrid(view);
+        assertNotNull("the server should eventually refuse to empty the column side", refused);
+        assertTrue(refused.getMessage(), refused.getMessage().contains("Cannot pivot last column"));
+    }
+
+    /** Moving a dimension to where it already is is refused rather than quietly doing nothing. */
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void pivotToItsOwnColumnIsRefused() {
+        EssCubeView view = sampleBasic().openCubeView();
+        try {
+            view.pivot(2, 2);
+            fail("expected the server to refuse a pivot with no effect");
+        } catch (EssApiException expected) {
+            assertTrue(expected.getMessage(), expected.getMessage().contains("no effect"));
+        }
     }
 
     // Still unresolved: "Your pivot operation cannot be performed on this report." Pinning one
