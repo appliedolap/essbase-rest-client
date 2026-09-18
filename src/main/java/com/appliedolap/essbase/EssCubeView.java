@@ -262,14 +262,20 @@ public interface EssCubeView extends EssGrid {
      * last column", a grid keeping something on each axis, and a move that would change nothing is
      * refused with "Your pivot operation has no effect on this report".
      *
-     * <p><strong>Nothing here moves a dimension off the row axis.</strong> Not this call with a
+     * <p><strong>Nothing moves a dimension off the row axis, and nothing can.</strong> The server was
+     * asked directly: sending an action it does not know answers with the list of ones it does, and the
+     * list is
+     * {@code [removeonly, keeponly, pivot, submit, pivotToPOV, refresh, zoomin, zoomout]} - eight, the
+     * same eight the spec declares, with no third pivot among them. So this is the API's shape rather
+     * than a coordinate not yet found. The Java API's pivot rotates a row dimension onto the columns;
+     * this one has no call that does, and a grid needing that has to be rebuilt rather than pivoted.
+     *
+     * <p>Not for want of looking. Not this call with a
      * row-axis {@code fromColumn}, which is either refused or quietly acts on a column-side dimension
      * instead; not a destination past the end of the grid or a negative one; and not
      * {@link #pivotToPov}, which takes from the column axis. On a grid staged with an empty POV and
      * three dimensions on the rows, every coordinate pair in {@code [0..3] x [-2..7]} either did
-     * nothing or moved a column-side dimension. Dimensions travel column axis to POV to rows, and the
-     * row axis is where they stop. Swapping a row dimension onto the columns - the pivot people usually
-     * mean - has no call here that has been found; it needs the grid rebuilt rather than pivoted.
+     * nothing or moved a column-side dimension. Dimensions travel column axis to POV to rows, and the row axis is where they stop.
      *
      * <p>Going the other way - a row-axis dimension out to the POV - is not this call, and is not yet
      * understood; see {@link #pivotToPov}.
