@@ -86,6 +86,24 @@ public interface EssCubeView extends EssGrid {
     void zoomOut(int row, int col);
 
     /**
+     * Zooms in on the members in several rectangles at once.
+     *
+     * <p>One request, so every member expands against the same grid. Zooming them one at a time would
+     * work from a grid that the previous zoom had already reshaped, and the positions would no longer
+     * mean what they meant when they were picked.
+     *
+     * @param ranges the rectangles to zoom in on, in any order
+     */
+    void zoomIn(List<Range> ranges);
+
+    /**
+     * Zooms out of the members in several rectangles at once.
+     *
+     * @param ranges the rectangles to zoom out of, in any order
+     */
+    void zoomOut(List<Range> ranges);
+
+    /**
      * Keeps only the member at the given position. See the class-level javadoc: this describes the
      * click as-is and returns whatever the server does with it, rather than computing a request
      * shaped to force a particular outcome.

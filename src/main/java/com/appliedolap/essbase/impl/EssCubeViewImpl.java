@@ -109,18 +109,33 @@ public class EssCubeViewImpl implements EssCubeView {
         // predict which field applies, just try "ranges" first - the more literal, direct
         // description of a single clicked cell - and fall back to "coordinates" only if the server
         // itself says that shape doesn't apply here.
-        GridOperation operation = new GridOperation().grid(grid).action(GridOperation.ActionEnum.ZOOMIN);
-        operation.setRanges(Arrays.asList(Arrays.asList(row, col, row, col)));
+        zoomIn(java.util.List.of(Range.cell(row, col)));
+    }
+
+    @Override
+    public void zoomIn(java.util.List<Range> ranges) {
         try {
-            execute(operation);
+            executeRanges(GridOperation.ActionEnum.ZOOMIN, ranges);
         } catch (EssApiException e) {
-            execute(GridOperation.ActionEnum.ZOOMIN, row, col);
+            // The fallback only exists for a POV placeholder cell, which is a single cell by nature -
+            // "coordinates" holds one pair and cannot describe a selection. A rejected multi-range zoom
+            // is the server's answer, not something to retry in a shape that cannot carry the question.
+            if (ranges.size() != 1 || ranges.get(0).size() != 1) {
+                throw e;
+            }
+            execute(GridOperation.ActionEnum.ZOOMIN,
+                    ranges.get(0).getStartRow(), ranges.get(0).getStartColumn());
         }
     }
 
     @Override
     public void zoomOut(int row, int col) {
         executeRange(GridOperation.ActionEnum.ZOOMOUT, row, col);
+    }
+
+    @Override
+    public void zoomOut(java.util.List<Range> ranges) {
+        executeRanges(GridOperation.ActionEnum.ZOOMOUT, ranges);
     }
 
     @Override
