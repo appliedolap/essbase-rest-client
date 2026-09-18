@@ -377,6 +377,61 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
                 "Measures", view.getCell(0, view.getColumns() - 1).trim());
     }
 
+    /**
+     * pivotToPov exchanges the POV dimension with the first one on the column axis.
+     *
+     * <p>It needs two dimensions on the column axis - with one, taking it into the POV would empty the
+     * axis and every coordinate is refused. {@code pivot(2, 1)} is how the second one gets there.
+     */
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void pivotToPovExchangesThePovWithTheColumnAxis() {
+        EssCubeView view = twoOnEachAxis();
+        assertEquals("Scenario", view.getCell(0, 2).trim());   // POV
+        assertEquals("Market", view.getCell(1, 2).trim());     // first column-axis dimension
+
+        view.pivotToPov(3, 0);
+        logGrid(view);
+
+        assertEquals("Market has taken the POV", "Market", view.getCell(0, 2).trim());
+        assertEquals("Scenario has gone to the column axis", "Scenario", view.getCell(1, 2).trim());
+        assertEquals("Measures is undisturbed below it", "Measures", view.getCell(2, 2).trim());
+    }
+
+    /** With one dimension on the column axis there is nothing to exchange, and the server says so. */
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void pivotToPovNeedsASecondColumnDimension() {
+        EssCubeView view = sampleBasic().openCubeView();
+        // Pristine Sample.Basic: Measures alone on the column axis.
+        try {
+            view.pivotToPov(3, 0);
+            fail("expected a refusal with only one column dimension");
+        } catch (EssApiException expected) {
+            assertTrue(expected.getMessage(), expected.getMessage().contains("cannot be performed"));
+        }
+    }
+
+    /**
+     * Market onto the column axis, then Product onto the rows: two dimensions on each axis, one in the
+     * POV. Retried because resetDefaultView is not always settled by the time the next call lands.
+     */
+    private EssCubeView twoOnEachAxis() {
+        for (int attempt = 0; ; attempt++) {
+            try {
+                EssCubeView view = sampleBasic().openCubeView();
+                view.pivot(2, 1);
+                view.pivot(1, 0);
+                assertEquals("Scenario", view.getCell(0, 2).trim());
+                return view;
+            } catch (Exception e) {
+                if (attempt >= 6) {
+                    throw new AssertionError("could not stage a two-on-each-axis grid", e);
+                }
+            }
+        }
+    }
+
     /** Moving a dimension to where it already is is refused rather than quietly doing nothing. */
     @Test
     @Category(DestructiveIntegrationTest.class)

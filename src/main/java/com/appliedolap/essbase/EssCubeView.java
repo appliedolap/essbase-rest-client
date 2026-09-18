@@ -57,8 +57,9 @@ import java.util.List;
  * <p>{@link #pivot} is verified live and documented on the method: it takes a source column and a
  * destination column, not a pair of cells as the old four-argument form assumed.
  *
- * <p>{@link #pivotToPov(int, int)} resisted the same treatment - see the notes on the method for what
- * a full sweep did and did not establish. Setting a *data* cell's value is
+ * <p>{@link #pivotToPov(int, int)} exchanges the POV dimension with the first one on the column axis,
+ * and needs a grid with two column dimensions to do anything at all - see the method for what is
+ * established and what is still guesswork. Setting a *data* cell's value is
  * not implemented at all yet - the same dirty-cell/submit mechanism {@link #setMembers} uses was
  * tried against data positions too, but unlike member positions, the write never stuck even against
  * a confirmed leaf-level intersection.
@@ -276,35 +277,38 @@ public interface EssCubeView extends EssGrid {
     void pivot(int fromColumn);
 
     /**
-     * Not understood. Swept the same way {@link #pivot} was, and it did not yield.
+     * Exchanges the POV dimension with the first dimension on the column axis.
      *
-     * <p>What the sweep established:
+     * <p>Worked out live, and only partly. What it reliably does, given a grid with more than one
+     * dimension on the column axis:
      *
-     * <ul>
-     * <li>It wants two coordinates. One answers "Pivot ending point cannot be determined".
-     * <li>Anything past the last column answers "Your pivot operation has no effect on this report",
-     * so the first coordinate is read and bounded by the grid's width.
-     * <li>Otherwise every pair answers "Your pivot operation cannot be performed on this report" or
-     * "The resultant report cannot be retrieved. Your report heading cannot be interpreted".
-     * <li>Pristine Sample.Basic cannot be the grid for it: with one dimension on each axis, moving
-     * either into the POV would empty an axis. A grid with two row dimensions is the minimum.
-     * </ul>
+     * <pre>
+     *   c0        c1     c2                  c0        c1     c2
+     *   .         .      Scenario   &lt;- POV   .         .      Market
+     *   .         .      Market       ==&gt;    .         .      Scenario
+     *   .         .      Measures            .         .      Measures
+     *   Product   Year   105522              Product   Year   105522
+     * </pre>
      *
-     * <p>One call did succeed, once: on a grid with two row dimensions and two dimensions in the POV,
-     * {@code [0, 0]} moved the first POV dimension onto the front of the row axis - <em>out of</em> the
-     * POV, the opposite of what the name says. It did not reproduce on a grid staged identically
-     * afterwards, so it is recorded as an observation and not as behaviour.
+     * <p>So this is the call that moves a dimension <em>into</em> the POV, and it takes it off the
+     * column axis - {@link #pivot} moves them the other way. A grid with a single column dimension
+     * cannot do it at all: there would be nothing left on that axis, and every coordinate is refused
+     * with "Your pivot operation cannot be performed on this report", which is what made this look
+     * broken for a long time. Two column dimensions is the minimum, and
+     * {@code pivot(povColumn, columnAxisColumn)} is how to get a second one there.
      *
-     * <p>Two things make this hard to pin down, worth knowing before trying again.
-     * {@link EssCube#resetDefaultView()} is not reliably settled by the time the next call lands, so
-     * staging a grid needs retrying; and every grid operation updates the server's stored default, so
-     * probes contaminate each other unless each one re-sends a grid the caller is holding.
+     * <p><strong>The coordinates are not understood.</strong> Every pair that does anything produces
+     * this same exchange; the rest are accepted and do nothing, or are refused. On the grid above
+     * {@code (3, 0)} works and repeats identically five times out of five, while {@code (3, 3)} and
+     * {@code (4, 1)} are refused and {@code (0, 2)} is accepted and inert. No pattern was found that
+     * explains which is which, and nothing addresses a particular dimension - you get the first one on
+     * the column axis whatever you pass.
      *
-     * <p>No coordinate was found that moves a dimension from the grid into the POV, which is what the
-     * name suggests this is for. {@link #pivot} moves dimensions the other way and is understood.
+     * <p>Nothing found moves a <em>row</em> dimension into the POV. On a grid with two dimensions on
+     * each axis, every pair that worked moved a column-axis dimension.
      *
-     * @param row a grid row
-     * @param col a grid column
+     * @param row a grid row; see above, the meaning is not established
+     * @param col a grid column; likewise
      */
     void pivotToPov(int row, int col);
 
