@@ -262,19 +262,17 @@ public interface EssCubeView extends EssGrid {
      * last column", a grid keeping something on each axis, and a move that would change nothing is
      * refused with "Your pivot operation has no effect on this report".
      *
-     * <p><strong>Nothing moves a dimension off the row axis, and nothing can.</strong> The server was
-     * asked directly: sending an action it does not know answers with the list of ones it does, and the
-     * list is
-     * {@code [removeonly, keeponly, pivot, submit, pivotToPOV, refresh, zoomin, zoomout]} - eight, the
-     * same eight the spec declares, with no third pivot among them. So this is the API's shape rather
-     * than a coordinate not yet found. The Java API's pivot rotates a row dimension onto the columns;
-     * this one has no call that does, and a grid needing that has to be rebuilt rather than pivoted.
+     * <p><strong>No pivot action moves a dimension off the row axis</strong>, and none can: the server,
+     * asked directly, names its whole vocabulary as
+     * {@code [removeonly, keeponly, pivot, submit, pivotToPOV, refresh, zoomin, zoomout]}, and there is
+     * no third pivot among them. That is a limit of the <em>actions</em>, not of the API -
+     * {@link #setLayout} rotates rows onto columns perfectly well by writing the sheet and letting the
+     * engine read it, which is how Smart View does it. Reach for that rather than for these.
      *
-     * <p>Nor is the grid payload a way round it. A grid carries a {@code dimensions} array saying where
-     * each dimension sits - {@code column} for a row dimension, {@code row} for a column dimension,
-     * {@code pov} for the rest - which reads like somewhere to state a layout. It is not: editing it to
-     * put Year on the column axis and Product on the rows, and sending that grid back, returns the
-     * original layout unchanged. The array describes the grid; the slice is what the server reads.
+     * <p>The grid's {@code dimensions} array is not the way to state a layout either, despite reading
+     * like one: editing it and sending the grid back returns the original layout unchanged. It
+     * describes the grid. The slice - the cells - is what the server reads, which is what
+     * {@link #setLayout} writes.
      *
      * <p>Not for want of looking. Not this call with a
      * row-axis {@code fromColumn}, which is either refused or quietly acts on a column-side dimension
@@ -333,6 +331,40 @@ public interface EssCubeView extends EssGrid {
      * @param col a grid column; likewise
      */
     void pivotToPov(int row, int col);
+
+    /**
+     * Rewrites the grid as a sheet of labels and asks the server to interpret it.
+     *
+     * <p><strong>This is how a grid is rearranged.</strong> Not the pivot actions - this. Write the
+     * dimension names where you want them and send it; Essbase reads the sheet and answers with the
+     * grid that layout describes, data and all. It is what Smart View does, and it is why every
+     * operation carries the whole grid in the request rather than a handle to one.
+     *
+     * <pre>
+     * before                            after
+     * .      Product Market Scenario     .         Product Market Scenario
+     * .      Measures                    .         Year
+     * Year   105522                      Measures  105522
+     *
+     * view.setLayout(List.of(
+     *         "", "Product", "Market", "Scenario",
+     *         "", "Year",    "",       "",
+     *         "Measures", "", "",      ""));
+     * </pre>
+     *
+     * <p>That is the row-for-column rotation the {@link #pivot} action cannot do, and moving a POV
+     * dimension to the top works the same way. Reordering within an axis is the same idea: write the
+     * names in the order you want them.
+     *
+     * <p>The sheet is row-major and must have exactly {@link #getRows()} times {@link #getColumns()}
+     * entries - the server indexes it by position and answers "Index n out of bounds" if it is short.
+     * Beyond that the rules are the engine's: a layout it cannot read comes back as "Your report
+     * heading cannot be interpreted", and a sheet whose shape implies more or fewer header rows than
+     * the one sent may come back reinterpreted rather than refused.
+     *
+     * @param cells the grid's labels, row by row, with empty strings for the blanks
+     */
+    void setLayout(List<String> cells);
 
     /**
      * Re-executes the view as-is, picking up any data changes made since it was last retrieved.

@@ -179,6 +179,25 @@ public class EssCubeViewImpl implements EssCubeView {
         executeRange(GridOperation.ActionEnum.REMOVEONLY, row, col);
     }
 
+    /**
+     * Sends the sheet as given and lets the engine read it.
+     *
+     * <p>Deliberately no validation beyond the length: what layouts Essbase accepts is the engine's
+     * business and richer than anything worth reimplementing here, and its refusals say more than a
+     * guess would.
+     */
+    @Override
+    public void setLayout(java.util.List<String> cells) {
+        int expected = getRows() * getColumns();
+        if (cells == null || cells.size() != expected) {
+            throw new IllegalArgumentException("A layout needs exactly " + expected + " cells for this "
+                    + getRows() + " by " + getColumns() + " grid, but got "
+                    + (cells == null ? 0 : cells.size()));
+        }
+        grid.getSlice().getData().getRanges().get(0).setValues(new java.util.ArrayList<>(cells));
+        execute(new GridOperation().grid(grid).action(GridOperation.ActionEnum.REFRESH));
+    }
+
     @Override
     public void refresh() {
         execute(new GridOperation().grid(grid).action(GridOperation.ActionEnum.REFRESH));

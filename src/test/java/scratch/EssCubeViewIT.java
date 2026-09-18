@@ -483,6 +483,57 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
         }
     }
 
+    /**
+     * Rewriting the sheet rotates a row dimension onto the columns - the pivot the actions cannot do.
+     */
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void setLayoutRotatesRowsOntoColumns() {
+        EssCubeView view = sampleBasic().openCubeView();
+        assertEquals("Measures", view.getCell(1, 1).trim());   // on the columns
+        assertEquals("Year", view.getCell(2, 0).trim());       // on the rows
+
+        view.setLayout(List.of(
+                "", "Product",  "Market", "Scenario",
+                "", "Year",     "",       "",
+                "Measures", "", "",       ""));
+        logGrid(view);
+
+        assertEquals("Year has taken the column axis", "Year", view.getCell(1, 1).trim());
+        assertEquals("Measures has taken the row axis", "Measures", view.getCell(2, 0).trim());
+        assertEquals("and the data came with it", "105522.0", view.getCell(2, 1).trim());
+    }
+
+    /** A POV dimension can be written straight onto the columns, which no pivot action does either. */
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void setLayoutMovesAPovDimensionToTheColumns() {
+        EssCubeView view = sampleBasic().openCubeView();
+
+        view.setLayout(List.of(
+                "", "Product", "Year", "Scenario",
+                "", "Market",  "",     "",
+                "Measures", "", "",    ""));
+        logGrid(view);
+
+        assertEquals("Market", view.getCell(1, 1).trim());
+        assertEquals("Measures", view.getCell(2, 0).trim());
+        assertEquals("Year is in the POV now", "Year", view.getCell(0, 2).trim());
+    }
+
+    /** The server indexes the sheet by position, so a short one is a bounds error rather than a hint. */
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void setLayoutNeedsExactlyOneCellPerPosition() {
+        EssCubeView view = sampleBasic().openCubeView();
+        try {
+            view.setLayout(List.of("", "Product", "Market"));
+            fail("expected a complaint about the cell count");
+        } catch (IllegalArgumentException expected) {
+            assertTrue(expected.getMessage(), expected.getMessage().contains("exactly 12 cells"));
+        }
+    }
+
     /** Moving a dimension to where it already is is refused rather than quietly doing nothing. */
     @Test
     @Category(DestructiveIntegrationTest.class)
