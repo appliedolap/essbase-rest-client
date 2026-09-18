@@ -64,6 +64,13 @@ public class EssCubeViewImpl implements EssCubeView {
         return "2".equals(location.range().getTypes().get(location.offset())) ? CellType.DATA : CellType.MEMBER;
     }
 
+    /**
+     * Finds a cell in the response.
+     *
+     * <p>The {@code GridRange} here is unrelated to the ranges a request carries, despite the name: on
+     * the way back a range is a flat run of cell values with a start and an end index, and on the way
+     * out it is a rectangle as start plus counts. Nothing converts between them and nothing should.
+     */
     private CellLocation locate(int row, int col) {
         Slice slice = grid.getSlice();
         int flatIndex = row * slice.getColumns() + col;
@@ -177,6 +184,13 @@ public class EssCubeViewImpl implements EssCubeView {
         execute(new GridOperation().grid(grid).action(GridOperation.ActionEnum.REFRESH));
     }
 
+    // "coordinates", not "ranges", and so untouched by the range format the other operations use - this
+    // is two points, a source and a destination, rather than a rectangle. Still unverified, but not
+    // unexamined: against the default Sample.Basic grid, four coordinates answers 200 with a grid whose
+    // every row reads "Market", which is not a pivot anyone asked for; two coordinates - just the source
+    // cell - answers with the row dimension actually replaced, which looks like one. "ranges" in any
+    // shape is refused outright with "Cannot read...". Recorded rather than acted on: what the second
+    // pair is supposed to mean is still a guess, and guessing produced the first grid.
     @Override
     public void pivot(int fromRow, int fromCol, int toRow, int toCol) {
         GridOperation operation = new GridOperation().grid(grid).action(GridOperation.ActionEnum.PIVOT);
