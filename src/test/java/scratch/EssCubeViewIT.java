@@ -351,6 +351,32 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
         assertTrue(refused.getMessage(), refused.getMessage().contains("Cannot pivot last column"));
     }
 
+    /**
+     * The POV row exists only while something is in the POV.
+     *
+     * <p>Emptying it does not leave a blank row - the grid loses the row, the column axis moves up to
+     * row 0, and every row index below it shifts. A reader that treats row 0 as the POV will take the
+     * column axis for it.
+     */
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void thePovRowDisappearsWhenThePovIsEmptied() {
+        EssCubeView view = sampleBasic().openCubeView();
+        assertEquals(3, view.getRows());
+        assertEquals("Product", view.getCell(0, 1).trim());   // POV
+        assertEquals("Measures", view.getCell(1, 1).trim());  // column axis, below it
+
+        // Pull all three POV dimensions onto the rows.
+        view.pivot(2, 0);
+        view.pivot(2, 0);
+        view.pivot(2, 0);
+        logGrid(view);
+
+        assertEquals("the POV row is gone, not blank", 2, view.getRows());
+        assertEquals("the column axis has moved up into row 0",
+                "Measures", view.getCell(0, view.getColumns() - 1).trim());
+    }
+
     /** Moving a dimension to where it already is is refused rather than quietly doing nothing. */
     @Test
     @Category(DestructiveIntegrationTest.class)

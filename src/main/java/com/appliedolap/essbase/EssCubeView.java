@@ -234,26 +234,34 @@ public interface EssCubeView extends EssGrid {
      *
      * <p>Worked out against a live server, because nothing documents it. A grid's dimensions all live
      * at some column: the row-axis dimensions occupy the leftmost columns, and the ones on the column
-     * side appear as labels in row 0 further right. Pivoting is moving a dimension from one of those
-     * columns to another.
+     * side appear as labels further right. Pivoting is moving a dimension from one of those columns to
+     * another.
      *
      * <pre>
-     *   col        0        1         2      3         4
-     *   row 0                               Scenario  Market     &lt;- column side
-     *   row 1   Product  Measures  Year     105522                  &lt;- row axis
+     *   col      0        1         2       3
+     *   row 0            Product   Market  Scenario    &lt;- POV, if there is one
+     *   row 1            Measures                      &lt;- column axis, one row per dimension
+     *   row 2   Year     105522                        &lt;- row axis
      *
-     *   pivot(3, 0)  Scenario to the front of the row axis
-     *   pivot(4, 2)  Market between Measures and Year
-     *   pivot(4, 3)  Market ahead of Scenario, still on the column side
+     *   pivot(2, 0)  Market to the front of the row axis
+     *   pivot(3, 2)  Scenario ahead of Market, still on the column side
      * </pre>
+     *
+     * <p><strong>Do not count rows from the top.</strong> The POV occupies row 0 only while there is a
+     * POV: empty it and the row disappears, the column-axis rows shift up, and the grid loses a row.
+     * Pivoting the third of three POV dimensions onto the rows in the grid above turns it from 3x4 into
+     * 2x5 with Measures - the column axis - now at row 0. Anything reading "row 0" as "the POV" will
+     * quietly read the column axis instead. The header is as many rows as there are column dimensions,
+     * plus one if any dimension is in the POV, and as many columns as there are row dimensions.
      *
      * <p>The dimension is inserted <em>before</em> whatever occupies {@code toColumn}, so moving a
      * dimension to the column just after itself does nothing.
      *
-     * <p>{@code fromColumn} has to name a dimension on the column side. A row-axis column is refused
-     * with "Cannot pivot last column", and so is moving the last remaining column-side dimension onto
-     * the row axis - a grid has to keep something on each axis. A move that would change nothing is
-     * refused with "Your pivot operation has no effect on this report".
+     * <p>{@code fromColumn} names a dimension on the column side, and matters when there is more than
+     * one of them; with a single column-side dimension left the server moves it whatever column is
+     * named. Moving that last one onto the row axis is refused with "Cannot pivot last column" - a grid
+     * keeps something on each axis - and so is naming a row-axis column. A move that would change
+     * nothing is refused with "Your pivot operation has no effect on this report".
      *
      * <p>Going the other way - a row-axis dimension out to the POV - is not this call, and is not yet
      * understood; see {@link #pivotToPov}.
