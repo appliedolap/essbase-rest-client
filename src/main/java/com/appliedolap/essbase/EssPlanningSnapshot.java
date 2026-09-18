@@ -257,6 +257,102 @@ public class EssPlanningSnapshot implements AutoCloseable {
         }
     }
 
+    /** What a dimension in the snapshot looks like, without importing anything. */
+    public static class DimensionSummary {
+
+        private final String name;
+
+        private final boolean attribute;
+
+        private final String density;
+
+        private final String dimensionType;
+
+        private final int members;
+
+        DimensionSummary(String name, boolean attribute, String density, String dimensionType,
+                int members) {
+            this.name = name;
+            this.attribute = attribute;
+            this.density = density;
+            this.dimensionType = dimensionType;
+            this.members = members;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * Whether the snapshot files this under attribute dimensions.
+         *
+         * <p>Worth knowing before importing, because <strong>batch outline editing cannot create an
+         * attribute dimension</strong>: {@code dimAdd} with an attribute category is refused with
+         * status 1060102 whatever the cube looks like, so an attribute dimension imported this way
+         * arrives as an ordinary sparse one with its members in it. Sometimes that is wanted and
+         * sometimes it is clutter, which is the caller's call rather than this one's.
+         */
+        public boolean isAttributeDimension() {
+            return attribute;
+        }
+
+        /** "Dense" or "Sparse" as the snapshot declares it, or empty. */
+        public String getDensity() {
+            return density;
+        }
+
+        /** Planning's dimension type - "Accounts", "Time", "None". */
+        public String getDimensionType() {
+            return dimensionType;
+        }
+
+        /** How many members this plan type has in it. */
+        public int getMembers() {
+            return members;
+        }
+
+        @Override
+        public String toString() {
+            return name + " (" + members + " members)";
+        }
+
+    }
+
+    /**
+     * What the snapshot holds for a plan type, without changing anything.
+     *
+     * <p>For showing someone what they are about to import and letting them choose. Reads every
+     * dimension file, so it is a real piece of work rather than a directory listing - but it is the
+     * only way to say how many members a dimension has, which is most of what makes the choice.
+     *
+     * @param planType which cube's members to count
+     * @return one summary per dimension, standard dimensions first
+     */
+    public List<DimensionSummary> preview(String planType) {
+        List<DimensionSummary> standard = new ArrayList<>();
+        List<DimensionSummary> attributes = new ArrayList<>();
+        for (Map.Entry<String, String> entry : getDimensionEntries(planType).entrySet()) {
+            boolean attribute = isAttributeEntry(entry.getValue());
+            try {
+                EssPlanningDimensionFile file = readDimension(entry.getValue());
+                int members = 0;
+                for (EssPlanningDimensionFile.Member member : file.getMembers()) {
+                    if (member.isInPlanType(planType)) {
+                        members++;
+                    }
+                }
+                (attribute ? attributes : standard).add(new DimensionSummary(entry.getKey(), attribute,
+                        file.getDensity(), file.getDimensionType(), members));
+            } catch (Exception e) {
+                logger.debug("Could not read {}", entry.getValue(), e);
+                (attribute ? attributes : standard)
+                        .add(new DimensionSummary(entry.getKey(), attribute, "", "unreadable", 0));
+            }
+        }
+        standard.addAll(attributes);
+        return standard;
+    }
+
     /**
      * Builds every dimension in the snapshot into a cube.
      *
@@ -270,8 +366,23 @@ public class EssPlanningSnapshot implements AutoCloseable {
      * @return what happened, dimension by dimension
      */
     public Report importInto(EssCube cube, String planType) {
+        return importInto(cube, planType, null);
+    }
+
+    /**
+     * Builds the dimensions the caller picked.
+     *
+     * @param cube where to build
+     * @param planType which cube of the Planning application to take the properties from
+     * @param only the dimension names to build, or null for all of them
+     * @return what happened, dimension by dimension
+     */
+    public Report importInto(EssCube cube, String planType, java.util.Collection<String> only) {
         Report report = new Report();
-        Map<String, String> dimensionEntries = getDimensionEntries(planType);
+        Map<String, String> dimensionEntries = new LinkedHashMap<>(getDimensionEntries(planType));
+        if (only != null) {
+            dimensionEntries.keySet().retainAll(only);
+        }
         if (dimensionEntries.isEmpty()) {
             report.note("No dimension files found for plan type " + planType + ".");
             return report;
@@ -304,7 +415,14 @@ public class EssPlanningSnapshot implements AutoCloseable {
         for (String dimension : attributes) {
             build(cube, dimension, files.get(dimension), planType, true, report);
         }
-        associateAttributes(cube, planType, namesById, report);
+        // Only where an attribute dimension was actually built. Associating one that was not imported
+        // is an action against a dimension that is not there - the server takes the document without
+        // complaint and the report would claim associations that do not exist.
+        if (attributes.isEmpty()) {
+            report.note("No attribute dimensions were imported, so no attribute associations.");
+        } else {
+            associateAttributes(cube, planType, namesById, new LinkedHashSet<>(attributes), report);
+        }
         return report;
     }
 
@@ -431,7 +549,7 @@ public class EssPlanningSnapshot implements AutoCloseable {
      * which is the one thing that makes that XML usable against an Essbase outline at all.
      */
     private void associateAttributes(EssCube cube, String planType, Map<String, String> namesById,
-            Report report) {
+            Set<String> built, Report report) {
         String entry = findBatchOutlineEditXml(planType);
         if (entry == null) {
             report.note("No batch outline edit XML in the snapshot, so no attribute associations.");
@@ -452,7 +570,7 @@ public class EssPlanningSnapshot implements AutoCloseable {
         for (String element : elements(xml, "dimAssoc")) {
             String dimension = attribute(element, "dimName");
             String attributeDimension = attribute(element, "attrDim");
-            if (!dimension.isEmpty() && !attributeDimension.isEmpty()) {
+            if (!dimension.isEmpty() && built.contains(attributeDimension)) {
                 edit.associateAttributeDimension(dimension, attributeDimension);
                 dimensionLevel++;
             }
@@ -461,7 +579,7 @@ public class EssPlanningSnapshot implements AutoCloseable {
             String member = namesById.get(attribute(element, "thisMbr"));
             String attributeMember = namesById.get(attribute(element, "attrMbr"));
             String attributeDimension = attribute(element, "attrDim");
-            if (member == null || attributeMember == null || attributeDimension.isEmpty()) {
+            if (member == null || attributeMember == null || !built.contains(attributeDimension)) {
                 unresolved++;
                 continue;
             }
