@@ -129,8 +129,22 @@ public class EssCubeViewImpl implements EssCubeView {
     }
 
     @Override
+    public void keepOnly(int fromRow, int fromCol, int toRow, int toCol) {
+        executeRange(GridOperation.ActionEnum.KEEPONLY, fromRow, fromCol, toRow, toCol);
+    }
+
+    @Override
+    public void removeOnly(int fromRow, int fromCol, int toRow, int toCol) {
+        executeRange(GridOperation.ActionEnum.REMOVEONLY, fromRow, fromCol, toRow, toCol);
+    }
+
+    // Ranges, like keepOnly. This used to go through "coordinates" and never worked - every attempt
+    // came back "This operation would generate a nonsensical report", which read as the action being
+    // unusable. It was the range format: once a single cell is [row, col, 1, 1] rather than
+    // [row, col, row, col], removing one member is ordinary and works.
+    @Override
     public void removeOnly(int row, int col) {
-        execute(GridOperation.ActionEnum.REMOVEONLY, row, col);
+        executeRange(GridOperation.ActionEnum.REMOVEONLY, row, col);
     }
 
     @Override
@@ -158,14 +172,31 @@ public class EssCubeViewImpl implements EssCubeView {
 
     // zoomOut/keepOnly are silently ignored by the server when sent via "coordinates" (200 OK, grid
     // unchanged) - that field is simply wired to other actions, not a matter of how we phrase the
-    // request, so "ranges" is the only way to invoke these two at all. Beyond that one substitution,
-    // this describes the click as literally as the wire format allows - a single-cell range - and
-    // does not try to compute, reverse, or otherwise infer "the range that will produce some intended
-    // result". Whatever grid the server returns for that description is authoritative; this library
-    // doesn't model or second-guess what a given action *should* do to the grid.
+    // request, so "ranges" is the only way to invoke these two at all.
+    //
+    // A range is [startRow, startColumn, rowCount, columnCount], not two corners. Established live
+    // rather than from the documentation, which says nothing: on a grid of Qtr1..Qtr4, Year, a keepOnly
+    // at Qtr2 (row 3) sent as [3, 0, 3, 0] keeps Qtr2, Qtr3 and Qtr4 - three rows starting at row 3 -
+    // while [3, 0, 1, 1] keeps Qtr2 alone. Read as two corners the first is a single cell, so the
+    // reading is not in doubt.
+    //
+    // This was a real defect: sending [row, col, row, col] for a single cell happens to be correct only
+    // at cell (1, 1), and everywhere else silently keeps or collapses a block whose size is whatever the
+    // coordinates happened to be. It did not fail, it did the wrong thing quietly, which is why the
+    // single-cell case had passed its live test - the test looked at (1, 1).
     private void executeRange(GridOperation.ActionEnum action, int row, int col) {
+        executeRange(action, row, col, row, col);
+    }
+
+    /** A rectangle given as two corners, in either order, sent as the start-plus-counts the server wants. */
+    private void executeRange(GridOperation.ActionEnum action, int fromRow, int fromCol,
+            int toRow, int toCol) {
+        int startRow = Math.min(fromRow, toRow);
+        int startCol = Math.min(fromCol, toCol);
+        int rows = Math.abs(toRow - fromRow) + 1;
+        int columns = Math.abs(toCol - fromCol) + 1;
         GridOperation operation = new GridOperation().grid(grid).action(action);
-        operation.setRanges(Arrays.asList(Arrays.asList(row, col, row, col)));
+        operation.setRanges(Arrays.asList(Arrays.asList(startRow, startCol, rows, columns)));
         execute(operation);
     }
 

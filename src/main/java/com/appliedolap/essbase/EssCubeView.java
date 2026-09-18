@@ -14,10 +14,14 @@ import java.util.List;
  * of them actually reaches the engine's implementation for a given kind of cell or action:
  *
  * <ul>
- * <li>{@link #zoomOut} and {@link #keepOnly} are sent as a "ranges" request (a single-cell range at
- * the given position) rather than "coordinates" like the other operations, because the server
- * silently no-ops "coordinates" for those two actions (200 OK, grid unchanged) - "ranges" is simply
- * the only field that reaches their implementation at all.
+ * <li>{@link #zoomOut}, {@link #keepOnly} and {@link #removeOnly} are sent as a "ranges" request
+ * rather than "coordinates" like the other operations, because the server silently no-ops
+ * "coordinates" for those actions (200 OK, grid unchanged) - "ranges" is simply the only field that
+ * reaches their implementation at all.
+ * <li>A range is <strong>{@code [startRow, startColumn, rowCount, columnCount]}</strong>, not two
+ * corners. Established live: on a grid of Qtr1..Qtr4, Year, a {@code keepOnly} at Qtr2 (row 3) sent as
+ * {@code [3, 0, 3, 0]} keeps Qtr2, Qtr3 and Qtr4 - three rows starting at row 3 - while
+ * {@code [3, 0, 1, 1]} keeps Qtr2 alone.
  * <li>{@link #zoomIn} tries "ranges" first and falls back to "coordinates" only if the server
  * rejects that shape outright (an engine-level error, not a 200). This isn't a guess based on
  * inspecting the cell: "coordinates" turns out not to do a literal (row, col) grid lookup at all for
@@ -44,12 +48,16 @@ import java.util.List;
  * {@code EssCubeViewIT}) in at least their most direct case - the grid content is asserted to actually
  * change, not just that the call doesn't throw.
  *
- * <p>{@link #removeOnly}, {@link #pivot}, and {@link #pivotToPov(int, int)} are not verified: their
- * request wire shape appears correct (the server returns engine-level errors specific to the given
- * coordinates/ranges, rather than a malformed-request 400), but no verified-valid pair of
- * coordinates has been found yet - see the ignored tests in {@code EssCubeViewIT}. For removeOnly,
- * every coordinate/range tried (including removing only the aggregate/total row, in isolation)
- * fails with "This operation would generate a nonsensical report." Setting a *data* cell's value is
+ * <p>{@link #removeOnly} is verified live, single cell and rectangle. It previously was not, and was
+ * documented here as unusable because every attempt answered "This operation would generate a
+ * nonsensical report" - that was the range format, not the action: a single cell sent as
+ * {@code [row, col, row, col]} describes a block of {@code row} by {@code col} cells, which for most
+ * positions really is nonsensical. It is ordinary once the range says what it means.
+ *
+ * <p>{@link #pivot} and {@link #pivotToPov(int, int)} are not verified: their request wire shape
+ * appears correct (the server returns engine-level errors specific to the given coordinates, rather
+ * than a malformed-request 400), but no verified-valid pair of coordinates has been found yet - see
+ * the ignored tests in {@code EssCubeViewIT}. Setting a *data* cell's value is
  * not implemented at all yet - the same dirty-cell/submit mechanism {@link #setMembers} uses was
  * tried against data positions too, but unlike member positions, the write never stuck even against
  * a confirmed leaf-level intersection.
@@ -88,6 +96,20 @@ public interface EssCubeView extends EssGrid {
     void keepOnly(int row, int col);
 
     /**
+     * Keeps only the members in a rectangle of cells, dropping their siblings.
+     *
+     * <p>The corners may be given in either order. What reaches the server is the rectangle they
+     * describe - a range there is a start plus a row and column count, not a pair of corners, which is
+     * a distinction worth knowing about only if you are reading the wire format.
+     *
+     * @param fromRow one corner's row
+     * @param fromCol one corner's column
+     * @param toRow the other corner's row
+     * @param toCol the other corner's column
+     */
+    void keepOnly(int fromRow, int fromCol, int toRow, int toCol);
+
+    /**
      * Removes the member at the given position, keeping the rest.
      *
      * <p><b>Not currently verified to work</b> - every coordinate/range tried against a live server
@@ -97,6 +119,16 @@ public interface EssCubeView extends EssGrid {
      * @param col the column of the member to remove
      */
     void removeOnly(int row, int col);
+
+    /**
+     * Removes the members in a rectangle of cells, keeping their siblings.
+     *
+     * @param fromRow one corner's row
+     * @param fromCol one corner's column
+     * @param toRow the other corner's row
+     * @param toCol the other corner's column
+     */
+    void removeOnly(int fromRow, int fromCol, int toRow, int toCol);
 
     /**
      * Swaps the positions of the members at the two given coordinates.
