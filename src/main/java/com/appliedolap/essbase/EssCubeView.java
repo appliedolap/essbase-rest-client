@@ -270,6 +270,12 @@ public interface EssCubeView extends EssGrid {
      * than a coordinate not yet found. The Java API's pivot rotates a row dimension onto the columns;
      * this one has no call that does, and a grid needing that has to be rebuilt rather than pivoted.
      *
+     * <p>Nor is the grid payload a way round it. A grid carries a {@code dimensions} array saying where
+     * each dimension sits - {@code column} for a row dimension, {@code row} for a column dimension,
+     * {@code pov} for the rest - which reads like somewhere to state a layout. It is not: editing it to
+     * put Year on the column axis and Product on the rows, and sending that grid back, returns the
+     * original layout unchanged. The array describes the grid; the slice is what the server reads.
+     *
      * <p>Not for want of looking. Not this call with a
      * row-axis {@code fromColumn}, which is either refused or quietly acts on a column-side dimension
      * instead; not a destination past the end of the grid or a negative one; and not
