@@ -134,6 +134,16 @@ public class EssCubeViewImpl implements EssCubeView {
     }
 
     @Override
+    public void keepOnly(java.util.List<Range> ranges) {
+        executeRanges(GridOperation.ActionEnum.KEEPONLY, ranges);
+    }
+
+    @Override
+    public void removeOnly(java.util.List<Range> ranges) {
+        executeRanges(GridOperation.ActionEnum.REMOVEONLY, ranges);
+    }
+
+    @Override
     public void removeOnly(int fromRow, int fromCol, int toRow, int toCol) {
         executeRange(GridOperation.ActionEnum.REMOVEONLY, fromRow, fromCol, toRow, toCol);
     }
@@ -197,6 +207,26 @@ public class EssCubeViewImpl implements EssCubeView {
         int columns = Math.abs(toCol - fromCol) + 1;
         GridOperation operation = new GridOperation().grid(grid).action(action);
         operation.setRanges(Arrays.asList(Arrays.asList(startRow, startCol, rows, columns)));
+        execute(operation);
+    }
+
+    /**
+     * Several rectangles in one request, which the server honours as one action over all of them.
+     *
+     * <p>Not a loop of single-range calls: each one re-executes the grid, so keeping the first and third
+     * of four quarters would drop the third before it was asked for.
+     */
+    private void executeRanges(GridOperation.ActionEnum action, java.util.List<Range> ranges) {
+        if (ranges == null || ranges.isEmpty()) {
+            throw new IllegalArgumentException("A grid operation needs at least one range");
+        }
+        java.util.List<java.util.List<Integer>> wire = new java.util.ArrayList<>(ranges.size());
+        for (Range range : ranges) {
+            wire.add(Arrays.asList(range.getStartRow(), range.getStartColumn(),
+                    range.getRowCount(), range.getColumnCount()));
+        }
+        GridOperation operation = new GridOperation().grid(grid).action(action);
+        operation.setRanges(wire);
         execute(operation);
     }
 

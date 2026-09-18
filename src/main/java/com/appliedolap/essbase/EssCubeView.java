@@ -110,6 +110,18 @@ public interface EssCubeView extends EssGrid {
     void keepOnly(int fromRow, int fromCol, int toRow, int toCol);
 
     /**
+     * Keeps only the members in several rectangles at once, dropping their siblings.
+     *
+     * <p>The rectangles need not touch, and this is the point of the method: keeping the first and third
+     * of four quarters is not a rectangle, and sending two operations would drop everything outside the
+     * first before the second was asked. Verified live - {@code [[2,0,1,1],[4,0,1,1]]} against
+     * Qtr1..Qtr4, Year keeps Qtr1 and Qtr3.
+     *
+     * @param ranges the rectangles to keep, in any order
+     */
+    void keepOnly(List<Range> ranges);
+
+    /**
      * Removes the member at the given position, keeping the rest.
      *
      * <p><b>Not currently verified to work</b> - every coordinate/range tried against a live server
@@ -129,6 +141,70 @@ public interface EssCubeView extends EssGrid {
      * @param toCol the other corner's column
      */
     void removeOnly(int fromRow, int fromCol, int toRow, int toCol);
+
+    /**
+     * Removes the members in several rectangles at once, keeping their siblings.
+     *
+     * @param ranges the rectangles to remove, in any order
+     */
+    void removeOnly(List<Range> ranges);
+
+    /**
+     * A rectangle of cells, given as two corners in either order.
+     *
+     * <p>What reaches the server is a start plus a row and column count, which is how a range is spelled
+     * on the wire; corners are how anyone holding a selection thinks about one.
+     */
+    final class Range {
+
+        private final int fromRow;
+
+        private final int fromColumn;
+
+        private final int toRow;
+
+        private final int toColumn;
+
+        public Range(int fromRow, int fromColumn, int toRow, int toColumn) {
+            this.fromRow = fromRow;
+            this.fromColumn = fromColumn;
+            this.toRow = toRow;
+            this.toColumn = toColumn;
+        }
+
+        /** A single cell. */
+        public static Range cell(int row, int column) {
+            return new Range(row, column, row, column);
+        }
+
+        public int getStartRow() {
+            return Math.min(fromRow, toRow);
+        }
+
+        public int getStartColumn() {
+            return Math.min(fromColumn, toColumn);
+        }
+
+        public int getRowCount() {
+            return Math.abs(toRow - fromRow) + 1;
+        }
+
+        public int getColumnCount() {
+            return Math.abs(toColumn - fromColumn) + 1;
+        }
+
+        /** How many cells the rectangle covers. */
+        public int size() {
+            return getRowCount() * getColumnCount();
+        }
+
+        @Override
+        public String toString() {
+            return "[" + getStartRow() + "," + getStartColumn()
+                    + " " + getRowCount() + "x" + getColumnCount() + "]";
+        }
+
+    }
 
     /**
      * Swaps the positions of the members at the two given coordinates.
