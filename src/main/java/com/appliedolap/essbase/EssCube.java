@@ -374,4 +374,38 @@ public interface EssCube extends EssObject {
      */
     void stop();
 
+    /**
+     * Applies a batch outline edit document to this cube's outline.
+     *
+     * <p>Batch outline editing is Essbase's way of making many outline changes in one transaction:
+     * one document listing add, update, delete, rename, move and attribute-association actions, sent
+     * once and applied in order, instead of a request per member. The document is XML in the
+     * {@code mbredit} namespace, the same format Essbase's own {@code mbredit.xsd} defines - and, as
+     * it turns out, the same format EPM Cloud writes when it exports a Planning application's Essbase
+     * outline, so a document from one can be replayed against the other.
+     *
+     * <p><strong>Read the result.</strong> This call throws only when the request itself fails. An
+     * edit whose actions could not be applied comes back as HTTP 200 carrying an error log, so the
+     * return value is the only place the outcome exists - see {@link EssBatchOutlineEditResult}.
+     *
+     * <p>Sent as XML rather than JSON although the endpoint advertises both. The JSON form the server
+     * documents is a JAXB artifact - each action wrapped in a {@code name}/{@code value} pair - and
+     * posting it is accepted with HTTP 200 and applies nothing at all.
+     *
+     * @param xml the document, with {@code otlEditMain} as its root element
+     * @return what the server said it did
+     */
+    EssBatchOutlineEditResult batchOutlineEdit(String xml);
+
+    /**
+     * Applies a batch outline edit built with {@link EssBatchOutlineEdit}.
+     *
+     * <p>The same call as {@link #batchOutlineEdit(String)} - and the same warning about reading the
+     * result - with the document written for you.
+     *
+     * @param edit the actions to apply, in order
+     * @return what the server said it did
+     */
+    EssBatchOutlineEditResult batchOutlineEdit(EssBatchOutlineEdit edit);
+
 }

@@ -6,6 +6,8 @@ import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.*;
 import com.appliedolap.essbase.exceptions.NoSuchEssbaseObjectException;
 import com.appliedolap.essbase.misc.MdxJson;
+import com.appliedolap.essbase.EssBatchOutlineEdit;
+import com.appliedolap.essbase.EssBatchOutlineEditResult;
 import com.appliedolap.essbase.util.NativeHttp;
 import com.appliedolap.essbase.util.WrapperUtil;
 import org.slf4j.Logger;
@@ -719,6 +721,98 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
      * The action is a query parameter, not a path segment - {@code /databases/Basic/action/start} is
      * a 404.
      */
+    /**
+     * Posts a batch outline edit document and reads the server's log back.
+     *
+     * <p>By hand rather than through the generated {@code BatchOutlineEditingApi}, which cannot send
+     * a usable document. Its {@code OtlEditMain} models {@code editActions} as JAXB's own
+     * {@code name}/{@code value}/{@code nil} wrapper rather than as the twenty-six action elements the
+     * schema actually defines, so there is no way to express an action through it; and its
+     * {@code restructOption} enum is spelled {@code ALL_DATA} where the server accepts only
+     * {@code allData} - sending the documented value answers HTTP 500.
+     *
+     * <p>{@code Accept: application/json} because the response is the one part the generated model has
+     * right: a single-property object whose {@code messages} is the log. Read as text and handed to
+     * {@link EssBatchOutlineEditResult} rather than deserialized, so a server that answers in XML, or
+     * with a bare log, still produces a readable result instead of a parse failure.
+     */
+    @Override
+    public EssBatchOutlineEditResult batchOutlineEdit(String xml) {
+        if (xml == null || xml.isBlank()) {
+            throw new IllegalArgumentException("A batch outline edit needs a document to apply");
+        }
+        String path = "/applications/" + ApiClient.urlEncode(getApplicationName())
+                + "/databases/" + ApiClient.urlEncode(getName()) + "/boe";
+        try {
+            logger.info("Running a batch outline edit on {}.{}", getApplicationName(), getName());
+            String body = NativeHttp.sendForString(api.getClient(),
+                    NativeHttp.request(api.getClient(), path)
+                            .header("Content-Type", "application/xml")
+                            .header("Accept", "application/json")
+                            .POST(HttpRequest.BodyPublishers.ofString(xml, java.nio.charset.StandardCharsets.UTF_8)),
+                    "batchOutlineEditingExecute");
+            return new EssBatchOutlineEditResult(unwrapMessages(body));
+        } catch (com.appliedolap.essbase.client.ApiException | java.io.IOException e) {
+            throw new EssApiException(e);
+        }
+    }
+
+    @Override
+    public EssBatchOutlineEditResult batchOutlineEdit(EssBatchOutlineEdit edit) {
+        if (edit == null) {
+            throw new IllegalArgumentException("A batch outline edit needs a document to apply");
+        }
+        return batchOutlineEdit(edit.toXml());
+    }
+
+    /**
+     * Pulls the log out of the {@code {"messages": "..."}} envelope, or hands back what it was given.
+     *
+     * <p>By hand because the envelope is one string property and reaching for a JSON parser to read it
+     * would mean a body shaped even slightly differently - an XML response, an empty one - becoming an
+     * exception instead of a result whose log says what happened.
+     */
+    private static String unwrapMessages(String body) {
+        if (body == null) {
+            return "";
+        }
+        int key = body.indexOf("\"messages\"");
+        if (key < 0) {
+            return body;
+        }
+        int open = body.indexOf('"', body.indexOf(':', key) + 1);
+        if (open < 0) {
+            return body;
+        }
+        StringBuilder log = new StringBuilder();
+        for (int i = open + 1; i < body.length(); i++) {
+            char c = body.charAt(i);
+            if (c == '"') {
+                return log.toString();
+            }
+            if (c != '\\' || i + 1 >= body.length()) {
+                log.append(c);
+                continue;
+            }
+            char escaped = body.charAt(++i);
+            switch (escaped) {
+                case 'n': log.append('\n'); break;
+                case 'r': log.append('\r'); break;
+                case 't': log.append('\t'); break;
+                case 'b': log.append('\b'); break;
+                case 'f': log.append('\f'); break;
+                case 'u':
+                    if (i + 4 < body.length()) {
+                        log.append((char) Integer.parseInt(body.substring(i + 1, i + 5), 16));
+                        i += 4;
+                    }
+                    break;
+                default: log.append(escaped);
+            }
+        }
+        return log.toString();
+    }
+
     private void performOperation(String action) {
         String path = NativeHttp.withQuery("/applications/" + ApiClient.urlEncode(getApplicationName())
                 + "/databases/" + ApiClient.urlEncode(getName()), "action", action);
