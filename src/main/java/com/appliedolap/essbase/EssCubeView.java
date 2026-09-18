@@ -57,11 +57,8 @@ import java.util.List;
  * <p>{@link #pivot} is verified live and documented on the method: it takes a source column and a
  * destination column, not a pair of cells as the old four-argument form assumed.
  *
- * <p>{@link #pivotToPov(int, int)} is still not understood. What is known: one coordinate answers
- * "Pivot ending point cannot be determined", so it wants two; two coordinates naming a row-axis column
- * answer "Cannot pivot last column"; two naming a column-side dimension answer "Your pivot operation
- * cannot be performed on this report". No pair has yet moved a row-axis dimension out to the POV,
- * which is what the name suggests it is for. Setting a *data* cell's value is
+ * <p>{@link #pivotToPov(int, int)} resisted the same treatment - see the notes on the method for what
+ * a full sweep did and did not establish. Setting a *data* cell's value is
  * not implemented at all yet - the same dirty-cell/submit mechanism {@link #setMembers} uses was
  * tried against data positions too, but unlike member positions, the write never stuck even against
  * a confirmed leaf-level intersection.
@@ -279,11 +276,35 @@ public interface EssCubeView extends EssGrid {
     void pivot(int fromColumn);
 
     /**
-     * Pins the member at the given position into the POV, removing its dimension from whichever axis
-     * it currently occupies.
+     * Not understood. Swept the same way {@link #pivot} was, and it did not yield.
      *
-     * @param row the row of the member to pin to the POV
-     * @param col the column of the member to pin to the POV
+     * <p>What the sweep established:
+     *
+     * <ul>
+     * <li>It wants two coordinates. One answers "Pivot ending point cannot be determined".
+     * <li>Anything past the last column answers "Your pivot operation has no effect on this report",
+     * so the first coordinate is read and bounded by the grid's width.
+     * <li>Otherwise every pair answers "Your pivot operation cannot be performed on this report" or
+     * "The resultant report cannot be retrieved. Your report heading cannot be interpreted".
+     * <li>Pristine Sample.Basic cannot be the grid for it: with one dimension on each axis, moving
+     * either into the POV would empty an axis. A grid with two row dimensions is the minimum.
+     * </ul>
+     *
+     * <p>One call did succeed, once: on a grid with two row dimensions and two dimensions in the POV,
+     * {@code [0, 0]} moved the first POV dimension onto the front of the row axis - <em>out of</em> the
+     * POV, the opposite of what the name says. It did not reproduce on a grid staged identically
+     * afterwards, so it is recorded as an observation and not as behaviour.
+     *
+     * <p>Two things make this hard to pin down, worth knowing before trying again.
+     * {@link EssCube#resetDefaultView()} is not reliably settled by the time the next call lands, so
+     * staging a grid needs retrying; and every grid operation updates the server's stored default, so
+     * probes contaminate each other unless each one re-sends a grid the caller is holding.
+     *
+     * <p>No coordinate was found that moves a dimension from the grid into the POV, which is what the
+     * name suggests this is for. {@link #pivot} moves dimensions the other way and is understood.
+     *
+     * @param row a grid row
+     * @param col a grid column
      */
     void pivotToPov(int row, int col);
 
