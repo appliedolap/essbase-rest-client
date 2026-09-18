@@ -255,11 +255,21 @@ public interface EssCubeView extends EssGrid {
      * <p>The dimension is inserted <em>before</em> whatever occupies {@code toColumn}, so moving a
      * dimension to the column just after itself does nothing.
      *
-     * <p>{@code fromColumn} names a dimension on the column side, and matters when there is more than
-     * one of them; with a single column-side dimension left the server moves it whatever column is
-     * named. Moving that last one onto the row axis is refused with "Cannot pivot last column" - a grid
-     * keeps something on each axis - and so is naming a row-axis column. A move that would change
-     * nothing is refused with "Your pivot operation has no effect on this report".
+     * <p>{@code fromColumn} names a dimension <strong>on the column side</strong>, and only ever moves
+     * one of those. It is honoured when the column-side dimensions sit in different columns; when they
+     * are stacked in one column - the POV above the column axis - it cannot tell them apart and you get
+     * the topmost. Moving the last column-side dimension onto the rows is refused with "Cannot pivot
+     * last column", a grid keeping something on each axis, and a move that would change nothing is
+     * refused with "Your pivot operation has no effect on this report".
+     *
+     * <p><strong>Nothing here moves a dimension off the row axis.</strong> Not this call with a
+     * row-axis {@code fromColumn}, which is either refused or quietly acts on a column-side dimension
+     * instead; not a destination past the end of the grid or a negative one; and not
+     * {@link #pivotToPov}, which takes from the column axis. On a grid staged with an empty POV and
+     * three dimensions on the rows, every coordinate pair in {@code [0..3] x [-2..7]} either did
+     * nothing or moved a column-side dimension. Dimensions travel column axis to POV to rows, and the
+     * row axis is where they stop. Swapping a row dimension onto the columns - the pivot people usually
+     * mean - has no call here that has been found; it needs the grid rebuilt rather than pivoted.
      *
      * <p>Going the other way - a row-axis dimension out to the POV - is not this call, and is not yet
      * understood; see {@link #pivotToPov}.

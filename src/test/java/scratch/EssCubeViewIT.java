@@ -419,6 +419,7 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
     private EssCubeView twoOnEachAxis() {
         for (int attempt = 0; ; attempt++) {
             try {
+                sampleBasic().resetDefaultView();
                 EssCubeView view = sampleBasic().openCubeView();
                 view.pivot(2, 1);
                 view.pivot(1, 0);
@@ -427,6 +428,56 @@ public class EssCubeViewIT extends AbstractEssbaseServerTest {
             } catch (Exception e) {
                 if (attempt >= 6) {
                     throw new AssertionError("could not stage a two-on-each-axis grid", e);
+                }
+            }
+        }
+    }
+
+    /**
+     * The row axis is a sink: nothing pivots a dimension off it.
+     *
+     * <p>Staged with an empty POV so that pivot has no POV dimension to reach for instead, and with
+     * three dimensions on the rows so that losing one would be legal. Asking to move one of them to the
+     * column side still does not.
+     */
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void nothingPivotsADimensionOffTheRowAxis() {
+        EssCubeView view = emptyPov();
+        assertEquals("Scenario", view.getCell(2, 0).trim());
+        assertEquals("Product", view.getCell(2, 1).trim());
+        assertEquals("Year", view.getCell(2, 2).trim());
+
+        // Year is at column 2; column 3 is the column side. Asking to send it there does nothing.
+        try {
+            view.pivot(2, 3);
+            fail("expected a refusal - the row axis cannot be pivoted out of");
+        } catch (EssApiException expected) {
+            assertTrue(expected.getMessage(), expected.getMessage().contains("no effect"));
+        }
+
+        // And a from that names a row column moves a column-side dimension instead of that one.
+        EssCubeView other = emptyPov();
+        other.pivot(1, 0);
+        logGrid(other);
+        assertEquals("Market, off the column side - not Product, which column 1 names",
+                "Market", other.getCell(1, 0).trim());
+    }
+
+    /** Three dimensions on the rows, two on the column side, nothing in the POV. */
+    private EssCubeView emptyPov() {
+        for (int attempt = 0; ; attempt++) {
+            try {
+                sampleBasic().resetDefaultView();
+                EssCubeView view = sampleBasic().openCubeView();
+                view.pivot(2, 1);
+                view.pivot(1, 0);
+                view.pivot(0, 0);
+                assertEquals(3, view.getRows());
+                return view;
+            } catch (Exception e) {
+                if (attempt >= 6) {
+                    throw new AssertionError("could not stage a grid with an empty POV", e);
                 }
             }
         }
