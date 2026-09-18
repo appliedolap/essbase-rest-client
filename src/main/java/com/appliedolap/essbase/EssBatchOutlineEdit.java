@@ -1,5 +1,7 @@
 package com.appliedolap.essbase;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -243,6 +245,35 @@ public class EssBatchOutlineEdit {
 
     public static EssBatchOutlineEdit create() {
         return new EssBatchOutlineEdit();
+    }
+
+    /**
+     * An edit that rebuilds a dimension from an EPM Cloud artifact snapshot.
+     *
+     * <p>Reads the dimension's {@code .csv} - not the batch-outline-edit XML that sits in the same
+     * snapshot, which cannot do this. That file addresses every member by a Planning GUID and carries
+     * no names, no parents and no hierarchy: it refreshes properties on members that already exist.
+     * The {@code .csv} is the one with the dimension in it. See {@link EssPlanningDimensionFile} for
+     * where they live in a snapshot.
+     *
+     * <pre>
+     * EssBatchOutlineEdit edit = EssBatchOutlineEdit.fromPlanningDimension(
+     *         Path.of("Artifact Snapshot/HP-Vision/resource/Global Artifacts/"
+     *                 + "Common Dimensions/Standard Dimensions/Account.csv"), "Vision");
+     * EssBatchOutlineEditResult result = cube.batchOutlineEdit(edit);
+     * </pre>
+     *
+     * @param dimensionFile the dimension's {@code .csv}
+     * @param planType which cube's columns to read - Planning records consolidation, storage, formula
+     *                 and solve order per plan type, and they differ
+     * @return an edit adding or updating every member of that dimension, parents first. Label-only and
+     *         dynamic-calc storage is not in it - see {@link EssPlanningDimensionFile#toStorageRefinement},
+     *         which is a second call for reasons explained there
+     * @throws IOException if the file cannot be read
+     */
+    public static EssBatchOutlineEdit fromPlanningDimension(Path dimensionFile, String planType)
+            throws IOException {
+        return EssPlanningDimensionFile.read(dimensionFile).toBatchOutlineEdit(planType);
     }
 
     /**
