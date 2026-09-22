@@ -6,6 +6,7 @@ import com.appliedolap.essbase.EssCubeView;
 import com.appliedolap.essbase.client.ApiException;
 import com.appliedolap.essbase.client.model.ColumnSuppression;
 import com.appliedolap.essbase.client.model.Grid;
+import com.appliedolap.essbase.client.model.GridDimension;
 import com.appliedolap.essbase.client.model.GridOperation;
 import com.appliedolap.essbase.client.model.GridRange;
 import com.appliedolap.essbase.client.model.Preferences;
@@ -24,6 +25,13 @@ public class EssCubeViewImpl implements EssCubeView {
     private final String applicationName;
 
     private final String databaseName;
+
+    /** The (undocumented) cell-type codes: a data position, a label, and a blank filler cell. */
+    private static final String DATA_CELL = "2";
+
+    private static final String MEMBER_CELL = "0";
+
+    private static final String BLANK_CELL = "7";
 
     private Grid grid;
 
@@ -198,33 +206,151 @@ public class EssCubeViewImpl implements EssCubeView {
         execute(new GridOperation().grid(grid).action(GridOperation.ActionEnum.REFRESH));
     }
 
+    // Every cell the server sends back carries five parallel arrays, and a sheet of a different shape
+    // has to restate all of them - not just the labels. Leaving a stale "types" array in place is how
+    // the single-argument setLayout limits itself to rearranging what is already on the axes: a label
+    // written into a position the server still believes is a data cell is not read as a heading.
+    @Override
+    public void setLayout(String[][] sheet, int headerRows, int leftColumns) {
+        if (sheet == null || sheet.length == 0 || sheet[0].length == 0) {
+            throw new IllegalArgumentException("A layout needs at least one cell");
+        }
+        int rows = sheet.length;
+        int columns = sheet[0].length;
+        for (String[] row : sheet) {
+            if (row.length != columns) {
+                throw new IllegalArgumentException("A layout has to be rectangular, but its rows are "
+                        + columns + " and " + row.length + " cells wide");
+            }
+        }
+        if (headerRows < 1 || headerRows >= rows) {
+            throw new IllegalArgumentException("headerRows has to leave at least one data row, but was "
+                    + headerRows + " of " + rows + " rows");
+        }
+        if (leftColumns < 1 || leftColumns >= columns) {
+            throw new IllegalArgumentException("leftColumns has to leave at least one data column, but was "
+                    + leftColumns + " of " + columns + " columns");
+        }
+
+        // Which columns and rows carry data, rather than a rectangle of them. A column carries data if
+        // the last header row - the innermost top axis, which names one member per data column - names
+        // something there, and a row carries data if the left axis names something on it. That is the
+        // same answer as a rectangle for an ordinary grid, and the right one for a grid with a blank
+        // row or column ruled through it, which is a thing people really do put in a template.
+        boolean[] dataColumn = new boolean[columns];
+        int dataColumns = 0;
+        for (int column = leftColumns; column < columns; column++) {
+            dataColumn[column] = !sheet[headerRows - 1][column].isEmpty();
+            if (dataColumn[column]) {
+                dataColumns++;
+            }
+        }
+        if (dataColumns == 0) {
+            throw new IllegalArgumentException("The last header row (row " + (headerRows - 1)
+                    + ") names no columns, so the layout has no data region");
+        }
+
+        boolean[] dataRow = new boolean[rows];
+        for (int row = headerRows; row < rows; row++) {
+            for (int column = 0; column < leftColumns; column++) {
+                dataRow[row] |= !sheet[row][column].isEmpty();
+            }
+        }
+
+        List<String> values = new ArrayList<>();
+        List<String> types = new ArrayList<>();
+        List<String> statuses = new ArrayList<>();
+        List<String> enumIds = new ArrayList<>();
+        List<String> texts = new ArrayList<>();
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                boolean data = dataRow[row] && dataColumn[column];
+                values.add(data ? "" : sheet[row][column]);
+                types.add(data ? DATA_CELL : sheet[row][column].isEmpty() ? BLANK_CELL : MEMBER_CELL);
+                statuses.add("0");
+                enumIds.add("");
+                texts.add(null);
+            }
+        }
+
+        Slice slice = grid.getSlice();
+        slice.setRows(rows);
+        slice.setColumns(columns);
+        GridRange range = slice.getData().getRanges().get(0);
+        range.setStart(0);
+        range.setEnd(values.size() - 1);
+        range.setValues(values);
+        range.setTypes(types);
+        range.setStatuses(statuses);
+        range.setEnumIds(enumIds);
+        range.setTexts(texts);
+        // A sheet of a different shape leaves the old ranges describing a grid that no longer exists.
+        while (slice.getData().getRanges().size() > 1) {
+            slice.getData().getRanges().remove(1);
+        }
+
+        execute(new GridOperation().grid(grid).action(GridOperation.ActionEnum.REFRESH));
+    }
+
+    @Override
+    public String getAliasTable() {
+        return grid.getAlias();
+    }
+
+    @Override
+    public List<DimensionPlacement> getPlacements() {
+        List<DimensionPlacement> placements = new ArrayList<>();
+        for (GridDimension dimension : grid.getDimensions()) {
+            // A dimension on an axis has an empty "pov" and exactly one of row/column set to a real
+            // index; one in the POV names itself there and has -1 for both.
+            String pov = dimension.getPov();
+            DimensionPlacement.Region region;
+            int index;
+            if (pov != null && !pov.isEmpty()) {
+                region = DimensionPlacement.Region.POV;
+                index = -1;
+            } else if (dimension.getColumn() != null && dimension.getColumn() >= 0) {
+                region = DimensionPlacement.Region.LEFT;
+                index = dimension.getColumn();
+            } else {
+                region = DimensionPlacement.Region.TOP;
+                index = dimension.getRow() == null ? -1 : dimension.getRow();
+            }
+            placements.add(new DimensionPlacement(dimension.getName(), region, index));
+        }
+        return placements;
+    }
+
     @Override
     public void refresh() {
         execute(new GridOperation().grid(grid).action(GridOperation.ActionEnum.REFRESH));
     }
 
-    // "coordinates", not "ranges" - two numbers, and any beyond the second are ignored (verified: a
-    // pivot with [3, 0, 9, 9] answers identically to [3, 0]). The old four-argument form sent a pair of
-    // cells, which is not what this reads: it takes a source column and a destination column.
+    // "coordinates", not "ranges", and each one is a flat cell index rather than a row, a column or a
+    // pair - see the interface. Anything beyond the second is ignored (verified: [3, 0, 9, 9] answers
+    // identically to [3, 0]).
     @Override
-    public void pivot(int fromColumn, int toColumn) {
+    public void pivot(int fromCell, int toCell) {
         GridOperation operation = new GridOperation().grid(grid).action(GridOperation.ActionEnum.PIVOT);
-        operation.setCoordinates(Arrays.asList(fromColumn, toColumn));
+        operation.setCoordinates(Arrays.asList(fromCell, toCell));
         execute(operation);
     }
 
     // One coordinate is a legitimate request and means the front of the row axis - the server supplies
     // the destination rather than rejecting the call, and [3] answers identically to [3, 0].
     @Override
-    public void pivot(int fromColumn) {
+    public void pivot(int fromCell) {
         GridOperation operation = new GridOperation().grid(grid).action(GridOperation.ActionEnum.PIVOT);
-        operation.setCoordinates(Arrays.asList(fromColumn));
+        operation.setCoordinates(Arrays.asList(fromCell));
         execute(operation);
     }
 
     @Override
-    public void pivotToPov(int row, int col) {
-        execute(GridOperation.ActionEnum.PIVOT_TO_POV, row, col);
+    public void pivotToPov(int fromCell, int toCell) {
+        GridOperation operation = new GridOperation().grid(grid)
+                .action(GridOperation.ActionEnum.PIVOT_TO_POV);
+        operation.setCoordinates(Arrays.asList(fromCell, toCell));
+        execute(operation);
     }
 
     private void execute(GridOperation.ActionEnum action, int row, int col) {

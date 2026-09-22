@@ -1,0 +1,103 @@
+{
+  "name" : "pivot-2-to-0",
+  "application" : "Vision",
+  "cube" : "Plan1",
+  "dimensions" : [ "Scenario", "Year", "Period", "Entity", "HSP_Metric", "Version", "Currency", "Account" ],
+  "aliasTable" : "Default",
+  "preferences" : {
+    "indentation" : "SUBITEMS",
+    "suppressMissingRows" : false,
+    "suppressZeroRows" : false,
+    "suppressUnderscoreRows" : false,
+    "repeatMemberLabels" : true,
+    "zoomInPreference" : "NEXT_LEVEL",
+    "includeSelection" : true,
+    "withinSelectedGroup" : false,
+    "removeUnselectedGroup" : false
+  },
+  "operation" : {
+    "action" : "pivot",
+    "ranges" : [ [ 2, 0 ] ],
+    "selected" : [ ]
+  },
+  "basis" : {
+    "rows" : 7,
+    "columns" : 6,
+    "headerRows" : 3,
+    "leftColumns" : 2,
+    "cells" : [ [ "", "", "HSP_Metric", "Currency", "Version", "Period" ], [ "", "", "Plan", "Plan", "", "" ], [ "", "", "FY22", "FY23", "", "" ], [ "Total Entity", "All Accounts", "", "", "", "" ], [ "Total Entity", "Cash Flow", "", "", "", "" ], [ "Management Rollup", "All Accounts", "", "", "", "" ], [ "Management Rollup", "Cash Flow", "", "", "", "" ] ],
+    "placements" : [ {
+      "name" : "Scenario",
+      "region" : "TOP",
+      "index" : 1
+    }, {
+      "name" : "Year",
+      "region" : "TOP",
+      "index" : 2
+    }, {
+      "name" : "Period",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Entity",
+      "region" : "LEFT",
+      "index" : 0
+    }, {
+      "name" : "HSP_Metric",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Version",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Currency",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Account",
+      "region" : "LEFT",
+      "index" : 1
+    } ]
+  },
+  "result" : {
+    "rows" : 7,
+    "columns" : 6,
+    "headerRows" : 3,
+    "leftColumns" : 3,
+    "cells" : [ [ "", "", "", "Currency", "Version", "Period" ], [ "", "", "", "Plan", "Plan", "" ], [ "", "", "", "FY22", "FY23", "" ], [ "HSP_Metric", "Total Entity", "All Accounts", "", "", "" ], [ "HSP_Metric", "Total Entity", "Cash Flow", "", "", "" ], [ "HSP_Metric", "Management Rollup", "All Accounts", "", "", "" ], [ "HSP_Metric", "Management Rollup", "Cash Flow", "", "", "" ] ],
+    "placements" : [ {
+      "name" : "Scenario",
+      "region" : "TOP",
+      "index" : 1
+    }, {
+      "name" : "Year",
+      "region" : "TOP",
+      "index" : 2
+    }, {
+      "name" : "Period",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Entity",
+      "region" : "LEFT",
+      "index" : 1
+    }, {
+      "name" : "HSP_Metric",
+      "region" : "LEFT",
+      "index" : 0
+    }, {
+      "name" : "Version",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Currency",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Account",
+      "region" : "LEFT",
+      "index" : 2
+    } ]
+  }
+}

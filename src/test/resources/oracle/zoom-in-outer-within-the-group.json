@@ -1,0 +1,103 @@
+{
+  "name" : "zoom-in-outer-within-the-group",
+  "application" : "Vision",
+  "cube" : "Plan1",
+  "dimensions" : [ "Scenario", "Year", "Period", "Entity", "HSP_Metric", "Version", "Currency", "Account" ],
+  "aliasTable" : "Default",
+  "preferences" : {
+    "indentation" : "SUBITEMS",
+    "suppressMissingRows" : false,
+    "suppressZeroRows" : false,
+    "suppressUnderscoreRows" : false,
+    "repeatMemberLabels" : true,
+    "zoomInPreference" : "NEXT_LEVEL",
+    "includeSelection" : true,
+    "withinSelectedGroup" : true,
+    "removeUnselectedGroup" : false
+  },
+  "operation" : {
+    "action" : "zoomIn",
+    "ranges" : [ [ 2, 0, 1, 1 ] ],
+    "selected" : [ "Total Entity" ]
+  },
+  "basis" : {
+    "rows" : 6,
+    "columns" : 7,
+    "headerRows" : 2,
+    "leftColumns" : 2,
+    "cells" : [ [ "", "", "Year", "Period", "HSP_Metric", "Version", "Currency" ], [ "", "", "Plan", "Actual", "", "", "" ], [ "Total Entity", "All Accounts", "", "", "", "", "" ], [ "Total Entity", "Cash Flow", "", "", "", "", "" ], [ "Management Rollup", "All Accounts", "", "", "", "", "" ], [ "Management Rollup", "Cash Flow", "", "", "", "", "" ] ],
+    "placements" : [ {
+      "name" : "Scenario",
+      "region" : "TOP",
+      "index" : 1
+    }, {
+      "name" : "Year",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Period",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Entity",
+      "region" : "LEFT",
+      "index" : 0
+    }, {
+      "name" : "HSP_Metric",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Version",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Currency",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Account",
+      "region" : "LEFT",
+      "index" : 1
+    } ]
+  },
+  "result" : {
+    "rows" : 10,
+    "columns" : 7,
+    "headerRows" : 2,
+    "leftColumns" : 2,
+    "cells" : [ [ "", "", "Year", "Period", "HSP_Metric", "Version", "Currency" ], [ "", "", "Plan", "Actual", "", "", "" ], [ "     Enterprise Global", "All Accounts", "", "", "", "", "" ], [ "     Enterprise Global", "Cash Flow", "", "", "", "", "" ], [ "     Total Department", "All Accounts", "", "", "", "", "" ], [ "     Total Department", "Cash Flow", "", "", "", "", "" ], [ "Total Entity", "All Accounts", "", "", "", "", "" ], [ "Total Entity", "Cash Flow", "", "", "", "", "" ], [ "Management Rollup", "All Accounts", "", "", "", "", "" ], [ "Management Rollup", "Cash Flow", "", "", "", "", "" ] ],
+    "placements" : [ {
+      "name" : "Scenario",
+      "region" : "TOP",
+      "index" : 1
+    }, {
+      "name" : "Year",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Period",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Entity",
+      "region" : "LEFT",
+      "index" : 0
+    }, {
+      "name" : "HSP_Metric",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Version",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Currency",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Account",
+      "region" : "LEFT",
+      "index" : 1
+    } ]
+  }
+}

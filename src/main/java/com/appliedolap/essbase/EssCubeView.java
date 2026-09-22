@@ -57,7 +57,7 @@ import java.util.List;
  * <p>{@link #pivot} is verified live and documented on the method: it takes a source column and a
  * destination column, not a pair of cells as the old four-argument form assumed.
  *
- * <p>{@link #pivotToPov(int, int)} exchanges the POV dimension with the first one on the column axis,
+ * <p>{@link #pivotToPov(int, int)} moves a dimension into the POV,
  * and needs a grid with two column dimensions to do anything at all - see the method for what is
  * established and what is still guesswork. Setting a *data* cell's value is
  * not implemented at all yet - the same dirty-cell/submit mechanism {@link #setMembers} uses was
@@ -227,110 +227,70 @@ public interface EssCubeView extends EssGrid {
     }
 
     /**
-     * Moves a dimension to a different place in the grid - onto the row axis, or elsewhere in the
-     * header.
+     * Moves a dimension to somewhere else in the grid.
      *
-     * <p>Worked out against a live server, because nothing documents it. A grid's dimensions all live
-     * at some column: the row-axis dimensions occupy the leftmost columns, and the ones on the column
-     * side appear as labels further right. Pivoting is moving a dimension from one of those columns to
-     * another.
+     * <p><strong>Both arguments are flat cell indices</strong>, counted across the grid row by row:
+     * {@code row * getColumns() + column}, which {@link #cellIndex(int, int)} will work out. They are
+     * not row/column pairs and not column numbers. Oracle's own examples are the authority here - the
+     * documented {@code pivotToPOV} call sends {@code [8, 2]} for a four-column grid, meaning the cell
+     * at row 2 column 0 and the one at row 0 column 2.
+     *
+     * <p>This is the general move: name any cell holding a dimension, name the cell where it should go,
+     * and the grid comes back with it there. The source may be in the POV or on either axis, and the
+     * destination decides which region it lands in.
      *
      * <pre>
-     *   col      0        1         2       3
-     *   row 0            Product   Market  Scenario    &lt;- POV, if there is one
-     *   row 1            Measures                      &lt;- column axis, one row per dimension
-     *   row 2   Year     105522                        &lt;- row axis
-     *
-     *   pivot(2, 0)  Market to the front of the row axis
-     *   pivot(3, 2)  Scenario ahead of Market, still on the column side
+     * // On Sample.Basic's default grid - Year down the side, Measures across the top, three in the POV:
+     * view.pivot(view.cellIndex(0, 1), view.cellIndex(1, 1));   // Product from the POV onto the top axis
+     * view.pivot(view.cellIndex(1, 1), view.cellIndex(0, 1));   // Measures off the top axis into the POV
+     * view.pivot(view.cellIndex(1, 1), view.cellIndex(1, 0));   // Measures off the top onto the row axis
      * </pre>
      *
-     * <p><strong>Do not count rows from the top.</strong> The POV occupies row 0 only while there is a
-     * POV: empty it and the row disappears, the column-axis rows shift up, and the grid loses a row.
-     * Pivoting the third of three POV dimensions onto the rows in the grid above turns it from 3x4 into
-     * 2x5 with Measures - the column axis - now at row 0. Anything reading "row 0" as "the POV" will
-     * quietly read the column axis instead. The header is as many rows as there are column dimensions,
-     * plus one if any dimension is in the POV, and as many columns as there are row dimensions.
+     * <p>It refuses rather than corrupting the grid: taking the last dimension off an axis answers
+     * "Cannot pivot last row", and naming a data cell answers "Pivot starting point cannot be
+     * determined".
      *
-     * <p>The dimension is inserted <em>before</em> whatever occupies {@code toColumn}, so moving a
-     * dimension to the column just after itself does nothing.
-     *
-     * <p>{@code fromColumn} names a dimension <strong>on the column side</strong>, and only ever moves
-     * one of those. It is honoured when the column-side dimensions sit in different columns; when they
-     * are stacked in one column - the POV above the column axis - it cannot tell them apart and you get
-     * the topmost. Moving the last column-side dimension onto the rows is refused with "Cannot pivot
-     * last column", a grid keeping something on each axis, and a move that would change nothing is
-     * refused with "Your pivot operation has no effect on this report".
-     *
-     * <p><strong>No pivot action moves a dimension off the row axis</strong>, and none can: the server,
-     * asked directly, names its whole vocabulary as
-     * {@code [removeonly, keeponly, pivot, submit, pivotToPOV, refresh, zoomin, zoomout]}, and there is
-     * no third pivot among them. That is a limit of the <em>actions</em>, not of the API -
-     * {@link #setLayout} rotates rows onto columns perfectly well by writing the sheet and letting the
-     * engine read it, which is how Smart View does it. Reach for that rather than for these.
-     *
-     * <p>The grid's {@code dimensions} array is not the way to state a layout either, despite reading
-     * like one: editing it and sending the grid back returns the original layout unchanged. It
-     * describes the grid. The slice - the cells - is what the server reads, which is what
-     * {@link #setLayout} writes.
-     *
-     * <p>Not for want of looking. Not this call with a
-     * row-axis {@code fromColumn}, which is either refused or quietly acts on a column-side dimension
-     * instead; not a destination past the end of the grid or a negative one; and not
-     * {@link #pivotToPov}, which takes from the column axis. On a grid staged with an empty POV and
-     * three dimensions on the rows, every coordinate pair in {@code [0..3] x [-2..7]} either did
-     * nothing or moved a column-side dimension. Dimensions travel column axis to POV to rows, and the row axis is where they stop.
-     *
-     * <p>Going the other way - a row-axis dimension out to the POV - is not this call, and is not yet
-     * understood; see {@link #pivotToPov}.
-     *
-     * @param fromColumn the column of the dimension to move
-     * @param toColumn where to put it; the dimension lands before whatever is there
+     * @param fromCell the flat index of a cell holding the dimension to move
+     * @param toCell   the flat index of the cell to move it to
      */
-    void pivot(int fromColumn, int toColumn);
+    void pivot(int fromCell, int toCell);
 
     /**
      * Moves a dimension to the front of the row axis, which is what a pivot with no destination does.
      *
-     * @param fromColumn the column of the dimension to move
+     * <p>The form Oracle's documentation shows, with a single coordinate. Works from the POV or from the
+     * column axis.
+     *
+     * @param fromCell the flat index of a cell holding the dimension to move
      */
-    void pivot(int fromColumn);
+    void pivot(int fromCell);
 
     /**
-     * Exchanges the POV dimension with the first dimension on the column axis.
+     * Moves a dimension into the POV.
      *
-     * <p>Worked out live, and only partly. What it reliably does, given a grid with more than one
-     * dimension on the column axis:
+     * <p>Flat cell indices again, like {@link #pivot(int, int)}. The destination names where in the POV
+     * row it should sit.
      *
-     * <pre>
-     *   c0        c1     c2                  c0        c1     c2
-     *   .         .      Scenario   &lt;- POV   .         .      Market
-     *   .         .      Market       ==&gt;    .         .      Scenario
-     *   .         .      Measures            .         .      Measures
-     *   Product   Year   105522              Product   Year   105522
-     * </pre>
+     * <p>The axis it leaves cannot be emptied: pivoting away the only dimension on the row axis answers
+     * "Cannot pivot last row". Where the grid can afford it, Essbase fills the gap by bringing a POV
+     * dimension back out - pivoting the second of two row dimensions away leaves the first in place and
+     * pulls something from the POV in beside it.
      *
-     * <p>So this is the call that moves a dimension <em>into</em> the POV, and it takes it off the
-     * column axis - {@link #pivot} moves them the other way. A grid with a single column dimension
-     * cannot do it at all: there would be nothing left on that axis, and every coordinate is refused
-     * with "Your pivot operation cannot be performed on this report", which is what made this look
-     * broken for a long time. Two column dimensions is the minimum, and
-     * {@code pivot(povColumn, columnAxisColumn)} is how to get a second one there.
-     *
-     * <p><strong>The coordinates are not understood.</strong> Every pair that does anything produces
-     * this same exchange; the rest are accepted and do nothing, or are refused. On the grid above
-     * {@code (3, 0)} works and repeats identically five times out of five, while {@code (3, 3)} and
-     * {@code (4, 1)} are refused and {@code (0, 2)} is accepted and inert. No pattern was found that
-     * explains which is which, and nothing addresses a particular dimension - you get the first one on
-     * the column axis whatever you pass.
-     *
-     * <p>Nothing found moves a <em>row</em> dimension into the POV. On a grid with two dimensions on
-     * each axis, every pair that worked moved a column-axis dimension.
-     *
-     * @param row a grid row; see above, the meaning is not established
-     * @param col a grid column; likewise
+     * @param fromCell the flat index of a cell holding the dimension to move
+     * @param toCell   the flat index of the POV cell to move it to
      */
-    void pivotToPov(int row, int col);
+    void pivotToPov(int fromCell, int toCell);
+
+    /**
+     * The flat index of a cell, which is how the pivot actions address one.
+     *
+     * @param row    the cell's row
+     * @param column the cell's column
+     * @return {@code row * getColumns() + column}
+     */
+    default int cellIndex(int row, int column) {
+        return row * getColumns() + column;
+    }
 
     /**
      * Rewrites the grid as a sheet of labels and asks the server to interpret it.
@@ -365,6 +325,96 @@ public interface EssCubeView extends EssGrid {
      * @param cells the grid's labels, row by row, with empty strings for the blanks
      */
     void setLayout(List<String> cells);
+
+    /**
+     * Rewrites the grid as a sheet of labels of any shape, saying where the data region begins.
+     *
+     * <p>The difference from {@link #setLayout(List)} is that this one can change the grid's
+     * <em>structure</em> - how many dimensions sit on the left, on top, and in the POV - and not just
+     * the order of what is already there. The single-argument form keeps the current grid's
+     * member/data partition and only rewrites the labels, which is enough to rotate a dimension from
+     * the left to the top but not to move a dimension between regions, because the server reads a
+     * label that lands in what it still believes is a data position as a heading it cannot interpret,
+     * and quietly answers with everything it could not place pushed into the POV.
+     *
+     * <p>A grid has three regions, and {@code headerRows} and {@code leftColumns} are exactly the two
+     * numbers that divide them:
+     *
+     * <pre>
+     *                 &lt;- leftColumns -&gt;
+     *              +----------------+----------------------+
+     *  headerRows  |     blank      |  POV row, then one    |
+     *              |                |  row per top axis     |
+     *              +----------------+----------------------+
+     *              |  one column    |                       |
+     *              |  per left axis |      data region      |
+     *              +----------------+----------------------+
+     * </pre>
+     *
+     * <p>Every cell above {@code headerRows} or left of {@code leftColumns} is a label. Of the rest, a
+     * cell carries data where both its column and its row do: a column does where the last header row -
+     * the innermost top axis, which names one member per data column - names something there, and a row
+     * does where the left axis names something on it. Leave the data cells empty; the server fills them.
+     *
+     * <p>Deciding it per row and column rather than as a rectangle is what lets a sheet have a blank row
+     * or column ruled through it, the way a real template does.
+     *
+     * <p>The POV does not have to be there: a grid with every dimension on an axis simply has no POV
+     * row, and {@code headerRows} is then just the number of top axes.
+     *
+     * @param sheet       the grid's labels, row by row, with empty strings for blanks and data cells
+     * @param headerRows  how many rows precede the data region - the POV row, if there is one, plus
+     *                    one row per top/column axis
+     * @param leftColumns how many columns the left/row axes occupy
+     */
+    void setLayout(String[][] sheet, int headerRows, int leftColumns);
+
+    /**
+     * Where a dimension sits in the grid: in the POV, on a top/column axis, or on a left/row axis.
+     *
+     * @param name   the dimension's name
+     * @param region which of the grid's three regions it occupies
+     * @param index  the grid row it occupies for {@link Region#TOP}, the grid column for
+     *               {@link Region#LEFT}, and {@code -1} for {@link Region#POV}
+     */
+    record DimensionPlacement(String name, Region region, int index) {
+
+        /**
+         * A grid's three regions. {@code TOP} and {@code LEFT} are the column and row axes - a top
+         * dimension lays its members across a grid <em>row</em>, and a left dimension lays them down a
+         * grid <em>column</em>, which is why naming them after the axis they form rather than the
+         * direction they run reads backwards as often as not.
+         */
+        public enum Region {
+            POV, TOP, LEFT
+        }
+
+    }
+
+    /**
+     * Says where every dimension currently sits, as the server reports it rather than as the sheet of
+     * labels implies.
+     *
+     * <p>This is the authoritative read of a grid's structure and the one worth asserting against: a
+     * layout the server reinterpreted looks perfectly reasonable in the returned labels and is only
+     * obvious here, as a dimension that came back in the POV when it was asked for on an axis.
+     *
+     * <p>The count is the cube's dimension count, always - every dimension is in exactly one region.
+     *
+     * @return one placement per dimension, in the server's order
+     */
+    List<DimensionPlacement> getPlacements();
+
+    /**
+     * The alias table the grid's labels are in.
+     *
+     * <p>Worth asking, because a grid takes member names on the way in and hands back aliases: send a
+     * layout saying {@code ALL} and the answer says {@code All Accounts}. Anything comparing what it
+     * asked for against what it got needs to know which table did that.
+     *
+     * @return the alias table's name, such as {@code Default}
+     */
+    String getAliasTable();
 
     /**
      * Re-executes the view as-is, picking up any data changes made since it was last retrieved.

@@ -1,0 +1,103 @@
+{
+  "name" : "zoom-in-all-levels",
+  "application" : "Vision",
+  "cube" : "Plan1",
+  "dimensions" : [ "Scenario", "Year", "Period", "Entity", "HSP_Metric", "Version", "Currency", "Account" ],
+  "aliasTable" : "Default",
+  "preferences" : {
+    "indentation" : "SUBITEMS",
+    "suppressMissingRows" : false,
+    "suppressZeroRows" : false,
+    "suppressUnderscoreRows" : false,
+    "repeatMemberLabels" : true,
+    "zoomInPreference" : "ALL_LEVELS",
+    "includeSelection" : true,
+    "withinSelectedGroup" : false,
+    "removeUnselectedGroup" : false
+  },
+  "operation" : {
+    "action" : "zoomIn",
+    "ranges" : [ [ 3, 0, 1, 1 ] ],
+    "selected" : [ "Management Rollup" ]
+  },
+  "basis" : {
+    "rows" : 6,
+    "columns" : 7,
+    "headerRows" : 2,
+    "leftColumns" : 1,
+    "cells" : [ [ "", "Year", "Period", "HSP_Metric", "Version", "Currency", "Account" ], [ "", "Plan", "Actual", "", "", "", "" ], [ "Unspecified Entity", "", "", "", "", "", "" ], [ "Management Rollup", "", "", "", "", "", "" ], [ "No Entity", "", "", "", "", "", "" ], [ "Total Entity", "", "", "", "", "", "" ] ],
+    "placements" : [ {
+      "name" : "Scenario",
+      "region" : "TOP",
+      "index" : 1
+    }, {
+      "name" : "Year",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Period",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Entity",
+      "region" : "LEFT",
+      "index" : 0
+    }, {
+      "name" : "HSP_Metric",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Version",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Currency",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Account",
+      "region" : "POV",
+      "index" : -1
+    } ]
+  },
+  "result" : {
+    "rows" : 67,
+    "columns" : 7,
+    "headerRows" : 2,
+    "leftColumns" : 1,
+    "cells" : [ [ "", "Year", "Period", "HSP_Metric", "Version", "Currency", "Account" ], [ "", "Plan", "Actual", "", "", "", "" ], [ "Unspecified Entity", "", "", "", "", "", "" ], [ "               CFO Office Management", "", "", "", "", "", "" ], [ "               CEO Office Management", "", "", "", "", "", "" ], [ "               Health Care", "", "", "", "", "", "" ], [ "               HR and Administration Management", "", "", "", "", "", "" ], [ "               CFO Office", "", "", "", "", "", "" ], [ "               CEO Office", "", "", "", "", "", "" ], [ "               Leasing", "", "", "", "", "", "" ], [ "          Administrative Director 2", "", "", "", "", "", "" ], [ "               Facilities", "", "", "", "", "", "" ], [ "               MIS", "", "", "", "", "", "" ], [ "               Order Entry", "", "", "", "", "", "" ], [ "               Payroll", "", "", "", "", "", "" ], [ "               Purchasing", "", "", "", "", "", "" ], [ "               Controllers Office", "", "", "", "", "", "" ], [ "               Finance", "", "", "", "", "", "" ], [ "          Administrative Director 1", "", "", "", "", "", "" ], [ "     Administrative VP", "", "", "", "", "", "" ], [ "               Distribution Organization 2", "", "", "", "", "", "" ], [ "               DRP Warehouse 1", "", "", "", "", "", "" ], [ "               Distribution Organization 1", "", "", "", "", "", "" ], [ "               Sub-Assembly Plant 1", "", "", "", "", "", "" ], [ "               Manufacturing Plant 3", "", "", "", "", "", "" ], [ "               M3 Dallas Manufacturing Plant 2", "", "", "", "", "", "" ], [ "               M1 Seattle Manufacturing Plant", "", "", "", "", "", "" ], [ "          Plant Director", "", "", "", "", "", "" ], [ "               Engineering - Const", "", "", "", "", "", "" ], [ "               Quality", "", "", "", "", "", "" ], [ "               Maintenance and Service - Const", "", "", "", "", "", "" ], [ "               Maintenance_580", "", "", "", "", "", "" ], [ "               Project Management Ofc - Const", "", "", "", "", "", "" ], [ "               Cost Accounting", "", "", "", "", "", "" ], [ "               Texas Inventory", "", "", "", "", "", "" ], [ "               San Francisco Inventory", "", "", "", "", "", "" ], [ "               Vision Operations Inventory", "", "", "", "", "", "" ], [ "               Field Service Technicians", "", "", "", "", "", "" ], [ "               Operations Manager", "", "", "", "", "", "" ], [ "          Operations Director", "", "", "", "", "", "" ], [ "     Manufacturing VP", "", "", "", "", "", "" ], [ "               Sales West", "", "", "", "", "", "" ], [ "               Sales Central", "", "", "", "", "", "" ], [ "               Sales South", "", "", "", "", "", "" ], [ "               Sales SouthEast", "", "", "", "", "", "" ], [ "               Sales Mid-Atlantic", "", "", "", "", "", "" ], [ "               Sales NorthEast", "", "", "", "", "", "" ], [ "               Sales East", "", "", "", "", "", "" ], [ "               International Sales", "", "", "", "", "", "" ], [ "          Sales Director 2", "", "", "", "", "", "" ], [ "               Marketing", "", "", "", "", "", "" ], [ "          Sales Director 1", "", "", "", "", "", "" ], [ "     Sales VP", "", "", "", "", "", "" ], [ "          International Organization", "", "", "", "", "", "" ], [ "          CAD Organization", "", "", "", "", "", "" ], [ "          US Organization", "", "", "", "", "", "" ], [ "          Communications Resources", "", "", "", "", "", "" ], [ "          Computer Resources", "", "", "", "", "", "" ], [ "          Machine Resources", "", "", "", "", "", "" ], [ "          East Region Resources", "", "", "", "", "", "" ], [ "          West Region Resources", "", "", "", "", "", "" ], [ "          Facilities Resources", "", "", "", "", "", "" ], [ "          No Department", "", "", "", "", "", "" ], [ "     Resources VP", "", "", "", "", "", "" ], [ "Management Rollup", "", "", "", "", "", "" ], [ "No Entity", "", "", "", "", "", "" ], [ "Total Entity", "", "", "", "", "", "" ] ],
+    "placements" : [ {
+      "name" : "Scenario",
+      "region" : "TOP",
+      "index" : 1
+    }, {
+      "name" : "Year",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Period",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Entity",
+      "region" : "LEFT",
+      "index" : 0
+    }, {
+      "name" : "HSP_Metric",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Version",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Currency",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Account",
+      "region" : "POV",
+      "index" : -1
+    } ]
+  }
+}

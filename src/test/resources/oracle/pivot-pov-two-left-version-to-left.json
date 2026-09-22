@@ -1,0 +1,103 @@
+{
+  "name" : "pivot-pov-two-left-version-to-left",
+  "application" : "Vision",
+  "cube" : "Plan1",
+  "dimensions" : [ "Scenario", "Year", "Period", "Entity", "HSP_Metric", "Version", "Currency", "Account" ],
+  "aliasTable" : "Default",
+  "preferences" : {
+    "indentation" : "SUBITEMS",
+    "suppressMissingRows" : false,
+    "suppressZeroRows" : false,
+    "suppressUnderscoreRows" : false,
+    "repeatMemberLabels" : true,
+    "zoomInPreference" : "NEXT_LEVEL",
+    "includeSelection" : true,
+    "withinSelectedGroup" : false,
+    "removeUnselectedGroup" : false
+  },
+  "operation" : {
+    "action" : "pivot",
+    "ranges" : [ [ 0, 4, 1, 1 ], [ 0 ] ],
+    "selected" : [ "Version" ]
+  },
+  "basis" : {
+    "rows" : 3,
+    "columns" : 7,
+    "headerRows" : 2,
+    "leftColumns" : 2,
+    "cells" : [ [ "", "", "Entity", "HSP_Metric", "Version", "Currency", "Account" ], [ "", "", "Year", "", "", "", "" ], [ "Period", "Scenario", "", "", "", "", "" ] ],
+    "placements" : [ {
+      "name" : "Scenario",
+      "region" : "LEFT",
+      "index" : 1
+    }, {
+      "name" : "Year",
+      "region" : "TOP",
+      "index" : 1
+    }, {
+      "name" : "Period",
+      "region" : "LEFT",
+      "index" : 0
+    }, {
+      "name" : "Entity",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "HSP_Metric",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Version",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Currency",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Account",
+      "region" : "POV",
+      "index" : -1
+    } ]
+  },
+  "result" : {
+    "rows" : 3,
+    "columns" : 7,
+    "headerRows" : 2,
+    "leftColumns" : 3,
+    "cells" : [ [ "", "", "", "Entity", "HSP_Metric", "Currency", "Account" ], [ "", "", "", "Year", "", "", "" ], [ "Version", "Period", "Scenario", "", "", "", "" ] ],
+    "placements" : [ {
+      "name" : "Scenario",
+      "region" : "LEFT",
+      "index" : 2
+    }, {
+      "name" : "Year",
+      "region" : "TOP",
+      "index" : 1
+    }, {
+      "name" : "Period",
+      "region" : "LEFT",
+      "index" : 1
+    }, {
+      "name" : "Entity",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "HSP_Metric",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Version",
+      "region" : "LEFT",
+      "index" : 0
+    }, {
+      "name" : "Currency",
+      "region" : "POV",
+      "index" : -1
+    }, {
+      "name" : "Account",
+      "region" : "POV",
+      "index" : -1
+    } ]
+  }
+}
