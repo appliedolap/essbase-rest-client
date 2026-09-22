@@ -13,9 +13,9 @@ layer calls. It measures the code, not a kept list, in both languages.
 
 | State | essbase-rest-client | EssSharp |
 | --- | ---: | ---: |
-| Exposed | 63 | 101 |
-| Generated, not exposed | 254 | 282 |
-| Not in the generated client | 177 | 111 |
+| Exposed | 98 | 101 |
+| Generated, not exposed | 396 | 282 |
+| Not in the generated client | 0 | 111 |
 | **Total** | **494** | **494** |
 
 ## The two together
@@ -24,42 +24,36 @@ Rows are this client, columns are EssSharp.
 
 | | EssSharp exposed | EssSharp generated only | EssSharp absent |
 | --- | ---: | ---: | ---: |
-| **Exposed** | 52 | 11 | 0 |
-| **Generated, not exposed** | 45 | 209 | 0 |
-| **Not in the generated client** | 4 | 62 | 111 |
+| **Exposed** | 67 | 21 | 10 |
+| **Generated, not exposed** | 34 | 261 | 101 |
+| **Not in the generated client** | 0 | 0 | 0 |
 
 ## Exposed by EssSharp, not here
 
-49 endpoints. The C# client has a wrapper and this one does
+34 endpoints. The C# client has a wrapper and this one does
 not, so each is a gap with a working reference implementation to read.
 An endpoint marked absent from the generated client here needs a
 regeneration before it can be wrapped at all.
 
-- `GET` `/applications/{applicationName}` - Get Application _(added 21.1 or earlier)_ _(here: generated only)_
 - `GET` `/applications/{applicationName}/connections` - List Application Connections _(added 21.1 or earlier)_ _(here: generated only)_
 - `DELETE` `/applications/{applicationName}/connections/{connectionName}` - Delete Application Connection _(added 21.1 or earlier)_ _(here: generated only)_
 - `GET` `/applications/{applicationName}/connections/{connectionName}` - Get Application Connection _(added 21.1 or earlier)_ _(here: generated only)_
 - `POST` `/applications/{applicationName}/connections/{connectionName}/actions/test` - Test Saved Application Connection _(added 21.1 or earlier)_ _(here: generated only)_
 - `DELETE` `/applications/{applicationName}/databases/{databaseName}` - Delete Database _(added 21.1 or earlier)_ _(here: generated only)_
-- `GET` `/applications/{applicationName}/databases/{databaseName}` - Get Database _(added 21.1 or earlier)_ _(here: generated only)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/aliases` - List Aliases _(added 21.1 or earlier)_ _(here: generated only)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/aliases/getActiveAlias` - List Active Aliases _(added 21.1 or earlier)_ _(here: generated only)_
-- `POST` `/applications/{applicationName}/databases/{databaseName}/dtreports/list` - List Drill Through Reports For Given Cell Intersections _(added 21.7)_ _(here: absent)_
+- `POST` `/applications/{applicationName}/databases/{databaseName}/dtreports/list` - List Drill Through Reports For Given Cell Intersections _(added 21.7)_ _(here: generated only)_
 - `POST` `/applications/{applicationName}/databases/{databaseName}/grid/layout` - Get Layout Grid _(added 21.1 or earlier)_ _(here: generated only)_
 - `POST` `/applications/{applicationName}/databases/{databaseName}/grid/mdx` - Execute MDX Report _(added 21.1 or earlier)_ _(here: generated only)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/locks/blocks` - List Locked Blocks _(added 21.1 or earlier)_ _(here: generated only)_
 - `POST` `/applications/{applicationName}/databases/{databaseName}/locks/blocks/unlock` - Unlock Block _(added 21.1 or earlier)_ _(here: generated only)_
+- `GET` `/applications/{applicationName}/databases/{databaseName}/scripts` - List Calc or MDX Scripts _(added 21.1 or earlier)_ _(here: generated only)_
 - `POST` `/applications/{applicationName}/databases/{databaseName}/scripts` - Create Essbase Script _(added 21.1 or earlier)_ _(here: generated only)_
 - `DELETE` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}` - Delete Calc or MDX Script _(added 21.1 or earlier)_ _(here: generated only)_
 - `PUT` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}` - Update Essbase Script _(added 21.1 or earlier)_ _(here: generated only)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/content` - Get Essbase Script Contents _(added 21.1 or earlier)_ _(here: generated only)_
-- `POST` `/applications/{applicationName}/databases/{databaseName}/variables` - Create Database Variable _(added 21.1 or earlier)_ _(here: generated only)_
-- `DELETE` `/applications/{applicationName}/databases/{databaseName}/variables/{variableName}` - Delete Database Variable _(added 21.1 or earlier)_ _(here: generated only)_
 - `GET` `/applications/{applicationName}/logs/latest` - Download Latest Application Log _(added 21.1 or earlier)_ _(here: generated only)_
-- `POST` `/applications/{applicationName}/variables` - Create Application Variable _(added 21.1 or earlier)_ _(here: generated only)_
-- `DELETE` `/applications/{applicationName}/variables/{variableName}` - Delete Application Variable _(added 21.1 or earlier)_ _(here: generated only)_
 - `POST` `/applications/{application}/databases/{database}/mdx` - Run MDX Query _(added 21.1 or earlier)_ _(here: generated only)_
-- `GET` `/applications/{app}/permissions` - Search Application Role Provisioning _(added 21.1 or earlier)_ _(here: generated only)_
 - `DELETE` `/applications/{app}/permissions/{id}` - Deprovision User or Group from Application _(added 21.1 or earlier)_ _(here: generated only)_
 - `GET` `/applications/{app}/permissions/{id}` - Get Application Role Provision _(added 21.1 or earlier)_ _(here: generated only)_
 - `PUT` `/applications/{app}/permissions/{id}` - Provision Application Role to User or Group _(added 21.1 or earlier)_ _(here: generated only)_
@@ -67,29 +61,26 @@ regeneration before it can be wrapped at all.
 - `DELETE` `/connections/{connectionName}` - Delete Global Connection _(added 21.1 or earlier)_ _(here: generated only)_
 - `GET` `/connections/{connectionName}` - Get Global Connection _(added 21.1 or earlier)_ _(here: generated only)_
 - `POST` `/connections/{connectionName}/actions/test` - Test Saved Global Connection _(added 21.1 or earlier)_ _(here: generated only)_
-- `POST` `/datasources/query` - Stream Global Datasource Results _(added 21.1 or earlier)_ _(here: generated only)_
-- `GET` `/datasources/{datasourceName}` - Get Global Datasource _(added 21.8)_ _(here: absent)_
 - `GET` `/files/sharedpath` - Get Shared Path _(added 21.1 or earlier)_ _(here: generated only)_
+- `DELETE` `/files/{path}` - Delete File or Folder _(added 21.1 or earlier)_ _(here: generated only)_
+- `GET` `/files/{path}` - List or Download Files _(added 21.1 or earlier)_ _(here: generated only)_
 - `PUT` `/files/{path}` - Upload File or Create Folder _(added 21.1 or earlier)_ _(here: generated only)_
-- `POST` `/groups` - Add or Import Group(s) _(added 21.1 or earlier)_ _(here: generated only)_
-- `DELETE` `/groups/{id}` - Delete Group _(added 21.1 or earlier)_ _(here: generated only)_
-- `PUT` `/groups/{id}` - Update Group _(added 21.1 or earlier)_ _(here: generated only)_
-- `DELETE` `/groups/{id}/members/groups` - Remove Groups From Group _(added 21.1 or earlier)_ _(here: absent)_
-- `POST` `/groups/{id}/members/groups` - Add Groups to Group _(added 21.1 or earlier)_ _(here: generated only)_
-- `DELETE` `/groups/{id}/members/users` - Remove Group Users _(added 21.1 or earlier)_ _(here: absent)_
-- `POST` `/groups/{id}/members/users` - Add Group Users _(added 21.1 or earlier)_ _(here: generated only)_
 - `GET` `/outline/{app}/{cube}/ancestors/{memberUniqueName}` - Get Member Ancestors _(added 21.1 or earlier)_ _(here: generated only)_
-- `DELETE` `/sessions` - Delete All Sessions _(added 21.1 or earlier)_ _(here: generated only)_
-- `GET` `/users` - Search or Export Users _(added 21.1 or earlier)_ _(here: generated only)_
 - `POST` `/users` - Add or Import User(s) _(added 21.1 or earlier)_ _(here: generated only)_
 - `DELETE` `/users/{id}` - Delete User _(added 21.1 or earlier)_ _(here: generated only)_
 - `GET` `/utilities/{id}` - Download Utility _(added 21.1 or earlier)_ _(here: generated only)_
 
 ## Exposed here, not by EssSharp
 
-11 endpoints, the same gap pointing the other way.
+31 endpoints, the same gap pointing the other way.
 
+- `GET` `/amw` - read _(added 26.1)_ _(EssSharp: absent)_
+- `PUT` `/amw` - write _(added 26.1)_ _(EssSharp: absent)_
 - `POST` `/applications/actions/rename` - Rename Application _(added 21.1 or earlier)_ _(EssSharp: generated only)_
+- `GET` `/applications/{applicationName}/configurationkeys` - Get Application Configuration (Filtered) _(added 21.1 or earlier)_ _(EssSharp: generated only)_
+- `POST` `/applications/{applicationName}/configurations` - Add Application Configuration _(added 21.1 or earlier)_ _(EssSharp: generated only)_
+- `DELETE` `/applications/{applicationName}/configurations/{configId}` - Delete Application Configuration _(added 21.1 or earlier)_ _(EssSharp: generated only)_
+- `PUT` `/applications/{applicationName}/configurations/{configId}` - Update Application Configuration _(added 21.1 or earlier)_ _(EssSharp: generated only)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/generations/{generationNumber}` - Get Generation _(added 21.1 or earlier)_ _(EssSharp: generated only)_
 - `PUT` `/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/generations/{generationNumber}` - Update Generation _(added 21.1 or earlier)_ _(EssSharp: generated only)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/levels/{levelNumber}` - Get Level _(added 21.1 or earlier)_ _(EssSharp: generated only)_
@@ -97,87 +88,35 @@ regeneration before it can be wrapped at all.
 - `GET` `/applications/{applicationName}/databases/{databaseName}/grid/layout/{layout}` - Execute Grid Layout _(added 21.1 or earlier)_ _(EssSharp: generated only)_
 - `POST` `/applications/{applicationName}/databases/{databaseName}/reports` - Create Drill Through Report _(added 21.1 or earlier)_ _(EssSharp: generated only)_
 - `PUT` `/applications/{applicationName}/databases/{databaseName}/reports/{name}` - Update Drill Through Report _(added 21.1 or earlier)_ _(EssSharp: generated only)_
+- `PUT` `/applications/{applicationName}/databases/{databaseName}/variables/{variableName}` - Update Database Variable _(added 21.1 or earlier)_ _(EssSharp: generated only)_
+- `PUT` `/applications/{applicationName}/variables/{variableName}` - Update Application Variable _(added 21.1 or earlier)_ _(EssSharp: generated only)_
 - `DELETE` `/applications/{application}/databases/{database}/layouts/{layout}` - Delete Grid Layout _(added 21.1 or earlier)_ _(EssSharp: generated only)_
-- `POST` `/datasources/query/stream` - Get Streamed Global Datasource Results _(added 21.1 or earlier)_ _(EssSharp: generated only)_
+- `POST` `/ess-mcp/call` - callTool _(added 26.1)_ _(EssSharp: absent)_
+- `GET` `/files/getDatabasesFromLCMZip` - Get database names from LCM zip file _(added 26.1)_ _(EssSharp: absent)_
+- `GET` `/groups/{id}` - Get Group _(added 21.1 or earlier)_ _(EssSharp: generated only)_
+- `DELETE` `/outline/{app}/{cube}/edit` - deleteMember _(added 26.1)_ _(EssSharp: absent)_
+- `PATCH` `/outline/{app}/{cube}/edit` - updateMember _(added 26.1)_ _(EssSharp: absent)_
+- `GET` `/outline/{app}/{cube}/edit/descendantsCount/{memberUniqueName}` - getDescendantsCount _(added 26.1)_ _(EssSharp: absent)_
+- `POST` `/outline/{app}/{cube}/edit/members` - getMembers _(added 26.1)_ _(EssSharp: absent)_
+- `GET` `/permissions` - Search Service Role Provisioning _(added 21.1 or earlier)_ _(EssSharp: generated only)_
 - `GET` `/scenarios` - Get Scenarios _(added 21.1 or earlier)_ _(EssSharp: generated only)_
+- `GET` `/service/status` - getStatus _(added 26.1)_ _(EssSharp: absent)_
+- `GET` `/settings/odlLogSettings` - Get Diagnostic Log Settings _(added 21.1 or earlier)_ _(EssSharp: generated only)_
+- `PUT` `/settings/odlLogSettings` - Set Diagnostic Log Settings _(added 21.1 or earlier)_ _(EssSharp: generated only)_
+- `PUT` `/variables/{variableName}` - Update Server Variable _(added 21.1 or earlier)_ _(EssSharp: generated only)_
+- `GET` `/version` - getVersion _(added 26.1)_ _(EssSharp: absent)_
 
 ## Reachable in C#, absent from the generated client here
 
-66 endpoints that EssSharp's generated client
+0 endpoints that EssSharp's generated client
 carries and this one does not. This is the regeneration gap seen from
 the outside: EssSharp generates from a newer specification, so these
 are already reachable there and need a spec refresh here first.
 
-- `DELETE` `/ai/aiconnection/{aiConnectionName}/chat/profile/{profileName}` - Drop OCI chat profile _(added 21.8)_ _(EssSharp: generated only)_
-- `POST` `/ai/aiconnection/{aiConnectionName}/chat/profile/{profileName}` - Create OCI chat profile _(added 21.8)_ _(EssSharp: generated only)_
-- `DELETE` `/ai/aiconnection/{aiConnectionName}/job/vectorindex` - Create a job to drop the vector index _(added 21.8)_ _(EssSharp: generated only)_
-- `POST` `/ai/aiconnection/{aiConnectionName}/job/vectorindex` - Create a job to build vector index _(added 21.8)_ _(EssSharp: generated only)_
-- `GET` `/ai/aiconnection/{aiConnectionName}/vectorindex/{vectorIndexName}/narrate/{profileName}` - AI Narrate _(added 21.8)_ _(EssSharp: generated only)_
-- `POST` `/ai/applications/{applicationName}/chat/passThrough` - AI pass through _(added 21.8)_ _(EssSharp: generated only)_
-- `DELETE` `/ai/applications/{applicationName}/connection` - Dissociate AI connection _(added 21.8)_ _(EssSharp: generated only)_
-- `POST` `/ai/applications/{applicationName}/connection/{connectionName}` - Associate AI connection _(added 21.8)_ _(EssSharp: generated only)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/listSampleQueries` - List Sample Queries _(added 21.8)_ _(EssSharp: generated only)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/mdxgenerator` - MDX Generator _(added 21.8)_ _(EssSharp: generated only)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/nnearestneighboursearch` - N-Nearest Neighbour Search _(added 21.8)_ _(EssSharp: generated only)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/semanticsearch` - Semantic Search _(added 21.8)_ _(EssSharp: generated only)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/vectorizationDate` - Vectorization Date _(added 21.8)_ _(EssSharp: generated only)_
-- `POST` `/ai/applications/{applicationName}/job/vectorize/databases/{databaseName}` - Vectorize outline job _(added 21.8)_ _(EssSharp: generated only)_
-- `GET` `/ai/connection` - Get AI connection _(added 21.8)_ _(EssSharp: generated only)_
-- `POST` `/ai/dbconnection/{dbConnectionName}/chat/credential/signingkey/{credentialName}` - Create OCI chat credential using singing key _(added 21.8)_ _(EssSharp: generated only)_
-- `DELETE` `/ai/dbconnection/{dbConnectionName}/chat/credential/{credentialName}` - Drop OCI chat credential _(added 21.8)_ _(EssSharp: generated only)_
-- `DELETE` `/ai/dbconnection/{dbConnectionName}/vector/credential/{credentialName}` - Drop OCI vector credential _(added 21.8)_ _(EssSharp: generated only)_
-- `POST` `/ai/dbconnection/{dbConnectionName}/vector/credential/{credentialName}` - Create OCI vector credential _(added 21.8)_ _(EssSharp: generated only)_
-- `GET` `/ai/vectorindex` - Get vector index _(added 21.8)_ _(EssSharp: generated only)_
-- `GET` `/applications/actions/name/{appVisiblity}` - List Application Names _(added 21.1 or earlier)_ _(EssSharp: generated only)_
-- `POST` `/applications/actions/shadowCopy` - Create Shadow Application _(added 21.1 or earlier)_ _(EssSharp: generated only)_
-- `DELETE` `/applications/actions/shadowDelete/{shadowAppName}` - Delete Shadow Application _(added 21.1 or earlier)_ _(EssSharp: generated only)_
-- `POST` `/applications/actions/shadowPromote` - Promote Shadow Application _(added 21.1 or earlier)_ _(EssSharp: generated only)_
-- `GET` `/applications/partitions/supportedfederatedtypes` - Get Supported Partition Types _(added 21.6)_ _(EssSharp: generated only)_
-- `DELETE` `/applications/{applicationName}/databases/{databaseName}/asodataload/buffers` - Destroy Dataload Buffer _(added 21.4)_ _(EssSharp: generated only)_
-- `GET` `/applications/{applicationName}/databases/{databaseName}/currencySettings` - Get Currency Settings _(added 21.1 or earlier)_ _(EssSharp: generated only)_
-- `POST` `/applications/{applicationName}/databases/{databaseName}/currencySettings` - Set Currency Settings _(added 21.1 or earlier)_ _(EssSharp: generated only)_
-- `POST` `/applications/{applicationName}/databases/{databaseName}/dtreports/list` - List Drill Through Reports For Given Cell Intersections _(added 21.7)_ _(EssSharp: exposed)_
-- `GET` `/applications/{applicationName}/databases/{databaseName}/executeReport` - Execute Report Script _(added 21.1 or earlier)_ _(EssSharp: generated only)_
-- `GET` `/applications/{applicationName}/databases/{databaseName}/partitions/supportedfederatedtypes` - Get Supported Partition Types _(added 21.1 or earlier)_ _(EssSharp: generated only)_
-- `POST` `/applications/{applicationName}/databases/{databaseName}/reports/{name}` - Execute Drill Through Report _(added 21.4)_ _(EssSharp: generated only)_
-- `GET` `/applications/{applicationName}/databases/{databaseName}/settings/compressioninfo` - Get ASO Compression Info _(added 21.5)_ _(EssSharp: generated only)_
-- `GET` `/applications/{applicationName}/datasources/{datasourceName}` - Get Application Datasource _(added 21.8)_ _(EssSharp: generated only)_
-- `POST` `/applications/{applicationName}/decrypt` - Decrypt Application _(added 21.6)_ _(EssSharp: generated only)_
-- `POST` `/applications/{applicationName}/encrypt` - Encrypt Application _(added 21.6)_ _(EssSharp: generated only)_
-- `GET` `/applications/{applicationName}/encryptionconfig` - Get Encryption Info _(added 21.6)_ _(EssSharp: generated only)_
-- `PUT` `/applications/{application}/databases/{database}/queries/rename` - Rename MDX report. _(added 21.8)_ _(EssSharp: generated only)_
-- `DELETE` `/centralizedurl` - Delete Essbase server from Centralized URL _(added 21.6)_ _(EssSharp: generated only)_
-- `GET` `/centralizedurl` - Get Essbase Server list _(added 21.6)_ _(EssSharp: generated only)_
-- `POST` `/centralizedurl` - Add Essbase server to Centralized URL List _(added 21.6)_ _(EssSharp: generated only)_
-- `PUT` `/centralizedurl` - Update Essbase URL of Centralized URL List _(added 21.6)_ _(EssSharp: generated only)_
-- `GET` `/connections/{connection}/getdependentconnections` - List dependamt connection names _(added 21.8)_ _(EssSharp: generated only)_
-- `POST` `/datasources/customdelimited/query/stream` - Get Streamed Global Datasource Results _(added 21.4)_ _(EssSharp: generated only)_
-- `GET` `/datasources/{datasourceName}` - Get Global Datasource _(added 21.8)_ _(EssSharp: exposed)_
-- `DELETE` `/files/abort/{path}` - Abort Multipart File Upload _(added 21.4)_ _(EssSharp: generated only)_
-- `POST` `/files/actions/extractJob` - Extract Zip File Using a Job _(added 21.6)_ _(EssSharp: generated only)_
-- `GET` `/files/getobjectstoreuri` - getObjectStoreURI _(added 21.8)_ _(EssSharp: generated only)_
-- `POST` `/files/upload-commit/{path}` - Commit Multipart File Upload _(added 21.4)_ _(EssSharp: generated only)_
-- `POST` `/files/upload-create/{path}` - Create Multipart File Upload _(added 21.4)_ _(EssSharp: generated only)_
-- `PUT` `/files/upload-part/{path}` - Upload File Part _(added 21.4)_ _(EssSharp: generated only)_
-- `GET` `/files/uploadconfig` - getUploadConfig _(added 21.4)_ _(EssSharp: generated only)_
-- `DELETE` `/groups/{id}/members/groups` - Remove Groups From Group _(added 21.1 or earlier)_ _(EssSharp: exposed)_
-- `DELETE` `/groups/{id}/members/users` - Remove Group Users _(added 21.1 or earlier)_ _(EssSharp: exposed)_
-- `DELETE` `/jobs/purge` - Delete Jobs _(added 21.2)_ _(EssSharp: generated only)_
-- `GET` `/outline/{app}/{cube}/pivotDimension` - Get Pivot dimension _(added 21.8)_ _(EssSharp: generated only)_
-- `DELETE` `/rocluster` - Delete ReadOnly Cluster _(added 21.6)_ _(EssSharp: generated only)_
-- `GET` `/rocluster` - Get ReadOnly Cluster List _(added 21.6)_ _(EssSharp: generated only)_
-- `POST` `/rocluster` - Create ReadOnly Cluster _(added 21.6)_ _(EssSharp: generated only)_
-- `PUT` `/rocluster` - Update ReadOnly Cluster _(added 21.6)_ _(EssSharp: generated only)_
-- `POST` `/rocluster/changestatus` - ReadOnly Cluster Change Status _(added 21.6)_ _(EssSharp: generated only)_
-- `GET` `/rocluster/findByName` - Find ReadOnly Cluster By Name _(added 21.6)_ _(EssSharp: generated only)_
-- `GET` `/rocluster/{svrName}/appcubelist` - Get App Cube List _(added 21.6)_ _(EssSharp: generated only)_
-- `GET` `/settings/odlLogSettings` - Get Diagnostic Log Settings _(added 21.1 or earlier)_ _(EssSharp: generated only)_
-- `PUT` `/settings/odlLogSettings` - Set Diagnostic Log Settings _(added 21.1 or earlier)_ _(EssSharp: generated only)_
-- `POST` `/utils/rules/verifyRule` - Verify Rule _(added 21.1 or earlier)_ _(EssSharp: generated only)_
 
 ## Exposed by both
 
-52 endpoints.
+67 endpoints.
 
 - `GET` `/about` - About Essbase _(added 21.1 or earlier)_
 - `GET` `/about/instance` - About Essbase Instance _(added 21.1 or earlier)_
@@ -185,9 +124,11 @@ are already reachable there and need a spec refresh here first.
 - `POST` `/applications` - Create Application and Database _(added 21.1 or earlier)_
 - `POST` `/applications/actions/copy` - Copy Application _(added 21.1 or earlier)_
 - `DELETE` `/applications/{applicationName}` - Delete Application _(added 21.1 or earlier)_
+- `GET` `/applications/{applicationName}` - Get Application _(added 21.1 or earlier)_
 - `PUT` `/applications/{applicationName}` - Start or Stop Application _(added 21.1 or earlier)_
 - `GET` `/applications/{applicationName}/configurations` - Get Application Configuration _(added 21.1 or earlier)_
 - `GET` `/applications/{applicationName}/databases` - List Databases _(added 21.1 or earlier)_
+- `GET` `/applications/{applicationName}/databases/{databaseName}` - Get Database _(added 21.1 or earlier)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/dimensions` - List Dimensions _(added 21.1 or earlier)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/generations` - List Generations _(added 21.1 or earlier)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/levels` - List Levels _(added 21.1 or earlier)_
@@ -199,20 +140,31 @@ are already reachable there and need a spec refresh here first.
 - `GET` `/applications/{applicationName}/databases/{databaseName}/reports` - Get Drill Through Reports _(added 21.1 or earlier)_
 - `DELETE` `/applications/{applicationName}/databases/{databaseName}/reports/{name}` - Delete Drill Through Report _(added 21.1 or earlier)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/reports/{name}` - Get Drill Through Report _(added 21.1 or earlier)_
-- `GET` `/applications/{applicationName}/databases/{databaseName}/scripts` - List Calc or MDX Scripts _(added 21.1 or earlier)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/variables` - Get Database Variables _(added 21.1 or earlier)_
+- `POST` `/applications/{applicationName}/databases/{databaseName}/variables` - Create Database Variable _(added 21.1 or earlier)_
+- `DELETE` `/applications/{applicationName}/databases/{databaseName}/variables/{variableName}` - Delete Database Variable _(added 21.1 or earlier)_
 - `GET` `/applications/{applicationName}/variables` - Get Application Variables _(added 21.1 or earlier)_
+- `POST` `/applications/{applicationName}/variables` - Create Application Variable _(added 21.1 or earlier)_
+- `DELETE` `/applications/{applicationName}/variables/{variableName}` - Delete Application Variable _(added 21.1 or earlier)_
+- `GET` `/applications/{app}/permissions` - Search Application Role Provisioning _(added 21.1 or earlier)_
 - `GET` `/datasources` - Get Global Datasources _(added 21.1 or earlier)_
+- `POST` `/datasources/query` - Stream Global Datasource Results _(added 21.1 or earlier)_
+- `GET` `/datasources/{datasourceName}` - Get Global Datasource _(added 21.8)_
 - `GET` `/files` - List Root Folders _(added 21.1 or earlier)_
 - `POST` `/files/actions/copy` - Copy File _(added 21.1 or earlier)_
 - `POST` `/files/actions/extract` - Extract Zip File _(added 21.1 or earlier)_
 - `POST` `/files/actions/move` - Move or Rename File _(added 21.1 or earlier)_
 - `GET` `/files/homepath` - Get Home Path _(added 21.1 or earlier)_
-- `DELETE` `/files/{path}` - Delete File or Folder _(added 21.1 or earlier)_
-- `GET` `/files/{path}` - List or Download Files _(added 21.1 or earlier)_
 - `GET` `/groups` - Search or Export Groups _(added 21.1 or earlier)_
+- `POST` `/groups` - Add or Import Group(s) _(added 21.1 or earlier)_
+- `DELETE` `/groups/{id}` - Delete Group _(added 21.1 or earlier)_
+- `PUT` `/groups/{id}` - Update Group _(added 21.1 or earlier)_
+- `DELETE` `/groups/{id}/members/groups` - Remove Groups From Group _(added 21.1 or earlier)_
 - `GET` `/groups/{id}/members/groups` - Get Groups in Group _(added 21.1 or earlier)_
+- `POST` `/groups/{id}/members/groups` - Add Groups to Group _(added 21.1 or earlier)_
+- `DELETE` `/groups/{id}/members/users` - Remove Group Users _(added 21.1 or earlier)_
 - `GET` `/groups/{id}/members/users` - Get Group Users _(added 21.1 or earlier)_
+- `POST` `/groups/{id}/members/users` - Add Group Users _(added 21.1 or earlier)_
 - `GET` `/jobs` - Get Job List _(added 21.1 or earlier)_
 - `POST` `/jobs` - Execute Job _(added 21.1 or earlier)_
 - `GET` `/jobs/{id}` - Get Job _(added 21.1 or earlier)_
@@ -224,9 +176,11 @@ are already reachable there and need a spec refresh here first.
 - `GET` `/scenarios/databases` - Get Scenario-Enabled Cubes _(added 21.1 or earlier)_
 - `DELETE` `/session` - Logout Session _(added 21.1 or earlier)_
 - `GET` `/session` - Get Session _(added 21.1 or earlier)_
+- `DELETE` `/sessions` - Delete All Sessions _(added 21.1 or earlier)_
 - `GET` `/sessions` - List Sessions _(added 21.1 or earlier)_
 - `DELETE` `/sessions/{sessionId}` - Delete Session By ID _(added 21.1 or earlier)_
 - `GET` `/urls` - Get Essbase URLs _(added 21.1 or earlier)_
+- `GET` `/users` - Search or Export Users _(added 21.1 or earlier)_
 - `GET` `/utilities` - List Utilities _(added 21.1 or earlier)_
 - `GET` `/variables` - Get Server Variables _(added 21.1 or earlier)_
 - `POST` `/variables` - Create Server Variable _(added 21.1 or earlier)_

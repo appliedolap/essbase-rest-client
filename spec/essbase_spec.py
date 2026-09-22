@@ -355,7 +355,20 @@ def first_seen(specs: list[tuple[str, dict]]) -> dict[Endpoint, str]:
 # which keeps this honest: it measures the code, not a hand-kept list.
 REQUEST_BUILDER = re.compile(r"^\s*private HttpRequest\.Builder (\w+)RequestBuilder\(", re.M)
 LOCAL_VAR_PATH = re.compile(r'^\s*String localVarPath = "([^"]*)"', re.M)
-HTTP_METHOD = re.compile(r'localVarRequestBuilder\.method\("(\w+)"')
+# The verb is matched on `.method(` alone rather than on
+# `localVarRequestBuilder.method(`, because an endpoint taking a form-encoded
+# body gets its content type and its verb in one chain:
+#
+#     localVarRequestBuilder
+#         .header("Content-Type", entity.getContentType().getValue())
+#         .method("DELETE", ...);
+#
+# Requiring the variable immediately before `.method(` missed all nine of those
+# and reported them as absent from the generated client - the outline editing
+# endpoints, which is where the form-encoded bodies happen to be - when the
+# generated methods were there all along. One builder is one request, and no
+# builder names two verbs, so the bare `.method(` is unambiguous.
+HTTP_METHOD = re.compile(r'\.method\("(\w+)"')
 
 # Some endpoints are reached without the generated client at all, through the
 # NativeHttp helper - streaming and file transfer, mostly. Those call sites are

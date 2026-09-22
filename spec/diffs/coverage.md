@@ -7,9 +7,9 @@ hand-written layer calls, so it measures the code rather than a kept list.
 
 | State | Count | Meaning |
 | --- | ---: | --- |
-| Exposed | 63 | The hand-written API reaches this endpoint. |
-| Generated, not exposed | 254 | A generated method exists; it needs an Ess* wrapper to reach callers. |
-| Not in the generated client | 177 | Absent from the spec this client was generated from; needs a regeneration first. |
+| Exposed | 98 | The hand-written API reaches this endpoint. |
+| Generated, not exposed | 396 | A generated method exists; it needs an Ess* wrapper to reach callers. |
+| Not in the generated client | 0 | Absent from the spec this client was generated from; needs a regeneration first. |
 | **Total** | **494** | |
 
 ## Not in the generated client
@@ -17,183 +17,6 @@ hand-written layer calls, so it measures the code rather than a kept list.
 These need a spec refresh before they can be wrapped: regenerate from a
 current specification (see `AGENTS.md`), then write the wrapper.
 
-- `DELETE` `/ai/aiconnection/{aiConnectionName}/chat/profile/{profileName}` - Drop OCI chat profile _(added 21.8)_
-- `POST` `/ai/aiconnection/{aiConnectionName}/chat/profile/{profileName}` - Create OCI chat profile _(added 21.8)_
-- `DELETE` `/ai/aiconnection/{aiConnectionName}/job/vectorindex` - Create a job to drop the vector index _(added 21.8)_
-- `POST` `/ai/aiconnection/{aiConnectionName}/job/vectorindex` - Create a job to build vector index _(added 21.8)_
-- `GET` `/ai/aiconnection/{aiConnectionName}/vectorindex/{vectorIndexName}/narrate/{profileName}` - AI Narrate _(added 21.8)_
-- `POST` `/ai/applications/{applicationName}/chat/passThrough` - AI pass through _(added 21.8)_
-- `DELETE` `/ai/applications/{applicationName}/connection` - Dissociate AI connection _(added 21.8)_
-- `POST` `/ai/applications/{applicationName}/connection/{connectionName}` - Associate AI connection _(added 21.8)_
-- `GET` `/ai/applications/{applicationName}/databases/{databaseName}/calculation/conversation` - List all calculation specific Conversations IDs _(added 26.1)_
-- `DELETE` `/ai/applications/{applicationName}/databases/{databaseName}/calculation/conversation/{conversationId}` - Drop a conversation. _(added 26.1)_
-- `GET` `/ai/applications/{applicationName}/databases/{databaseName}/calculation/conversation/{conversationId}` - Get all calculation specific conversations. _(added 26.1)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/calculation/generate` - Generate calculation script. _(added 26.1)_
-- `GET` `/ai/applications/{applicationName}/databases/{databaseName}/conversation` - List conversations _(added 26.1)_
-- `DELETE` `/ai/applications/{applicationName}/databases/{databaseName}/conversationHistory` - Delete conversation history _(added 26.1)_
-- `GET` `/ai/applications/{applicationName}/databases/{databaseName}/conversationHistory` - Get conversation history _(added 26.1)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/listSampleQueries` - List Sample Queries _(added 21.8)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/mdxgenerator` - MDX Generator _(added 21.8)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/nnearestneighboursearch` - N-Nearest Neighbour Search _(added 21.8)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/semanticsearch` - Semantic Search _(added 21.8)_
-- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/vectorizationDate` - Vectorization Date _(added 21.8)_
-- `POST` `/ai/applications/{applicationName}/job/vectorize/databases/{databaseName}` - Vectorize outline job _(added 21.8)_
-- `GET` `/ai/connection` - Get AI connection _(added 21.8)_
-- `POST` `/ai/dbconnection/{dbConnectionName}/chat/credential/signingkey/{credentialName}` - Create OCI chat credential using singing key _(added 21.8)_
-- `DELETE` `/ai/dbconnection/{dbConnectionName}/chat/credential/{credentialName}` - Drop OCI chat credential _(added 21.8)_
-- `DELETE` `/ai/dbconnection/{dbConnectionName}/vector/credential/{credentialName}` - Drop OCI vector credential _(added 21.8)_
-- `POST` `/ai/dbconnection/{dbConnectionName}/vector/credential/{credentialName}` - Create OCI vector credential _(added 21.8)_
-- `GET` `/ai/vectorindex` - Get vector index _(added 21.8)_
-- `GET` `/amw` - read _(added 26.1)_
-- `PUT` `/amw` - write _(added 26.1)_
-- `GET` `/applications/actions/name/{appVisiblity}` - List Application Names _(added 21.1 or earlier)_
-- `POST` `/applications/actions/shadowCopy` - Create Shadow Application _(added 21.1 or earlier)_
-- `DELETE` `/applications/actions/shadowDelete/{shadowAppName}` - Delete Shadow Application _(added 21.1 or earlier)_
-- `POST` `/applications/actions/shadowPromote` - Promote Shadow Application _(added 21.1 or earlier)_
-- `GET` `/applications/partitions/supportedfederatedtypes` - Get Supported Partition Types _(added 21.6)_
-- `DELETE` `/applications/{applicationName}/databases/{databaseName}/asodataload/buffers` - Destroy Dataload Buffer _(added 21.4)_
-- `GET` `/applications/{applicationName}/databases/{databaseName}/currencySettings` - Get Currency Settings _(added 21.1 or earlier)_
-- `POST` `/applications/{applicationName}/databases/{databaseName}/currencySettings` - Set Currency Settings _(added 21.1 or earlier)_
-- `POST` `/applications/{applicationName}/databases/{databaseName}/dtreports/list` - List Drill Through Reports For Given Cell Intersections _(added 21.7)_
-- `GET` `/applications/{applicationName}/databases/{databaseName}/executeReport` - Execute Report Script _(added 21.1 or earlier)_
-- `GET` `/applications/{applicationName}/databases/{databaseName}/partitions/supportedfederatedtypes` - Get Supported Partition Types _(added 21.1 or earlier)_
-- `POST` `/applications/{applicationName}/databases/{databaseName}/reports/{name}` - Execute Drill Through Report _(added 21.4)_
-- `PUT` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/content` - uploadScriptContent _(added 26.1)_
-- `POST` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/scriptops/validate` - Validate Calc Script _(added 26.1)_
-- `GET` `/applications/{applicationName}/databases/{databaseName}/settings/compressioninfo` - Get ASO Compression Info _(added 21.5)_
-- `GET` `/applications/{applicationName}/datasources/{datasourceName}` - Get Application Datasource _(added 21.8)_
-- `POST` `/applications/{applicationName}/decrypt` - Decrypt Application _(added 21.6)_
-- `POST` `/applications/{applicationName}/encrypt` - Encrypt Application _(added 21.6)_
-- `GET` `/applications/{applicationName}/encryptionconfig` - Get Encryption Info _(added 21.6)_
-- `PUT` `/applications/{application}/databases/{database}/queries/rename` - Rename MDX report. _(added 21.8)_
-- `GET` `/backup/application/{applicationId}` - getApplicationBackups _(added 26.1)_
-- `GET` `/backup/applications` - getApplications _(added 26.1)_
-- `POST` `/backup/applications` - backupApplications _(added 26.1)_
-- `GET` `/backup/info` - getBackupInfo _(added 26.1)_
-- `GET` `/backup/isrunning` - isRunning _(added 26.1)_
-- `GET` `/backup/queue` - getQueueInfo _(added 26.1)_
-- `GET` `/backup/settings` - getSettings _(added 26.1)_
-- `PUT` `/backup/settings` - saveSettings _(added 26.1)_
-- `GET` `/backup/settings/validation` - getSettingsValidator _(added 26.1)_
-- `POST` `/backup/start` - startBackup _(added 26.1)_
-- `POST` `/backup/stop` - stopBackup _(added 26.1)_
-- `GET` `/backup/system` - getSystemBackups _(added 26.1)_
-- `GET` `/catalog_old/{fileName}` - getFileContent _(added 26.1)_
-- `DELETE` `/centralizedurl` - Delete Essbase server from Centralized URL _(added 21.6)_
-- `GET` `/centralizedurl` - Get Essbase Server list _(added 21.6)_
-- `POST` `/centralizedurl` - Add Essbase server to Centralized URL List _(added 21.6)_
-- `PUT` `/centralizedurl` - Update Essbase URL of Centralized URL List _(added 21.6)_
-- `GET` `/cfg` - Get Essbase Configuration. _(added 26.1)_
-- `GET` `/cloudstorage/config` - Get object storage configuration _(added 26.1)_
-- `PUT` `/cloudstorage/config` - Create or update object storage configuration _(added 26.1)_
-- `POST` `/cloudstorage/config/test` - Verify object storage configuration _(added 26.1)_
-- `GET` `/connections/{connection}/getdependentconnections` - List dependamt connection names _(added 21.8)_
-- `POST` `/datasources/customdelimited/query/stream` - Get Streamed Global Datasource Results _(added 21.4)_
-- `GET` `/datasources/{datasourceName}` - Get Global Datasource _(added 21.8)_
-- `GET` `/ess-mcp` - doGet _(added 26.1)_
-- `POST` `/ess-mcp` - doPost _(added 26.1)_
-- `POST` `/ess-mcp/call` - callTool _(added 26.1)_
-- `GET` `/ess-mcp/tools` - listTools _(added 26.1)_
-- `POST` `/event/{eventName}` - fireEvent _(added 26.1)_
-- `POST` `/fastwriteback/adwload` - load _(added 26.1)_
-- `GET` `/fastwriteback/checkSQLload` - checkIfSQLLoad _(added 26.1)_
-- `POST` `/federatedoverdatasource` - report _(added 26.1)_
-- `GET` `/federatedoverdatasource/av/avparams` - avParams _(added 26.1)_
-- `POST` `/federatedoverdatasource/av/createAv` - createAv _(added 26.1)_
-- `GET` `/federatedoverdatasource/av/status` - avStatus _(added 26.1)_
-- `GET` `/federatedoverdatasource/av/validate` - validate _(added 26.1)_
-- `GET` `/federatedoverdatasource/cancel` - cancelRequest _(added 26.1)_
-- `POST` `/federatedoverdatasource/clearregions` - clear _(added 26.1)_
-- `GET` `/federatedoverdatasource/factmanaged/settings` - factManagedSettings _(added 26.1)_
-- `GET` `/federatedoverdatasource/lastcommit` - getFedVersion _(added 26.1)_
-- `DELETE` `/federatedoverdatasource/mapping` - deleteMapping _(added 26.1)_
-- `GET` `/federatedoverdatasource/mapping` - getMapping _(added 26.1)_
-- `PUT` `/federatedoverdatasource/mapping` - createMappingLegacy _(added 26.1)_
-- `GET` `/federatedoverdatasource/mapping/cr` - getMappingCR _(added 26.1)_
-- `PUT` `/federatedoverdatasource/mapping/cr` - createMappingCR _(added 26.1)_
-- `GET` `/federatedoverdatasource/mapping/denormalized` - getMappingDenormalized _(added 26.1)_
-- `PUT` `/federatedoverdatasource/mapping/denormalized` - createMappingDenormalized _(added 26.1)_
-- `PUT` `/federatedoverdatasource/mapping/denormalized/legacytest` - createMappingDenormalizedLegacyTest _(added 26.1)_
-- `POST` `/federatedoverdatasource/saveformulas` - saveFormulas _(added 26.1)_
-- `POST` `/federatedoverdatasource/saveformulas/cache` - cacheFormulas _(added 26.1)_
-- `POST` `/federatedoverdatasource/writeback` - writeback _(added 26.1)_
-- `POST` `/federatedsample` - report_1 _(added 26.1)_
-- `DELETE` `/files/abort/{path}` - Abort Multipart File Upload _(added 21.4)_
-- `POST` `/files/actions/extractJob` - Extract Zip File Using a Job _(added 21.6)_
-- `GET` `/files/getDatabasesFromLCMZip` - Get database names from LCM zip file _(added 26.1)_
-- `GET` `/files/getobjectstoreuri` - getObjectStoreURI _(added 21.8)_
-- `POST` `/files/upload-commit/{path}` - Commit Multipart File Upload _(added 21.4)_
-- `POST` `/files/upload-create/{path}` - Create Multipart File Upload _(added 21.4)_
-- `PUT` `/files/upload-part/{path}` - Upload File Part _(added 21.4)_
-- `GET` `/files/uploadconfig` - getUploadConfig _(added 21.4)_
-- `DELETE` `/groups/{id}/members/groups` - Remove Groups From Group _(added 21.1 or earlier)_
-- `DELETE` `/groups/{id}/members/users` - Remove Group Users _(added 21.1 or earlier)_
-- `DELETE` `/jobs/purge` - Delete Jobs _(added 21.2)_
-- `GET` `/logs` - Get All Server Types _(added 26.1)_
-- `GET` `/logs/stream` - Return Filtered Logs _(added 26.1)_
-- `GET` `/logs/{serverType}` - Download Logs for Server Type _(added 26.1)_
-- `GET` `/logs/{serverType}/all` - Download All Logs _(added 26.1)_
-- `GET` `/logs/{serverType}/latest` - Download Latest Log _(added 26.1)_
-- `GET` `/odbc` - read_1 _(added 26.1)_
-- `PUT` `/odbc` - write_1 _(added 26.1)_
-- `DELETE` `/outline/{app}/{cube}/edit` - deleteMember _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/edit` - getMembers_1 _(added 26.1)_
-- `PATCH` `/outline/{app}/{cube}/edit` - updateMember _(added 26.1)_
-- `POST` `/outline/{app}/{cube}/edit` - outlineAction _(added 26.1)_
-- `PUT` `/outline/{app}/{cube}/edit` - save _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/edit/ancestors/{memberUniqueName}` - getAncestorsMemberInfo _(added 26.1)_
-- `POST` `/outline/{app}/{cube}/edit/copy` - copyMembers _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/edit/copy/status` - getCopyMembersStatus _(added 26.1)_
-- `POST` `/outline/{app}/{cube}/edit/currencyDatabase` - createCurrencyDB _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/edit/descendantsCount/{memberUniqueName}` - getDescendantsCount _(added 26.1)_
-- `POST` `/outline/{app}/{cube}/edit/direct` - outlineEdit _(added 26.1)_
-- `POST` `/outline/{app}/{cube}/edit/exportaliastable` - exportAliasTable _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/edit/getRelatedInfo` - getRelatedInfo _(added 26.1)_
-- `POST` `/outline/{app}/{cube}/edit/importaliastable` - importAliasTable _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/edit/memberSelection` - memberSelection _(added 26.1)_
-- `POST` `/outline/{app}/{cube}/edit/members` - getMembers _(added 26.1)_
-- `POST` `/outline/{app}/{cube}/edit/motf` - setMOTF _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/edit/settings/aliases` - getAliasTableNames _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/edit/settings/hierarchyDetails` - getHierarchyDetails _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/edit/settings/outline` - getOutlineSettings _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/edit/settings/smartlist` - getAllSmartList _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/edit/shared` - getSharedMembers _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/edit/validate` - validate_1 _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/edit/{memberUniqueName}` - getMemberInfo _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/pivotDimension` - Get Pivot dimension _(added 21.8)_
-- `DELETE` `/outline/{app}/{cube}/qedit` - deleteMember_1 _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/qedit` - getMembers_3 _(added 26.1)_
-- `PATCH` `/outline/{app}/{cube}/qedit` - updateMember_1 _(added 26.1)_
-- `POST` `/outline/{app}/{cube}/qedit` - outlineAction_1 _(added 26.1)_
-- `PUT` `/outline/{app}/{cube}/qedit` - save_1 _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/qedit/ancestors/{memberUniqueName}` - getAncestorsMemberInfo_1 _(added 26.1)_
-- `POST` `/outline/{app}/{cube}/qedit/currencyDatabase` - createCurrencyDB_1 _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/qedit/descendantsCount/{memberUniqueName}` - getDescendantsCount_1 _(added 26.1)_
-- `POST` `/outline/{app}/{cube}/qedit/direct` - outlineEdit_1 _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/qedit/memberSelection` - memberSelection_1 _(added 26.1)_
-- `POST` `/outline/{app}/{cube}/qedit/members` - getMembers_2 _(added 26.1)_
-- `POST` `/outline/{app}/{cube}/qedit/motf` - setMOTF_1 _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/qedit/settings/aliases` - getAliasTableNames_1 _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/qedit/settings/outline` - getOutlineSettings_1 _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/qedit/settings/smartlist` - getAllSmartList_1 _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/qedit/shared` - getSharedMembers_1 _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/qedit/validate` - validate_2 _(added 26.1)_
-- `GET` `/outline/{app}/{cube}/qedit/{memberUniqueName}` - getMemberInfo_1 _(added 26.1)_
-- `DELETE` `/rocluster` - Delete ReadOnly Cluster _(added 21.6)_
-- `GET` `/rocluster` - Get ReadOnly Cluster List _(added 21.6)_
-- `POST` `/rocluster` - Create ReadOnly Cluster _(added 21.6)_
-- `PUT` `/rocluster` - Update ReadOnly Cluster _(added 21.6)_
-- `POST` `/rocluster/changestatus` - ReadOnly Cluster Change Status _(added 21.6)_
-- `GET` `/rocluster/findByName` - Find ReadOnly Cluster By Name _(added 21.6)_
-- `GET` `/rocluster/{svrName}/appcubelist` - Get App Cube List _(added 21.6)_
-- `POST` `/security/syncwithidp` - syncWithIDP _(added 26.1)_
-- `POST` `/service/actions/start` - start _(added 26.1)_
-- `POST` `/service/actions/stop` - stop _(added 26.1)_
-- `GET` `/service/status` - getStatus _(added 26.1)_
-- `GET` `/settings/odlLogSettings` - Get Diagnostic Log Settings _(added 21.1 or earlier)_
-- `PUT` `/settings/odlLogSettings` - Set Diagnostic Log Settings _(added 21.1 or earlier)_
-- `POST` `/utils/rules/verifyRule` - Verify Rule _(added 21.1 or earlier)_
-- `GET` `/version` - getVersion _(added 26.1)_
 
 ## Generated, not exposed
 
@@ -201,22 +24,51 @@ The generated method already exists for each of these, so exposing one is a
 matter of adding an `Ess*` wrapper - the cheapest place to add coverage.
 Grouped by the tag Oracle gives the endpoint.
 
-<details><summary><strong>Aggregate Storage Load Buffers</strong> (3)</summary>
+<details><summary><strong>AI</strong> (27)</summary>
 
-- `POST` `/applications/{applicationName}/databases/{databaseName}/asodataload/actions/merge` - `AsoLoadBuffersApi.aSOLoadBuffersMerge`
-- `GET` `/applications/{applicationName}/databases/{databaseName}/asodataload/buffers` - `AsoLoadBuffersApi.aSOLoadBuffersListBuffers`
-- `POST` `/applications/{applicationName}/databases/{databaseName}/asodataload/buffers` - `AsoLoadBuffersApi.aSOLoadBuffersCreateBuffer`
+- `DELETE` `/ai/aiconnection/{aiConnectionName}/chat/profile/{profileName}` - `AiApi.aIDropOCIChatProfile`
+- `POST` `/ai/aiconnection/{aiConnectionName}/chat/profile/{profileName}` - `AiApi.aICreateOCIChatProfile`
+- `DELETE` `/ai/aiconnection/{aiConnectionName}/job/vectorindex` - `AiApi.aIDropVectorIndexJob`
+- `POST` `/ai/aiconnection/{aiConnectionName}/job/vectorindex` - `AiApi.aICreateVectorIndexJob`
+- `GET` `/ai/aiconnection/{aiConnectionName}/vectorindex/{vectorIndexName}/narrate/{profileName}` - `AiApi.aINarrateVectorIndex`
+- `POST` `/ai/applications/{applicationName}/chat/passThrough` - `AiApi.aIPassThrough`
+- `DELETE` `/ai/applications/{applicationName}/connection` - `AiApi.aIDissociateConnection`
+- `POST` `/ai/applications/{applicationName}/connection/{connectionName}` - `AiApi.aIAssociateConnection`
+- `GET` `/ai/applications/{applicationName}/databases/{databaseName}/calculation/conversation` - `AiApi.aIListCalculationConversations`
+- `DELETE` `/ai/applications/{applicationName}/databases/{databaseName}/calculation/conversation/{conversationId}` - `AiApi.aIDeleteCalculationConversations`
+- `GET` `/ai/applications/{applicationName}/databases/{databaseName}/calculation/conversation/{conversationId}` - `AiApi.aIGetCalculationConversations`
+- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/calculation/generate` - `AiApi.aIGenerateCalculationScript`
+- `GET` `/ai/applications/{applicationName}/databases/{databaseName}/conversation` - `AiApi.aIListConversations`
+- `DELETE` `/ai/applications/{applicationName}/databases/{databaseName}/conversationHistory` - `AiApi.aIDeleteConversationHistory`
+- `GET` `/ai/applications/{applicationName}/databases/{databaseName}/conversationHistory` - `AiApi.aIGetConversationHistory`
+- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/listSampleQueries` - `AiApi.aIListSampleQueries`
+- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/mdxgenerator` - `AiApi.aIMDXGenerator`
+- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/nnearestneighboursearch` - `AiApi.aINNearestNeighbourSearch`
+- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/semanticsearch` - `AiApi.aISemanticSearch`
+- `POST` `/ai/applications/{applicationName}/databases/{databaseName}/vectorizationDate` - `AiApi.aIVectorizationDate`
+- `POST` `/ai/applications/{applicationName}/job/vectorize/databases/{databaseName}` - `AiApi.aIVectorizeOutlineJob`
+- `GET` `/ai/connection` - `AiApi.aIGetConnection`
+- `POST` `/ai/dbconnection/{dbConnectionName}/chat/credential/signingkey/{credentialName}` - `AiApi.aICreateOCIChatCredentialUsingSingingKey`
+- `DELETE` `/ai/dbconnection/{dbConnectionName}/chat/credential/{credentialName}` - `AiApi.aIDropOCIChatCredential`
+- `DELETE` `/ai/dbconnection/{dbConnectionName}/vector/credential/{credentialName}` - `AiApi.aIDropOCIVectorCredential`
+- `POST` `/ai/dbconnection/{dbConnectionName}/vector/credential/{credentialName}` - `AiApi.aICreateOCIVectorCredential`
+- `GET` `/ai/vectorindex` - `AiApi.aIGetVectorIndex`
 
 </details>
 
-<details><summary><strong>Application Configuration</strong> (6)</summary>
+<details><summary><strong>Aggregate Storage Load Buffers</strong> (4)</summary>
 
-- `GET` `/applications/{applicationName}/configurationkeys` - `ApplicationConfigurationApi.applicationConfigurationGetConfigurationKeys`
-- `POST` `/applications/{applicationName}/configurations` - `ApplicationConfigurationApi.applicationConfigurationAddConfiguration`
+- `POST` `/applications/{applicationName}/databases/{databaseName}/asodataload/actions/merge` - `AggregateStorageLoadBuffersApi.aSOLoadBuffersMerge`
+- `DELETE` `/applications/{applicationName}/databases/{databaseName}/asodataload/buffers` - `AggregateStorageLoadBuffersApi.aSOLoadBuffersDestroyBuffers`
+- `GET` `/applications/{applicationName}/databases/{databaseName}/asodataload/buffers` - `AggregateStorageLoadBuffersApi.aSOLoadBuffersListBuffers`
+- `POST` `/applications/{applicationName}/databases/{databaseName}/asodataload/buffers` - `AggregateStorageLoadBuffersApi.aSOLoadBuffersCreateBuffer`
+
+</details>
+
+<details><summary><strong>Application Configuration</strong> (2)</summary>
+
 - `PUT` `/applications/{applicationName}/configurations` - `ApplicationConfigurationApi.applicationConfigurationSetConfigurations`
-- `DELETE` `/applications/{applicationName}/configurations/{configId}` - `ApplicationConfigurationApi.applicationConfigurationDeleteConfiguration`
 - `GET` `/applications/{applicationName}/configurations/{configId}` - `ApplicationConfigurationApi.applicationConfigurationGetConfiguration`
-- `PUT` `/applications/{applicationName}/configurations/{configId}` - `ApplicationConfigurationApi.applicationConfigurationSetConfiguration`
 
 </details>
 
@@ -233,13 +85,14 @@ Grouped by the tag Oracle gives the endpoint.
 
 </details>
 
-<details><summary><strong>Application Datasources</strong> (5)</summary>
+<details><summary><strong>Application Datasources</strong> (6)</summary>
 
-- `GET` `/applications/{applicationName}/datasources` - `ApplicationDataSourcesApi.applicationDatasourcesGetDatasources`
-- `POST` `/applications/{applicationName}/datasources` - `ApplicationDataSourcesApi.applicationDatasourcesCreateDatasource`
-- `POST` `/applications/{applicationName}/datasources/query/stream` - `ApplicationDataSourcesApi.applicationDatasourcesGetDataStream`
-- `DELETE` `/applications/{applicationName}/datasources/{datasourceName}` - `ApplicationDataSourcesApi.applicationDatasourcesDeleteDatasource`
-- `PUT` `/applications/{applicationName}/datasources/{datasourceName}` - `ApplicationDataSourcesApi.applicationDatasourcesUpdateDatasource`
+- `GET` `/applications/{applicationName}/datasources` - `ApplicationDatasourcesApi.applicationDatasourcesGetDatasources`
+- `POST` `/applications/{applicationName}/datasources` - `ApplicationDatasourcesApi.applicationDatasourcesCreateDatasource`
+- `POST` `/applications/{applicationName}/datasources/query/stream` - `ApplicationDatasourcesApi.applicationDatasourcesGetDataStream`
+- `DELETE` `/applications/{applicationName}/datasources/{datasourceName}` - `ApplicationDatasourcesApi.applicationDatasourcesDeleteDatasource`
+- `GET` `/applications/{applicationName}/datasources/{datasourceName}` - `ApplicationDatasourcesApi.applicationDatasourcesGetDatasourceDetails`
+- `PUT` `/applications/{applicationName}/datasources/{datasourceName}` - `ApplicationDatasourcesApi.applicationDatasourcesUpdateDatasource`
 
 </details>
 
@@ -251,9 +104,8 @@ Grouped by the tag Oracle gives the endpoint.
 
 </details>
 
-<details><summary><strong>Application Role Provisioning</strong> (5)</summary>
+<details><summary><strong>Application Role Provisioning</strong> (4)</summary>
 
-- `GET` `/applications/{app}/permissions` - `ApplicationRoleProvisioningApi.applicationRoleProvisioningSearchProvision`
 - `POST` `/applications/{app}/permissions` - `ApplicationRoleProvisioningApi.applicationRoleProvisioningImportProvision`
 - `DELETE` `/applications/{app}/permissions/{id}` - `ApplicationRoleProvisioningApi.applicationRoleProvisioningDeprovision`
 - `GET` `/applications/{app}/permissions/{id}` - `ApplicationRoleProvisioningApi.applicationRoleProvisioningGetProvision`
@@ -271,21 +123,30 @@ Grouped by the tag Oracle gives the endpoint.
 
 </details>
 
-<details><summary><strong>Applications</strong> (14)</summary>
+<details><summary><strong>Applications</strong> (23)</summary>
 
+- `GET` `/applications/actions/name/{appVisiblity}` - `ApplicationsApi.applicationsGetApplicationNames`
+- `POST` `/applications/actions/shadowCopy` - `ApplicationsApi.applicationsCreateShadowApplication`
+- `DELETE` `/applications/actions/shadowDelete/{shadowAppName}` - `ApplicationsApi.applicationsDropShadowApplication`
+- `POST` `/applications/actions/shadowPromote` - `ApplicationsApi.applicationsPromoteShadowApplication`
 - `GET` `/applications/actions/tree` - `ApplicationsApi.applicationsGetApplicationsTree`
-- `GET` `/applications/{applicationName}` - `ApplicationsApi.applicationsGetApplication`
+- `GET` `/applications/partitions/supportedfederatedtypes` - `ApplicationsApi.applicationsGetSupportedFederatedTypes`
 - `POST` `/applications/{applicationName}/databases/actions/copy` - `ApplicationsApi.applicationsCopyDatabase`
 - `POST` `/applications/{applicationName}/databases/actions/rename` - `ApplicationsApi.applicationsRenameDatabase`
 - `DELETE` `/applications/{applicationName}/databases/{databaseName}` - `ApplicationsApi.applicationsDeleteDatabase`
-- `GET` `/applications/{applicationName}/databases/{databaseName}` - `ApplicationsApi.applicationsGetCube`
 - `PUT` `/applications/{applicationName}/databases/{databaseName}` - `ApplicationsApi.applicationsPerformDbOperation`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/aliases` - `ApplicationsApi.applicationsGetAliases`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/aliases/getActiveAlias` - `ApplicationsApi.applicationsGetActiveAlias`
-- `PUT` `/applications/{applicationName}/databases/{databaseName}/aliases/setActiveAlias` - `ApplicationsApi.applicationsSetAliases`
+- `PUT` `/applications/{applicationName}/databases/{databaseName}/aliases/setActiveAlias` - `ApplicationsApi.applicationsSetActiveAlias`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/calculationFunctions` - `ApplicationsApi.databasesGetCalculationFunctions`
+- `GET` `/applications/{applicationName}/databases/{databaseName}/currencySettings` - `ApplicationsApi.databasesGetCurrencySettings`
+- `POST` `/applications/{applicationName}/databases/{databaseName}/currencySettings` - `ApplicationsApi.databasesSetCurrencySettings`
+- `GET` `/applications/{applicationName}/databases/{databaseName}/executeReport` - `ApplicationsApi.applicationsExecuteReportScript`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/formulaFunctions` - `ApplicationsApi.databasesFormulaFunctions`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/mdxFunctions` - `ApplicationsApi.databasesGetMdxFunctions`
+- `POST` `/applications/{applicationName}/decrypt` - `ApplicationsApi.applicationDecrypt`
+- `POST` `/applications/{applicationName}/encrypt` - `ApplicationsApi.applicationEncrypt`
+- `GET` `/applications/{applicationName}/encryptionconfig` - `ApplicationsApi.applicationAppSupportedEncryptionMethods`
 - `GET` `/applications/{applicationName}/provisionReport` - `ApplicationsApi.applicationsGetApplicationProvisionReport`
 
 </details>
@@ -303,7 +164,16 @@ Grouped by the tag Oracle gives the endpoint.
 
 </details>
 
-<details><summary><strong>Database Settings and Statistics</strong> (17)</summary>
+<details><summary><strong>CentralizedURL</strong> (4)</summary>
+
+- `DELETE` `/centralizedurl` - `CentralizedUrlApi.centralizedUrlDeletSingleURLProperties`
+- `GET` `/centralizedurl` - `CentralizedUrlApi.centraliazedurlGetSingleURLList`
+- `POST` `/centralizedurl` - `CentralizedUrlApi.centralizedUrlAddHostSingleURL`
+- `PUT` `/centralizedurl` - `CentralizedUrlApi.centralizedUrlUpdateSingleURLProperties`
+
+</details>
+
+<details><summary><strong>Database Settings and Statistics</strong> (18)</summary>
 
 - `GET` `/applications/{applicationName}/databases/{databaseName}/settings` - `DatabaseSettingsAndStatisticsApi.databaseSettingsStatisticsGetSettings`
 - `PATCH` `/applications/{applicationName}/databases/{databaseName}/settings` - `DatabaseSettingsAndStatisticsApi.databaseSettingsStatisticsUpdateSettings`
@@ -311,6 +181,7 @@ Grouped by the tag Oracle gives the endpoint.
 - `GET` `/applications/{applicationName}/databases/{databaseName}/settings/caches` - `DatabaseSettingsAndStatisticsApi.databaseSettingsStatisticsGetCachesSettings`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/settings/calculation` - `DatabaseSettingsAndStatisticsApi.databaseSettingsStatisticsGetCalculationSettings`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/settings/compression` - `DatabaseSettingsAndStatisticsApi.databaseSettingsStatisticsGetCompressSettings`
+- `GET` `/applications/{applicationName}/databases/{databaseName}/settings/compressioninfo` - `DatabaseSettingsAndStatisticsApi.databaseSettingsStatisticsGetCompressionInfo`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/settings/outline` - `DatabaseSettingsAndStatisticsApi.databaseSettingsStatisticsGetOutlineSettings`
 - `PATCH` `/applications/{applicationName}/databases/{databaseName}/settings/outline` - `DatabaseSettingsAndStatisticsApi.databaseSettingsStatisticsUpdateOutlineSettings`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/settings/outline/attributes` - `DatabaseSettingsAndStatisticsApi.databaseSettingsStatisticsGetOutlineAttributesSettings`
@@ -331,6 +202,13 @@ Grouped by the tag Oracle gives the endpoint.
 
 </details>
 
+<details><summary><strong>Drill Through Reports</strong> (2)</summary>
+
+- `POST` `/applications/{applicationName}/databases/{databaseName}/dtreports/list` - `DrillThroughReportsApi.drillThroughReportsListReports`
+- `POST` `/applications/{applicationName}/databases/{databaseName}/reports/{name}` - `DrillThroughReportsApi.drillThroughReportsExecute`
+
+</details>
+
 <details><summary><strong>Email</strong> (7)</summary>
 
 - `GET` `/email` - `EmailApi.emailGetEmailLinks`
@@ -340,6 +218,12 @@ Grouped by the tag Oracle gives the endpoint.
 - `DELETE` `/email/smtp` - `EmailApi.emailDeleteSMTPDetails`
 - `GET` `/email/smtp` - `EmailApi.emailGetSMTPServerDetail`
 - `PUT` `/email/smtp` - `EmailApi.emailAddSMTPDetails`
+
+</details>
+
+<details><summary><strong>Essbase Configuration</strong> (1)</summary>
+
+- `GET` `/cfg` - `EssbaseConfigurationApi.essbaseConfigurationGet`
 
 </details>
 
@@ -359,9 +243,18 @@ Grouped by the tag Oracle gives the endpoint.
 
 </details>
 
-<details><summary><strong>Files</strong> (2)</summary>
+<details><summary><strong>Files</strong> (11)</summary>
 
+- `DELETE` `/files/abort/{path}` - `FilesApi.filesAbortUpload`
+- `POST` `/files/actions/extractJob` - `FilesApi.filesExtractJob`
+- `GET` `/files/getobjectstoreuri` - `FilesApi.getObjectStoreURI`
 - `GET` `/files/sharedpath` - `FilesApi.filesGetSharedPath`
+- `POST` `/files/upload-commit/{path}` - `FilesApi.filesUploadCommit`
+- `POST` `/files/upload-create/{path}` - `FilesApi.filesCreateUpload`
+- `PUT` `/files/upload-part/{path}` - `FilesApi.filesUploadPart`
+- `GET` `/files/uploadconfig` - `FilesApi.getUploadConfig`
+- `DELETE` `/files/{path}` - `FilesApi.filesDeleteFile`
+- `GET` `/files/{path}` - `FilesApi.filesListFiles`
 - `PUT` `/files/{path}` - `FilesApi.filesAddFile`
 
 </details>
@@ -384,7 +277,7 @@ Grouped by the tag Oracle gives the endpoint.
 
 </details>
 
-<details><summary><strong>Global Connections</strong> (8)</summary>
+<details><summary><strong>Global Connections</strong> (9)</summary>
 
 - `GET` `/connections` - `GlobalConnectionsApi.globalConnectionsGetConnections`
 - `POST` `/connections` - `GlobalConnectionsApi.globalConnectionsCreateConnection`
@@ -394,16 +287,18 @@ Grouped by the tag Oracle gives the endpoint.
 - `PUT` `/connections/{connectionName}` - `GlobalConnectionsApi.globalConnectionsUpdateConnection`
 - `POST` `/connections/{connectionName}/actions/test` - `GlobalConnectionsApi.globalConnectionsTestConnectionExisting`
 - `PUT` `/connections/{connectionName}/wallet` - `GlobalConnectionsApi.globalConnectionsWallets`
+- `GET` `/connections/{connection}/getdependentconnections` - `GlobalConnectionsApi.globalConnectionsDependantconnections`
 
 </details>
 
-<details><summary><strong>Global Datasources</strong> (5)</summary>
+<details><summary><strong>Global Datasources</strong> (6)</summary>
 
-- `POST` `/datasources` - `GlobalDataSourcesApi.globalDatasourcesCreateDatasource`
-- `POST` `/datasources/query` - `GlobalDataSourcesApi.globalDatasourcesGetResults`
-- `GET` `/datasources/query/data/{streamId}` - `GlobalDataSourcesApi.globalDatasourcesGetData`
-- `DELETE` `/datasources/{datasourceName}` - `GlobalDataSourcesApi.globalDatasourcesDeleteDatasource`
-- `PUT` `/datasources/{datasourceName}` - `GlobalDataSourcesApi.globalDatasourcesUpdateDatasource`
+- `POST` `/datasources` - `GlobalDatasourcesApi.globalDatasourcesCreateDatasource`
+- `POST` `/datasources/customdelimited/query/stream` - `GlobalDatasourcesApi.globalDatasourcesGetCustomDelimitedDataStream`
+- `GET` `/datasources/query/data/{streamId}` - `GlobalDatasourcesApi.globalDatasourcesGetData`
+- `POST` `/datasources/query/stream` - `GlobalDatasourcesApi.globalDatasourcesGetDataStream`
+- `DELETE` `/datasources/{datasourceName}` - `GlobalDatasourcesApi.globalDatasourcesDeleteDatasource`
+- `PUT` `/datasources/{datasourceName}` - `GlobalDatasourcesApi.globalDatasourcesUpdateDatasource`
 
 </details>
 
@@ -425,32 +320,27 @@ Grouped by the tag Oracle gives the endpoint.
 
 </details>
 
-<details><summary><strong>Groups</strong> (8)</summary>
+<details><summary><strong>Groups</strong> (2)</summary>
 
-- `POST` `/groups` - `GroupsApi.groupsAdd`
 - `POST` `/groups/actions/delete` - `GroupsApi.usersDeleteGroups`
-- `DELETE` `/groups/{id}` - `GroupsApi.groupsDelete`
-- `GET` `/groups/{id}` - `GroupsApi.groupsGet`
-- `PUT` `/groups/{id}` - `GroupsApi.groupsEdit`
 - `GET` `/groups/{id}/members` - `GroupsApi.groupsGetMembers`
-- `POST` `/groups/{id}/members/groups` - `GroupsApi.groupsAddGroupMembersToGroup`
-- `POST` `/groups/{id}/members/users` - `GroupsApi.groupsAddUserMembersToGroup`
 
 </details>
 
-<details><summary><strong>Jobs</strong> (1)</summary>
+<details><summary><strong>Jobs</strong> (2)</summary>
 
+- `DELETE` `/jobs/purge` - `JobsApi.jobsPurge`
 - `GET` `/jobs/statistics/{userId}` - `JobsApi.jobsGetJobStatistics`
 
 </details>
 
 <details><summary><strong>Layouts</strong> (5)</summary>
 
-- `GET` `/applications/{application}/databases/{database}/layouts` - `LayoutsApi.getLayouts`
-- `POST` `/applications/{application}/databases/{database}/layouts` - `LayoutsApi.saveLayout`
-- `GET` `/applications/{application}/databases/{database}/layouts/{layout}` - `LayoutsApi.getLayoutDetails`
-- `PUT` `/applications/{application}/databases/{database}/layouts/{layout}` - `LayoutsApi.editLayout`
-- `POST` `/applications/{application}/databases/{database}/layouts/{layout}/actions/markDefault` - `LayoutsApi.markDefaultLayout`
+- `GET` `/applications/{application}/databases/{database}/layouts` - `LayoutsApi.layoutsGetLayouts`
+- `POST` `/applications/{application}/databases/{database}/layouts` - `LayoutsApi.layoutsSaveLayout`
+- `GET` `/applications/{application}/databases/{database}/layouts/{layout}` - `LayoutsApi.layoutsGetLayoutDetails`
+- `PUT` `/applications/{application}/databases/{database}/layouts/{layout}` - `LayoutsApi.layoutsEditLayout`
+- `POST` `/applications/{application}/databases/{database}/layouts/{layout}/actions/markDefault` - `LayoutsApi.layoutsMarkDefaultLayout`
 
 </details>
 
@@ -472,26 +362,36 @@ Grouped by the tag Oracle gives the endpoint.
 
 </details>
 
-<details><summary><strong>MDX Reports</strong> (5)</summary>
+<details><summary><strong>MDX Reports</strong> (6)</summary>
 
-- `GET` `/applications/{application}/databases/{database}/queries` - `NamedQueriesApi.getNamedQueries`
-- `POST` `/applications/{application}/databases/{database}/queries` - `NamedQueriesApi.saveNamedQuery`
-- `DELETE` `/applications/{application}/databases/{database}/queries/{query}` - `NamedQueriesApi.deleteNamedQuery`
-- `GET` `/applications/{application}/databases/{database}/queries/{query}` - `NamedQueriesApi.getNamedQueryDetails`
-- `PUT` `/applications/{application}/databases/{database}/queries/{query}` - `NamedQueriesApi.editNamedQuery`
+- `GET` `/applications/{application}/databases/{database}/queries` - `MdxReportsApi.namedqueriesGetNamedQueries`
+- `POST` `/applications/{application}/databases/{database}/queries` - `MdxReportsApi.namedqueriesSaveNamedQuery`
+- `PUT` `/applications/{application}/databases/{database}/queries/rename` - `MdxReportsApi.rename`
+- `DELETE` `/applications/{application}/databases/{database}/queries/{query}` - `MdxReportsApi.namedqueriesDeleteNamedQuery`
+- `GET` `/applications/{application}/databases/{database}/queries/{query}` - `MdxReportsApi.namedqueriesGetNamedQueryDetails`
+- `PUT` `/applications/{application}/databases/{database}/queries/{query}` - `MdxReportsApi.namedqueriesEditNamedQuery`
 
 </details>
 
-<details><summary><strong>Outline Viewer</strong> (4)</summary>
+<details><summary><strong>Object Storage Configuration</strong> (3)</summary>
+
+- `GET` `/cloudstorage/config` - `ObjectStorageConfigurationApi.cloudStorageGetConfig`
+- `PUT` `/cloudstorage/config` - `ObjectStorageConfigurationApi.cloudStorageCreateOrUpdateConfig`
+- `POST` `/cloudstorage/config/test` - `ObjectStorageConfigurationApi.cloudStorageTestConfig`
+
+</details>
+
+<details><summary><strong>Outline Viewer</strong> (5)</summary>
 
 - `GET` `/outline/{app}/{cube}/ancestors/{memberUniqueName}` - `OutlineViewerApi.outlineGetAncestorsMemberInfo`
 - `GET` `/outline/{app}/{cube}/descendantsCount/{memberUniqueName}` - `OutlineViewerApi.outlineGetDescendantsCount`
-- `GET` `/outline/{app}/{cube}/settings/smartlist` - `OutlineViewerApi.getAllSmartList`
+- `GET` `/outline/{app}/{cube}/pivotDimension` - `OutlineViewerApi.outlineGetPivotDimension`
+- `GET` `/outline/{app}/{cube}/settings/smartlist` - `OutlineViewerApi.outlineGetAllSmartList`
 - `POST` `/outline/{app}/{cube}/xml` - `OutlineViewerApi.outlineGetOutlineXML`
 
 </details>
 
-<details><summary><strong>Partitions</strong> (9)</summary>
+<details><summary><strong>Partitions</strong> (10)</summary>
 
 - `DELETE` `/applications/{applicationName}/databases/{databaseName}/partitions` - `PartitionsApi.partitionDeletePartition`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/partitions` - `PartitionsApi.partitionGetPartitions`
@@ -500,6 +400,7 @@ Grouped by the tag Oracle gives the endpoint.
 - `POST` `/applications/{applicationName}/databases/{databaseName}/partitions/cellcount` - `PartitionsApi.partitionGetPartitionCellCount`
 - `POST` `/applications/{applicationName}/databases/{databaseName}/partitions/lock` - `PartitionsApi.partitionLockPartition`
 - `POST` `/applications/{applicationName}/databases/{databaseName}/partitions/replicatedata` - `PartitionsApi.partitionReplicateDataFromSource`
+- `GET` `/applications/{applicationName}/databases/{databaseName}/partitions/supportedfederatedtypes` - `PartitionsApi.partitionGetSupportedFederatedTypes`
 - `POST` `/applications/{applicationName}/databases/{databaseName}/partitions/unlock` - `PartitionsApi.partitionUnlockPartition`
 - `POST` `/applications/{applicationName}/databases/{databaseName}/partitions/validate` - `PartitionsApi.partitionValidatePartition`
 
@@ -509,7 +410,7 @@ Grouped by the tag Oracle gives the endpoint.
 
 - `DELETE` `/performance/files` - `PerformanceAnalyzerApi.performanceDeleteall`
 - `GET` `/performance/files` - `PerformanceAnalyzerApi.performanceGetFiles`
-- `GET` `/performance/files/actions/download` - `PerformanceAnalyzerApi.performanceDownload2`
+- `GET` `/performance/files/actions/download` - `PerformanceAnalyzerApi.performanceDownloadall`
 - `GET` `/performance/files/{file}` - `PerformanceAnalyzerApi.performanceDownload`
 - `GET` `/performance/settings` - `PerformanceAnalyzerApi.performanceGetConfig`
 - `PUT` `/performance/settings` - `PerformanceAnalyzerApi.performanceSetConfig`
@@ -540,19 +441,32 @@ Grouped by the tag Oracle gives the endpoint.
 
 </details>
 
+<details><summary><strong>ROCluster</strong> (7)</summary>
+
+- `DELETE` `/rocluster` - `RoClusterApi.rOClusterDeleteROCluster`
+- `GET` `/rocluster` - `RoClusterApi.rOClusterGetClusterList`
+- `POST` `/rocluster` - `RoClusterApi.rOClusterCreateROCluster`
+- `PUT` `/rocluster` - `RoClusterApi.rOClusterUpdateROCluster`
+- `POST` `/rocluster/changestatus` - `RoClusterApi.rOClusterEnableCluster`
+- `GET` `/rocluster/findByName` - `RoClusterApi.rOClusterGetROCluster`
+- `GET` `/rocluster/{svrName}/appcubelist` - `RoClusterApi.rOClusterGetAppAndCubeListByServerName`
+
+</details>
+
 <details><summary><strong>Roles</strong> (1)</summary>
 
 - `GET` `/roles` - `RolesApi.rolesGetRoles`
 
 </details>
 
-<details><summary><strong>Rules</strong> (5)</summary>
+<details><summary><strong>Rules</strong> (6)</summary>
 
 - `GET` `/utils/rules` - `RulesApi.rulesGet`
 - `POST` `/utils/rules` - `RulesApi.rulesSave`
 - `POST` `/utils/rules/actions/import` - `RulesApi.rulesImportRule`
 - `POST` `/utils/rules/preview` - `RulesApi.rulesGetPreviewData`
 - `POST` `/utils/rules/verify` - `RulesApi.rulesVerify`
+- `POST` `/utils/rules/verifyRule` - `RulesApi.rulesVerifyRule`
 
 </details>
 
@@ -590,8 +504,9 @@ Grouped by the tag Oracle gives the endpoint.
 
 </details>
 
-<details><summary><strong>Scripts</strong> (12)</summary>
+<details><summary><strong>Scripts</strong> (15)</summary>
 
+- `GET` `/applications/{applicationName}/databases/{databaseName}/scripts` - `ScriptsApi.scriptsListScripts`
 - `POST` `/applications/{applicationName}/databases/{databaseName}/scripts` - `ScriptsApi.scriptsCreateScript`
 - `POST` `/applications/{applicationName}/databases/{databaseName}/scripts/scriptops/copy` - `ScriptsApi.scriptsCopyScript`
 - `POST` `/applications/{applicationName}/databases/{databaseName}/scripts/scriptops/rename` - `ScriptsApi.scriptsRenameScript`
@@ -600,32 +515,36 @@ Grouped by the tag Oracle gives the endpoint.
 - `GET` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}` - `ScriptsApi.scriptsGetScript`
 - `PUT` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}` - `ScriptsApi.scriptsEditScript`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/content` - `ScriptsApi.scriptsGetScriptContent`
+- `PUT` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/content` - `ScriptsApi.uploadScriptContent`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/permissions` - `ScriptsApi.scriptsGetScriptPermissions`
 - `POST` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/permissions` - `ScriptsApi.scriptsAddScriptPermission`
 - `DELETE` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/permissions/{userGroupId}` - `ScriptsApi.scriptsRemoveScriptPermission`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/rtsv` - `ScriptsApi.scriptsGetRTSVsForScripts`
+- `POST` `/applications/{applicationName}/databases/{databaseName}/scripts/{scriptName}/scriptops/validate` - `ScriptsApi.scriptsValidateScriptFile`
 
 </details>
 
-<details><summary><strong>Server Variables</strong> (2)</summary>
+<details><summary><strong>Server Variables</strong> (1)</summary>
 
 - `GET` `/variables/{variableName}` - `ServerVariablesApi.variablesGetServerVariable`
-- `PUT` `/variables/{variableName}` - `ServerVariablesApi.variablesEditServerVariable`
 
 </details>
 
-<details><summary><strong>Service Role Provisioning</strong> (4)</summary>
+<details><summary><strong>Server logs</strong> (5)</summary>
 
-- `GET` `/permissions` - `ServiceRoleProvisioningApi.serviceRoleProvisioningSearchProvision`
+- `GET` `/logs` - `ServerLogsApi.serverLogsGetServerLogLinks`
+- `GET` `/logs/stream` - `ServerLogsApi.serverLogsStream`
+- `GET` `/logs/{serverType}` - `ServerLogsApi.serverLogsDownloadServerLogFiles`
+- `GET` `/logs/{serverType}/all` - `ServerLogsApi.serverLogsDownloadAllLogFiles`
+- `GET` `/logs/{serverType}/latest` - `ServerLogsApi.serverLogsDownloadLatestLogFile`
+
+</details>
+
+<details><summary><strong>Service Role Provisioning</strong> (3)</summary>
+
 - `DELETE` `/permissions/{id}` - `ServiceRoleProvisioningApi.serviceRoleProvisioningDeprovision`
 - `GET` `/permissions/{id}` - `ServiceRoleProvisioningApi.serviceRoleProvisioningGetProvision`
 - `PUT` `/permissions/{id}` - `ServiceRoleProvisioningApi.serviceRoleProvisioningProvision`
-
-</details>
-
-<details><summary><strong>Sessions</strong> (1)</summary>
-
-- `DELETE` `/sessions` - `SessionsApi.sessionsDeleteAllActiveSessions`
 
 </details>
 
@@ -653,6 +572,94 @@ Grouped by the tag Oracle gives the endpoint.
 
 </details>
 
+<details><summary><strong>Untagged</strong> (83)</summary>
+
+- `GET` `/backup/application/{applicationId}` - `DefaultApi.getApplicationBackups`
+- `GET` `/backup/applications` - `DefaultApi.getApplications`
+- `POST` `/backup/applications` - `DefaultApi.backupApplications`
+- `GET` `/backup/info` - `DefaultApi.getBackupInfo`
+- `GET` `/backup/isrunning` - `DefaultApi.isRunning`
+- `GET` `/backup/queue` - `DefaultApi.getQueueInfo`
+- `GET` `/backup/settings` - `DefaultApi.getSettings`
+- `PUT` `/backup/settings` - `DefaultApi.saveSettings`
+- `GET` `/backup/settings/validation` - `DefaultApi.getSettingsValidator`
+- `POST` `/backup/start` - `DefaultApi.startBackup`
+- `POST` `/backup/stop` - `DefaultApi.stopBackup`
+- `GET` `/backup/system` - `DefaultApi.getSystemBackups`
+- `GET` `/catalog_old/{fileName}` - `DefaultApi.getFileContent`
+- `GET` `/ess-mcp` - `DefaultApi.doGet`
+- `POST` `/ess-mcp` - `DefaultApi.doPost`
+- `GET` `/ess-mcp/tools` - `DefaultApi.listTools`
+- `POST` `/event/{eventName}` - `DefaultApi.fireEvent`
+- `POST` `/fastwriteback/adwload` - `DefaultApi.load`
+- `GET` `/fastwriteback/checkSQLload` - `DefaultApi.checkIfSQLLoad`
+- `POST` `/federatedoverdatasource` - `DefaultApi.report`
+- `GET` `/federatedoverdatasource/av/avparams` - `DefaultApi.avParams`
+- `POST` `/federatedoverdatasource/av/createAv` - `DefaultApi.createAv`
+- `GET` `/federatedoverdatasource/av/status` - `DefaultApi.avStatus`
+- `GET` `/federatedoverdatasource/av/validate` - `DefaultApi.validate`
+- `GET` `/federatedoverdatasource/cancel` - `DefaultApi.cancelRequest`
+- `POST` `/federatedoverdatasource/clearregions` - `DefaultApi.clear`
+- `GET` `/federatedoverdatasource/factmanaged/settings` - `DefaultApi.factManagedSettings`
+- `GET` `/federatedoverdatasource/lastcommit` - `DefaultApi.getFedVersion`
+- `DELETE` `/federatedoverdatasource/mapping` - `DefaultApi.deleteMapping`
+- `GET` `/federatedoverdatasource/mapping` - `DefaultApi.getMapping`
+- `PUT` `/federatedoverdatasource/mapping` - `DefaultApi.createMappingLegacy`
+- `GET` `/federatedoverdatasource/mapping/cr` - `DefaultApi.getMappingCR`
+- `PUT` `/federatedoverdatasource/mapping/cr` - `DefaultApi.createMappingCR`
+- `GET` `/federatedoverdatasource/mapping/denormalized` - `DefaultApi.getMappingDenormalized`
+- `PUT` `/federatedoverdatasource/mapping/denormalized` - `DefaultApi.createMappingDenormalized`
+- `PUT` `/federatedoverdatasource/mapping/denormalized/legacytest` - `DefaultApi.createMappingDenormalizedLegacyTest`
+- `POST` `/federatedoverdatasource/saveformulas` - `DefaultApi.saveFormulas`
+- `POST` `/federatedoverdatasource/saveformulas/cache` - `DefaultApi.cacheFormulas`
+- `POST` `/federatedoverdatasource/writeback` - `DefaultApi.writeback`
+- `POST` `/federatedsample` - `DefaultApi.report1`
+- `GET` `/odbc` - `DefaultApi.read1`
+- `PUT` `/odbc` - `DefaultApi.write1`
+- `GET` `/outline/{app}/{cube}/edit` - `DefaultApi.getMembers1`
+- `POST` `/outline/{app}/{cube}/edit` - `DefaultApi.outlineAction`
+- `PUT` `/outline/{app}/{cube}/edit` - `DefaultApi.save`
+- `GET` `/outline/{app}/{cube}/edit/ancestors/{memberUniqueName}` - `DefaultApi.getAncestorsMemberInfo`
+- `POST` `/outline/{app}/{cube}/edit/copy` - `DefaultApi.copyMembers`
+- `GET` `/outline/{app}/{cube}/edit/copy/status` - `DefaultApi.getCopyMembersStatus`
+- `POST` `/outline/{app}/{cube}/edit/currencyDatabase` - `DefaultApi.createCurrencyDB`
+- `POST` `/outline/{app}/{cube}/edit/direct` - `DefaultApi.outlineEdit`
+- `POST` `/outline/{app}/{cube}/edit/exportaliastable` - `DefaultApi.exportAliasTable`
+- `GET` `/outline/{app}/{cube}/edit/getRelatedInfo` - `DefaultApi.getRelatedInfo`
+- `POST` `/outline/{app}/{cube}/edit/importaliastable` - `DefaultApi.importAliasTable`
+- `GET` `/outline/{app}/{cube}/edit/memberSelection` - `DefaultApi.memberSelection`
+- `POST` `/outline/{app}/{cube}/edit/motf` - `DefaultApi.setMOTF`
+- `GET` `/outline/{app}/{cube}/edit/settings/aliases` - `DefaultApi.getAliasTableNames`
+- `GET` `/outline/{app}/{cube}/edit/settings/hierarchyDetails` - `DefaultApi.getHierarchyDetails`
+- `GET` `/outline/{app}/{cube}/edit/settings/outline` - `DefaultApi.getOutlineSettings`
+- `GET` `/outline/{app}/{cube}/edit/settings/smartlist` - `DefaultApi.getAllSmartList`
+- `GET` `/outline/{app}/{cube}/edit/shared` - `DefaultApi.getSharedMembers`
+- `GET` `/outline/{app}/{cube}/edit/validate` - `DefaultApi.validate1`
+- `GET` `/outline/{app}/{cube}/edit/{memberUniqueName}` - `DefaultApi.getMemberInfo`
+- `DELETE` `/outline/{app}/{cube}/qedit` - `DefaultApi.deleteMember1`
+- `GET` `/outline/{app}/{cube}/qedit` - `DefaultApi.getMembers3`
+- `PATCH` `/outline/{app}/{cube}/qedit` - `DefaultApi.updateMember1`
+- `POST` `/outline/{app}/{cube}/qedit` - `DefaultApi.outlineAction1`
+- `PUT` `/outline/{app}/{cube}/qedit` - `DefaultApi.save1`
+- `GET` `/outline/{app}/{cube}/qedit/ancestors/{memberUniqueName}` - `DefaultApi.getAncestorsMemberInfo1`
+- `POST` `/outline/{app}/{cube}/qedit/currencyDatabase` - `DefaultApi.createCurrencyDB1`
+- `GET` `/outline/{app}/{cube}/qedit/descendantsCount/{memberUniqueName}` - `DefaultApi.getDescendantsCount1`
+- `POST` `/outline/{app}/{cube}/qedit/direct` - `DefaultApi.outlineEdit1`
+- `GET` `/outline/{app}/{cube}/qedit/memberSelection` - `DefaultApi.memberSelection1`
+- `POST` `/outline/{app}/{cube}/qedit/members` - `DefaultApi.getMembers2`
+- `POST` `/outline/{app}/{cube}/qedit/motf` - `DefaultApi.setMOTF1`
+- `GET` `/outline/{app}/{cube}/qedit/settings/aliases` - `DefaultApi.getAliasTableNames1`
+- `GET` `/outline/{app}/{cube}/qedit/settings/outline` - `DefaultApi.getOutlineSettings1`
+- `GET` `/outline/{app}/{cube}/qedit/settings/smartlist` - `DefaultApi.getAllSmartList1`
+- `GET` `/outline/{app}/{cube}/qedit/shared` - `DefaultApi.getSharedMembers1`
+- `GET` `/outline/{app}/{cube}/qedit/validate` - `DefaultApi.validate2`
+- `GET` `/outline/{app}/{cube}/qedit/{memberUniqueName}` - `DefaultApi.getMemberInfo1`
+- `POST` `/security/syncwithidp` - `DefaultApi.syncWithIDP`
+- `POST` `/service/actions/start` - `DefaultApi.start`
+- `POST` `/service/actions/stop` - `DefaultApi.stop`
+
+</details>
+
 <details><summary><strong>User Provisioning Report</strong> (6)</summary>
 
 - `GET` `/users/{userId}/provisionReport` - `UserProvisioningReportApi.userProvisioningReportGetFullReport`
@@ -670,9 +677,8 @@ Grouped by the tag Oracle gives the endpoint.
 
 </details>
 
-<details><summary><strong>Users</strong> (6)</summary>
+<details><summary><strong>Users</strong> (5)</summary>
 
-- `GET` `/users` - `UsersApi.usersSearch`
 - `POST` `/users` - `UsersApi.usersAdd`
 - `POST` `/users/actions/delete` - `UsersApi.usersDeleteUsers`
 - `DELETE` `/users/{id}` - `UsersApi.usersDelete`
@@ -681,16 +687,10 @@ Grouped by the tag Oracle gives the endpoint.
 
 </details>
 
-<details><summary><strong>Variables</strong> (8)</summary>
+<details><summary><strong>Variables</strong> (2)</summary>
 
-- `POST` `/applications/{applicationName}/databases/{databaseName}/variables` - `VariablesApi.variablesCreateVariable`
-- `DELETE` `/applications/{applicationName}/databases/{databaseName}/variables/{variableName}` - `VariablesApi.variablesDeleteVariable`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/variables/{variableName}` - `VariablesApi.variablesGetVariable`
-- `PUT` `/applications/{applicationName}/databases/{databaseName}/variables/{variableName}` - `VariablesApi.variablesEditVariable`
-- `POST` `/applications/{applicationName}/variables` - `VariablesApi.variablesCreateAppVariable`
-- `DELETE` `/applications/{applicationName}/variables/{variableName}` - `VariablesApi.variablesDeleteAppVariable`
 - `GET` `/applications/{applicationName}/variables/{variableName}` - `VariablesApi.variablesGetAppVariable`
-- `PUT` `/applications/{applicationName}/variables/{variableName}` - `VariablesApi.variablesEditAppVariable`
 
 </details>
 
@@ -702,18 +702,26 @@ Grouped by the tag Oracle gives the endpoint.
 
 ## Already exposed
 
-<details><summary>63 endpoints</summary>
+<details><summary>98 endpoints</summary>
 
 - `GET` `/about` - `AboutEssbaseApi.aboutGetAbout`
-- `GET` `/about/instance` - `AboutEssbaseApi.getInstanceDetails`
+- `GET` `/about/instance` - `AboutEssbaseApi.aboutGetInstanceDetails`
+- `GET` `/amw` - `DefaultApi.read`
+- `PUT` `/amw` - `DefaultApi.write`
 - `GET` `/applications` - `ApplicationsApi.applicationsGetApplications`
 - `POST` `/applications` - `ApplicationsApi.applicationsCreateApplications`
 - `POST` `/applications/actions/copy` - `ApplicationsApi.applicationsCopyApplication`
 - `POST` `/applications/actions/rename` - `ApplicationsApi.applicationsRenameApplication`
 - `DELETE` `/applications/{applicationName}` - `ApplicationsApi.applicationsDeleteApplication`
+- `GET` `/applications/{applicationName}` - `ApplicationsApi.applicationsGetApplication`
 - `PUT` `/applications/{applicationName}` - `ApplicationsApi.applicationsPerformOperation`
+- `GET` `/applications/{applicationName}/configurationkeys` - `ApplicationConfigurationApi.applicationConfigurationGetConfigurationKeys`
 - `GET` `/applications/{applicationName}/configurations` - `ApplicationConfigurationApi.applicationConfigurationGetConfigurations`
+- `POST` `/applications/{applicationName}/configurations` - `ApplicationConfigurationApi.applicationConfigurationAddConfiguration`
+- `DELETE` `/applications/{applicationName}/configurations/{configId}` - `ApplicationConfigurationApi.applicationConfigurationDeleteConfiguration`
+- `PUT` `/applications/{applicationName}/configurations/{configId}` - `ApplicationConfigurationApi.applicationConfigurationSetConfiguration`
 - `GET` `/applications/{applicationName}/databases` - `ApplicationsApi.applicationsGetCubes`
+- `GET` `/applications/{applicationName}/databases/{databaseName}` - `ApplicationsApi.applicationsGetCube`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/dimensions` - `DimensionsApi.dimensionsListDimensions`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/generations` - `DimensionsApi.dimensionsListDimGenerations`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/generations/{generationNumber}` - `DimensionsApi.dimensionsGetDimGenerations`
@@ -732,61 +740,74 @@ Grouped by the tag Oracle gives the endpoint.
 - `DELETE` `/applications/{applicationName}/databases/{databaseName}/reports/{name}` - `DrillThroughReportsApi.drillThroughReportsDelete`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/reports/{name}` - `DrillThroughReportsApi.drillThroughReportsGetReport`
 - `PUT` `/applications/{applicationName}/databases/{databaseName}/reports/{name}` - `DrillThroughReportsApi.drillThroughReportsUpdateReport`
-- `GET` `/applications/{applicationName}/databases/{databaseName}/scripts` - `ScriptsApi.scriptsListScripts`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/variables` - `VariablesApi.variablesListVariables`
+- `POST` `/applications/{applicationName}/databases/{databaseName}/variables` - `VariablesApi.variablesCreateVariable`
+- `DELETE` `/applications/{applicationName}/databases/{databaseName}/variables/{variableName}` - `VariablesApi.variablesDeleteVariable`
+- `PUT` `/applications/{applicationName}/databases/{databaseName}/variables/{variableName}` - `VariablesApi.variablesEditVariable`
 - `GET` `/applications/{applicationName}/variables` - `VariablesApi.variablesListAppVariables`
-- `DELETE` `/applications/{application}/databases/{database}/layouts/{layout}` - `LayoutsApi.deleteLayout`
-- `GET` `/datasources` - `GlobalDataSourcesApi.globalDatasourcesGetDatasources`
-- `POST` `/datasources/query/stream` - `GlobalDataSourcesApi.globalDatasourcesGetDataStream`
+- `POST` `/applications/{applicationName}/variables` - `VariablesApi.variablesCreateAppVariable`
+- `DELETE` `/applications/{applicationName}/variables/{variableName}` - `VariablesApi.variablesDeleteAppVariable`
+- `PUT` `/applications/{applicationName}/variables/{variableName}` - `VariablesApi.variablesEditAppVariable`
+- `DELETE` `/applications/{application}/databases/{database}/layouts/{layout}` - `LayoutsApi.layoutsDeleteLayout`
+- `GET` `/applications/{app}/permissions` - `ApplicationRoleProvisioningApi.applicationRoleProvisioningSearchProvision`
+- `GET` `/datasources` - `GlobalDatasourcesApi.globalDatasourcesGetDatasources`
+- `POST` `/datasources/query` - `GlobalDatasourcesApi.globalDatasourcesGetResults`
+- `GET` `/datasources/{datasourceName}` - `GlobalDatasourcesApi.globalDatasourcesGetDatasourceDetails`
+- `POST` `/ess-mcp/call` - `DefaultApi.callTool`
 - `GET` `/files` - `FilesApi.filesListRootFolders`
 - `POST` `/files/actions/copy` - `FilesApi.filesCopyResource`
 - `POST` `/files/actions/extract` - `FilesApi.filesExtract`
 - `POST` `/files/actions/move` - `FilesApi.filesMoveResource`
+- `GET` `/files/getDatabasesFromLCMZip` - `FilesApi.filesGetDatabasesFromLCMZip`
 - `GET` `/files/homepath` - `FilesApi.filesGetUserHomePath`
-- `DELETE` `/files/{path}` - `FilesApi.filesDeleteFile`
-- `GET` `/files/{path}` - `FilesApi.filesListFiles`
 - `GET` `/groups` - `GroupsApi.groupsSearch`
+- `POST` `/groups` - `GroupsApi.groupsAdd`
+- `DELETE` `/groups/{id}` - `GroupsApi.groupsDelete`
+- `GET` `/groups/{id}` - `GroupsApi.groupsGet`
+- `PUT` `/groups/{id}` - `GroupsApi.groupsEdit`
+- `DELETE` `/groups/{id}/members/groups` - `GroupsApi.groupsRemoveGroupMembersFromGroup`
 - `GET` `/groups/{id}/members/groups` - `GroupsApi.groupsGetGroupMembersOfGroup`
+- `POST` `/groups/{id}/members/groups` - `GroupsApi.groupsAddGroupMembersToGroup`
+- `DELETE` `/groups/{id}/members/users` - `GroupsApi.groupsRemoveUserMembersFromGroup`
 - `GET` `/groups/{id}/members/users` - `GroupsApi.groupsGetUserMembersOfGroup`
+- `POST` `/groups/{id}/members/users` - `GroupsApi.groupsAddUserMembersToGroup`
 - `GET` `/jobs` - `JobsApi.jobsGetAllJobRecords`
 - `POST` `/jobs` - `JobsApi.jobsExecuteJob`
 - `GET` `/jobs/{id}` - `JobsApi.jobsGetJobInfo`
 - `POST` `/jobs/{id}` - `JobsApi.jobsExecuteByJobId`
 - `GET` `/outline/{app}/{cube}` - `OutlineViewerApi.outlineGetMembers`
+- `DELETE` `/outline/{app}/{cube}/edit` - `DefaultApi.deleteMember`
+- `PATCH` `/outline/{app}/{cube}/edit` - `DefaultApi.updateMember`
+- `GET` `/outline/{app}/{cube}/edit/descendantsCount/{memberUniqueName}` - `DefaultApi.getDescendantsCount`
+- `POST` `/outline/{app}/{cube}/edit/members` - `DefaultApi.getMembers`
 - `GET` `/outline/{app}/{cube}/{memberUniqueName}` - `OutlineViewerApi.outlineGetMemberInfo`
+- `GET` `/permissions` - `ServiceRoleProvisioningApi.serviceRoleProvisioningSearchProvision`
 - `GET` `/preferences/grid` - `GridPreferencesApi.gridPreferencesGet`
 - `PUT` `/preferences/grid` - `GridPreferencesApi.gridPreferencesSet`
 - `GET` `/scenarios` - `ScenariosApi.scenariosGetScenarios`
 - `GET` `/scenarios/databases` - `ScenariosApi.scenariosGetRegisteredCubes`
+- `GET` `/service/status` - `DefaultApi.getStatus`
 - `DELETE` `/session` - `UserSessionApi.userSessionSignoff`
 - `GET` `/session` - `UserSessionApi.userSessionGetSession`
+- `DELETE` `/sessions` - `SessionsApi.sessionsDeleteAllActiveSessions`
 - `GET` `/sessions` - `SessionsApi.sessionsGetAllActiveSessions`
 - `DELETE` `/sessions/{sessionId}` - `SessionsApi.sessionsDeleteSessionWithId`
+- `GET` `/settings/odlLogSettings` - `PlatformServiceSettingsApi.getodllogsettings`
+- `PUT` `/settings/odlLogSettings` - `PlatformServiceSettingsApi.setodllogsettings`
 - `GET` `/urls` - `UrlsApi.uRLsGet`
+- `GET` `/users` - `UsersApi.usersSearch`
 - `GET` `/utilities` - `TemplatesAndUtilitiesApi.resourcesGetUtilities`
 - `GET` `/variables` - `ServerVariablesApi.variablesListServerVariables`
 - `POST` `/variables` - `ServerVariablesApi.variablesCreateServerVariable`
 - `DELETE` `/variables/{variableName}` - `ServerVariablesApi.variablesDeleteServerVariable`
+- `PUT` `/variables/{variableName}` - `ServerVariablesApi.variablesEditServerVariable`
+- `GET` `/version` - `DefaultApi.getVersion`
 
 </details>
-
-## Generated methods with no endpoint
-
-The generated client still carries these, but Essbase 26.1 has no such
-endpoint - they went away between the spec this client was built from and
-26.1. Calling one against a current server will fail.
-
-- `POST` `/applications/{applicationName}/databases/{databaseName}/dvgrid` - `GridApi.gridExecuteDV`
-- `DELETE` `/applications/{application}/databases/{database}/audittrail/metadata` - `AuditTrailApi.auditTrailPurgeMetadataAudit`
-- `GET` `/applications/{application}/databases/{database}/audittrail/metadata` - `AuditTrailApi.auditTrailGetMetadataAudit`
-- `GET` `/settings/database` - `PlatformServiceSettingsApi.pSMSettingsGetDatabaseSettings`
-- `PUT` `/settings/database` - `PlatformServiceSettingsApi.pSMSettingsSetDatabaseSettings`
-- `GET` `/settings/resources` - `PlatformServiceSettingsApi.pSMSettingsGetResources`
-- `PUT` `/settings/resources` - `PlatformServiceSettingsApi.pSMSettingsSetResources`
 
 ## What this measurement misses
 
 Coverage is counted through the generated client, plus `NativeHttp` call
-sites whose path is a plain literal. 13 `NativeHttp` call sites build their path from
+sites whose path is a plain literal. 51 `NativeHttp` call sites build their path from
 pieces at runtime and cannot be attributed to an endpoint, so the exposed
 count is a floor, not an exact figure.
