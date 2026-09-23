@@ -417,6 +417,17 @@ public interface EssCubeView extends EssGrid {
     String getAliasTable();
 
     /**
+     * The alias table name that means "label members with their own names".
+     *
+     * <p>A sentinel rather than a table: the grid API has no flag for turning aliases off, and a name
+     * the cube does not have is an error, so this is the only way to ask for member names. Exactly this
+     * spelling - {@code None}, {@code NONE} and {@code nOnE} are all rejected like any other unknown
+     * table, which is itself the evidence that the lowercase one is deliberate rather than a cube that
+     * happens to have a table by that name.
+     */
+    String NO_ALIASES = "none";
+
+    /**
      * Sets the alias table this grid's members are labelled from.
      *
      * <p>Per request, not a stored preference: the alias table rides along on every grid action, so two
@@ -424,9 +435,10 @@ public interface EssCubeView extends EssGrid {
      * grid preferences, which Essbase keeps per session and therefore shares between every grid a user
      * has open.
      *
-     * <p>Null, or the name of a table the cube does not have, leaves the server to use its default -
-     * it does not fail. {@link #getAliasTable()} reports what the last response was actually labelled
-     * from, which is the way to tell whether a name was understood.
+     * <p>Null means the server's default, which is the {@code Default} table. A name the cube does not
+     * have is <em>not</em> ignored - the next action fails - so a name should come from
+     * {@link EssCube#getAliasTables()} or be {@link #NO_ALIASES}. {@link #getAliasTable()} reports what
+     * the last response was labelled from.
      *
      * @param aliasTable the alias table to label members from, or null for the server's default
      */
