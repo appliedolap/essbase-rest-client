@@ -417,6 +417,22 @@ public interface EssCubeView extends EssGrid {
     String getAliasTable();
 
     /**
+     * Sets the alias table this grid's members are labelled from.
+     *
+     * <p>Per request, not a stored preference: the alias table rides along on every grid action, so two
+     * grids open on the same connection can be reading different ones. That is unlike the rest of the
+     * grid preferences, which Essbase keeps per session and therefore shares between every grid a user
+     * has open.
+     *
+     * <p>Null, or the name of a table the cube does not have, leaves the server to use its default -
+     * it does not fail. {@link #getAliasTable()} reports what the last response was actually labelled
+     * from, which is the way to tell whether a name was understood.
+     *
+     * @param aliasTable the alias table to label members from, or null for the server's default
+     */
+    void setAliasTable(String aliasTable);
+
+    /**
      * Re-executes the view as-is, picking up any data changes made since it was last retrieved.
      */
     void refresh();

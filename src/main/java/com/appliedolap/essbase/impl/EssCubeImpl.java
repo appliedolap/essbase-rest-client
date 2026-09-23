@@ -825,4 +825,12 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
         }
     }
 
+
+    @Override
+    public List<String> getAliasTables() {
+        StringCollectionResponse response = WrapperUtil.doWithWrap(() -> api.getApplicationsApi()
+                .applicationsGetAliases(application.getName(), getName()));
+        return response.getItems() == null ? new ArrayList<>() : response.getItems();
+    }
+
 }

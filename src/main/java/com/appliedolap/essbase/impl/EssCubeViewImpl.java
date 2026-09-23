@@ -298,6 +298,20 @@ public class EssCubeViewImpl implements EssCubeView {
     }
 
     @Override
+    public void setAliasTable(String aliasTable) {
+        this.aliasTable = aliasTable;
+    }
+
+    /**
+     * The alias table asked for, which is not necessarily the one in use.
+     *
+     * <p>Held rather than read back off the grid because the grid reports what the server labelled the
+     * last response from: before the first action after a change there is nothing to read, and if the
+     * server does not recognise the name there never will be.
+     */
+    private String aliasTable;
+
+    @Override
     public List<DimensionPlacement> getPlacements() {
         List<DimensionPlacement> placements = new ArrayList<>();
         for (GridDimension dimension : grid.getDimensions()) {
@@ -410,6 +424,15 @@ public class EssCubeViewImpl implements EssCubeView {
     }
 
     private void execute(GridOperation operation) {
+        // On the operation, not on the grid inside it. Both carry an "alias" field and only this one is
+        // read: setting the grid's alone leaves the response labelled from Default, established live
+        // against a cube with six alias tables. The grid's is what the server fills in to say which
+        // table it used, which is why getAliasTable() reads it from there.
+        //
+        // Sent on every action because the API takes it per request rather than storing it, which is
+        // what lets two grids on one connection read different alias tables - unlike the rest of the
+        // grid preferences, which Essbase keeps per session.
+        operation.setAlias(aliasTable);
         try {
             this.grid = api.getGridApi().gridExecute(applicationName, databaseName, null, operation);
         } catch (ApiException e) {

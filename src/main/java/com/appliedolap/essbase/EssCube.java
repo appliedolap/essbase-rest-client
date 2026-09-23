@@ -100,6 +100,16 @@ public interface EssCube extends EssObject {
      *
      * @return the cube variables
      */
+    /**
+     * Gets the names of this cube's alias tables.
+     *
+     * <p>Always at least {@code Default}, which is the table a cube has whether or not anyone has added
+     * others, and the one members are labelled from when none is asked for.
+     *
+     * @return the alias table names
+     */
+    List<String> getAliasTables();
+
     List<EssCubeVariable> getVariables();
 
     /**
