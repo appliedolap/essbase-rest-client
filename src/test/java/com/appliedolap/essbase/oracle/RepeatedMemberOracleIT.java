@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Keep only, where the same member appears on an axis more than once.
+ * Members appearing on an axis more than once: how a grid gets that way, and what keep only does then.
  *
  * <p>It keeps <em>members</em>, not positions. Asking for one occurrence keeps every occurrence, and a
  * range covering every member on the axis - however few of its columns it touches - therefore changes
@@ -24,12 +24,13 @@ import static org.junit.Assert.assertEquals;
  * selection of two columns out of four left all four standing, because the two named the only two
  * members there were.
  *
- * <p>A grid can hold a member twice through an ordinary pivot or a hand-built layout, so this is not a
- * curiosity - and there is no way to ask for one of them, because nothing in the request distinguishes
- * them.
+ * <p>Nor is it a curiosity that has to be contrived. Include-selection leaves a zoomed member in the
+ * grid, so zooming it a second time asks for children that are already there and the server duly adds
+ * them again - two clicks from a default grid. And there is then no way to ask for one of them, because
+ * nothing in the request distinguishes them.
  */
 @Category(DestructiveIntegrationTest.class)
-public class RepeatedMemberKeepOracleIT {
+public class RepeatedMemberOracleIT {
 
     private EssCube cube;
 
@@ -40,6 +41,33 @@ public class RepeatedMemberKeepOracleIT {
         } catch (RuntimeException absent) {
             Assume.assumeNoException("Sample.Basic is not on this server", absent);
         }
+    }
+
+    /**
+     * Zooming a member twice, which include-selection makes easy: the first zoom leaves the member in
+     * the grid beside its children, and zooming it again adds those children a second time.
+     */
+    @Test
+    public void zoomingAMemberTwiceRepeatsItsChildren() {
+        cube.resetDefaultView();
+        EssCubeView view = cube.openCubeView();
+        EssCubeView.GridPreferences current = view.getPreferences();
+        view.setPreferences(new EssCubeView.GridPreferences(current.indentation(),
+                current.suppressMissingRows(), current.suppressZeroRows(),
+                current.suppressUnderscoreRows(), current.repeatMemberLabels(),
+                current.zoomInPreference(), true, current.withinSelectedGroup(),
+                current.removeUnselectedGroup(), current.useBothNamesAndAliases()));
+        view.refresh();
+
+        view.zoomIn(1, 1);
+        assertEquals(List.of("Profit", "Inventory", "Ratios", "Measures"), topRow(view));
+
+        // Measures again, which include-selection left at the end of the row.
+        view.zoomIn(1, topRow(view).indexOf("Measures") + 1);
+
+        assertEquals("its children arrive a second time rather than being recognised as present",
+                List.of("Profit", "Inventory", "Ratios", "Profit", "Inventory", "Ratios", "Measures"),
+                topRow(view));
     }
 
     /** Two measures laid out twice over, so each member has two columns. */
