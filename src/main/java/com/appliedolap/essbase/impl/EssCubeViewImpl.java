@@ -458,7 +458,8 @@ public class EssCubeViewImpl implements EssCubeView {
                 toZoomInPreference(wire.getZoomIn()),
                 Boolean.TRUE.equals(wire.getIncludeSelection()),
                 Boolean.TRUE.equals(wire.getWithinSelectedGroup()),
-                Boolean.TRUE.equals(wire.getRemoveUnSelectedGroup()));
+                Boolean.TRUE.equals(wire.getRemoveUnSelectedGroup()),
+                Boolean.TRUE.equals(wire.getIncludeDescriptionLabel()));
     }
 
     @Override
@@ -482,6 +483,7 @@ public class EssCubeViewImpl implements EssCubeView {
                 .zero(preferences.suppressZeroRows())
                 .underScore(preferences.suppressUnderscoreRows()));
         wire.setRepeatMemberLabels(preferences.repeatMemberLabels());
+        wire.setIncludeDescriptionLabel(preferences.useBothNamesAndAliases());
         wire.setZoomIn(fromZoomInPreference(preferences.zoomInPreference()));
         wire.setIncludeSelection(preferences.includeSelection());
         wire.setWithinSelectedGroup(preferences.withinSelectedGroup());

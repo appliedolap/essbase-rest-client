@@ -537,6 +537,12 @@ public interface EssCubeView extends EssGrid {
      * @param suppressMissingRows    whether to suppress rows whose data cells are all #Missing
      * @param suppressZeroRows       whether to suppress rows whose data cells are all zero
      * @param suppressUnderscoreRows whether to suppress rows whose member name starts with "_"
+     * @param useBothNamesAndAliases whether each row dimension gets two columns, its members' names in
+     *                               one and their aliases in the next. The wire calls this
+     *                               {@code includeDescriptionLabel}, which says nothing about what it
+     *                               does; established live, where turning it on widened a grid from
+     *                               four columns to five and put {@code 100} beside {@code Colas}.
+     *                               Row dimensions only - the column axis is unaffected
      * @param repeatMemberLabels     whether a member label repeats down every row of its group, or
      *                               only appears once at the top of the group
      * @param zoomInPreference       the server's default zoom-in depth for a plain {@link #zoomIn}
@@ -555,7 +561,23 @@ public interface EssCubeView extends EssGrid {
             ZoomInPreference zoomInPreference,
             boolean includeSelection,
             boolean withinSelectedGroup,
-            boolean removeUnselectedGroup) {
+            boolean removeUnselectedGroup,
+            boolean useBothNamesAndAliases) {
+
+        /**
+         * The form without {@code useBothNamesAndAliases}, which defaults to off.
+         *
+         * <p>Kept so that every caller written before that existed still compiles, and because off is
+         * what they meant: a grid that showed one column per row dimension carries on doing so.
+         */
+        public GridPreferences(Indentation indentation, boolean suppressMissingRows,
+                boolean suppressZeroRows, boolean suppressUnderscoreRows, boolean repeatMemberLabels,
+                ZoomInPreference zoomInPreference, boolean includeSelection, boolean withinSelectedGroup,
+                boolean removeUnselectedGroup) {
+            this(indentation, suppressMissingRows, suppressZeroRows, suppressUnderscoreRows,
+                    repeatMemberLabels, zoomInPreference, includeSelection, withinSelectedGroup,
+                    removeUnselectedGroup, false);
+        }
     }
 
     /**
