@@ -230,4 +230,32 @@ public class PivotOracleIT {
         }
     }
 
+    // ----- one coordinate on the row axis, with more than one dimension there ----------------------
+
+    /**
+     * A row dimension with only a source named goes to the front of the column axis.
+     *
+     * <p>Completes the one-coordinate rule, which is a toggle rather than a cycle: a dimension in the
+     * POV or on the column axis goes to the front of the row axis, and one already on the row axis goes
+     * to the front of the column axis. The axis it leaves closes up behind it - Year moves from
+     * {@code LEFT1} to {@code LEFT0} here without being asked to.
+     *
+     * <p>Staged with two dimensions on the row axis, because the last one cannot be pivoted away.
+     */
+    @Test
+    @Category(DestructiveIntegrationTest.class)
+    public void aSingleCoordinateMovesARowDimensionToTheColumnAxis() {
+        EssCubeView view = settled();
+        Assume.assumeNotNull(view);
+
+        view.pivot(view.cellIndex(0, 2));   // Market joins the row axis, so there are two
+        assertEquals(List.of("Year=LEFT1", "Measures=TOP1", "Market=LEFT0"), axes(view));
+
+        view.pivot(view.cellIndex(2, 0));   // Market, the outer row dimension
+
+        assertEquals("TOP1", regionOf(view, "Market"));
+        assertEquals("the column axis should have made room", "TOP2", regionOf(view, "Measures"));
+        assertEquals("the row axis should have closed up", "LEFT0", regionOf(view, "Year"));
+    }
+
 }

@@ -537,6 +537,10 @@ public interface EssCubeView extends EssGrid {
      * @param suppressMissingRows    whether to suppress rows whose data cells are all #Missing
      * @param suppressZeroRows       whether to suppress rows whose data cells are all zero
      * @param suppressUnderscoreRows whether to suppress rows whose member name starts with "_"
+     * @param navigateWithoutData    whether zooming and pivoting bring data back, or only rearrange the
+     *                               members. The wire has this the other way up, as {@code navigate},
+     *                               which is true when data <em>is</em> wanted - established live,
+     *                               where setting it false returned a grid of empty cells
      * @param useBothNamesAndAliases whether each row dimension gets two columns, its members' names in
      *                               one and their aliases in the next. The wire calls this
      *                               {@code includeDescriptionLabel}, which says nothing about what it
@@ -562,7 +566,22 @@ public interface EssCubeView extends EssGrid {
             boolean includeSelection,
             boolean withinSelectedGroup,
             boolean removeUnselectedGroup,
-            boolean useBothNamesAndAliases) {
+            boolean useBothNamesAndAliases,
+            boolean navigateWithoutData) {
+
+        /**
+         * The form with {@code useBothNamesAndAliases} but not {@code navigateWithoutData}.
+         *
+         * @param useBothNamesAndAliases whether each row dimension gets a name column and an alias one
+         */
+        public GridPreferences(Indentation indentation, boolean suppressMissingRows,
+                boolean suppressZeroRows, boolean suppressUnderscoreRows, boolean repeatMemberLabels,
+                ZoomInPreference zoomInPreference, boolean includeSelection, boolean withinSelectedGroup,
+                boolean removeUnselectedGroup, boolean useBothNamesAndAliases) {
+            this(indentation, suppressMissingRows, suppressZeroRows, suppressUnderscoreRows,
+                    repeatMemberLabels, zoomInPreference, includeSelection, withinSelectedGroup,
+                    removeUnselectedGroup, useBothNamesAndAliases, false);
+        }
 
         /**
          * The form without {@code useBothNamesAndAliases}, which defaults to off.
@@ -576,7 +595,7 @@ public interface EssCubeView extends EssGrid {
                 boolean removeUnselectedGroup) {
             this(indentation, suppressMissingRows, suppressZeroRows, suppressUnderscoreRows,
                     repeatMemberLabels, zoomInPreference, includeSelection, withinSelectedGroup,
-                    removeUnselectedGroup, false);
+                    removeUnselectedGroup, false, false);
         }
     }
 

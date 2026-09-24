@@ -459,7 +459,9 @@ public class EssCubeViewImpl implements EssCubeView {
                 Boolean.TRUE.equals(wire.getIncludeSelection()),
                 Boolean.TRUE.equals(wire.getWithinSelectedGroup()),
                 Boolean.TRUE.equals(wire.getRemoveUnSelectedGroup()),
-                Boolean.TRUE.equals(wire.getIncludeDescriptionLabel()));
+                Boolean.TRUE.equals(wire.getIncludeDescriptionLabel()),
+                // Inverted: the wire asks whether to navigate *with* data.
+                !Boolean.TRUE.equals(wire.getNavigate()));
     }
 
     @Override
@@ -484,6 +486,7 @@ public class EssCubeViewImpl implements EssCubeView {
                 .underScore(preferences.suppressUnderscoreRows()));
         wire.setRepeatMemberLabels(preferences.repeatMemberLabels());
         wire.setIncludeDescriptionLabel(preferences.useBothNamesAndAliases());
+        wire.setNavigate(!preferences.navigateWithoutData());
         wire.setZoomIn(fromZoomInPreference(preferences.zoomInPreference()));
         wire.setIncludeSelection(preferences.includeSelection());
         wire.setWithinSelectedGroup(preferences.withinSelectedGroup());
