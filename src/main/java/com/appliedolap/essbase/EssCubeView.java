@@ -566,13 +566,17 @@ public interface EssCubeView extends EssGrid {
      * apply to every subsequent grid operation for this connection, not just this one view, and they
      * persist until changed again or the session ends.
      *
-     * <p>Verified live against a real server: {@link #indentation}, {@link #zoomInPreference}, and
-     * {@link #repeatMemberLabels} each visibly change the next retrieve/zoom's output. {@link
-     * #suppressMissingRows}, {@link #suppressZeroRows}, {@link #suppressUnderscoreRows}, {@link
-     * #includeSelection}, {@link #withinSelectedGroup}, and {@link #removeUnselectedGroup} are wired
-     * through (the wire fields exist and accept the value) but not yet confirmed to have a visible
-     * effect - suppression in particular needs a grid with genuine missing/zero data cells to test
-     * against, not just member structure, and wasn't confirmed either way.
+     * <p>Verified live against a real server: {@link #indentation}, {@link #zoomInPreference}, {@link
+     * #repeatMemberLabels}, {@link #includeSelection} and {@link #suppressMissingRows} each visibly
+     * change the next retrieve/zoom's output. {@link #suppressZeroRows}, {@link
+     * #suppressUnderscoreRows}, {@link #withinSelectedGroup} and {@link #removeUnselectedGroup} are
+     * wired through but not confirmed either way. {@link #suppressMissingColumns} and {@link
+     * #ancestorOnTop} are accepted and stored - they round-trip - and then ignored by a 21.1 server,
+     * which returns the empty column and puts the ancestor last whatever they say.
+     *
+     * <p>Suppression applies only where the server is choosing what to return. {@link #setLayout}
+     * states a grid literally and is honoured literally, empty rows included; it is a zoom or a
+     * retrieve that suppresses.
      *
      * @param indentation            member row/column indentation style
      * @param suppressMissingRows    whether to suppress rows whose data cells are all #Missing
@@ -596,6 +600,17 @@ public interface EssCubeView extends EssGrid {
      * @param withinSelectedGroup    whether a zoom stays scoped to the selected group rather than
      *                               applying to every member at that level
      * @param removeUnselectedGroup  whether zooming in removes sibling groups that weren't selected
+     * @param suppressMissingColumns whether to suppress columns whose data cells are all #Missing. Its
+     *                               own flag rather than a rider on {@link #suppressMissingRows},
+     *                               which is what it used to be - the wire has a separate
+     *                               {@code columnSupression} object and ticking the row box has no
+     *                               business emptying columns
+     * @param ancestorOnTop          whether a zoom that keeps the zoomed-on member (see
+     *                               {@link #includeSelection}) puts it above its children rather than
+     *                               below them. Sent as the wire's {@code zoomIn.ancestor}, which a
+     *                               21.1 server accepts and then ignores - {@code top} and
+     *                               {@code bottom} returned identical grids - so this is a faithful
+     *                               pass-through that currently changes nothing on Essbase
      */
     record GridPreferences(
             Indentation indentation,
@@ -608,7 +623,25 @@ public interface EssCubeView extends EssGrid {
             boolean withinSelectedGroup,
             boolean removeUnselectedGroup,
             boolean useBothNamesAndAliases,
-            boolean navigateWithoutData) {
+            boolean navigateWithoutData,
+            boolean suppressMissingColumns,
+            boolean ancestorOnTop) {
+
+        /**
+         * The form before column suppression and {@code ancestorOnTop} existed, which default to off.
+         *
+         * <p>Off is what those callers meant: a grid that suppressed nothing horizontally carries on
+         * not doing so, and the ancestor stays where every server put it anyway.
+         */
+        public GridPreferences(Indentation indentation, boolean suppressMissingRows,
+                boolean suppressZeroRows, boolean suppressUnderscoreRows, boolean repeatMemberLabels,
+                ZoomInPreference zoomInPreference, boolean includeSelection, boolean withinSelectedGroup,
+                boolean removeUnselectedGroup, boolean useBothNamesAndAliases,
+                boolean navigateWithoutData) {
+            this(indentation, suppressMissingRows, suppressZeroRows, suppressUnderscoreRows,
+                    repeatMemberLabels, zoomInPreference, includeSelection, withinSelectedGroup,
+                    removeUnselectedGroup, useBothNamesAndAliases, navigateWithoutData, false, false);
+        }
 
         /**
          * The form with {@code useBothNamesAndAliases} but not {@code navigateWithoutData}.
@@ -621,7 +654,7 @@ public interface EssCubeView extends EssGrid {
                 boolean removeUnselectedGroup, boolean useBothNamesAndAliases) {
             this(indentation, suppressMissingRows, suppressZeroRows, suppressUnderscoreRows,
                     repeatMemberLabels, zoomInPreference, includeSelection, withinSelectedGroup,
-                    removeUnselectedGroup, useBothNamesAndAliases, false);
+                    removeUnselectedGroup, useBothNamesAndAliases, false, false, false);
         }
 
         /**
@@ -636,7 +669,7 @@ public interface EssCubeView extends EssGrid {
                 boolean removeUnselectedGroup) {
             this(indentation, suppressMissingRows, suppressZeroRows, suppressUnderscoreRows,
                     repeatMemberLabels, zoomInPreference, includeSelection, withinSelectedGroup,
-                    removeUnselectedGroup, false, false);
+                    removeUnselectedGroup, false, false, false, false);
         }
     }
 

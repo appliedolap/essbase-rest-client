@@ -476,7 +476,15 @@ public class EssCubeViewImpl implements EssCubeView {
         } catch (ApiException e) {
             throw new EssApiException(e);
         }
-        RowSuppression rowSuppression = wire.getRowSupression();
+        // The wire carries row suppression under two names - "rowSuppression" and the misspelled
+        // "rowSupression" - and a server answers in only one of them. Oracle evidently fixed the
+        // spelling and left the old key in the schema; the column one was never fixed and exists only
+        // as "columnSupression". Reading the correct spelling first and falling back is what makes this
+        // work on a server of either vintage.
+        RowSuppression rowSuppression = wire.getRowSuppression() != null
+                ? wire.getRowSuppression()
+                : wire.getRowSupression();
+        ColumnSuppression columnSuppression = wire.getColumnSupression();
         return new GridPreferences(
                 toIndentation(wire.getIndentation()),
                 rowSuppression != null && Boolean.TRUE.equals(rowSuppression.getMissing()),
@@ -489,7 +497,9 @@ public class EssCubeViewImpl implements EssCubeView {
                 Boolean.TRUE.equals(wire.getRemoveUnSelectedGroup()),
                 Boolean.TRUE.equals(wire.getIncludeDescriptionLabel()),
                 // Inverted: the wire asks whether to navigate *with* data.
-                !Boolean.TRUE.equals(wire.getNavigate()));
+                !Boolean.TRUE.equals(wire.getNavigate()),
+                columnSuppression != null && Boolean.TRUE.equals(columnSuppression.getMissing()),
+                toAncestorOnTop(wire.getZoomIn()));
     }
 
     @Override
@@ -504,18 +514,23 @@ public class EssCubeViewImpl implements EssCubeView {
             throw new EssApiException(e);
         }
         wire.setIndentation(fromIndentation(preferences.indentation()));
-        wire.setRowSupression(new RowSuppression()
+        RowSuppression rows = new RowSuppression()
                 .missing(preferences.suppressMissingRows())
                 .zero(preferences.suppressZeroRows())
-                .underScore(preferences.suppressUnderscoreRows()));
-        wire.setColumnSupression(new ColumnSuppression()
-                .missing(preferences.suppressMissingRows())
-                .zero(preferences.suppressZeroRows())
-                .underScore(preferences.suppressUnderscoreRows()));
+                .underScore(preferences.suppressUnderscoreRows());
+        // Both spellings, because which one a server reads is which one it reads - and sending the
+        // misspelled one alone is why this preference never did anything: it round-tripped as false
+        // however it was set. Sending both costs a few bytes and works either way.
+        wire.setRowSuppression(rows);
+        wire.setRowSupression(rows);
+        // Only missing, and only from the column flag. This used to be a copy of the row suppression,
+        // which meant ticking "suppress missing rows" quietly emptied columns too - three labels that
+        // said "rows" driving six wire fields.
+        wire.setColumnSupression(new ColumnSuppression().missing(preferences.suppressMissingColumns()));
         wire.setRepeatMemberLabels(preferences.repeatMemberLabels());
         wire.setIncludeDescriptionLabel(preferences.useBothNamesAndAliases());
         wire.setNavigate(!preferences.navigateWithoutData());
-        wire.setZoomIn(fromZoomInPreference(preferences.zoomInPreference()));
+        wire.setZoomIn(fromZoomInPreference(preferences.zoomInPreference(), preferences.ancestorOnTop()));
         wire.setIncludeSelection(preferences.includeSelection());
         wire.setWithinSelectedGroup(preferences.withinSelectedGroup());
         wire.setRemoveUnSelectedGroup(preferences.removeUnselectedGroup());
@@ -545,8 +560,10 @@ public class EssCubeViewImpl implements EssCubeView {
         };
     }
 
-    // Only "mode" distinguishes NEXT_LEVEL/ALL_LEVELS/BOTTOM_LEVEL; "ancestor" (top/bottom) has no
-    // confirmed effect and is always sent as TOP. See EssCubeView.ZoomInPreference.
+    // "mode" is what distinguishes NEXT_LEVEL/ALL_LEVELS/BOTTOM_LEVEL; "ancestor" is a separate axis,
+    // read and written as GridPreferences.ancestorOnTop. A 21.1 server accepts either value and
+    // returns the same grid for both, so it is passed through rather than relied on. See
+    // EssCubeView.ZoomInPreference.
     private static ZoomInPreference toZoomInPreference(ZoomIn wire) {
         if (wire == null || wire.getMode() == null) {
             return ZoomInPreference.NEXT_LEVEL;
@@ -558,13 +575,20 @@ public class EssCubeViewImpl implements EssCubeView {
         };
     }
 
-    private static ZoomIn fromZoomInPreference(ZoomInPreference preference) {
+    private static boolean toAncestorOnTop(ZoomIn wire) {
+        return wire == null || wire.getAncestor() == null || wire.getAncestor() == ZoomIn.AncestorEnum.TOP;
+    }
+
+    private static ZoomIn fromZoomInPreference(ZoomInPreference preference, boolean ancestorOnTop) {
         ZoomIn.ModeEnum mode = switch (preference) {
             case NEXT_LEVEL -> ZoomIn.ModeEnum.CHILDREN;
             case ALL_LEVELS -> ZoomIn.ModeEnum.DESCENDENTS;
             case BOTTOM_LEVEL -> ZoomIn.ModeEnum.BASE;
         };
-        return new ZoomIn().ancestor(ZoomIn.AncestorEnum.TOP).mode(mode);
+        ZoomIn.AncestorEnum ancestor = ancestorOnTop
+                ? ZoomIn.AncestorEnum.TOP
+                : ZoomIn.AncestorEnum.BOTTOM;
+        return new ZoomIn().ancestor(ancestor).mode(mode);
     }
 
 }
