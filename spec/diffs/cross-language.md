@@ -13,8 +13,8 @@ layer calls. It measures the code, not a kept list, in both languages.
 
 | State | essbase-rest-client | EssSharp |
 | --- | ---: | ---: |
-| Exposed | 98 | 101 |
-| Generated, not exposed | 396 | 282 |
+| Exposed | 99 | 101 |
+| Generated, not exposed | 395 | 282 |
 | Not in the generated client | 0 | 111 |
 | **Total** | **494** | **494** |
 
@@ -24,13 +24,13 @@ Rows are this client, columns are EssSharp.
 
 | | EssSharp exposed | EssSharp generated only | EssSharp absent |
 | --- | ---: | ---: | ---: |
-| **Exposed** | 67 | 21 | 10 |
-| **Generated, not exposed** | 34 | 261 | 101 |
+| **Exposed** | 68 | 21 | 10 |
+| **Generated, not exposed** | 33 | 261 | 101 |
 | **Not in the generated client** | 0 | 0 | 0 |
 
 ## Exposed by EssSharp, not here
 
-34 endpoints. The C# client has a wrapper and this one does
+33 endpoints. The C# client has a wrapper and this one does
 not, so each is a gap with a working reference implementation to read.
 An endpoint marked absent from the generated client here needs a
 regeneration before it can be wrapped at all.
@@ -40,7 +40,6 @@ regeneration before it can be wrapped at all.
 - `GET` `/applications/{applicationName}/connections/{connectionName}` - Get Application Connection _(added 21.1 or earlier)_ _(here: generated only)_
 - `POST` `/applications/{applicationName}/connections/{connectionName}/actions/test` - Test Saved Application Connection _(added 21.1 or earlier)_ _(here: generated only)_
 - `DELETE` `/applications/{applicationName}/databases/{databaseName}` - Delete Database _(added 21.1 or earlier)_ _(here: generated only)_
-- `GET` `/applications/{applicationName}/databases/{databaseName}/aliases` - List Aliases _(added 21.1 or earlier)_ _(here: generated only)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/aliases/getActiveAlias` - List Active Aliases _(added 21.1 or earlier)_ _(here: generated only)_
 - `POST` `/applications/{applicationName}/databases/{databaseName}/dtreports/list` - List Drill Through Reports For Given Cell Intersections _(added 21.7)_ _(here: generated only)_
 - `POST` `/applications/{applicationName}/databases/{databaseName}/grid/layout` - Get Layout Grid _(added 21.1 or earlier)_ _(here: generated only)_
@@ -116,7 +115,7 @@ are already reachable there and need a spec refresh here first.
 
 ## Exposed by both
 
-67 endpoints.
+68 endpoints.
 
 - `GET` `/about` - About Essbase _(added 21.1 or earlier)_
 - `GET` `/about/instance` - About Essbase Instance _(added 21.1 or earlier)_
@@ -129,6 +128,7 @@ are already reachable there and need a spec refresh here first.
 - `GET` `/applications/{applicationName}/configurations` - Get Application Configuration _(added 21.1 or earlier)_
 - `GET` `/applications/{applicationName}/databases` - List Databases _(added 21.1 or earlier)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}` - Get Database _(added 21.1 or earlier)_
+- `GET` `/applications/{applicationName}/databases/{databaseName}/aliases` - List Aliases _(added 21.1 or earlier)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/dimensions` - List Dimensions _(added 21.1 or earlier)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/generations` - List Generations _(added 21.1 or earlier)_
 - `GET` `/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/levels` - List Levels _(added 21.1 or earlier)_

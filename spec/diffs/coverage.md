@@ -7,8 +7,8 @@ hand-written layer calls, so it measures the code rather than a kept list.
 
 | State | Count | Meaning |
 | --- | ---: | --- |
-| Exposed | 98 | The hand-written API reaches this endpoint. |
-| Generated, not exposed | 396 | A generated method exists; it needs an Ess* wrapper to reach callers. |
+| Exposed | 99 | The hand-written API reaches this endpoint. |
+| Generated, not exposed | 395 | A generated method exists; it needs an Ess* wrapper to reach callers. |
 | Not in the generated client | 0 | Absent from the spec this client was generated from; needs a regeneration first. |
 | **Total** | **494** | |
 
@@ -123,7 +123,7 @@ Grouped by the tag Oracle gives the endpoint.
 
 </details>
 
-<details><summary><strong>Applications</strong> (23)</summary>
+<details><summary><strong>Applications</strong> (22)</summary>
 
 - `GET` `/applications/actions/name/{appVisiblity}` - `ApplicationsApi.applicationsGetApplicationNames`
 - `POST` `/applications/actions/shadowCopy` - `ApplicationsApi.applicationsCreateShadowApplication`
@@ -135,7 +135,6 @@ Grouped by the tag Oracle gives the endpoint.
 - `POST` `/applications/{applicationName}/databases/actions/rename` - `ApplicationsApi.applicationsRenameDatabase`
 - `DELETE` `/applications/{applicationName}/databases/{databaseName}` - `ApplicationsApi.applicationsDeleteDatabase`
 - `PUT` `/applications/{applicationName}/databases/{databaseName}` - `ApplicationsApi.applicationsPerformDbOperation`
-- `GET` `/applications/{applicationName}/databases/{databaseName}/aliases` - `ApplicationsApi.applicationsGetAliases`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/aliases/getActiveAlias` - `ApplicationsApi.applicationsGetActiveAlias`
 - `PUT` `/applications/{applicationName}/databases/{databaseName}/aliases/setActiveAlias` - `ApplicationsApi.applicationsSetActiveAlias`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/calculationFunctions` - `ApplicationsApi.databasesGetCalculationFunctions`
@@ -702,7 +701,7 @@ Grouped by the tag Oracle gives the endpoint.
 
 ## Already exposed
 
-<details><summary>98 endpoints</summary>
+<details><summary>99 endpoints</summary>
 
 - `GET` `/about` - `AboutEssbaseApi.aboutGetAbout`
 - `GET` `/about/instance` - `AboutEssbaseApi.aboutGetInstanceDetails`
@@ -722,6 +721,7 @@ Grouped by the tag Oracle gives the endpoint.
 - `PUT` `/applications/{applicationName}/configurations/{configId}` - `ApplicationConfigurationApi.applicationConfigurationSetConfiguration`
 - `GET` `/applications/{applicationName}/databases` - `ApplicationsApi.applicationsGetCubes`
 - `GET` `/applications/{applicationName}/databases/{databaseName}` - `ApplicationsApi.applicationsGetCube`
+- `GET` `/applications/{applicationName}/databases/{databaseName}/aliases` - `ApplicationsApi.applicationsGetAliases`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/dimensions` - `DimensionsApi.dimensionsListDimensions`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/generations` - `DimensionsApi.dimensionsListDimGenerations`
 - `GET` `/applications/{applicationName}/databases/{databaseName}/dimensions/{dimensionName}/generations/{generationNumber}` - `DimensionsApi.dimensionsGetDimGenerations`
