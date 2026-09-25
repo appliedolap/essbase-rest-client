@@ -25,10 +25,12 @@ You can pull this library in using Maven by adding this to your `<dependencies>`
         <dependency>
             <groupId>com.appliedolap.essbase</groupId>
             <artifactId>essbase-rest-client</artifactId>
-            <version>1.0.2</version>
+            <version>2.0.2</version>
         </dependency>
 
 You may want to check the versions available on [Maven Central](https://central.sonatype.com/artifact/com.appliedolap.essbase/essbase-rest-client) to ensure you are using the latest version.
+
+Version 2.x requires Java 17 or later. Coming from 1.x, the high-level `Ess*` API is unchanged, but the generated `com.appliedolap.essbase.client` layer now uses the JDK's `HttpClient` and Jackson in place of OkHttp and Gson, so code that called its `okhttp3.Call`/`*Async` methods or relied on Gson annotations will need updating.
 
 ## Example
 
