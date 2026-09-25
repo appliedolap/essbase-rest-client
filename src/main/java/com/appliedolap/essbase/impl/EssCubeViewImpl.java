@@ -4,6 +4,7 @@ import com.appliedolap.essbase.ApiContext;
 import com.appliedolap.essbase.EssApiException;
 import com.appliedolap.essbase.EssCubeView;
 import com.appliedolap.essbase.client.ApiException;
+import com.appliedolap.essbase.EssCubeView.CellEdit;
 import com.appliedolap.essbase.client.model.ColumnSuppression;
 import com.appliedolap.essbase.client.model.Grid;
 import com.appliedolap.essbase.client.model.GridDimension;
@@ -110,6 +111,33 @@ public class EssCubeViewImpl implements EssCubeView {
         }
         grid.getSlice().setDirtyCells(dirty);
         grid.getSlice().setDirtyTexts(dirty);
+        execute(new GridOperation().grid(grid).action(GridOperation.ActionEnum.SUBMIT));
+    }
+
+    @Override
+    public void submitData(List<CellEdit> edits) {
+        if (edits.isEmpty()) {
+            return;
+        }
+        List<Integer> dirty = new ArrayList<>();
+        for (CellEdit edit : edits) {
+            CellLocation location = locate(edit.row(), edit.col());
+            if (location == null) {
+                throw new IllegalArgumentException(
+                        "No such grid position: (" + edit.row() + ", " + edit.col() + ")");
+            }
+            String value = edit.value() == null ? "" : edit.value();
+            location.range().getValues().set(location.offset(), value);
+            // "texts" is what the cell reads as, and is what comes back out of getCell - so leaving
+            // the old formatted number there would show the previous value in the cell just submitted,
+            // right up until the response replaced the grid. Only dirtyCells is sent, though: the
+            // server is being told which *values* changed, and marking the text dirty as well is what
+            // setMembers does because a member cell's label is the thing being edited.
+            location.range().getTexts().set(location.offset(), value);
+            dirty.add(location.flatIndex());
+        }
+        grid.getSlice().setDirtyCells(dirty);
+        grid.getSlice().setDirtyTexts(new ArrayList<>());
         execute(new GridOperation().grid(grid).action(GridOperation.ActionEnum.SUBMIT));
     }
 

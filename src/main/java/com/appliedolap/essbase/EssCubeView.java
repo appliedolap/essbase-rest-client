@@ -499,6 +499,47 @@ public interface EssCubeView extends EssGrid {
     void setMembers(List<MemberPlacement> placements);
 
     /**
+     * A new value for one data cell.
+     *
+     * <p>The value is a string rather than a number because not every value a data cell takes is one:
+     * clearing a cell submits the empty string, and a text or date measure submits neither. Parsing it
+     * into a double here would only mean turning it back into a string for the wire, having lost the
+     * cases that are not doubles on the way.
+     *
+     * @param row   the data cell's row
+     * @param col   the data cell's column
+     * @param value the value to write
+     */
+    record CellEdit(int row, int col, String value) {
+    }
+
+    /**
+     * Writes values back into the cube, in one request.
+     *
+     * <p>The same mechanism as {@link #setMembers}, which is not a coincidence: Essbase's grid has one
+     * submit action and what it writes depends on which cells were marked dirty. Members go in as
+     * labels, data as values, and both travel as edits to the grid the server already has.
+     *
+     * <p>Positional, so there is nothing to resolve: the server knows what intersection each cell of
+     * its own grid is. Submitting a member cell's position is not rejected here but is not what this is
+     * for - use {@link #setMembers}.
+     *
+     * <p>The grid is refreshed by the submit, as every operation is, so a value the cube transforms on
+     * the way in - a member with a formula, an aggregation, a cell the writer cannot write - reads back
+     * as whatever it actually became rather than as what was sent.
+     *
+     * <p><strong>The empty string clears a cell; {@code #Missing} does not.</strong> Established live:
+     * submitting {@code ""} leaves the intersection with no value, and submitting {@code #Missing} -
+     * the classic spreadsheet word for the same thing, in any spelling - writes a literal zero, which
+     * is a different number that aggregates. Anything passing a value a person typed has to translate
+     * that word itself; this does not, because guessing which strings are words rather than values is
+     * the caller's business and getting it wrong silently corrupts a cube.
+     *
+     * @param edits the cells to write, and what to write in them
+     */
+    void submitData(List<CellEdit> edits);
+
+    /**
      * How indented member rows/columns are, mirroring the classic ad hoc "Indentation" setting.
      * Verified live: changing this changes the leading-space indentation on subsequent retrieves.
      */
