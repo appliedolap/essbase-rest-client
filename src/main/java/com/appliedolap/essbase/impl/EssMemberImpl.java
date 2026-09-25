@@ -52,6 +52,27 @@ public class EssMemberImpl extends AbstractEssObject implements EssMember {
         this(api, cube, propsToMemberBean(memberProps), Collections.unmodifiableMap(new LinkedHashMap<>(memberProps)));
     }
 
+    /**
+     * The member's aliases out of the untyped listing.
+     *
+     * <p>A null value is kept rather than dropped: the server sends a key with no value for a table the
+     * member has no alias in, so the keys say which tables the cube has and the values say which of
+     * them this member uses. Losing the difference would make "no alias here" indistinguishable from
+     * "no such table".
+     */
+    private static Map<String, String> aliasesOf(Map<String, Object> memberProps) {
+        Object aliases = memberProps.get("aliases");
+        if (!(aliases instanceof Map)) {
+            return new LinkedHashMap<>();
+        }
+        Map<String, String> typed = new LinkedHashMap<>();
+        for (Map.Entry<?, ?> entry : ((Map<?, ?>) aliases).entrySet()) {
+            typed.put(Objects.toString(entry.getKey(), null),
+                    entry.getValue() == null ? null : Objects.toString(entry.getValue()));
+        }
+        return typed;
+    }
+
     static MemberBean propsToMemberBean(Map<String, Object> memberProps) {
         MemberBean memberBean = new MemberBean();
         memberBean.setName(Objects.toString(memberProps.get("name"), null));
@@ -72,6 +93,8 @@ public class EssMemberImpl extends AbstractEssObject implements EssMember {
                 || dimensionType.toUpperCase(Locale.ROOT).startsWith("ATTRIBUTE"));
         memberBean.setAccount(Boolean.TRUE.equals(memberProps.get("account"))
                 || "ACCOUNTS".equalsIgnoreCase(dimensionType));
+        memberBean.setAliases(aliasesOf(memberProps));
+        memberBean.setActiveAliasName(Objects.toString(memberProps.get("activeAliasName"), null));
         return memberBean;
     }
 
@@ -119,6 +142,14 @@ public class EssMemberImpl extends AbstractEssObject implements EssMember {
     @Override
     public DataStorage getDataStorage() {
         return DataStorage.parse(memberBean.getDataStorageType());
+    }
+
+    @Override
+    public java.util.Map<String, String> getAliases() {
+        java.util.Map<String, String> aliases = memberBean.getAliases();
+        // Unmodifiable rather than handed over: this is the bean's own map, and a caller that edited it
+        // would be editing the member's cached state rather than the cube's.
+        return aliases == null ? java.util.Map.of() : java.util.Collections.unmodifiableMap(aliases);
     }
 
     @Override

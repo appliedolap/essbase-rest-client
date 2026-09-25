@@ -100,6 +100,33 @@ public interface EssMember extends EssObject {
     DataStorage getDataStorage();
 
     /**
+     * This member's alias in every alias table the cube has, by table name.
+     *
+     * <p>Free: the server sends all of them with the member itself, so reading one table's alias for a
+     * whole outline costs no requests beyond the ones that fetched the members. Established live -
+     * Sample.Basic's {@code 100} comes back with six entries, one per table on that cube.
+     *
+     * <p>A table the member has no alias in is present with a null value rather than absent, so the
+     * keys are the cube's alias tables whether or not this member uses them. {@link #getAlias(String)}
+     * is the reading that does not care about the difference.
+     *
+     * @return table name to alias, empty if the server sent none
+     */
+    Map<String, String> getAliases();
+
+    /**
+     * This member's alias in one table, or null if it has none there.
+     *
+     * @param aliasTable the alias table to read; null or blank means {@code Default}
+     * @return the alias, or null where the member has none in that table
+     */
+    default String getAlias(String aliasTable) {
+        String table = aliasTable == null || aliasTable.isBlank() ? "Default" : aliasTable;
+        String alias = getAliases().get(table);
+        return alias == null || alias.isBlank() ? null : alias;
+    }
+
+    /**
      * Whether this dimension is dense or sparse.
      *
      * <p>Only a standard dimension has one. A member below a dimension, and an attribute dimension,
