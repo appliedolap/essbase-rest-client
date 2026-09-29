@@ -116,6 +116,16 @@
 
     <build>
         <plugins>
+        	<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-surefire-plugin</artifactId>
+        		<version>3.5.4</version>
+        		<configuration>
+        			<!-- Nothing here draws today, but any code that touches AWT in a forked JVM
+        			     without this registers as a windowed app and takes the screen on macOS. -->
+        			<argLine>-Djava.awt.headless=true</argLine>
+        		</configuration>
+        	</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
