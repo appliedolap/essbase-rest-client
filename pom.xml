@@ -129,6 +129,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.15.0</version>
                 <configuration>
                     <!-- The Jaygrid differential harness needs a library this project does not
                          otherwise depend on, and must not: neither of the two is allowed to require
@@ -138,11 +139,6 @@
                         <testExclude>**/com/appliedolap/essbase/jaygrid/**</testExclude>
                     </testExcludes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.15.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
