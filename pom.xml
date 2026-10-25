@@ -251,7 +251,10 @@
                     <plugin>
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>0.11.0</version>
+                        <!-- 0.12.0 or later: Maven 3.10 leaves maven-metadata-local.xml and
+                             _remote.repositories beside the artifacts, earlier versions bundle them,
+                             and Central rejects the bundle as content without a .pom file. -->
+                        <version>0.12.0</version>
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>
