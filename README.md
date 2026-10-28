@@ -25,7 +25,7 @@ You can pull this library in using Maven by adding this to your `<dependencies>`
         <dependency>
             <groupId>com.appliedolap.essbase</groupId>
             <artifactId>essbase-rest-client</artifactId>
-            <version>2.0.3</version>
+            <version>2.1.0</version>
         </dependency>
 
 You may want to check the versions available on [Maven Central](https://central.sonatype.com/artifact/com.appliedolap.essbase/essbase-rest-client) to ensure you are using the latest version.
