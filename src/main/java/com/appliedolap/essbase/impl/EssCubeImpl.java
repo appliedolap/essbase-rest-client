@@ -18,6 +18,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.http.HttpRequest;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -573,23 +575,56 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
         folder.uploadFile(file);
     }
 
+    @Deprecated(since = "2.1.0")
     @Override
     public void executeMdx(String query, MdxOutputType outputType, MdxOptions mdxOptions, OutputStream outputStream) {
+        executeMdx(query, EssMdxOptions.defaults(), outputType, outputStream);
+    }
+
+    @Override
+    public void executeMdx(String query, EssMdxOptions options, MdxOutputType outputType, OutputStream outputStream) {
         try {
             MDXInput mdxInput = new MDXInput();
             mdxInput.setQuery(query);
+            mdxInput.setPreferences(toPreferences(options));
 
             // CSV, HTML, JSON, XLSX
             String path = "/applications/" + ApiClient.urlEncode(getApplicationName())
                     + "/databases/" + ApiClient.urlEncode(getName()) + "/mdx";
             path = NativeHttp.withQuery(path, "format", outputType.name());
-            NativeHttp.copyBodyTo(NativeHttp.send(api.getClient(), NativeHttp.request(api.getClient(), path)
+            HttpRequest.Builder request = NativeHttp.request(api.getClient(), path)
                     .header("Accept", "application/octet-stream, application/json, text/csv, text/html, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                     .header("Content-Type", "application/json")
-                    .POST(NativeHttp.jsonBody(api.getClient(), mdxInput)), "mDXExecuteMDX"), outputStream);
+                    .POST(NativeHttp.jsonBody(api.getClient(), mdxInput));
+            Duration timeout = options == null ? null : options.getTimeout();
+            NativeHttp.copyBodyTo(NativeHttp.send(api.getClient(), request, "mDXExecuteMDX", timeout), outputStream);
         } catch (IOException | ApiException e) {
             throw new EssApiException(e);
         }
+    }
+
+    /**
+     * The preferences to send for the given options: none at all when no option is set, so a plain
+     * query goes out exactly as it did before options were sent, and otherwise only the ones set.
+     */
+    static NamedQueriesPreferences toPreferences(EssMdxOptions options) {
+        if (options == null || !options.hasPreferences()) {
+            return null;
+        }
+        NamedQueriesPreferences preferences = new NamedQueriesPreferences();
+        preferences.setDataless(options.getDataless());
+        preferences.setHideRestrictedData(options.getHideRestrictedData());
+        preferences.setCellAttributes(options.getCellAttributes());
+        preferences.setFormatString(options.getFormatString());
+        preferences.setFormatValues(options.getFormatValues());
+        preferences.setMeaninglessCells(options.getMeaninglessCells());
+        preferences.setTextList(options.getTextList());
+        preferences.setUrlDrillThrough(options.getUrlDrillThrough());
+        if (options.getMemberIdentifierType() != null) {
+            preferences.setMemberIdentifierType(NamedQueriesPreferences.MemberIdentifierTypeEnum.fromValue(options.getMemberIdentifierType().name()));
+        }
+        preferences.setAliasTableName(options.getAliasTableName());
+        return preferences;
     }
 
     @Override
@@ -612,13 +647,18 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
 
     @Override
     public EssGrid executeMdx(String query) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        executeMdx(query, MdxOutputType.JSON, new MdxOptions(), outputStream);
+        return executeMdx(query, EssMdxOptions.defaults());
+    }
 
-        String json = outputStream.toString();
+    @Override
+    public EssMdxGrid executeMdx(String query, EssMdxOptions options) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        executeMdx(query, options, MdxOutputType.JSON, outputStream);
+
+        String json = outputStream.toString(StandardCharsets.UTF_8);
         try {
             MdxJson mdxJson = api.getClient().getObjectMapper().readValue(json, MdxJson.class);
-            return new EssGridImpl(mdxJson);
+            return new EssMdxGridImpl(mdxJson);
         } catch (IOException e) {
             throw new EssApiException(e);
         }
@@ -675,6 +715,12 @@ public class EssCubeImpl extends AbstractEssObject implements EssCube {
 
     }
 
+    /**
+     * Never sent to the server, and with no way to set its fields.
+     *
+     * @deprecated since 2.1.0. Use {@link EssMdxOptions}, which is sent.
+     */
+    @Deprecated(since = "2.1.0")
     public static class MdxOptions {
 
         private boolean dataless;

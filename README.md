@@ -37,7 +37,7 @@ Version 2.x requires Java 17 or later. Coming from 1.x, the high-level `Ess*` AP
 The library can be consumed as simply as doing the following:
 
     // replace example with your machine running Essbase
-    EssServer server = new EssServer("http://example:9000/essbase", "admin", "welcome1");
+    EssServer server = new EssServerImpl("http://example:9000/essbase", "admin", "welcome1");
 
     List<EssApplication> applications = server.getApplications();
     for (EssApplication application : applications) {
@@ -45,6 +45,15 @@ The library can be consumed as simply as doing the following:
     }
 
 This would print out the list of applications on the server. If you want to get an Essbase 21 server up and running using Docker, you might want to look at the [Essbase Docker](https://github.com/appliedolap/docker-essbase) project (also by Applied OLAP).
+
+Running an MDX query returns its grid, along with the dimensions on each axis. The options choose how members are named, among other things:
+
+    EssCube cube = server.getApplication("Sample").getCube("Basic");
+    EssMdxGrid grid = cube.executeMdx("SELECT {[Jan]} ON COLUMNS, {[100-10], [100-20]} ON ROWS FROM Sample.Basic",
+            EssMdxOptions.defaults().memberIdentifierType(EssCube.MdxIdentifierType.ALIAS));
+
+    System.out.println(grid.getRowDimensions());   // [Product]
+    System.out.println(grid.getCell(1, 0));        // Cola, the alias of 100-10
 
 Although not extensively tested, as this is a normal Java library you should be able to use this with Kotlin, Jython, Groovy, and other languages that work with the JVM.
 

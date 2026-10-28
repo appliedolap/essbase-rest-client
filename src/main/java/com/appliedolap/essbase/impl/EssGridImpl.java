@@ -10,14 +10,23 @@ public class EssGridImpl implements EssGrid {
 
     private final String[][] cells;
 
-    EssGridImpl(MdxJson json) {
-        int rows = json.getData().size();
-        int cols = json.getData().get(0).size();
+    private final int columns;
 
-        cells = new String[rows][cols];
+    /**
+     * Copies the result's cells. The grid is as wide as its widest row, and a shorter row reads null
+     * past its end: the server shortens the header row of a query whose rows all dropped out.
+     */
+    EssGridImpl(MdxJson json) {
+        List<List<String>> data = json.getData() == null ? List.of() : json.getData();
+        int cols = 0;
+        for (List<String> row : data) {
+            cols = Math.max(cols, row.size());
+        }
+        columns = cols;
+        cells = new String[data.size()][cols];
 
         int rowIndex = 0;
-        for (List<String> row : json.getData()) {
+        for (List<String> row : data) {
             int col = 0;
             for (String cell : row) {
                 cells[rowIndex][col++] = cell;
@@ -33,7 +42,7 @@ public class EssGridImpl implements EssGrid {
 
     @Override
     public int getColumns() {
-        return cells[0].length;
+        return columns;
     }
 
     @Override

@@ -272,9 +272,57 @@ public interface EssCube extends EssObject {
      */
     void importFile(File file);
 
+    /**
+     * Runs an MDX query and writes the server's answer, in the given format, to a stream.
+     *
+     * @param query        the query
+     * @param outputType   the format to write
+     * @param mdxOptions   ignored: this class never sent its options to the server
+     * @param outputStream where to write the result; not closed
+     * @deprecated since 2.1.0. Its options class lives in the implementation package and was never sent.
+     * Use {@link #executeMdx(String, EssMdxOptions, MdxOutputType, OutputStream)}.
+     */
+    @Deprecated(since = "2.1.0")
     void executeMdx(String query, MdxOutputType outputType, EssCubeImpl.MdxOptions mdxOptions, OutputStream outputStream);
 
+    /**
+     * Runs an MDX query and writes the server's answer, in the given format, to a stream. JSON is the
+     * format {@link #executeMdx(String, EssMdxOptions)} reads; the others are for handing on as they
+     * are.
+     *
+     * <p>The options come second, unlike the deprecated method's, so that a call passing null for those
+     * still compiles against the deprecated method rather than matching both.
+     *
+     * @param query        the query
+     * @param options      how to present the result; {@link EssMdxOptions#defaults()} for the server's
+     *                     defaults
+     * @param outputType   the format to write
+     * @param outputStream where to write the result; not closed
+     * @since 2.1.0
+     */
+    void executeMdx(String query, EssMdxOptions options, MdxOutputType outputType, OutputStream outputStream);
+
+    /**
+     * Runs an MDX query and returns its cells.
+     *
+     * <p>The grid is an {@link EssMdxGrid}, though declared as the plainer type for compatibility. Use
+     * {@link #executeMdx(String, EssMdxOptions)} to have it typed as one.
+     *
+     * @param query the query
+     * @return the result
+     */
     EssGrid executeMdx(String query);
+
+    /**
+     * Runs an MDX query and returns its cells along with the dimensions on each axis.
+     *
+     * @param query   the query
+     * @param options how to present the result; {@link EssMdxOptions#defaults()} for the server's
+     *                defaults
+     * @return the result
+     * @since 2.1.0
+     */
+    EssMdxGrid executeMdx(String query, EssMdxOptions options);
 
     /**
      * The generative-AI features this cube offers - notably turning a question asked in English into

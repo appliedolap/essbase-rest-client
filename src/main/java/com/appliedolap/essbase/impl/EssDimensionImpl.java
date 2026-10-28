@@ -40,6 +40,21 @@ public class EssDimensionImpl extends AbstractEssObject implements EssDimension 
     }
 
     @Override
+    public StorageType getStorageType() {
+        return StorageType.parse(dimensionBean.getType());
+    }
+
+    @Override
+    public Integer getMemberCount() {
+        return dimensionBean.getMembers();
+    }
+
+    @Override
+    public Integer getStoredMemberCount() {
+        return dimensionBean.getStoredMembers();
+    }
+
+    @Override
     public List<EssGeneration> listDimGenerations() {
         try {
             GenerationLevelList generationLevelList = api.getDimensionsApi().dimensionsListDimGenerations(application.getName(), cube.getName(), getName());

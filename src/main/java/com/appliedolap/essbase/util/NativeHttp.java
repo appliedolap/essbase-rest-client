@@ -57,8 +57,19 @@ public final class NativeHttp {
 
     public static HttpResponse<InputStream> send(ApiClient client, HttpRequest.Builder builder, String operationId)
             throws ApiException, IOException {
+        return send(client, builder, operationId, null);
+    }
+
+    /**
+     * Sends a request as {@link #send(ApiClient, HttpRequest.Builder, String)} does, but waiting as long as
+     * the given timeout rather than the client's read timeout.
+     *
+     * @param timeout how long to wait for this request, or null for the client's read timeout
+     */
+    public static HttpResponse<InputStream> send(ApiClient client, HttpRequest.Builder builder, String operationId,
+                                                 Duration timeout) throws ApiException, IOException {
         try {
-            Duration readTimeout = client.getReadTimeout();
+            Duration readTimeout = timeout != null ? timeout : client.getReadTimeout();
             if (readTimeout != null) {
                 builder.timeout(readTimeout);
             }
