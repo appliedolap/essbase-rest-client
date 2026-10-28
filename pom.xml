@@ -34,7 +34,7 @@
         <java.version>17</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <swagger-core-version>1.6.2</swagger-core-version>
-        <jackson-version>2.22.2</jackson-version>
+        <jackson-version>2.22.3</jackson-version>
         <jackson-annotations-version>2.22</jackson-annotations-version>
         <commons-lang3-version>3.20.0</commons-lang3-version>
         <jakarta-annotation-version>3.0.0</jakarta-annotation-version>
