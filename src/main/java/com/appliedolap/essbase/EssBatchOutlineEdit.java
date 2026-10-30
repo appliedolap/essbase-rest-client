@@ -314,6 +314,9 @@ public class EssBatchOutlineEdit {
     /**
      * Adds a member, failing with a warning if it already exists.
      *
+     * <p>The new member goes first among its parent's children unless {@link Action#after(String)}
+     * places it - so adding several in order means passing each the previous one.
+     *
      * @param member the new member's name
      * @param parent the parent to add it under
      * @return the action, for setting the new member's properties
@@ -496,7 +499,16 @@ public class EssBatchOutlineEdit {
             return attribute("isMbrId", true);
         }
 
-        /** Where the member should sit among its siblings; omitted means last. */
+        /**
+         * Puts the member right after the given sibling.
+         *
+         * <p>Without it a new member goes <em>first</em> among its parent's children, not last - verified
+         * against 21c, where adding Jan, Feb and Mar under Q1 in that order, none of them placed, leaves
+         * Mar, Feb, Jan. To add members in order, pass each one the sibling added just before it.
+         * Dimensions are the exception: a {@code dimAdd} without a sibling did go after the others.
+         *
+         * @param sibling the member, under the same parent, that this one should follow
+         */
         public Action after(String sibling) {
             return attribute("preSibling", sibling);
         }
