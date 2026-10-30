@@ -907,6 +907,11 @@ public class EssServerImpl extends AbstractEssObject implements EssServer {
     }
 
     @Override
+    public EssServerAi getAi() {
+        return new EssServerAiImpl(api);
+    }
+
+    @Override
     public EssMaintenanceLimits getMaintenanceLimits() {
         return EssSettings.maintenanceLimits(api);
     }

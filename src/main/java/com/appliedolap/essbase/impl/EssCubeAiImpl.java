@@ -144,7 +144,7 @@ public class EssCubeAiImpl implements EssCubeAi {
      * Reads one boolean out of the instance document, or null when the key isn't there at all -
      * which is the difference between "off" and "this server has never heard of it".
      */
-    private static Boolean flag(String body, String name) {
+    static Boolean flag(String body, String name) {
         Matcher matcher = Pattern.compile("\"" + Pattern.quote(name) + "\"\\s*:\\s*(true|false)").matcher(body);
         return matcher.find() ? Boolean.valueOf(matcher.group(1)) : null;
     }
@@ -284,6 +284,16 @@ public class EssCubeAiImpl implements EssCubeAi {
      * non-2xx: every diagnosis here is made out of the error bodies, so they cannot be exceptions.
      */
     private Reply call(String method, String path, Object body) {
+        return call(api, method, path, body);
+    }
+
+    /**
+     * Static and package-private so {@link EssServerAiImpl} can make the same kind of request: the
+     * server-level rungs of the diagnosis are asked of {@code /about/instance} and
+     * {@code /ai/connection}, neither of which involves a cube, and both of which need the
+     * interceptors and the don't-throw-on-4xx behaviour below rather than a second copy of them.
+     */
+    static Reply call(ApiContext api, String method, String path, Object body) {
         ApiClient client = api.getClient();
         HttpRequest.Builder request = NativeHttp.request(client, path)
                 .header("Accept", "application/json");

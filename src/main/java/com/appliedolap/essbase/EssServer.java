@@ -489,6 +489,19 @@ public interface EssServer {
     EssMcp getMcp();
 
     /**
+     * This server's own generative-AI setup: whether it supports AI, whether it is switched on, which
+     * capabilities are on, and whether any GenAI connection has been configured.
+     *
+     * <p>The server-level answer to a question {@link EssCube#getAi()} can only answer per cube. The
+     * cube walks the whole setup chain, so asking it "is AI configured here" costs one walk per cube
+     * and mixes the server's answer in with each application's. This is the half that is the same for
+     * every cube on the server, asked once.
+     *
+     * @return the server's AI setup, never null; nothing is contacted until it is asked something
+     */
+    EssServerAi getAi();
+
+    /**
      * What the server reports about the machine it runs on - free disk and memory, and any configured
      * ceilings. The only window the REST API offers onto the host.
      *
